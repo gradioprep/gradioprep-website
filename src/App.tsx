@@ -1,293 +1,89 @@
-type Pathway = {
-  number: string;
-  programme: string;
-  title: string;
-  stage: string;
-  description: string;
-};
+import { useState, type ReactNode } from "react";
 
-const pathways: Pathway[] = [
-  {
-    number: "01",
-    programme: "IB MYP",
-    title: "Language & Literature",
-    stage: "Years 1–5",
-    description:
-      "Build confidence in reading, interpretation and purposeful writing through a clearly mapped learning route.",
-  },
-  {
-    number: "02",
-    programme: "CAMBRIDGE",
-    title: "Lower Secondary English",
-    stage: "Stages 7–9",
-    description:
-      "Strengthen core English skills with practice organised around the learning objectives that matter.",
-  },
-  {
-    number: "03",
-    programme: "CAMBRIDGE IGCSE",
-    title: "First Language English",
-    stage: "Grade 9–10 equivalent",
-    description:
-      "Work towards the relevant syllabus with carefully checked curriculum mapping and purposeful practice.",
-  },
+type Page = "home" | "dashboard" | "lesson" | "questions" | "assessment";
+type Navigate = (page: Page) => void;
+type Question = { id: string; area: "Reading" | "Writing" | "Analysis"; type: string; title: string; skill: string; time: string };
+
+const questionItems: Question[] = [
+  { id: "Q-014", area: "Reading", type: "Short response", title: "Read between the lines", skill: "Inference and evidence", time: "8 min" },
+  { id: "Q-021", area: "Analysis", type: "Guided analysis", title: "How language shapes tone", skill: "Writer's choices", time: "12 min" },
+  { id: "Q-026", area: "Writing", type: "Writing task", title: "Build a purposeful opening", skill: "Structure and audience", time: "15 min" },
+  { id: "Q-033", area: "Reading", type: "Short response", title: "Select the strongest evidence", skill: "Evidence selection", time: "7 min" },
+  { id: "Q-041", area: "Writing", type: "Revision task", title: "Make every sentence work", skill: "Precision and concision", time: "10 min" },
+  { id: "Q-052", area: "Analysis", type: "Guided analysis", title: "Notice the pattern, explain the effect", skill: "Language and effect", time: "14 min" },
+];
+const sections: { page: Page; label: string; icon: string }[] = [
+  { page: "dashboard", label: "Overview", icon: "⌂" },
+  { page: "questions", label: "Question bank", icon: "▤" },
+  { page: "lesson", label: "Lessons & practice", icon: "↗" },
+  { page: "assessment", label: "Assessment feedback", icon: "◎" },
 ];
 
-const principles = [
-  {
-    number: "01",
-    title: "Find your bearings",
-    detail: "Start with your programme, stage and the skill you want to build.",
-    symbol: "⌖",
-  },
-  {
-    number: "02",
-    title: "Practise with purpose",
-    detail: "Use focused questions, annotated examples and clear explanations.",
-    symbol: "↗",
-  },
-  {
-    number: "03",
-    title: "Learn from evidence",
-    detail: "Use saved attempts and meaningful feedback to decide what comes next.",
-    symbol: "✳",
-  },
-];
+function Notice({ compact = false }: { compact?: boolean }) {
+  return <div className={"proto-notice" + (compact ? " compact" : "")}><span /> <b>PROTOTYPE</b><i>/</i> Sample content and fictional learner data</div>;
+}
+function Logo({ onClick }: { onClick: () => void }) {
+  return <button className="proto-logo" type="button" onClick={onClick} aria-label="Criterion Lab home"><span className="proto-logo-mark"><i /><i /><i /><i /></span><span><b>criterion lab</b><small>IB & CAMBRIDGE LEARNING</small></span></button>;
+}
+function Action({ children, onClick, secondary = false }: { children: ReactNode; onClick: () => void; secondary?: boolean }) {
+  return <button type="button" onClick={onClick} className={"proto-action" + (secondary ? " secondary" : "")}>{children}</button>;
+}
+function Label({ children }: { children: ReactNode }) { return <p className="proto-eyebrow"><span />{children}</p>; }
 
-function BrandMark() {
-  return (
-    <span className="brand-mark" aria-hidden="true">
-      <span />
-      <span />
-      <span />
-      <span />
-    </span>
-  );
+function Home({ go }: { go: Navigate }) {
+  return <div className="proto-public">
+    <Notice />
+    <header className="proto-header"><div className="proto-container proto-header-inner"><Logo onClick={() => go("home")} /><nav><a href="#proto-pathways">Pathways</a><a href="#proto-approach">Our approach</a><a href="#proto-first">What's coming</a></nav><Action secondary onClick={() => go("dashboard")}>Student preview ↗</Action></div></header>
+    <main>
+      <section className="proto-hero"><div className="proto-container proto-hero-grid"><div><Label>LEARNING, WITH DIRECTION</Label><h1>Make your next step a <em>smarter one.</em></h1><p className="proto-lead">A more considered way to learn English across IB MYP and Cambridge pathways. Practise with purpose, understand your gaps and build on what you know.</p><div className="proto-actions"><Action onClick={() => go("questions")}>Explore the question bank <span>→</span></Action><button className="proto-inline" type="button" onClick={() => document.getElementById("proto-approach")?.scrollIntoView({ behavior: "smooth" })}>Our approach ↘</button></div><div className="proto-proof"><span>✳</span><div><b>Learning that moves you forward.</b><small>Clear objectives. Useful practice. Feedback with a purpose.</small></div></div></div>
+        <div className="proto-hero-art"><div className="proto-orbit one" /><div className="proto-orbit two" /><section className="proto-journey"><div className="proto-overline"><span>YOUR LEARNING JOURNEY</span><span>01 — 03</span></div><div className="proto-journey-title"><span>↗</span><div><small>A ROUTE THAT MAKES SENSE</small><h2>Progress, in practice.</h2></div></div><div className="proto-journey-row"><span>01</span><div><b>Understand the skill</b><small>Know what you're learning and why.</small></div><i className="done">✓</i></div><div className="proto-journey-row"><span>02</span><div><b>Practise with purpose</b><small>Try questions connected to that skill.</small></div><i>02</i></div><div className="proto-journey-row"><span>03</span><div><b>Choose your next step</b><small>Use evidence and feedback to improve.</small></div><i>03</i></div><div className="proto-journey-footer">✳ &nbsp; Designed for progress, not guesswork.</div></section><div className="proto-floating-note"><span>↗</span><div><b>Small steps.</b><small>Meaningful progress.</small></div></div></div></div><div className="proto-ribbon"><span>LEARN WITH PURPOSE</span><i /><span>GROW WITH EVIDENCE</span><i /><span>KEEP MOVING FORWARD</span></div></section>
+      <section className="proto-pathways proto-section" id="proto-pathways"><div className="proto-container"><div className="proto-section-heading"><div><Label>START WITH THE RIGHT PATH</Label><h2>The right route starts<br />with <em>your world.</em></h2></div><p>Different programmes have different expectations. Start with the pathway that matches your curriculum—not a one-size-fits-all course.</p></div><div className="proto-pathway-grid"><article><div><span>01</span><b>IB MYP</b></div><h3>Language & Literature</h3><small>Years 1–5</small><p>Build confidence in reading, interpretation and purposeful writing through a clearly mapped learning route.</p><button type="button" onClick={() => go("dashboard")}>Preview pathway <span>↗</span></button></article><article><div><span>02</span><b>CAMBRIDGE</b></div><h3>Lower Secondary English</h3><small>Stages 7–9</small><p>Strengthen core English skills with practice organised around the learning objectives that matter.</p><button type="button" onClick={() => go("dashboard")}>Preview pathway <span>↗</span></button></article><article><div><span>03</span><b>CAMBRIDGE IGCSE</b></div><h3>First Language English</h3><small>Grade 9–10 equivalent pathways</small><p>Work towards the relevant syllabus through purposeful practice and carefully checked mapping.</p><button type="button" onClick={() => go("dashboard")}>Preview pathway <span>↗</span></button></article></div><p className="proto-fineprint">Stage 1 is a starter pathway, not exhaustive syllabus coverage. Curriculum mapping must be verified before content is published.</p></div></section>
+      <section className="proto-approach proto-section" id="proto-approach"><div className="proto-container proto-approach-grid"><div><Label>WHY THIS PLATFORM</Label><h2>More than a library.<br /><em>A clearer next step.</em></h2><p>Finding notes is only the beginning. The aim is to connect the syllabus, a specific skill, deliberate practice and useful feedback in one learning space.</p><Action secondary onClick={() => go("lesson")}>Preview a lesson →</Action></div><div className="proto-principles"><article><span>01</span><i>⌖</i><div><b>Find your bearings</b><p>Start with your programme, stage and the skill you want to build.</p></div></article><article><span>02</span><i>↗</i><div><b>Practise with purpose</b><p>Use focused questions, annotated examples and clear explanations.</p></div></article><article><span>03</span><i>✳</i><div><b>Learn from evidence</b><p>Use saved attempts and meaningful feedback to decide what comes next.</p></div></article></div></div></section>
+      <section className="proto-release" id="proto-first"><div className="proto-container proto-release-panel"><div><Label>THE FIRST RELEASE</Label><h2>English first.<br /><em>Built thoughtfully.</em></h2></div><div><p>The initial build focuses on English pathways, verified curriculum mapping, purposeful practice and a clear foundation for learner progress. Mathematics is planned for a later phase.</p><small>This preview contains sample content only. Real accounts, learning tools and connected progress tracking are still in development.</small><Action onClick={() => go("dashboard")}>Explore student preview ↗</Action></div></div></section>
+    </main>
+    <footer className="proto-public-footer"><div className="proto-container"><Logo onClick={() => go("home")} /><p>Know what to practise next—and see whether you have improved.</p><small>EARLY BUILD · WORKING NAME</small></div></footer>
+  </div>;
 }
 
-function App() {
-  return (
-    <div className="site-shell" id="top">
-      <div className="preview-banner">
-        <span className="status-dot" />
-        EARLY BUILD PREVIEW
-        <span className="banner-divider">/</span>
-        LEARNING TOOLS ARE IN DEVELOPMENT
-      </div>
+function Shell({ page, go, children }: { page: Page; go: Navigate; children: ReactNode }) {
+  return <div className="proto-app"><Notice compact /><div className="proto-app-layout"><aside className="proto-sidebar"><Logo onClick={() => go("home")} /><div className="proto-workspace">LEARNING SPACE <span>DEMO</span></div><nav aria-label="Student preview navigation">{sections.map(s => <button type="button" key={s.page} className={page === s.page ? "active" : ""} onClick={() => go(s.page)}><i>{s.icon}</i>{s.label}{page === s.page && <b />}</button>)}</nav><div className="proto-sidebar-bottom"><strong>✳ &nbsp; Keep moving forward.</strong><p>Every attempt can teach you something.</p><button type="button" onClick={() => go("home")}>↖ &nbsp; Public homepage</button></div></aside><div className="proto-app-main"><header className="proto-app-header"><div>Learning space <span>/</span> <b>{sections.find(s => s.page === page)?.label ?? "Preview"}</b></div><small>English · Stage 1 preview</small><i>D</i></header><main className="proto-app-content">{children}<footer className="proto-app-footer"><span>CRITERION LAB · DESIGN PROTOTYPE</span><span>Fictional data · No real learner records</span></footer></main></div></div></div>;
+}
+function PageIntro({ eyebrow, title, subtitle }: { eyebrow: string; title: ReactNode; subtitle: string }) {
+  return <div className="proto-page-intro"><Label>{eyebrow}</Label><h1>{title}</h1><p>{subtitle}</p></div>;
+}
+function InfoNote({ children }: { children: ReactNode }) { return <div className="proto-info-note"><span>i</span><p>{children}</p></div>; }
 
-      <header className="site-header">
-        <div className="container header-inner">
-          <a className="brand" href="#top" aria-label="Criterion Lab home">
-            <BrandMark />
-            <span className="brand-words">
-              <strong>criterion lab</strong>
-              <small>IB &amp; CAMBRIDGE LEARNING</small>
-            </span>
-          </a>
-          <nav className="main-nav" aria-label="Main navigation">
-            <a href="#pathways">Pathways</a>
-            <a href="#approach">Our approach</a>
-            <a className="nav-link-strong" href="#first-release">
-              What’s coming <span aria-hidden="true">↗</span>
-            </a>
-          </nav>
-        </div>
-      </header>
-
-      <main>
-        <section className="hero">
-          <div className="container hero-layout">
-            <div className="hero-copy">
-              <p className="eyebrow"><span /> LEARNING, WITH DIRECTION</p>
-              <h1>Make your next step a <em>smarter one.</em></h1>
-              <p className="hero-description">
-                A structured learning space for IB MYP and Cambridge English
-                learners. Know what to practise next—and see whether you have
-                improved.
-              </p>
-              <div className="hero-actions">
-                <a className="button button-dark" href="#pathways">
-                  Explore pathways <span aria-hidden="true">→</span>
-                </a>
-                <a className="simple-link" href="#approach">
-                  How it works <span aria-hidden="true">↘</span>
-                </a>
-              </div>
-              <div className="hero-signature">
-                <span className="signature-star" aria-hidden="true">✳</span>
-                <p>
-                  <strong>Learning that moves you forward.</strong>
-                  <br />
-                  Clear objectives. Useful practice. Feedback with a purpose.
-                </p>
-              </div>
-            </div>
-
-            <div className="learning-card" aria-label="Illustration of the planned learning journey">
-              <div className="card-heading">
-                <span>THE LEARNING JOURNEY</span>
-                <span className="card-index">01 — 03</span>
-              </div>
-              <div className="journey-title">
-                <span className="journey-icon" aria-hidden="true">↗</span>
-                <div>
-                  <p>A ROUTE THAT MAKES SENSE</p>
-                  <h2>Progress, in practice.</h2>
-                </div>
-              </div>
-              <div className="journey-steps">
-                <div className="journey-step">
-                  <span className="step-number">01</span>
-                  <div>
-                    <strong>Understand the skill</strong>
-                    <p>Know what you’re learning and why.</p>
-                  </div>
-                  <span className="step-ring" />
-                </div>
-                <div className="journey-step">
-                  <span className="step-number">02</span>
-                  <div>
-                    <strong>Practise with purpose</strong>
-                    <p>Try questions connected to that skill.</p>
-                  </div>
-                  <span className="step-ring" />
-                </div>
-                <div className="journey-step">
-                  <span className="step-number">03</span>
-                  <div>
-                    <strong>Choose your next step</strong>
-                    <p>Use evidence and feedback to improve.</p>
-                  </div>
-                  <span className="step-ring" />
-                </div>
-              </div>
-              <div className="journey-footer">
-                <span aria-hidden="true">✳</span>
-                Designed for progress, not guesswork.
-              </div>
-              <span className="hero-orbit orbit-a" aria-hidden="true" />
-              <span className="hero-orbit orbit-b" aria-hidden="true" />
-            </div>
-          </div>
-          <div className="hero-ribbon" aria-hidden="true">
-            <span>LEARN WITH PURPOSE</span><span className="ribbon-line" /><span>GROW WITH EVIDENCE</span>
-          </div>
-        </section>
-
-        <section className="pathways section-space" id="pathways">
-          <div className="container">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow"><span /> START WITH THE RIGHT PATH</p>
-                <h2>The right learning route<br />starts with <em>your world.</em></h2>
-              </div>
-              <p className="section-intro">
-                Different programmes have different expectations. Begin with
-                the pathway that matches your curriculum—not a one-size-fits-all
-                course.
-              </p>
-            </div>
-            <div className="pathway-grid">
-              {pathways.map((pathway) => (
-                <article className="pathway-card" key={pathway.number}>
-                  <div className="pathway-card-top">
-                    <span className="pathway-number">{pathway.number}</span>
-                    <span className="programme-tag">{pathway.programme}</span>
-                  </div>
-                  <h3>{pathway.title}</h3>
-                  <p className="pathway-stage">{pathway.stage}</p>
-                  <p className="pathway-description">{pathway.description}</p>
-                  <div className="pathway-card-bottom">
-                    <span>PATHWAY PREVIEW</span>
-                    <span className="planned-tag">Planned</span>
-                  </div>
-                </article>
-              ))}
-            </div>
-            <p className="section-note">
-              Stage 1 is a starter pathway, not exhaustive syllabus coverage.
-              Curriculum mapping will be verified against official specifications
-              before any learning content is published.
-            </p>
-          </div>
-        </section>
-
-        <section className="approach section-space" id="approach">
-          <div className="container approach-layout">
-            <div className="approach-copy">
-              <p className="eyebrow"><span /> WHY THIS PLATFORM</p>
-              <h2>More than a library.<br /><em>A clearer next step.</em></h2>
-              <p>
-                Finding notes is only the beginning. The aim is to connect the
-                syllabus, a specific skill, deliberate practice and useful
-                feedback in one learning space.
-              </p>
-              <a className="simple-link" href="#first-release">
-                What we’re building <span aria-hidden="true">→</span>
-              </a>
-            </div>
-            <div className="principle-list">
-              {principles.map((principle) => (
-                <article className="principle-row" key={principle.number}>
-                  <span className="principle-number">{principle.number}</span>
-                  <div>
-                    <h3>{principle.title}</h3>
-                    <p>{principle.detail}</p>
-                  </div>
-                  <span className="principle-symbol" aria-hidden="true">{principle.symbol}</span>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="first-release section-space" id="first-release">
-          <div className="container release-panel">
-            <div className="release-top">
-              <span className="release-symbol" aria-hidden="true">✳</span>
-              <span>THE FIRST RELEASE</span>
-            </div>
-            <div className="release-layout">
-              <h2>English first.<br /><em>Built thoughtfully.</em></h2>
-              <div>
-                <p>
-                  The initial build will focus on English learning pathways,
-                  verified curriculum mapping, purposeful practice and a clear
-                  foundation for learner progress. Mathematics is planned for a
-                  later phase.
-                </p>
-                <p className="release-caveat">
-                  This is an early preview, not a complete course or a live
-                  student account system. Interactive learning tools and content
-                  are still being built.
-                </p>
-                <a className="button button-light" href="#top">
-                  Back to the beginning <span aria-hidden="true">↑</span>
-                </a>
-              </div>
-            </div>
-            <div className="release-motif" aria-hidden="true">
-              {Array.from({ length: 25 }, (_, index) => <span key={index} />)}
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="site-footer">
-        <div className="container footer-inner">
-          <a className="brand footer-brand" href="#top" aria-label="Criterion Lab home">
-            <BrandMark />
-            <span className="brand-words">
-              <strong>criterion lab</strong>
-              <small>WORKING NAME — NOT FINAL</small>
-            </span>
-          </a>
-          <p>Know what to practise next—and see whether you have improved.</p>
-          <span className="footer-meta">EARLY BUILD · 2026</span>
-        </div>
-      </footer>
-    </div>
-  );
+function Dashboard({ go }: { go: Navigate }) {
+  return <Shell page="dashboard" go={go}><InfoNote><b>Demonstration dashboard.</b> All learner activity and numbers below are fictional examples to show the intended experience.</InfoNote><PageIntro eyebrow="YOUR LEARNING AT A GLANCE" title={<>A clearer picture of <em>your progress.</em></>} subtitle="A considered overview of what you have practised, where you are building confidence and what may be useful next." /><section className="proto-welcome"><div><small>YOUR NEXT STEP</small><h2>Keep building your writer's voice.</h2><p>Pick up with a short lesson on how deliberate language choices create tone.</p><Action onClick={() => go("lesson")}>Continue learning →</Action></div><div className="proto-welcome-art"><span>Aa</span><small>WORDS WITH PURPOSE</small></div></section><div className="proto-section-title"><div><h2>Your learning snapshot</h2><p>Example measures from a fictional demo learner.</p></div><small>THIS MONTH · SAMPLE</small></div><div className="proto-metrics"><article><i>⌖</i><small>SKILLS EXPLORED</small><strong>12</strong><span>Across 3 example units</span></article><article><i>↗</i><small>PRACTICE ATTEMPTS</small><strong>28</strong><span>Across reading and writing</span></article><article><i>⟳</i><small>REVISED RESPONSES</small><strong>6</strong><span>Saved revisions in this example</span></article></div><div className="proto-dash-grid"><section className="proto-panel"><div className="proto-panel-heading"><div><h2>Skills in focus</h2><p>Example statuses, with their evidence.</p></div><button type="button" onClick={() => go("questions")}>Find practice ↗</button></div><div className="proto-skill-row"><i className="good">✓</i><div><b>Selecting textual evidence</b><small>Consistent results across recent demo attempts.</small></div><span className="green-status">Building confidence</span></div><div className="proto-skill-row"><i className="warm">↗</i><div><b>Explaining language choices</b><small>Some explanations need clearer links to effect.</small></div><span className="warm-status">In progress</span></div><div className="proto-skill-row"><i>○</i><div><b>Structuring an argument</b><small>Not enough evidence to assess this skill yet.</small></div><span>Not assessed</span></div><p className="proto-note-bottom">In a live product, every skill status must be backed by defined rules and recorded learner evidence.</p></section><section className="proto-panel"><div className="proto-panel-heading"><div><h2>Suggested next</h2><p>Reasoned from this demo profile.</p></div><span className="proto-spark">✳</span></div><div className="proto-recommend"><small>12 MIN · GUIDED ANALYSIS</small><h3>How language shapes tone</h3><p>Practise linking a writer's choice to the effect it creates, using precise evidence.</p><Action onClick={() => go("lesson")}>Try this activity →</Action></div><button type="button" className="proto-wide-link" onClick={() => go("assessment")}>View example assessment feedback ↗</button></section></div><section className="proto-panel proto-activity"><div className="proto-panel-heading"><div><h2>Recent activity</h2><p>A short history from this fictional account.</p></div><button type="button" onClick={() => go("questions")}>Browse questions ↗</button></div>{[{t:"Read between the lines",m:"Inference and evidence · Practice",s:"Completed"},{t:"How language shapes tone",m:"Writer's choices · Guided analysis",s:"In progress"},{t:"Build a purposeful opening",m:"Structure and audience · Writing",s:"Saved draft"}].map(item => <button type="button" className="proto-activity-row" key={item.t} onClick={() => go(item.s === "Completed" ? "questions" : "lesson")}><i>{item.s === "Completed" ? "✓" : item.s === "In progress" ? "↗" : "○"}</i><span><b>{item.t}</b><small>{item.m}</small></span><em>{item.s}</em><strong>↗</strong></button>)}</section></Shell>;
 }
 
-export default App;
+function Lesson({ go }: { go: Navigate }) {
+  const [answer, setAnswer] = useState("");
+  const [checked, setChecked] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const answers = [{ id:"A", text:"It tells the reader exactly what to think." },{ id:"B", text:"It slows the scene without changing its mood." },{ id:"C", text:"It creates a pause that makes the change feel sudden." }];
+  return <Shell page="lesson" go={go}><InfoNote><b>Illustrative lesson only.</b> The sample question and explanation have not been mapped to or verified against a specific syllabus edition.</InfoNote><div className="proto-crumb"><button type="button" onClick={() => go("dashboard")}>Overview</button> / <button type="button" onClick={() => go("questions")}>Question bank</button> / <b>Language choices</b></div><div className="proto-lesson-head"><div><Label>SKILL STUDY · SAMPLE UNIT</Label><h1>Notice the choice.<br /><em>Explain the effect.</em></h1><p>Strong analysis moves beyond spotting a technique. It explains how a particular choice shapes a reader's experience.</p></div><div className="proto-progress"><small>EXAMPLE PROGRESS</small><b>2 <span>of 4 steps</span></b><div><i /></div><small>Illustrative only</small></div></div><div className="proto-lesson-grid"><div><section className="proto-panel proto-explanation"><Label>01 · THE IDEA</Label><h2>A choice is only the beginning.</h2><p>When you analyse a piece of writing, naming a technique is not enough. Ask what the writer's choice makes the reader notice, feel or question—and support your explanation with evidence.</p><div className="proto-extract"><small>INVENTED EXAMPLE EXTRACT</small><blockquote>The door swung open. <b>Silence.</b> Then the room erupted.</blockquote><p><span>↳</span> The one-word sentence interrupts the rhythm. That pause makes the sudden shift in the room feel sharper.</p></div><div className="proto-tip"><span>✳</span><p><b>Try this thinking move</b><br />Choice → evidence → effect. Make the link between each part explicit.</p></div></section><section className="proto-panel proto-practice"><Label>02 · CHECK YOUR UNDERSTANDING</Label><h2>Why might the writer use the one-word sentence?</h2><p>Choose the strongest explanation. This is a sample question, not a syllabus-verified item.</p><div className="proto-answer-list">{answers.map(a => <button type="button" key={a.id} onClick={() => { setAnswer(a.id); setChecked(false); }} className={(answer === a.id ? "selected " : "") + (checked && a.id === "C" ? "correct " : "") + (checked && answer === a.id && answer !== "C" ? "incorrect" : "")}><i>{a.id}</i><span>{a.text}</span>{checked && a.id === "C" && <b>✓</b>}</button>)}</div>{checked && <div className={"proto-answer-feedback " + (answer === "C" ? "right" : "")}><b>{answer === "C" ? "That's the strongest explanation." : "Review the effect, not just the technique."}</b><p>The abrupt pause changes the rhythm and heightens the contrast with what follows.</p></div>}<div className="proto-practice-footer"><small>DEMO ONLY · NO GRADE IS RECORDED</small><Action onClick={() => { if (answer) setChecked(true); }}>Check response →</Action></div></section><div className="proto-bottom-actions"><Action secondary onClick={() => go("questions")}>Back to question bank</Action><Action onClick={() => go("assessment")}>See feedback example →</Action></div></div><aside className="proto-panel proto-lesson-aside"><Label>IN THIS LESSON</Label><div className="proto-outline-row"><i className="current">✓</i><span><b>The idea</b><small>Understand the skill</small></span></div><div className="proto-outline-row"><i className="current">02</i><span><b>Check understanding</b><small>Try a question</small></span></div><div className="proto-outline-row"><i>03</i><span><b>Review an example</b><small>See the reasoning</small></span></div><div className="proto-outline-row"><i>04</i><span><b>Choose what is next</b><small>Review and continue</small></span></div><button type="button" className={"proto-save " + (saved ? "is-saved" : "")} onClick={() => setSaved(!saved)}>{saved ? "✓ Saved to demo list" : "+ Save this lesson"}</button><small className="proto-aside-note">Temporary to this open preview; not synced to an account.</small><div className="proto-aside-tip"><span>Aa</span><b>Keep the explanation useful.</b><p>A strong response names the choice, points to evidence and explains its effect.</p></div></aside></div></Shell>;
+}
+
+function Questions({ go }: { go: Navigate }) {
+  const [search, setSearch] = useState("");
+  const [area, setArea] = useState("All skills");
+  const [type, setType] = useState("All task types");
+  const filtered = questionItems.filter(q => (q.title + " " + q.skill + " " + q.area + " " + q.type).toLowerCase().includes(search.toLowerCase()) && (area === "All skills" || q.area === area) && (type === "All task types" || q.type === type));
+  return <Shell page="questions" go={go}><InfoNote><b>Question bank prototype.</b> Titles and items are examples for demonstrating search and filters, not a published syllabus-mapped bank.</InfoNote><PageIntro eyebrow="PRACTISE WITH PURPOSE" title={<>A better question can<br />unlock <em>a new idea.</em></>} subtitle="Explore short practice and extended-response examples. Filter by the kind of skill you want to work on." /><div className="proto-bank-count"><b>{filtered.length}</b> example {filtered.length === 1 ? "task" : "tasks"} shown <small>FICTIONAL CONTENT</small></div><section className="proto-panel proto-filters"><div className="proto-search"><span>⌕</span><input aria-label="Search questions" placeholder="Search a skill, topic or task..." value={search} onChange={e => setSearch(e.target.value)} /><small>SEARCH</small></div><div className="proto-filter-row"><label>SKILL AREA<select value={area} onChange={e => setArea(e.target.value)}><option>All skills</option><option>Reading</option><option>Writing</option><option>Analysis</option></select></label><label>TASK TYPE<select value={type} onChange={e => setType(e.target.value)}><option>All task types</option><option>Short response</option><option>Guided analysis</option><option>Writing task</option><option>Revision task</option></select></label><button type="button" onClick={() => { setSearch(""); setArea("All skills"); setType("All task types"); }}>Clear filters ↺</button></div></section><div className="proto-results">{filtered.map((q, i) => <article className="proto-result" key={q.id}><div className={"proto-result-art art-" + (i % 3)}><b>{q.area === "Reading" ? "“ ”" : q.area === "Writing" ? "Aa" : "↗"}</b><small>{q.id}</small></div><div className="proto-result-main"><div><span>{q.area}</span><small>{q.type}</small></div><h2>{q.title}</h2><p>{q.skill}</p><small>◷ {q.time} &nbsp; · &nbsp; Demo item</small></div><Action secondary onClick={() => go("lesson")}>Open activity ↗</Action></article>)}{filtered.length === 0 && <div className="proto-empty"><span>⌕</span><h2>No matching examples</h2><p>Try a different search term or clear the filters to see all demo items.</p><Action secondary onClick={() => { setSearch(""); setArea("All skills"); setType("All task types"); }}>Clear filters</Action></div>}</div></Shell>;
+}
+
+function Assessment({ go }: { go: Navigate }) {
+  const [evidence, setEvidence] = useState(true);
+  return <Shell page="assessment" go={go}><InfoNote><b>Assessment feedback prototype.</b> This is fictional feedback and an illustrative placeholder rubric—not a founder-approved rubric or a real student assessment.</InfoNote><div className="proto-assess-head"><div><div className="proto-crumb"><button type="button" onClick={() => go("dashboard")}>Overview</button> / <b>Assessment feedback</b></div><Label>HUMAN FEEDBACK · CONCEPT SCREEN</Label><h1>See the thinking<br />behind <em>the feedback.</em></h1><p>Useful assessment connects a criterion to evidence in the response, then points towards a practical next step.</p></div><div className="proto-assess-status"><span>✓</span><div><small>EXAMPLE STATUS</small><b>Feedback published</b><small>Fictional assessment · sample date</small></div></div></div><section className="proto-panel proto-assess-summary"><div><small>SAMPLE TASK</small><h2>Write for a specific audience</h2><p>Extended response · Curriculum mapping to be verified</p></div><div><small>ASSESSMENT TYPE</small><b>Human-graded concept</b><small>RESPONSE HISTORY</small><button type="button" onClick={() => setEvidence(!evidence)}>{evidence ? "Hide evidence excerpts" : "Show evidence excerpts"} ↗</button></div></section><div className="proto-assess-grid"><div><section className="proto-panel"><div className="proto-feedback-title"><div><Label>THE BIG PICTURE</Label><h2>A thoughtful start, with room to be more precise.</h2></div><span>✳</span></div><p className="proto-feedback-body">The response maintains a consistent voice and recognises its intended audience. To strengthen the piece, make the central point clearer earlier and ensure each detail helps develop that purpose.</p><div className="proto-feedback-columns"><div><small>WHAT IS WORKING</small><p>Voice and tone feel considered. The response stays focused on its intended reader.</p></div><div><small>WHAT TO DEVELOP</small><p>Make the main message more explicit and connect supporting details more directly to it.</p></div></div></section><section className="proto-panel proto-rubric"><div className="proto-panel-heading"><div><h2>Criterion-by-criterion feedback</h2><p>Illustrative placeholder criteria for the interface only.</p></div><span>NOT FINAL RUBRIC</span></div>{[{n:"01",title:"Purpose and audience",score:"4",body:"The tone is broadly appropriate to the intended reader. A clearer opening would establish the purpose more confidently.",quote:"You might have noticed that things are changing around us..."},{n:"02",title:"Organisation and development",score:"3",body:"The sequence is understandable. Stronger links between the central point and supporting details would improve the flow.",quote:"Another point to think about is..."},{n:"03",title:"Language and precision",score:"4",body:"Language is generally clear. A few more specific verbs and details could make the message sharper.",quote:""}].map(c => <article className="proto-criterion" key={c.n}><div><span>{c.n}</span><div><b>{c.title}</b><small>Placeholder criterion</small></div><strong>{c.score}<small> / 5</small></strong></div><p>{c.body}</p>{evidence && c.quote && <blockquote><small>INVENTED EVIDENCE EXCERPT</small><br />“{c.quote}”<p>This example shows how the final feedback can connect a comment to the learner's words.</p></blockquote>}</article>)}<p className="proto-rubric-note">Scores are illustrative UI data. Final task-specific rubrics and multi-credit rules remain decisions for the academic lead.</p></section></div><aside><section className="proto-panel proto-next-steps"><span>↗</span><Label>YOUR NEXT STEPS</Label><h2>Turn feedback into practice.</h2><ol><li><i>1</i>Rewrite the opening so the central point is clear.</li><li><i>2</i>Connect each supporting detail to your purpose.</li><li><i>3</i>Review transitions and clarify links between ideas.</li></ol><Action onClick={() => go("questions")}>Find related practice →</Action></section><section className="proto-panel proto-help"><span>i</span><b>What makes feedback useful?</b><p>It should be specific, linked to evidence and clear about what to try next—not only a score.</p></section></aside></div><div className="proto-bottom-actions"><Action secondary onClick={() => go("dashboard")}>← Back to overview</Action><Action onClick={() => go("lesson")}>Practise a skill →</Action></div></Shell>;
+}
+
+export default function App() {
+  const [page, setPage] = useState<Page>("home");
+  const go: Navigate = next => { setPage(next); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  if (page === "dashboard") return <Dashboard go={go} />;
+  if (page === "lesson") return <Lesson go={go} />;
+  if (page === "questions") return <Questions go={go} />;
+  if (page === "assessment") return <Assessment go={go} />;
+  return <Home go={go} />;
+}
