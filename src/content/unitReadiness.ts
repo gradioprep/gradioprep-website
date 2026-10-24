@@ -4,6 +4,7 @@ import type {
   UnitReadinessGate,
 } from "./model";
 import { englishPathways } from "./pathways";
+import { pilotUnitDraft } from "./pilotUnitDraft";
 
 /**
  * Initial unit-content planning records. They contain no lesson links, verified
@@ -19,9 +20,10 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
     title: unit.title,
     releaseStatus: "planned",
     syllabusEditionCode: null,
-    officialSourceUrl: null,
-    officialSourceCheckedAt: null,
-    officialObjectiveCodes: [],
+    officialSourceUrl: unit.id === pilotUnitDraft.unitId ? pilotUnitDraft.source.url : null,
+    officialSourceCheckedAt: unit.id === pilotUnitDraft.unitId ? pilotUnitDraft.source.checkedAt : null,
+    officialSourceNote: unit.id === pilotUnitDraft.unitId ? pilotUnitDraft.source.scopeNote : null,
+    officialObjectiveCodes: unit.id === pilotUnitDraft.unitId ? pilotUnitDraft.officialObjectiveCodes : [],
     learningObjective: null,
     lessonIds: [],
     practiceQuestionIds: [],
