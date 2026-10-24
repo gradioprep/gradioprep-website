@@ -215,7 +215,7 @@ function Pathways({ go }: { go: Navigate }) {
   );
 
   return <Shell page="pathways" go={go}>
-    <InfoNote><b>Pathway catalogue — planning preview.</b> These are the 10 planned English pathways, not released courses. Official syllabus editions, mappings and unit focuses are not yet verified. The readiness checks show what remains before each unit can be released.</InfoNote>
+    <InfoNote><b>Pathway catalogue — planning preview.</b> These are the 10 planned English pathways, not released courses. Official syllabus editions and mappings remain unverified; the first unit is approved for pilot preview. The readiness checks show what remains before any unit can be released.</InfoNote>
     <PageIntro
       eyebrow="CHOOSE YOUR CURRICULUM"
       title={<>Start with the right <em>pathway.</em></>}
@@ -239,7 +239,7 @@ function Pathways({ go }: { go: Navigate }) {
     {selected && <section className="proto-panel" aria-label="Selected pathway unit planning slots">
       <div className="proto-panel-heading">
         <div>
-          <h2>Planned units — {selected.levelLabel}</h2>
+          <h2>Unit plan — {selected.levelLabel}</h2>
           <p>{selected.programmeName} · {selected.courseName}. Content review passed; official guide edition and objective mapping remain unverified.</p>
         </div>
         <span>NOT RELEASED</span>
@@ -254,7 +254,7 @@ function Pathways({ go }: { go: Navigate }) {
         >
           <i>{String(unit.sequence).padStart(2, "0")}</i>
           <span><b>{unit.title}</b><small>{unit.reviewNote}</small></span>
-          <em>{selectedUnit?.id === unit.id ? "Selected" : "Planned"}</em>
+          <em>{unit.id === pilotUnitDraft.unitId ? "Pilot preview" : selectedUnit?.id === unit.id ? "Selected" : "Planned"}</em>
           <strong>↗</strong>
         </button>
       ))}
@@ -315,7 +315,7 @@ function Pathways({ go }: { go: Navigate }) {
       </div>
       <div className="proto-feedback-columns">
         <div><small>COMMON MISCONCEPTIONS TO ADDRESS</small>{pilotUnitDraft.commonMisconceptions.map(item => <p key={item}>{item}</p>)}</div>
-        <div><small>ACADEMIC REVIEW QUESTIONS</small>{pilotUnitDraft.reviewQuestions.map(item => <p key={item}>{item}</p>)}</div>
+        <div><small>REMAINING SOURCE / RELEASE CHECKS</small>{pilotUnitDraft.remainingReleaseChecks.map(item => <p key={item}>{item}</p>)}</div>
       </div>
       <p className="proto-note-bottom">{pilotUnitDraft.rightsNote}</p>
       <p className="proto-note-bottom">{pilotUnitDraft.releaseNote}</p>
