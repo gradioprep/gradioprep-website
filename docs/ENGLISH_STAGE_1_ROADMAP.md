@@ -1,6 +1,6 @@
 # English Stage 1 — Curriculum Roadmap
 
-**Status:** Working planning draft. Pathway count and production targets follow the approved master brief. Exact skill objectives, sequence and official syllabus mappings still require academic-lead approval.
+**Status:** Working roadmap. The first pilot unit's instructional content review passed for preview version 1; official syllabus mapping remains unverified, and the other pathway sequences still require their own review. Pathway count and production targets follow the master brief.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Purpose:** Turn the approved Stage 1 scope into a trackable production plan without claiming full syllabus coverage or inventing official curriculum mappings.
 
