@@ -5,36 +5,40 @@ import type {
 } from "./model";
 import { englishPathways } from "./pathways";
 import { pilotUnitDraft } from "./pilotUnitDraft";
+import { pilotLearnerLesson } from "./pilotLearnerLesson";
 
 /**
- * Initial unit-content planning records. They contain no lesson links, verified
- * syllabus edition, objective codes, reviewer details or release approvals.
- * This is static source data, not a saved editor or live database.
+ * Static planning records, not a database. The pilot's content-review outcome,
+ * lesson IDs and practice IDs are recorded for version 1. Curriculum mapping,
+ * rights/accessibility review and release approval remain separate requirements.
  */
 export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathway =>
-  pathway.unitSlots.map((unit: PlannedUnitSlot): UnitContentPlan => ({
-    id: `plan-${unit.id}`,
-    unitId: unit.id,
-    pathwayId: pathway.id,
-    version: 1,
-    title: unit.title,
-    releaseStatus: "planned",
-    syllabusEditionCode: null,
-    officialSourceUrl: unit.id === pilotUnitDraft.unitId ? pilotUnitDraft.source.url : null,
-    officialSourceCheckedAt: unit.id === pilotUnitDraft.unitId ? pilotUnitDraft.source.checkedAt : null,
-    officialSourceNote: unit.id === pilotUnitDraft.unitId ? pilotUnitDraft.source.scopeNote : null,
-    officialObjectiveCodes: unit.id === pilotUnitDraft.unitId ? pilotUnitDraft.officialObjectiveCodes : [],
-    learningObjective: null,
-    lessonIds: [],
-    practiceQuestionIds: [],
-    answerKeyReviewState: "not-started",
-    academicReviewer: null,
-    academicReviewedAt: null,
-    contentRightsNote: null,
-    accessibilityReviewState: "not-started",
-    releaseApprovedBy: null,
-    releaseApprovedAt: null,
-  }))
+  pathway.unitSlots.map((unit: PlannedUnitSlot): UnitContentPlan => {
+    const isPilotUnit = unit.id === pilotLearnerLesson.unitId;
+    return {
+      id: `plan-${unit.id}`,
+      unitId: unit.id,
+      pathwayId: pathway.id,
+      version: 1,
+      title: isPilotUnit ? pilotLearnerLesson.title : unit.title,
+      releaseStatus: "planned",
+      syllabusEditionCode: null,
+      officialSourceUrl: isPilotUnit ? pilotUnitDraft.source.url : null,
+      officialSourceCheckedAt: isPilotUnit ? pilotUnitDraft.source.checkedAt : null,
+      officialSourceNote: isPilotUnit ? pilotUnitDraft.source.scopeNote : null,
+      officialObjectiveCodes: isPilotUnit ? pilotUnitDraft.officialObjectiveCodes : [],
+      learningObjective: isPilotUnit ? pilotLearnerLesson.proposedLearningObjective : null,
+      lessonIds: isPilotUnit ? [pilotLearnerLesson.id] : [],
+      practiceQuestionIds: isPilotUnit ? pilotLearnerLesson.practiceItems.map(item => item.id) : [],
+      answerKeyReviewState: isPilotUnit ? "passed" : "not-started",
+      academicReviewer: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewerLabel : null,
+      academicReviewedAt: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewedAt : null,
+      contentRightsNote: null,
+      accessibilityReviewState: "not-started",
+      releaseApprovedBy: null,
+      releaseApprovedAt: null,
+    };
+  })
 );
 
 /**
