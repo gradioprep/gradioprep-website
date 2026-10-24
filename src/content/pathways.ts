@@ -7,18 +7,22 @@ const unitSequences: readonly UnitSequence[] = [1, 2, 3];
  * do not imply curriculum coverage; the academic lead chooses each focus.
  */
 function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
-  return unitSequences.map((sequence) => ({
-    id: `${pathwayId}-u${sequence}`,
-    pathwayId,
-    sequence,
-    title: "Unit focus to be confirmed",
-    learningObjective: null,
-    officialObjectiveCodes: [],
-    mappingStatus: "unverified",
-    releaseStatus: "planned",
-    reviewNote:
-      "Planning slot only. Add a skill focus and official objective references after academic review.",
-  }));
+  return unitSequences.map((sequence) => {
+    const isPilotDraft = pathwayId === "ib-myp-lal-y1" && sequence === 1;
+    return {
+      id: `${pathwayId}-u${sequence}`,
+      pathwayId,
+      sequence,
+      title: isPilotDraft ? "Draft focus — How writers shape meaning" : "Unit focus to be confirmed",
+      learningObjective: null,
+      officialObjectiveCodes: [],
+      mappingStatus: "unverified",
+      releaseStatus: "planned",
+      reviewNote: isPilotDraft
+        ? "Working content draft available for academic review; not an approved Year 1 objective mapping or release."
+        : "Planning slot only. Add a skill focus and official objective references after academic review.",
+    };
+  });
 }
 
 function pathway(
