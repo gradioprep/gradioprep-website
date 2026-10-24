@@ -2,7 +2,7 @@
 
 **Version:** 1.6  
 **Last updated:** 24 October 2026  
-**Status:** Frontend prototype; pathway catalogue includes unit release-readiness checks  
+**Status:** Frontend prototype; pilot lesson content review passed for preview version 1  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
 **Founder context:** 18 years of IB, IGCSE and SAT tutoring experience; founder will initially be the sole grader and academic lead.  
 **Initial geography:** Delhi-NCR, then wider India  
