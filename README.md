@@ -34,7 +34,7 @@ Any approved or reviewed feature, content item or document may be updated later.
 - [Design specification](docs/DESIGN_SPEC.md) — approved visual system and screen behaviour.
 - [English Stage 1 roadmap](docs/ENGLISH_STAGE_1_ROADMAP.md) — pathway planning draft; exact skill sequence awaits academic-lead approval.
 - [Logical data model](docs/DATA_MODEL.md) — proposed content, learner-record and access-control structure; not a live database.
-- [Typed pathway catalogue](src/content/pathways.ts) — 10 planned entries and 30 unit slots; the first slot has an unapproved draft focus.
+- [Typed pathway catalogue](src/content/pathways.ts) — 10 planned entries and 30 unit slots; the first slot is approved for pilot preview but remains officially unmapped.
 - [Content types](src/content/model.ts) — shared TypeScript structures for pathway, unit and demonstration content.
 - [Pilot unit brief](src/content/pilotUnitDraft.ts) — proposed focus, sequence, worked response and candidate objective references; unverified and unreleased.
 - [Pilot lesson and practice pack](src/content/pilotLessonPack.ts) — full draft lesson, original reading passage, formative questions, model answers and teacher feedback guidance.
