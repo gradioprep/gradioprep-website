@@ -114,6 +114,46 @@ function Lesson({ go }: { go: Navigate }) {
 function Pathways({ go }: { go: Navigate }) {
   const [selectedPathwayId, setSelectedPathwayId] = useState("ib-myp-lal-y1");
   const selected = englishPathways.find(item => item.id === selectedPathwayId) ?? englishPathways[0];
+  const [selectedUnitId, setSelectedUnitId] = useState(selected.unitSlots[0]?.id ?? "");
+  const selectedUnit = selected.unitSlots.find(unit => unit.id === selectedUnitId) ?? selected.unitSlots[0];
+
+  const unitReadinessRequirements = [
+    {
+      title: "Verify the official curriculum source",
+      detail: "Record the applicable official programme/course reference, syllabus or framework edition, source URL and date checked.",
+      owner: "Academic review",
+    },
+    {
+      title: "Approve the learning objective",
+      detail: "Confirm the unit focus, objective wording, objective references and prerequisites before drafting the teaching content.",
+      owner: "Academic decision",
+    },
+    {
+      title: "Prepare the lesson content",
+      detail: "Add an explanation, a worked or annotated example, common-mistake guidance and a meaningful next step.",
+      owner: "Content work",
+    },
+    {
+      title: "Link practice and explanations",
+      detail: "Add relevant questions, answer keys and explanations. Keep learner-visible prompts separate from restricted answer keys in production.",
+      owner: "Content work",
+    },
+    {
+      title: "Complete academic and rights review",
+      detail: "Record reviewer, date, content version, source/rights notes and any changes required.",
+      owner: "Quality review",
+    },
+    {
+      title: "Check accessibility and presentation",
+      detail: "Review language level, keyboard access, responsive layout, contrast and whether the content works on mobile.",
+      owner: "Quality review",
+    },
+    {
+      title: "Approve before release",
+      detail: "Publish only after curriculum mapping, content, answer explanations and reviews are accepted for this exact version.",
+      owner: "Release gate",
+    },
+  ];
 
   const renderGroup = (title: string, description: string, items: typeof englishPathways) => (
     <section>
@@ -129,7 +169,14 @@ function Pathways({ go }: { go: Navigate }) {
             <small>{pathway.levelLabel}</small>
             {pathway.gradeEquivalentLabel && <small>{pathway.gradeEquivalentLabel}</small>}
             <p>{pathway.reviewNote}</p>
-            <button type="button" aria-expanded={selectedPathwayId === pathway.id} onClick={() => setSelectedPathwayId(pathway.id)}>
+            <button
+              type="button"
+              aria-expanded={selectedPathwayId === pathway.id}
+              onClick={() => {
+                setSelectedPathwayId(pathway.id);
+                setSelectedUnitId(pathway.unitSlots[0]?.id ?? "");
+              }}
+            >
               {selectedPathwayId === pathway.id ? "Viewing unit plan" : "View planned units"} <span>↗</span>
             </button>
           </article>
@@ -139,7 +186,7 @@ function Pathways({ go }: { go: Navigate }) {
   );
 
   return <Shell page="pathways" go={go}>
-    <InfoNote><b>Pathway catalogue — planning preview.</b> These are the 10 planned English pathways, not released courses. Official syllabus editions, mappings and unit focuses are not yet verified. Choosing a pathway displays its empty planning slots only.</InfoNote>
+    <InfoNote><b>Pathway catalogue — planning preview.</b> These are the 10 planned English pathways, not released courses. Official syllabus editions, mappings and unit focuses are not yet verified. Selecting a unit opens its release checklist; it does not create or publish content.</InfoNote>
     <PageIntro
       eyebrow="CHOOSE YOUR CURRICULUM"
       title={<>Start with the right <em>pathway.</em></>}
@@ -169,18 +216,46 @@ function Pathways({ go }: { go: Navigate }) {
         <span>NOT RELEASED</span>
       </div>
       {selected.unitSlots.map(unit => (
-        <div className="proto-skill-row" key={unit.id}>
+        <button
+          type="button"
+          className={"proto-activity-row proto-unit-plan-row" + (selectedUnit?.id === unit.id ? " is-selected" : "")}
+          key={unit.id}
+          aria-pressed={selectedUnit?.id === unit.id}
+          onClick={() => setSelectedUnitId(unit.id)}
+        >
           <i>{String(unit.sequence).padStart(2, "0")}</i>
-          <div><b>{unit.title}</b><small>{unit.reviewNote}</small></div>
-          <span>Planned</span>
-        </div>
+          <span><b>{unit.title}</b><small>{unit.reviewNote}</small></span>
+          <em>{selectedUnit?.id === unit.id ? "Selected" : "Planned"}</em>
+          <strong>↗</strong>
+        </button>
       ))}
       {selected.levelKind === "navigation-only-grade-equivalent" && <p className="proto-note-bottom">This is a provisional learner-navigation label. Confirm whether the band is useful before treating it as a separate product route.</p>}
       <p className="proto-note-bottom">The illustrative lesson and six sample questions are not assigned to this pathway. No syllabus mapping has been inferred from the selected level.</p>
     </section>}
+    {selectedUnit && <section className="proto-panel proto-unit-readiness" aria-label="Selected unit release checklist">
+      <div className="proto-panel-heading">
+        <div>
+          <h2>Unit preparation — {selectedUnit.sequence}</h2>
+          <p>{selectedUnit.id} · {selectedUnit.title}</p>
+        </div>
+        <span>PLANNING ONLY</span>
+      </div>
+      <p className="proto-unit-readiness-intro">This is a readiness checklist, not an editor. Changes are not saved here, and no lesson is linked to this unit until it has been reviewed and assigned deliberately.</p>
+      {unitReadinessRequirements.map((requirement, index) => (
+        <div className="proto-skill-row proto-readiness-row" key={requirement.title}>
+          <i className="warm">{String(index + 1).padStart(2, "0")}</i>
+          <div>
+            <b>{requirement.title}</b>
+            <small>{requirement.detail}</small>
+            <small className="proto-readiness-owner">{requirement.owner}</small>
+          </div>
+          <span>Not complete</span>
+        </div>
+      ))}
+      <p className="proto-note-bottom">Release rule: keep the unit unavailable to learners until the official mapping, learning objective, content, linked practice and academic approval are complete for the same content version.</p>
+    </section>}
   </Shell>;
 }
-
 function Questions({ go }: { go: Navigate }) {
   const [search, setSearch] = useState("");
   const [area, setArea] = useState("All skills");
