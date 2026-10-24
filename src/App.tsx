@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { demoQuestionItems } from "./content/demoCatalog";
 import { englishPathways } from "./content/pathways";
-import { pilotUnitDraft } from "./content/pilotUnitDraft";
+import { pilotReviewSummary } from "./content/pilotReviewSummary";
 import { pilotLearnerLesson } from "./content/pilotLearnerLesson";
 import { getUnitReadinessGates, getUnitReadinessSummary, unitContentPlans } from "./content/unitReadiness";
 
@@ -254,71 +254,55 @@ function Pathways({ go }: { go: Navigate }) {
         >
           <i>{String(unit.sequence).padStart(2, "0")}</i>
           <span><b>{unit.title}</b><small>{unit.reviewNote}</small></span>
-          <em>{unit.id === pilotUnitDraft.unitId ? "Pilot preview" : selectedUnit?.id === unit.id ? "Selected" : "Planned"}</em>
+          <em>{unit.id === pilotReviewSummary.unitId ? "Pilot preview" : selectedUnit?.id === unit.id ? "Selected" : "Planned"}</em>
           <strong>↗</strong>
         </button>
       ))}
       {selected.levelKind === "navigation-only-grade-equivalent" && <p className="proto-note-bottom">This is a provisional learner-navigation label. Confirm whether the band is useful before treating it as a separate product route.</p>}
       <p className="proto-note-bottom">The learner lesson preview uses the reviewed pilot content. It is not assigned an official syllabus mapping, and its responses are not saved.</p>
     </section>}
-    {selectedUnit?.id === pilotUnitDraft.unitId && <section className="proto-panel proto-unit-draft" aria-label="Reviewed pilot unit preview">
+    {selectedUnit?.id === pilotReviewSummary.unitId && <section className="proto-panel proto-unit-draft" aria-label="Reviewed pilot unit preview">
       <div className="proto-panel-heading">
         <div>
           <p className="proto-eyebrow"><span />PILOT CONTENT · REVIEWED PREVIEW</p>
-          <h2>{pilotUnitDraft.title}</h2>
-          <p>{pilotUnitDraft.proposedFocus}</p>
+          <h2>{pilotReviewSummary.title}</h2>
+          <p>{pilotReviewSummary.proposedFocus}</p>
         </div>
         <span>REVIEW PASSED · MAPPING UNVERIFIED</span>
       </div>
-      <p className="proto-unit-readiness-intro">Academic content review passed for this preview version. The official curriculum mapping remains unverified, so this is not yet a released or officially mapped unit.</p>
+      <p className="proto-unit-readiness-intro">Academic content review passed for version 1 on {pilotReviewSummary.reviewRecord.reviewedAt}. This summary contains curriculum and release metadata only. It is not an officially mapped or released course.</p>
       <div className="proto-extract">
-        <small>OFFICIAL STARTING POINT · CHECKED {pilotUnitDraft.source.checkedAt}</small>
-        <p><a href={pilotUnitDraft.source.url} target="_blank" rel="noreferrer">{pilotUnitDraft.source.title} ↗</a></p>
-        <p>{pilotUnitDraft.source.scopeNote}</p>
+        <small>OFFICIAL STARTING POINT · CHECKED {pilotReviewSummary.source.checkedAt}</small>
+        <p><a href={pilotReviewSummary.source.url} target="_blank" rel="noreferrer">{pilotReviewSummary.source.title} ↗</a></p>
+        <p>{pilotReviewSummary.source.scopeNote}</p>
       </div>
       <div className="proto-feedback-columns">
-        <div><small>PILOT LEARNING OBJECTIVE</small><p>{pilotUnitDraft.proposedLearningObjective}</p></div>
-        <div><small>CURRICULUM MAPPING</small><p>Unverified. No edition-specific objective codes are assigned, and this draft does not yet count as mapped to MYP Year 1.</p></div>
+        <div><small>PILOT LEARNING OBJECTIVE</small><p>{pilotReviewSummary.proposedLearningObjective}</p></div>
+        <div><small>CURRICULUM MAPPING</small><p>Unverified. No edition-specific objective codes are assigned, so this preview must not be described as officially mapped to MYP Year 1.</p></div>
       </div>
       <div className="proto-extract">
         <small>CANDIDATE IB OBJECTIVE REFERENCES · NOT VERIFIED</small>
-        <p>The IB-hosted guide search result suggests the following Year 1 strands. The source opens through IB curriculum sign-in, and the current school-guide edition has not been confirmed.</p>
-        {pilotUnitDraft.candidateObjectiveMappings.map(item => (
+        <p>The following are candidate Year 1 references only. The detailed guide opens through IB curriculum sign-in, and the applicable school-guide edition has not been confirmed.</p>
+        {pilotReviewSummary.candidateObjectiveMappings.map(item => (
           <div className="proto-skill-row proto-readiness-row" key={item.strand}>
             <i>{item.strand}</i>
             <div><b>{item.criterion}</b><small>{item.descriptor}</small><small>{item.rationale}</small></div>
             <span>Candidate</span>
           </div>
         ))}
-        <p><a href={pilotUnitDraft.candidateGuide.url} target="_blank" rel="noreferrer">Open IB-hosted guide reference ↗</a> · <a href={pilotUnitDraft.source.subjectBriefUrl} target="_blank" rel="noreferrer">Open public IB subject brief ↗</a></p>
-        <p>These candidate references are deliberately not recorded as official objective codes. Curriculum mapping remains unverified until checked against the applicable school guide.</p>
+        <p><a href={pilotReviewSummary.candidateGuide.url} target="_blank" rel="noreferrer">Open IB-hosted guide reference ↗</a> · <a href={pilotReviewSummary.source.subjectBriefUrl} target="_blank" rel="noreferrer">Open public IB subject brief ↗</a></p>
+        <p>These candidate references are not recorded as official objective codes. Mapping remains unverified until the applicable school guide is checked.</p>
       </div>
       <div className="proto-section-title">
-        <div><h2>Teaching sequence</h2><p>Four teaching steps reviewed for pilot preview; this is not an official IB unit sequence.</p></div>
+        <div><h2>Remaining release checks</h2><p>Content review passed; these independent requirements still need evidence.</p></div>
       </div>
-      {pilotUnitDraft.teachingSequence.map(step => (
-        <div className="proto-skill-row proto-readiness-row" key={step.number}>
-          <i>{step.number}</i>
-          <div><b>{step.title}</b><small>{step.purpose}</small></div>
+      {pilotReviewSummary.remainingReleaseChecks.map((item,index) => (
+        <div className="proto-skill-row proto-readiness-row" key={item}>
+          <i className="warm">{String(index+1).padStart(2,"0")}</i>
+          <div><b>{item}</b></div>
         </div>
       ))}
-      <div className="proto-extract">
-        <small>{pilotUnitDraft.originalExample.label.toUpperCase()}</small>
-        <blockquote>{pilotUnitDraft.originalExample.text}</blockquote>
-        <p><b>Focus: “{pilotUnitDraft.originalExample.focus}”</b> — {pilotUnitDraft.originalExample.teachingNote}</p>
-      </div>
-      <div className="proto-extract">
-        <small>PRACTICE PROMPT</small>
-        <p>{pilotUnitDraft.practicePrompt}</p>
-        <small>WHAT A RESPONSE SHOULD SHOW</small>
-        {pilotUnitDraft.responseExpectation.map(item => <p key={item}>• {item}</p>)}
-      </div>
-      <div className="proto-feedback-columns">
-        <div><small>COMMON MISCONCEPTIONS TO ADDRESS</small>{pilotUnitDraft.commonMisconceptions.map(item => <p key={item}>{item}</p>)}</div>
-        <div><small>REMAINING SOURCE / RELEASE CHECKS</small>{pilotUnitDraft.remainingReleaseChecks.map(item => <p key={item}>{item}</p>)}</div>
-      </div>
-      <p className="proto-note-bottom">{pilotUnitDraft.rightsNote}</p>
-      <p className="proto-note-bottom">{pilotUnitDraft.releaseNote}</p>
+      <p className="proto-note-bottom">{pilotReviewSummary.releaseNote}</p>
       <div className="proto-bottom-actions"><Action onClick={() => go("lesson")}>Open learner lesson preview →</Action></div>
     </section>}
     {selectedUnit && selectedUnitPlan && <section className="proto-panel proto-unit-readiness" aria-label="Selected unit release checklist" aria-live="polite">
