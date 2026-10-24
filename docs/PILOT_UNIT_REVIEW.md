@@ -3,7 +3,7 @@
 **Unit draft:** How writers shape meaning  
 **Pathway slot:** `ib-myp-lal-y1-u1`  
 **Content version:** 1  
-**Review state:** Working draft — not mapped, approved or released  
+**Review state:** Academic content review passed for preview version 1; official curriculum mapping and release remain blocked  
 **Source of truth for the content draft:** `src/content/pilotUnitDraft.ts` and `src/content/pilotLessonPack.ts`
 
 ## Purpose
@@ -20,7 +20,7 @@ Review one complete unit package before producing more material. This sheet is a
 - Exit ticket and an informal three-part feedback guide.
 - Accessibility checks and specific academic-review questions.
 
-The learner-facing preview is currently part of the static prototype. Suggested answers are present in the frontend bundle for draft review only. **Do not reuse this arrangement for production answer keys**; future production answers must be separated from unrestricted learner-visible content and protected by the approved application design.
+The learner-facing preview now uses a separate student-safe data file, `src/content/pilotLearnerLesson.ts`, which contains no correct-answer IDs or model answers. The teacher/editor source with answer keys is `src/content/pilotLessonPack.ts` and is deliberately not imported by the client UI. This is a source-code separation for the static preview, not a production authorization system; in the production architecture, answer keys must be served through a protected server-side path and must never be included in an unrestricted learner bundle.
 
 ## Official-source notes
 
@@ -28,34 +28,41 @@ The learner-facing preview is currently part of the static prototype. Suggested 
 2. [IB MYP Language and literature subject brief](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) — public overview document labelled From 2014.
 3. [IB-hosted Language and literature guide reference](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) — a search-indexed excerpt suggests Year 1 Criterion A strands A(ii) and A(iii). Opening the detailed guide redirects to IB curriculum sign-in. The exact guide edition used by the intended school has not been confirmed.
 
-The candidate strand references remain **unverified**. The `officialObjectiveCodes` list must stay empty and the curriculum mapping status must stay unverified until the academic lead consults the applicable current guide. Public marketing must not describe this as an officially mapped IB unit in the meantime.
+The academic content review has passed for version 1, based on the project owner's confirmation on 24 October 2026. This approval covers the instructional content and practice pack for pilot preview; it does not change the separate mapping evidence. The candidate strand references remain **unverified**. The `officialObjectiveCodes` list must stay empty and curriculum mapping must stay unverified until the applicable guide edition and objective references are checked. Public marketing must not describe this as an officially mapped IB unit in the meantime.
 
 ## Required review decisions
 
-- [ ] Confirm which MYP Language and literature guide/edition applies to the intended learner.
-- [ ] Verify whether candidate strands A(ii), A(iii), both, or neither are applicable to this unit.
-- [ ] Approve or revise the proposed objective, sequence and estimated 25-minute duration.
-- [ ] Confirm the text and task difficulty are appropriate for the intended year and learners' prior knowledge.
-- [ ] Review the multiple-choice distractors and feedback; ensure only one option is best supported.
-- [ ] Review the model responses and explicitly allow other interpretations that are supported by evidence.
-- [ ] Confirm the informal feedback guide is clearly distinguished from an official IB rubric.
-- [ ] Complete accessibility and rights review.
-- [ ] Decide whether the pack should be revised, held, or advanced to a mapped content version.
-- [ ] If approved later, record the exact reviewed version and release approval; re-review substantive edits.
+- [ ] Confirm which MYP Language and literature guide/edition applies to the intended learner — still open.
+- [ ] Verify whether candidate strands A(ii), A(iii), both, or neither are applicable — still open.
+- [x] Review the proposed objective, sequence and estimated 25-minute duration for pilot preview — academic content review passed per project-owner confirmation.
+- [x] Review text and task difficulty for the intended audience — academic content review passed per project-owner confirmation.
+- [x] Review multiple-choice distractors and feedback — academic content review passed per project-owner confirmation.
+- [x] Review model responses and allow other evidence-supported interpretations — academic content review passed per project-owner confirmation.
+- [x] Confirm the informal feedback guide is clearly distinguished from an official IB rubric.
+- [ ] Complete and record the separate rights review.
+- [ ] Complete and record the separate accessibility review.
+- [ ] Verify official curriculum mapping before any claim of syllabus alignment or course release.
+- [ ] Record an explicit release approval only after every required gate has evidence.
 
-## Review record — not yet completed
+## Review record
 
 | Field | Value |
 |---|---|
-| Reviewer | Not recorded |
-| Date | Not recorded |
-| Decision | Pending academic review |
+| Reviewer | Academic lead — review pass confirmed by project owner; personal name not supplied |
+| Date | 24 October 2026 |
+| Decision | **Academic content review passed** for pilot preview version 1 |
+| Review scope | Instructional draft, teaching sequence, practice prompts, answer guidance and informal feedback guide |
 | Applicable syllabus/guide edition | Not verified |
-| Approved objective/strand references | None recorded |
-| Rights review | Pending |
-| Accessibility review | Pending |
+| Approved official objective references | None recorded; candidate A(ii)/A(iii) references remain unverified |
+| Rights review | Pending separate sign-off |
+| Accessibility review | Pending separate sign-off |
+| Official curriculum mapping | Unverified |
 | Release approval | Not granted |
+
+## Revision policy
+
+Academic approval is version-specific, not a permanent freeze. Any approved or reviewed feature, content item, interface, rule or document can be amended later. Keep changes in Git history, update the relevant version/date/reason, and re-review the affected parts when a change is material. A change to content does not inherit the previous version's approval automatically.
 
 ## Release guardrail
 
-This package is original draft teaching content for internal review. It is not a complete syllabus, official IB material, an official mark scheme, or a released lesson. Do not mark the unit ready for release based on this review sheet alone. The eight-gate release checklist in the Pathways screen remains authoritative for the current prototype state.
+The content review pass makes this package suitable for a pilot preview only. It is not a complete syllabus, official IB material, an official mark scheme, or an officially mapped/released course. Do not mark the unit ready for release based on this review sheet alone. The eight-gate release checklist in the Pathways screen remains authoritative for the current prototype state.
