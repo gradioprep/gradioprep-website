@@ -1,18 +1,22 @@
 import type { PilotLessonPack } from "./model";
 
 /**
- * A complete first teaching-and-practice draft for academic review.
- *
- * This is original pilot content, not an approved or officially mapped MYP unit.
- * It remains separate from demoLesson and must not be exposed as released
- * learner content until curriculum, age/level, answer guidance and accessibility
- * reviews are recorded.
+ * Teacher/editor source for the reviewed pilot lesson pack. This includes answer
+ * keys and model responses, so MUST NOT be imported into the client application.
+ * Academic review passed for the pilot preview on 2026-10-24; curriculum mapping
+ * remains unverified and the pack is not an officially mapped or released MYP unit.
  */
 export const pilotLessonPack: PilotLessonPack = {
   id: "draft-lesson-how-writers-shape-meaning",
   version: 1,
   unitId: "ib-myp-lal-y1-u1",
-  status: "working-draft",
+  status: "approved-for-pilot-preview",
+  reviewRecord: {
+    outcome: "passed",
+    reviewedAt: "2026-10-24",
+    reviewerLabel: "Academic lead (approval confirmed by project owner; name not specified)",
+    scopeNote: "Academic content review passed for this version per project owner confirmation. This approval supports the pilot preview only; the official curriculum mapping remains unverified and release is not authorised.",
+  },
   title: "How writers shape meaning",
   audienceNote:
     "Proposed for an early MYP learner audience; the Year 1 level fit has not yet been approved by the academic lead.",
