@@ -3,8 +3,9 @@ import type { CurriculumPathway, PlannedUnitSlot, UnitSequence } from "./model";
 const unitSequences: readonly UnitSequence[] = [1, 2, 3];
 
 /**
- * Create empty production-planning slots only. These are not lesson topics and
- * do not imply curriculum coverage; the academic lead chooses each focus.
+ * Create planned catalogue slots. Most remain empty; the first IB MYP Year 1
+ * slot points to reviewed pilot-preview content. Neither the slot nor preview
+ * implies official syllabus coverage or a production release.
  */
 function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
   return unitSequences.map((sequence) => {
