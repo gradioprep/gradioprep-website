@@ -3,6 +3,7 @@ import { demoQuestionItems } from "./content/demoCatalog";
 import { demoLesson } from "./content/demoLesson";
 import { englishPathways } from "./content/pathways";
 import { pilotUnitDraft } from "./content/pilotUnitDraft";
+import { pilotLessonPack } from "./content/pilotLessonPack";
 import { getUnitReadinessGates, getUnitReadinessSummary, unitContentPlans } from "./content/unitReadiness";
 
 type Page = "home" | "dashboard" | "pathways" | "lesson" | "questions" | "assessment";
@@ -265,6 +266,81 @@ function Pathways({ go }: { go: Navigate }) {
       </div>
       <p className="proto-note-bottom">{pilotUnitDraft.rightsNote}</p>
       <p className="proto-note-bottom">{pilotUnitDraft.releaseNote}</p>
+    </section>}
+    {selectedUnit?.id === pilotLessonPack.unitId && <section className="proto-panel proto-pilot-lesson" aria-label="Full pilot lesson and practice pack">
+      <div className="proto-panel-heading">
+        <div>
+          <p className="proto-eyebrow"><span />LESSON & PRACTICE · WORKING DRAFT</p>
+          <h2>{pilotLessonPack.title}</h2>
+          <p>{pilotLessonPack.estimatedMinutes} minute draft · {pilotLessonPack.audienceNote}</p>
+        </div>
+        <span>NOT RELEASED</span>
+      </div>
+      <p className="proto-unit-readiness-intro">Teacher review preview. Suggested answers and feedback are visible here for editorial review; this is not a learner lesson or official IB mark scheme.</p>
+      <div className="proto-feedback-columns">
+        <div><small>PROPOSED LEARNING OBJECTIVE</small><p>{pilotLessonPack.proposedLearningObjective}</p></div>
+        <div><small>MAPPING STATUS</small><p>Unverified. Candidate curriculum references are not approved objective codes.</p></div>
+      </div>
+      <div className="proto-extract">
+        <small>SUCCESS CRITERIA</small>
+        {pilotLessonPack.successCriteria.map(item => <p key={item}>• {item}</p>)}
+      </div>
+      <div className="proto-extract">
+        <small>{pilotLessonPack.passage.label.toUpperCase()}</small>
+        <blockquote>{pilotLessonPack.passage.text}</blockquote>
+        <p>{pilotLessonPack.passage.rightsNote}</p>
+      </div>
+      <div className="proto-extract">
+        <small>{pilotLessonPack.keyIdea.label.toUpperCase()}</small>
+        {pilotLessonPack.keyIdea.pattern.map((step, index) => <p key={step}><b>{index + 1}. </b>{step}</p>)}
+        <p>{pilotLessonPack.keyIdea.explanation}</p>
+      </div>
+      <div className="proto-section-title">
+        <div><h2>Teaching sequence</h2><p>Explanations, actions and examples for the pilot lesson.</p></div>
+      </div>
+      {pilotLessonPack.sections.map(section => (
+        <article className="proto-pilot-section" key={section.id}>
+          <h3>{section.heading}</h3>
+          <p className="proto-pilot-purpose">{section.purpose}</p>
+          <p>{section.explanation}</p>
+          {section.example && <div className="proto-pilot-example"><small>{section.example.label.toUpperCase()}</small><blockquote>{section.example.text}</blockquote><p>{section.example.explanation}</p></div>}
+          <div className="proto-pilot-action"><b>Learner action</b><p>{section.learnerAction}</p></div>
+        </article>
+      ))}
+      <div className="proto-section-title">
+        <div><h2>Formative practice</h2><p>Draft questions with answer guidance for academic review, not a scoring rubric.</p></div>
+      </div>
+      {pilotLessonPack.practiceItems.map((item, index) => (
+        <article className="proto-pilot-question" key={item.id}>
+          <div className="proto-pilot-question-head"><span>{String(index + 1).padStart(2, "0")}</span><div><small>{item.focus}</small><h3>{item.prompt}</h3></div></div>
+          {item.options && <div className="proto-pilot-options">{item.options.map(option => (
+            <div className={"proto-pilot-option" + (option.id === item.bestOptionId ? " is-best" : "")} key={option.id}>
+              <b>{option.id}</b><div><p>{option.text}</p><small>{option.feedback}</small></div>
+              {option.id === item.bestOptionId && <span>Best-supported answer</span>}
+            </div>
+          ))}</div>}
+          <div className="proto-pilot-answer"><small>MODEL ANSWER / REVIEW GUIDANCE</small><p>{item.modelAnswer}</p><ul>{item.successIndicators.map(point => <li key={point}>{point}</li>)}</ul><div className="proto-feedback-columns"><div><small>WHEN THE RESPONSE IS STRONG</small><p>{item.feedbackForLearner.ifStrong}</p></div><div><small>NEXT STEP IF NEEDED</small><p>{item.feedbackForLearner.nextStep}</p></div></div></div>
+        </article>
+      ))}
+      <div className="proto-section-title">
+        <div><h2>Exit ticket</h2><p>Use this to check whether the core thinking move is taking hold.</p></div>
+      </div>
+      <div className="proto-extract">
+        <small>LEARNER PROMPT</small><p>{pilotLessonPack.exitTicket.prompt}</p>
+        <small>SUCCESS INDICATORS</small>{pilotLessonPack.exitTicket.successIndicators.map(item => <p key={item}>• {item}</p>)}
+        <small>MODEL RESPONSE FOR REVIEW</small><p>{pilotLessonPack.exitTicket.modelAnswer}</p>
+      </div>
+      <div className="proto-section-title">
+        <div><h2>Informal feedback guide</h2><p>This guide is for practice feedback only. It is not an official IB rubric or achievement level.</p></div>
+      </div>
+      <div className="proto-pilot-feedback-grid">
+        {pilotLessonPack.feedbackGuide.map(item => <article key={item.area}><h3>{item.area}</h3><div><small>DEVELOPING</small><p>{item.developing}</p></div><div><small>SECURE FOR THIS PRACTICE</small><p>{item.secure}</p></div></article>)}
+      </div>
+      <div className="proto-feedback-columns">
+        <div><small>ACCESSIBILITY REVIEW POINTS</small>{pilotLessonPack.accessibilitySupports.map(item => <p key={item}>{item}</p>)}</div>
+        <div><small>ACADEMIC REVIEW CHECKLIST</small>{pilotLessonPack.academicReviewQuestions.map(item => <p key={item}>{item}</p>)}</div>
+      </div>
+      <p className="proto-note-bottom">{pilotLessonPack.releaseNote}</p>
     </section>}
     {selectedUnit && selectedUnitPlan && <section className="proto-panel proto-unit-readiness" aria-label="Selected unit release checklist" aria-live="polite">
       <div className="proto-panel-heading">
