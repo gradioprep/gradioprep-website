@@ -171,6 +171,8 @@ export interface UnitContentPlan {
   title: string;
   releaseStatus: ContentLifecycle;
   syllabusEditionCode: string | null;
+  officialSourceUrl: string | null;
+  officialSourceCheckedAt: string | null;
   officialObjectiveCodes: string[];
   learningObjective: string | null;
   lessonIds: string[];
