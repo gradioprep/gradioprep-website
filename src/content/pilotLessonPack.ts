@@ -245,13 +245,12 @@ export const pilotLessonPack: PilotLessonPack = {
     "Accept different evidence-supported interpretations and provide a next step rather than marking one literary reading as the only possible answer.",
     "Review vocabulary, sentence length and cognitive load with a teacher before confirming age/level suitability.",
   ],
-  academicReviewQuestions: [
-    "Confirm whether the current guide used by the learner's school supports the candidate Year 1 Criterion A strands recorded in pilotUnitDraft.ts.",
-    "Approve or revise the learning objective, sequence and estimated 25-minute lesson duration for the intended level.",
-    "Review each model answer and acceptable alternative interpretation for literary accuracy and age/level appropriateness.",
-    "Review distractors and feedback for question 1; verify that only one option is clearly best supported.",
-    "Decide whether the informal three-part feedback guide is useful; it is not an official IB rubric and must not be presented as one.",
-    "Complete rights, accessibility and release reviews before assigning the pack to a released course.",
+  remainingReleaseChecks: [
+    "Confirm the applicable current guide/edition used by the intended school and verify whether candidate strands A(ii), A(iii), both or neither are appropriate.",
+    "Record exact official objective/strand references only after checking that guide.",
+    "Complete and record the separate content-rights review.",
+    "Complete and record the accessibility review for the interactive lesson.",
+    "Record explicit release approval only after all required evidence is complete.",
   ],
   releaseNote:
     "Working draft only. Do not publish, grade as an official IB achievement level, or present the candidate strands as verified MYP mappings. The official objective codes remain unassigned until the applicable guide is checked by the academic lead.",
