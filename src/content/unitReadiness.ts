@@ -4,7 +4,7 @@ import type {
   UnitReadinessGate,
 } from "./model";
 import { englishPathways } from "./pathways";
-import { pilotUnitDraft } from "./pilotUnitDraft";
+import { pilotReviewSummary } from "./pilotReviewSummary";
 import { pilotLearnerLesson } from "./pilotLearnerLesson";
 
 /**
@@ -23,10 +23,10 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
       title: isPilotUnit ? pilotLearnerLesson.title : unit.title,
       releaseStatus: "planned",
       syllabusEditionCode: null,
-      officialSourceUrl: isPilotUnit ? pilotUnitDraft.source.url : null,
-      officialSourceCheckedAt: isPilotUnit ? pilotUnitDraft.source.checkedAt : null,
-      officialSourceNote: isPilotUnit ? pilotUnitDraft.source.scopeNote : null,
-      officialObjectiveCodes: isPilotUnit ? pilotUnitDraft.officialObjectiveCodes : [],
+      officialSourceUrl: isPilotUnit ? pilotReviewSummary.source.url : null,
+      officialSourceCheckedAt: isPilotUnit ? pilotReviewSummary.source.checkedAt : null,
+      officialSourceNote: isPilotUnit ? pilotReviewSummary.source.scopeNote : null,
+      officialObjectiveCodes: isPilotUnit ? pilotReviewSummary.officialObjectiveCodes : [],
       learningObjective: isPilotUnit ? pilotLearnerLesson.proposedLearningObjective : null,
       lessonIds: isPilotUnit ? [pilotLearnerLesson.id] : [],
       practiceQuestionIds: isPilotUnit ? pilotLearnerLesson.practiceItems.map(item => item.id) : [],
