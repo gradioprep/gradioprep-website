@@ -8,18 +8,18 @@ const unitSequences: readonly UnitSequence[] = [1, 2, 3];
  */
 function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
   return unitSequences.map((sequence) => {
-    const isPilotDraft = pathwayId === "ib-myp-lal-y1" && sequence === 1;
+    const isPilotPreview = pathwayId === "ib-myp-lal-y1" && sequence === 1;
     return {
       id: `${pathwayId}-u${sequence}`,
       pathwayId,
       sequence,
-      title: isPilotDraft ? "Draft focus — How writers shape meaning" : "Unit focus to be confirmed",
+      title: isPilotPreview ? "Pilot preview — How writers shape meaning" : "Unit focus to be confirmed",
       learningObjective: null,
       officialObjectiveCodes: [],
       mappingStatus: "unverified",
       releaseStatus: "planned",
-      reviewNote: isPilotDraft
-        ? "Working content draft available for academic review; not an approved Year 1 objective mapping or release."
+      reviewNote: isPilotPreview
+        ? "Academic content review passed for pilot preview version 1; official Year 1 objective mapping remains unverified and this unit is not released."
         : "Planning slot only. Add a skill focus and official objective references after academic review.",
     };
   });
