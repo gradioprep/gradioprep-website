@@ -1,4 +1,5 @@
 import type { DemoLesson } from "./model";
+import { createUnassignedDemoCurriculum } from "./demoMetadata";
 
 /**
  * One illustrative lesson, separated from the page component so content can
@@ -8,8 +9,9 @@ import type { DemoLesson } from "./model";
  */
 export const demoLesson: DemoLesson = {
   id: "demo-language-choices",
+  version: 1,
+  curriculum: createUnassignedDemoCurriculum(),
   contentStatus: "demonstration",
-  syllabusMappingStatus: "unverified",
   breadcrumb: {
     overview: "Overview",
     questionBank: "Question bank",
