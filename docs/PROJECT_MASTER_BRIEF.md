@@ -1,8 +1,8 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Last updated:** 24 October 2026  
-**Status:** Business model approved; build has not started  
+**Status:** Frontend prototype deployed; curriculum/data foundations in progress  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
 **Founder context:** 18 years of IB, IGCSE and SAT tutoring experience; founder will initially be the sole grader and academic lead.  
 **Initial geography:** Delhi-NCR, then wider India  
@@ -23,6 +23,10 @@ When a decision changes, update this file first or ask the assistant to produce 
 3. Earlier chat messages, which may contain superseded ideas.
 
 Do not silently change approved prices, credit rules, curriculum scope, SLAs or roles. If a conflict is found, call it out and ask before changing the specification.
+
+### Current implementation state
+
+As of 24 October 2026, a five-screen React + TypeScript prototype is deployed to Cloudflare Workers. It remains a demonstration frontend: authentication, database, persistent learner records, released syllabus-mapped content, real grading, payments and production analytics are not implemented. The current question-bank examples are typed demo content and remain unverified against official syllabus objectives. The planning drafts in [`ENGLISH_STAGE_1_ROADMAP.md`](ENGLISH_STAGE_1_ROADMAP.md) and [`DATA_MODEL.md`](DATA_MODEL.md) prepare the content and data foundations; they do not approve a syllabus sequence or claim that a database exists. The commercial hosting choice remains open until the vendor terms and requirements are reviewed.
 
 ### Approved frontend typography and text-colour guardrail
 
@@ -245,6 +249,8 @@ Preferred maintainable architecture:
 **Important Vercel policy constraint verified 23 October 2026:** Vercel's current Terms of Service state that its free Hobby plan is limited to personal/non-commercial use; commercial usage requires Pro or Enterprise. The terms also contain a model-training provision applicable to content on Hobby/trial Pro. Therefore, do not assume Vercel Hobby is an appropriate free host for a commercial learning platform or for student submissions. See: https://vercel.com/legal/terms and https://vercel.com/docs/limits/fair-use-guidelines.
 
 To preserve the near-zero initial budget, use GitHub + Cloudflare Pages for the public frontend if its current terms and requirements fit, or budget for Vercel Pro before the commercial deployment. Re-check all vendor plans/terms before launch. Keep the codebase portable so changing deployment providers does not require rewriting the product.
+
+The current five-screen preview is deployed on Cloudflare Workers. This is the existing preview setup, not a final approval of the commercial hosting architecture and not approval to store real student records there. Re-check the exact Cloudflare product, plan, terms, limits and security controls before any production use.
 
 Do not commit credentials, `.env` files, API keys, student submissions or private data to GitHub. Use platform environment variables and rotate credentials immediately if exposed. See GitHub secret-scanning guidance: https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning.
 
