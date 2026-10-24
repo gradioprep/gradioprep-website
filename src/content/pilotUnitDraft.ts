@@ -111,5 +111,5 @@ export const pilotUnitDraft: PilotUnitDraft = {
   rightsNote:
     "The short example is original draft text. Replace or supplement it only with original material or material whose use is appropriately permitted and documented.",
   releaseNote:
-    "Do not publish or describe this draft as officially mapped until the academic lead verifies the applicable guide/criteria, objective references, level fit and sequence.",
+    "Approved for pilot preview only. Do not claim official curriculum mapping or release this as a syllabus-mapped course until the applicable guide edition/objective references and all remaining release gates are verified.",
 };
