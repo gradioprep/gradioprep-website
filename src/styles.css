@@ -1,25 +1,89 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
 
 :root {
-  font-family: "DM Sans", Arial, sans-serif;
-  color: #202923;
+  font-family: var(--font-body);
+  color: var(--text-primary);
   background: #f5f4ee;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+
+  /* Locked design-system tokens: reuse these on every new page. */
   --paper: #f5f4ee;
   --ink: #202923;
   --muted: #515a53;
+  --text-primary: var(--ink);
+  --text-secondary: var(--muted);
+  --text-inverse: #eaf0e5;
+
+  --font-body: "DM Sans", Arial, sans-serif;
+  --font-display: "Manrope", "DM Sans", Arial, sans-serif;
+  --font-mono: "DM Mono", monospace;
+
+  --type-caption: 10.5px;
+  --type-label: 12px;
+  --type-body-small: 13.5px;
+  --type-body: 15px;
+  --type-body-large: 16px;
+  --type-card-title: 18px;
+  --type-section-title: clamp(29px, 4vw, 39px);
+  --type-page-title: clamp(42px, 5vw, 65px);
+
   --green: #244d3a;
   --green-dark: #193a2c;
   --lime: #d9edab;
   --coral: #e98d70;
   --border: #dfe3d9;
-  --mono: "DM Mono", monospace;
-  --display: "Manrope", "DM Sans", Arial, sans-serif;
+
+  /* Compatibility aliases used by existing components. */
+  --mono: var(--font-mono);
+  --display: var(--font-display);
 }
 
 * { box-sizing: border-box; }
+
+/* Reusable typography helpers for new pages. Keep existing reviewed component
+   rules intact; use these classes/tokens instead of inventing one-off styles. */
+.type-page-title {
+  font-family: var(--font-display);
+  font-size: var(--type-page-title);
+  font-weight: 600;
+  line-height: 1.07;
+  letter-spacing: -.065em;
+}
+.type-section-title {
+  font-family: var(--font-display);
+  font-size: var(--type-section-title);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -.05em;
+}
+.type-body {
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+.type-supporting {
+  font-family: var(--font-body);
+  font-size: var(--type-body-small);
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+.type-label {
+  font-family: var(--font-mono);
+  font-size: var(--type-label);
+  line-height: 1.5;
+  letter-spacing: .04em;
+  color: var(--text-secondary);
+}
+.type-caption {
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  line-height: 1.5;
+  letter-spacing: .03em;
+  color: var(--text-secondary);
+}
 html { scroll-behavior: smooth; scroll-padding-top: 90px; }
 body { min-width: 320px; margin: 0; }
 a { color: inherit; text-decoration: none; }
