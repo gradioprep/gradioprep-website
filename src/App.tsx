@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { demoQuestionItems } from "./content/demoCatalog";
 import { demoLesson } from "./content/demoLesson";
 import { englishPathways } from "./content/pathways";
+import { pilotUnitDraft } from "./content/pilotUnitDraft";
 import { getUnitReadinessGates, getUnitReadinessSummary, unitContentPlans } from "./content/unitReadiness";
 
 type Page = "home" | "dashboard" | "pathways" | "lesson" | "questions" | "assessment";
@@ -197,6 +198,52 @@ function Pathways({ go }: { go: Navigate }) {
       ))}
       {selected.levelKind === "navigation-only-grade-equivalent" && <p className="proto-note-bottom">This is a provisional learner-navigation label. Confirm whether the band is useful before treating it as a separate product route.</p>}
       <p className="proto-note-bottom">The illustrative lesson and six sample questions are not assigned to this pathway. No syllabus mapping has been inferred from the selected level.</p>
+    </section>}
+    {selectedUnit?.id === pilotUnitDraft.unitId && <section className="proto-panel proto-unit-draft" aria-label="Pilot unit working draft">
+      <div className="proto-panel-heading">
+        <div>
+          <p className="proto-eyebrow"><span />PILOT CONTENT · WORKING DRAFT</p>
+          <h2>{pilotUnitDraft.title}</h2>
+          <p>{pilotUnitDraft.proposedFocus}</p>
+        </div>
+        <span>ACADEMIC REVIEW</span>
+      </div>
+      <p className="proto-unit-readiness-intro">This is an original planning draft, not a released lesson. It is shown here so the first pilot can be reviewed as a concrete unit rather than an empty slot.</p>
+      <div className="proto-extract">
+        <small>OFFICIAL STARTING POINT · CHECKED {pilotUnitDraft.source.checkedAt}</small>
+        <p><a href={pilotUnitDraft.source.url} target="_blank" rel="noreferrer">{pilotUnitDraft.source.title} ↗</a></p>
+        <p>{pilotUnitDraft.source.scopeNote}</p>
+      </div>
+      <div className="proto-feedback-columns">
+        <div><small>PROPOSED LEARNING OBJECTIVE</small><p>{pilotUnitDraft.proposedLearningObjective}</p></div>
+        <div><small>CURRICULUM MAPPING</small><p>Unverified. No edition-specific objective codes are assigned, and this draft does not yet count as mapped to MYP Year 1.</p></div>
+      </div>
+      <div className="proto-section-title">
+        <div><h2>Proposed teaching sequence</h2><p>Four small steps for academic review; not yet approved as the unit order.</p></div>
+      </div>
+      {pilotUnitDraft.teachingSequence.map(step => (
+        <div className="proto-skill-row proto-readiness-row" key={step.number}>
+          <i>{step.number}</i>
+          <div><b>{step.title}</b><small>{step.purpose}</small></div>
+        </div>
+      ))}
+      <div className="proto-extract">
+        <small>{pilotUnitDraft.originalExample.label.toUpperCase()}</small>
+        <blockquote>{pilotUnitDraft.originalExample.text}</blockquote>
+        <p><b>Focus: “{pilotUnitDraft.originalExample.focus}”</b> — {pilotUnitDraft.originalExample.teachingNote}</p>
+      </div>
+      <div className="proto-extract">
+        <small>DRAFT PRACTICE PROMPT</small>
+        <p>{pilotUnitDraft.practicePrompt}</p>
+        <small>WHAT A RESPONSE SHOULD SHOW</small>
+        {pilotUnitDraft.responseExpectation.map(item => <p key={item}>• {item}</p>)}
+      </div>
+      <div className="proto-feedback-columns">
+        <div><small>COMMON MISCONCEPTIONS TO ADDRESS</small>{pilotUnitDraft.commonMisconceptions.map(item => <p key={item}>{item}</p>)}</div>
+        <div><small>ACADEMIC REVIEW QUESTIONS</small>{pilotUnitDraft.reviewQuestions.map(item => <p key={item}>{item}</p>)}</div>
+      </div>
+      <p className="proto-note-bottom">{pilotUnitDraft.rightsNote}</p>
+      <p className="proto-note-bottom">{pilotUnitDraft.releaseNote}</p>
     </section>}
     {selectedUnit && selectedUnitPlan && <section className="proto-panel proto-unit-readiness" aria-label="Selected unit release checklist" aria-live="polite">
       <div className="proto-panel-heading">
