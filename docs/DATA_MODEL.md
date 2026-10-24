@@ -50,6 +50,20 @@ This is a logical model, not yet a live SQL schema. Names can be adapted during 
 | `guardian_learner_links` | Guardian user ID, learner user ID, relationship, consent/verification state, timestamps | A guardian sees only learners with a valid authorized link |
 | `course_enrolments` | Learner ID, pathway ID, status, start/end dates | Controls which pathway is on the learner's dashboard; a UI link alone never grants access |
 
+### Unit content planning and release readiness
+
+The current frontend code also defines a `unit_content_plans`-style record for planning each pathway unit. Its intended fields include:
+
+- Target unit/pathway IDs and a content version.
+- Official syllabus edition, source URL, date checked and objective codes.
+- Approved learning objective.
+- Linked lesson and practice-question IDs.
+- Answer-key review state.
+- Academic reviewer/date, content rights/source note and accessibility review state.
+- Explicit release approver/date and release state.
+
+The `src/content/unitReadiness.ts` helper calculates eight gates from this evidence. A source edition/objective mapping and a learning objective are blocking requirements; missing lesson/practice content, reviews and approvals cannot be assumed complete. Current records are static planning fixtures with null/empty evidence. The Pathways screen's checklist is read-only and is not a content editor, database or release mechanism.
+
 ### Learning activity and progress evidence
 
 | Record | Purpose and key fields | Relationships / rules |
@@ -117,6 +131,7 @@ Additional protections:
 
 1. Approve the content fields, pathway mapping workflow and initial pilot pathway.
 2. Create versioned content fixtures/types using the model; keep current demo content explicitly marked as fictional.
+3. Use the unit readiness gates to track the official source, objective, lesson/practice links and reviews before release.
 3. Choose and verify the database/auth provider's current terms, limits, backup and restore approach before creating production records.
 4. Create database migrations and enforce least-privilege access policies.
 5. Add authentication and profiles, then pathway enrolments and published content reads.
