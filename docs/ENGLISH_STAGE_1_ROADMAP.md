@@ -109,6 +109,8 @@ A material edit to a published question, answer, rubric or syllabus mapping crea
 - [ ] All content states and versions are recorded; unreleased items do not appear as available.
 - [ ] A final academic-lead approval is recorded.
 
-## 8. Immediate next action
+## 8. Implementation status and immediate next action
+
+A typed catalogue now exists at `src/content/pathways.ts`. It contains the 10 planned entries above and three empty unit slots per entry. Every pathway is marked planned, every official syllabus edition is unset, and every mapping is unverified. The current sample lesson and practice items also explicitly have no assigned programme, pathway, syllabus edition or objective codes. These are structural planning records only; they do not assert that any syllabus mapping has been checked.
 
 Complete the official-source mapping and choose the three skill/unit focuses for one pilot pathway first. Use that pilot to validate the content template and review process before filling all 30 unit slots or authoring hundreds of questions. Do not start bulk content generation until the academic lead signs off on the pathway sequence.
