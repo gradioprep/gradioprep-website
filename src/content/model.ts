@@ -155,3 +155,51 @@ export interface DemoLesson {
     tipBody: string;
   };
 }
+
+/** Review states used by the unit-content release checklist. */
+export type ContentReviewState = "not-started" | "in-review" | "passed";
+
+/**
+ * Production planning record for a pathway unit. It deliberately separates
+ * the intended pathway from verified syllabus alignment and released content.
+ */
+export interface UnitContentPlan {
+  id: string;
+  unitId: string;
+  pathwayId: string;
+  version: number;
+  title: string;
+  releaseStatus: ContentLifecycle;
+  syllabusEditionCode: string | null;
+  officialObjectiveCodes: string[];
+  learningObjective: string | null;
+  lessonIds: string[];
+  practiceQuestionIds: string[];
+  answerKeyReviewState: ContentReviewState;
+  academicReviewer: string | null;
+  academicReviewedAt: string | null;
+  contentRightsNote: string | null;
+  accessibilityReviewState: ContentReviewState;
+  releaseApprovedBy: string | null;
+  releaseApprovedAt: string | null;
+}
+
+export type UnitReadinessGateId =
+  | "official-source"
+  | "learning-objective"
+  | "lesson-content"
+  | "practice-and-answers"
+  | "academic-review"
+  | "rights-review"
+  | "accessibility-review"
+  | "release-approval";
+
+export type UnitReadinessGateStatus = "blocked" | "pending" | "complete";
+
+export interface UnitReadinessGate {
+  id: UnitReadinessGateId;
+  title: string;
+  detail: string;
+  owner: string;
+  status: UnitReadinessGateStatus;
+}
