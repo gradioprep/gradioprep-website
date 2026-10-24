@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { demoQuestionItems } from "./content/demoCatalog";
+import { demoLesson } from "./content/demoLesson";
 
 type Page = "home" | "dashboard" | "lesson" | "questions" | "assessment";
 type Navigate = (page: Page) => void;
@@ -50,13 +51,63 @@ function Dashboard({ go }: { go: Navigate }) {
 }
 
 function Lesson({ go }: { go: Navigate }) {
+  const lesson = demoLesson;
   const [answer, setAnswer] = useState("");
   const [checked, setChecked] = useState(false);
   const [saved, setSaved] = useState(false);
-  const answers = [{ id:"A", text:"It tells the reader exactly what to think." },{ id:"B", text:"It slows the scene without changing its mood." },{ id:"C", text:"It creates a pause that makes the change feel sudden." }];
-  return <Shell page="lesson" go={go}><InfoNote><b>Illustrative lesson only.</b> The sample question and explanation have not been mapped to or verified against a specific syllabus edition.</InfoNote><div className="proto-crumb"><button type="button" onClick={() => go("dashboard")}>Overview</button> / <button type="button" onClick={() => go("questions")}>Question bank</button> / <b>Language choices</b></div><div className="proto-lesson-head"><div><Label>SKILL STUDY · SAMPLE UNIT</Label><h1>Notice the choice.<br /><em>Explain the effect.</em></h1><p>Strong analysis moves beyond spotting a technique. It explains how a particular choice shapes a reader's experience.</p></div><div className="proto-progress"><small>EXAMPLE PROGRESS</small><b>2 <span>of 4 steps</span></b><div><i /></div><small>Illustrative only</small></div></div><div className="proto-lesson-grid"><div><section className="proto-panel proto-explanation"><Label>01 · THE IDEA</Label><h2>A choice is only the beginning.</h2><p>When you analyse a piece of writing, naming a technique is not enough. Ask what the writer's choice makes the reader notice, feel or question—and support your explanation with evidence.</p><div className="proto-extract"><small>INVENTED EXAMPLE EXTRACT</small><blockquote>The door swung open. <b>Silence.</b> Then the room erupted.</blockquote><p><span>↳</span> The one-word sentence interrupts the rhythm. That pause makes the sudden shift in the room feel sharper.</p></div><div className="proto-tip"><span>✳</span><p><b>Try this thinking move</b><br />Choice → evidence → effect. Make the link between each part explicit.</p></div></section><section className="proto-panel proto-practice"><Label>02 · CHECK YOUR UNDERSTANDING</Label><h2>Why might the writer use the one-word sentence?</h2><p>Choose the strongest explanation. This is a sample question, not a syllabus-verified item.</p><div className="proto-answer-list">{answers.map(a => <button type="button" key={a.id} onClick={() => { setAnswer(a.id); setChecked(false); }} className={(answer === a.id ? "selected " : "") + (checked && a.id === "C" ? "correct " : "") + (checked && answer === a.id && answer !== "C" ? "incorrect" : "")}><i>{a.id}</i><span>{a.text}</span>{checked && a.id === "C" && <b>✓</b>}</button>)}</div>{checked && <div className={"proto-answer-feedback " + (answer === "C" ? "right" : "")}><b>{answer === "C" ? "That's the strongest explanation." : "Review the effect, not just the technique."}</b><p>The abrupt pause changes the rhythm and heightens the contrast with what follows.</p></div>}<div className="proto-practice-footer"><small>DEMO ONLY · NO GRADE IS RECORDED</small><Action onClick={() => { if (answer) setChecked(true); }}>Check response →</Action></div></section><div className="proto-bottom-actions"><Action secondary onClick={() => go("questions")}>Back to question bank</Action><Action onClick={() => go("assessment")}>See feedback example →</Action></div></div><aside className="proto-panel proto-lesson-aside"><Label>IN THIS LESSON</Label><div className="proto-outline-row"><i className="current">✓</i><span><b>The idea</b><small>Understand the skill</small></span></div><div className="proto-outline-row"><i className="current">02</i><span><b>Check understanding</b><small>Try a question</small></span></div><div className="proto-outline-row"><i>03</i><span><b>Review an example</b><small>See the reasoning</small></span></div><div className="proto-outline-row"><i>04</i><span><b>Choose what is next</b><small>Review and continue</small></span></div><button type="button" className={"proto-save " + (saved ? "is-saved" : "")} onClick={() => setSaved(!saved)}>{saved ? "✓ Saved to demo list" : "+ Save this lesson"}</button><small className="proto-aside-note">Temporary to this open preview; not synced to an account.</small><div className="proto-aside-tip"><span>Aa</span><b>Keep the explanation useful.</b><p>A strong response names the choice, points to evidence and explains its effect.</p></div></aside></div></Shell>;
-}
+  const answers = lesson.practice.answerOptions;
 
+  return <Shell page="lesson" go={go}>
+    <InfoNote><b>Illustrative lesson only.</b> The sample question and explanation have not been mapped to or verified against a specific syllabus edition.</InfoNote>
+    <div className="proto-crumb"><button type="button" onClick={() => go("dashboard")}>{lesson.breadcrumb.overview}</button> / <button type="button" onClick={() => go("questions")}>{lesson.breadcrumb.questionBank}</button> / <b>{lesson.breadcrumb.lessonTitle}</b></div>
+    <div className="proto-lesson-head">
+      <div>
+        <Label>{lesson.introduction.eyebrow}</Label>
+        <h1>{lesson.introduction.headlineStart}<br /><em>{lesson.introduction.headlineEmphasis}</em></h1>
+        <p>{lesson.introduction.description}</p>
+      </div>
+      <div className="proto-progress">
+        <small>EXAMPLE PROGRESS</small>
+        <b>{lesson.introduction.progressCompleted} <span>of {lesson.introduction.progressTotal} steps</span></b>
+        <div><i /></div>
+        <small>Illustrative only</small>
+      </div>
+    </div>
+    <div className="proto-lesson-grid">
+      <div>
+        <section className="proto-panel proto-explanation">
+          <Label>01 · THE IDEA</Label>
+          <h2>{lesson.concept.title}</h2>
+          <p>{lesson.concept.explanation}</p>
+          <div className="proto-extract">
+            <small>{lesson.concept.extractLabel}</small>
+            <blockquote>{lesson.concept.extractBefore}<b>{lesson.concept.extractFocus}</b>{lesson.concept.extractAfter}</blockquote>
+            <p><span>↳</span> {lesson.concept.extractExplanation}</p>
+          </div>
+          <div className="proto-tip"><span>✳</span><p><b>{lesson.concept.tipTitle}</b><br />{lesson.concept.tipBody}</p></div>
+        </section>
+        <section className="proto-panel proto-practice">
+          <Label>02 · CHECK YOUR UNDERSTANDING</Label>
+          <h2>{lesson.practice.title}</h2>
+          <p>{lesson.practice.instructions}</p>
+          <div className="proto-answer-list">
+            {answers.map(a => <button type="button" key={a.id} onClick={() => { setAnswer(a.id); setChecked(false); }} className={(answer === a.id ? "selected " : "") + (checked && a.id === lesson.practice.correctAnswerId ? "correct " : "") + (checked && answer === a.id && answer !== lesson.practice.correctAnswerId ? "incorrect" : "")}><i>{a.id}</i><span>{a.text}</span>{checked && a.id === lesson.practice.correctAnswerId && <b>✓</b>}</button>)}
+          </div>
+          {checked && <div className={"proto-answer-feedback " + (answer === lesson.practice.correctAnswerId ? "right" : "")}><b>{answer === lesson.practice.correctAnswerId ? lesson.practice.correctFeedbackTitle : lesson.practice.incorrectFeedbackTitle}</b><p>{lesson.practice.feedbackExplanation}</p></div>}
+          <div className="proto-practice-footer"><small>DEMO ONLY · NO GRADE IS RECORDED</small><Action onClick={() => { if (answer) setChecked(true); }}>Check response →</Action></div>
+        </section>
+        <div className="proto-bottom-actions"><Action secondary onClick={() => go("questions")}>Back to question bank</Action><Action onClick={() => go("assessment")}>See feedback example →</Action></div>
+      </div>
+      <aside className="proto-panel proto-lesson-aside">
+        <Label>IN THIS LESSON</Label>
+        {lesson.outline.map(step => <div className="proto-outline-row" key={step.number}><i className={step.status === "upcoming" ? "" : "current"}>{step.status === "complete" ? "✓" : step.number}</i><span><b>{step.title}</b><small>{step.description}</small></span></div>)}
+        <button type="button" className={"proto-save " + (saved ? "is-saved" : "")} onClick={() => setSaved(!saved)}>{saved ? "✓ " + lesson.aside.savedLabel : "+ " + lesson.aside.saveLabel}</button>
+        <small className="proto-aside-note">{lesson.aside.saveNote}</small>
+        <div className="proto-aside-tip"><span>Aa</span><b>{lesson.aside.tipTitle}</b><p>{lesson.aside.tipBody}</p></div>
+      </aside>
+    </div>
+  </Shell>;
+}
 function Questions({ go }: { go: Navigate }) {
   const [search, setSearch] = useState("");
   const [area, setArea] = useState("All skills");
