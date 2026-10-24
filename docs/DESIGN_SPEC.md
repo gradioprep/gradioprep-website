@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 0.3  
+**Version:** 0.4  
 **Status:** Design direction agreed; page specifications prepared for implementation  
 **Last updated:** 24 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -9,6 +9,8 @@
 > This document translates the agreed visual direction into a buildable interface specification. The master brief takes precedence if any design suggestion here conflicts with an approved product rule. This is a design and interaction plan, not a claim that the described product features are already implemented.
 
 **Revision policy:** Approved or reviewed screens, interactions, tokens and design documentation can be changed later. Record substantive changes in version control, update this specification when it is affected, and re-review the impact before release. The locked fonts, typography, palette and text-colour rules remain in force unless a specific change is explicitly approved.
+
+**Version 0.4 change note — 24 October 2026:** The owner approved a site-wide peach-led palette with dark terracotta primary actions and forest-green accents because the earlier interface felt too dull and monochromatic. Page surfaces, cards, section backgrounds, primary emphasis, supporting accents and related borders have been updated across all six prototype screens. Typography, type sizes, font weights, line heights, letter-spacing and layout spacing are unchanged.
 
 ## 1. Design direction
 
@@ -41,17 +43,20 @@ Reference URLs:
 
 | Token | Hex | Use |
 |---|---|---|
-| Paper | `#F5F4EE` | Main warm page background |
-| Surface | `#FCFCF8` | Primary cards and reading surfaces |
-| Ink | `#202923` | Main text and high-emphasis controls |
-| Muted | `#515A53` | Approved secondary text colour on light backgrounds |
-| Forest | `#244D3A` | Primary actions, active navigation and key accents |
-| Forest dark | `#193A2C` | Dark feature panels and footer accents |
-| Soft lime | `#D9EDAB` | Rare positive accent, not a default background for every card |
-| Soft coral | `#E98D70` | Small highlights, focus details and occasional illustration accents |
-| Border | `#DFE3D9` | Separators and understated card boundaries |
+| Paper | `#FFF5EF` | Warm peach-white main page background |
+| Surface | `#FFFCF9` | Clean warm-white cards and reading surfaces |
+| Soft peach | `#F9DFD3` | Secondary section backgrounds, selected states and gentle emphasis |
+| Ink | `#242723` | Main text and high-emphasis controls |
+| Muted | `#57514D` | Supporting text on light backgrounds |
+| Terracotta | `#A8472F` | Primary actions, key heading emphasis and prominent links |
+| Terracotta dark | `#843621` | Hover state for primary actions |
+| Forest | `#244D3A` | Green accents, icon treatments and selected supporting controls |
+| Forest dark | `#193A2C` | Dark green feature panels, preview banner and occasional strong accent |
+| Soft lime | `#D9EDAB` | Positive highlight on selected accents and dark green panels; not a default card background |
+| Peach accent | `#F2B9A2` | Decorative highlights and illustration details, not small body text |
+| Border | `#E9D4CA` | Warm separators and understated card boundaries |
 
-Use the palette with restraint. Most screens should be paper/surface with ink text and one forest-green action. Reserve coral and lime for small moments. Status must never be communicated by colour alone; pair it with text or an icon.
+Use the palette with restraint. The dominant impression should come from warm peach-white paper and cards, soft peach section surfaces and dark terracotta primary actions. Use forest and deep green for accents, occasional dark panels and positive/status cues; use lime sparingly. Peach is not a default fill for every card, and status must never be communicated by colour alone: pair it with text or an icon.
 
 ### Typography
 
@@ -94,12 +99,12 @@ Use the existing utility classes `.type-page-title`, `.type-section-title`, `.ty
 
 | Token | Value | Rule |
 |---|---|---|
-| `--text-primary` | `#202923` | Primary headings, questions and body text on light surfaces |
-| `--text-secondary` | `#515A53` | Supporting paragraphs, descriptions, labels and other muted grey/sage text on light surfaces |
-| `--text-inverse` | `#EAF0E5` | Text on the deep-green dark surface, where appropriate |
-| `--ink` / `--muted` | Existing aliases | Keep existing components compatible; `--muted` is now `#515A53` |
+| `--text-primary` | `#242723` | Primary headings, questions and body text on light surfaces |
+| `--text-secondary` | `#57514D` | Supporting paragraphs, descriptions, labels and other muted warm-neutral text on light surfaces |
+| `--text-inverse` | `#FFF7F2` | Text on dark green surfaces, where appropriate |
+| `--ink` / `--muted` | Existing aliases | Keep components compatible; `--ink` is `#242723` and `--muted` is `#57514D` |
 
-The secondary grey/sage text palette on light surfaces has been darkened for legibility. Existing page/card/sidebar background colours were not changed in that text-colour update. For future pages, use the semantic text tokens rather than inventing pale grey text colours or adding one-off grey hex values. Green, lime, coral and other approved status/accent colours remain for their defined semantic roles, not as generic paragraph text.
+An earlier text-colour refinement darkened supporting text for legibility. The approved palette update in version 0.4 also warmed the page/card/sidebar surfaces and muted text hues. For future pages, use the semantic text tokens rather than inventing pale text colours or adding one-off grey hex values. Terracotta, forest green, lime and other approved accent colours remain for their defined roles, not as generic paragraph text.
 
 **One-time changes already applied — do not repeat them**
 
