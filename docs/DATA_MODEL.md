@@ -62,7 +62,7 @@ The current frontend code also defines a `unit_content_plans`-style record for p
 - Academic reviewer/date, content rights/source note and accessibility review state.
 - Explicit release approver/date and release state.
 
-The `src/content/unitReadiness.ts` helper calculates eight gates from this evidence. A source edition/objective mapping and a learning objective are blocking requirements; missing lesson/practice content, reviews and approvals cannot be assumed complete. Current records are static planning fixtures with null/empty evidence. The Pathways screen's checklist is read-only and is not a content editor, database or release mechanism.
+The `src/content/unitReadiness.ts` helper calculates eight gates from this evidence. A source edition/objective mapping and a learning objective are blocking requirements; missing lesson/practice content, reviews and approvals cannot be assumed complete. The first IB MYP Year 1 planning record now retains the public official subject-page URL, the date checked and a scope note. Because the public page does not supply an edition-specific Year 1 objective sequence, its syllabus edition and official objective codes remain unassigned and the source gate is still blocked. The original draft in `src/content/pilotUnitDraft.ts` is a separate working content brief, not a released lesson and not linked to the demo lesson. Current records remain static planning fixtures. The Pathways screen's checklist is read-only and is not a content editor, database or release mechanism.
 
 ### Learning activity and progress evidence
 
@@ -131,7 +131,7 @@ Additional protections:
 
 1. Approve the content fields, pathway mapping workflow and initial pilot pathway.
 2. Create versioned content fixtures/types using the model; keep current demo content explicitly marked as fictional.
-3. Use the unit readiness gates to track the official source, objective, lesson/practice links and reviews before release.
+3. Review `src/content/pilotUnitDraft.ts` with the academic lead, confirm the correct MYP Year 1 guide and objective/strand references, then use the readiness gates to track mapping, lesson/practice links and reviews before release.
 3. Choose and verify the database/auth provider's current terms, limits, backup and restore approach before creating production records.
 4. Create database migrations and enforce least-privilege access policies.
 5. Add authentication and profiles, then pathway enrolments and published content reads.
