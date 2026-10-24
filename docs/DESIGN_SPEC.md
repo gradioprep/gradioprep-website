@@ -1,12 +1,14 @@
 # Criterion Lab — Design Specification
 
-**Version:** 0.2  
+**Version:** 0.3  
 **Status:** Design direction agreed; page specifications prepared for implementation  
 **Last updated:** 24 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
 > This document translates the agreed visual direction into a buildable interface specification. The master brief takes precedence if any design suggestion here conflicts with an approved product rule. This is a design and interaction plan, not a claim that the described product features are already implemented.
+
+**Revision policy:** Approved or reviewed screens, interactions, tokens and design documentation can be changed later. Record substantive changes in version control, update this specification when it is affected, and re-review the impact before release. The locked fonts, typography, palette and text-colour rules remain in force unless a specific change is explicitly approved.
 
 ## 1. Design direction
 
