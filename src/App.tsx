@@ -261,7 +261,7 @@ function Pathways({ go }: { go: Navigate }) {
       {selected.levelKind === "navigation-only-grade-equivalent" && <p className="proto-note-bottom">This is a provisional learner-navigation label. Confirm whether the band is useful before treating it as a separate product route.</p>}
       <p className="proto-note-bottom">The learner lesson preview uses the reviewed pilot content. It is not assigned an official syllabus mapping, and its responses are not saved.</p>
     </section>}
-    {selectedUnit?.id === pilotUnitDraft.unitId && <section className="proto-panel proto-unit-draft" aria-label="Pilot unit working draft">
+    {selectedUnit?.id === pilotUnitDraft.unitId && <section className="proto-panel proto-unit-draft" aria-label="Reviewed pilot unit preview">
       <div className="proto-panel-heading">
         <div>
           <p className="proto-eyebrow"><span />PILOT CONTENT · REVIEWED PREVIEW</p>
@@ -277,7 +277,7 @@ function Pathways({ go }: { go: Navigate }) {
         <p>{pilotUnitDraft.source.scopeNote}</p>
       </div>
       <div className="proto-feedback-columns">
-        <div><small>PROPOSED LEARNING OBJECTIVE</small><p>{pilotUnitDraft.proposedLearningObjective}</p></div>
+        <div><small>PILOT LEARNING OBJECTIVE</small><p>{pilotUnitDraft.proposedLearningObjective}</p></div>
         <div><small>CURRICULUM MAPPING</small><p>Unverified. No edition-specific objective codes are assigned, and this draft does not yet count as mapped to MYP Year 1.</p></div>
       </div>
       <div className="proto-extract">
@@ -294,7 +294,7 @@ function Pathways({ go }: { go: Navigate }) {
         <p>These candidate references are deliberately not recorded as official objective codes. Curriculum mapping remains unverified until checked against the applicable school guide.</p>
       </div>
       <div className="proto-section-title">
-        <div><h2>Proposed teaching sequence</h2><p>Four small steps for academic review; not yet approved as the unit order.</p></div>
+        <div><h2>Teaching sequence</h2><p>Four teaching steps reviewed for pilot preview; this is not an official IB unit sequence.</p></div>
       </div>
       {pilotUnitDraft.teachingSequence.map(step => (
         <div className="proto-skill-row proto-readiness-row" key={step.number}>
