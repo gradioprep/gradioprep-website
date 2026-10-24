@@ -220,6 +220,45 @@ export interface PilotUnitDraft {
   releaseNote: string;
 }
 
+/** Non-answer review metadata safe to show in the public prototype. */
+export interface PilotReviewSummary {
+  id: string;
+  unitId: string;
+  title: string;
+  proposedFocus: string;
+  proposedLearningObjective: string;
+  mappingStatus: "unverified";
+  officialObjectiveCodes: string[];
+  reviewRecord: {
+    outcome: "passed";
+    reviewedAt: string;
+    reviewerLabel: string;
+    scopeNote: string;
+  };
+  source: {
+    title: string;
+    url: string;
+    subjectBriefUrl: string;
+    checkedAt: string;
+    scopeNote: string;
+  };
+  candidateGuide: {
+    title: string;
+    url: string;
+    checkedAt: string;
+    accessNote: string;
+  };
+  candidateObjectiveMappings: {
+    criterion: "A — Analysing";
+    strand: "A(ii)" | "A(iii)";
+    descriptor: string;
+    state: "candidate-unverified";
+    rationale: string;
+  }[];
+  remainingReleaseChecks: string[];
+  releaseNote: string;
+}
+
 /** One teacher-facing teaching step in an unreleased pilot lesson. */
 export interface PilotLessonSection {
   id: string;
