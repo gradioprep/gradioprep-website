@@ -52,18 +52,19 @@ This is a logical model, not yet a live SQL schema. Names can be adapted during 
 
 ### Unit content planning and release readiness
 
-The current frontend code also defines a `unit_content_plans`-style record for planning each pathway unit. Its intended fields include:
+The current frontend defines static unit-planning records as a code-level precursor to a future `unit_content_plans` table. Each plan should eventually record:
 
-- Target unit/pathway IDs and a content version.
-- Official syllabus edition, source URL, date checked and objective codes.
+- Target unit/pathway IDs and exact content version.
+- Official syllabus edition, source URL, date checked and verified objective codes.
 - Approved learning objective.
 - Linked lesson and practice-question IDs.
 - Answer-key review state.
 - Academic reviewer/date, content rights/source note and accessibility review state.
 - Explicit release approver/date and release state.
 
-The `src/content/unitReadiness.ts` helper calculates eight gates from this evidence. A source edition/objective mapping and a learning objective are blocking requirements; missing lesson/practice content, reviews and approvals cannot be assumed complete. The first IB MYP Year 1 pilot consists of a content brief (`src/content/pilotUnitDraft.ts`) and a fuller lesson/practice pack (`src/content/pilotLessonPack.ts`). The pack includes original teaching text, practice tasks and model answers. Candidate Year 1 Criterion A strands are stored separately from `officialObjectiveCodes` because the detailed IB-hosted guide redirects to curriculum sign-in and the applicable school-guide edition remains unconfirmed; the mapping remains unverified. The pack is shown in the static Pathways preview for academic review only and is not linked to released lesson records. Its answer guidance is included in the frontend bundle for review convenience in this prototype; production content must separate teacher-only answer keys from unrestricted learner-facing data and enforce access control server-side. The checklist remains read-only and is not a content editor, database or release mechanism.
+The `src/content/unitReadiness.ts` helper calculates eight gates from these fields. The first IB MYP Year 1 pilot has an academic content-review pass recorded for preview version 1, and its learner lesson/practice IDs and answer-key review are represented in the static fixture. Official curriculum mapping remains unverified because the applicable guide edition has not been confirmed; official objective codes remain empty. Rights/accessibility reviews and explicit release approval remain outstanding.
 
+The client imports only `src/content/pilotLearnerLesson.ts`, which excludes correct-answer IDs and model answers. `src/content/pilotLessonPack.ts` is the teacher/editor source containing answer guidance and is deliberately not imported by the client. This is code-splitting/source separation for a prototype, not a production security boundary. Production must enforce learner/teacher access server-side and must not ship answer keys in unrestricted client bundles. The readiness checklist is read-only and is not a database or release mechanism.
 ### Learning activity and progress evidence
 
 | Record | Purpose and key fields | Relationships / rules |
