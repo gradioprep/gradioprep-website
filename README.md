@@ -1,17 +1,19 @@
 # IB/IGCSE Learning Platform
 
-The project for the curriculum-aware IB and Cambridge learning platform described in the master project brief (docs/PROJECT_MASTER_BRIEF.md). The agreed screen design is described in docs/DESIGN_SPEC.md.
+The project for the curriculum-aware IB and Cambridge learning platform described in the master project brief (`docs/PROJECT_MASTER_BRIEF.md`). The agreed screen design is described in `docs/DESIGN_SPEC.md`.
 
 **Criterion Lab is a placeholder working name.** The final brand and domain have not been decided.
 
 ## Current status
 
-The repository contains a React + TypeScript frontend prototype with five clickable screens:
+The React + TypeScript frontend prototype is deployed to Cloudflare Workers and contains five clickable screens:
 - Public homepage and pathway discovery.
 - Student dashboard.
 - Lesson and sample practice interaction.
 - Searchable and filterable question-bank prototype.
 - Human-assessment feedback concept screen.
+
+The assessment evidence toggle has been fixed and verified on the deployed site.
 
 **This is a static design prototype, not a live learning product.** Dashboard numbers, activity, questions, rubric criteria, marks and feedback are fictional demonstration data. The sample lesson has not been verified against a specific syllabus edition. The answer check and filters are local prototype interactions; they do not save real learner records.
 
@@ -30,18 +32,19 @@ These programmes are distinct. Course and syllabus mapping must be verified agai
 - React
 - TypeScript
 - Vite
+- Cloudflare Workers for the current deployed preview
 
 ## Local development
 
-Install Node.js 20.19+ (or 22.12+), run npm install, then npm run dev to start the development preview. Run npm run build to check TypeScript and generate a production build.
+Install Node.js 20.19+ (or 22.12+), run `npm install`, then `npm run dev` to start the development preview. Run `npm run build` to check TypeScript and generate a production build.
 
 ## Deployment
 
-Vercel can import this private repository and use the standard Vite settings. Before commercial launch, re-check hosting terms and choose a plan/provider appropriate for commercial use and the sensitivity of any student information.
+The current prototype is deployed to Cloudflare Workers. Keep the codebase portable and verify the selected Cloudflare product's current terms, limits and data-handling requirements before commercial launch or before handling real student information. Do not assume the preview deployment is production-ready for authenticated accounts or student records.
 
 ## Security rules
 
 - Keep this repository private.
-- Never commit API keys, passwords, .env files, student submissions or private customer information.
+- Never commit API keys, passwords, `.env` files, student submissions or private customer information.
 - Add secrets only through the hosting provider's environment settings when needed.
-- Use docs/PROJECT_MASTER_BRIEF.md as the source of truth. Update it when a decision is explicitly approved.
+- Use `docs/PROJECT_MASTER_BRIEF.md` as the source of truth. Update it when a decision is explicitly approved.
