@@ -8,13 +8,13 @@ The curriculum-aware IB and Cambridge learning platform described in the master 
 
 The repository's React + TypeScript prototype now contains six clickable screens on `main` (including the pathway catalogue). The earlier five-screen preview was deployed to Cloudflare Workers; deployment of the latest pathway-catalogue change has not yet been independently confirmed:
 - Public homepage and pathway discovery.
-- Pathway catalogue with 10 planned English pathway entries and empty unit slots.
+- Pathway catalogue with 10 planned English pathway entries; the first IB MYP Year 1 unit has an original working draft for academic review.
 - Student dashboard.
 - Lesson and sample practice interaction.
 - Searchable and filterable question-bank prototype.
 - Human-assessment feedback concept screen.
 
-The assessment evidence toggle has been fixed and verified on the earlier deployed preview. The pathway catalogue is connected to the prototype navigation and displays the 10 planned English pathway entries grouped by programme, with three empty unit slots per entry. Selecting a unit shows an eight-gate readiness checklist calculated from structured unit-plan records. The current slots have no approved curriculum source, learning objective, linked lesson or linked practice; they cannot pass the release gate. The six question-bank examples and illustrative lesson remain typed demonstration content with unassigned curriculum metadata. This checklist is not a content editor and does not save changes to a database.
+The assessment evidence toggle has been fixed and verified on the earlier deployed preview. The pathway catalogue is connected to the prototype navigation and displays the 10 planned English pathway entries grouped by programme, with three planned unit slots each. The first IB MYP Year 1 slot now has an original, clearly labelled working draft: a proposed learning objective, teaching sequence, invented micro-extract, practice prompt and review questions. The official IB subject page and date checked are recorded, but the source is broad rather than an edition-specific Year 1 specification; no official objective codes or approved mapping have been assigned. The eight-gate readiness checklist therefore remains blocked for source mapping and release. The six question-bank examples and illustrative demo lesson remain separate with unassigned curriculum metadata. The checklist and draft preview do not save changes to a database.
 
 **This is a static design prototype, not a live learning product.** Dashboard numbers, activity, questions, rubric criteria, marks and feedback are fictional demonstration data. The sample lesson has not been verified against a specific syllabus edition. The answer check and filters are local prototype interactions; they do not save real learner records.
 
@@ -34,9 +34,10 @@ These programmes are distinct. Course and syllabus mapping must be verified agai
 - [Design specification](docs/DESIGN_SPEC.md) — approved visual system and screen behaviour.
 - [English Stage 1 roadmap](docs/ENGLISH_STAGE_1_ROADMAP.md) — pathway planning draft; exact skill sequence awaits academic-lead approval.
 - [Logical data model](docs/DATA_MODEL.md) — proposed content, learner-record and access-control structure; not a live database.
-- [Typed pathway catalogue](src/content/pathways.ts) — 10 planned pathway entries and 30 empty unit slots, all still unverified.
+- [Typed pathway catalogue](src/content/pathways.ts) — 10 planned entries and 30 unit slots; the first slot has an unapproved draft focus.
 - [Content types](src/content/model.ts) — shared TypeScript structures for pathway, unit and demonstration content.
-- [Unit readiness rules](src/content/unitReadiness.ts) — calculates release gates from unit plan records; current records are planning-only.
+- [Pilot unit draft](src/content/pilotUnitDraft.ts) — original working draft for IB MYP Year 1, not approved or released.
+- [Unit readiness rules](src/content/unitReadiness.ts) — calculates release gates from source evidence, content links and review records; current records remain planning-only.
 
 ## Technology
 
