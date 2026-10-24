@@ -4,6 +4,8 @@ The curriculum-aware IB and Cambridge learning platform described in the master 
 
 **Criterion Lab is a placeholder working name.** The final brand and domain have not been decided.
 
+**Current visual system:** warm peach-white page surfaces and cards, soft peach sections, dark terracotta primary actions and heading emphasis, and forest/deep-green accents. The approved fonts and typography sizes are unchanged; use `docs/DESIGN_SPEC.md` v0.4 and the tokens in `src/styles.css` for every page.
+
 ## Current status
 
 The React + TypeScript prototype has six clickable screens, including Pathways and an interactive Lesson & practice preview. The earlier preview was deployed to Cloudflare Workers; deployment of the latest changes has not been independently confirmed.
