@@ -363,7 +363,7 @@ function Pathways({ go }: { go: Navigate }) {
           <span>{gate.status === "complete" ? "Complete" : gate.status === "blocked" ? "Blocked" : "Not started"}</span>
         </div>
       ))}
-      <p className="proto-note-bottom">{readiness.releasable ? "This version has all recorded release evidence." : "No real lesson content is linked to this unit yet. The current demonstration lesson remains separate and must not be treated as syllabus-approved material."}</p>
+      <p className="proto-note-bottom">{readiness.releasable ? "This version has all recorded release evidence." : "The working lesson and practice pack above are still drafts and are not linked to this readiness record or counted as reviewed content. The separate demonstration lesson must not be treated as syllabus-approved material."}</p>
     </section>}
   </Shell>;
 }
