@@ -1,17 +1,9 @@
 import { useState, type ReactNode } from "react";
+import { demoQuestionItems } from "./content/demoCatalog";
 
 type Page = "home" | "dashboard" | "lesson" | "questions" | "assessment";
 type Navigate = (page: Page) => void;
-type Question = { id: string; area: "Reading" | "Writing" | "Analysis"; type: string; title: string; skill: string; time: string };
 
-const questionItems: Question[] = [
-  { id: "Q-014", area: "Reading", type: "Short response", title: "Read between the lines", skill: "Inference and evidence", time: "8 min" },
-  { id: "Q-021", area: "Analysis", type: "Guided analysis", title: "How language shapes tone", skill: "Writer's choices", time: "12 min" },
-  { id: "Q-026", area: "Writing", type: "Writing task", title: "Build a purposeful opening", skill: "Structure and audience", time: "15 min" },
-  { id: "Q-033", area: "Reading", type: "Short response", title: "Select the strongest evidence", skill: "Evidence selection", time: "7 min" },
-  { id: "Q-041", area: "Writing", type: "Revision task", title: "Make every sentence work", skill: "Precision and concision", time: "10 min" },
-  { id: "Q-052", area: "Analysis", type: "Guided analysis", title: "Notice the pattern, explain the effect", skill: "Language and effect", time: "14 min" },
-];
 const sections: { page: Page; label: string; icon: string }[] = [
   { page: "dashboard", label: "Overview", icon: "⌂" },
   { page: "questions", label: "Question bank", icon: "▤" },
@@ -69,7 +61,7 @@ function Questions({ go }: { go: Navigate }) {
   const [search, setSearch] = useState("");
   const [area, setArea] = useState("All skills");
   const [type, setType] = useState("All task types");
-  const filtered = questionItems.filter(q => (q.title + " " + q.skill + " " + q.area + " " + q.type).toLowerCase().includes(search.toLowerCase()) && (area === "All skills" || q.area === area) && (type === "All task types" || q.type === type));
+  const filtered = demoQuestionItems.filter(q => (q.title + " " + q.skill + " " + q.area + " " + q.type).toLowerCase().includes(search.toLowerCase()) && (area === "All skills" || q.area === area) && (type === "All task types" || q.type === type));
   return <Shell page="questions" go={go}><InfoNote><b>Question bank prototype.</b> Titles and items are examples for demonstrating search and filters, not a published syllabus-mapped bank.</InfoNote><PageIntro eyebrow="PRACTISE WITH PURPOSE" title={<>A better question can<br />unlock <em>a new idea.</em></>} subtitle="Explore short practice and extended-response examples. Filter by the kind of skill you want to work on." /><div className="proto-bank-count"><b>{filtered.length}</b> example {filtered.length === 1 ? "task" : "tasks"} shown <small>FICTIONAL CONTENT</small></div><section className="proto-panel proto-filters"><div className="proto-search"><span>⌕</span><input aria-label="Search questions" placeholder="Search a skill, topic or task..." value={search} onChange={e => setSearch(e.target.value)} /><small>SEARCH</small></div><div className="proto-filter-row"><label>SKILL AREA<select value={area} onChange={e => setArea(e.target.value)}><option>All skills</option><option>Reading</option><option>Writing</option><option>Analysis</option></select></label><label>TASK TYPE<select value={type} onChange={e => setType(e.target.value)}><option>All task types</option><option>Short response</option><option>Guided analysis</option><option>Writing task</option><option>Revision task</option></select></label><button type="button" onClick={() => { setSearch(""); setArea("All skills"); setType("All task types"); }}>Clear filters ↺</button></div></section><div className="proto-results">{filtered.map((q, i) => <article className="proto-result" key={q.id}><div className={"proto-result-art art-" + (i % 3)}><b>{q.area === "Reading" ? "“ ”" : q.area === "Writing" ? "Aa" : "↗"}</b><small>{q.id}</small></div><div className="proto-result-main"><div><span>{q.area}</span><small>{q.type}</small></div><h2>{q.title}</h2><p>{q.skill}</p><small>◷ {q.time} &nbsp; · &nbsp; Demo item</small></div><Action secondary onClick={() => go("lesson")}>Open activity ↗</Action></article>)}{filtered.length === 0 && <div className="proto-empty"><span>⌕</span><h2>No matching examples</h2><p>Try a different search term or clear the filters to see all demo items.</p><Action secondary onClick={() => { setSearch(""); setArea("All skills"); setType("All task types"); }}>Clear filters</Action></div>}</div></Shell>;
 }
 
