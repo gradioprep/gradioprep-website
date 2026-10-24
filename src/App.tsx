@@ -308,7 +308,7 @@ function Pathways({ go }: { go: Navigate }) {
         <p><b>Focus: “{pilotUnitDraft.originalExample.focus}”</b> — {pilotUnitDraft.originalExample.teachingNote}</p>
       </div>
       <div className="proto-extract">
-        <small>DRAFT PRACTICE PROMPT</small>
+        <small>PRACTICE PROMPT</small>
         <p>{pilotUnitDraft.practicePrompt}</p>
         <small>WHAT A RESPONSE SHOULD SHOW</small>
         {pilotUnitDraft.responseExpectation.map(item => <p key={item}>• {item}</p>)}
