@@ -1,8 +1,8 @@
 /**
- * Shared, lightweight frontend types for curriculum content.
+ * Shared frontend types for curriculum-aware English learning content.
  *
- * These types are a code-level starting point, not a database schema.
- * Keep prototype/demo content clearly separate from reviewed and published content.
+ * These types are a code-level foundation, not a live database schema.
+ * Content is not releasable until its mapping and academic review are verified.
  */
 
 export type SkillArea = "Reading" | "Writing" | "Analysis";
@@ -23,19 +23,73 @@ export type ContentLifecycle =
 
 export type SyllabusMappingStatus = "unverified" | "verified";
 
+export type PathwayLevelKind =
+  | "official-programme-level"
+  | "navigation-only-grade-equivalent";
+
+export type UnitSequence = 1 | 2 | 3;
+
+/**
+ * Curriculum identity is explicit. Null values mean "not assigned yet", not
+ * that the content applies to every programme or syllabus.
+ */
+export interface CurriculumAlignment {
+  programmeCode: string | null;
+  courseCode: string | null;
+  pathwayId: string | null;
+  syllabusEditionCode: string | null;
+  objectiveCodes: string[];
+  mappingStatus: SyllabusMappingStatus;
+  reviewNote: string;
+}
+
+export interface PlannedUnitSlot {
+  id: string;
+  pathwayId: string;
+  sequence: UnitSequence;
+  title: string;
+  learningObjective: null;
+  officialObjectiveCodes: string[];
+  mappingStatus: "unverified";
+  releaseStatus: "planned";
+  reviewNote: string;
+}
+
+/**
+ * Catalogue entry for one learner-facing route.
+ * An IGCSE grade-equivalent band is a navigation aid, not a separate
+ * qualification or an assertion of a different official syllabus.
+ */
+export interface CurriculumPathway {
+  id: string;
+  programmeCode: string;
+  programmeName: string;
+  courseCode: string;
+  courseName: string;
+  levelCode: string;
+  levelLabel: string;
+  levelKind: PathwayLevelKind;
+  gradeEquivalentLabel: string | null;
+  syllabusEditionCode: null;
+  mappingStatus: "unverified";
+  releaseStatus: "planned";
+  reviewNote: string;
+  unitSlots: PlannedUnitSlot[];
+}
+
 /**
  * A question used only to demonstrate the current prototype UI.
- * Do not treat it as approved curriculum content or a real learner record.
  */
 export interface DemoPracticeQuestion {
   id: string;
+  version: 1;
   area: SkillArea;
   type: PracticeTaskType;
   title: string;
   skill: string;
   time: string;
   contentStatus: "demonstration";
-  syllabusMappingStatus: "unverified";
+  curriculum: CurriculumAlignment;
 }
 
 export interface DemoLessonAnswerOption {
@@ -51,13 +105,14 @@ export interface DemoLessonOutlineStep {
 }
 
 /**
- * Structured content for the one illustrative lesson currently used by the UI.
- * This must not be treated as syllabus-approved learning material.
+ * Structured content for the illustrative lesson used by the current UI.
+ * Its curriculum alignment must stay unassigned until reviewed.
  */
 export interface DemoLesson {
   id: string;
+  version: 1;
   contentStatus: "demonstration";
-  syllabusMappingStatus: "unverified";
+  curriculum: CurriculumAlignment;
   breadcrumb: {
     overview: string;
     questionBank: string;
