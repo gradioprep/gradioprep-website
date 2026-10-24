@@ -1,6 +1,6 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 1.6  
+**Version:** 1.7  
 **Last updated:** 24 October 2026  
 **Status:** Frontend prototype; pilot lesson content review passed for preview version 1  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
@@ -29,6 +29,8 @@ Do not silently change approved prices, credit rules, curriculum scope, SLAs or 
 **No feature, design, policy, content item or document becomes permanently frozen merely because it has been reviewed or approved. Any and all approved/reviewed features and documentation may be updated or changed at a later date.** Keep changes in Git history; record the affected version, date and reason; update dependent documentation; and re-review the parts affected by a material change. A later version does not inherit the previous version's approval automatically. Changes to protected business rules or design-system tokens still follow their existing explicit-approval requirements. This is a change-control rule, not permission to silently override an approval.
 
 
+**v1.7 change note — 24 October 2026:** The owner approved the peach-and-terracotta-led visual direction to make the prototype feel warmer and less monochromatic. All prototype screens now use the updated palette; typography and spacing are unchanged. See `docs/DESIGN_SPEC.md` v0.4 for token values and future-page rules.
+
 ### Current implementation state
 
 As of 24 October 2026, the React + TypeScript frontend prototype remains a demonstration product: authentication, database, persistent learner records, production grading, payments and production analytics are not implemented. The catalogue in [`../src/content/pathways.ts`](../src/content/pathways.ts) contains 10 planned pathways and three unit slots per pathway. The Pathways screen shows the programme groupings and an eight-gate readiness checklist.
@@ -39,11 +41,11 @@ The client app and readiness fixture use the learner-safe lesson and non-answer 
 
 The public [IB MYP Language and literature page](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) and its [subject brief marked From 2014](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) were checked on 24 October 2026. An IB-hosted [Language and literature guide reference](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) surfaced candidate Year 1 Criterion A strands A(ii) and A(iii); the detailed guide redirects to IB curriculum sign-in and the applicable current school-guide edition remains unconfirmed. These are candidate references, not verified mappings. `officialObjectiveCodes` remains empty, so syllabus mapping and the official-source/objective gates remain blocked. In the static readiness fixture, the pilot lesson and practice IDs, answer-key review and academic-review pass are now recorded. Separate rights review, accessibility review and explicit release approval remain outstanding. The content is approved for pilot preview only, not a released syllabus-mapped course. The prototype still has no database, authentication or persistent learner records. Latest source files have been rechecked, but a fresh build and Cloudflare deployment have not been independently confirmed. The commercial hosting choice remains open pending review of vendor terms and requirements.
 
-### Approved frontend typography and text-colour guardrail
+### Approved frontend typography, text-colour and palette guardrail
 
 For every existing and future page, `docs/DESIGN_SPEC.md` Section 2 and the design tokens in `src/styles.css` are authoritative. Reuse the shared Manrope heading, DM Sans body and DM Mono metadata fonts, the approved size tokens, utility classes and semantic text-colour roles. Do not add one-off font families, smaller text, pale grey text on light backgrounds, or new grey hex values simply to style a new page.
 
-The current text tokens are `--text-primary: #202923`, `--text-secondary: #515A53` and `--text-inverse: #EAF0E5`; `--muted` is also `#515A53`. The secondary grey/sage text colours were darkened for legibility while section/card/sidebar background colours were preserved. The earlier 1.5× increase to originally ≤10px typography has already been applied to the current CSS; do not scale it again. New non-decorative text must be at least 10.5px, and running text should normally be 13.5–15px or larger.
+The current text tokens are `--text-primary: #242723`, `--text-secondary: #57514D` and `--text-inverse: #FFF7F2`; `--muted` is also `#57514D`. On 24 October 2026, the owner explicitly approved a site-wide colour refresh: warm peach-white surfaces, soft peach section backgrounds, dark terracotta primary actions and forest/deep-green accents. Design spec v0.4 and the tokens in `src/styles.css` are the source of truth for the exact palette. This change does not alter font families, typography sizes, weights, line heights, letter-spacing or layout spacing. The earlier 1.5× increase to originally ≤10px typography has already been applied to the current CSS; do not scale it again. New non-decorative text must be at least 10.5px, and running text should normally be 13.5–15px or larger.
 
 Any proposed change to these rules requires explicit founder approval and a coordinated update to the design spec and CSS tokens. Future-page work must preserve font weight, style, line-height, and letter-spacing unless a change is expressly approved.
 
