@@ -178,9 +178,23 @@ export interface PilotUnitDraft {
   source: {
     title: string;
     url: string;
+    subjectBriefUrl: string;
     checkedAt: string;
     scopeNote: string;
   };
+  candidateGuide: {
+    title: string;
+    url: string;
+    checkedAt: string;
+    accessNote: string;
+  };
+  candidateObjectiveMappings: {
+    criterion: "A — Analysing";
+    strand: "A(ii)" | "A(iii)";
+    descriptor: string;
+    state: "candidate-unverified";
+    rationale: string;
+  }[];
   teachingSequence: {
     number: string;
     title: string;
@@ -191,6 +205,15 @@ export interface PilotUnitDraft {
     text: string;
     focus: string;
     teachingNote: string;
+  };
+  modelResponse: {
+    label: string;
+    response: string;
+    annotations: {
+      title: string;
+      detail: string;
+    }[];
+    reviewNote: string;
   };
   practicePrompt: string;
   responseExpectation: string[];
