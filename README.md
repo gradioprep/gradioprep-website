@@ -6,14 +6,15 @@ The curriculum-aware IB and Cambridge learning platform described in the master 
 
 ## Current status
 
-The React + TypeScript frontend prototype is deployed to Cloudflare Workers and contains five clickable screens:
+The repository's React + TypeScript prototype now contains six clickable screens on `main` (including the pathway catalogue). The earlier five-screen preview was deployed to Cloudflare Workers; deployment of the latest pathway-catalogue change has not yet been independently confirmed:
 - Public homepage and pathway discovery.
+- Pathway catalogue with 10 planned English pathway entries and empty unit slots.
 - Student dashboard.
 - Lesson and sample practice interaction.
 - Searchable and filterable question-bank prototype.
 - Human-assessment feedback concept screen.
 
-The assessment evidence toggle has been fixed and verified on the deployed preview. The six question-bank examples and illustrative lesson use typed, reusable content records. The repository also contains a typed catalogue of the 10 planned English pathway entries, with three unapproved unit slots per entry. Programme, pathway and syllabus identifiers for the demo content remain unassigned; all pathway mappings and unit focuses remain unverified.
+The assessment evidence toggle has been fixed and verified on the earlier deployed preview. The pathway catalogue is now connected to the prototype navigation and displays the 10 planned English pathway entries grouped by programme, with three empty unit slots per entry. The six question-bank examples and illustrative lesson use typed, reusable content records. Programme, pathway and syllabus identifiers for the demo content remain unassigned; all pathway mappings and unit focuses remain unverified.
 
 **This is a static design prototype, not a live learning product.** Dashboard numbers, activity, questions, rubric criteria, marks and feedback are fictional demonstration data. The sample lesson has not been verified against a specific syllabus edition. The answer check and filters are local prototype interactions; they do not save real learner records.
 
