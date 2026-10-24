@@ -1,12 +1,14 @@
 import { useState, type ReactNode } from "react";
 import { demoQuestionItems } from "./content/demoCatalog";
 import { demoLesson } from "./content/demoLesson";
+import { englishPathways } from "./content/pathways";
 
-type Page = "home" | "dashboard" | "lesson" | "questions" | "assessment";
+type Page = "home" | "dashboard" | "pathways" | "lesson" | "questions" | "assessment";
 type Navigate = (page: Page) => void;
 
 const sections: { page: Page; label: string; icon: string }[] = [
   { page: "dashboard", label: "Overview", icon: "⌂" },
+  { page: "pathways", label: "Pathways", icon: "⌁" },
   { page: "questions", label: "Question bank", icon: "▤" },
   { page: "lesson", label: "Lessons & practice", icon: "↗" },
   { page: "assessment", label: "Assessment feedback", icon: "◎" },
@@ -30,7 +32,7 @@ function Home({ go }: { go: Navigate }) {
     <main>
       <section className="proto-hero"><div className="proto-container proto-hero-grid"><div><Label>LEARNING, WITH DIRECTION</Label><h1>Make your next step a <em>smarter one.</em></h1><p className="proto-lead">A more considered way to learn English across IB MYP and Cambridge pathways. Practise with purpose, understand your gaps and build on what you know.</p><div className="proto-actions"><Action onClick={() => go("questions")}>Explore the question bank <span>→</span></Action><button className="proto-inline" type="button" onClick={() => document.getElementById("proto-approach")?.scrollIntoView({ behavior: "smooth" })}>Our approach ↘</button></div><div className="proto-proof"><span>✳</span><div><b>Learning that moves you forward.</b><small>Clear objectives. Useful practice. Feedback with a purpose.</small></div></div></div>
         <div className="proto-hero-art"><div className="proto-orbit one" /><div className="proto-orbit two" /><section className="proto-journey"><div className="proto-overline"><span>YOUR LEARNING JOURNEY</span><span>01 — 03</span></div><div className="proto-journey-title"><span>↗</span><div><small>A ROUTE THAT MAKES SENSE</small><h2>Progress, in practice.</h2></div></div><div className="proto-journey-row"><span>01</span><div><b>Understand the skill</b><small>Know what you're learning and why.</small></div><i className="done">✓</i></div><div className="proto-journey-row"><span>02</span><div><b>Practise with purpose</b><small>Try questions connected to that skill.</small></div><i>02</i></div><div className="proto-journey-row"><span>03</span><div><b>Choose your next step</b><small>Use evidence and feedback to improve.</small></div><i>03</i></div><div className="proto-journey-footer">✳ &nbsp; Designed for progress, not guesswork.</div></section><div className="proto-floating-note"><span>↗</span><div><b>Small steps.</b><small>Meaningful progress.</small></div></div></div></div><div className="proto-ribbon"><span>LEARN WITH PURPOSE</span><i /><span>GROW WITH EVIDENCE</span><i /><span>KEEP MOVING FORWARD</span></div></section>
-      <section className="proto-pathways proto-section" id="proto-pathways"><div className="proto-container"><div className="proto-section-heading"><div><Label>START WITH THE RIGHT PATH</Label><h2>The right route starts<br />with <em>your world.</em></h2></div><p>Different programmes have different expectations. Start with the pathway that matches your curriculum—not a one-size-fits-all course.</p></div><div className="proto-pathway-grid"><article><div><span>01</span><b>IB MYP</b></div><h3>Language & Literature</h3><small>Years 1–5</small><p>Build confidence in reading, interpretation and purposeful writing through a clearly mapped learning route.</p><button type="button" onClick={() => go("dashboard")}>Preview pathway <span>↗</span></button></article><article><div><span>02</span><b>CAMBRIDGE</b></div><h3>Lower Secondary English</h3><small>Stages 7–9</small><p>Strengthen core English skills with practice organised around the learning objectives that matter.</p><button type="button" onClick={() => go("dashboard")}>Preview pathway <span>↗</span></button></article><article><div><span>03</span><b>CAMBRIDGE IGCSE</b></div><h3>First Language English</h3><small>Grade 9–10 equivalent pathways</small><p>Work towards the relevant syllabus through purposeful practice and carefully checked mapping.</p><button type="button" onClick={() => go("dashboard")}>Preview pathway <span>↗</span></button></article></div><p className="proto-fineprint">Stage 1 is a starter pathway, not exhaustive syllabus coverage. Curriculum mapping must be verified before content is published.</p></div></section>
+      <section className="proto-pathways proto-section" id="proto-pathways"><div className="proto-container"><div className="proto-section-heading"><div><Label>START WITH THE RIGHT PATH</Label><h2>The right route starts<br />with <em>your world.</em></h2></div><p>Different programmes have different expectations. Start with the pathway that matches your curriculum—not a one-size-fits-all course.</p></div><div className="proto-pathway-grid"><article><div><span>01</span><b>IB MYP</b></div><h3>Language & Literature</h3><small>Years 1–5</small><p>Build confidence in reading, interpretation and purposeful writing through a clearly mapped learning route.</p><button type="button" onClick={() => go("pathways")}>Explore pathways <span>↗</span></button></article><article><div><span>02</span><b>CAMBRIDGE</b></div><h3>Lower Secondary English</h3><small>Stages 7–9</small><p>Strengthen core English skills with practice organised around the learning objectives that matter.</p><button type="button" onClick={() => go("pathways")}>Explore pathways <span>↗</span></button></article><article><div><span>03</span><b>CAMBRIDGE IGCSE</b></div><h3>First Language English</h3><small>Grade 9–10 equivalent pathways</small><p>Work towards the relevant syllabus through purposeful practice and carefully checked mapping.</p><button type="button" onClick={() => go("pathways")}>Explore pathways <span>↗</span></button></article></div><p className="proto-fineprint">Stage 1 is a starter pathway, not exhaustive syllabus coverage. Curriculum mapping must be verified before content is published.</p></div></section>
       <section className="proto-approach proto-section" id="proto-approach"><div className="proto-container proto-approach-grid"><div><Label>WHY THIS PLATFORM</Label><h2>More than a library.<br /><em>A clearer next step.</em></h2><p>Finding notes is only the beginning. The aim is to connect the syllabus, a specific skill, deliberate practice and useful feedback in one learning space.</p><Action secondary onClick={() => go("lesson")}>Preview a lesson →</Action></div><div className="proto-principles"><article><span>01</span><i>⌖</i><div><b>Find your bearings</b><p>Start with your programme, stage and the skill you want to build.</p></div></article><article><span>02</span><i>↗</i><div><b>Practise with purpose</b><p>Use focused questions, annotated examples and clear explanations.</p></div></article><article><span>03</span><i>✳</i><div><b>Learn from evidence</b><p>Use saved attempts and meaningful feedback to decide what comes next.</p></div></article></div></div></section>
       <section className="proto-release" id="proto-first"><div className="proto-container proto-release-panel"><div><Label>THE FIRST RELEASE</Label><h2>English first.<br /><em>Built thoughtfully.</em></h2></div><div><p>The initial build focuses on English pathways, verified curriculum mapping, purposeful practice and a clear foundation for learner progress. Mathematics is planned for a later phase.</p><small>This preview contains sample content only. Real accounts, learning tools and connected progress tracking are still in development.</small><Action onClick={() => go("dashboard")}>Explore student preview ↗</Action></div></div></section>
     </main>
@@ -108,6 +110,77 @@ function Lesson({ go }: { go: Navigate }) {
     </div>
   </Shell>;
 }
+
+function Pathways({ go }: { go: Navigate }) {
+  const [selectedPathwayId, setSelectedPathwayId] = useState("ib-myp-lal-y1");
+  const selected = englishPathways.find(item => item.id === selectedPathwayId) ?? englishPathways[0];
+
+  const renderGroup = (title: string, description: string, items: typeof englishPathways) => (
+    <section>
+      <div className="proto-section-title">
+        <div><h2>{title}</h2><p>{description}</p></div>
+        <small>{items.length} PATHWAY{items.length === 1 ? "" : "S"}</small>
+      </div>
+      <div className="proto-pathway-grid">
+        {items.map((pathway, index) => (
+          <article key={pathway.id}>
+            <div><span>{String(index + 1).padStart(2, "0")}</span><b>PLANNED</b></div>
+            <h3>{pathway.courseName}</h3>
+            <small>{pathway.levelLabel}</small>
+            {pathway.gradeEquivalentLabel && <small>{pathway.gradeEquivalentLabel}</small>}
+            <p>{pathway.reviewNote}</p>
+            <button type="button" aria-expanded={selectedPathwayId === pathway.id} onClick={() => setSelectedPathwayId(pathway.id)}>
+              {selectedPathwayId === pathway.id ? "Viewing unit plan" : "View planned units"} <span>↗</span>
+            </button>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+
+  return <Shell page="pathways" go={go}>
+    <InfoNote><b>Pathway catalogue — planning preview.</b> These are the 10 planned English pathways, not released courses. Official syllabus editions, mappings and unit focuses are not yet verified. Choosing a pathway displays its empty planning slots only.</InfoNote>
+    <PageIntro
+      eyebrow="CHOOSE YOUR CURRICULUM"
+      title={<>Start with the right <em>pathway.</em></>}
+      subtitle="Each programme keeps its own identity and learning sequence. The catalogue is being prepared before curriculum content is released."
+    />
+    {renderGroup(
+      "IB MYP Language and Literature",
+      "Five programme years. Grade equivalents are provided only as a navigation aid.",
+      englishPathways.filter(item => item.programmeCode === "ib-myp")
+    )}
+    {renderGroup(
+      "Cambridge Lower Secondary English",
+      "Stages 7–9, kept separate from the IGCSE qualification pathway.",
+      englishPathways.filter(item => item.programmeCode === "cambridge-lower-secondary")
+    )}
+    {renderGroup(
+      "Cambridge IGCSE First Language English",
+      "The two grade-equivalent entries are provisional navigation bands, not separate qualifications or automatically separate syllabuses.",
+      englishPathways.filter(item => item.programmeCode === "cambridge-igcse")
+    )}
+    {selected && <section className="proto-panel" aria-label="Selected pathway unit planning slots">
+      <div className="proto-panel-heading">
+        <div>
+          <h2>Planned units — {selected.levelLabel}</h2>
+          <p>{selected.programmeName} · {selected.courseName}. The academic lead must confirm the unit focus and mapping before release.</p>
+        </div>
+        <span>NOT RELEASED</span>
+      </div>
+      {selected.unitSlots.map(unit => (
+        <div className="proto-skill-row" key={unit.id}>
+          <i>{String(unit.sequence).padStart(2, "0")}</i>
+          <div><b>{unit.title}</b><small>{unit.reviewNote}</small></div>
+          <span>Planned</span>
+        </div>
+      ))}
+      {selected.levelKind === "navigation-only-grade-equivalent" && <p className="proto-note-bottom">This is a provisional learner-navigation label. Confirm whether the band is useful before treating it as a separate product route.</p>}
+      <p className="proto-note-bottom">The illustrative lesson and six sample questions are not assigned to this pathway. No syllabus mapping has been inferred from the selected level.</p>
+    </section>}
+  </Shell>;
+}
+
 function Questions({ go }: { go: Navigate }) {
   const [search, setSearch] = useState("");
   const [area, setArea] = useState("All skills");
@@ -137,6 +210,7 @@ export default function App() {
   const [page, setPage] = useState<Page>("home");
   const go: Navigate = next => { setPage(next); window.scrollTo({ top: 0, behavior: "smooth" }); };
   if (page === "dashboard") return <Dashboard go={go} />;
+  if (page === "pathways") return <Pathways go={go} />;
   if (page === "lesson") return <Lesson go={go} />;
   if (page === "questions") return <Questions go={go} />;
   if (page === "assessment") return <Assessment go={go} />;
