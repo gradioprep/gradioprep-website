@@ -169,7 +169,13 @@ export interface PilotUnitDraft {
   version: 1;
   pathwayId: string;
   unitId: string;
-  status: "working-draft";
+  status: "approved-for-pilot-preview";
+  reviewRecord: {
+    outcome: "passed";
+    reviewedAt: string;
+    reviewerLabel: string;
+    scopeNote: string;
+  };
   title: string;
   proposedFocus: string;
   proposedLearningObjective: string;
@@ -205,15 +211,6 @@ export interface PilotUnitDraft {
     text: string;
     focus: string;
     teachingNote: string;
-  };
-  modelResponse: {
-    label: string;
-    response: string;
-    annotations: {
-      title: string;
-      detail: string;
-    }[];
-    reviewNote: string;
   };
   practicePrompt: string;
   responseExpectation: string[];
@@ -262,7 +259,13 @@ export interface PilotLessonPack {
   id: string;
   version: 1;
   unitId: string;
-  status: "working-draft";
+  status: "approved-for-pilot-preview";
+  reviewRecord: {
+    outcome: "passed";
+    reviewedAt: string;
+    reviewerLabel: string;
+    scopeNote: string;
+  };
   title: string;
   audienceNote: string;
   estimatedMinutes: number;
@@ -294,6 +297,62 @@ export interface PilotLessonPack {
   accessibilitySupports: string[];
   academicReviewQuestions: string[];
   releaseNote: string;
+}
+
+/** The learner-facing version deliberately excludes answer keys and model answers. */
+export interface PilotLearnerLesson {
+  id: string;
+  version: 1;
+  unitId: string;
+  status: "approved-for-pilot-preview";
+  reviewRecord: {
+    outcome: "passed";
+    reviewedAt: string;
+    reviewerLabel: string;
+    scopeNote: string;
+  };
+  title: string;
+  estimatedMinutes: number;
+  audienceNote: string;
+  proposedLearningObjective: string;
+  mappingStatus: "unverified";
+  successCriteria: string[];
+  passage: {
+    label: string;
+    text: string;
+    rightsNote: string;
+  };
+  keyIdea: {
+    label: string;
+    pattern: string[];
+    explanation: string;
+  };
+  sections: {
+    id: string;
+    heading: string;
+    purpose: string;
+    explanation: string;
+    learnerAction: string;
+    example?: {
+      label: string;
+      text: string;
+      explanation: string;
+    };
+  }[];
+  practiceItems: {
+    id: string;
+    type: "best-explanation" | "short-response" | "response-revision";
+    focus: string;
+    prompt: string;
+    options?: { id: string; text: string }[];
+    successIndicators: string[];
+  }[];
+  exitTicket: {
+    prompt: string;
+    successIndicators: string[];
+  };
+  accessibilitySupports: string[];
+  learnerNote: string;
 }
 
 export interface UnitContentPlan {
