@@ -1,8 +1,8 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Last updated:** 24 October 2026  
-**Status:** Frontend prototype deployed; curriculum/data foundations in progress  
+**Status:** Frontend prototype deployed; typed curriculum catalogue and content foundations in progress  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
 **Founder context:** 18 years of IB, IGCSE and SAT tutoring experience; founder will initially be the sole grader and academic lead.  
 **Initial geography:** Delhi-NCR, then wider India  
@@ -26,7 +26,7 @@ Do not silently change approved prices, credit rules, curriculum scope, SLAs or 
 
 ### Current implementation state
 
-As of 24 October 2026, a five-screen React + TypeScript prototype is deployed to Cloudflare Workers. It remains a demonstration frontend: authentication, database, persistent learner records, released syllabus-mapped content, real grading, payments and production analytics are not implemented. The current question-bank examples are typed demo content, and the lesson screen now reads from a separate typed demonstration lesson record; neither is approved syllabus content. The planning drafts in [`ENGLISH_STAGE_1_ROADMAP.md`](ENGLISH_STAGE_1_ROADMAP.md) and [`DATA_MODEL.md`](DATA_MODEL.md) prepare the content and data foundations; they do not approve a syllabus sequence or claim that a database exists. The app build still needs to be run and verified before treating this code change as build-tested. The commercial hosting choice remains open until the vendor terms and requirements are reviewed.
+As of 24 October 2026, a five-screen React + TypeScript prototype is deployed to Cloudflare Workers. It remains a demonstration frontend: authentication, database, persistent learner records, released syllabus-mapped content, real grading, payments and production analytics are not implemented. The question-bank examples and lesson are typed demonstration content with explicit, unassigned curriculum metadata; they are not approved syllabus content. The code catalogue in [`../src/content/pathways.ts`](../src/content/pathways.ts) mirrors the 10 planned pathway entries and creates three empty, unapproved unit slots for each. The slots do not specify skill focuses or official objective codes. The planning drafts in [`ENGLISH_STAGE_1_ROADMAP.md`](ENGLISH_STAGE_1_ROADMAP.md) and [`DATA_MODEL.md`](DATA_MODEL.md) remain the source for content and access-control planning; no database or learner-record persistence exists yet. The app build still needs to be run and verified before treating this code change as build-tested. The commercial hosting choice remains open until the vendor terms and requirements are reviewed.
 
 ### Approved frontend typography and text-colour guardrail
 
