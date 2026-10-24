@@ -14,16 +14,42 @@ export const pilotUnitDraft: PilotUnitDraft = {
   proposedFocus:
     "A starter exploration of how deliberate word and sentence choices influence a reader's understanding and response.",
   proposedLearningObjective:
-    "Explain how a writer's specific word or sentence choices shape meaning or mood, using precise evidence from a text.",
+    "Identify a writer's choice in a short text and comment on how it may shape meaning or mood, using an example to support the explanation.",
   mappingStatus: "unverified",
   officialObjectiveCodes: [],
   source: {
     title: "IB MYP Language and literature — official subject page",
     url: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
+    subjectBriefUrl: "https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf",
     checkedAt: "2026-10-24",
     scopeNote:
-      "This public page describes the subject broadly, including reading and viewing among six skill areas and study of literary and non-literary texts. It does not provide a Year 1 unit sequence or an edition-specific objective code. The curriculum mapping therefore remains unverified.",
+      "The public IB subject page and its subject brief describe the programme broadly and confirm the four assessment criteria, but do not themselves provide Year 1 strand descriptors. The more detailed candidate references below come from an IB-hosted guide result indexed as the 2014 Language and literature guide. Its applicability to the current guide used by the learner's school must be verified before mapping can be approved.",
   },
+  candidateGuide: {
+    title: "IB Language and literature guide — Year 1 objective strands",
+    url: "https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf",
+    checkedAt: "2026-10-24",
+    accessNote:
+      "The IB-hosted search-indexed guide excerpt lists Year 1 Criterion A strands, but opening the guide URL redirects to IB curriculum sign-in. Treat these as candidate references only and confirm against the current guide available to the school.",
+  },
+  candidateObjectiveMappings: [
+    {
+      criterion: "A — Analysing",
+      strand: "A(ii)",
+      descriptor: "Identify and comment upon the creator's choices.",
+      state: "candidate-unverified",
+      rationale:
+        "Closest candidate for noticing and commenting on a deliberate word or sentence choice. The current guide edition and the unit-level fit still need confirmation.",
+    },
+    {
+      criterion: "A — Analysing",
+      strand: "A(iii)",
+      descriptor: "Justify opinions and ideas using examples, explanations and terminology.",
+      state: "candidate-unverified",
+      rationale:
+        "Candidate support for requiring a precise example and an explanation. Confirm whether this strand should be included in the first unit.",
+    },
+  ],
   teachingSequence: [
     {
       number: "01",
@@ -57,6 +83,27 @@ export const pilotUnitDraft: PilotUnitDraft = {
     teachingNote:
       "The verb 'sighed' gives the bus a human-like action. It can make the departure feel weary or reluctant, while the shrinking headlights and rain help create a sense of distance. These are plausible readings to support with evidence, not the only acceptable interpretation.",
   },
+  modelResponse: {
+    label: "Worked response — original draft",
+    response:
+      "The verb 'sighed' gives the bus a human action, which can make its departure seem weary or reluctant. The phrase 'headlights shrinking into the rain' suggests the bus is moving farther away, creating a quiet, wistful mood.",
+    annotations: [
+      {
+        title: "Choice",
+        detail: "Names the precise word 'sighed' rather than only naming a technique.",
+      },
+      {
+        title: "Explanation",
+        detail: "Explains a plausible association: the bus seems weary or reluctant.",
+      },
+      {
+        title: "Supporting evidence",
+        detail: "Connects a second phrase to distance and mood.",
+      },
+    ],
+    reviewNote:
+      "This is one plausible interpretation, not a single official answer. Review for level suitability and accept other evidence-supported interpretations.",
+  },
   practicePrompt:
     "Choose one word or phrase from the micro-extract. Explain how it helps create the mood of the moment.",
   responseExpectation: [
@@ -71,7 +118,8 @@ export const pilotUnitDraft: PilotUnitDraft = {
   ],
   reviewQuestions: [
     "Is the focus appropriate for MYP Year 1 learners and their prior knowledge?",
-    "Which exact current MYP Language and Literature objective/strand should this teach toward, if any?",
+    "Does the learner's school use the guide represented by the candidate source, or a later applicable guide?",
+    "Should candidate strands A(ii) and A(iii) both be used, or is one strand a better fit?",
     "Does the proposed sequence belong in Unit 1, or should another skill come first?",
     "What accessible range of text types and language needs should the finished unit include?",
     "Which formative check and marking guidance should be approved before practice items are authored?",
