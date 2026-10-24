@@ -4,6 +4,8 @@
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Goal:** Define relationships and permission boundaries before connecting the current prototype to a database. This document is provider-independent; the master brief's proposed Supabase approach still requires a current plan/terms review before real student data is stored.
 
+**Revision policy:** Any approved or reviewed part of this data model may be amended later. Record the change and reason in version control, update dependent documentation, and re-review changes that affect curriculum alignment, answer-key privacy, learner records or authorization.
+
 ## 1. Design rules
 
 1. Keep programme, course, subject, level/year/stage, syllabus edition, objective, skill, task and rubric as distinct concepts.
