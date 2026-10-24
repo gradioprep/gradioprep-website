@@ -14,7 +14,7 @@ The repository's React + TypeScript prototype now contains six clickable screens
 - Searchable and filterable question-bank prototype.
 - Human-assessment feedback concept screen.
 
-The assessment evidence toggle has been fixed and verified on the earlier deployed preview. The pathway catalogue is now connected to the prototype navigation and displays the 10 planned English pathway entries grouped by programme, with three empty unit slots per entry. The six question-bank examples and illustrative lesson use typed, reusable content records. Programme, pathway and syllabus identifiers for the demo content remain unassigned; all pathway mappings and unit focuses remain unverified.
+The assessment evidence toggle has been fixed and verified on the earlier deployed preview. The pathway catalogue is connected to the prototype navigation and displays the 10 planned English pathway entries grouped by programme, with three empty unit slots per entry. Selecting a unit shows an eight-gate readiness checklist calculated from structured unit-plan records. The current slots have no approved curriculum source, learning objective, linked lesson or linked practice; they cannot pass the release gate. The six question-bank examples and illustrative lesson remain typed demonstration content with unassigned curriculum metadata. This checklist is not a content editor and does not save changes to a database.
 
 **This is a static design prototype, not a live learning product.** Dashboard numbers, activity, questions, rubric criteria, marks and feedback are fictional demonstration data. The sample lesson has not been verified against a specific syllabus edition. The answer check and filters are local prototype interactions; they do not save real learner records.
 
@@ -36,6 +36,7 @@ These programmes are distinct. Course and syllabus mapping must be verified agai
 - [Logical data model](docs/DATA_MODEL.md) — proposed content, learner-record and access-control structure; not a live database.
 - [Typed pathway catalogue](src/content/pathways.ts) — 10 planned pathway entries and 30 empty unit slots, all still unverified.
 - [Content types](src/content/model.ts) — shared TypeScript structures for pathway, unit and demonstration content.
+- [Unit readiness rules](src/content/unitReadiness.ts) — calculates release gates from unit plan records; current records are planning-only.
 
 ## Technology
 
