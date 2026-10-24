@@ -463,6 +463,33 @@ a:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
 .proto-activity-row em { color: #5a645a; font-size: 12px; font-style: normal; white-space: nowrap; }
 .proto-activity-row > strong { color: #5a665a; font-size: 13px; font-weight: 400; }
 
+/* Unit-planning controls reuse the approved design tokens and existing row layout. */
+.proto-unit-plan-row.is-selected {
+  background: var(--paper);
+  box-shadow: inset 3px 0 var(--green);
+  padding-left: 10px;
+}
+.proto-unit-plan-row:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 3px;
+}
+.proto-unit-readiness { margin-top: 12px; }
+.proto-unit-readiness-intro {
+  margin: 0 0 8px;
+  color: var(--text-secondary);
+  font-size: var(--type-body-small);
+  line-height: 1.7;
+}
+.proto-readiness-owner {
+  font-family: var(--font-mono);
+  letter-spacing: .02em;
+}
+.proto-readiness-row > span {
+  max-width: 130px;
+  text-align: right;
+  white-space: normal;
+}
+
 /* Lesson view */
 .proto-crumb { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; color: #6c736c; font-size: 13.5px; }
 .proto-crumb button { border: 0; padding: 0; background: transparent; color: #5a655a; cursor: pointer; }
