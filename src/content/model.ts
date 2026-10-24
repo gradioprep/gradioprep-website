@@ -215,7 +215,7 @@ export interface PilotUnitDraft {
   practicePrompt: string;
   responseExpectation: string[];
   commonMisconceptions: string[];
-  reviewQuestions: string[];
+  remainingReleaseChecks: string[];
   rightsNote: string;
   releaseNote: string;
 }
@@ -295,7 +295,7 @@ export interface PilotLessonPack {
     secure: string;
   }[];
   accessibilitySupports: string[];
-  academicReviewQuestions: string[];
+  remainingReleaseChecks: string[];
   releaseNote: string;
 }
 
