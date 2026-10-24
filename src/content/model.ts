@@ -223,6 +223,79 @@ export interface PilotUnitDraft {
   releaseNote: string;
 }
 
+/** One teacher-facing teaching step in an unreleased pilot lesson. */
+export interface PilotLessonSection {
+  id: string;
+  heading: string;
+  purpose: string;
+  explanation: string;
+  learnerAction: string;
+  example?: {
+    label: string;
+    text: string;
+    explanation: string;
+  };
+}
+
+export interface PilotPracticeOption {
+  id: string;
+  text: string;
+  feedback: string;
+}
+
+export interface PilotPracticeItem {
+  id: string;
+  type: "best-explanation" | "short-response" | "response-revision";
+  focus: string;
+  prompt: string;
+  options?: PilotPracticeOption[];
+  bestOptionId?: string;
+  modelAnswer: string;
+  successIndicators: string[];
+  feedbackForLearner: {
+    ifStrong: string;
+    nextStep: string;
+  };
+}
+
+export interface PilotLessonPack {
+  id: string;
+  version: 1;
+  unitId: string;
+  status: "working-draft";
+  title: string;
+  audienceNote: string;
+  estimatedMinutes: number;
+  proposedLearningObjective: string;
+  mappingStatus: "unverified";
+  successCriteria: string[];
+  passage: {
+    label: string;
+    text: string;
+    rightsNote: string;
+  };
+  keyIdea: {
+    label: string;
+    pattern: string[];
+    explanation: string;
+  };
+  sections: PilotLessonSection[];
+  practiceItems: PilotPracticeItem[];
+  exitTicket: {
+    prompt: string;
+    successIndicators: string[];
+    modelAnswer: string;
+  };
+  feedbackGuide: {
+    area: string;
+    developing: string;
+    secure: string;
+  }[];
+  accessibilitySupports: string[];
+  academicReviewQuestions: string[];
+  releaseNote: string;
+}
+
 export interface UnitContentPlan {
   id: string;
   unitId: string;
