@@ -218,6 +218,19 @@ function Pathways({ go }: { go: Navigate }) {
         <div><small>PROPOSED LEARNING OBJECTIVE</small><p>{pilotUnitDraft.proposedLearningObjective}</p></div>
         <div><small>CURRICULUM MAPPING</small><p>Unverified. No edition-specific objective codes are assigned, and this draft does not yet count as mapped to MYP Year 1.</p></div>
       </div>
+      <div className="proto-extract">
+        <small>CANDIDATE IB OBJECTIVE REFERENCES · NOT VERIFIED</small>
+        <p>The IB-hosted guide search result suggests the following Year 1 strands. The source opens through IB curriculum sign-in, and the current school-guide edition has not been confirmed.</p>
+        {pilotUnitDraft.candidateObjectiveMappings.map(item => (
+          <div className="proto-skill-row proto-readiness-row" key={item.strand}>
+            <i>{item.strand}</i>
+            <div><b>{item.criterion}</b><small>{item.descriptor}</small><small>{item.rationale}</small></div>
+            <span>Candidate</span>
+          </div>
+        ))}
+        <p><a href={pilotUnitDraft.candidateGuide.url} target="_blank" rel="noreferrer">Open IB-hosted guide reference ↗</a> · <a href={pilotUnitDraft.source.subjectBriefUrl} target="_blank" rel="noreferrer">Open public IB subject brief ↗</a></p>
+        <p>These candidate references are deliberately not recorded as official objective codes. Curriculum mapping remains unverified until checked against the applicable school guide.</p>
+      </div>
       <div className="proto-section-title">
         <div><h2>Proposed teaching sequence</h2><p>Four small steps for academic review; not yet approved as the unit order.</p></div>
       </div>
@@ -231,6 +244,14 @@ function Pathways({ go }: { go: Navigate }) {
         <small>{pilotUnitDraft.originalExample.label.toUpperCase()}</small>
         <blockquote>{pilotUnitDraft.originalExample.text}</blockquote>
         <p><b>Focus: “{pilotUnitDraft.originalExample.focus}”</b> — {pilotUnitDraft.originalExample.teachingNote}</p>
+      </div>
+      <div className="proto-extract">
+        <small>{pilotUnitDraft.modelResponse.label.toUpperCase()}</small>
+        <blockquote>{pilotUnitDraft.modelResponse.response}</blockquote>
+        {pilotUnitDraft.modelResponse.annotations.map(item => (
+          <p key={item.title}><b>{item.title}:</b> {item.detail}</p>
+        ))}
+        <p>{pilotUnitDraft.modelResponse.reviewNote}</p>
       </div>
       <div className="proto-extract">
         <small>DRAFT PRACTICE PROMPT</small>
