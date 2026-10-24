@@ -4,11 +4,11 @@
 **Pathway slot:** `ib-myp-lal-y1-u1`  
 **Content version:** 1  
 **Review state:** Academic content review passed for preview version 1; official curriculum mapping and release remain blocked  
-**Source of truth for the content draft:** `src/content/pilotUnitDraft.ts` and `src/content/pilotLessonPack.ts`
+**Content sources:** `src/content/pilotUnitDraft.ts`, learner-safe `src/content/pilotLearnerLesson.ts`, and teacher/editor `src/content/pilotLessonPack.ts`
 
 ## Purpose
 
-Review one complete unit package before producing more material. This sheet is a manual editorial record to be completed by the academic lead; it is not connected to a database and does not itself approve or release content.
+This sheet records the academic content-review pass and the remaining source/mapping, rights, accessibility and release checks. It is a manual record, not connected to a database; a future content or feature change may be made later, with a versioned change record and a new review of the affected scope.
 
 ## Included in the current draft
 
