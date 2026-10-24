@@ -19,6 +19,8 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
     title: unit.title,
     releaseStatus: "planned",
     syllabusEditionCode: null,
+    officialSourceUrl: null,
+    officialSourceCheckedAt: null,
     officialObjectiveCodes: [],
     learningObjective: null,
     lessonIds: [],
@@ -39,7 +41,10 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
  */
 export function getUnitReadinessGates(plan: UnitContentPlan): UnitReadinessGate[] {
   const sourceVerified = Boolean(
-    plan.syllabusEditionCode && plan.officialObjectiveCodes.length > 0
+    plan.syllabusEditionCode &&
+    plan.officialSourceUrl &&
+    plan.officialSourceCheckedAt &&
+    plan.officialObjectiveCodes.length > 0
   );
   const objectiveApproved = Boolean(plan.learningObjective?.trim());
   const lessonLinked = plan.lessonIds.length > 0;
