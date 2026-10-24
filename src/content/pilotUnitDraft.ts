@@ -101,13 +101,12 @@ export const pilotUnitDraft: PilotUnitDraft = {
     "Writing a general comment about the scene without referring to specific words.",
     "Treating one interpretation as the only possible reading without supporting it.",
   ],
-  reviewQuestions: [
-    "Is the focus appropriate for MYP Year 1 learners and their prior knowledge?",
-    "Does the learner's school use the guide represented by the candidate source, or a later applicable guide?",
-    "Should candidate strands A(ii) and A(iii) both be used, or is one strand a better fit?",
-    "Does the proposed sequence belong in Unit 1, or should another skill come first?",
-    "What accessible range of text types and language needs should the finished unit include?",
-    "Which formative check and marking guidance should be approved before practice items are authored?",
+  remainingReleaseChecks: [
+    "Confirm the applicable MYP Language and literature guide/edition used by the intended school.",
+    "Verify whether candidate strands A(ii), A(iii), both or neither fit this unit, then record the exact official references.",
+    "Complete and record the separate content-rights review.",
+    "Complete and record the accessibility review for the interactive lesson.",
+    "Record explicit release approval only after all required evidence is complete.",
   ],
   rightsNote:
     "The short example is original draft text. Replace or supplement it only with original material or material whose use is appropriately permitted and documented.",
