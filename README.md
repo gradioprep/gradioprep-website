@@ -36,9 +36,10 @@ Any approved or reviewed feature, content item or document may be updated later.
 - [Logical data model](docs/DATA_MODEL.md) — proposed content, learner-record and access-control structure; not a live database.
 - [Typed pathway catalogue](src/content/pathways.ts) — 10 planned entries and 30 unit slots; the first slot is approved for pilot preview but remains officially unmapped.
 - [Content types](src/content/model.ts) — shared TypeScript structures for pathway, unit and demonstration content.
-- [Pilot unit brief](src/content/pilotUnitDraft.ts) — proposed focus, sequence, worked response and candidate objective references; unverified and unreleased.
-- [Pilot lesson and practice pack](src/content/pilotLessonPack.ts) — full draft lesson, original reading passage, formative questions, model answers and teacher feedback guidance.
-- [Pilot unit review sheet](docs/PILOT_UNIT_REVIEW.md) — academic-review decisions and release guardrails.
+- [Pilot unit brief](src/content/pilotUnitDraft.ts) — reviewed for pilot preview; candidate objective references and official mapping remain unverified.
+- [Learner-safe pilot lesson](src/content/pilotLearnerLesson.ts) — reviewed lesson and practice prompts without answer keys.
+- [Teacher/editor answer guide](src/content/pilotLessonPack.ts) — teacher-only source with model answers; do not import into the client application.
+- [Pilot unit review sheet](docs/PILOT_UNIT_REVIEW.md) — academic content review pass, remaining release checks and revision guardrails.
 - [Unit readiness rules](src/content/unitReadiness.ts) — calculates release gates from source evidence, content links and review records; current records remain planning-only.
 
 ## Technology
