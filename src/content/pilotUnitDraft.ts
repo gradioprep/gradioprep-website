@@ -1,15 +1,21 @@
 import type { PilotUnitDraft } from "./model";
 
 /**
- * First pilot-unit content pack. This is an original working draft for academic
- * review, not an approved syllabus mapping and not linked to the demo lesson.
+ * Original pilot-unit brief. Academic content review passed for the pilot
+ * preview; official curriculum mapping remains unverified.
  */
 export const pilotUnitDraft: PilotUnitDraft = {
   id: "draft-ib-myp-lal-y1-u1",
   version: 1,
   pathwayId: "ib-myp-lal-y1",
   unitId: "ib-myp-lal-y1-u1",
-  status: "working-draft",
+  status: "approved-for-pilot-preview",
+  reviewRecord: {
+    outcome: "passed",
+    reviewedAt: "2026-10-24",
+    reviewerLabel: "Academic lead (approval confirmed by project owner; name not specified)",
+    scopeNote: "Academic content review passed for this version per project owner confirmation. This approval supports the pilot preview only; the official curriculum mapping remains unverified and release is not authorised.",
+  },
   title: "How writers shape meaning",
   proposedFocus:
     "A starter exploration of how deliberate word and sentence choices influence a reader's understanding and response.",
@@ -82,27 +88,6 @@ export const pilotUnitDraft: PilotUnitDraft = {
     focus: "sighed",
     teachingNote:
       "The verb 'sighed' gives the bus a human-like action. It can make the departure feel weary or reluctant, while the shrinking headlights and rain help create a sense of distance. These are plausible readings to support with evidence, not the only acceptable interpretation.",
-  },
-  modelResponse: {
-    label: "Worked response — original draft",
-    response:
-      "The verb 'sighed' gives the bus a human action, which can make its departure seem weary or reluctant. The phrase 'headlights shrinking into the rain' suggests the bus is moving farther away, creating a quiet, wistful mood.",
-    annotations: [
-      {
-        title: "Choice",
-        detail: "Names the precise word 'sighed' rather than only naming a technique.",
-      },
-      {
-        title: "Explanation",
-        detail: "Explains a plausible association: the bus seems weary or reluctant.",
-      },
-      {
-        title: "Supporting evidence",
-        detail: "Connects a second phrase to distance and mood.",
-      },
-    ],
-    reviewNote:
-      "This is one plausible interpretation, not a single official answer. Review for level suitability and accept other evidence-supported interpretations.",
   },
   practicePrompt:
     "Choose one word or phrase from the micro-extract. Explain how it helps create the mood of the moment.",
