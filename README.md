@@ -13,7 +13,7 @@ The React + TypeScript frontend prototype is deployed to Cloudflare Workers and 
 - Searchable and filterable question-bank prototype.
 - Human-assessment feedback concept screen.
 
-The assessment evidence toggle has been fixed and verified on the deployed preview. The question-bank examples now live in a separate, typed demo catalogue. The lesson screen also reads from a reusable typed demonstration lesson record. The question and lesson examples remain fictional and have unverified syllabus mapping.
+The assessment evidence toggle has been fixed and verified on the deployed preview. The six question-bank examples and illustrative lesson use typed, reusable content records. The repository also contains a typed catalogue of the 10 planned English pathway entries, with three unapproved unit slots per entry. Programme, pathway and syllabus identifiers for the demo content remain unassigned; all pathway mappings and unit focuses remain unverified.
 
 **This is a static design prototype, not a live learning product.** Dashboard numbers, activity, questions, rubric criteria, marks and feedback are fictional demonstration data. The sample lesson has not been verified against a specific syllabus edition. The answer check and filters are local prototype interactions; they do not save real learner records.
 
@@ -33,6 +33,8 @@ These programmes are distinct. Course and syllabus mapping must be verified agai
 - [Design specification](docs/DESIGN_SPEC.md) — approved visual system and screen behaviour.
 - [English Stage 1 roadmap](docs/ENGLISH_STAGE_1_ROADMAP.md) — pathway planning draft; exact skill sequence awaits academic-lead approval.
 - [Logical data model](docs/DATA_MODEL.md) — proposed content, learner-record and access-control structure; not a live database.
+- [Typed pathway catalogue](src/content/pathways.ts) — 10 planned pathway entries and 30 empty unit slots, all still unverified.
+- [Content types](src/content/model.ts) — shared TypeScript structures for pathway, unit and demonstration content.
 
 ## Technology
 
