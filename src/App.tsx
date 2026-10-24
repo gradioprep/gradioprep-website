@@ -1,9 +1,8 @@
 import { useState, type ReactNode } from "react";
 import { demoQuestionItems } from "./content/demoCatalog";
-import { demoLesson } from "./content/demoLesson";
 import { englishPathways } from "./content/pathways";
 import { pilotUnitDraft } from "./content/pilotUnitDraft";
-import { pilotLessonPack } from "./content/pilotLessonPack";
+import { pilotLearnerLesson } from "./content/pilotLearnerLesson";
 import { getUnitReadinessGates, getUnitReadinessSummary, unitContentPlans } from "./content/unitReadiness";
 
 type Page = "home" | "dashboard" | "pathways" | "lesson" | "questions" | "assessment";
@@ -56,59 +55,121 @@ function Dashboard({ go }: { go: Navigate }) {
 }
 
 function Lesson({ go }: { go: Navigate }) {
-  const lesson = demoLesson;
-  const [answer, setAnswer] = useState("");
-  const [checked, setChecked] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const answers = lesson.practice.answerOptions;
+  const lesson = pilotLearnerLesson;
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+  const [responses, setResponses] = useState<Record<string, string>>({});
+  const [attempted, setAttempted] = useState<Record<string, boolean>>({});
+  const [exitResponse, setExitResponse] = useState("");
+  const [exitReviewed, setExitReviewed] = useState(false);
+  const attemptedCount = Object.values(attempted).filter(Boolean).length + (exitReviewed ? 1 : 0);
+
+  const updateResponse = (id: string, value: string) => {
+    setResponses(previous => ({ ...previous, [id]: value }));
+    setAttempted(previous => ({ ...previous, [id]: false }));
+  };
+
+  const canReview = (item: typeof lesson.practiceItems[number]) =>
+    item.options ? Boolean(selectedOptions[item.id]) : Boolean(responses[item.id]?.trim());
 
   return <Shell page="lesson" go={go}>
-    <InfoNote><b>Illustrative lesson only.</b> The sample question and explanation have not been mapped to or verified against a specific syllabus edition.</InfoNote>
-    <div className="proto-crumb"><button type="button" onClick={() => go("dashboard")}>{lesson.breadcrumb.overview}</button> / <button type="button" onClick={() => go("questions")}>{lesson.breadcrumb.questionBank}</button> / <b>{lesson.breadcrumb.lessonTitle}</b></div>
+    <InfoNote><b>Academic content review passed.</b> This lesson is approved for pilot preview only. Official IB guide edition and objective mapping remain unverified. Practice responses are temporary to this open preview; nothing is saved or graded.</InfoNote>
+    <div className="proto-crumb"><button type="button" onClick={() => go("pathways")}>Pathways</button> / <b>{lesson.title}</b></div>
     <div className="proto-lesson-head">
       <div>
-        <Label>{lesson.introduction.eyebrow}</Label>
-        <h1>{lesson.introduction.headlineStart}<br /><em>{lesson.introduction.headlineEmphasis}</em></h1>
-        <p>{lesson.introduction.description}</p>
+        <Label>IB MYP LANGUAGE & LITERATURE · PILOT PREVIEW</Label>
+        <h1>Notice the choice.<br /><em>Explain the effect.</em></h1>
+        <p>{lesson.proposedLearningObjective}</p>
       </div>
       <div className="proto-progress">
-        <small>EXAMPLE PROGRESS</small>
-        <b>{lesson.introduction.progressCompleted} <span>of {lesson.introduction.progressTotal} steps</span></b>
-        <div><i /></div>
-        <small>Illustrative only</small>
+        <small>LESSON VERSION</small>
+        <b>01 <span>· {lesson.estimatedMinutes} min</span></b>
+        <div><i style={{ width: "100%" }} /></div>
+        <small>Reviewed {lesson.reviewRecord.reviewedAt} · Not saved</small>
       </div>
     </div>
-    <div className="proto-lesson-grid">
+
+    <section className="proto-panel proto-pilot-learner-summary">
+      <div className="proto-panel-heading">
+        <div><h2>What success looks like</h2><p>Use these as you read, practise and review your own responses.</p></div>
+        <span>PREVIEW V1</span>
+      </div>
+      {lesson.successCriteria.map((item,index) => <div className="proto-skill-row proto-readiness-row" key={item}><i>{String(index+1).padStart(2,"0")}</i><div><b>{item}</b></div></div>)}
+    </section>
+
+    <div className="proto-lesson-grid proto-pilot-learner-grid">
       <div>
         <section className="proto-panel proto-explanation">
-          <Label>01 · THE IDEA</Label>
-          <h2>{lesson.concept.title}</h2>
-          <p>{lesson.concept.explanation}</p>
-          <div className="proto-extract">
-            <small>{lesson.concept.extractLabel}</small>
-            <blockquote>{lesson.concept.extractBefore}<b>{lesson.concept.extractFocus}</b>{lesson.concept.extractAfter}</blockquote>
-            <p><span>↳</span> {lesson.concept.extractExplanation}</p>
-          </div>
-          <div className="proto-tip"><span>✳</span><p><b>{lesson.concept.tipTitle}</b><br />{lesson.concept.tipBody}</p></div>
+          <Label>01 · READ THE PASSAGE</Label>
+          <h2>{lesson.passage.label}</h2>
+          <blockquote className="proto-pilot-passage">{lesson.passage.text}</blockquote>
+          <p className="proto-unit-readiness-intro">{lesson.passage.rightsNote}</p>
         </section>
-        <section className="proto-panel proto-practice">
-          <Label>02 · CHECK YOUR UNDERSTANDING</Label>
-          <h2>{lesson.practice.title}</h2>
-          <p>{lesson.practice.instructions}</p>
-          <div className="proto-answer-list">
-            {answers.map(a => <button type="button" key={a.id} onClick={() => { setAnswer(a.id); setChecked(false); }} className={(answer === a.id ? "selected " : "") + (checked && a.id === lesson.practice.correctAnswerId ? "correct " : "") + (checked && answer === a.id && answer !== lesson.practice.correctAnswerId ? "incorrect" : "")}><i>{a.id}</i><span>{a.text}</span>{checked && a.id === lesson.practice.correctAnswerId && <b>✓</b>}</button>)}
+        <section className="proto-panel proto-explanation">
+          <Label>02 · THE IDEA</Label>
+          <h2>{lesson.keyIdea.label}</h2>
+          <div className="proto-pilot-evidence-chain">
+            {lesson.keyIdea.pattern.map((step,index)=><div key={step}><i>{index+1}</i><p>{step}</p></div>)}
           </div>
-          {checked && <div className={"proto-answer-feedback " + (answer === lesson.practice.correctAnswerId ? "right" : "")}><b>{answer === lesson.practice.correctAnswerId ? lesson.practice.correctFeedbackTitle : lesson.practice.incorrectFeedbackTitle}</b><p>{lesson.practice.feedbackExplanation}</p></div>}
-          <div className="proto-practice-footer"><small>DEMO ONLY · NO GRADE IS RECORDED</small><Action onClick={() => { if (answer) setChecked(true); }}>Check response →</Action></div>
+          <p>{lesson.keyIdea.explanation}</p>
         </section>
-        <div className="proto-bottom-actions"><Action secondary onClick={() => go("questions")}>Back to question bank</Action><Action onClick={() => go("assessment")}>See feedback example →</Action></div>
+
+        <section className="proto-panel proto-pilot-learning-steps">
+          <Label>03 · LEARN THE MOVE</Label>
+          <h2>Work through the sequence</h2>
+          {lesson.sections.map(section => <article className="proto-pilot-section" key={section.id}>
+            <h3>{section.heading}</h3>
+            <p className="proto-pilot-purpose">{section.purpose}</p>
+            <p>{section.explanation}</p>
+            {section.example && <div className="proto-pilot-example"><small>{section.example.label.toUpperCase()}</small><blockquote>{section.example.text}</blockquote><p>{section.example.explanation}</p></div>}
+            <div className="proto-pilot-action"><b>Try this</b><p>{section.learnerAction}</p></div>
+          </article>)}
+        </section>
+
+        <section className="proto-panel proto-pilot-practice">
+          <div className="proto-panel-heading">
+            <div><Label>04 · FORMATIVE PRACTICE</Label><h2>Put the idea to work</h2><p>{attemptedCount} of {lesson.practiceItems.length+1} activities reviewed in this open preview</p></div>
+            <span>NOT GRADED</span>
+          </div>
+          <p className="proto-unit-readiness-intro">Choose an option or write your response, then check the success indicators. This preview does not mark correctness, retain your work or send it anywhere.</p>
+          {lesson.practiceItems.map((item,index)=><article className="proto-pilot-question" key={item.id}>
+            <div className="proto-pilot-question-head"><span>{String(index+1).padStart(2,"0")}</span><div><small>{item.focus}</small><h3>{item.prompt}</h3></div></div>
+            {item.options && <div className="proto-pilot-options">
+              {item.options.map(option=><button type="button" key={option.id} aria-pressed={selectedOptions[item.id]===option.id} className={"proto-pilot-option-button"+(selectedOptions[item.id]===option.id?" is-selected":"")} onClick={()=>{setSelectedOptions(previous=>({...previous,[item.id]:option.id}));setAttempted(previous=>({...previous,[item.id]:false}));}}>
+                <b>{option.id}</b><span>{option.text}</span>
+              </button>)}
+            </div>}
+            {!item.options && <label className="proto-pilot-response-label">Your response
+              <textarea rows={4} value={responses[item.id]??""} onChange={event=>updateResponse(item.id,event.target.value)} placeholder="Write your explanation here..." />
+            </label>}
+            <div className="proto-pilot-question-footer">
+              <small>{attempted[item.id]?"REVIEWED IN THIS SESSION":"NOT YET REVIEWED"}</small>
+              <button type="button" className="proto-action secondary" disabled={!canReview(item)} onClick={()=>setAttempted(previous=>({...previous,[item.id]:true}))}>Review my thinking</button>
+            </div>
+            {attempted[item.id] && <div className="proto-answer-feedback right"><b>Use the success indicators</b><p>Your response has not been scored. Check each point below and revise your answer if it would make your reasoning clearer.</p><ul>{item.successIndicators.map(point=><li key={point}>{point}</li>)}</ul><p>Different interpretations can be valid when they are supported by evidence.</p></div>}
+          </article>)}
+        </section>
+
+        <section className="proto-panel proto-pilot-exit">
+          <Label>05 · EXIT TICKET</Label>
+          <h2>Try the thinking move independently</h2>
+          <p>{lesson.exitTicket.prompt}</p>
+          <label className="proto-pilot-response-label">Your exit response
+            <textarea rows={5} value={exitResponse} onChange={event=>{setExitResponse(event.target.value);setExitReviewed(false);}} placeholder="Use precise evidence, explain what it may suggest, and connect it to the context..." />
+          </label>
+          <div className="proto-pilot-question-footer">
+            <small>{exitReviewed?"CHECKLIST OPENED":"SELF-REVIEW AVAILABLE"}</small>
+            <button type="button" className="proto-action" disabled={!exitResponse.trim()} onClick={()=>setExitReviewed(true)}>Review exit response</button>
+          </div>
+          {exitReviewed && <div className="proto-answer-feedback right"><b>Self-review checklist</b><ul>{lesson.exitTicket.successIndicators.map(point=><li key={point}>{point}</li>)}</ul><p>This is a checklist, not a mark or a saved assessment.</p></div>}
+        </section>
+        <div className="proto-bottom-actions"><Action secondary onClick={()=>go("pathways")}>Back to pathways</Action><Action onClick={()=>go("questions")}>Explore more practice →</Action></div>
       </div>
       <aside className="proto-panel proto-lesson-aside">
         <Label>IN THIS LESSON</Label>
-        {lesson.outline.map(step => <div className="proto-outline-row" key={step.number}><i className={step.status === "upcoming" ? "" : "current"}>{step.status === "complete" ? "✓" : step.number}</i><span><b>{step.title}</b><small>{step.description}</small></span></div>)}
-        <button type="button" className={"proto-save " + (saved ? "is-saved" : "")} onClick={() => setSaved(!saved)}>{saved ? "✓ " + lesson.aside.savedLabel : "+ " + lesson.aside.saveLabel}</button>
-        <small className="proto-aside-note">{lesson.aside.saveNote}</small>
-        <div className="proto-aside-tip"><span>Aa</span><b>{lesson.aside.tipTitle}</b><p>{lesson.aside.tipBody}</p></div>
+        {lesson.sections.map((section,index)=><div className="proto-outline-row" key={section.id}><i>{String(index+1).padStart(2,"0")}</i><span><b>{section.heading.replace(/^\d+\.\s*/,"")}</b><small>{section.purpose}</small></span></div>)}
+        <div className="proto-aside-tip"><span>Aa</span><b>Keep the evidence chain visible</b><p>Choice → association → effect in context. A quotation is the start of your explanation, not the whole explanation.</p></div>
+        <div className="proto-aside-tip"><span>i</span><b>About this preview</b><p>Academic content review passed on {lesson.reviewRecord.reviewedAt}. Official curriculum mapping is still unverified.</p></div>
+        <p className="proto-note-bottom">{lesson.learnerNote}</p>
       </aside>
     </div>
   </Shell>;
@@ -179,7 +240,7 @@ function Pathways({ go }: { go: Navigate }) {
       <div className="proto-panel-heading">
         <div>
           <h2>Planned units — {selected.levelLabel}</h2>
-          <p>{selected.programmeName} · {selected.courseName}. The academic lead must confirm the unit focus and mapping before release.</p>
+          <p>{selected.programmeName} · {selected.courseName}. Content review passed; official guide edition and objective mapping remain unverified.</p>
         </div>
         <span>NOT RELEASED</span>
       </div>
@@ -198,18 +259,18 @@ function Pathways({ go }: { go: Navigate }) {
         </button>
       ))}
       {selected.levelKind === "navigation-only-grade-equivalent" && <p className="proto-note-bottom">This is a provisional learner-navigation label. Confirm whether the band is useful before treating it as a separate product route.</p>}
-      <p className="proto-note-bottom">The illustrative lesson and six sample questions are not assigned to this pathway. No syllabus mapping has been inferred from the selected level.</p>
+      <p className="proto-note-bottom">The learner lesson preview uses the reviewed pilot content. It is not assigned an official syllabus mapping, and its responses are not saved.</p>
     </section>}
     {selectedUnit?.id === pilotUnitDraft.unitId && <section className="proto-panel proto-unit-draft" aria-label="Pilot unit working draft">
       <div className="proto-panel-heading">
         <div>
-          <p className="proto-eyebrow"><span />PILOT CONTENT · WORKING DRAFT</p>
+          <p className="proto-eyebrow"><span />PILOT CONTENT · REVIEWED PREVIEW</p>
           <h2>{pilotUnitDraft.title}</h2>
           <p>{pilotUnitDraft.proposedFocus}</p>
         </div>
-        <span>ACADEMIC REVIEW</span>
+        <span>REVIEW PASSED · MAPPING UNVERIFIED</span>
       </div>
-      <p className="proto-unit-readiness-intro">This is an original planning draft, not a released lesson. It is shown here so the first pilot can be reviewed as a concrete unit rather than an empty slot.</p>
+      <p className="proto-unit-readiness-intro">Academic content review passed for this preview version. The official curriculum mapping remains unverified, so this is not yet a released or officially mapped unit.</p>
       <div className="proto-extract">
         <small>OFFICIAL STARTING POINT · CHECKED {pilotUnitDraft.source.checkedAt}</small>
         <p><a href={pilotUnitDraft.source.url} target="_blank" rel="noreferrer">{pilotUnitDraft.source.title} ↗</a></p>
@@ -247,14 +308,6 @@ function Pathways({ go }: { go: Navigate }) {
         <p><b>Focus: “{pilotUnitDraft.originalExample.focus}”</b> — {pilotUnitDraft.originalExample.teachingNote}</p>
       </div>
       <div className="proto-extract">
-        <small>{pilotUnitDraft.modelResponse.label.toUpperCase()}</small>
-        <blockquote>{pilotUnitDraft.modelResponse.response}</blockquote>
-        {pilotUnitDraft.modelResponse.annotations.map(item => (
-          <p key={item.title}><b>{item.title}:</b> {item.detail}</p>
-        ))}
-        <p>{pilotUnitDraft.modelResponse.reviewNote}</p>
-      </div>
-      <div className="proto-extract">
         <small>DRAFT PRACTICE PROMPT</small>
         <p>{pilotUnitDraft.practicePrompt}</p>
         <small>WHAT A RESPONSE SHOULD SHOW</small>
@@ -266,6 +319,7 @@ function Pathways({ go }: { go: Navigate }) {
       </div>
       <p className="proto-note-bottom">{pilotUnitDraft.rightsNote}</p>
       <p className="proto-note-bottom">{pilotUnitDraft.releaseNote}</p>
+      <div className="proto-bottom-actions"><Action onClick={() => go("lesson")}>Open learner lesson preview →</Action></div>
     </section>}
     {selectedUnit?.id === pilotLessonPack.unitId && <section className="proto-panel proto-pilot-lesson" aria-label="Full pilot lesson and practice pack">
       <div className="proto-panel-heading">
