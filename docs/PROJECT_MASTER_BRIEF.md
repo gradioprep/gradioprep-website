@@ -1,7 +1,7 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 1.0  
-**Last updated:** 23 October 2026  
+**Version:** 1.1  
+**Last updated:** 24 October 2026  
 **Status:** Business model approved; build has not started  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
 **Founder context:** 18 years of IB, IGCSE and SAT tutoring experience; founder will initially be the sole grader and academic lead.  
@@ -23,6 +23,14 @@ When a decision changes, update this file first or ask the assistant to produce 
 3. Earlier chat messages, which may contain superseded ideas.
 
 Do not silently change approved prices, credit rules, curriculum scope, SLAs or roles. If a conflict is found, call it out and ask before changing the specification.
+
+### Approved frontend typography and text-colour guardrail
+
+For every existing and future page, `docs/DESIGN_SPEC.md` Section 2 and the design tokens in `src/styles.css` are authoritative. Reuse the shared Manrope heading, DM Sans body and DM Mono metadata fonts, the approved size tokens, utility classes and semantic text-colour roles. Do not add one-off font families, smaller text, pale grey text on light backgrounds, or new grey hex values simply to style a new page.
+
+The current text tokens are `--text-primary: #202923`, `--text-secondary: #515A53` and `--text-inverse: #EAF0E5`; `--muted` is also `#515A53`. The secondary grey/sage text colours were darkened for legibility while section/card/sidebar background colours were preserved. The earlier 1.5× increase to originally ≤10px typography has already been applied to the current CSS; do not scale it again. New non-decorative text must be at least 10.5px, and running text should normally be 13.5–15px or larger.
+
+Any proposed change to these rules requires explicit founder approval and a coordinated update to the design spec and CSS tokens. Future-page work must preserve font weight, style, line-height, and letter-spacing unless a change is expressly approved.
 
 ## 2. Product vision and positioning
 
@@ -314,7 +322,7 @@ The assistant must not invent these decisions or silently replace them with a ge
 
 ## New-chat kickoff prompt
 
-> We are continuing an approved product build. Read the attached `IB/IGCSE Learning Platform — Master Project Brief` completely and treat it as the source of truth. Do not silently change approved pricing, review-credit rules, SLAs, grader rating formula, curriculum scope, access-control requirements or the 15-day build/15-day validation plan. The founder has 18 years of IB, IGCSE and SAT tutoring experience and will initially be the sole grader and academic lead. The founder will finalise the curriculum roadmap. Start by summarising the current approved specification and identifying the immediate next action only; then proceed step by step, updating the master brief whenever a decision is explicitly approved. Keep all code, credentials and student data secure. Before choosing a vendor or relying on free-tier terms, verify current official documentation. The working name is a placeholder, not final.
+> We are continuing an approved product build. Read the attached `IB/IGCSE Learning Platform — Master Project Brief` completely and treat it as the source of truth. Do not silently change approved pricing, review-credit rules, SLAs, grader rating formula, curriculum scope, access-control requirements or the 15-day build/15-day validation plan. The founder has 18 years of IB, IGCSE and SAT tutoring experience and will initially be the sole grader and academic lead. The founder will finalise the curriculum roadmap. Start by summarising the current approved specification and identifying the immediate next action only; then proceed step by step, updating the master brief whenever a decision is explicitly approved. Keep all code, credentials and student data secure. Before choosing a vendor or relying on free-tier terms, verify current official documentation. The working name is a placeholder, not final. For frontend work, follow the locked typography and text-colour tokens in Section 1 and `docs/DESIGN_SPEC.md`; do not add ad-hoc font families, sizes or grey text colours, or change tokens without explicit approval.
 
 ## Official service-policy links to re-check before deployment
 
