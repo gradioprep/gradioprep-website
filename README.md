@@ -10,7 +10,7 @@ The React + TypeScript prototype has six clickable screens, including Pathways a
 
 The first IB MYP Year 1 pilot lesson, **How writers shape meaning**, passed academic content review for pilot-preview version 1, as confirmed by the project owner on 24 October 2026. It includes an original reading passage, four teaching stages, four practice tasks, written-response fields and self-review checklists. Responses are temporary to the open preview, are not graded and are not saved.
 
-The client imports [`src/content/pilotLearnerLesson.ts`](src/content/pilotLearnerLesson.ts), which contains no correct-answer IDs or model answers. The teacher/editor answer source, [`src/content/pilotLessonPack.ts`](src/content/pilotLessonPack.ts), is not imported into the client application. This is not yet a production authorization system.
+The client imports [`src/content/pilotLearnerLesson.ts`](src/content/pilotLearnerLesson.ts) for the lesson and [`src/content/pilotReviewSummary.ts`](src/content/pilotReviewSummary.ts) for non-answer pathway/release metadata. Neither contains correct-answer IDs or model answers. The teacher/editor unit brief and answer source, [`src/content/pilotUnitDraft.ts`](src/content/pilotUnitDraft.ts) and [`src/content/pilotLessonPack.ts`](src/content/pilotLessonPack.ts), are not imported into the client module graph. This is source separation for the static prototype, not a production authorization system.
 
 **Important:** the content is approved for a pilot preview only. Official IB guide edition/objective mapping is still unverified; `officialObjectiveCodes` remains empty. Separate rights review, accessibility review and explicit release approval are outstanding, so the unit is not a released syllabus-mapped course. The existing demo question-bank content remains separate with unassigned curriculum metadata.
 
@@ -36,7 +36,8 @@ Any approved or reviewed feature, content item or document may be updated later.
 - [Logical data model](docs/DATA_MODEL.md) — proposed content, learner-record and access-control structure; not a live database.
 - [Typed pathway catalogue](src/content/pathways.ts) — 10 planned entries and 30 unit slots; the first slot is approved for pilot preview but remains officially unmapped.
 - [Content types](src/content/model.ts) — shared TypeScript structures for pathway, unit and demonstration content.
-- [Pilot unit brief](src/content/pilotUnitDraft.ts) — reviewed for pilot preview; candidate objective references and official mapping remain unverified.
+- [Pilot unit brief](src/content/pilotUnitDraft.ts) — teacher/editor source; candidate objective references and official mapping remain unverified.
+- [Pilot review summary](src/content/pilotReviewSummary.ts) — answer-free curriculum and release metadata for Pathways.
 - [Learner-safe pilot lesson](src/content/pilotLearnerLesson.ts) — reviewed lesson and practice prompts without answer keys.
 - [Teacher/editor answer guide](src/content/pilotLessonPack.ts) — teacher-only source with model answers; do not import into the client application.
 - [Pilot unit review sheet](docs/PILOT_UNIT_REVIEW.md) — academic content review pass, remaining release checks and revision guardrails.
