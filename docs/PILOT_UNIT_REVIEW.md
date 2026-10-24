@@ -4,7 +4,7 @@
 **Pathway slot:** `ib-myp-lal-y1-u1`  
 **Content version:** 1  
 **Review state:** Academic content review passed for preview version 1; official curriculum mapping and release remain blocked  
-**Content sources:** `src/content/pilotUnitDraft.ts`, learner-safe `src/content/pilotLearnerLesson.ts`, and teacher/editor `src/content/pilotLessonPack.ts`
+**Content sources:** teacher/editor brief `src/content/pilotUnitDraft.ts`, learner-safe `src/content/pilotLearnerLesson.ts`, answer-free review summary `src/content/pilotReviewSummary.ts`, and teacher/editor answer guide `src/content/pilotLessonPack.ts`
 
 ## Purpose
 
@@ -20,7 +20,7 @@ This sheet records the academic content-review pass and the remaining source/map
 - Exit ticket and an informal three-part feedback guide.
 - Accessibility checks and specific academic-review questions.
 
-The learner-facing preview now uses a separate student-safe data file, `src/content/pilotLearnerLesson.ts`, which contains no correct-answer IDs or model answers. The teacher/editor source with answer keys is `src/content/pilotLessonPack.ts` and is deliberately not imported by the client UI. This is a source-code separation for the static preview, not a production authorization system; in the production architecture, answer keys must be served through a protected server-side path and must never be included in an unrestricted learner bundle.
+The learner-facing preview uses `src/content/pilotLearnerLesson.ts`, and Pathways uses the answer-free metadata summary in `src/content/pilotReviewSummary.ts`. Neither contains correct-answer IDs or model answers. The teacher/editor brief (`src/content/pilotUnitDraft.ts`) and teacher answer guide (`src/content/pilotLessonPack.ts`) are deliberately not imported by the client module graph. This is source-code separation for the static preview, not a production authorization system; in production, answer keys must be served through a protected server-side path and must never be included in an unrestricted learner bundle.
 
 ## Official-source notes
 
