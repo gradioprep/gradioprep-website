@@ -1,8 +1,8 @@
 # Criterion Lab — Design Specification
 
-**Version:** 0.1  
+**Version:** 0.2  
 **Status:** Design direction agreed; page specifications prepared for implementation  
-**Last updated:** 23 October 2026  
+**Last updated:** 24 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
@@ -42,7 +42,7 @@ Reference URLs:
 | Paper | `#F5F4EE` | Main warm page background |
 | Surface | `#FCFCF8` | Primary cards and reading surfaces |
 | Ink | `#202923` | Main text and high-emphasis controls |
-| Muted | `#68736B` | Supporting text; not for tiny low-contrast text |
+| Muted | `#515A53` | Approved secondary text colour on light backgrounds |
 | Forest | `#244D3A` | Primary actions, active navigation and key accents |
 | Forest dark | `#193A2C` | Dark feature panels and footer accents |
 | Soft lime | `#D9EDAB` | Rare positive accent, not a default background for every card |
@@ -53,12 +53,59 @@ Use the palette with restraint. Most screens should be paper/surface with ink te
 
 ### Typography
 
-- **Headings:** Manrope or a similar clear, modern display sans-serif; compact but not cramped.
-- **Body and learning content:** DM Sans or a highly readable equivalent. Prioritise long-form reading comfort.
-- **Metadata and technical labels:** DM Mono sparingly for small uppercase labels, section indexes and dates.
-- Provide sensible system-font fallbacks. A third-party font failing to load must not break layout.
+- **Headings:** Manrope, with the approved display fallback stack.
+- **Body and learning content:** DM Sans. This includes questions, instructions, explanations, comments, feedback and other sentences students or parents read.
+- **Metadata and technical labels:** DM Mono, used sparingly for short labels, section indexes and dates.
+- Use the font-family tokens in `src/styles.css`; do not add a new font family or a page-specific substitute without explicit approval.
+- Use sentence case for headings and controls. Reserve uppercase mono labels for short metadata only. Avoid long uppercase paragraphs and excessive letter-spacing.
+- Text weights, line heights and letter-spacing remain part of the existing component design. A text-colour adjustment alone must not change them.
 
-Use sentence case for headings and controls. Reserve uppercase mono labels for short metadata only. Avoid making long paragraphs uppercase or excessively letter-spaced.
+### Locked typography and text-colour rules for all future pages
+
+The authoritative implementation is the shared custom properties and reusable helpers in `src/styles.css`. Treat these as a locked design system, not as suggestions to reinterpret for each page.
+
+**Font-family tokens**
+
+| Token | Value and role |
+|---|---|
+| `--font-body` | DM Sans with Arial/sans-serif fallback; running text and controls |
+| `--font-display` | Manrope with DM Sans/Arial/sans-serif fallback; headings |
+| `--font-mono` | DM Mono with monospace fallback; concise metadata |
+| `--display` / `--mono` | Compatibility aliases to the display and mono tokens already used by existing components |
+
+**Approved size tokens for new pages**
+
+| Token | Value | Use |
+|---|---:|---|
+| `--type-caption` | 10.5px | Brief, non-essential captions only |
+| `--type-label` | 12px | Short labels and interface metadata |
+| `--type-body-small` | 13.5px | Supporting explanations |
+| `--type-body` | 15px | Default running text |
+| `--type-body-large` | 16px | Prominent or comfortable reading text |
+| `--type-card-title` | 18px | Card and compact-panel headings |
+| `--type-section-title` | clamp(29px, 4vw, 39px) | Section headings |
+| `--type-page-title` | clamp(42px, 5vw, 65px) | Main page headings |
+
+Use the existing utility classes `.type-page-title`, `.type-section-title`, `.type-body`, `.type-supporting`, `.type-label` and `.type-caption` where they fit. For new pages, do not introduce text smaller than 10.5px; body text should normally be 13.5–15px or larger. The existing 6px/9px values are legacy prototype-specific results of the earlier size adjustment and must not be copied into new student/parent reading content.
+
+**Approved text-colour roles**
+
+| Token | Value | Rule |
+|---|---|---|
+| `--text-primary` | `#202923` | Primary headings, questions and body text on light surfaces |
+| `--text-secondary` | `#515A53` | Supporting paragraphs, descriptions, labels and other muted grey/sage text on light surfaces |
+| `--text-inverse` | `#EAF0E5` | Text on the deep-green dark surface, where appropriate |
+| `--ink` / `--muted` | Existing aliases | Keep existing components compatible; `--muted` is now `#515A53` |
+
+The secondary grey/sage text palette on light surfaces has been darkened for legibility. Existing page/card/sidebar background colours were not changed in that text-colour update. For future pages, use the semantic text tokens rather than inventing pale grey text colours or adding one-off grey hex values. Green, lime, coral and other approved status/accent colours remain for their defined semantic roles, not as generic paragraph text.
+
+**One-time changes already applied — do not repeat them**
+
+- Font-size values and font shorthand sizes that were 10px or below before the earlier typography change were multiplied by 1.5, including responsive overrides. Font family, weight/boldness, font style, letter-spacing and line-height were preserved. The current CSS contains the final values; do not run the scaling operation again.
+- Grey/sage text declarations used on light backgrounds were darkened in the subsequent text-colour refinement. The current CSS and tokens are the source of truth; do not revert to the earlier lighter values.
+- A future page must inherit these tokens and helpers. Do not reset global typography, introduce a separate palette, or change token values unless the owner explicitly approves the change and this document is updated in the same work.
+
+Maintain accessible contrast: target WCAG 2.2 AA contrast of at least 4.5:1 for normal text and 3:1 for large text, and test actual foreground/background combinations. Never use colour alone to communicate state.
 
 ### Layout, surfaces and motion
 
