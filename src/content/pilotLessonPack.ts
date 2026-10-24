@@ -253,5 +253,5 @@ export const pilotLessonPack: PilotLessonPack = {
     "Record explicit release approval only after all required evidence is complete.",
   ],
   releaseNote:
-    "Working draft only. Do not publish, grade as an official IB achievement level, or present the candidate strands as verified MYP mappings. The official objective codes remain unassigned until the applicable guide is checked by the academic lead.",
+    "Academic content review passed for pilot preview version 1. Do not describe this as an officially mapped MYP unit, grade it as an official IB achievement level, or release it as a syllabus-mapped course until the applicable guide edition/objective references, rights review, accessibility review and explicit release approval are recorded.",
 };
