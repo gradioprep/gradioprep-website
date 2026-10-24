@@ -552,6 +552,20 @@ a:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
 .proto-help p { margin: 6px 0 0; color: #728071; font-size: 9px; line-height: 1.8; }
 .proto-app-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; padding: 24px 0 19px; color: #8a948a; font: 7px "DM Mono",monospace; letter-spacing: .04em; }
 
+.proto-evidence-excerpts { margin: 0 0 18px; border-color: #cdd9c4; background: #fbfcf8; scroll-margin-top: 18px; }
+.proto-evidence-excerpts[hidden] { display: none !important; }
+.proto-evidence-heading { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.proto-evidence-heading > span { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 auto; background: #e5eddd; color: #31583b; font-size: 16px; }
+.proto-evidence-heading .proto-eyebrow { margin-bottom: 6px; }
+.proto-evidence-heading h2 { margin: 0; font: 700 15px/1.35 "Manrope", sans-serif; }
+.proto-evidence-heading p { margin: 5px 0 0; color: #71806e; font-size: 10px; line-height: 1.7; }
+.proto-evidence-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.proto-evidence-card { margin: 0; padding: 14px; border: 1px solid #e0e6da; border-radius: 8px; background: #fff; }
+.proto-evidence-card > small { color: #788573; font: 8px "DM Mono", monospace; letter-spacing: .04em; text-transform: uppercase; }
+.proto-evidence-card blockquote { margin: 10px 0; padding: 11px; border-left: 3px solid #e5a189; background: #f7f5ee; color: #374b3a; font: 600 11px/1.7 "Manrope", sans-serif; }
+.proto-evidence-card p { margin: 0; color: #6e7a6d; font-size: 9px; line-height: 1.8; }
+.proto-evidence-note { margin: 14px 0 0; padding-top: 10px; border-top: 1px solid #e6e9e1; color: #897958; font-size: 8px; line-height: 1.8; }
+
 @media (max-width: 1050px) {
   .proto-header nav { gap: 15px; }
   .proto-app-layout { grid-template-columns: 205px minmax(0,1fr); }
@@ -585,6 +599,7 @@ a:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
   .proto-lesson-aside { display: grid; grid-template-columns: 1fr 1fr; }
   .proto-lesson-aside > .proto-eyebrow,.proto-lesson-aside > .proto-outline-row,.proto-lesson-aside > .proto-save,.proto-lesson-aside > .proto-aside-note { grid-column: 1/-1; }
   .proto-assess-grid { grid-template-columns: 1fr; }
+  .proto-evidence-grid { grid-template-columns: 1fr; }
   .proto-assess-grid > aside { display: grid; grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 600px) {
