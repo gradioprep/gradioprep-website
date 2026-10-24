@@ -163,6 +163,43 @@ export type ContentReviewState = "not-started" | "in-review" | "passed";
  * Production planning record for a pathway unit. It deliberately separates
  * the intended pathway from verified syllabus alignment and released content.
  */
+/** An original pilot unit brief, intentionally kept separate from released lesson content. */
+export interface PilotUnitDraft {
+  id: string;
+  version: 1;
+  pathwayId: string;
+  unitId: string;
+  status: "working-draft";
+  title: string;
+  proposedFocus: string;
+  proposedLearningObjective: string;
+  mappingStatus: "unverified";
+  officialObjectiveCodes: string[];
+  source: {
+    title: string;
+    url: string;
+    checkedAt: string;
+    scopeNote: string;
+  };
+  teachingSequence: {
+    number: string;
+    title: string;
+    purpose: string;
+  }[];
+  originalExample: {
+    label: string;
+    text: string;
+    focus: string;
+    teachingNote: string;
+  };
+  practicePrompt: string;
+  responseExpectation: string[];
+  commonMisconceptions: string[];
+  reviewQuestions: string[];
+  rightsNote: string;
+  releaseNote: string;
+}
+
 export interface UnitContentPlan {
   id: string;
   unitId: string;
@@ -173,6 +210,7 @@ export interface UnitContentPlan {
   syllabusEditionCode: string | null;
   officialSourceUrl: string | null;
   officialSourceCheckedAt: string | null;
+  officialSourceNote: string | null;
   officialObjectiveCodes: string[];
   learningObjective: string | null;
   lessonIds: string[];
