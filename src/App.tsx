@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { demoQuestionItems } from "./content/demoCatalog";
 import { demoLesson } from "./content/demoLesson";
 import { englishPathways } from "./content/pathways";
+import { getUnitReadinessGates, getUnitReadinessSummary, unitContentPlans } from "./content/unitReadiness";
 
 type Page = "home" | "dashboard" | "pathways" | "lesson" | "questions" | "assessment";
 type Navigate = (page: Page) => void;
@@ -116,44 +117,9 @@ function Pathways({ go }: { go: Navigate }) {
   const selected = englishPathways.find(item => item.id === selectedPathwayId) ?? englishPathways[0];
   const [selectedUnitId, setSelectedUnitId] = useState(selected.unitSlots[0]?.id ?? "");
   const selectedUnit = selected.unitSlots.find(unit => unit.id === selectedUnitId) ?? selected.unitSlots[0];
-
-  const unitReadinessRequirements = [
-    {
-      title: "Verify the official curriculum source",
-      detail: "Record the applicable official programme/course reference, syllabus or framework edition, source URL and date checked.",
-      owner: "Academic review",
-    },
-    {
-      title: "Approve the learning objective",
-      detail: "Confirm the unit focus, objective wording, objective references and prerequisites before drafting the teaching content.",
-      owner: "Academic decision",
-    },
-    {
-      title: "Prepare the lesson content",
-      detail: "Add an explanation, a worked or annotated example, common-mistake guidance and a meaningful next step.",
-      owner: "Content work",
-    },
-    {
-      title: "Link practice and explanations",
-      detail: "Add relevant questions, answer keys and explanations. Keep learner-visible prompts separate from restricted answer keys in production.",
-      owner: "Content work",
-    },
-    {
-      title: "Complete academic and rights review",
-      detail: "Record reviewer, date, content version, source/rights notes and any changes required.",
-      owner: "Quality review",
-    },
-    {
-      title: "Check accessibility and presentation",
-      detail: "Review language level, keyboard access, responsive layout, contrast and whether the content works on mobile.",
-      owner: "Quality review",
-    },
-    {
-      title: "Approve before release",
-      detail: "Publish only after curriculum mapping, content, answer explanations and reviews are accepted for this exact version.",
-      owner: "Release gate",
-    },
-  ];
+  const selectedUnitPlan = unitContentPlans.find(plan => plan.unitId === selectedUnit?.id);
+  const readinessGates = selectedUnitPlan ? getUnitReadinessGates(selectedUnitPlan) : [];
+  const readiness = selectedUnitPlan ? getUnitReadinessSummary(selectedUnitPlan) : { complete: 0, total: 0, releasable: false };
 
   const renderGroup = (title: string, description: string, items: typeof englishPathways) => (
     <section>
@@ -186,7 +152,7 @@ function Pathways({ go }: { go: Navigate }) {
   );
 
   return <Shell page="pathways" go={go}>
-    <InfoNote><b>Pathway catalogue — planning preview.</b> These are the 10 planned English pathways, not released courses. Official syllabus editions, mappings and unit focuses are not yet verified. Selecting a unit opens its release checklist; it does not create or publish content.</InfoNote>
+    <InfoNote><b>Pathway catalogue — planning preview.</b> These are the 10 planned English pathways, not released courses. Official syllabus editions, mappings and unit focuses are not yet verified. The readiness checks show what remains before each unit can be released.</InfoNote>
     <PageIntro
       eyebrow="CHOOSE YOUR CURRICULUM"
       title={<>Start with the right <em>pathway.</em></>}
@@ -232,27 +198,28 @@ function Pathways({ go }: { go: Navigate }) {
       {selected.levelKind === "navigation-only-grade-equivalent" && <p className="proto-note-bottom">This is a provisional learner-navigation label. Confirm whether the band is useful before treating it as a separate product route.</p>}
       <p className="proto-note-bottom">The illustrative lesson and six sample questions are not assigned to this pathway. No syllabus mapping has been inferred from the selected level.</p>
     </section>}
-    {selectedUnit && <section className="proto-panel proto-unit-readiness" aria-label="Selected unit release checklist">
+    {selectedUnit && selectedUnitPlan && <section className="proto-panel proto-unit-readiness" aria-label="Selected unit release checklist" aria-live="polite">
       <div className="proto-panel-heading">
         <div>
           <h2>Unit preparation — {selectedUnit.sequence}</h2>
           <p>{selectedUnit.id} · {selectedUnit.title}</p>
+          <p>{readiness.complete} of {readiness.total} release requirements complete</p>
         </div>
-        <span>PLANNING ONLY</span>
+        <span>{readiness.releasable ? "READY FOR RELEASE" : "PLANNING ONLY"}</span>
       </div>
-      <p className="proto-unit-readiness-intro">This is a readiness checklist, not an editor. Changes are not saved here, and no lesson is linked to this unit until it has been reviewed and assigned deliberately.</p>
-      {unitReadinessRequirements.map((requirement, index) => (
-        <div className="proto-skill-row proto-readiness-row" key={requirement.title}>
-          <i className="warm">{String(index + 1).padStart(2, "0")}</i>
+      <p className="proto-unit-readiness-intro">This is a readiness view, not an editor. Changes are not saved here. A unit becomes releasable only when its curriculum source, objective, lesson, practice, reviews and explicit approval have been recorded.</p>
+      {readinessGates.map((gate, index) => (
+        <div className="proto-skill-row proto-readiness-row" key={gate.id}>
+          <i className={gate.status === "complete" ? "good" : gate.status === "blocked" ? "warm" : ""}>{gate.status === "complete" ? "✓" : String(index + 1).padStart(2, "0")}</i>
           <div>
-            <b>{requirement.title}</b>
-            <small>{requirement.detail}</small>
-            <small className="proto-readiness-owner">{requirement.owner}</small>
+            <b>{gate.title}</b>
+            <small>{gate.detail}</small>
+            <small className="proto-readiness-owner">{gate.owner}</small>
           </div>
-          <span>Not complete</span>
+          <span>{gate.status === "complete" ? "Complete" : gate.status === "blocked" ? "Blocked" : "Not started"}</span>
         </div>
       ))}
-      <p className="proto-note-bottom">Release rule: keep the unit unavailable to learners until the official mapping, learning objective, content, linked practice and academic approval are complete for the same content version.</p>
+      <p className="proto-note-bottom">{readiness.releasable ? "This version has all recorded release evidence." : "No real lesson content is linked to this unit yet. The current demonstration lesson remains separate and must not be treated as syllabus-approved material."}</p>
     </section>}
   </Shell>;
 }
