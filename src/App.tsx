@@ -200,8 +200,14 @@ function Pathways({ go }: { go: Navigate }) {
   const readinessGates = selectedUnitPlan ? getUnitReadinessGates(selectedUnitPlan) : [];
   const readiness = selectedUnitPlan ? getUnitReadinessSummary(selectedUnitPlan) : { complete: 0, total: 0, releasable: false };
 
-  const renderGroup = (title: string, description: string, items: typeof englishPathways) => (
-    <section>
+  const renderGroup = (taxonomy: string, title: string, description: string, groupClass: string, items: typeof englishPathways) => (
+    <section className={"proto-pathway-catalogue-group " + groupClass}>
+      <div className="proto-pathway-taxonomy" aria-label={taxonomy + " pathway group"}>
+        <span aria-hidden="true">{groupClass === "taxonomy-ib" ? "01" : groupClass === "taxonomy-lower-secondary" ? "02" : "03"}</span>
+        <small>CURRICULUM TAXONOMY</small>
+        <strong>{taxonomy}</strong>
+        <i aria-hidden="true" />
+      </div>
       <div className="proto-section-title">
         <div><h2>{title}</h2><p>{description}</p></div>
         <small>{items.length} PATHWAY{items.length === 1 ? "" : "S"}</small>
@@ -238,24 +244,31 @@ function Pathways({ go }: { go: Navigate }) {
       subtitle="Each programme keeps its own identity and learning sequence. The catalogue is being prepared before curriculum content is released."
     />
     {renderGroup(
+      "IB MYP",
       "IB MYP Language and Literature",
       "Five programme years. Grade equivalents are provided only as a navigation aid.",
+      "taxonomy-ib",
       englishPathways.filter(item => item.programmeCode === "ib-myp")
     )}
     {renderGroup(
+      "Cambridge Lower Secondary",
       "Cambridge Lower Secondary English",
       "Stages 7–9, kept separate from the IGCSE qualification pathway.",
+      "taxonomy-lower-secondary",
       englishPathways.filter(item => item.programmeCode === "cambridge-lower-secondary")
     )}
     {renderGroup(
+      "Cambridge IGCSE",
       "Cambridge IGCSE First Language English",
       "The two grade-equivalent entries are provisional navigation bands, not separate qualifications or automatically separate syllabuses.",
+      "taxonomy-igcse",
       englishPathways.filter(item => item.programmeCode === "cambridge-igcse")
     )}
-    {selected && <section className="proto-panel" aria-label="Selected pathway unit planning slots">
+    <div className="proto-pathway-detail-stack">
+    {selected && <section className="proto-panel proto-unit-planning-panel" aria-label="Selected pathway unit planning slots">
       <div className="proto-panel-heading">
         <div>
-          <h2>Unit plan — {selected.levelLabel}</h2>
+          <h2>{selected.levelLabel} — Unit planning</h2>
           <p>{selected.programmeName} · {selected.courseName}. Content review passed; official guide edition and objective mapping remain unverified.</p>
         </div>
         <span>NOT RELEASED</span>
@@ -277,7 +290,7 @@ function Pathways({ go }: { go: Navigate }) {
       {selected.levelKind === "navigation-only-grade-equivalent" && <p className="proto-note-bottom">This is a provisional learner-navigation label. Confirm whether the band is useful before treating it as a separate product route.</p>}
       <p className="proto-note-bottom">The learner lesson preview uses the reviewed pilot content. It is not assigned an official syllabus mapping, and its responses are not saved.</p>
     </section>}
-    {selectedUnit?.id === pilotReviewSummary.unitId && <section className="proto-panel proto-unit-draft" aria-label="Reviewed pilot unit preview">
+    {selectedUnit?.id === pilotReviewSummary.unitId && <section className="proto-panel proto-unit-draft proto-pathway-detail-card" aria-label="Reviewed pilot unit preview">
       <div className="proto-panel-heading">
         <div>
           <p className="proto-eyebrow"><span />PILOT CONTENT · REVIEWED PREVIEW</p>
@@ -321,7 +334,7 @@ function Pathways({ go }: { go: Navigate }) {
       <p className="proto-note-bottom">{pilotReviewSummary.releaseNote}</p>
       <div className="proto-bottom-actions"><Action onClick={() => go("lesson")}>Open learner lesson preview →</Action></div>
     </section>}
-    {selectedUnit && selectedUnitPlan && <section className="proto-panel proto-unit-readiness" aria-label="Selected unit release checklist" aria-live="polite">
+    {selectedUnit && selectedUnitPlan && <section className="proto-panel proto-unit-readiness proto-pathway-detail-card" aria-label="Selected unit release checklist" aria-live="polite">
       <div className="proto-panel-heading">
         <div>
           <h2>Unit preparation — {selectedUnit.sequence}</h2>
@@ -344,6 +357,7 @@ function Pathways({ go }: { go: Navigate }) {
       ))}
       <p className="proto-note-bottom">{readiness.releasable ? "This version has all recorded release evidence." : "The pilot lesson and practice IDs are recorded in this static planning fixture, and the academic content review is marked passed. Official guide edition/objective mapping, rights review, accessibility review and explicit release approval remain outstanding; the pilot is not a released syllabus-mapped course."}</p>
     </section>}
+    </div>
   </Shell>;
 }
 function Questions({ go }: { go: Navigate }) {
