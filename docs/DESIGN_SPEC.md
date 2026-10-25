@@ -47,7 +47,7 @@ Reference URLs:
 | White | `#FFFFFF` | Cards, forms and focused reading areas |
 | Aubergine | `#48264F` | Brand identity, primary actions, key heading emphasis and prominent links |
 | Deep aubergine | `#351D3B` | Hover/focus treatment for primary actions and selected dark sections |
-| Dusty blue | `#587C9D` | Secondary brand colour, interactive features, selected controls and visual wayfinding |
+| Accessible dusty blue | `#527391` | Secondary brand colour, interactive features, selected controls and visual wayfinding |
 | Deep blue | `#36556F` | Positive feedback and student-response labels; pair with explicit wording/icons |
 | Soft lilac | `#E9E2F0` | Questions, model-answer panels and selected section emphasis |
 | Pale blue-grey | `#DCE6F1` | Student-response surfaces and supporting learning panels |
@@ -58,7 +58,7 @@ Reference URLs:
 | Supporting text | `#514B57` | Supporting paragraphs, descriptions and labels on light backgrounds |
 | Border | `#D8D1E0` | Soft lilac-toned separators and understated card boundaries |
 
-Use an established, role-based EdTech design-system approach: a small set of brand anchors, semantic surface/foreground roles, consistent interaction states and contrast checks. The dominant impression should come from cool white and white reading surfaces, with measured alternation between soft lilac and pale blue-grey learning surfaces. Use aubergine for brand identity and primary actions, dusty blue for secondary emphasis and interactive features, and plum charcoal for selected dark panels rather than making every section dark. Keep buttercream to tiny accents. Use deep blue for strengths/positive feedback and muted amber for constructive next steps. Avoid using either as generic decoration; status must never be communicated by colour alone, so pair every status with a clear label and/or icon. Keep text/background contrast at WCAG 2.2 AA levels and validate actual foreground/background pairs.
+Use an established, role-based EdTech design-system approach: a small set of brand anchors, semantic surface/foreground roles, consistent interaction states and contrast checks. The dominant impression should come from cool white and white reading surfaces, with measured alternation between soft lilac and pale blue-grey learning surfaces. Use aubergine for brand identity and primary actions, accessible dusty blue for secondary emphasis and interactive features, and plum charcoal for selected dark panels rather than making every section dark. Keep buttercream to tiny accents. Use deep blue for strengths/positive feedback and muted amber for constructive next steps. Avoid using either as generic decoration; status must never be communicated by colour alone, so pair every status with a clear label and/or icon. Keep text/background contrast at WCAG 2.2 AA levels and validate actual foreground/background pairs.
 
 
 
