@@ -231,7 +231,7 @@ function Pathways({ go }: { go: Navigate }) {
       programmeCode: "cambridge-igcse",
       taxonomy: "Cambridge IGCSE",
       title: "First Language English",
-      levelSummary: "Provisional grade-equivalent learning bands",
+      levelSummary: "Syllabus edition and level structure to be confirmed",
       description: "Explore the First Language English route without treating provisional grade bands as separate qualifications.",
       caveat: "The applicable syllabus edition and mapping are unverified; grade-equivalent bands are navigation aids only.",
       groupClass: "taxonomy-igcse",
@@ -299,7 +299,7 @@ function Pathways({ go }: { go: Navigate }) {
               <div className="proto-curriculum-card-top"><span>{course.taxonomy}</span><b>PLANNED ROUTE</b></div>
               <h2>{course.title}</h2>
               <p>{course.description}</p>
-              <div className="proto-curriculum-card-meta"><span>{course.levelSummary}</span><span>{englishPathways.filter(item => item.courseCode === course.code).length} planned level{englishPathways.filter(item => item.courseCode === course.code).length === 1 ? "" : "s"}</span></div>
+              <div className="proto-curriculum-card-meta"><span>{course.levelSummary}</span><span>{course.code === "cambridge-igcse-first-language-english" ? "Syllabus structure to be confirmed" : englishPathways.filter(item => item.courseCode === course.code).length + " planned levels"}</span></div>
               <p className="proto-curriculum-caveat">{course.caveat}</p>
               <button type="button" className="proto-action" onClick={() => openCurriculum(course.code)}>Explore this pathway <span>→</span></button>
             </article>
@@ -320,19 +320,23 @@ function Pathways({ go }: { go: Navigate }) {
         <div><small>CURRICULUM ROUTE</small><h2>{courseChoices.find(item => item.code === selectedCourseCode)?.taxonomy} · {courseChoices.find(item => item.code === selectedCourseCode)?.title}</h2></div>
         <p>{courseChoices.find(item => item.code === selectedCourseCode)?.caveat}</p>
       </section>
-      <div className="proto-level-grid">
-        {coursePathways.map((pathway, index) => (
+      {coursePathways.some(pathway => pathway.levelKind === "official-programme-level") ? <div className="proto-level-grid">
+        {coursePathways.filter(pathway => pathway.levelKind === "official-programme-level").map((pathway, index) => (
           <article className="proto-level-card" key={pathway.id}>
             <div className="proto-level-card-top"><span>{String(index + 1).padStart(2, "0")}</span><b>PLANNED</b></div>
             <h2>{pathway.levelLabel}</h2>
             {pathway.gradeEquivalentLabel && pathway.levelKind !== "navigation-only-grade-equivalent" && <p className="proto-level-equivalent">{pathway.gradeEquivalentLabel} · Navigation aid</p>}
-            {pathway.levelKind === "navigation-only-grade-equivalent" && <p className="proto-level-equivalent">Provisional navigation label only — not a separate qualification or syllabus.</p>}
             <p>{pathway.reviewNote}</p>
             <div className="proto-level-status"><span>Mapping</span><b>Unverified</b><span>Release</span><b>Planned</b></div>
             <button type="button" className="proto-action" onClick={() => openLevel(pathway.id)}>Explore {pathway.levelLabel} <span>→</span></button>
           </article>
         ))}
-      </div>
+      </div> : <section className="proto-no-levels">
+        <p className="proto-eyebrow"><span />LEVEL STRUCTURE NOT YET VERIFIED</p>
+        <h2>Confirm the syllabus route before choosing a level.</h2>
+        <p>The current planning data contains provisional grade-equivalent labels only. They are not separate qualifications or confirmed syllabus routes, so this prototype does not present them as independent levels.</p>
+        <p>The applicable Cambridge IGCSE First Language English syllabus edition and any useful learner-navigation structure must be confirmed before level-specific plans are shown here.</p>
+      </section>}
       <div className="proto-bottom-actions"><Action secondary onClick={backToCatalogue}>← Back to pathways catalogue</Action></div>
     </>}
 
