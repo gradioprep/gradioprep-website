@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Status:** Approved design system; curriculum-first navigation implemented in frontend prototype  
 **Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -18,7 +18,9 @@
 
 **Version 1.0 change note — 25 October 2026:** Owner-approved curriculum-first information architecture. The Pathways page is a catalogue only. Curriculum/subject details, a specific year/stage/syllabus plan, and unit-level learning details live in their appropriate contextual destinations. This supersedes the earlier instruction in Section 6 to stack unit-planning, pilot-preview and release-readiness panels after the final Pathways card group. Existing palette, typography and spacing decisions remain unchanged.
 
-**Version 1.1 change note — 25 October 2026:** Implemented the approved curriculum-first flow in the React prototype: Pathways catalogue → curriculum/subject → level → unit detail. The catalogue contains three route cards only and has no default-selected pathway details beneath them. Curriculum and level views show their own contextual choices and status notes; unit detail displays pilot/release metadata and readiness gates only for the selected unit. Breadcrumbs and contextual header text preserve orientation. Navigation uses local component state and is not a production URL/deep-link or persistence implementation. Palette B, typography and curriculum/release status records remain unchanged.
+**Version 1.1 change note — 25 October 2026:** Implemented the approved curriculum-first flow in the React prototype: Pathways catalogue → curriculum/subject → level → unit detail. The catalogue contains three route cards only and has no default-selected pathway details beneath them. Curriculum and level views show their own contextual choices and status notes; unit detail displays pilot/release metadata and readiness gates only for the selected unit. Breadcrumbs and contextual header text preserve orientation. Navigation initially used local component state. Palette B, typography and curriculum/release status records remain unchanged.
+
+**Version 1.2 change note — 25 October 2026:** Added canonical pathname-based routes for the catalogue, each curriculum/subject destination, existing official programme-level destinations, unit details and the approved pilot lesson. Route rendering is derived from the current URL, with browser `popstate` handling for back/forward and contextual breadcrumb navigation. Routes are data-driven and intentionally exclude provisional IGCSE grade-equivalent bands or unverified syllabus editions. No design tokens, curriculum mapping, content review or release statuses changed. Build and live deployment outcomes must be confirmed independently.
 
 ## 1. Design direction
 
@@ -274,7 +276,7 @@ Keep statuses distinct: academic content review, official curriculum mapping, ri
 - Group content into understandable units and skill objectives on the relevant level/unit destination, not on the general catalogue.
 - Distinguish content available now from content that is planned.
 - Keep the approved taxonomy-band styling and the Pathways-specific spacing refinements on the catalogue; do not move level-specific panels into the catalogue merely to reuse their existing styling.
-- The curriculum-first architecture is implemented in the current prototype through four contextual views: catalogue, curriculum/subject, level and unit detail. The catalogue must remain free of selected-pathway plans, pilot previews and readiness checklists. Changes to this hierarchy require explicit review and coordinated updates to both source-of-truth documents.
+- The curriculum-first architecture is implemented in the current prototype through four contextual views: catalogue, curriculum/subject, level and unit detail. The views use pathname-based URLs, not temporary view-selection state. Direct links resolve from current catalogue data; browser back/forward restores the URL-selected destination. Breadcrumbs and contextual links preserve programme/subject, level and unit identity. Routes are created only for supported programme levels; a provisional grade-equivalent label or unverified syllabus does not become a standalone route. Unknown URLs show an unavailable-destination message. The catalogue must remain free of selected-pathway plans, pilot previews and readiness checklists. Changes to this hierarchy require explicit review and coordinated updates to both source-of-truth documents.
 
 ### Lesson view
 
