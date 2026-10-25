@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 1.3  
+**Version:** 1.4  
 **Status:** Approved design system; curriculum-first navigation implemented in frontend prototype  
 **Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -23,6 +23,8 @@
 **Version 1.2 change note — 25 October 2026:** Added canonical pathname-based routes for the catalogue, each curriculum/subject destination, existing official programme-level destinations, unit details and the approved pilot lesson. Route rendering is derived from the current URL, with browser `popstate` handling for back/forward and contextual breadcrumb navigation. Routes are data-driven and intentionally exclude provisional IGCSE grade-equivalent bands or unverified syllabus editions. No design tokens, curriculum mapping, content review or release statuses changed. Build and live deployment outcomes must be confirmed independently.
 
 **Version 1.3 change note — 25 October 2026:** Added Chromium browser tests for direct curriculum URLs, the catalogue-to-pilot-lesson journey, Back/Forward history, and unavailable provisional IGCSE routes. Tests run against locally served Wrangler assets in CI. The current Chromium suite passed all 9 tests and the associated Cloudflare preview build succeeded on commit `e7f3982aecacb8d069ce7a6877235bd538bf4d22`; see PR #10 for build and preview URLs. Keep this separate from the manual check of the Cloudflare preview and production site; do not mark a live deployment as verified until it has actually been checked. The approved palette, typography, layout and curriculum/release statuses are unchanged.
+
+**Version 1.4 change note — 25 October 2026:** Added a consistent in-page Previous/Next control bar to supported curriculum, level, unit and lesson destinations. Keep navigation contextual and route-driven, maintain programme/subject identity, and show a plain explanation instead of an active link when no safe next destination exists. Cambridge IGCSE level navigation stays unavailable until its applicable syllabus/level structure is verified. Do not add a default-selected pathway or navigation bar to the Pathways catalogue itself. Palette, typography, spacing tokens and academic/release statuses remain unchanged.
 
 ## 1. Design direction
 
@@ -278,7 +280,7 @@ Keep statuses distinct: academic content review, official curriculum mapping, ri
 - Group content into understandable units and skill objectives on the relevant level/unit destination, not on the general catalogue.
 - Distinguish content available now from content that is planned.
 - Keep the approved taxonomy-band styling and the Pathways-specific spacing refinements on the catalogue; do not move level-specific panels into the catalogue merely to reuse their existing styling.
-- The curriculum-first architecture is implemented in the current prototype through four contextual views: catalogue, curriculum/subject, level and unit detail. The views use pathname-based URLs, not temporary view-selection state. Direct links resolve from current catalogue data; browser back/forward restores the URL-selected destination. Breadcrumbs and contextual links preserve programme/subject, level and unit identity. Routes are created only for supported programme levels; a provisional grade-equivalent label or unverified syllabus does not become a standalone route. Unknown URLs show an unavailable-destination message. The catalogue must remain free of selected-pathway plans, pilot previews and readiness checklists. Changes to this hierarchy require explicit review and coordinated updates to both source-of-truth documents.
+- The curriculum-first architecture is implemented in the current prototype through four contextual views: catalogue, curriculum/subject, level and unit detail. The views use pathname-based URLs, not temporary view-selection state. Direct links resolve from current catalogue data; browser back/forward restores the URL-selected destination. Breadcrumbs and contextual Previous/Next controls preserve programme/subject, level and unit identity. Each supported curriculum, level, unit and lesson view offers an in-page back action and a forward action when the next destination is supported; where no safe next destination exists, the interface explains why. The Pathways catalogue remains unselected and has no Previous/Next bar. Routes are created only for supported programme levels; a provisional grade-equivalent label or unverified syllabus does not become a standalone route. Unknown URLs show an unavailable-destination message. The catalogue must remain free of selected-pathway plans, pilot previews and readiness checklists. Changes to this hierarchy require explicit review and coordinated updates to both source-of-truth documents.
 
 ### Lesson view
 
