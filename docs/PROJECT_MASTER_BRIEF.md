@@ -1,6 +1,6 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 2.2  
+**Version:** 2.3  
 **Last updated:** 25 October 2026  
 **Status:** Frontend prototype; pilot lesson content review passed for preview version 1  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
@@ -32,6 +32,30 @@ Do not silently change approved prices, credit rules, curriculum scope, SLAs or 
 **v2.0 change note — 25 October 2026:** The owner approved a site-wide visual-composition improvement on top of Palette B. Typography remains locked. The shared design system now specifies three spacing tiers, selective plum-charcoal bands, stronger visual section breaks, grouped IB/Cambridge pathway introductions on the homepage, and colour-coded, more spacious lesson stages with restrained visual motifs for younger learners. See `docs/DESIGN_SPEC.md` v0.7 for implementation rules.
 
 **v2.1 change note — 25 October 2026:** Refined the Pathways catalogue with slim taxonomy bands and dividers for IB MYP, Cambridge Lower Secondary and Cambridge IGCSE. Added a consistent generous gap and differentiated panel treatments for unit planning, reviewed pilot preview and release-readiness details. Palette B and typography remain locked; content mapping and release status are unchanged.
+
+**v2.3 change note — 25 October 2026:** The owner approved a curriculum-first information architecture. The Pathways page is a catalogue only; it must not display a default-selected pathway's unit plan, pilot preview or release-readiness panels beneath the catalogue. Selecting a pathway opens its curriculum/subject destination; selecting a specific year, stage or verified syllabus opens that level's own plan; selecting a unit opens its unit detail/learning view. Reusable templates are allowed, but content, objectives, sequence, assessment and mapping must remain specific to the selected curriculum, subject, level and applicable syllabus edition. Keep provisional grade-equivalent labels as navigation aids only; never treat them as separate qualifications or syllabus routes without verification. Use breadcrumbs and contextual level/unit navigation. This decision supersedes the v2.1 and v2.2 descriptions that placed planning, pilot-preview and readiness panels beneath the Pathways catalogue. No code has been changed by this documentation decision.
+
+### Approved information architecture — binding product decision
+
+The approved navigation hierarchy is:
+
+1. **Homepage:** explain the product and provide a route to pathway discovery.
+2. **Pathways catalogue:** compare available curriculum routes only. Show programme taxonomy, subject/course cards, brief descriptions and accurate availability caveats. Do not render any selected pathway's unit plan, pilot preview, release-readiness checklist or other level-specific planning details on this page. There is no default-selected curriculum whose details appear below the catalogue.
+3. **Curriculum and subject destination:** identify the chosen programme and subject/course, explain the route, and offer only the relevant level choices that the product actually supports.
+4. **Specific year, stage or syllabus destination:** show the plan and learning sequence for that exact programme, subject and level, including applicable objectives, unit sequence, assessment approach, available learning materials and accurate review/mapping/release statuses.
+5. **Unit detail and learning view:** show that unit's purpose, skills, lessons, practice, explanations and relevant assessment activities.
+
+The normal discovery path is Homepage → Pathways catalogue → Curriculum/subject → Year/stage/verified syllabus → Unit → Lesson/practice. Breadcrumbs and contextual navigation must let users return to the parent destination without losing curriculum context. Direct links to a level, unit or lesson must retain or clearly display the full curriculum context.
+
+**Data and curriculum integrity rules:**
+- Keep programme, subject/course, year/stage, qualification, syllabus edition, objective, unit, task and rubric as distinct data concepts; do not infer equivalence from similar labels.
+- IB MYP Language and Literature, Cambridge Lower Secondary English and Cambridge IGCSE First Language English are separate routes with distinct structures. Do not merge their requirements into a generic Grade 6–10 plan.
+- Cambridge grade-equivalent labels are navigation aids only. They must not create a separate qualification, syllabus or curriculum route unless official requirements and the founder-approved roadmap establish that route.
+- Reuse page templates and components where useful, but never reuse one curriculum's unit plan, objectives, sequence, assessment or mapping as if it applied to another curriculum or level.
+- Academic content review, official curriculum mapping, rights review, accessibility review and release approval are separate statuses. A passed review must not imply official mapping or release.
+- Do not fabricate syllabus coverage or present planned/unverified content as available. The starter pathway is not exhaustive syllabus coverage.
+
+**Implementation and change-control rule:** This is an approved target architecture, not a claim that it is implemented. Before coding, compare the route/data model with the current source files for pathways and app navigation, then implement in reviewable steps. Preserve the approved Palette B, typography, spacing and current content/status wording unless separately approved. Update this master brief and the design specification together if the architecture changes in future. This decision supersedes any older wording in either document that instructs placing planning, pilot-preview or readiness panels below the Pathways catalogue.
 
 ### Current implementation state
 
@@ -352,4 +376,4 @@ The assistant must not invent these decisions or silently replace them with a ge
 - OpenAI transfer conversations between accounts: https://help.openai.com/en/articles/9106926-transferring-conversations-from-1-chatgpt-account-to-another-chatgpt-account
 - GitHub secret scanning: https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning
 
-**v2.2 change note — 25 October 2026:** The Pathways page received a spacing correction after visual review: reduce inter-group and planning-panel gaps by roughly half and tighten taxonomy-band-to-card spacing so each taxonomy clearly labels the cards immediately below. No typography or palette changes; the shared site-wide spacing system remains intact.
+**v2.2 change note — 25 October 2026:** The Pathways page received a spacing correction after visual review: reduce inter-group and planning-panel gaps by roughly half and tighten taxonomy-band-to-card spacing so each taxonomy clearly labels the cards immediately below. No typography or palette changes; the shared site-wide spacing system remains intact. The spacing adjustment remains applicable to catalogue groups; the below-catalogue planning-panel layout is superseded by v2.3.
