@@ -51,8 +51,8 @@ function Home({ go }: { go: Navigate }) {
   </div>;
 }
 
-function Shell({ page, go, children }: { page: Page; go: Navigate; children: ReactNode }) {
-  return <div className="proto-app"><Notice compact /><div className="proto-app-layout"><aside className="proto-sidebar"><Logo onClick={() => go("home")} /><div className="proto-workspace">LEARNING SPACE <span>DEMO</span></div><nav aria-label="Student preview navigation">{sections.map(s => <button type="button" key={s.page} className={page === s.page ? "active" : ""} onClick={() => go(s.page)}><i>{s.icon}</i>{s.label}{page === s.page && <b />}</button>)}</nav><div className="proto-sidebar-bottom"><strong>✳ &nbsp; Keep moving forward.</strong><p>Every attempt can teach you something.</p><button type="button" onClick={() => go("home")}>↖ &nbsp; Public homepage</button></div></aside><div className="proto-app-main"><header className="proto-app-header"><div>Learning space <span>/</span> <b>{sections.find(s => s.page === page)?.label ?? "Preview"}</b></div><small>English · Stage 1 preview</small><i>D</i></header><main className="proto-app-content">{children}<footer className="proto-app-footer"><span>CRITERION LAB · DESIGN PROTOTYPE</span><span>Fictional data · No real learner records</span></footer></main></div></div></div>;
+function Shell({ page, go, children, context }: { page: Page; go: Navigate; children: ReactNode; context?: string }) {
+  return <div className="proto-app"><Notice compact /><div className="proto-app-layout"><aside className="proto-sidebar"><Logo onClick={() => go("home")} /><div className="proto-workspace">LEARNING SPACE <span>DEMO</span></div><nav aria-label="Student preview navigation">{sections.map(s => <button type="button" key={s.page} className={page === s.page ? "active" : ""} onClick={() => go(s.page)}><i>{s.icon}</i>{s.label}{page === s.page && <b />}</button>)}</nav><div className="proto-sidebar-bottom"><strong>✳ &nbsp; Keep moving forward.</strong><p>Every attempt can teach you something.</p><button type="button" onClick={() => go("home")}>↖ &nbsp; Public homepage</button></div></aside><div className="proto-app-main"><header className="proto-app-header"><div>Learning space <span>/</span> <b>{sections.find(s => s.page === page)?.label ?? "Preview"}</b></div><small>{context ?? "English · Stage 1 preview"}</small><i>D</i></header><main className="proto-app-content">{children}<footer className="proto-app-footer"><span>CRITERION LAB · DESIGN PROTOTYPE</span><span>Fictional data · No real learner records</span></footer></main></div></div></div>;
 }
 function PageIntro({ eyebrow, title, subtitle }: { eyebrow: string; title: ReactNode; subtitle: string }) {
   return <div className="proto-page-intro"><Label>{eyebrow}</Label><h1>{title}</h1><p>{subtitle}</p></div>;
@@ -192,174 +192,227 @@ function Lesson({ go }: { go: Navigate }) {
 }
 
 function Pathways({ go }: { go: Navigate }) {
+  const [view, setView] = useState<"catalogue" | "curriculum" | "level" | "unit">("catalogue");
+  const [selectedCourseCode, setSelectedCourseCode] = useState("ib-myp-language-literature");
   const [selectedPathwayId, setSelectedPathwayId] = useState("ib-myp-lal-y1");
-  const selected = englishPathways.find(item => item.id === selectedPathwayId) ?? englishPathways[0];
-  const [selectedUnitId, setSelectedUnitId] = useState(selected.unitSlots[0]?.id ?? "");
-  const selectedUnit = selected.unitSlots.find(unit => unit.id === selectedUnitId) ?? selected.unitSlots[0];
-  const selectedUnitPlan = unitContentPlans.find(plan => plan.unitId === selectedUnit?.id);
-  const readinessGates = selectedUnitPlan ? getUnitReadinessGates(selectedUnitPlan) : [];
-  const readiness = selectedUnitPlan ? getUnitReadinessSummary(selectedUnitPlan) : { complete: 0, total: 0, releasable: false };
+  const [selectedUnitId, setSelectedUnitId] = useState("ib-myp-lal-y1-u1");
 
-  const renderGroup = (taxonomy: string, title: string, description: string, groupClass: string, items: typeof englishPathways) => (
-    <section className={"proto-pathway-catalogue-group " + groupClass}>
-      <div className="proto-pathway-taxonomy" aria-label={taxonomy + " pathway group"}>
-        <span aria-hidden="true">{groupClass === "taxonomy-ib" ? "01" : groupClass === "taxonomy-lower-secondary" ? "02" : "03"}</span>
-        <small>CURRICULUM TAXONOMY</small>
-        <strong>{taxonomy}</strong>
-        <i aria-hidden="true" />
+  const selectedPathway = englishPathways.find(item => item.id === selectedPathwayId) ?? englishPathways[0];
+  const selectedUnit = selectedPathway.unitSlots.find(item => item.id === selectedUnitId) ?? selectedPathway.unitSlots[0];
+  const selectedPlan = unitContentPlans.find(plan => plan.unitId === selectedUnit?.id);
+  const readinessGates = selectedPlan ? getUnitReadinessGates(selectedPlan) : [];
+  const readiness = selectedPlan ? getUnitReadinessSummary(selectedPlan) : { complete: 0, total: 0, releasable: false };
+  const coursePathways = englishPathways.filter(item => item.courseCode === selectedCourseCode);
+  const isPilotUnit = selectedUnit?.id === pilotReviewSummary.unitId;
+
+  const courseChoices = [
+    {
+      code: "ib-myp-language-literature",
+      programmeCode: "ib-myp",
+      taxonomy: "IB MYP",
+      title: "Language and Literature",
+      levelSummary: "Years 1–5",
+      description: "Explore reading, interpretation and purposeful writing through the IB Middle Years Programme.",
+      caveat: "Grade equivalents are navigation aids only. Applicable guide edition and objective mapping remain unverified.",
+      groupClass: "taxonomy-ib",
+    },
+    {
+      code: "cambridge-lower-secondary-english",
+      programmeCode: "cambridge-lower-secondary",
+      taxonomy: "Cambridge Lower Secondary",
+      title: "English",
+      levelSummary: "Stages 7–9",
+      description: "Build core English skills through the Cambridge Lower Secondary route, kept distinct from IGCSE.",
+      caveat: "Applicable curriculum framework and official learning-objective references remain to be verified.",
+      groupClass: "taxonomy-lower-secondary",
+    },
+    {
+      code: "cambridge-igcse-first-language-english",
+      programmeCode: "cambridge-igcse",
+      taxonomy: "Cambridge IGCSE",
+      title: "First Language English",
+      levelSummary: "Provisional grade-equivalent learning bands",
+      description: "Explore the First Language English route without treating provisional grade bands as separate qualifications.",
+      caveat: "The applicable syllabus edition and mapping are unverified; grade-equivalent bands are navigation aids only.",
+      groupClass: "taxonomy-igcse",
+    },
+  ];
+
+  const openCurriculum = (courseCode: string) => {
+    const first = englishPathways.find(item => item.courseCode === courseCode);
+    if (!first) return;
+    setSelectedCourseCode(courseCode);
+    setSelectedPathwayId(first.id);
+    setSelectedUnitId(first.unitSlots[0]?.id ?? "");
+    setView("curriculum");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const openLevel = (pathwayId: string) => {
+    const pathway = englishPathways.find(item => item.id === pathwayId);
+    if (!pathway) return;
+    setSelectedPathwayId(pathway.id);
+    setSelectedUnitId(pathway.unitSlots[0]?.id ?? "");
+    setView("level");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const openUnit = (unitId: string) => {
+    setSelectedUnitId(unitId);
+    setView("unit");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const backToCatalogue = () => {
+    setView("catalogue");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const backToCurriculum = () => {
+    setView("curriculum");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const backToLevel = () => {
+    setView("level");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const shellContext = view === "catalogue" ? "English pathways · Planning preview" : view === "curriculum" ? (courseChoices.find(item => item.code === selectedCourseCode)?.taxonomy + " · " + (courseChoices.find(item => item.code === selectedCourseCode)?.title ?? "Curriculum")) : selectedPathway.programmeName + " · " + selectedPathway.courseName + " · " + selectedPathway.levelLabel;
+
+  return <Shell page="pathways" go={go} context={shellContext}>
+    {view === "catalogue" && <>
+      <InfoNote><b>Pathway catalogue — planning preview.</b> These are planned English routes, not released courses. Official syllabus editions and mappings remain unverified. Stage 1 is a starter pathway, not exhaustive syllabus coverage.</InfoNote>
+      <PageIntro
+        eyebrow="CHOOSE YOUR CURRICULUM"
+        title={<>Start with the right <em>pathway.</em></>}
+        subtitle="Compare the available curriculum routes. Choose a programme and subject to see the levels planned for that route."
+      />
+      <div className="proto-pathway-catalogue-groups">
+        {courseChoices.map((course, index) => (
+          <section className={"proto-pathway-catalogue-group " + course.groupClass} key={course.code}>
+            <div className="proto-pathway-taxonomy" aria-label={course.taxonomy + " pathway group"}>
+              <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+              <small>CURRICULUM TAXONOMY</small>
+              <strong>{course.taxonomy}</strong>
+              <i aria-hidden="true" />
+            </div>
+            <article className="proto-curriculum-card">
+              <div className="proto-curriculum-card-top"><span>{course.taxonomy}</span><b>PLANNED ROUTE</b></div>
+              <h2>{course.title}</h2>
+              <p>{course.description}</p>
+              <div className="proto-curriculum-card-meta"><span>{course.levelSummary}</span><span>{englishPathways.filter(item => item.courseCode === course.code).length} planned level{englishPathways.filter(item => item.courseCode === course.code).length === 1 ? "" : "s"}</span></div>
+              <p className="proto-curriculum-caveat">{course.caveat}</p>
+              <button type="button" className="proto-action" onClick={() => openCurriculum(course.code)}>Explore this pathway <span>→</span></button>
+            </article>
+          </section>
+        ))}
       </div>
-      <div className="proto-section-title">
-        <div><h2>{title}</h2><p>{description}</p></div>
-        <small>{items.length} PATHWAY{items.length === 1 ? "" : "S"}</small>
-      </div>
-      <div className="proto-pathway-grid">
-        {items.map((pathway, index) => (
-          <article key={pathway.id}>
-            <div><span>{String(index + 1).padStart(2, "0")}</span><b>PLANNED</b></div>
-            <h3>{pathway.courseName}</h3>
-            <small>{pathway.levelLabel}</small>
-            {pathway.gradeEquivalentLabel && <small>{pathway.gradeEquivalentLabel}</small>}
+    </>}
+
+    {view === "curriculum" && <>
+      <div className="proto-crumb"><button type="button" onClick={backToCatalogue}>Pathways</button> / <b>{courseChoices.find(item => item.code === selectedCourseCode)?.taxonomy}</b></div>
+      <InfoNote><b>Curriculum destination — planning preview.</b> These level choices describe planned navigation, not published or syllabus-mapped courses.</InfoNote>
+      <PageIntro
+        eyebrow={courseChoices.find(item => item.code === selectedCourseCode)?.taxonomy ?? "CURRICULUM"}
+        title={<>{courseChoices.find(item => item.code === selectedCourseCode)?.title} <em>pathway.</em></>}
+        subtitle={courseChoices.find(item => item.code === selectedCourseCode)?.description ?? "Explore the planned levels for this route."}
+      />
+      <section className="proto-curriculum-context-panel">
+        <div><small>CURRICULUM ROUTE</small><h2>{courseChoices.find(item => item.code === selectedCourseCode)?.taxonomy} · {courseChoices.find(item => item.code === selectedCourseCode)?.title}</h2></div>
+        <p>{courseChoices.find(item => item.code === selectedCourseCode)?.caveat}</p>
+      </section>
+      <div className="proto-level-grid">
+        {coursePathways.map((pathway, index) => (
+          <article className="proto-level-card" key={pathway.id}>
+            <div className="proto-level-card-top"><span>{String(index + 1).padStart(2, "0")}</span><b>PLANNED</b></div>
+            <h2>{pathway.levelLabel}</h2>
+            {pathway.gradeEquivalentLabel && pathway.levelKind !== "navigation-only-grade-equivalent" && <p className="proto-level-equivalent">{pathway.gradeEquivalentLabel} · Navigation aid</p>}
+            {pathway.levelKind === "navigation-only-grade-equivalent" && <p className="proto-level-equivalent">Provisional navigation label only — not a separate qualification or syllabus.</p>}
             <p>{pathway.reviewNote}</p>
-            <button
-              type="button"
-              aria-expanded={selectedPathwayId === pathway.id}
-              onClick={() => {
-                setSelectedPathwayId(pathway.id);
-                setSelectedUnitId(pathway.unitSlots[0]?.id ?? "");
-              }}
-            >
-              {selectedPathwayId === pathway.id ? "Viewing unit plan" : "View planned units"} <span>↗</span>
-            </button>
+            <div className="proto-level-status"><span>Mapping</span><b>Unverified</b><span>Release</span><b>Planned</b></div>
+            <button type="button" className="proto-action" onClick={() => openLevel(pathway.id)}>Explore {pathway.levelLabel} <span>→</span></button>
           </article>
         ))}
       </div>
-    </section>
-  );
+      <div className="proto-bottom-actions"><Action secondary onClick={backToCatalogue}>← Back to pathways catalogue</Action></div>
+    </>}
 
-  return <Shell page="pathways" go={go}>
-    <InfoNote><b>Pathway catalogue — planning preview.</b> These are the 10 planned English pathways, not released courses. Official syllabus editions and mappings remain unverified; the first unit is approved for pilot preview. The readiness checks show what remains before any unit can be released.</InfoNote>
-    <PageIntro
-      eyebrow="CHOOSE YOUR CURRICULUM"
-      title={<>Start with the right <em>pathway.</em></>}
-      subtitle="Each programme keeps its own identity and learning sequence. The catalogue is being prepared before curriculum content is released."
-    />
-    {renderGroup(
-      "IB MYP",
-      "IB MYP Language and Literature",
-      "Five programme years. Grade equivalents are provided only as a navigation aid.",
-      "taxonomy-ib",
-      englishPathways.filter(item => item.programmeCode === "ib-myp")
-    )}
-    {renderGroup(
-      "Cambridge Lower Secondary",
-      "Cambridge Lower Secondary English",
-      "Stages 7–9, kept separate from the IGCSE qualification pathway.",
-      "taxonomy-lower-secondary",
-      englishPathways.filter(item => item.programmeCode === "cambridge-lower-secondary")
-    )}
-    {renderGroup(
-      "Cambridge IGCSE",
-      "Cambridge IGCSE First Language English",
-      "The two grade-equivalent entries are provisional navigation bands, not separate qualifications or automatically separate syllabuses.",
-      "taxonomy-igcse",
-      englishPathways.filter(item => item.programmeCode === "cambridge-igcse")
-    )}
-    <div className="proto-pathway-detail-stack">
-    {selected && <section className="proto-panel proto-unit-planning-panel" aria-label="Selected pathway unit planning slots">
-      <div className="proto-panel-heading">
-        <div>
-          <h2>{selected.levelLabel} — Unit planning</h2>
-          <p>{selected.programmeName} · {selected.courseName}. Content review passed; official guide edition and objective mapping remain unverified.</p>
-        </div>
-        <span>NOT RELEASED</span>
-      </div>
-      {selected.unitSlots.map(unit => (
-        <button
-          type="button"
-          className={"proto-activity-row proto-unit-plan-row" + (selectedUnit?.id === unit.id ? " is-selected" : "")}
-          key={unit.id}
-          aria-pressed={selectedUnit?.id === unit.id}
-          onClick={() => setSelectedUnitId(unit.id)}
-        >
-          <i>{String(unit.sequence).padStart(2, "0")}</i>
-          <span><b>{unit.title}</b><small>{unit.reviewNote}</small></span>
-          <em>{unit.id === pilotReviewSummary.unitId ? "Pilot preview" : selectedUnit?.id === unit.id ? "Selected" : "Planned"}</em>
-          <strong>↗</strong>
-        </button>
-      ))}
-      {selected.levelKind === "navigation-only-grade-equivalent" && <p className="proto-note-bottom">This is a provisional learner-navigation label. Confirm whether the band is useful before treating it as a separate product route.</p>}
-      <p className="proto-note-bottom">The learner lesson preview uses the reviewed pilot content. It is not assigned an official syllabus mapping, and its responses are not saved.</p>
-    </section>}
-    {selectedUnit?.id === pilotReviewSummary.unitId && <section className="proto-panel proto-unit-draft proto-pathway-detail-card" aria-label="Reviewed pilot unit preview">
-      <div className="proto-panel-heading">
-        <div>
-          <p className="proto-eyebrow"><span />PILOT CONTENT · REVIEWED PREVIEW</p>
-          <h2>{pilotReviewSummary.title}</h2>
-          <p>{pilotReviewSummary.proposedFocus}</p>
-        </div>
-        <span>REVIEW PASSED · MAPPING UNVERIFIED</span>
-      </div>
-      <p className="proto-unit-readiness-intro">Academic content review passed for version 1 on {pilotReviewSummary.reviewRecord.reviewedAt}. This summary contains curriculum and release metadata only. It is not an officially mapped or released course.</p>
-      <div className="proto-extract">
-        <small>OFFICIAL STARTING POINT · CHECKED {pilotReviewSummary.source.checkedAt}</small>
-        <p><a href={pilotReviewSummary.source.url} target="_blank" rel="noreferrer">{pilotReviewSummary.source.title} ↗</a></p>
-        <p>{pilotReviewSummary.source.scopeNote}</p>
-      </div>
-      <div className="proto-feedback-columns">
-        <div><small>PILOT LEARNING OBJECTIVE</small><p>{pilotReviewSummary.proposedLearningObjective}</p></div>
-        <div><small>CURRICULUM MAPPING</small><p>Unverified. No edition-specific objective codes are assigned, so this preview must not be described as officially mapped to MYP Year 1.</p></div>
-      </div>
-      <div className="proto-extract">
-        <small>CANDIDATE IB OBJECTIVE REFERENCES · NOT VERIFIED</small>
-        <p>The following are candidate Year 1 references only. The detailed guide opens through IB curriculum sign-in, and the applicable school-guide edition has not been confirmed.</p>
-        {pilotReviewSummary.candidateObjectiveMappings.map(item => (
-          <div className="proto-skill-row proto-readiness-row" key={item.strand}>
-            <i>{item.strand}</i>
-            <div><b>{item.criterion}</b><small>{item.descriptor}</small><small>{item.rationale}</small></div>
-            <span>Candidate</span>
-          </div>
+    {view === "level" && <>
+      <div className="proto-crumb"><button type="button" onClick={backToCatalogue}>Pathways</button> / <button type="button" onClick={backToCurriculum}>{selectedPathway.programmeName} · {selectedPathway.courseName}</button> / <b>{selectedPathway.levelLabel}</b></div>
+      <InfoNote><b>Level plan — planning preview.</b> The unit sequence below is a planning structure, not an exhaustive syllabus map. No unit is presented as released unless its release requirements have been recorded.</InfoNote>
+      <PageIntro
+        eyebrow={selectedPathway.programmeName + " · " + selectedPathway.courseName}
+        title={<>{selectedPathway.levelLabel} <em>learning plan.</em></>}
+        subtitle="Review the planned sequence and its current content status. Curriculum mapping, content review and release approval are separate checks."
+      />
+      <section className="proto-curriculum-context-panel">
+        <div><small>LEVEL CONTEXT</small><h2>{selectedPathway.programmeName} · {selectedPathway.courseName} · {selectedPathway.levelLabel}</h2></div>
+        <div className="proto-level-status"><span>Official syllabus edition</span><b>Not assigned</b><span>Objective mapping</span><b>Unverified</b><span>Release</span><b>Planned</b></div>
+        {selectedPathway.levelKind === "navigation-only-grade-equivalent" && <p>This grade-equivalent learning band is a provisional navigation aid only. It does not represent a separate qualification or syllabus route.</p>}
+      </section>
+      <div className="proto-unit-list-heading"><div><h2>Planned unit sequence</h2><p>Three planning slots are shown; this is not a claim of complete syllabus coverage.</p></div><span>3 PLANNING SLOTS</span></div>
+      <div className="proto-level-unit-list">
+        {selectedPathway.unitSlots.map(unit => (
+          <article className="proto-level-unit-row" key={unit.id}>
+            <span className="proto-level-unit-number">{String(unit.sequence).padStart(2, "0")}</span>
+            <div><h3>{unit.title}</h3><p>{unit.reviewNote}</p><div className="proto-level-status compact"><span>Mapping</span><b>Unverified</b><span>Release</span><b>Planned</b>{unit.id === pilotReviewSummary.unitId && <b className="proto-review-status">Academic review passed for pilot preview</b>}</div></div>
+            <button type="button" className="proto-text-link" onClick={() => openUnit(unit.id)}>{unit.id === pilotReviewSummary.unitId ? "View pilot unit" : "View unit details"} <span>↗</span></button>
+          </article>
         ))}
-        <p><a href={pilotReviewSummary.candidateGuide.url} target="_blank" rel="noreferrer">Open IB-hosted guide reference ↗</a> · <a href={pilotReviewSummary.source.subjectBriefUrl} target="_blank" rel="noreferrer">Open public IB subject brief ↗</a></p>
-        <p>These candidate references are not recorded as official objective codes. Mapping remains unverified until the applicable school guide is checked.</p>
       </div>
-      <div className="proto-section-title">
-        <div><h2>Remaining release checks</h2><p>Content review passed; these independent requirements still need evidence.</p></div>
-      </div>
-      {pilotReviewSummary.remainingReleaseChecks.map((item,index) => (
-        <div className="proto-skill-row proto-readiness-row" key={item}>
-          <i className="warm">{String(index+1).padStart(2,"0")}</i>
-          <div><b>{item}</b></div>
+      <div className="proto-bottom-actions"><Action secondary onClick={backToCurriculum}>← Back to curriculum</Action></div>
+    </>}
+
+    {view === "unit" && selectedUnit && <>
+      <div className="proto-crumb"><button type="button" onClick={backToCatalogue}>Pathways</button> / <button type="button" onClick={backToCurriculum}>{selectedPathway.programmeName} · {selectedPathway.courseName}</button> / <button type="button" onClick={backToLevel}>{selectedPathway.levelLabel}</button> / <b>Unit {selectedUnit.sequence}</b></div>
+      <InfoNote><b>Unit detail — planning preview.</b> This view separates academic review, curriculum mapping, and release status. The lesson is available only as a pilot preview and is not an officially mapped or released course.</InfoNote>
+      <PageIntro
+        eyebrow={selectedPathway.programmeName + " · " + selectedPathway.courseName + " · " + selectedPathway.levelLabel}
+        title={<>{isPilotUnit ? pilotReviewSummary.title : "Unit " + selectedUnit.sequence} <em>{isPilotUnit ? "pilot preview." : "planning record."}</em></>}
+        subtitle={isPilotUnit ? pilotReviewSummary.proposedFocus : "This planning slot has no confirmed unit focus yet. Do not infer syllabus coverage from the placeholder."}
+      />
+      <section className="proto-unit-detail-panel">
+        <div className="proto-panel-heading">
+          <div><h2>{isPilotUnit ? "Pilot preview — How writers shape meaning" : selectedUnit.title}</h2><p>{selectedPathway.programmeName} · {selectedPathway.courseName} · {selectedPathway.levelLabel} · Unit {selectedUnit.sequence}</p></div>
+          <span>NOT RELEASED</span>
         </div>
-      ))}
-      <p className="proto-note-bottom">{pilotReviewSummary.releaseNote}</p>
-      <div className="proto-bottom-actions"><Action onClick={() => go("lesson")}>Open learner lesson preview →</Action></div>
-    </section>}
-    {selectedUnit && selectedUnitPlan && <section className="proto-panel proto-unit-readiness proto-pathway-detail-card" aria-label="Selected unit release checklist" aria-live="polite">
-      <div className="proto-panel-heading">
-        <div>
-          <h2>Unit preparation — {selectedUnit.sequence}</h2>
-          <p>{selectedUnit.id} · {selectedUnit.title}</p>
-          <p>{readiness.complete} of {readiness.total} release requirements complete</p>
-        </div>
-        <span>{readiness.releasable ? "READY FOR RELEASE" : "PLANNING ONLY"}</span>
-      </div>
-      <p className="proto-unit-readiness-intro">This is a readiness view, not an editor. Changes are not saved here. A unit becomes releasable only when its curriculum source, objective, lesson, practice, reviews and explicit approval have been recorded.</p>
-      {readinessGates.map((gate, index) => (
-        <div className="proto-skill-row proto-readiness-row" key={gate.id}>
-          <i className={gate.status === "complete" ? "good" : gate.status === "blocked" ? "warm" : ""}>{gate.status === "complete" ? "✓" : String(index + 1).padStart(2, "0")}</i>
-          <div>
-            <b>{gate.title}</b>
-            <small>{gate.detail}</small>
-            <small className="proto-readiness-owner">{gate.owner}</small>
+        {isPilotUnit ? <>
+          <div className="proto-unit-status-grid">
+            <div><small>ACADEMIC CONTENT REVIEW</small><b>Passed for pilot preview v1</b><p>Reviewed {pilotReviewSummary.reviewRecord.reviewedAt}</p></div>
+            <div><small>OFFICIAL CURRICULUM MAPPING</small><b>Unverified</b><p>No edition-specific official objective codes are assigned.</p></div>
+            <div><small>RELEASE APPROVAL</small><b>Outstanding</b><p>This content is not a released syllabus-mapped course.</p></div>
           </div>
-          <span>{gate.status === "complete" ? "Complete" : gate.status === "blocked" ? "Blocked" : "Not started"}</span>
-        </div>
-      ))}
-      <p className="proto-note-bottom">{readiness.releasable ? "This version has all recorded release evidence." : "The pilot lesson and practice IDs are recorded in this static planning fixture, and the academic content review is marked passed. Official guide edition/objective mapping, rights review, accessibility review and explicit release approval remain outstanding; the pilot is not a released syllabus-mapped course."}</p>
-    </section>}
-    </div>
+          <div className="proto-extract">
+            <small>OFFICIAL STARTING POINT · CHECKED {pilotReviewSummary.source.checkedAt}</small>
+            <p><a href={pilotReviewSummary.source.url} target="_blank" rel="noreferrer">{pilotReviewSummary.source.title} ↗</a></p>
+            <p>{pilotReviewSummary.source.scopeNote}</p>
+          </div>
+          <div className="proto-feedback-columns">
+            <div><small>PILOT LEARNING OBJECTIVE</small><p>{pilotReviewSummary.proposedLearningObjective}</p></div>
+            <div><small>CURRICULUM MAPPING</small><p>Unverified. Candidate references are not official objective codes; mapping remains blocked until the applicable guide edition is confirmed.</p></div>
+          </div>
+          <div className="proto-extract">
+            <small>CANDIDATE IB OBJECTIVE REFERENCES · NOT VERIFIED</small>
+            <p>The detailed guide opens through IB curriculum sign-in, and the applicable school-guide edition has not been confirmed.</p>
+            {pilotReviewSummary.candidateObjectiveMappings.map(item => <div className="proto-skill-row proto-readiness-row" key={item.strand}><i>{item.strand}</i><div><b>{item.criterion}</b><small>{item.descriptor}</small><small>{item.rationale}</small></div><span>Candidate</span></div>)}
+            <p><a href={pilotReviewSummary.candidateGuide.url} target="_blank" rel="noreferrer">Open IB-hosted guide reference ↗</a> · <a href={pilotReviewSummary.source.subjectBriefUrl} target="_blank" rel="noreferrer">Open public IB subject brief ↗</a></p>
+          </div>
+          <div className="proto-section-title"><div><h2>Remaining release checks</h2><p>Content review passed; these independent requirements still need evidence.</p></div></div>
+          {pilotReviewSummary.remainingReleaseChecks.map((item, index) => <div className="proto-skill-row proto-readiness-row" key={item}><i className="warm">{String(index + 1).padStart(2, "0")}</i><div><b>{item}</b></div></div>)}
+          <p className="proto-note-bottom">{pilotReviewSummary.releaseNote}</p>
+          <div className="proto-bottom-actions"><Action onClick={() => go("lesson")}>Open learner lesson preview →</Action></div>
+        </> : <>
+          <p className="proto-unit-readiness-intro">This is a planning slot only. Its skill focus, learning objective, applicable syllabus source and objective mapping have not been confirmed.</p>
+          <p className="proto-note-bottom">{selectedUnit.reviewNote}</p>
+        </>}
+        <div className="proto-unit-readiness-summary"><div><small>RELEASE READINESS</small><b>{readiness.complete} of {readiness.total} requirements complete</b></div><span>{readiness.releasable ? "Ready for release" : "Planning only"}</span></div>
+        {readinessGates.map((gate, index) => <div className="proto-skill-row proto-readiness-row" key={gate.id}><i className={gate.status === "complete" ? "good" : gate.status === "blocked" ? "warm" : ""}>{gate.status === "complete" ? "✓" : String(index + 1).padStart(2, "0")}</i><div><b>{gate.title}</b><small>{gate.detail}</small><small className="proto-readiness-owner">{gate.owner}</small></div><span>{gate.status === "complete" ? "Complete" : gate.status === "blocked" ? "Blocked" : "Not started"}</span></div>)}
+      </section>
+      <div className="proto-bottom-actions"><Action secondary onClick={backToLevel}>← Back to {selectedPathway.levelLabel}</Action></div>
+    </>}
   </Shell>;
 }
+
+
 function Questions({ go }: { go: Navigate }) {
   const [search, setSearch] = useState("");
   const [area, setArea] = useState("All skills");

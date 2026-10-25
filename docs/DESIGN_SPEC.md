@@ -1,7 +1,7 @@
 # Criterion Lab — Design Specification
 
-**Version:** 1.0  
-**Status:** Design direction agreed; page specifications prepared for implementation  
+**Version:** 1.1  
+**Status:** Approved design system; curriculum-first navigation implemented in frontend prototype  
 **Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
@@ -17,6 +17,8 @@
 **Version 0.8 change note — 25 October 2026:** Added slim taxonomy bands with a divider and explicit curriculum labels before each Pathways catalogue group (IB MYP, Cambridge Lower Secondary and Cambridge IGCSE). Added a consistent, generous vertical rhythm and distinct surface/accent treatments for unit planning, reviewed pilot preview and release-readiness sections. Typography, approved Palette B tokens and content/release rules remain unchanged.
 
 **Version 1.0 change note — 25 October 2026:** Owner-approved curriculum-first information architecture. The Pathways page is a catalogue only. Curriculum/subject details, a specific year/stage/syllabus plan, and unit-level learning details live in their appropriate contextual destinations. This supersedes the earlier instruction in Section 6 to stack unit-planning, pilot-preview and release-readiness panels after the final Pathways card group. Existing palette, typography and spacing decisions remain unchanged.
+
+**Version 1.1 change note — 25 October 2026:** Implemented the approved curriculum-first flow in the React prototype: Pathways catalogue → curriculum/subject → level → unit detail. The catalogue contains three route cards only and has no default-selected pathway details beneath them. Curriculum and level views show their own contextual choices and status notes; unit detail displays pilot/release metadata and readiness gates only for the selected unit. Breadcrumbs and contextual header text preserve orientation. Navigation uses local component state and is not a production URL/deep-link or persistence implementation. Palette B, typography and curriculum/release status records remain unchanged.
 
 ## 1. Design direction
 
@@ -272,7 +274,7 @@ Keep statuses distinct: academic content review, official curriculum mapping, ri
 - Group content into understandable units and skill objectives on the relevant level/unit destination, not on the general catalogue.
 - Distinguish content available now from content that is planned.
 - Keep the approved taxonomy-band styling and the Pathways-specific spacing refinements on the catalogue; do not move level-specific panels into the catalogue merely to reuse their existing styling.
-- The approved target architecture is not yet implemented simply because it is documented. Before implementation, check the existing pathway data, app navigation and related content/readiness files, preserve accurate status wording, and implement in reviewable steps.
+- The curriculum-first architecture is implemented in the current prototype through four contextual views: catalogue, curriculum/subject, level and unit detail. The catalogue must remain free of selected-pathway plans, pilot previews and readiness checklists. Changes to this hierarchy require explicit review and coordinated updates to both source-of-truth documents.
 
 ### Lesson view
 
