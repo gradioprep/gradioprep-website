@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 0.7  
+**Version:** 0.8  
 **Status:** Design direction agreed; page specifications prepared for implementation  
 **Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -13,6 +13,8 @@
 **Version 0.6 change note — 25 October 2026:** The owner approved Palette B: aubergine, dusty blue, soft lilac and plum charcoal, supported by cool-white and pale blue-grey surfaces. Buttercream is restricted to small accents rather than large backgrounds. The palette is implemented through consistent semantic roles inspired by established EdTech design-system practices; no competitor brand system is copied. Typography, type sizes, font weights, line heights, letter-spacing and layout spacing are unchanged.
 
 **Version 0.7 change note — 25 October 2026:** Added a student-friendly visual system without changing typography: three coherent spacing tiers for within-section relationships, lesson steps and major section breaks; selective plum-charcoal feature bands; visual IB and Cambridge pathway introductions before the pathway cards; more generous, colour-coded lesson stages; and restrained decorative learning motifs. Use illustration-like CSS/SVG elements, clear numbered stages and semantic colours instead of noisy decoration. Keep the approved Palette B tokens unchanged.
+
+**Version 0.8 change note — 25 October 2026:** Added slim taxonomy bands with a divider and explicit curriculum labels before each Pathways catalogue group (IB MYP, Cambridge Lower Secondary and Cambridge IGCSE). Added a consistent, generous vertical rhythm and distinct surface/accent treatments for unit planning, reviewed pilot preview and release-readiness sections. Typography, approved Palette B tokens and content/release rules remain unchanged.
 
 ## 1. Design direction
 
@@ -252,6 +254,8 @@ On login, let a student or guardian understand current learning activity, progre
 Show the curriculum hierarchy rather than flattening all courses into “Grade 6–10.” Keep programme, course, year/stage, subject, syllabus edition, skill objective and task/rubric identifiers separate in the underlying model.
 
 Within each pathway, group content into understandable units and skill objectives. Distinguish content that is available now from items that are planned. Label the first release as a starter pathway, not complete syllabus coverage.
+
+In the Pathways catalogue, place a thin taxonomy band with a visible divider before each programme group. The band must explicitly identify IB MYP, Cambridge Lower Secondary or Cambridge IGCSE, remain visually lighter than the homepage's feature bands, and preserve clear spacing before the group title and cards. After the final card group, present unit planning, reviewed pilot details and release-readiness checks as distinct stacked panels with a consistent generous gap, subtle surface variation and restrained semantic accent borders. Keep these panels in the existing reading order and responsive flow.
 
 ### Lesson view
 

@@ -1,6 +1,6 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 2.0  
+**Version:** 2.1  
 **Last updated:** 25 October 2026  
 **Status:** Frontend prototype; pilot lesson content review passed for preview version 1  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
@@ -30,6 +30,8 @@ Do not silently change approved prices, credit rules, curriculum scope, SLAs or 
 
 
 **v2.0 change note — 25 October 2026:** The owner approved a site-wide visual-composition improvement on top of Palette B. Typography remains locked. The shared design system now specifies three spacing tiers, selective plum-charcoal bands, stronger visual section breaks, grouped IB/Cambridge pathway introductions on the homepage, and colour-coded, more spacious lesson stages with restrained visual motifs for younger learners. See `docs/DESIGN_SPEC.md` v0.7 for implementation rules.
+
+**v2.1 change note — 25 October 2026:** Refined the Pathways catalogue with slim taxonomy bands and dividers for IB MYP, Cambridge Lower Secondary and Cambridge IGCSE. Added a consistent generous gap and differentiated panel treatments for unit planning, reviewed pilot preview and release-readiness details. Palette B and typography remain locked; content mapping and release status are unchanged.
 
 ### Current implementation state
 
