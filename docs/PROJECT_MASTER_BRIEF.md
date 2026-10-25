@@ -1,6 +1,6 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 2.5  
+**Version:** 2.6  
 **Last updated:** 25 October 2026  
 **Status:** Frontend prototype; pilot lesson content review passed for preview version 1  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
@@ -38,6 +38,8 @@ Do not silently change approved prices, credit rules, curriculum scope, SLAs or 
 **v2.4 change note — 25 October 2026:** Implemented the approved curriculum-first Pathways navigation in the React prototype. The catalogue now contains three programme/subject route cards only; curriculum destinations list planned levels, level destinations list that level's unit slots, and unit detail views show the appropriate planning/pilot metadata and readiness checks. Added contextual breadcrumbs and curriculum-aware header text. No curriculum mapping, review outcome, release status, palette or typography was changed. The route transitions use temporary client-side state and do not create production deep links or persistence.
 
 **v2.5 change note — 25 October 2026:** Added pathname-based URL navigation on `feature/pathway-url-navigation`. Pathways catalogue, curriculum/subject destinations, supported programme-level destinations, unit details and the one pilot lesson have canonical direct-link routes. The address bar is the navigation source of truth; in-app navigation records browser history and back/forward re-resolves the current pathname. Breadcrumbs retain course/level/unit context. Routes are resolved against existing course and pathway data; provisional IGCSE grade-equivalent bands and unverified syllabus editions do not get standalone level/syllabus routes. This change does not alter curriculum content, objective mapping, academic-review, rights, accessibility or release statuses. Build checks, pull-request review and live deployment verification are separate and must be recorded from their actual results.
+
+**v2.6 change note — 25 October 2026:** Added automated Chromium browser checks for the URL-based curriculum navigation. The tests load direct catalogue, curriculum, supported level, unit and pilot-lesson URLs; walk through the route sequence; exercise browser Back/Forward; and confirm provisional IGCSE grade-equivalent routes remain unavailable. The GitHub Actions workflow builds the app, installs Chromium, then runs these checks against the locally served Wrangler assets. These checks are not evidence that this PR is merged or live production is updated; production verification remains separate. No curriculum content, official mapping, academic-review, rights, accessibility or release statuses were changed.
 
 ### Approved information architecture — binding product decision
 
