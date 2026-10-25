@@ -1259,3 +1259,67 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   .proto-pilot-practice,.proto-pilot-exit { padding: 20px 15px; }
   .proto-pilot-question { padding: 16px; }
 }
+
+
+/* Pathway catalogue taxonomy bands and a clear, consistent planning-section rhythm. */
+.proto-pathway-catalogue-group { position: relative; }
+.proto-pathway-catalogue-group + .proto-pathway-catalogue-group { margin-top: var(--section-gap-generous); }
+.proto-pathway-taxonomy {
+  display: grid; grid-template-columns: 32px auto minmax(0,1fr) 42px; align-items: center; gap: 12px;
+  min-height: 48px; margin-bottom: var(--section-gap-compact); padding: 8px 14px;
+  border-top: 1px solid #D8D1E0; border-bottom: 1px solid #D8D1E0;
+  background: linear-gradient(90deg,rgba(233,226,240,.54),rgba(247,248,252,.7) 55%,rgba(220,230,241,.55));
+  color: var(--aubergine);
+}
+.proto-pathway-taxonomy > span {
+  display: grid; place-items: center; width: 28px; height: 28px; border-radius: 7px 3px 7px 3px;
+  background: var(--lilac); color: var(--aubergine); font: 700 12px "DM Mono",monospace;
+}
+.proto-pathway-taxonomy > small { color: var(--text-secondary); font: 10.5px "DM Mono",monospace; letter-spacing: .08em; white-space: nowrap; }
+.proto-pathway-taxonomy > strong { justify-self: end; font: 700 14px "Manrope",sans-serif; letter-spacing: -.02em; text-align: right; }
+.proto-pathway-taxonomy > i { justify-self: end; width: 32px; height: 3px; border-radius: 3px; background: var(--dusty-blue); }
+.taxonomy-lower-secondary .proto-pathway-taxonomy { border-top-color: rgba(82,115,145,.55); background: linear-gradient(90deg,rgba(220,230,241,.78),rgba(247,248,252,.8) 70%); }
+.taxonomy-lower-secondary .proto-pathway-taxonomy > span { background: var(--pale-blue); color: var(--blue-dark); }
+.taxonomy-lower-secondary .proto-pathway-taxonomy > i { background: var(--dusty-blue); }
+.taxonomy-igcse .proto-pathway-taxonomy { border-top-color: rgba(72,38,79,.35); background: linear-gradient(90deg,rgba(233,226,240,.72),rgba(247,248,252,.84) 70%); }
+.taxonomy-igcse .proto-pathway-taxonomy > i { background: var(--aubergine); }
+.proto-pathway-catalogue-group .proto-section-title { margin-bottom: var(--section-gap-compact); }
+.proto-pathway-detail-stack {
+  display: flex; flex-direction: column; gap: var(--section-gap-generous);
+  margin-top: var(--section-gap-generous); padding-top: var(--section-gap-standard);
+  border-top: 1px solid #D8D1E0; position: relative;
+}
+.proto-pathway-detail-stack:before {
+  content: "SELECTED PATHWAY · UNIT PLANNING"; position: absolute; left: 0; top: 0; transform: translateY(-50%);
+  padding: 0 12px 0 0; background: var(--paper); color: var(--text-secondary);
+  font: 10.5px "DM Mono",monospace; letter-spacing: .09em;
+}
+.proto-pathway-detail-stack > section { margin: 0; min-width: 0; }
+.proto-pathway-detail-stack > .proto-panel {
+  padding: clamp(22px,3vw,34px); border: 1px solid #D8D1E0; border-radius: 12px;
+  box-shadow: var(--visual-shadow); background: #fff;
+}
+.proto-pathway-detail-stack > .proto-unit-planning-panel {
+  border-top: 5px solid var(--aubergine); background: linear-gradient(135deg,#fff 0%,#F7F8FC 100%);
+}
+.proto-pathway-detail-stack > .proto-unit-draft {
+  border-top: 5px solid var(--dusty-blue); background: linear-gradient(135deg,#fff 0%,#F7F8FC 72%,#E9E2F0 100%);
+}
+.proto-pathway-detail-stack > .proto-unit-readiness {
+  border-top: 5px solid var(--plum-charcoal); background: #F7F8FC;
+}
+.proto-pathway-detail-stack .proto-panel-heading { margin-bottom: var(--section-gap-compact); }
+.proto-pathway-detail-stack .proto-section-title { margin-top: var(--section-gap-standard); }
+.proto-pathway-detail-stack .proto-extract { margin-top: var(--section-gap-compact); padding: 18px 20px; border: 1px solid rgba(82,115,145,.22); border-radius: 8px; background: rgba(255,255,255,.78); }
+.proto-pathway-detail-stack .proto-feedback-columns { gap: 16px; margin-top: var(--section-gap-compact); }
+.proto-pathway-detail-stack .proto-skill-row { margin-top: 10px; padding-block: 15px; border-radius: 7px; }
+.proto-pathway-detail-stack .proto-bottom-actions { margin-top: var(--section-gap-standard); }
+@media (max-width: 620px) {
+  .proto-pathway-taxonomy { grid-template-columns: 30px minmax(0,1fr) 28px; gap: 9px; padding: 8px 10px; }
+  .proto-pathway-taxonomy > small { grid-column: 2; grid-row: 1; align-self: end; white-space: normal; }
+  .proto-pathway-taxonomy > strong { grid-column: 2; grid-row: 2; justify-self: start; text-align: left; }
+  .proto-pathway-taxonomy > i { grid-column: 3; grid-row: 1 / span 2; }
+  .proto-pathway-taxonomy > span { grid-column: 1; grid-row: 1 / span 2; }
+  .proto-pathway-detail-stack { padding-top: var(--section-gap-standard); }
+  .proto-pathway-detail-stack > .proto-panel { padding: 21px 16px; }
+}
