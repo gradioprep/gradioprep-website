@@ -1,6 +1,6 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 2.1  
+**Version:** 2.2  
 **Last updated:** 25 October 2026  
 **Status:** Frontend prototype; pilot lesson content review passed for preview version 1  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
@@ -351,3 +351,5 @@ The assistant must not invent these decisions or silently replace them with a ge
 - Vercel fair use/commercial use: https://vercel.com/docs/limits/fair-use-guidelines
 - OpenAI transfer conversations between accounts: https://help.openai.com/en/articles/9106926-transferring-conversations-from-1-chatgpt-account-to-another-chatgpt-account
 - GitHub secret scanning: https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning
+
+**v2.2 change note — 25 October 2026:** The Pathways page received a spacing correction after visual review: reduce inter-group and planning-panel gaps by roughly half and tighten taxonomy-band-to-card spacing so each taxonomy clearly labels the cards immediately below. No typography or palette changes; the shared site-wide spacing system remains intact.
