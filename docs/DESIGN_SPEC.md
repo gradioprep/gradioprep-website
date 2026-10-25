@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 0.5  
+**Version:** 0.6  
 **Status:** Design direction agreed; page specifications prepared for implementation  
 **Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -10,7 +10,7 @@
 
 **Revision policy:** Approved or reviewed screens, interactions, tokens and design documentation can be changed later. Record substantive changes in version control, update this specification when it is affected, and re-review the impact before release. The locked fonts, typography, palette and text-colour rules remain in force unless a specific change is explicitly approved.
 
-**Version 0.5 change note — 25 October 2026:** The owner replaced the previously approved peach/terracotta/green direction with a balanced aubergine, dusty-blue, buttercream, soft-lilac and plum-charcoal system. The semantic roles now distinguish questions, student responses, analysis, model answers, features, positive feedback and improvement guidance. Typography, type sizes, font weights, line heights, letter-spacing and layout spacing are unchanged.
+**Version 0.6 change note — 25 October 2026:** The owner approved Palette B: aubergine, dusty blue, soft lilac and plum charcoal, supported by cool-white and pale blue-grey surfaces. Buttercream is restricted to small accents rather than large backgrounds. The palette is implemented through consistent semantic roles inspired by established EdTech design-system practices; no competitor brand system is copied. Typography, type sizes, font weights, line heights, letter-spacing and layout spacing are unchanged.
 
 ## 1. Design direction
 
@@ -43,22 +43,22 @@ Reference URLs:
 
 | Token | Hex | Use |
 |---|---|---|
-| Buttercream paper | `#F8F1DE` | Main page background; warm and readable |
-| Warm white surface | `#FFFCF6` | Cards, reading areas and uncluttered surfaces |
-| Aubergine | `#4A294F` | Brand emphasis, primary actions, key heading emphasis and prominent links |
-| Deep aubergine | `#38203D` | Hover/focus treatment for primary actions |
-| Dusty blue | `#5F7E9B` | Interactive features, selected controls and visual wayfinding |
+| Cool white | `#F7F8FC` | Default page canvas and large reading surfaces |
+| White | `#FFFFFF` | Cards, forms and focused reading areas |
+| Aubergine | `#48264F` | Brand identity, primary actions, key heading emphasis and prominent links |
+| Deep aubergine | `#351D3B` | Hover/focus treatment for primary actions and selected dark sections |
+| Dusty blue | `#587C9D` | Secondary brand colour, interactive features, selected controls and visual wayfinding |
 | Deep blue | `#36556F` | Positive feedback and student-response labels; pair with explicit wording/icons |
-| Soft lilac | `#EAE2F0` | Questions, model-answer panels and gentle section emphasis |
-| Pale blue | `#E4EDF5` | Student-response surfaces and supporting learning panels |
+| Soft lilac | `#E9E2F0` | Questions, model-answer panels and selected section emphasis |
+| Pale blue-grey | `#DCE6F1` | Student-response surfaces and supporting learning panels |
 | Plum charcoal | `#302B35` | Dark hero/closing panels, preview banner and high-contrast inverse-text areas |
 | Muted amber | `#80500F` | Constructive next steps and improvement feedback; never a red/error shorthand |
-| Pale amber | `#F5E8C9` | Background for improvement feedback when needed |
+| Buttercream accent | `#F4E9D8` | Tiny decorative accents only; not a page or large section background |
 | Primary text | `#28242D` | Main text and high-emphasis controls |
 | Supporting text | `#514B57` | Supporting paragraphs, descriptions and labels on light backgrounds |
-| Border | `#D8CDDD` | Soft lilac-toned separators and understated card boundaries |
+| Border | `#D8D1E0` | Soft lilac-toned separators and understated card boundaries |
 
-Use the palette with restraint. The dominant impression should come from buttercream paper and warm-white cards, with clear alternation between soft-lilac and pale-blue learning surfaces. Use aubergine for brand identity and primary actions, dusty blue for interactive features, and plum charcoal for occasional dark panels. Use deep blue for strengths/positive feedback and muted amber for constructive next steps. Avoid using either as generic decoration; status must never be communicated by colour alone, so pair every status with a clear label and/or icon. Keep text and background contrast at WCAG 2.2 AA levels.
+Use an established, role-based EdTech design-system approach: a small set of brand anchors, semantic surface/foreground roles, consistent interaction states and contrast checks. The dominant impression should come from cool white and white reading surfaces, with measured alternation between soft lilac and pale blue-grey learning surfaces. Use aubergine for brand identity and primary actions, dusty blue for secondary emphasis and interactive features, and plum charcoal for selected dark panels rather than making every section dark. Keep buttercream to tiny accents. Use deep blue for strengths/positive feedback and muted amber for constructive next steps. Avoid using either as generic decoration; status must never be communicated by colour alone, so pair every status with a clear label and/or icon. Keep text/background contrast at WCAG 2.2 AA levels and validate actual foreground/background pairs.
 
 
 
@@ -76,8 +76,8 @@ The following meanings are global and must remain consistent on all screens:
 | Interactive features and tools | Dusty-blue accents and selected-state treatments | Shows where a learner can act or interact |
 | Positive feedback / strengths | Deep-blue label or icon plus explicit wording such as “What you did well” | Recognises a specific demonstrated strength; blue is not a substitute for evidence |
 | Improvement feedback / next steps | Muted-amber label or icon plus explicit wording such as “What to improve next” | Frames a concrete next action without red/green judgement coding |
-| General comments | Supporting text colour on a warm-white or buttercream surface | Keeps explanatory feedback readable and neutral |
-| Section backgrounds | Alternate buttercream, warm white, soft lilac, pale blue and occasional plum-charcoal sections | Creates visible section breaks without changing the meaning of semantic feedback colours |
+| General comments | Supporting text colour on white or cool-white surfaces | Keeps explanatory feedback readable and neutral |
+| Section backgrounds | Alternate cool white, white, soft lilac, pale blue-grey and occasional plum-charcoal sections | Creates visible section breaks without changing the meaning of semantic feedback colours |
 
 These meanings apply to existing and future pages, including the dashboard, lesson/practice, question bank and assessment feedback. Never rely on colour alone: keep visible text labels, adequate contrast and accessible focus states. This palette update must not change typography, spacing, page content, feature behaviour or section-break composition; section-break and feature-guidance improvements will be discussed as a separate next step.
 
@@ -122,12 +122,12 @@ Use the existing utility classes `.type-page-title`, `.type-section-title`, `.ty
 
 | Token | Value | Rule |
 |---|---|---|
-| `--text-primary` | `#242723` | Primary headings, questions and body text on light surfaces |
-| `--text-secondary` | `#57514D` | Supporting paragraphs, descriptions, labels and other muted warm-neutral text on light surfaces |
-| `--text-inverse` | `#FFF7F2` | Text on dark green surfaces, where appropriate |
-| `--ink` / `--muted` | Existing aliases | Keep components compatible; `--ink` is `#242723` and `--muted` is `#57514D` |
+| `--text-primary` | `#28242D` | Primary headings, questions and body text on light surfaces |
+| `--text-secondary` | `#514B57` | Supporting paragraphs, descriptions, labels and other muted warm-neutral text on light surfaces |
+| `--text-inverse` | `#F7F8FC` | Text on dark green surfaces, where appropriate |
+| `--ink` / `--muted` | Existing aliases | Keep components compatible; `--ink` is `#28242D` and `--muted` is `#514B57` |
 
-An earlier text-colour refinement darkened supporting text for legibility. The approved palette update in version 0.4 also warmed the page/card/sidebar surfaces and muted text hues. For future pages, use the semantic text tokens rather than inventing pale text colours or adding one-off grey hex values. Terracotta, forest green, lime and other approved accent colours remain for their defined roles, not as generic paragraph text.
+An earlier text-colour refinement darkened supporting text for legibility. The palette updates use cool-white reading surfaces, soft-lilac and pale blue-grey panels, and role-based text hues. For future pages, use the semantic text tokens rather than inventing pale text colours or adding one-off grey hex values. Aubergine, dusty blue, lilac, pale blue-grey and muted amber remain limited to their defined roles, not as arbitrary paragraph text.
 
 **One-time changes already applied — do not repeat them**
 
