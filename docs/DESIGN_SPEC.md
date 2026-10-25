@@ -52,7 +52,7 @@ Reference URLs:
 | Soft lilac | `#EAE2F0` | Questions, model-answer panels and gentle section emphasis |
 | Pale blue | `#E4EDF5` | Student-response surfaces and supporting learning panels |
 | Plum charcoal | `#302B35` | Dark hero/closing panels, preview banner and high-contrast inverse-text areas |
-| Muted amber | `#98621B` | Constructive next steps and improvement feedback; never a red/error shorthand |
+| Muted amber | `#80500F` | Constructive next steps and improvement feedback; never a red/error shorthand |
 | Pale amber | `#F5E8C9` | Background for improvement feedback when needed |
 | Primary text | `#28242D` | Main text and high-emphasis controls |
 | Supporting text | `#514B57` | Supporting paragraphs, descriptions and labels on light backgrounds |
