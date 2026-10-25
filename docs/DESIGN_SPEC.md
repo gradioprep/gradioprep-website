@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 0.6  
+**Version:** 0.7  
 **Status:** Design direction agreed; page specifications prepared for implementation  
 **Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -11,6 +11,8 @@
 **Revision policy:** Approved or reviewed screens, interactions, tokens and design documentation can be changed later. Record substantive changes in version control, update this specification when it is affected, and re-review the impact before release. The locked fonts, typography, palette and text-colour rules remain in force unless a specific change is explicitly approved.
 
 **Version 0.6 change note — 25 October 2026:** The owner approved Palette B: aubergine, dusty blue, soft lilac and plum charcoal, supported by cool-white and pale blue-grey surfaces. Buttercream is restricted to small accents rather than large backgrounds. The palette is implemented through consistent semantic roles inspired by established EdTech design-system practices; no competitor brand system is copied. Typography, type sizes, font weights, line heights, letter-spacing and layout spacing are unchanged.
+
+**Version 0.7 change note — 25 October 2026:** Added a student-friendly visual system without changing typography: three coherent spacing tiers for within-section relationships, lesson steps and major section breaks; selective plum-charcoal feature bands; visual IB and Cambridge pathway introductions before the pathway cards; more generous, colour-coded lesson stages; and restrained decorative learning motifs. Use illustration-like CSS/SVG elements, clear numbered stages and semantic colours instead of noisy decoration. Keep the approved Palette B tokens unchanged.
 
 ## 1. Design direction
 
