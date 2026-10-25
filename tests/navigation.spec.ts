@@ -65,7 +65,7 @@ test.describe("curriculum pathway URLs", () => {
     await page.goForward();
     await expect(page).toHaveURL(new RegExp(`${ibUnitOne}$`));
 
-    await page.getByRole("button", { name: "Year 1" }).click();
+    await page.getByRole("button", { name: "Year 1", exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${ibYearOne}$`));
     await expect(page.getByRole("heading", { name: /Year 1 learning plan/i })).toBeVisible();
   });
