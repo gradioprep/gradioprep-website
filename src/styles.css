@@ -1323,3 +1323,22 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   .proto-pathway-detail-stack { padding-top: var(--section-gap-standard); }
   .proto-pathway-detail-stack > .proto-panel { padding: 21px 16px; }
 }
+
+
+/* Pathways-only spacing refinement: compact group transitions, taxonomy anchored near its cards. */
+.proto-pathway-catalogue-group + .proto-pathway-catalogue-group { margin-top: calc(var(--section-gap-generous) / 2); }
+.proto-pathway-taxonomy { margin-bottom: 12px; }
+.proto-pathway-catalogue-group .proto-section-title { margin-top: 0; margin-bottom: 12px; }
+.proto-pathway-detail-stack {
+  gap: calc(var(--section-gap-generous) / 2);
+  margin-top: calc(var(--section-gap-generous) / 2);
+  padding-top: calc(var(--section-gap-standard) / 2);
+}
+.proto-pathway-detail-stack .proto-section-title { margin-top: calc(var(--section-gap-standard) / 2); }
+.proto-pathway-detail-stack .proto-panel-heading { margin-bottom: 16px; }
+.proto-pathway-detail-stack .proto-bottom-actions { margin-top: calc(var(--section-gap-standard) / 2); }
+@media (max-width: 620px) {
+  .proto-pathway-catalogue-group + .proto-pathway-catalogue-group { margin-top: calc(var(--section-gap-generous) / 2); }
+  .proto-pathway-taxonomy { margin-bottom: 10px; }
+  .proto-pathway-detail-stack { gap: calc(var(--section-gap-generous) / 2); margin-top: calc(var(--section-gap-generous) / 2); padding-top: calc(var(--section-gap-standard) / 2); }
+}

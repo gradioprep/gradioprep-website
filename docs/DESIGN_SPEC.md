@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 0.8  
+**Version:** 0.9  
 **Status:** Design direction agreed; page specifications prepared for implementation  
 **Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -388,3 +388,6 @@ The design can be considered ready for functional implementation when:
 - Mobile, keyboard and accessibility checks are documented.
 - Demonstration data is clearly labelled and cannot be mistaken for live student data.
 - No unapproved business, syllabus, privacy or pricing decision has been introduced.
+
+
+**Version 0.9 change note — 25 October 2026:** Tightened vertical spacing on the Pathways page by approximately half for transitions between curriculum groups and the selected-pathway planning panels. Taxonomy bands now sit close to their group headings and cards, rather than being visually centred between adjacent content blocks. Keep this spacing adjustment scoped to Pathways; preserve the shared site-wide spacing system and existing typography/palette.
