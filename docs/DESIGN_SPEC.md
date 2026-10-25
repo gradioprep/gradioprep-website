@@ -62,6 +62,12 @@ Use an established, role-based EdTech design-system approach: a small set of bra
 
 
 
+
+
+**Design-system rationale:** This is an original GradiPrep palette using common, proven EdTech interface principles—not a copy of another company's branding. Khan Academy's published Wonder Blocks work describes semantic colour tokens organised by role and intensity, tested against contrast requirements; Coursera's brand guidance emphasises a consistent blue, black and white palette. GradiPrep applies the transferable principles of role-based colour, restrained accents, readable light surfaces and tested contrast to its own aubergine/blue/lilac identity.
+
+References: [Khan Academy — rebuilding its colour system](https://blog.khanacademy.org/how-we-rebuilt-khan-academys-color-system-from-the-ground-up/); [Coursera — brand guide](https://about.coursera.org/brand-guide/BrandGuidelines/).
+
 ### Semantic colour coding across every learning feature
 
 The following meanings are global and must remain consistent on all screens:
@@ -123,8 +129,8 @@ Use the existing utility classes `.type-page-title`, `.type-section-title`, `.ty
 | Token | Value | Rule |
 |---|---|---|
 | `--text-primary` | `#28242D` | Primary headings, questions and body text on light surfaces |
-| `--text-secondary` | `#514B57` | Supporting paragraphs, descriptions, labels and other muted warm-neutral text on light surfaces |
-| `--text-inverse` | `#F7F8FC` | Text on dark green surfaces, where appropriate |
+| `--text-secondary` | `#514B57` | Supporting paragraphs, descriptions, labels and other muted neutral text on light surfaces |
+| `--text-inverse` | `#F7F8FC` | Text on dark aubergine or plum-charcoal surfaces |
 | `--ink` / `--muted` | Existing aliases | Keep components compatible; `--ink` is `#28242D` and `--muted` is `#514B57` |
 
 An earlier text-colour refinement darkened supporting text for legibility. The palette updates use cool-white reading surfaces, soft-lilac and pale blue-grey panels, and role-based text hues. For future pages, use the semantic text tokens rather than inventing pale text colours or adding one-off grey hex values. Aubergine, dusty blue, lilac, pale blue-grey and muted amber remain limited to their defined roles, not as arbitrary paragraph text.
