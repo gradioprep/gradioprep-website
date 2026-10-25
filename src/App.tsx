@@ -34,7 +34,16 @@ function Home({ go }: { go: Navigate }) {
     <main>
       <section className="proto-hero"><div className="proto-container proto-hero-grid"><div><Label>LEARNING, WITH DIRECTION</Label><h1>Make your next step a <em>smarter one.</em></h1><p className="proto-lead">A more considered way to learn English across IB MYP and Cambridge pathways. Practise with purpose, understand your gaps and build on what you know.</p><div className="proto-actions"><Action onClick={() => go("questions")}>Explore the question bank <span>→</span></Action><button className="proto-inline" type="button" onClick={() => document.getElementById("proto-approach")?.scrollIntoView({ behavior: "smooth" })}>Our approach ↘</button></div><div className="proto-proof"><span>✳</span><div><b>Learning that moves you forward.</b><small>Clear objectives. Useful practice. Feedback with a purpose.</small></div></div></div>
         <div className="proto-hero-art"><div className="proto-orbit one" /><div className="proto-orbit two" /><section className="proto-journey"><div className="proto-overline"><span>YOUR LEARNING JOURNEY</span><span>01 — 03</span></div><div className="proto-journey-title"><span>↗</span><div><small>A ROUTE THAT MAKES SENSE</small><h2>Progress, in practice.</h2></div></div><div className="proto-journey-row"><span>01</span><div><b>Understand the skill</b><small>Know what you're learning and why.</small></div><i className="done">✓</i></div><div className="proto-journey-row"><span>02</span><div><b>Practise with purpose</b><small>Try questions connected to that skill.</small></div><i>02</i></div><div className="proto-journey-row"><span>03</span><div><b>Choose your next step</b><small>Use evidence and feedback to improve.</small></div><i>03</i></div><div className="proto-journey-footer">✳ &nbsp; Designed for progress, not guesswork.</div></section><div className="proto-floating-note"><span>↗</span><div><b>Small steps.</b><small>Meaningful progress.</small></div></div></div></div><div className="proto-ribbon"><span>LEARN WITH PURPOSE</span><i /><span>GROW WITH EVIDENCE</span><i /><span>KEEP MOVING FORWARD</span></div></section>
-      <section className="proto-pathways proto-section" id="proto-pathways"><div className="proto-container"><div className="proto-section-heading"><div><Label>START WITH THE RIGHT PATH</Label><h2>The right route starts<br />with <em>your world.</em></h2></div><p>Different programmes have different expectations. Start with the pathway that matches your curriculum—not a one-size-fits-all course.</p></div><div className="proto-pathway-grid"><article><div><span>01</span><b>IB MYP</b></div><h3>Language & Literature</h3><small>Years 1–5</small><p>Build confidence in reading, interpretation and purposeful writing through a clearly mapped learning route.</p><button type="button" onClick={() => go("pathways")}>Explore pathways <span>↗</span></button></article><article><div><span>02</span><b>CAMBRIDGE</b></div><h3>Lower Secondary English</h3><small>Stages 7–9</small><p>Strengthen core English skills with practice organised around the learning objectives that matter.</p><button type="button" onClick={() => go("pathways")}>Explore pathways <span>↗</span></button></article><article><div><span>03</span><b>CAMBRIDGE IGCSE</b></div><h3>First Language English</h3><small>Grade 9–10 equivalent pathways</small><p>Work towards the relevant syllabus through purposeful practice and carefully checked mapping.</p><button type="button" onClick={() => go("pathways")}>Explore pathways <span>↗</span></button></article></div><p className="proto-fineprint">Stage 1 is a starter pathway, not exhaustive syllabus coverage. Curriculum mapping must be verified before content is published.</p></div></section>
+      <section className="proto-pathways proto-section" id="proto-pathways"><div className="proto-container"><div className="proto-section-heading"><div><Label>START WITH THE RIGHT PATH</Label><h2>The right route starts<br />with <em>your world.</em></h2></div><p>Different programmes have different expectations. Start with the pathway that matches your curriculum—not a one-size-fits-all course.</p></div><div className="proto-pathway-groups">
+        <section className="proto-pathway-group ib-pathway-group">
+          <div className="proto-pathway-band"><div className="proto-pathway-symbol" aria-hidden="true"><span>IB</span><i>✳</i></div><div><small>PATHWAY 01 · INTERNATIONAL BACCALAUREATE</small><h3>IB Middle Years Programme</h3><p>Explore Language & Literature through inquiry, interpretation and thoughtful communication.</p></div><span className="proto-pathway-band-arrow" aria-hidden="true">↗</span></div>
+          <div className="proto-pathway-grid ib-grid"><article><div><span>01</span><b>IB MYP</b></div><h3>Language & Literature</h3><small>Years 1–5</small><p>Build confidence in reading, interpretation and purposeful writing through a clearly mapped learning route.</p><button type="button" onClick={() => go("pathways")}>Explore IB pathways <span>↗</span></button></article></div>
+        </section>
+        <section className="proto-pathway-group cambridge-pathway-group">
+          <div className="proto-pathway-band"><div className="proto-pathway-symbol" aria-hidden="true"><span>C</span><i>✦</i></div><div><small>PATHWAY 02 · CAMBRIDGE INTERNATIONAL</small><h3>Cambridge English</h3><p>Choose the stage that fits your learning journey, from core skills to exam preparation.</p></div><span className="proto-pathway-band-arrow" aria-hidden="true">↗</span></div>
+          <div className="proto-pathway-grid cambridge-grid"><article><div><span>02</span><b>CAMBRIDGE</b></div><h3>Lower Secondary English</h3><small>Stages 7–9</small><p>Strengthen core English skills with practice organised around the learning objectives that matter.</p><button type="button" onClick={() => go("pathways")}>Explore Cambridge <span>↗</span></button></article><article><div><span>03</span><b>CAMBRIDGE IGCSE</b></div><h3>First Language English</h3><small>Grade 9–10 equivalent pathways</small><p>Work towards the relevant syllabus through purposeful practice and carefully checked mapping.</p><button type="button" onClick={() => go("pathways")}>Explore Cambridge <span>↗</span></button></article></div>
+        </section>
+      </div><p className="proto-fineprint">Stage 1 is a starter pathway, not exhaustive syllabus coverage. Curriculum mapping must be verified before content is published.</p></div></section>
       <section className="proto-approach proto-section" id="proto-approach"><div className="proto-container proto-approach-grid"><div><Label>WHY THIS PLATFORM</Label><h2>More than a library.<br /><em>A clearer next step.</em></h2><p>Finding notes is only the beginning. The aim is to connect the syllabus, a specific skill, deliberate practice and useful feedback in one learning space.</p><Action secondary onClick={() => go("lesson")}>Preview a lesson →</Action></div><div className="proto-principles"><article><span>01</span><i>⌖</i><div><b>Find your bearings</b><p>Start with your programme, stage and the skill you want to build.</p></div></article><article><span>02</span><i>↗</i><div><b>Practise with purpose</b><p>Use focused questions, annotated examples and clear explanations.</p></div></article><article><span>03</span><i>✳</i><div><b>Learn from evidence</b><p>Use saved attempts and meaningful feedback to decide what comes next.</p></div></article></div></div></section>
       <section className="proto-release" id="proto-first"><div className="proto-container proto-release-panel"><div><Label>THE FIRST RELEASE</Label><h2>English first.<br /><em>Built thoughtfully.</em></h2></div><div><p>The initial build focuses on English pathways, verified curriculum mapping, purposeful practice and a clear foundation for learner progress. Mathematics is planned for a later phase.</p><small>This preview contains sample content only. Real accounts, learning tools and connected progress tracking are still in development.</small><Action onClick={() => go("dashboard")}>Explore student preview ↗</Action></div></div></section>
     </main>
@@ -96,15 +105,22 @@ function Lesson({ go }: { go: Navigate }) {
       {lesson.successCriteria.map((item,index) => <div className="proto-skill-row proto-readiness-row" key={item}><i>{String(index+1).padStart(2,"0")}</i><div><b>{item}</b></div></div>)}
     </section>
 
+    <div className="proto-learning-route" aria-label="Lesson steps">
+      <div className="route-read"><span>01</span><i aria-hidden="true">▤</i><b>Read the passage</b><small>Notice details</small></div>
+      <div className="route-connector" aria-hidden="true">→</div>
+      <div className="route-idea"><span>02</span><i aria-hidden="true">✦</i><b>The idea</b><small>Spot the pattern</small></div>
+      <div className="route-connector" aria-hidden="true">→</div>
+      <div className="route-move"><span>03</span><i aria-hidden="true">↗</i><b>Learn the move</b><small>Try it yourself</small></div>
+    </div>
     <div className="proto-lesson-grid proto-pilot-learner-grid">
       <div>
-        <section className="proto-panel proto-explanation">
+        <section className="proto-panel proto-explanation proto-learning-stage stage-read">
           <Label>01 · READ THE PASSAGE</Label>
           <h2>{lesson.passage.label}</h2>
           <blockquote className="proto-pilot-passage">{lesson.passage.text}</blockquote>
           <p className="proto-unit-readiness-intro">{lesson.passage.rightsNote}</p>
         </section>
-        <section className="proto-panel proto-explanation">
+        <section className="proto-panel proto-explanation proto-learning-stage stage-idea">
           <Label>02 · THE IDEA</Label>
           <h2>{lesson.keyIdea.label}</h2>
           <div className="proto-pilot-evidence-chain">
@@ -113,9 +129,9 @@ function Lesson({ go }: { go: Navigate }) {
           <p>{lesson.keyIdea.explanation}</p>
         </section>
 
-        <section className="proto-panel proto-pilot-learning-steps">
+        <section className="proto-panel proto-pilot-learning-steps proto-learning-stage stage-move">
           <Label>03 · LEARN THE MOVE</Label>
-          <h2>Work through the sequence</h2>
+          <h2>Work through the sequence</h2><p className="proto-stage-helper">Three small moves. Take them one at a time.</p>
           {lesson.sections.map(section => <article className="proto-pilot-section" key={section.id}>
             <h3>{section.heading}</h3>
             <p className="proto-pilot-purpose">{section.purpose}</p>

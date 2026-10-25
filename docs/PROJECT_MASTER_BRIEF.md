@@ -1,6 +1,6 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 1.9  
+**Version:** 2.0  
 **Last updated:** 25 October 2026  
 **Status:** Frontend prototype; pilot lesson content review passed for preview version 1  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
@@ -29,7 +29,7 @@ Do not silently change approved prices, credit rules, curriculum scope, SLAs or 
 **No feature, design, policy, content item or document becomes permanently frozen merely because it has been reviewed or approved. Any and all approved/reviewed features and documentation may be updated or changed at a later date.** Keep changes in Git history; record the affected version, date and reason; update dependent documentation; and re-review the parts affected by a material change. A later version does not inherit the previous version's approval automatically. Changes to protected business rules or design-system tokens still follow their existing explicit-approval requirements. This is a change-control rule, not permission to silently override an approval.
 
 
-**v1.9 change note — 25 October 2026:** The owner approved Palette B: aubergine, dusty blue, soft lilac and plum charcoal, with cool-white and pale blue-grey as the main light surfaces. Buttercream is limited to small accents and is no longer used as a large background. The semantic learning roles remain consistent across questions, student responses, analysis, model answers, interactive features, strengths and improvement feedback. Typography, spacing and feature behaviour are unchanged. See `docs/DESIGN_SPEC.md` v0.6 for exact tokens and future-page rules.
+**v2.0 change note — 25 October 2026:** The owner approved a site-wide visual-composition improvement on top of Palette B. Typography remains locked. The shared design system now specifies three spacing tiers, selective plum-charcoal bands, stronger visual section breaks, grouped IB/Cambridge pathway introductions on the homepage, and colour-coded, more spacious lesson stages with restrained visual motifs for younger learners. See `docs/DESIGN_SPEC.md` v0.7 for implementation rules.
 
 ### Current implementation state
 
