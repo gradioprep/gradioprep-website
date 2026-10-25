@@ -189,6 +189,37 @@ function PageIntro({ eyebrow, title, subtitle }: { eyebrow: string; title: React
 }
 function InfoNote({ children }: { children: ReactNode }) { return <div className="proto-info-note"><span>i</span><p>{children}</p></div>; }
 
+type StepNavigationDestination =
+  | { label: string; path: string }
+  | { label: string; unavailableReason: string };
+
+function PathwayStepNavigation({
+  previous,
+  next,
+  navigatePath,
+}: {
+  previous: { label: string; path: string };
+  next: StepNavigationDestination;
+  navigatePath: NavigatePath;
+}) {
+  return <nav className="proto-bottom-actions proto-pathway-navigation" aria-label="Pathway step navigation">
+    <button type="button" className="proto-action secondary" onClick={() => navigatePath(previous.path)}>
+      <small className="proto-step-kicker">PREVIOUS STEP</small>
+      <b>← Back to {previous.label}</b>
+    </button>
+    {"path" in next
+      ? <button type="button" className="proto-action" onClick={() => navigatePath(next.path)}>
+          <small className="proto-step-kicker">NEXT STEP</small>
+          <b>Continue to {next.label} →</b>
+        </button>
+      : <div className="proto-pathway-next-unavailable" aria-label={next.label}>
+          <small className="proto-step-kicker">NEXT STEP</small>
+          <b>{next.label}</b>
+          <p>{next.unavailableReason}</p>
+        </div>}
+  </nav>;
+}
+
 function Dashboard({ go }: { go: Navigate }) {
   return <Shell page="dashboard" go={go}><InfoNote><b>Demonstration dashboard.</b> All learner activity and numbers below are fictional examples to show the intended experience.</InfoNote><PageIntro eyebrow="YOUR LEARNING AT A GLANCE" title={<>A clearer picture of <em>your progress.</em></>} subtitle="A considered overview of what you have practised, where you are building confidence and what may be useful next." /><section className="proto-welcome"><div><small>YOUR NEXT STEP</small><h2>Keep building your writer's voice.</h2><p>Pick up with a short lesson on how deliberate language choices create tone.</p><Action onClick={() => go("lesson")}>Continue learning →</Action></div><div className="proto-welcome-art"><span>Aa</span><small>WORDS WITH PURPOSE</small></div></section><div className="proto-section-title"><div><h2>Your learning snapshot</h2><p>Example measures from a fictional demo learner.</p></div><small>THIS MONTH · SAMPLE</small></div><div className="proto-metrics"><article><i>⌖</i><small>SKILLS EXPLORED</small><strong>12</strong><span>Across 3 example units</span></article><article><i>↗</i><small>PRACTICE ATTEMPTS</small><strong>28</strong><span>Across reading and writing</span></article><article><i>⟳</i><small>REVISED RESPONSES</small><strong>6</strong><span>Saved revisions in this example</span></article></div><div className="proto-dash-grid"><section className="proto-panel"><div className="proto-panel-heading"><div><h2>Skills in focus</h2><p>Example statuses, with their evidence.</p></div><button type="button" onClick={() => go("questions")}>Find practice ↗</button></div><div className="proto-skill-row"><i className="good">✓</i><div><b>Selecting textual evidence</b><small>Consistent results across recent demo attempts.</small></div><span className="green-status">Building confidence</span></div><div className="proto-skill-row"><i className="warm">↗</i><div><b>Explaining language choices</b><small>Some explanations need clearer links to effect.</small></div><span className="warm-status">In progress</span></div><div className="proto-skill-row"><i>○</i><div><b>Structuring an argument</b><small>Not enough evidence to assess this skill yet.</small></div><span>Not assessed</span></div><p className="proto-note-bottom">In a live product, every skill status must be backed by defined rules and recorded learner evidence.</p></section><section className="proto-panel"><div className="proto-panel-heading"><div><h2>Suggested next</h2><p>Reasoned from this demo profile.</p></div><span className="proto-spark">✳</span></div><div className="proto-recommend"><small>12 MIN · GUIDED ANALYSIS</small><h3>How language shapes tone</h3><p>Practise linking a writer's choice to the effect it creates, using precise evidence.</p><Action onClick={() => go("lesson")}>Try this activity →</Action></div><button type="button" className="proto-wide-link" onClick={() => go("assessment")}>View example assessment feedback ↗</button></section></div><section className="proto-panel proto-activity"><div className="proto-panel-heading"><div><h2>Recent activity</h2><p>A short history from this fictional account.</p></div><button type="button" onClick={() => go("questions")}>Browse questions ↗</button></div>{[{t:"Read between the lines",m:"Inference and evidence · Practice",s:"Completed"},{t:"How language shapes tone",m:"Writer's choices · Guided analysis",s:"In progress"},{t:"Build a purposeful opening",m:"Structure and audience · Writing",s:"Saved draft"}].map(item => <button type="button" className="proto-activity-row" key={item.t} onClick={() => go(item.s === "Completed" ? "questions" : "lesson")}><i>{item.s === "Completed" ? "✓" : item.s === "In progress" ? "↗" : "○"}</i><span><b>{item.t}</b><small>{item.m}</small></span><em>{item.s}</em><strong>↗</strong></button>)}</section></Shell>;
 }
@@ -314,7 +345,15 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
           </div>
           {exitReviewed && <div className="proto-answer-feedback right"><b>Self-review checklist</b><ul>{lesson.exitTicket.successIndicators.map(point=><li key={point}>{point}</li>)}</ul><p>This is a checklist, not a mark or a saved assessment.</p></div>}
         </section>
-        <div className="proto-bottom-actions"><Action secondary onClick={() => navigatePath(unitPath)}>← Back to unit details</Action><Action onClick={() => go("questions")}>Explore more practice →</Action></div>
+        <PathwayStepNavigation
+          previous={{ label: `Unit ${unit.sequence}`, path: unitPath }}
+          next={{
+            label: "More lessons are not available yet",
+            unavailableReason: "Only the reviewed pilot lesson is available in this preview. Additional lessons must be prepared and reviewed before they can be added.",
+          }}
+          navigatePath={navigatePath}
+        />
+        <div className="proto-bottom-actions proto-pathway-extra-actions"><Action onClick={() => go("questions")}>Explore more practice →</Action></div>
       </div>
       <aside className="proto-panel proto-lesson-aside">
         <Label>IN THIS LESSON</Label>
@@ -342,6 +381,13 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
   const readinessGates = selectedPlan ? getUnitReadinessGates(selectedPlan) : [];
   const readiness = selectedPlan ? getUnitReadinessSummary(selectedPlan) : { complete: 0, total: 0, releasable: false };
   const coursePathways = englishPathways.filter(item => item.courseCode === selectedCourseCode);
+  const supportedCoursePathways = coursePathways.filter(item => item.levelKind === "official-programme-level");
+  const firstSupportedPathway = supportedCoursePathways[0];
+  const previousUnit = selectedPathway.unitSlots.find((item, index) => item.id === selectedUnit?.id && index > 0)
+    ? selectedPathway.unitSlots[selectedPathway.unitSlots.findIndex(item => item.id === selectedUnit?.id) - 1]
+    : undefined;
+  const selectedUnitIndex = selectedPathway.unitSlots.findIndex(item => item.id === selectedUnit?.id);
+  const nextUnit = selectedUnitIndex >= 0 ? selectedPathway.unitSlots[selectedUnitIndex + 1] : undefined;
   const isPilotUnit = selectedUnit?.id === pilotReviewSummary.unitId;
 
 
@@ -429,7 +475,16 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
         <p>The current planning data contains provisional grade-equivalent labels only. They are not separate qualifications or confirmed syllabus routes, so this prototype does not present them as independent levels.</p>
         <p>The applicable Cambridge IGCSE First Language English syllabus edition and any useful learner-navigation structure must be confirmed before level-specific plans are shown here.</p>
       </section>}
-      <div className="proto-bottom-actions"><Action secondary onClick={backToCatalogue}>← Back to pathways catalogue</Action></div>
+      <PathwayStepNavigation
+        previous={{ label: "Pathways catalogue", path: "/pathways" }}
+        next={firstSupportedPathway
+          ? { label: firstSupportedPathway.levelLabel, path: pathwayPathForId(firstSupportedPathway.id) }
+          : {
+              label: "Levels are not available yet",
+              unavailableReason: "The applicable IGCSE syllabus edition and level structure must be confirmed before level navigation is offered.",
+            }}
+        navigatePath={navigatePath}
+      />
     </>}
 
     {view === "level" && <>
@@ -455,7 +510,16 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
           </article>
         ))}
       </div>
-      <div className="proto-bottom-actions"><Action secondary onClick={backToCurriculum}>← Back to curriculum</Action></div>
+      <PathwayStepNavigation
+        previous={{ label: `${selectedPathway.programmeName} · ${selectedPathway.courseName}`, path: coursePathForCode(selectedPathway.courseCode) }}
+        next={selectedPathway.unitSlots[0]
+          ? { label: `Unit ${selectedPathway.unitSlots[0].sequence}`, path: unitPathForId(selectedPathway.id, selectedPathway.unitSlots[0].id) }
+          : {
+              label: "Unit planning is not available yet",
+              unavailableReason: "A unit sequence must be recorded before the next step can be opened.",
+            }}
+        navigatePath={navigatePath}
+      />
     </>}
 
     {view === "unit" && selectedUnit && <>
@@ -495,7 +559,6 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
           <div className="proto-section-title"><div><h2>Remaining release checks</h2><p>Content review passed; these independent requirements still need evidence.</p></div></div>
           {pilotReviewSummary.remainingReleaseChecks.map((item, index) => <div className="proto-skill-row proto-readiness-row" key={item}><i className="warm">{String(index + 1).padStart(2, "0")}</i><div><b>{item}</b></div></div>)}
           <p className="proto-note-bottom">{pilotReviewSummary.releaseNote}</p>
-          <div className="proto-bottom-actions"><Action onClick={() => go("lesson")}>Open learner lesson preview →</Action></div>
         </> : <>
           <p className="proto-unit-readiness-intro">This is a planning slot only. Its skill focus, learning objective, applicable syllabus source and objective mapping have not been confirmed.</p>
           <p className="proto-note-bottom">{selectedUnit.reviewNote}</p>
@@ -503,7 +566,20 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
         <div className="proto-unit-readiness-summary"><div><small>RELEASE READINESS</small><b>{readiness.complete} of {readiness.total} requirements complete</b></div><span>{readiness.releasable ? "Ready for release" : "Planning only"}</span></div>
         {readinessGates.map((gate, index) => <div className="proto-skill-row proto-readiness-row" key={gate.id}><i className={gate.status === "complete" ? "good" : gate.status === "blocked" ? "warm" : ""}>{gate.status === "complete" ? "✓" : String(index + 1).padStart(2, "0")}</i><div><b>{gate.title}</b><small>{gate.detail}</small><small className="proto-readiness-owner">{gate.owner}</small></div><span>{gate.status === "complete" ? "Complete" : gate.status === "blocked" ? "Blocked" : "Not started"}</span></div>)}
       </section>
-      <div className="proto-bottom-actions"><Action secondary onClick={backToLevel}>← Back to {selectedPathway.levelLabel}</Action></div>
+      <PathwayStepNavigation
+        previous={previousUnit
+          ? { label: `Unit ${previousUnit.sequence}`, path: unitPathForId(selectedPathway.id, previousUnit.id) }
+          : { label: selectedPathway.levelLabel, path: pathwayPathForId(selectedPathway.id) }}
+        next={isPilotUnit
+          ? { label: "pilot lesson preview", path: lessonPathForId(selectedPathway.id, selectedUnit.id) }
+          : nextUnit
+            ? { label: `Unit ${nextUnit.sequence}`, path: unitPathForId(selectedPathway.id, nextUnit.id) }
+            : {
+                label: "No further unit is planned",
+                unavailableReason: "There are no additional unit slots in this level's current planning sequence.",
+              }}
+        navigatePath={navigatePath}
+      />
     </>}
   </Shell>;
 }
