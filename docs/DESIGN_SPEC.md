@@ -1,8 +1,8 @@
 # Criterion Lab — Design Specification
 
-**Version:** 0.4  
+**Version:** 0.5  
 **Status:** Design direction agreed; page specifications prepared for implementation  
-**Last updated:** 24 October 2026  
+**Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
@@ -10,7 +10,7 @@
 
 **Revision policy:** Approved or reviewed screens, interactions, tokens and design documentation can be changed later. Record substantive changes in version control, update this specification when it is affected, and re-review the impact before release. The locked fonts, typography, palette and text-colour rules remain in force unless a specific change is explicitly approved.
 
-**Version 0.4 change note — 24 October 2026:** The owner approved a site-wide peach-led palette with dark terracotta primary actions and forest-green accents because the earlier interface felt too dull and monochromatic. Page surfaces, cards, section backgrounds, primary emphasis, supporting accents and related borders have been updated across all six prototype screens. Typography, type sizes, font weights, line heights, letter-spacing and layout spacing are unchanged.
+**Version 0.5 change note — 25 October 2026:** The owner replaced the previously approved peach/terracotta/green direction with a balanced aubergine, dusty-blue, buttercream, soft-lilac and plum-charcoal system. The semantic roles now distinguish questions, student responses, analysis, model answers, features, positive feedback and improvement guidance. Typography, type sizes, font weights, line heights, letter-spacing and layout spacing are unchanged.
 
 ## 1. Design direction
 
@@ -43,20 +43,43 @@ Reference URLs:
 
 | Token | Hex | Use |
 |---|---|---|
-| Paper | `#FFF5EF` | Warm peach-white main page background |
-| Surface | `#FFFCF9` | Clean warm-white cards and reading surfaces |
-| Soft peach | `#F9DFD3` | Secondary section backgrounds, selected states and gentle emphasis |
-| Ink | `#242723` | Main text and high-emphasis controls |
-| Muted | `#57514D` | Supporting text on light backgrounds |
-| Terracotta | `#A8472F` | Primary actions, key heading emphasis and prominent links |
-| Terracotta dark | `#843621` | Hover state for primary actions |
-| Forest | `#244D3A` | Green accents, icon treatments and selected supporting controls |
-| Forest dark | `#193A2C` | Dark green feature panels, preview banner and occasional strong accent |
-| Soft lime | `#D9EDAB` | Positive highlight on selected accents and dark green panels; not a default card background |
-| Peach accent | `#F2B9A2` | Decorative highlights and illustration details, not small body text |
-| Border | `#E9D4CA` | Warm separators and understated card boundaries |
+| Buttercream paper | `#F8F1DE` | Main page background; warm and readable |
+| Warm white surface | `#FFFCF6` | Cards, reading areas and uncluttered surfaces |
+| Aubergine | `#4A294F` | Brand emphasis, primary actions, key heading emphasis and prominent links |
+| Deep aubergine | `#38203D` | Hover/focus treatment for primary actions |
+| Dusty blue | `#5F7E9B` | Interactive features, selected controls and visual wayfinding |
+| Deep blue | `#36556F` | Positive feedback and student-response labels; pair with explicit wording/icons |
+| Soft lilac | `#EAE2F0` | Questions, model-answer panels and gentle section emphasis |
+| Pale blue | `#E4EDF5` | Student-response surfaces and supporting learning panels |
+| Plum charcoal | `#302B35` | Dark hero/closing panels, preview banner and high-contrast inverse-text areas |
+| Muted amber | `#80500F` | Constructive next steps and improvement feedback; never a red/error shorthand |
+| Pale amber | `#F5E8C9` | Background for improvement feedback when needed |
+| Primary text | `#28242D` | Main text and high-emphasis controls |
+| Supporting text | `#514B57` | Supporting paragraphs, descriptions and labels on light backgrounds |
+| Border | `#D8CDDD` | Soft lilac-toned separators and understated card boundaries |
 
-Use the palette with restraint. The dominant impression should come from warm peach-white paper and cards, soft peach section surfaces and dark terracotta primary actions. Use forest and deep green for accents, occasional dark panels and positive/status cues; use lime sparingly. Peach is not a default fill for every card, and status must never be communicated by colour alone: pair it with text or an icon.
+Use the palette with restraint. The dominant impression should come from buttercream paper and warm-white cards, with clear alternation between soft-lilac and pale-blue learning surfaces. Use aubergine for brand identity and primary actions, dusty blue for interactive features, and plum charcoal for occasional dark panels. Use deep blue for strengths/positive feedback and muted amber for constructive next steps. Avoid using either as generic decoration; status must never be communicated by colour alone, so pair every status with a clear label and/or icon. Keep text and background contrast at WCAG 2.2 AA levels.
+
+
+
+### Semantic colour coding across every learning feature
+
+The following meanings are global and must remain consistent on all screens:
+
+| Learning element | Visual treatment | Purpose |
+|---|---|---|
+| Headings | Preserve the existing dual-colour heading treatment: aubergine plus dusty blue | Brand hierarchy and orientation; do not change heading structure or typography |
+| Questions and prompts | Soft-lilac surface with aubergine heading/label | Makes the task being asked visually distinct |
+| Student responses | Pale-blue surface with deep-blue label or border | Identifies the learner's own thinking without implying it is correct or incorrect |
+| Analysis / reasoning | Aubergine accent, with readable neutral body text | Signals interpretation, reasoning and evidence-linking |
+| Model answers / worked examples | Soft-lilac surface with aubergine heading | Distinguishes an exemplar from a student's submitted response |
+| Interactive features and tools | Dusty-blue accents and selected-state treatments | Shows where a learner can act or interact |
+| Positive feedback / strengths | Deep-blue label or icon plus explicit wording such as “What you did well” | Recognises a specific demonstrated strength; blue is not a substitute for evidence |
+| Improvement feedback / next steps | Muted-amber label or icon plus explicit wording such as “What to improve next” | Frames a concrete next action without red/green judgement coding |
+| General comments | Supporting text colour on a warm-white or buttercream surface | Keeps explanatory feedback readable and neutral |
+| Section backgrounds | Alternate buttercream, warm white, soft lilac, pale blue and occasional plum-charcoal sections | Creates visible section breaks without changing the meaning of semantic feedback colours |
+
+These meanings apply to existing and future pages, including the dashboard, lesson/practice, question bank and assessment feedback. Never rely on colour alone: keep visible text labels, adequate contrast and accessible focus states. This palette update must not change typography, spacing, page content, feature behaviour or section-break composition; section-break and feature-guidance improvements will be discussed as a separate next step.
 
 ### Typography
 
