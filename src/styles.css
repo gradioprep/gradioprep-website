@@ -1417,3 +1417,8 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   .proto-unit-list-heading { align-items: start; flex-direction: column; }
   .proto-unit-readiness-summary { align-items: start; flex-direction: column; }
 }
+
+
+.proto-no-levels { max-width: 880px; padding: clamp(22px,3vw,32px); border: 1px solid #D8D1E0; border-left: 5px solid var(--dusty-blue); border-radius: 0 10px 10px 0; background: var(--paper); }
+.proto-no-levels h2 { margin: 10px 0; font: 700 clamp(21px,2.6vw,28px)/1.25 var(--display); }
+.proto-no-levels > p:not(.proto-eyebrow) { max-width: 700px; color: var(--text-secondary); line-height: 1.75; }
