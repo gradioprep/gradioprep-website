@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { demoQuestionItems } from "./content/demoCatalog";
 import { englishPathways } from "./content/pathways";
 import { pilotReviewSummary } from "./content/pilotReviewSummary";
@@ -8,6 +8,21 @@ import { getUnitReadinessGates, getUnitReadinessSummary, unitContentPlans } from
 type Page = "home" | "dashboard" | "pathways" | "lesson" | "questions" | "assessment";
 type Navigate = (page: Page) => void;
 
+type PathwaysLocation =
+  | { type: "pathways"; view: "catalogue" }
+  | { type: "pathways"; view: "curriculum"; courseCode: string }
+  | { type: "pathways"; view: "level"; courseCode: string; pathwayId: string }
+  | { type: "pathways"; view: "unit"; courseCode: string; pathwayId: string; unitId: string };
+
+type AppRoute =
+  | { type: "home" }
+  | { type: "page"; page: "dashboard" | "questions" | "assessment" }
+  | PathwaysLocation
+  | { type: "lesson"; pathwayId: string; unitId: string }
+  | { type: "not-found" };
+
+type NavigatePath = (path: string) => void;
+
 const sections: { page: Page; label: string; icon: string }[] = [
   { page: "dashboard", label: "Overview", icon: "⌂" },
   { page: "pathways", label: "Pathways", icon: "⌁" },
@@ -15,6 +30,121 @@ const sections: { page: Page; label: string; icon: string }[] = [
   { page: "lesson", label: "Lessons & practice", icon: "↗" },
   { page: "assessment", label: "Assessment feedback", icon: "◎" },
 ];
+
+
+const courseChoices = [
+  {
+    code: "ib-myp-language-literature",
+    path: "ib-myp/language-and-literature",
+    programmeCode: "ib-myp",
+    taxonomy: "IB MYP",
+    title: "Language and Literature",
+    levelSummary: "Years 1–5",
+    description: "Explore reading, interpretation and purposeful writing through the IB Middle Years Programme.",
+    caveat: "Grade equivalents are navigation aids only. Applicable guide edition and objective mapping remain unverified.",
+    groupClass: "taxonomy-ib",
+  },
+  {
+    code: "cambridge-lower-secondary-english",
+    path: "cambridge-lower-secondary/english",
+    programmeCode: "cambridge-lower-secondary",
+    taxonomy: "Cambridge Lower Secondary",
+    title: "English",
+    levelSummary: "Stages 7–9",
+    description: "Build core English skills through the Cambridge Lower Secondary route, kept distinct from IGCSE.",
+    caveat: "Applicable curriculum framework and official learning-objective references remain to be verified.",
+    groupClass: "taxonomy-lower-secondary",
+  },
+  {
+    code: "cambridge-igcse-first-language-english",
+    path: "cambridge-igcse/first-language-english",
+    programmeCode: "cambridge-igcse",
+    taxonomy: "Cambridge IGCSE",
+    title: "First Language English",
+    levelSummary: "Syllabus edition and level structure to be confirmed",
+    description: "Explore the First Language English route without treating provisional grade bands as separate qualifications.",
+    caveat: "The applicable syllabus edition and mapping are unverified; grade-equivalent bands are navigation aids only.",
+    groupClass: "taxonomy-igcse",
+  },
+];
+
+function coursePathForCode(courseCode: string): string {
+  const course = courseChoices.find(item => item.code === courseCode);
+  return course ? `/pathways/${course.path}` : "/pathways";
+}
+
+function pathwayPathForId(pathwayId: string): string {
+  const pathway = englishPathways.find(item => item.id === pathwayId);
+  return pathway ? `${coursePathForCode(pathway.courseCode)}/${pathway.levelCode}` : "/pathways";
+}
+
+function unitPathForId(pathwayId: string, unitId: string): string {
+  const pathway = englishPathways.find(item => item.id === pathwayId);
+  const unit = pathway?.unitSlots.find(item => item.id === unitId);
+  return pathway && unit ? `${pathwayPathForId(pathway.id)}/units/unit-${unit.sequence}` : "/pathways";
+}
+
+function lessonPathForId(pathwayId: string, unitId: string): string {
+  return `${unitPathForId(pathwayId, unitId)}/lesson`;
+}
+
+function pilotLessonRoute(): AppRoute {
+  const pathway = englishPathways.find(item => item.unitSlots.some(unit => unit.id === pilotReviewSummary.unitId));
+  const unit = pathway?.unitSlots.find(item => item.id === pilotReviewSummary.unitId);
+  return pathway && unit ? { type: "lesson", pathwayId: pathway.id, unitId: unit.id } : { type: "not-found" };
+}
+
+function pathnameForPage(page: Page): string {
+  if (page === "home") return "/";
+  if (page === "pathways") return "/pathways";
+  if (page === "lesson") {
+    const pilot = pilotLessonRoute();
+    return pilot.type === "lesson" ? lessonPathForId(pilot.pathwayId, pilot.unitId) : "/pathways";
+  }
+  return `/${page}`;
+}
+
+function resolvePathname(pathname: string): AppRoute {
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length === 0) return { type: "home" };
+
+  if (segments.length === 1) {
+    const segment = segments[0];
+    if (segment === "pathways") return { type: "pathways", view: "catalogue" };
+    if (segment === "lesson") return pilotLessonRoute();
+    if (segment === "dashboard" || segment === "questions" || segment === "assessment") {
+      return { type: "page", page: segment };
+    }
+    return { type: "not-found" };
+  }
+
+  if (segments[0] !== "pathways" || segments.length < 3) return { type: "not-found" };
+
+  const course = courseChoices.find(item => item.path === segments.slice(1, 3).join("/"));
+  if (!course) return { type: "not-found" };
+  if (segments.length === 3) return { type: "pathways", view: "curriculum", courseCode: course.code };
+
+  const pathway = englishPathways.find(item =>
+    item.courseCode === course.code &&
+    item.levelCode === segments[3] &&
+    item.levelKind === "official-programme-level"
+  );
+  if (!pathway) return { type: "not-found" };
+  if (segments.length === 4) {
+    return { type: "pathways", view: "level", courseCode: course.code, pathwayId: pathway.id };
+  }
+  if (segments[4] !== "units") return { type: "not-found" };
+
+  const unit = pathway.unitSlots.find(item => `unit-${item.sequence}` === segments[5]);
+  if (!unit) return { type: "not-found" };
+  if (segments.length === 6) {
+    return { type: "pathways", view: "unit", courseCode: course.code, pathwayId: pathway.id, unitId: unit.id };
+  }
+  if (segments.length === 7 && segments[6] === "lesson" && unit.id === pilotReviewSummary.unitId) {
+    return { type: "lesson", pathwayId: pathway.id, unitId: unit.id };
+  }
+  return { type: "not-found" };
+}
 
 function Notice({ compact = false }: { compact?: boolean }) {
   return <div className={"proto-notice" + (compact ? " compact" : "")}><span /> <b>PROTOTYPE</b><i>/</i> Sample content and fictional learner data</div>;
@@ -59,11 +189,48 @@ function PageIntro({ eyebrow, title, subtitle }: { eyebrow: string; title: React
 }
 function InfoNote({ children }: { children: ReactNode }) { return <div className="proto-info-note"><span>i</span><p>{children}</p></div>; }
 
+type StepNavigationDestination =
+  | { label: string; path: string }
+  | { label: string; unavailableReason: string };
+
+function PathwayStepNavigation({
+  previous,
+  next,
+  navigatePath,
+}: {
+  previous: { label: string; path: string };
+  next: StepNavigationDestination;
+  navigatePath: NavigatePath;
+}) {
+  return <nav className="proto-bottom-actions proto-pathway-navigation" aria-label="Pathway step navigation">
+    <button type="button" className="proto-action secondary" onClick={() => navigatePath(previous.path)}>
+      <small className="proto-step-kicker">PREVIOUS STEP</small>
+      <b>← Back to {previous.label}</b>
+    </button>
+    {"path" in next
+      ? <button type="button" className="proto-action" onClick={() => navigatePath(next.path)}>
+          <small className="proto-step-kicker">NEXT STEP</small>
+          <b>Continue to {next.label} →</b>
+        </button>
+      : <div className="proto-pathway-next-unavailable" aria-label={next.label}>
+          <small className="proto-step-kicker">NEXT STEP</small>
+          <b>{next.label}</b>
+          <p>{next.unavailableReason}</p>
+        </div>}
+  </nav>;
+}
+
 function Dashboard({ go }: { go: Navigate }) {
   return <Shell page="dashboard" go={go}><InfoNote><b>Demonstration dashboard.</b> All learner activity and numbers below are fictional examples to show the intended experience.</InfoNote><PageIntro eyebrow="YOUR LEARNING AT A GLANCE" title={<>A clearer picture of <em>your progress.</em></>} subtitle="A considered overview of what you have practised, where you are building confidence and what may be useful next." /><section className="proto-welcome"><div><small>YOUR NEXT STEP</small><h2>Keep building your writer's voice.</h2><p>Pick up with a short lesson on how deliberate language choices create tone.</p><Action onClick={() => go("lesson")}>Continue learning →</Action></div><div className="proto-welcome-art"><span>Aa</span><small>WORDS WITH PURPOSE</small></div></section><div className="proto-section-title"><div><h2>Your learning snapshot</h2><p>Example measures from a fictional demo learner.</p></div><small>THIS MONTH · SAMPLE</small></div><div className="proto-metrics"><article><i>⌖</i><small>SKILLS EXPLORED</small><strong>12</strong><span>Across 3 example units</span></article><article><i>↗</i><small>PRACTICE ATTEMPTS</small><strong>28</strong><span>Across reading and writing</span></article><article><i>⟳</i><small>REVISED RESPONSES</small><strong>6</strong><span>Saved revisions in this example</span></article></div><div className="proto-dash-grid"><section className="proto-panel"><div className="proto-panel-heading"><div><h2>Skills in focus</h2><p>Example statuses, with their evidence.</p></div><button type="button" onClick={() => go("questions")}>Find practice ↗</button></div><div className="proto-skill-row"><i className="good">✓</i><div><b>Selecting textual evidence</b><small>Consistent results across recent demo attempts.</small></div><span className="green-status">Building confidence</span></div><div className="proto-skill-row"><i className="warm">↗</i><div><b>Explaining language choices</b><small>Some explanations need clearer links to effect.</small></div><span className="warm-status">In progress</span></div><div className="proto-skill-row"><i>○</i><div><b>Structuring an argument</b><small>Not enough evidence to assess this skill yet.</small></div><span>Not assessed</span></div><p className="proto-note-bottom">In a live product, every skill status must be backed by defined rules and recorded learner evidence.</p></section><section className="proto-panel"><div className="proto-panel-heading"><div><h2>Suggested next</h2><p>Reasoned from this demo profile.</p></div><span className="proto-spark">✳</span></div><div className="proto-recommend"><small>12 MIN · GUIDED ANALYSIS</small><h3>How language shapes tone</h3><p>Practise linking a writer's choice to the effect it creates, using precise evidence.</p><Action onClick={() => go("lesson")}>Try this activity →</Action></div><button type="button" className="proto-wide-link" onClick={() => go("assessment")}>View example assessment feedback ↗</button></section></div><section className="proto-panel proto-activity"><div className="proto-panel-heading"><div><h2>Recent activity</h2><p>A short history from this fictional account.</p></div><button type="button" onClick={() => go("questions")}>Browse questions ↗</button></div>{[{t:"Read between the lines",m:"Inference and evidence · Practice",s:"Completed"},{t:"How language shapes tone",m:"Writer's choices · Guided analysis",s:"In progress"},{t:"Build a purposeful opening",m:"Structure and audience · Writing",s:"Saved draft"}].map(item => <button type="button" className="proto-activity-row" key={item.t} onClick={() => go(item.s === "Completed" ? "questions" : "lesson")}><i>{item.s === "Completed" ? "✓" : item.s === "In progress" ? "↗" : "○"}</i><span><b>{item.t}</b><small>{item.m}</small></span><em>{item.s}</em><strong>↗</strong></button>)}</section></Shell>;
 }
 
-function Lesson({ go }: { go: Navigate }) {
+function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigatePath: NavigatePath; pathwayId: string; unitId: string }) {
+  const pathway = englishPathways.find(item => item.id === pathwayId) ?? englishPathways[0];
+  const unit = pathway.unitSlots.find(item => item.id === unitId) ?? pathway.unitSlots[0];
+  const curriculumPath = coursePathForCode(pathway.courseCode);
+  const levelPath = pathwayPathForId(pathway.id);
+  const unitPath = unitPathForId(pathway.id, unit.id);
+  const curriculumContext = `${pathway.programmeName} · ${pathway.courseName} · ${pathway.levelLabel} · Unit ${unit.sequence}`;
   const lesson = pilotLearnerLesson;
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [responses, setResponses] = useState<Record<string, string>>({});
@@ -80,9 +247,9 @@ function Lesson({ go }: { go: Navigate }) {
   const canReview = (item: typeof lesson.practiceItems[number]) =>
     item.options ? Boolean(selectedOptions[item.id]) : Boolean(responses[item.id]?.trim());
 
-  return <Shell page="lesson" go={go}>
+  return <Shell page="lesson" go={go} context={curriculumContext}>
     <InfoNote><b>Academic content review passed.</b> This lesson is approved for pilot preview only. Official IB guide edition and objective mapping remain unverified. Practice responses are temporary to this open preview; nothing is saved or graded.</InfoNote>
-    <div className="proto-crumb"><button type="button" onClick={() => go("pathways")}>Pathways</button> / <b>{lesson.title}</b></div>
+    <div className="proto-crumb"><button type="button" onClick={() => navigatePath("/pathways")}>Pathways</button> / <button type="button" onClick={() => navigatePath(curriculumPath)}>{pathway.programmeName} · {pathway.courseName}</button> / <button type="button" onClick={() => navigatePath(levelPath)}>{pathway.levelLabel}</button> / <button type="button" onClick={() => navigatePath(unitPath)}>Unit {unit.sequence}</button> / <b>Lesson</b></div>
     <div className="proto-lesson-head">
       <div>
         <Label>IB MYP LANGUAGE & LITERATURE · PILOT PREVIEW</Label>
@@ -178,7 +345,15 @@ function Lesson({ go }: { go: Navigate }) {
           </div>
           {exitReviewed && <div className="proto-answer-feedback right"><b>Self-review checklist</b><ul>{lesson.exitTicket.successIndicators.map(point=><li key={point}>{point}</li>)}</ul><p>This is a checklist, not a mark or a saved assessment.</p></div>}
         </section>
-        <div className="proto-bottom-actions"><Action secondary onClick={()=>go("pathways")}>Back to pathways</Action><Action onClick={()=>go("questions")}>Explore more practice →</Action></div>
+        <PathwayStepNavigation
+          previous={{ label: `Unit ${unit.sequence}`, path: unitPath }}
+          next={{
+            label: "More lessons are not available yet",
+            unavailableReason: "Only the reviewed pilot lesson is available in this preview. Additional lessons must be prepared and reviewed before they can be added.",
+          }}
+          navigatePath={navigatePath}
+        />
+        <div className="proto-bottom-actions proto-pathway-extra-actions"><Action onClick={() => go("questions")}>Explore more practice →</Action></div>
       </div>
       <aside className="proto-panel proto-lesson-aside">
         <Label>IN THIS LESSON</Label>
@@ -191,92 +366,55 @@ function Lesson({ go }: { go: Navigate }) {
   </Shell>;
 }
 
-function Pathways({ go }: { go: Navigate }) {
-  const [view, setView] = useState<"catalogue" | "curriculum" | "level" | "unit">("catalogue");
-  const [selectedCourseCode, setSelectedCourseCode] = useState("ib-myp-language-literature");
-  const [selectedPathwayId, setSelectedPathwayId] = useState("ib-myp-lal-y1");
-  const [selectedUnitId, setSelectedUnitId] = useState("ib-myp-lal-y1-u1");
+function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLocation; navigatePath: NavigatePath }) {
+  const view = route.view;
+  const selectedCourseCode = route.view === "catalogue" ? courseChoices[0].code : route.courseCode;
+  const selectedPathwayId = route.view === "level" || route.view === "unit" ? route.pathwayId : "ib-myp-lal-y1";
+  const selectedUnitId = route.view === "unit"
+    ? route.unitId
+    : englishPathways.find(item => item.id === selectedPathwayId)?.unitSlots[0]?.id ?? "ib-myp-lal-y1-u1";
 
   const selectedPathway = englishPathways.find(item => item.id === selectedPathwayId) ?? englishPathways[0];
   const selectedUnit = selectedPathway.unitSlots.find(item => item.id === selectedUnitId) ?? selectedPathway.unitSlots[0];
+  const selectedCourse = courseChoices.find(item => item.code === selectedCourseCode) ?? courseChoices[0];
   const selectedPlan = unitContentPlans.find(plan => plan.unitId === selectedUnit?.id);
   const readinessGates = selectedPlan ? getUnitReadinessGates(selectedPlan) : [];
   const readiness = selectedPlan ? getUnitReadinessSummary(selectedPlan) : { complete: 0, total: 0, releasable: false };
   const coursePathways = englishPathways.filter(item => item.courseCode === selectedCourseCode);
+  const supportedCoursePathways = coursePathways.filter(item => item.levelKind === "official-programme-level");
+  const firstSupportedPathway = supportedCoursePathways[0];
+  const previousUnit = selectedPathway.unitSlots.find((item, index) => item.id === selectedUnit?.id && index > 0)
+    ? selectedPathway.unitSlots[selectedPathway.unitSlots.findIndex(item => item.id === selectedUnit?.id) - 1]
+    : undefined;
+  const selectedUnitIndex = selectedPathway.unitSlots.findIndex(item => item.id === selectedUnit?.id);
+  const nextUnit = selectedUnitIndex >= 0 ? selectedPathway.unitSlots[selectedUnitIndex + 1] : undefined;
   const isPilotUnit = selectedUnit?.id === pilotReviewSummary.unitId;
 
-  const courseChoices = [
-    {
-      code: "ib-myp-language-literature",
-      programmeCode: "ib-myp",
-      taxonomy: "IB MYP",
-      title: "Language and Literature",
-      levelSummary: "Years 1–5",
-      description: "Explore reading, interpretation and purposeful writing through the IB Middle Years Programme.",
-      caveat: "Grade equivalents are navigation aids only. Applicable guide edition and objective mapping remain unverified.",
-      groupClass: "taxonomy-ib",
-    },
-    {
-      code: "cambridge-lower-secondary-english",
-      programmeCode: "cambridge-lower-secondary",
-      taxonomy: "Cambridge Lower Secondary",
-      title: "English",
-      levelSummary: "Stages 7–9",
-      description: "Build core English skills through the Cambridge Lower Secondary route, kept distinct from IGCSE.",
-      caveat: "Applicable curriculum framework and official learning-objective references remain to be verified.",
-      groupClass: "taxonomy-lower-secondary",
-    },
-    {
-      code: "cambridge-igcse-first-language-english",
-      programmeCode: "cambridge-igcse",
-      taxonomy: "Cambridge IGCSE",
-      title: "First Language English",
-      levelSummary: "Syllabus edition and level structure to be confirmed",
-      description: "Explore the First Language English route without treating provisional grade bands as separate qualifications.",
-      caveat: "The applicable syllabus edition and mapping are unverified; grade-equivalent bands are navigation aids only.",
-      groupClass: "taxonomy-igcse",
-    },
-  ];
 
-  const openCurriculum = (courseCode: string) => {
-    const first = englishPathways.find(item => item.courseCode === courseCode);
-    if (!first) return;
-    setSelectedCourseCode(courseCode);
-    setSelectedPathwayId(first.id);
-    setSelectedUnitId(first.unitSlots[0]?.id ?? "");
-    setView("curriculum");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+
+  const openCurriculum = (courseCode: string) => navigatePath(coursePathForCode(courseCode));
 
   const openLevel = (pathwayId: string) => {
     const pathway = englishPathways.find(item => item.id === pathwayId);
-    if (!pathway) return;
-    setSelectedPathwayId(pathway.id);
-    setSelectedUnitId(pathway.unitSlots[0]?.id ?? "");
-    setView("level");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (!pathway || pathway.levelKind !== "official-programme-level") return;
+    navigatePath(pathwayPathForId(pathway.id));
   };
 
   const openUnit = (unitId: string) => {
-    setSelectedUnitId(unitId);
-    setView("unit");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const pathway = englishPathways.find(item => item.unitSlots.some(unit => unit.id === unitId));
+    if (!pathway || pathway.levelKind !== "official-programme-level") return;
+    navigatePath(unitPathForId(pathway.id, unitId));
   };
 
-  const backToCatalogue = () => {
-    setView("catalogue");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-  const backToCurriculum = () => {
-    setView("curriculum");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-  const backToLevel = () => {
-    setView("level");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const backToCatalogue = () => navigatePath("/pathways");
+  const backToCurriculum = () => navigatePath(coursePathForCode(selectedPathway.courseCode));
+  const backToLevel = () => navigatePath(pathwayPathForId(selectedPathway.id));
 
-  const shellContext = view === "catalogue" ? "English pathways · Planning preview" : view === "curriculum" ? (courseChoices.find(item => item.code === selectedCourseCode)?.taxonomy + " · " + (courseChoices.find(item => item.code === selectedCourseCode)?.title ?? "Curriculum")) : selectedPathway.programmeName + " · " + selectedPathway.courseName + " · " + selectedPathway.levelLabel;
+  const shellContext = view === "catalogue"
+    ? "English pathways · Planning preview"
+    : view === "curriculum"
+      ? `${selectedCourse.taxonomy} · ${selectedCourse.title}`
+      : `${selectedPathway.programmeName} · ${selectedPathway.courseName} · ${selectedPathway.levelLabel}`;
 
   return <Shell page="pathways" go={go} context={shellContext}>
     {view === "catalogue" && <>
@@ -309,7 +447,7 @@ function Pathways({ go }: { go: Navigate }) {
     </>}
 
     {view === "curriculum" && <>
-      <div className="proto-crumb"><button type="button" onClick={backToCatalogue}>Pathways</button> / <b>{courseChoices.find(item => item.code === selectedCourseCode)?.taxonomy}</b></div>
+      <div className="proto-crumb"><button type="button" onClick={backToCatalogue}>Pathways</button> / <b>{selectedCourse.taxonomy} · {selectedCourse.title}</b></div>
       <InfoNote><b>Curriculum destination — planning preview.</b> These level choices describe planned navigation, not published or syllabus-mapped courses.</InfoNote>
       <PageIntro
         eyebrow={courseChoices.find(item => item.code === selectedCourseCode)?.taxonomy ?? "CURRICULUM"}
@@ -337,7 +475,16 @@ function Pathways({ go }: { go: Navigate }) {
         <p>The current planning data contains provisional grade-equivalent labels only. They are not separate qualifications or confirmed syllabus routes, so this prototype does not present them as independent levels.</p>
         <p>The applicable Cambridge IGCSE First Language English syllabus edition and any useful learner-navigation structure must be confirmed before level-specific plans are shown here.</p>
       </section>}
-      <div className="proto-bottom-actions"><Action secondary onClick={backToCatalogue}>← Back to pathways catalogue</Action></div>
+      <PathwayStepNavigation
+        previous={{ label: "Pathways catalogue", path: "/pathways" }}
+        next={firstSupportedPathway
+          ? { label: firstSupportedPathway.levelLabel, path: pathwayPathForId(firstSupportedPathway.id) }
+          : {
+              label: "Levels are not available yet",
+              unavailableReason: "The applicable IGCSE syllabus edition and level structure must be confirmed before level navigation is offered.",
+            }}
+        navigatePath={navigatePath}
+      />
     </>}
 
     {view === "level" && <>
@@ -363,7 +510,16 @@ function Pathways({ go }: { go: Navigate }) {
           </article>
         ))}
       </div>
-      <div className="proto-bottom-actions"><Action secondary onClick={backToCurriculum}>← Back to curriculum</Action></div>
+      <PathwayStepNavigation
+        previous={{ label: `${selectedPathway.programmeName} · ${selectedPathway.courseName}`, path: coursePathForCode(selectedPathway.courseCode) }}
+        next={selectedPathway.unitSlots[0]
+          ? { label: `Unit ${selectedPathway.unitSlots[0].sequence}`, path: unitPathForId(selectedPathway.id, selectedPathway.unitSlots[0].id) }
+          : {
+              label: "Unit planning is not available yet",
+              unavailableReason: "A unit sequence must be recorded before the next step can be opened.",
+            }}
+        navigatePath={navigatePath}
+      />
     </>}
 
     {view === "unit" && selectedUnit && <>
@@ -403,7 +559,6 @@ function Pathways({ go }: { go: Navigate }) {
           <div className="proto-section-title"><div><h2>Remaining release checks</h2><p>Content review passed; these independent requirements still need evidence.</p></div></div>
           {pilotReviewSummary.remainingReleaseChecks.map((item, index) => <div className="proto-skill-row proto-readiness-row" key={item}><i className="warm">{String(index + 1).padStart(2, "0")}</i><div><b>{item}</b></div></div>)}
           <p className="proto-note-bottom">{pilotReviewSummary.releaseNote}</p>
-          <div className="proto-bottom-actions"><Action onClick={() => go("lesson")}>Open learner lesson preview →</Action></div>
         </> : <>
           <p className="proto-unit-readiness-intro">This is a planning slot only. Its skill focus, learning objective, applicable syllabus source and objective mapping have not been confirmed.</p>
           <p className="proto-note-bottom">{selectedUnit.reviewNote}</p>
@@ -411,7 +566,20 @@ function Pathways({ go }: { go: Navigate }) {
         <div className="proto-unit-readiness-summary"><div><small>RELEASE READINESS</small><b>{readiness.complete} of {readiness.total} requirements complete</b></div><span>{readiness.releasable ? "Ready for release" : "Planning only"}</span></div>
         {readinessGates.map((gate, index) => <div className="proto-skill-row proto-readiness-row" key={gate.id}><i className={gate.status === "complete" ? "good" : gate.status === "blocked" ? "warm" : ""}>{gate.status === "complete" ? "✓" : String(index + 1).padStart(2, "0")}</i><div><b>{gate.title}</b><small>{gate.detail}</small><small className="proto-readiness-owner">{gate.owner}</small></div><span>{gate.status === "complete" ? "Complete" : gate.status === "blocked" ? "Blocked" : "Not started"}</span></div>)}
       </section>
-      <div className="proto-bottom-actions"><Action secondary onClick={backToLevel}>← Back to {selectedPathway.levelLabel}</Action></div>
+      <PathwayStepNavigation
+        previous={previousUnit
+          ? { label: `Unit ${previousUnit.sequence}`, path: unitPathForId(selectedPathway.id, previousUnit.id) }
+          : { label: selectedPathway.levelLabel, path: pathwayPathForId(selectedPathway.id) }}
+        next={isPilotUnit
+          ? { label: "pilot lesson preview", path: lessonPathForId(selectedPathway.id, selectedUnit.id) }
+          : nextUnit
+            ? { label: `Unit ${nextUnit.sequence}`, path: unitPathForId(selectedPathway.id, nextUnit.id) }
+            : {
+                label: "No further unit is planned",
+                unavailableReason: "There are no additional unit slots in this level's current planning sequence.",
+              }}
+        navigatePath={navigatePath}
+      />
     </>}
   </Shell>;
 }
@@ -442,13 +610,48 @@ function Assessment({ go }: { go: Navigate }) {
   return <Shell page="assessment" go={go}><InfoNote><b>Assessment feedback prototype.</b> This is fictional feedback and an illustrative placeholder rubric—not a founder-approved rubric or a real student assessment.</InfoNote><div className="proto-assess-head"><div><div className="proto-crumb"><button type="button" onClick={() => go("dashboard")}>Overview</button> / <b>Assessment feedback</b></div><Label>HUMAN FEEDBACK · CONCEPT SCREEN</Label><h1>See the thinking<br />behind <em>the feedback.</em></h1><p>Useful assessment connects a criterion to evidence in the response, then points towards a practical next step.</p></div><div className="proto-assess-status"><span>✓</span><div><small>EXAMPLE STATUS</small><b>Feedback published</b><small>Fictional assessment · sample date</small></div></div></div><section className="proto-panel proto-assess-summary"><div><small>SAMPLE TASK</small><h2>Write for a specific audience</h2><p>Extended response · Curriculum mapping to be verified</p></div><div><small>ASSESSMENT TYPE</small><b>Human-graded concept</b><small>RESPONSE HISTORY</small><button type="button" aria-expanded={evidence} aria-controls="proto-evidence-excerpts" onClick={() => { const next = !evidence; setEvidence(next); if (next) window.setTimeout(() => document.getElementById("proto-evidence-excerpts")?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50); }}>{evidence ? "Hide evidence excerpts ↑" : "Show evidence excerpts ↓"}</button></div></section><section id="proto-evidence-excerpts" hidden={!evidence} className="proto-panel proto-evidence-excerpts" aria-label="Evidence excerpts"><div className="proto-evidence-heading"><span>↗</span><div><Label>ILLUSTRATIVE EXCERPTS</Label><h2>Evidence connected to feedback</h2><p>These examples show how a feedback comment can refer to specific words from a response.</p></div></div><div className="proto-evidence-grid">{evidenceExcerpts.map(item => <article className="proto-evidence-card" key={item.criterion}><small>{item.criterion}</small><blockquote>“{item.quote}”</blockquote><p>{item.explanation}</p></article>)}</div><p className="proto-evidence-note">Fictional demonstration text only—not a real learner's response. Final rubrics and assessment rules are not yet approved.</p></section><div className="proto-assess-grid"><div><section className="proto-panel"><div className="proto-feedback-title"><div><Label>THE BIG PICTURE</Label><h2>A thoughtful start, with room to be more precise.</h2></div><span>✳</span></div><p className="proto-feedback-body">The response maintains a consistent voice and recognises its intended audience. To strengthen the piece, make the central point clearer earlier and ensure each detail helps develop that purpose.</p><div className="proto-feedback-columns"><div><small>WHAT IS WORKING</small><p>Voice and tone feel considered. The response stays focused on its intended reader.</p></div><div><small>WHAT TO DEVELOP</small><p>Make the main message more explicit and connect supporting details more directly to it.</p></div></div></section><section className="proto-panel proto-rubric"><div className="proto-panel-heading"><div><h2>Criterion-by-criterion feedback</h2><p>Illustrative placeholder criteria for the interface only.</p></div><span>NOT FINAL RUBRIC</span></div>{[{n:"01",title:"Purpose and audience",score:"4",body:"The tone is broadly appropriate to the intended reader. A clearer opening would establish the purpose more confidently."},{n:"02",title:"Organisation and development",score:"3",body:"The sequence is understandable. Stronger links between the central point and supporting details would improve the flow."},{n:"03",title:"Language and precision",score:"4",body:"Language is generally clear. A few more specific verbs and details could make the message sharper."}].map(c => <article className="proto-criterion" key={c.n}><div><span>{c.n}</span><div><b>{c.title}</b><small>Placeholder criterion</small></div><strong>{c.score}<small> / 5</small></strong></div><p>{c.body}</p></article>)}<p className="proto-rubric-note">Scores are illustrative UI data. Final task-specific rubrics and multi-credit rules remain decisions for the academic lead.</p></section></div><aside><section className="proto-panel proto-next-steps"><span>↗</span><Label>YOUR NEXT STEPS</Label><h2>Turn feedback into practice.</h2><ol><li><i>1</i>Rewrite the opening so the central point is clear.</li><li><i>2</i>Connect each supporting detail to your purpose.</li><li><i>3</i>Review transitions and clarify links between ideas.</li></ol><Action onClick={() => go("questions")}>Find related practice →</Action></section><section className="proto-panel proto-help"><span>i</span><b>What makes feedback useful?</b><p>It should be specific, linked to evidence and clear about what to try next—not only a score.</p></section></aside></div><div className="proto-bottom-actions"><Action secondary onClick={() => go("dashboard")}>← Back to overview</Action><Action onClick={() => go("lesson")}>Practise a skill →</Action></div></Shell>;
 }
 
+function NotFound({ go }: { go: Navigate }) {
+  return <Shell page="pathways" go={go} context="Destination unavailable">
+    <PageIntro
+      eyebrow="DESTINATION NOT FOUND"
+      title={<>This route isn't <em>available.</em></>}
+      subtitle="We couldn't match this address to a planned pathway. Unverified syllabus routes are not created automatically."
+    />
+    <Action onClick={() => go("pathways")}>Return to pathways catalogue →</Action>
+  </Shell>;
+}
+
 export default function App() {
-  const [page, setPage] = useState<Page>("home");
-  const go: Navigate = next => { setPage(next); window.scrollTo({ top: 0, behavior: "smooth" }); };
-  if (page === "dashboard") return <Dashboard go={go} />;
-  if (page === "pathways") return <Pathways go={go} />;
-  if (page === "lesson") return <Lesson go={go} />;
-  if (page === "questions") return <Questions go={go} />;
-  if (page === "assessment") return <Assessment go={go} />;
-  return <Home go={go} />;
+  const [pathname, setPathname] = useState(() => window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setPathname(window.location.pathname);
+      window.scrollTo({ top: 0, behavior: "auto" });
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  const navigatePath: NavigatePath = path => {
+    const normalizedPath = `/${path.split("/").filter(Boolean).join("/")}`;
+    if (window.location.pathname !== normalizedPath) {
+      window.history.pushState({}, "", normalizedPath);
+    }
+    setPathname(normalizedPath);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const go: Navigate = next => navigatePath(pathnameForPage(next));
+  const route = resolvePathname(pathname);
+
+  if (route.type === "home") return <Home go={go} />;
+  if (route.type === "page") {
+    if (route.page === "dashboard") return <Dashboard go={go} />;
+    if (route.page === "questions") return <Questions go={go} />;
+    return <Assessment go={go} />;
+  }
+  if (route.type === "pathways") return <Pathways go={go} route={route} navigatePath={navigatePath} />;
+  if (route.type === "lesson") return <Lesson go={go} navigatePath={navigatePath} pathwayId={route.pathwayId} unitId={route.unitId} />;
+  return <NotFound go={go} />;
 }
