@@ -1,8 +1,8 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 2.7  
+**Version:** 2.8  
 **Last updated:** 25 October 2026  
-**Status:** Frontend prototype; pilot lesson content review passed for preview version 1  
+**Status:** Frontend prototype deployed to Cloudflare Workers; pathway navigation live-verified; pilot lesson content review passed for preview version 1 (not a commercial launch)  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
 **Founder context:** 18 years of IB, IGCSE and SAT tutoring experience; founder will initially be the sole grader and academic lead.  
 **Initial geography:** Delhi-NCR, then wider India  
@@ -43,6 +43,8 @@ Do not silently change approved prices, credit rules, curriculum scope, SLAs or 
 
 **v2.7 change note — 25 October 2026:** Added consistent in-page Previous/Next navigation to each supported curriculum, level, unit and lesson view. Buttons move through the actual route hierarchy and planned unit sequence while preserving the programme/subject context. A missing next destination is explained rather than invented; in particular, Cambridge IGCSE does not offer level navigation until its syllabus and level structure are verified. The unselected Pathways catalogue remains a catalogue with no default-selected curriculum. Automated Chromium coverage now passes 11/11 tests in GitHub Actions run 63 on commit `035b3a6d37d9df05dbe0ab6b2371b6fdc5998cb8`; this includes in-page navigation across Cambridge Lower Secondary unit slots and the IGCSE guardrail. The corresponding Cloudflare preview build succeeded (`51726b35-1247-4223-8778-2c878301fe48`). No curriculum content, mapping, review outcome, rights, accessibility or release statuses changed.
 
+**v2.8 change note — 25 October 2026:** PR [#10](https://github.com/gradioprep/gradioprep-website/pull/10) was merged into `main` as commit `7d8d4ff53eaab5cef468bc4e0d3b633e51907e25`. GitHub Actions run [#64](https://github.com/gradioprep/gradioprep-website/actions/runs/64) passed on PR head commit `d202e0afa80c50d5c47048c6f2c86d6a8950eceb`, including the build and all 11 Chromium browser tests. Cloudflare Workers production build `99301a5d-91f7-4939-af95-f356f20268a7` succeeded and deployed the merge commit at `2026-10-25T17:26:16.522Z` (UTC). Live preview: [GradiPrep website](https://gradioprep-website.wandering-scene-1822.workers.dev). After deployment, the owner confirmed the Pathways flow, in-page Previous/Next controls, browser Back/Forward, and direct URLs work. This verifies the pathway-navigation deployment only; it does not indicate commercial-launch readiness or change curriculum content, official mapping, academic review, rights, accessibility or release statuses.
+
 ### Approved information architecture — binding product decision
 
 The approved navigation hierarchy is:
@@ -75,7 +77,7 @@ The first IB MYP Year 1 planning slot has a teacher/editor unit brief (`../src/c
 
 The client app and readiness fixture use the learner-safe lesson and non-answer review summary. Neither the teacher/editor unit brief nor the teacher answer guide is imported into the client module graph. This is source separation for the static prototype, not a substitute for server-side authorization in production.
 
-The public [IB MYP Language and literature page](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) and its [subject brief marked From 2014](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) were checked on 24 October 2026. An IB-hosted [Language and literature guide reference](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) surfaced candidate Year 1 Criterion A strands A(ii) and A(iii); the detailed guide redirects to IB curriculum sign-in and the applicable current school-guide edition remains unconfirmed. These are candidate references, not verified mappings. `officialObjectiveCodes` remains empty, so syllabus mapping and the official-source/objective gates remain blocked. In the static readiness fixture, the pilot lesson and practice IDs, answer-key review and academic-review pass are now recorded. Separate rights review, accessibility review and explicit release approval remain outstanding. The content is approved for pilot preview only, not a released syllabus-mapped course. The prototype still has no database, authentication or persistent learner records. Latest source files have been rechecked, but a fresh build and Cloudflare deployment have not been independently confirmed. The commercial hosting choice remains open pending review of vendor terms and requirements.
+The public [IB MYP Language and literature page](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) and its [subject brief marked From 2014](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) were checked on 24 October 2026. An IB-hosted [Language and literature guide reference](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) surfaced candidate Year 1 Criterion A strands A(ii) and A(iii); the detailed guide redirects to IB curriculum sign-in and the applicable current school-guide edition remains unconfirmed. These are candidate references, not verified mappings. `officialObjectiveCodes` remains empty, so syllabus mapping and the official-source/objective gates remain blocked. In the static readiness fixture, the pilot lesson and practice IDs, answer-key review and academic-review pass are now recorded. Separate rights review, accessibility review and explicit release approval remain outstanding. The content is approved for pilot preview only, not a released syllabus-mapped course. The pathway-navigation changes are deployed and live-verified as recorded in v2.8; this confirms the navigation milestone, not commercial readiness or curriculum/release approval. The prototype still has no database, authentication or persistent learner records. The commercial hosting choice remains open pending review of current vendor terms, security controls and operational requirements.
 
 ### Approved frontend typography, text-colour and palette guardrail
 
@@ -297,9 +299,7 @@ Preferred maintainable architecture:
 
 **Important Vercel policy constraint verified 23 October 2026:** Vercel's current Terms of Service state that its free Hobby plan is limited to personal/non-commercial use; commercial usage requires Pro or Enterprise. The terms also contain a model-training provision applicable to content on Hobby/trial Pro. Therefore, do not assume Vercel Hobby is an appropriate free host for a commercial learning platform or for student submissions. See: https://vercel.com/legal/terms and https://vercel.com/docs/limits/fair-use-guidelines.
 
-To preserve the near-zero initial budget, use GitHub + Cloudflare Pages for the public frontend if its current terms and requirements fit, or budget for Vercel Pro before the commercial deployment. Re-check all vendor plans/terms before launch. Keep the codebase portable so changing deployment providers does not require rewriting the product.
-
-The current five-screen preview is deployed on Cloudflare Workers. This is the existing preview setup, not a final approval of the commercial hosting architecture and not approval to store real student records there. Re-check the exact Cloudflare product, plan, terms, limits and security controls before any production use.
+The current React + TypeScript preview is deployed on Cloudflare Workers, and the pathway-navigation deployment is live-verified (see v2.8). This records the platform used for the prototype preview; it is not a final approval of the commercial hosting architecture and is not approval to store real student records. Before commercial use, verify current Cloudflare Workers product/plan terms, limits, data-handling practices, security controls and operational requirements. Keep the codebase portable; assess alternatives only against the founder's budget and actual launch requirements.
 
 Do not commit credentials, `.env` files, API keys, student submissions or private data to GitHub. Use platform environment variables and rotate credentials immediately if exposed. See GitHub secret-scanning guidance: https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning.
 
@@ -368,7 +368,7 @@ The founder will finalise before bulk content creation:
 2. The rubric(s) for each task family and the criteria for multi-credit tasks.
 3. Final brand/domain and public description.
 4. The exact privacy, consent, refund, credit-expiry and service terms after appropriate review.
-5. Whether the first commercial deployment uses Cloudflare Pages or a paid Vercel plan.
+5. Whether to retain Cloudflare Workers for the commercial launch or adopt another hosting platform, after reviewing current vendor terms, pricing, data handling, security and operational requirements.
 6. How academic-lead/reviewer calibration will be arranged before offering broad human-graded service.
 
 The assistant must not invent these decisions or silently replace them with a generic curriculum.
