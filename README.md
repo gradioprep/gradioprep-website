@@ -4,11 +4,11 @@ The curriculum-aware IB and Cambridge learning platform described in the master 
 
 **Criterion Lab is a placeholder working name.** The final brand and domain have not been decided.
 
-**Current visual system:** warm peach-white page surfaces and cards, soft peach sections, dark terracotta primary actions and heading emphasis, and forest/deep-green accents. The approved fonts and typography sizes are unchanged; use `docs/DESIGN_SPEC.md` v0.4 and the tokens in `src/styles.css` for every page.
+**Current visual system:** approved Palette B—aubergine, dusty blue, soft lilac and plum charcoal, with cool-white and pale blue-grey surfaces, plus restrained semantic deep-blue and muted-amber feedback accents. Typography remains locked. Follow `docs/DESIGN_SPEC.md` v1.5 and the shared tokens in `src/styles.css` for every page.
 
 ## Current status
 
-The React + TypeScript prototype has six clickable screens, including Pathways and an interactive Lesson & practice preview. The earlier preview was deployed to Cloudflare Workers; deployment of the latest changes has not been independently confirmed.
+The React + TypeScript prototype has six clickable screens, including Pathways and an interactive Lesson & practice preview. PR #10 (URL-based pathway navigation and in-page Previous/Next controls) is merged to `main` as `7d8d4ff53eaab5cef468bc4e0d3b633e51907e25` and deployed to [Cloudflare Workers](https://gradioprep-website.wandering-scene-1822.workers.dev). Production build `99301a5d-91f7-4939-af95-f356f20268a7` succeeded; the owner confirmed the live pathway flow, Previous/Next controls, browser Back/Forward and direct URLs. GitHub Actions run #64 passed, with 11/11 Chromium browser tests. This verifies the navigation milestone, not a commercial launch.
 
 The first IB MYP Year 1 pilot lesson, **How writers shape meaning**, passed academic content review for pilot-preview version 1, as confirmed by the project owner on 24 October 2026. It includes an original reading passage, four teaching stages, four practice tasks, written-response fields and self-review checklists. Responses are temporary to the open preview, are not graded and are not saved.
 
@@ -16,7 +16,7 @@ The client imports [`src/content/pilotLearnerLesson.ts`](src/content/pilotLearne
 
 **Important:** the content is approved for a pilot preview only. Official IB guide edition/objective mapping is still unverified; `officialObjectiveCodes` remains empty. Separate rights review, accessibility review and explicit release approval are outstanding, so the unit is not a released syllabus-mapped course. The existing demo question-bank content remains separate with unassigned curriculum metadata.
 
-Not yet implemented: authentication, database, persistent learner records, released syllabus-mapped content, diagnostics, server-side saved attempts, real grading/submission workflows, payments, transactional email or production analytics. The updated app build and fresh Cloudflare deployment have not been independently confirmed.
+Not yet implemented: authentication, database, persistent learner records, released syllabus-mapped content, diagnostics, server-side saved attempts, real grading/submission workflows, payments, transactional email or production analytics. The deployed site remains a prototype preview; do not use it for real learner records or imply that the course is officially mapped or released.
 
 ## Initial planned pathways
 
@@ -58,7 +58,7 @@ Use Node.js 20.19+ (or 22.12+), run `npm install`, then `npm run dev` to start t
 
 ## Deployment
 
-The current prototype is deployed to Cloudflare Workers. Keep the codebase portable and verify the selected Cloudflare product's current terms, limits and data-handling requirements before commercial launch or before handling real student information. The current preview is not production-ready for authenticated accounts or student records.
+The current prototype is deployed to [Cloudflare Workers](https://gradioprep-website.wandering-scene-1822.workers.dev); the live deployment of the pathway-navigation milestone has been confirmed. This is a preview, not a commercial-launch or real-student-data approval. Keep the codebase portable and verify the current Workers product/plan terms, limits, security controls and data-handling requirements before commercial use.
 
 ## Security rules
 
