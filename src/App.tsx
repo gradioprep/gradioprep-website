@@ -51,8 +51,8 @@ function Home({ go }: { go: Navigate }) {
   </div>;
 }
 
-function Shell({ page, go, children }: { page: Page; go: Navigate; children: ReactNode }) {
-  return <div className="proto-app"><Notice compact /><div className="proto-app-layout"><aside className="proto-sidebar"><Logo onClick={() => go("home")} /><div className="proto-workspace">LEARNING SPACE <span>DEMO</span></div><nav aria-label="Student preview navigation">{sections.map(s => <button type="button" key={s.page} className={page === s.page ? "active" : ""} onClick={() => go(s.page)}><i>{s.icon}</i>{s.label}{page === s.page && <b />}</button>)}</nav><div className="proto-sidebar-bottom"><strong>✳ &nbsp; Keep moving forward.</strong><p>Every attempt can teach you something.</p><button type="button" onClick={() => go("home")}>↖ &nbsp; Public homepage</button></div></aside><div className="proto-app-main"><header className="proto-app-header"><div>Learning space <span>/</span> <b>{sections.find(s => s.page === page)?.label ?? "Preview"}</b></div><small>English · Stage 1 preview</small><i>D</i></header><main className="proto-app-content">{children}<footer className="proto-app-footer"><span>CRITERION LAB · DESIGN PROTOTYPE</span><span>Fictional data · No real learner records</span></footer></main></div></div></div>;
+function Shell({ page, go, children, context }: { page: Page; go: Navigate; children: ReactNode; context?: string }) {
+  return <div className="proto-app"><Notice compact /><div className="proto-app-layout"><aside className="proto-sidebar"><Logo onClick={() => go("home")} /><div className="proto-workspace">LEARNING SPACE <span>DEMO</span></div><nav aria-label="Student preview navigation">{sections.map(s => <button type="button" key={s.page} className={page === s.page ? "active" : ""} onClick={() => go(s.page)}><i>{s.icon}</i>{s.label}{page === s.page && <b />}</button>)}</nav><div className="proto-sidebar-bottom"><strong>✳ &nbsp; Keep moving forward.</strong><p>Every attempt can teach you something.</p><button type="button" onClick={() => go("home")}>↖ &nbsp; Public homepage</button></div></aside><div className="proto-app-main"><header className="proto-app-header"><div>Learning space <span>/</span> <b>{sections.find(s => s.page === page)?.label ?? "Preview"}</b></div><small>{context ?? "English · Stage 1 preview"}</small><i>D</i></header><main className="proto-app-content">{children}<footer className="proto-app-footer"><span>CRITERION LAB · DESIGN PROTOTYPE</span><span>Fictional data · No real learner records</span></footer></main></div></div></div>;
 }
 function PageIntro({ eyebrow, title, subtitle }: { eyebrow: string; title: ReactNode; subtitle: string }) {
   return <div className="proto-page-intro"><Label>{eyebrow}</Label><h1>{title}</h1><p>{subtitle}</p></div>;
@@ -276,7 +276,9 @@ function Pathways({ go }: { go: Navigate }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  return <Shell page="pathways" go={go}>
+  const shellContext = view === "catalogue" ? "English pathways · Planning preview" : view === "curriculum" ? (courseChoices.find(item => item.code === selectedCourseCode)?.taxonomy + " · " + (courseChoices.find(item => item.code === selectedCourseCode)?.title ?? "Curriculum")) : selectedPathway.programmeName + " · " + selectedPathway.courseName + " · " + selectedPathway.levelLabel;
+
+  return <Shell page="pathways" go={go} context={shellContext}>
     {view === "catalogue" && <>
       <InfoNote><b>Pathway catalogue — planning preview.</b> These are planned English routes, not released courses. Official syllabus editions and mappings remain unverified. Stage 1 is a starter pathway, not exhaustive syllabus coverage.</InfoNote>
       <PageIntro
