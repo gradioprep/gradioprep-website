@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 0.9  
+**Version:** 1.0  
 **Status:** Design direction agreed; page specifications prepared for implementation  
 **Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -15,6 +15,8 @@
 **Version 0.7 change note — 25 October 2026:** Added a student-friendly visual system without changing typography: three coherent spacing tiers for within-section relationships, lesson steps and major section breaks; selective plum-charcoal feature bands; visual IB and Cambridge pathway introductions before the pathway cards; more generous, colour-coded lesson stages; and restrained decorative learning motifs. Use illustration-like CSS/SVG elements, clear numbered stages and semantic colours instead of noisy decoration. Keep the approved Palette B tokens unchanged.
 
 **Version 0.8 change note — 25 October 2026:** Added slim taxonomy bands with a divider and explicit curriculum labels before each Pathways catalogue group (IB MYP, Cambridge Lower Secondary and Cambridge IGCSE). Added a consistent, generous vertical rhythm and distinct surface/accent treatments for unit planning, reviewed pilot preview and release-readiness sections. Typography, approved Palette B tokens and content/release rules remain unchanged.
+
+**Version 1.0 change note — 25 October 2026:** Owner-approved curriculum-first information architecture. The Pathways page is a catalogue only. Curriculum/subject details, a specific year/stage/syllabus plan, and unit-level learning details live in their appropriate contextual destinations. This supersedes the earlier instruction in Section 6 to stack unit-planning, pilot-preview and release-readiness panels after the final Pathways card group. Existing palette, typography and spacing decisions remain unchanged.
 
 ## 1. Design direction
 
@@ -249,13 +251,28 @@ On login, let a student or guardian understand current learning activity, progre
 
 ## 6. Screen specification C — Pathway, lesson and practice
 
-### Pathway view
+### Approved curriculum-first navigation and pathway views
 
-Show the curriculum hierarchy rather than flattening all courses into “Grade 6–10.” Keep programme, course, year/stage, subject, syllabus edition, skill objective and task/rubric identifiers separate in the underlying model.
+The hierarchy below is mandatory for new work and supersedes any older instruction in this specification that places selected-pathway details below the catalogue.
 
-Within each pathway, group content into understandable units and skill objectives. Distinguish content that is available now from items that are planned. Label the first release as a starter pathway, not complete syllabus coverage.
+1. **Pathways catalogue:** This is a comparison/discovery page. Retain the slim taxonomy bands and visible dividers for IB MYP, Cambridge Lower Secondary and Cambridge IGCSE. Cards show the programme/subject route, concise description, relevant levels and accurate availability caveats, with a clear action to open that route. The catalogue must not render a default-selected curriculum, unit plan, pilot preview, release-readiness checklist or other level-specific planning details beneath the cards. Do not leave a hidden or expanded detail panel at the end of the catalogue.
+2. **Curriculum and subject page:** After a pathway is selected, identify the programme and subject/course, explain the route and show only the levels or verified syllabus choices supported for that route.
+3. **Year, stage or verified syllabus page:** Selecting a level opens its own contextual destination. Put the level-specific unit plan here, along with the applicable learning objectives, unit sequence, assessment approach, available learning materials and clear content/review/mapping/release statuses.
+4. **Unit detail/learning view:** Selecting a unit opens its own detail/learning destination with the unit purpose, skills, constituent lessons, practice, explanations and relevant assessment activities.
 
-In the Pathways catalogue, place a thin taxonomy band with a visible divider before each programme group. The band must explicitly identify IB MYP, Cambridge Lower Secondary or Cambridge IGCSE, remain visually lighter than the homepage's feature bands, and preserve clear spacing before the group title and cards. After the final card group, present unit planning, reviewed pilot details and release-readiness checks as distinct stacked panels with a consistent generous gap, subtle surface variation and restrained semantic accent borders. Keep these panels in the existing reading order and responsive flow.
+Use a clear breadcrumb pattern such as “Pathways / IB MYP / Language and Literature / Year 1 / Unit 1”, adapting each crumb to the actual data model. Keep programme, subject/course, year/stage, qualification, syllabus edition, objective, unit, task and rubric identifiers separate. Direct links must display the curriculum context and offer a way back to the parent page.
+
+Reusable templates are encouraged; generic or interchangeable curriculum content is not. A page may share its layout with another curriculum, but its plan, objectives, unit sequence, assessment requirements and mapping must be specific to the selected programme, subject, level and applicable syllabus edition. Grade-equivalent labels are navigation aids only and do not establish a separate qualification or syllabus. In particular, do not treat Cambridge IGCSE grade-equivalent entries as separate curricula without official verification and an approved roadmap.
+
+Keep statuses distinct: academic content review, official curriculum mapping, rights review, accessibility review and release approval are separate gates. Never let a review-passed label imply verified official mapping or released syllabus coverage. The starter pathway is not exhaustive syllabus coverage.
+
+### Pathway content model and display rules
+
+- Show the curriculum hierarchy rather than flattening all courses into “Grade 6–10.”
+- Group content into understandable units and skill objectives on the relevant level/unit destination, not on the general catalogue.
+- Distinguish content available now from content that is planned.
+- Keep the approved taxonomy-band styling and the Pathways-specific spacing refinements on the catalogue; do not move level-specific panels into the catalogue merely to reuse their existing styling.
+- The approved target architecture is not yet implemented simply because it is documented. Before implementation, check the existing pathway data, app navigation and related content/readiness files, preserve accurate status wording, and implement in reviewable steps.
 
 ### Lesson view
 
@@ -390,4 +407,4 @@ The design can be considered ready for functional implementation when:
 - No unapproved business, syllabus, privacy or pricing decision has been introduced.
 
 
-**Version 0.9 change note — 25 October 2026:** Tightened vertical spacing on the Pathways page by approximately half for transitions between curriculum groups and the selected-pathway planning panels. Taxonomy bands now sit close to their group headings and cards, rather than being visually centred between adjacent content blocks. Keep this spacing adjustment scoped to Pathways; preserve the shared site-wide spacing system and existing typography/palette.
+**Version 0.9 change note — 25 October 2026:** Tightened vertical spacing on the Pathways page by approximately half for transitions between curriculum groups and the selected-pathway planning panels. Taxonomy bands now sit close to their group headings and cards, rather than being visually centred between adjacent content blocks. Keep this spacing adjustment scoped to catalogue groups; preserve the shared site-wide spacing system and existing typography/palette. The former below-catalogue planning-panel placement is superseded by version 1.0.
