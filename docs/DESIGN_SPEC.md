@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Status:** Approved design system; curriculum-first navigation implemented in frontend prototype  
 **Last updated:** 25 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -21,6 +21,8 @@
 **Version 1.1 change note — 25 October 2026:** Implemented the approved curriculum-first flow in the React prototype: Pathways catalogue → curriculum/subject → level → unit detail. The catalogue contains three route cards only and has no default-selected pathway details beneath them. Curriculum and level views show their own contextual choices and status notes; unit detail displays pilot/release metadata and readiness gates only for the selected unit. Breadcrumbs and contextual header text preserve orientation. Navigation initially used local component state. Palette B, typography and curriculum/release status records remain unchanged.
 
 **Version 1.2 change note — 25 October 2026:** Added canonical pathname-based routes for the catalogue, each curriculum/subject destination, existing official programme-level destinations, unit details and the approved pilot lesson. Route rendering is derived from the current URL, with browser `popstate` handling for back/forward and contextual breadcrumb navigation. Routes are data-driven and intentionally exclude provisional IGCSE grade-equivalent bands or unverified syllabus editions. No design tokens, curriculum mapping, content review or release statuses changed. Build and live deployment outcomes must be confirmed independently.
+
+**Version 1.3 change note — 25 October 2026:** Added Chromium browser tests for direct curriculum URLs, the catalogue-to-pilot-lesson journey, Back/Forward history, and unavailable provisional IGCSE routes. Tests run against locally served Wrangler assets in CI. Keep this separate from the manual check of the Cloudflare preview and production site; do not mark a live deployment as verified until it has actually been checked. The approved palette, typography, layout and curriculum/release statuses are unchanged.
 
 ## 1. Design direction
 
