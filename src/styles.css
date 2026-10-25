@@ -16,7 +16,7 @@
   --muted: #514b57;
   --text-primary: var(--ink);
   --text-secondary: var(--muted);
-  --text-inverse: #fff9f0;
+  --text-inverse: #F7F8FC;
 
   /* Palette B: aubergine + dusty blue + soft lilac, supported by cool-white reading surfaces. */
   --aubergine: #48264F;
