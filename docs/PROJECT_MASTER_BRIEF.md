@@ -1,6 +1,6 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 1.8  
+**Version:** 1.9  
 **Last updated:** 25 October 2026  
 **Status:** Frontend prototype; pilot lesson content review passed for preview version 1  
 **Working name:** “Criterion Lab” (placeholder only; brand and domain are not yet final)  
@@ -29,7 +29,7 @@ Do not silently change approved prices, credit rules, curriculum scope, SLAs or 
 **No feature, design, policy, content item or document becomes permanently frozen merely because it has been reviewed or approved. Any and all approved/reviewed features and documentation may be updated or changed at a later date.** Keep changes in Git history; record the affected version, date and reason; update dependent documentation; and re-review the parts affected by a material change. A later version does not inherit the previous version's approval automatically. Changes to protected business rules or design-system tokens still follow their existing explicit-approval requirements. This is a change-control rule, not permission to silently override an approval.
 
 
-**v1.8 change note — 25 October 2026:** The owner approved replacing the peach/terracotta/green palette with a balanced aubergine, dusty-blue, buttercream, soft-lilac and plum-charcoal system. The design spec defines global semantic colours for questions, student responses, analysis, model answers, interactive features, strengths and improvement feedback. Typography, spacing and feature behaviour are unchanged. See `docs/DESIGN_SPEC.md` v0.5 for the exact tokens and future-page rules.
+**v1.9 change note — 25 October 2026:** The owner approved Palette B: aubergine, dusty blue, soft lilac and plum charcoal, with cool-white and pale blue-grey as the main light surfaces. Buttercream is limited to small accents and is no longer used as a large background. The semantic learning roles remain consistent across questions, student responses, analysis, model answers, interactive features, strengths and improvement feedback. Typography, spacing and feature behaviour are unchanged. See `docs/DESIGN_SPEC.md` v0.6 for exact tokens and future-page rules.
 
 ### Current implementation state
 
@@ -45,7 +45,7 @@ The public [IB MYP Language and literature page](https://www.ibo.org/programmes/
 
 For every existing and future page, `docs/DESIGN_SPEC.md` Section 2 and the design tokens in `src/styles.css` are authoritative. Reuse the shared Manrope heading, DM Sans body and DM Mono metadata fonts, the approved size tokens, utility classes and semantic text-colour roles. Do not add one-off font families, smaller text, pale grey text on light backgrounds, or new grey hex values simply to style a new page.
 
-The current text tokens are `--text-primary: #28242D`, `--text-secondary: #514B57` and `--text-inverse: #FFF9F0`; `--muted` is also `#514B57`. On 25 October 2026, the owner explicitly approved a site-wide palette refresh: aubergine and dusty blue for brand emphasis and interaction, buttercream and warm white for primary surfaces, soft lilac and pale blue for learning panels, plum charcoal for occasional dark sections, deep blue for positive feedback and muted amber for improvement guidance. The design spec v0.5 and tokens in `src/styles.css` are the source of truth for exact palette and semantic roles. This change does not alter font families, typography sizes, weights, line heights, letter-spacing, layout spacing or feature behaviour. The earlier 1.5× increase to originally ≤10px typography has already been applied to the current CSS; do not scale it again. New non-decorative text must be at least 10.5px, and running text should normally be 13.5–15px or larger.
+The current text tokens are `--text-primary: #28242D`, `--text-secondary: #514B57` and `--text-inverse: #F7F8FC`; `--muted` is also `#514B57`. On 25 October 2026, the owner explicitly approved Palette B for the whole site: aubergine and contrast-tested dusty blue for brand emphasis and interaction; cool white and white for primary surfaces; soft lilac and pale blue-grey for learning panels; plum charcoal for selected dark sections; deep blue for positive feedback; and muted amber for improvement guidance. Buttercream is restricted to small accents. The design spec v0.6 and tokens in `src/styles.css` are the source of truth for exact palette and semantic roles. This change does not alter font families, typography sizes, weights, line heights, letter-spacing, layout spacing or feature behaviour. The earlier 1.5× increase to originally ≤10px typography has already been applied to the current CSS; do not scale it again. New non-decorative text must be at least 10.5px, and running text should normally be 13.5–15px or larger.
 
 Any proposed change to these rules requires explicit founder approval and a coordinated update to the design spec and CSS tokens. Future-page work must preserve font weight, style, line-height, and letter-spacing unless a change is expressly approved.
 
