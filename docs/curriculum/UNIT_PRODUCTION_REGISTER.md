@@ -1,8 +1,8 @@
 # Unit Production Register
 
-**Status:** Internal control register v1.2 — MYP Year 1 guide v1.1, implementation structure v1.1 and resource landscape audit are complete for founder review; approval is required before Unit 1 curriculum production. Later track files remain drafts until their turn in the workflow.
+**Status:** Internal control register v1.3 — MYP Year 1 guide v1.1, implementation structure v1.1 and resource landscape audit are complete for founder review; approval is required before Unit 1 curriculum production. Later track files remain drafts until their turn in the workflow.
 **Source of truth:** docs/PROJECT_MASTER_BRIEF.md, docs/ENGLISH_STAGE_1_ROADMAP.md, docs/ENGLISH_CURRICULUM_GUIDES.md, docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md and the relevant course guide.
-**Rule:** Do not finish an entire curriculum group before moving to the next eligible curriculum. Create one unit at a time in the order below. A blocked item stays blocked; do not invent syllabus objectives or substitute unrelated content to keep the rotation moving.
+**Rule:** Complete Unit 1 for every route in the first Grade 6-equivalent cohort before starting older-level Unit 1 work or any Unit 2. The order is IB MYP Year 1 → Cambridge Lower Secondary Stage 7 → CBSE Grade 6. This is an internal production grouping, not official curriculum equivalence. A blocked item pauses the sequence; do not skip it or invent syllabus objectives.
 
 ## 1. Curriculum guide readiness register
 
@@ -13,20 +13,21 @@
 | IB DP Language A: Language and Literature | Year 1/Year 2 in docs/curriculum/IB_DP_LANGUAGE_A_LANGUAGE_AND_LITERATURE_GUIDE.md | Public-source-aligned guide drafted | Verify session-specific assessment details/criterion version against current official materials before scored mocks |
 | Cambridge IGCSE First Language English 0500 | Syllabus-wide guide and two proposed delivery phases in docs/curriculum/CAMBRIDGE_IGCSE_FIRST_LANGUAGE_ENGLISH_0500_GUIDE.md | Current 2027–2029 syllabus/specimen baseline recorded | Record each learner's examination year and component/route; map every task against the exact syllabus/specimen |
 
-A guide being drafted does not mean every objective is officially mapped, every task is written, or a release gate has passed. For MYP Year 1, the guide and implementation structure are complete as independent public-framework-aligned documents, but founder review is pending. The existing Unit 1 preview has not been reimplemented under this guide. A Cambridge Lower Secondary Stage 7 Unit 1 draft also exists from earlier work; it is not the active checkpoint and must not advance before the founder approves the MYP Year 1 Unit 1 work.
+A guide being drafted does not mean every objective is officially mapped, every task is written, or a release gate has passed. For MYP Year 1, the guide and implementation structure are complete as independent public-framework-aligned documents, but founder review is pending. The existing Unit 1 preview has not been reimplemented under this guide. Cambridge Lower Secondary Stage 7 Unit 1 has an earlier draft, and CBSE Grade 6 Unit 1 has not been created. These are the next two entries in the binding first cohort; neither may be skipped, and no older-level Unit 1 or Unit 2 may start before all three cohort units are student-ready and their required gates recorded.
 
 ## 2. Unit 1 production rotation
 
-**Current checkpoint (26 October 2026):** MYP Year 1 guide v1.1, implementation structure v1.1 and resource landscape review v1.0 complete; **awaiting founder approval** before adapting/implementing Unit 1. Existing “How writers shape meaning” preview is not duplicated and remains preview-only. After the founder approves the guide and Unit 1 is implemented and approved, continue to Cambridge Lower Secondary Stage 7 guide/Unit 1. A Stage 7 Unit 1 draft already exists in this branch but remains a later-track draft and must be reviewed only when that rotation slot becomes active.
+**Current checkpoint (26 October 2026):** MYP Year 1 guide v1.1, implementation structure v1.1 and resource landscape review v1.0 complete; **awaiting founder approval** before adapting/implementing Unit 1. Existing “How writers shape meaning” preview is not duplicated and remains preview-only. The first cohort is IB MYP Year 1 → Cambridge Lower Secondary Stage 7 → CBSE Grade 6. After MYP Unit 1 is approved and implemented, review the existing Stage 7 draft; after Stage 7 Unit 1 is completed, create and complete CBSE Grade 6 Unit 1. Do not proceed to older-level Unit 1 work or Unit 2 until all three are student-ready and required gates are recorded.
 
 | Order | Unit ID | Curriculum/year or delivery phase | Content status | Next action / blocking condition |
 |---:|---|---|---|---|
 | 1 | ib-myp-lal-y1-u1 | IB MYP Language and Literature Year 1 | Existing preview: **How writers shape meaning**, version 1; academic content review passed for preview | Keep as the first rotation slot. Reconcile it with the public-framework Year 1 guide; exact official mapping stays unverified; rights, accessibility and release approval remain outstanding |
 | 2 | cambridge-ls-english-s7-u1 | Cambridge Lower Secondary English 0861 Stage 7 | Draft 1.0 authored in this branch: learner content and separate teacher/editor review pack | Review original content against the currently applicable framework and the public-source guide; exact official objective codes remain blank; then complete academic, rights and accessibility review before UI implementation |
-| 3 | ib-dp-langlit-y1-u1 | IB DP Language A: Language and Literature Year 1 | Planned | Create after Stage 7 Unit 1; use current public course/examiner sources; verify session-specific assessment demands and SL/HL before labelling exam practice |
-| 4 | cambridge-igcse-fle-phase-a-u1 | Cambridge IGCSE First Language English 0500 first proposed delivery phase | Planned | Create after DP Year 1 Unit 1; current public baseline is syllabus Version 1 for exams 2027–2029; check candidate route and use matching current specimens |
-| 5 | ib-myp-lal-y2-u1 | IB MYP Language and Literature Year 2 | Planned | Public-framework-aligned original unit; do not invent official objective codes |
-| 6 | cambridge-ls-english-s8-u1 | Cambridge Lower Secondary English 0861 Stage 8 | Planned | Verify framework version/objectives; build on Stage 7 but do not simply repeat it |
+| 3 | cbse-english-g6-u1 | CBSE English Grade 6 | Not started | Research current CBSE/NCERT sources for Grade 6, create original student-facing Unit 1 and complete required review/release gates; this is the third mandatory first-cohort item |
+| 4 | ib-dp-langlit-y1-u1 | IB DP Language A: Language and Literature Year 1 | Planned; blocked until first cohort is complete | Do not start before MYP Year 1, Cambridge Stage 7 and CBSE Grade 6 Unit 1 are student-ready and all required gates are recorded; then use current public course/examiner sources and verify SL/HL and assessment session |
+| 5 | cambridge-igcse-fle-phase-a-u1 | Cambridge IGCSE First Language English 0500 first proposed delivery phase | Planned; blocked until first cohort is complete | Later-level route; do not begin before the first cohort is complete. Use syllabus Version 1 for exams 2027–2029 and check candidate route/current specimens |
+| 6 | ib-myp-lal-y2-u1 | IB MYP Language and Literature Year 2 | Planned; blocked until first cohort is complete | Later grade band; public-framework-aligned original unit; do not invent official objective codes |
+| 7 | cambridge-ls-english-s8-u1 | Cambridge Lower Secondary English 0861 Stage 8 | Planned; blocked until first cohort is complete | Later grade band; verify framework version/objectives; build on Stage 7 but do not simply repeat it |
 | 7 | ib-dp-langlit-y2-u1 | IB DP Language A: Language and Literature Year 2 | Planned | Check school sequence, candidate SL/HL and applicable assessment session |
 | 8 | cambridge-ls-english-s9-u1 | Cambridge Lower Secondary English 0861 Stage 9 | Planned | Verify framework version/objectives and chosen next pathway |
 | 9 | cambridge-igcse-fle-phase-b-u1 | Cambridge IGCSE First Language English 0500 second proposed delivery phase | Planned | Same syllabus as phase A, not a separate qualification/syllabus; check exam year and route |
@@ -34,7 +35,7 @@ A guide being drafted does not mean every objective is officially mapped, every 
 | 11 | ib-myp-lal-y4-u1 | IB MYP Language and Literature Year 4 | Planned | Keep mapping labels honest |
 | 12 | ib-myp-lal-y5-u1 | IB MYP Language and Literature Year 5 | Planned | Verify school-selected pathway; do not assume optional MYP eAssessment |
 
-**Rotation rule:** Unit 1 is handled across the entire approved track list above before producing Unit 2. Then repeat the same order for Unit 3. If an item is blocked by an actual evidence gap, record the gap and pause that item; do not leap ahead to write Unit 2 or complete an entire curriculum group first.
+**Rotation rule:** Complete all three first-cohort Unit 1s (IB MYP Year 1, Cambridge Lower Secondary Stage 7, CBSE Grade 6) before beginning any older-level Unit 1. If a cohort unit is blocked, pause and report the blocker. Do not skip to another older track or start Unit 2. After the first cohort passes its completion standard, resume the remaining approved Unit 1 rotation, then return to Unit 2 only after the wider approved Unit 1 rotation is complete.
 
 ## 3. Unit-level production gates
 
@@ -63,7 +64,7 @@ Before a unit is considered draft-complete:
 
 The first slot, IB MYP Year 1 Unit 1, already exists as the reviewed preview **How writers shape meaning**. The public-framework guide and route structure are complete, but the founder must approve them before Unit 1 is adapted/implemented as curriculum content. Do not duplicate the preview. Rights, accessibility, official mapping and final release remain unresolved. Do not duplicate it.
 
-A draft for the later slot, **Cambridge Lower Secondary English Stage 7 Unit 1**, already exists in docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md and docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_TEACHER_REVIEW_PACK.md. It has not passed academic review, been integrated into the application, or been released. Do not advance or review it as the active task until the founder approves the MYP Year 1 checkpoint and MYP Unit 1 work is approved. Then return to this existing Stage 7 draft rather than creating a duplicate.
+A draft for the second first-cohort slot, **Cambridge Lower Secondary English Stage 7 Unit 1**, already exists in docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md and docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_TEACHER_REVIEW_PACK.md. It has not passed academic review, been integrated into the application, or been released. Do not advance it until the founder approves the MYP Year 1 checkpoint and MYP Unit 1 work is approved. Then return to this existing Stage 7 draft rather than creating a duplicate. The third first-cohort slot is CBSE Grade 6 Unit 1; no content exists for it yet.
 
 
 ## 6. Expanded MYP research checkpoint — 26 October 2026
