@@ -1,6 +1,6 @@
 # English Curriculum Guides — Year/Stage Framework and Pathway Implementation Plan
 
-**Status:** Internal guide register v0.6. Draft curriculum chapters now exist for all 12 planned year/stage/delivery entries across four curriculum groups; exact official objective maps remain unverified where current descriptors are not directly available.
+**Status:** Internal guide register v0.7. Draft curriculum chapters now exist for all 12 planned year/stage/delivery entries across four curriculum groups; exact official objective maps remain unverified where current descriptors are not directly available.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`, `ENGLISH_STAGE_1_ROADMAP.md`, `ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`, and `ENGLISH_PUBLIC_SOURCE_REGISTER.md`.
 **Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences.
 
@@ -11,8 +11,8 @@ Use **one independently reviewable guide per curriculum-year/stage track**, plus
 Use a separate implementation-plan document for each curriculum-year/stage track. Keep shared research methods, evidence standards, source-access limits and the rubric in the central research standard/register.
 
 Canonical guide files:
-- `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md` — **completed public-framework-aligned guide v1.0; founder review pending**.
-- `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md` — **completed corresponding implementation structure v1.0; no application changes included**.
+- `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md` — **guide v1.1 approved by founder 26 Oct 2026; official mapping remains unverified**.
+- `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md` — **implementation plan v1.2 records Unit 1 v2 candidate; awaiting founder review in PR #14; no production release**.
 - `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_GUIDE.md` — legacy group draft with Years 1–5 chapters; Year 1 is superseded by the standalone guide. Years 2–5 remain drafts, not completed/approved guides.
 - `docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md` — existing group draft; review/split Stage 7 as the next guide only after the founder approves MYP Year 1 Unit 1.
 - `docs/curriculum/IB_DP_LANGUAGE_A_LANGUAGE_AND_LITERATURE_GUIDE.md` — existing group draft; review/split DP Year 1 as its own guide when it reaches the approved rotation.
@@ -28,7 +28,7 @@ The entries below define **guide work to complete**, not official IB/Cambridge t
 
 | Track | Guide chapter | Scope to research | Current state |
 |---|---|---|---|
-| IB MYP Language and Literature | Year 1 | Public six-skill framework, inquiry, text/context/audience/purpose; progressive evidence-led unit plan | Standalone guide v1.0 and implementation plan v1.0 complete; founder review pending; official objective/strand mapping not claimed; Unit 1 implementation awaits approval |
+| IB MYP Language and Literature | Year 1 | Public six-skill framework, inquiry, text/context/audience/purpose; six-unit 50-hour platform plan and evidence-led Unit 1 | Guide v1.1/implementation approved by founder; Unit 1 v2 in founder review; current official objective/strand mapping not claimed; rights/accessibility/release gates remain open |
 | IB MYP Language and Literature | Year 2 | Independent evidence selection, stronger reasoning and purposeful communication | Draft chapter exists; official mapping unverified |
 | IB MYP Language and Literature | Year 3 | Sustained analysis, evidence-driven argument and comparison | Draft chapter exists; official mapping unverified |
 | IB MYP Language and Literature | Year 4 | Layered interpretation, contextual nuance and synthesis | Draft chapter exists; official mapping unverified |
@@ -182,3 +182,8 @@ The current pilot **How writers shape meaning** remains academic-review passed f
 The v1.0 guide's research scope was too narrow for the founder's request to assess MYP-focused EdTech platforms. Version 1.1 now includes a dedicated comparative audit of InThinking/ThinkIB, ASJ Learning, Hachette Learning/MYP by Concept, ManageBac+, Toddle, My IB Hub and lower-confidence marketplace sources, alongside current public IB pages and the indexed 2014/15 detailed guide reference.
 
 The old detailed guide is treated as a **legacy reference, not verified current edition**. Enhanced MYP beta guidance remains a separate transition watch. Year 1 is now six proposed units plus shared time for diagnostics, language support, retrieval, revision and transfer, totaling at least 50 planned teaching hours. These unit names/order are platform decisions, not IB-prescribed structure. The revised guide and implementation structure await founder review; keep Unit 1 and the later-track rotation blocked until approvals are recorded.
+
+
+## MYP Year 1 Unit 1 checkpoint — 26 October 2026
+
+The approved research method and guide are now followed by a v2 revision of the existing Unit 1 preview, not a duplicate. The candidate is in draft PR #14 and is awaiting founder review. It adds a paired original poster, an unscored entry observation, a text/visual comparison task, guided evidence-based explanation, response revision and an independent fresh-text exit check. Version 1's approval remains preview-only and does not transfer to version 2. Do not begin the next active curriculum content checkpoint until the founder approves this exact Unit 1 version.
