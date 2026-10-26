@@ -1,0 +1,79 @@
+# MYP Year 1 Unit 1 — Version 2 Reconciliation and Review Record
+
+**Version:** 1.0  
+**Date:** 26 October 2026  
+**Status:** Implemented candidate; awaiting founder review in draft PR #14.  
+**Unit:** IB MYP Language and Literature Year 1, Unit 1.  
+**Content version:** 2 — “How writers and creators shape meaning”.  
+**Guide baseline:** Approved guide v1.1 and implementation structure v1.2.  
+**Important:** This record is not an official IB mapping, academic-review pass, rights clearance, accessibility approval or release authorization.
+
+## 1. Decision and version history
+
+The founder approved the MYP Year 1 curriculum guide, implementation structure and official-plus-specialist-resource research method on 26 October 2026. The next step was to reconcile the existing “How writers shape meaning” preview with the approved six-unit plan, rather than create duplicate content.
+
+Version 1 passed academic content review for pilot preview on 24 October 2026. That approval is specific to version 1. The changes documented here are a material revision and therefore use version 2 with a fresh review state:
+
+- Learner data: src/content/pilotLearnerLesson.ts, ID pilot-lesson-how-writers-shape-meaning-v2.
+- Teacher/editor pack: src/content/pilotLessonPack.ts, ID draft-lesson-how-writers-shape-meaning-v2.
+- Safe Pathways metadata: src/content/pilotReviewSummary.ts, version 2 and draft-for-founder-review.
+- Planning brief: src/content/pilotUnitDraft.ts, version 2.
+- Readiness state: src/content/unitReadiness.ts, version-specific reviewer and answer-key status.
+- User-facing route label: src/content/pathways.ts.
+- Preview rendering/status: src/App.tsx; new poster/entry/transfer styles in src/styles.css.
+
+Version 2 is in a pull request preview branch, not merged to main and not deployed to production. It must not be described as an approved Unit 1 or released MYP course.
+
+## 2. Alignment with the approved Year 1 guide
+
+| Guide v1.1 requirement / design choice | Version 2 response | Evidence or limit |
+|---|---|---|
+| Read and view varied text forms | Keeps the original prose passage and adds an original fictional night-bus poster rendered with HTML/CSS. | Direct reading and viewing opportunities; poster includes visible text and a written visual description. |
+| Establish a diagnostic before instruction | Adds an unscored starting observation: identify a word or visual detail and describe it before interpreting it. | Temporary UI state only; not a saved diagnostic, score or persistent learner record. |
+| Model an explicit evidence process | Uses choice → evidence → effect in context and an annotated example. | Learner instructions remain separate from answer keys/model responses. |
+| Explain creator choices, meaning and audience | Adds a comparison task that asks learners to use a specific phrase from the passage and a written/visual choice from the poster. | It teaches plausible audience effects; it does not assume every reader responds identically. |
+| Develop reasoning in context | Retains “warm light spilled across the wet pavement” and asks learners to consider Mara’s final hesitation. | Success indicators encourage evidence-based qualification, not one compulsory interpretation. |
+| Include deliberate practice and revision | Includes a supported choice question, short responses, text/visual comparison, contextual interpretation and revision of a weak visual-analysis response. | Teacher/editor answer guide remains outside the learner-facing module graph. |
+| Demonstrate transfer on a fresh task | Uses a new original micro-extract about a sunrise platform and yellow scarf for the exit task. | Requires new evidence; not represented as an IB specimen. |
+| Keep skill claims honest | Main assessed modes are reading, viewing and written explanation/comparison. Optional partner discussion is an extension only. | The preview does not capture or score speaking/listening performance; do not claim that it does. |
+| Keep official mapping separate from internal design | Official objective-code array remains empty; mapping status remains unverified. The 2014/15 guide is a labelled legacy crosswalk only. | No official objective/strand code is invented or inferred from a third-party platform. |
+| Separate content/release gates | Version 2 is marked draft-for-founder-review; official mapping, academic review, rights, accessibility and release approval remain separate. | Version 1 approval does not transfer to this revision. |
+
+## 3. Review of text, poster and source rights
+
+The prose passage is original to the platform and retained from version 1. The night-bus poster uses original copy and art direction, rendered from HTML/CSS shapes and visible text. The exit-ticket micro-extract is also original. No protected IB question, textbook extract, specialist-platform lesson, model response or past-paper question is reproduced.
+
+This is a documented origin claim, not completed legal/rights clearance. The rights reviewer must still record the applicable approval basis for this exact version, including any future changes to copy, graphics, fonts or other assets. Do not add third-party materials without a fresh rights check.
+
+## 4. Version 2 quality and accessibility checklist
+
+| Check | State | Note |
+|---|---|---|
+| Reconciled with approved Unit 1 focus | Complete for review | Retains evidence-based analysis and extends it to an original visual artefact. |
+| Original learner text/visual/transfer | Drafted | Final rights review remains open. |
+| Learning objective and success criteria | Drafted | Platform-authored; not an official IB objective statement. |
+| Entry observation and fresh-text transfer | Implemented in preview branch | Both are temporary, not graded or persisted. |
+| Answer/model response separation | Implemented in source structure | CI/source review must confirm the teacher pack is not imported into client modules. |
+| Current official Year 1 map | Unverified | Keep officialObjectiveCodes empty. |
+| Academic review for v2 | Pending founder review | Version 1's review is retained as history only. |
+| Reading and visual description | Present | Screen-reader order and reading load still need testing. |
+| Keyboard, focus, zoom/reflow, contrast and small-screen layout | Review pending | JSX and CSS changed; formal accessibility review has not been completed. |
+| Age/level and cultural/context suitability | Review pending | Founder/academic review required. |
+| Release approval | Not approved | No released/syllabus-mapped-course claim. |
+
+## 5. What must happen next
+
+1. Founder reviews the version 2 preview and its separate teacher/editor pack.
+2. Record accept/revise/reject for this exact version; never carry version 1 approval forward automatically.
+3. If revisions are requested, create the next version and update source/review metadata.
+4. Complete academic, rights, accessibility, age/level and cultural/context checks separately.
+5. Keep official objective/strand codes blank unless the applicable current IB guide is verified.
+6. Merge content/app changes only after the founder approves version 2 and required checks for the intended status have been addressed.
+7. Do not move the content rotation to Cambridge Lower Secondary Stage 7 until Unit 1 version 2 has been approved.
+
+## 6. Current PR and deployment status
+
+- **PR #14:** Unit 1 v2 candidate plus supporting application/documentation changes; founder review pending.
+- **Main branch:** Still contains the previously reviewed version 1 preview; v2 is not on main.
+- **Production:** No deployment of version 2 has occurred.
+- **Cambridge Stage 7:** Draft learner/teacher files remain in separate inactive draft PR #12; they are not part of this Unit 1 PR and must not advance yet.
