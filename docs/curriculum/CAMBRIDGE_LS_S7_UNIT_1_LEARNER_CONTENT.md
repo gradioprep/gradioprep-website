@@ -29,7 +29,7 @@ Read this original mini-example:
 
 Which statement is directly stated?
 - The room was cold.
-- The map's corners moved and a chair scraped.
+- The map's corners moved and a sheet of paper skated across the floor.
 - Dev was frightened.
 
 Now consider this inference: *Air was moving through the room.* The two details support that idea. They do not prove every possible explanation, so a good reader checks that an inference fits the whole context.
