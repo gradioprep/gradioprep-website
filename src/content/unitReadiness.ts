@@ -8,9 +8,10 @@ import { pilotReviewSummary } from "./pilotReviewSummary";
 import { pilotLearnerLesson } from "./pilotLearnerLesson";
 
 /**
- * Static planning records, not a database. The pilot's content-review outcome,
- * lesson IDs and practice IDs are recorded for version 1. Curriculum mapping,
- * rights/accessibility review and release approval remain separate requirements.
+ * Static planning records, not a database. Review and practice metadata follow
+ * the currently selected content version. A previous version's review outcome
+ * is never copied to a new draft. Curriculum mapping, rights/accessibility
+ * review and release approval remain separate requirements.
  */
 export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathway =>
   pathway.unitSlots.map((unit: PlannedUnitSlot): UnitContentPlan => {
