@@ -232,12 +232,14 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
   const unitPath = unitPathForId(pathway.id, unit.id);
   const curriculumContext = `${pathway.programmeName} · ${pathway.courseName} · ${pathway.levelLabel} · Unit ${unit.sequence}`;
   const lesson = pilotLearnerLesson;
+  const [entryResponse, setEntryResponse] = useState("");
+  const [entryReviewed, setEntryReviewed] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [attempted, setAttempted] = useState<Record<string, boolean>>({});
   const [exitResponse, setExitResponse] = useState("");
   const [exitReviewed, setExitReviewed] = useState(false);
-  const attemptedCount = Object.values(attempted).filter(Boolean).length + (exitReviewed ? 1 : 0);
+  const attemptedCount = Object.values(attempted).filter(Boolean).length + (entryReviewed ? 1 : 0) + (exitReviewed ? 1 : 0);
 
   const updateResponse = (id: string, value: string) => {
     setResponses(previous => ({ ...previous, [id]: value }));
@@ -248,32 +250,37 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
     item.options ? Boolean(selectedOptions[item.id]) : Boolean(responses[item.id]?.trim());
 
   return <Shell page="lesson" go={go} context={curriculumContext}>
-    <InfoNote><b>Academic content review passed.</b> This lesson is approved for pilot preview only. Official IB guide edition and objective mapping remain unverified. Practice responses are temporary to this open preview; nothing is saved or graded.</InfoNote>
+    <InfoNote>
+      {lesson.reviewRecord.outcome === "passed"
+        ? <><b>Academic content review passed.</b> This version is approved for pilot preview only. Official Year 1 mapping and release approval remain open.</>
+        : <><b>Unit 1 version {lesson.version} is awaiting founder review.</b> Version 1's preview approval does not automatically apply to this revision. Official Year 1 mapping and release approval remain open.</>}
+      {" "}Practice responses are temporary to this open preview; nothing is saved or graded.
+    </InfoNote>
     <div className="proto-crumb"><button type="button" onClick={() => navigatePath("/pathways")}>Pathways</button> / <button type="button" onClick={() => navigatePath(curriculumPath)}>{pathway.programmeName} · {pathway.courseName}</button> / <button type="button" onClick={() => navigatePath(levelPath)}>{pathway.levelLabel}</button> / <button type="button" onClick={() => navigatePath(unitPath)}>Unit {unit.sequence}</button> / <b>Lesson</b></div>
     <div className="proto-lesson-head">
       <div>
-        <Label>IB MYP LANGUAGE & LITERATURE · PILOT PREVIEW</Label>
+        <Label>IB MYP LANGUAGE & LITERATURE · UNIT 1 REVIEW PREVIEW</Label>
         <h1>Notice the choice.<br /><em>Explain the effect.</em></h1>
         <p>{lesson.proposedLearningObjective}</p>
       </div>
       <div className="proto-progress">
         <small>LESSON VERSION</small>
-        <b>01 <span>· {lesson.estimatedMinutes} min</span></b>
+        <b>{String(lesson.version).padStart(2, "0")} <span>· {lesson.estimatedMinutes} min</span></b>
         <div><i style={{ width: "100%" }} /></div>
-        <small>Reviewed {lesson.reviewRecord.reviewedAt} · Not saved</small>
+        <small>{lesson.reviewRecord.reviewRecord?.reviewedAt ?? (lesson.reviewRecord.outcome === "passed" ? `Reviewed ${lesson.reviewRecord.reviewedAt}` : "Founder review pending")} · Not saved</small>
       </div>
     </div>
 
     <section className="proto-panel proto-pilot-learner-summary">
       <div className="proto-panel-heading">
         <div><h2>What success looks like</h2><p>Use these as you read, practise and review your own responses.</p></div>
-        <span>PREVIEW V1</span>
+        <span>{lesson.reviewRecord.outcome === "passed" ? `PREVIEW V${lesson.version}` : `DRAFT V${lesson.version} · REVIEW PENDING`}</span>
       </div>
       {lesson.successCriteria.map((item,index) => <div className="proto-skill-row proto-readiness-row" key={item}><i>{String(index+1).padStart(2,"0")}</i><div><b>{item}</b></div></div>)}
     </section>
 
     <div className="proto-learning-route" aria-label="Lesson steps">
-      <div className="route-read"><span>01</span><i aria-hidden="true">▤</i><b>Read the passage</b><small>Notice details</small></div>
+      <div className="route-read"><span>01</span><i aria-hidden="true">▤</i><b>Read + view</b><small>Notice choices</small></div>
       <div className="route-connector" aria-hidden="true">→</div>
       <div className="route-idea"><span>02</span><i aria-hidden="true">✦</i><b>The idea</b><small>Spot the pattern</small></div>
       <div className="route-connector" aria-hidden="true">→</div>
@@ -286,6 +293,34 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
           <h2>{lesson.passage.label}</h2>
           <blockquote className="proto-pilot-passage">{lesson.passage.text}</blockquote>
           <p className="proto-unit-readiness-intro">{lesson.passage.rightsNote}</p>
+          <figure className="proto-pilot-poster">
+            <div className="proto-pilot-poster-card">
+              <p className="proto-pilot-poster-kicker">{lesson.companionArtifact.kicker}</p>
+              <h3>{lesson.companionArtifact.headline}</h3>
+              <div className="proto-pilot-poster-scene" aria-hidden="true">
+                <span className="proto-pilot-poster-glow" />
+                <span className="proto-pilot-poster-shelter" />
+                <span className="proto-pilot-poster-person" />
+              </div>
+              <p className="proto-pilot-poster-supporting">{lesson.companionArtifact.supportingText}</p>
+              <p className="proto-pilot-poster-footer">{lesson.companionArtifact.footerText}</p>
+            </div>
+            <figcaption>{lesson.companionArtifact.altText}</figcaption>
+            <p className="proto-unit-readiness-intro">{lesson.companionArtifact.rightsNote}</p>
+          </figure>
+        </section>
+        <section className="proto-panel proto-pilot-entry-check">
+          <Label>STARTING POINT · NOT GRADED</Label>
+          <h2>What do you notice first?</h2>
+          <p>{lesson.entryCheck.prompt}</p>
+          <label className="proto-pilot-response-label">Your first observation
+            <textarea rows={3} value={entryResponse} onChange={event => { setEntryResponse(event.target.value); setEntryReviewed(false); }} placeholder={lesson.entryCheck.placeholder} />
+          </label>
+          <div className="proto-pilot-question-footer">
+            <small>{entryReviewed ? "STARTING THOUGHT REVIEWED" : "NOT YET REVIEWED"}</small>
+            <button type="button" className="proto-action secondary" disabled={!entryResponse.trim()} onClick={() => setEntryReviewed(true)}>Review my observation</button>
+          </div>
+          {entryReviewed && <div className="proto-answer-feedback right"><b>Check your starting point</b><ul>{lesson.entryCheck.successIndicators.map(point => <li key={point}>{point}</li>)}</ul><p>Keep this first thought. You can revisit it after the model and practice.</p></div>}
         </section>
         <section className="proto-panel proto-explanation proto-learning-stage stage-idea">
           <Label>02 · THE IDEA</Label>
@@ -335,6 +370,11 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
         <section className="proto-panel proto-pilot-exit">
           <Label>05 · EXIT TICKET</Label>
           <h2>Try the thinking move independently</h2>
+          <div className="proto-pilot-transfer-stimulus">
+            <small>{lesson.exitTicket.stimulus.label}</small>
+            <blockquote>{lesson.exitTicket.stimulus.text}</blockquote>
+            <p>{lesson.exitTicket.stimulus.rightsNote}</p>
+          </div>
           <p>{lesson.exitTicket.prompt}</p>
           <label className="proto-pilot-response-label">Your exit response
             <textarea rows={5} value={exitResponse} onChange={event=>{setExitResponse(event.target.value);setExitReviewed(false);}} placeholder="Use precise evidence, explain what it may suggest, and connect it to the context..." />
@@ -359,7 +399,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
         <Label>IN THIS LESSON</Label>
         {lesson.sections.map((section,index)=><div className="proto-outline-row" key={section.id}><i>{String(index+1).padStart(2,"0")}</i><span><b>{section.heading.replace(/^\d+\.\s*/,"")}</b><small>{section.purpose}</small></span></div>)}
         <div className="proto-aside-tip"><span>Aa</span><b>Keep the evidence chain visible</b><p>Choice → association → effect in context. A quotation is the start of your explanation, not the whole explanation.</p></div>
-        <div className="proto-aside-tip"><span>i</span><b>About this preview</b><p>Academic content review passed on {lesson.reviewRecord.reviewedAt}. Official curriculum mapping is still unverified.</p></div>
+        <div className="proto-aside-tip"><span>i</span><b>About this version</b><p>{lesson.reviewRecord.outcome === "passed" ? `Academic content review passed on ${lesson.reviewRecord.reviewedAt}; the content is preview-only.` : `Version ${lesson.version} is awaiting founder review. Version 1's approval does not transfer to this revision.`} Official curriculum mapping is unverified.</p></div>
         <p className="proto-note-bottom">{lesson.learnerNote}</p>
       </aside>
     </div>
