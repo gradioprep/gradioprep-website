@@ -2,7 +2,7 @@
 
 **Version:** 1.1 — expanded MYP-specific resource review and six-unit scope-and-sequence  
 **Status:** Internal curriculum design for founder review; not an official IB guide or complete verified syllabus map.
-**Production sequence:** Unit 1 is first in the internal Grade 6-equivalent cohort; Cambridge Lower Secondary Stage 7 and CBSE Grade 6 Unit 1 must also be completed before older-level Unit 1 or any Unit 2 begins. This is not a claim of official curriculum equivalence.  
+**Production sequence:** Complete Unit 1 across the first cohort (MYP Year 1, Cambridge Lower Secondary Stage 7, CBSE Grade 6), then the next comparable band (MYP Year 2, Cambridge Stage 8, CBSE Grade 7), and subsequent bands in order after verifying actual age/grade alignment. Do not begin Unit 2 for the first cohort next; Unit 2 starts only after Unit 1 is complete across all approved in-scope levels. This is an internal production plan, not a claim of official curriculum equivalence.  
 **Programme/course:** IB Middle Years Programme (MYP), Language and Literature.  
 **Year:** Year 1.  
 **Pathway ID:** ib-myp-lal-y1.  
