@@ -19,7 +19,7 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
       id: `plan-${unit.id}`,
       unitId: unit.id,
       pathwayId: pathway.id,
-      version: 1,
+      version: isPilotUnit ? pilotLearnerLesson.version : 1,
       title: isPilotUnit ? pilotLearnerLesson.title : unit.title,
       releaseStatus: "planned",
       syllabusEditionCode: null,
@@ -30,9 +30,15 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
       learningObjective: isPilotUnit ? pilotLearnerLesson.proposedLearningObjective : null,
       lessonIds: isPilotUnit ? [pilotLearnerLesson.id] : [],
       practiceQuestionIds: isPilotUnit ? pilotLearnerLesson.practiceItems.map(item => item.id) : [],
-      answerKeyReviewState: isPilotUnit ? "passed" : "not-started",
-      academicReviewer: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewerLabel : null,
-      academicReviewedAt: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewedAt : null,
+      answerKeyReviewState: isPilotUnit
+        ? (pilotLearnerLesson.reviewRecord.outcome === "passed" ? "passed" : "in-review")
+        : "not-started",
+      academicReviewer: isPilotUnit && pilotLearnerLesson.reviewRecord.outcome === "passed"
+        ? pilotLearnerLesson.reviewRecord.reviewerLabel
+        : null,
+      academicReviewedAt: isPilotUnit && pilotLearnerLesson.reviewRecord.outcome === "passed"
+        ? pilotLearnerLesson.reviewRecord.reviewedAt
+        : null,
       contentRightsNote: null,
       accessibilityReviewState: "not-started",
       releaseApprovedBy: null,
