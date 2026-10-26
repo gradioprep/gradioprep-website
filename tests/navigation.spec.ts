@@ -150,3 +150,16 @@ test.describe("MYP Year 1 Unit 1 version 2 review preview", () => {
     await expect(page.getByText(/This is a checklist, not a mark or a saved assessment/i)).toBeVisible();
   });
 });
+
+test("Unit 1 detail and level views show the v2 review gate instead of inheriting v1 approval", async ({ page }) => {
+  await page.goto(ibUnitOne);
+
+  await expect(page.getByRole("heading", { name: /How writers and creators shape meaning.*review draft/i })).toBeVisible();
+  await expect(page.getByText(/Awaiting review of version 2/i)).toBeVisible();
+  await expect(page.getByText(/Version 1 approval does not transfer to this revision/i)).toBeVisible();
+  await expect(page.getByRole("button", { name: /Continue to Unit 1 review draft/i })).toBeVisible();
+
+  await page.goto(ibYearOne);
+  await expect(page.getByText(/Unit 1 version 2 awaiting founder review/i)).toBeVisible();
+  await expect(page.getByText(/Academic review passed for pilot preview v1/i)).toHaveCount(0);
+});
