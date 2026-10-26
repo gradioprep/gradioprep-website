@@ -3,8 +3,8 @@ import type { PilotLessonPack } from "./model";
 /**
  * Teacher/editor source for Unit 1 candidate version 2.
  * Contains answer keys and model responses and MUST NOT be imported by the
- * client application. It is awaiting founder review; version 1's review does
- * not automatically transfer to this revision.
+ * client application. The founder approved this content version as a candidate;
+ * separate academic and release gates remain open.
  */
 export const pilotLessonPack: PilotLessonPack = {
   id: "draft-lesson-how-writers-shape-meaning-v2",
