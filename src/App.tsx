@@ -300,7 +300,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
               <div className="proto-pilot-poster-photo-wrap">
                 <img
                   className="proto-pilot-poster-photo"
-                  src="https://images.pexels.com/photos/19092243/pexels-photo-19092243/free-photo-of-people-on-a-bus-stop-at-night.jpeg?auto=compress&dpr=1&h=750&w=1260"
+                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Bus_stop_with_platform_during_night.jpg"
                   alt={lesson.companionArtifact.altText}
                   loading="lazy"
                   decoding="async"
@@ -309,7 +309,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
               <p className="proto-pilot-poster-supporting">{lesson.companionArtifact.supportingText}</p>
               <p className="proto-pilot-poster-footer">{lesson.companionArtifact.footerText}</p>
             </div>
-            <figcaption>Notice how the illuminated shelter and waiting passengers contrast with the dark street and reflections on wet pavement.</figcaption>
+            <figcaption>Notice how the empty platform, orange streetlights and distant headlights create a particular mood. Photograph by Mateusz Konieczny, released under CC0 1.0.</figcaption>
             <p className="proto-unit-readiness-intro">{lesson.companionArtifact.rightsNote}</p>
           </figure>
         </section>
