@@ -66,12 +66,12 @@ export const pilotUnitDraft: PilotUnitDraft = {
     "Founder reviews and approves this exact version 2 before the curriculum rotation advances.",
     "Complete item-level academic review; version 1 approval does not carry forward.",
     "Keep official Year 1 objective/strand codes blank until the applicable current guide is verified.",
-    "Complete rights review for original prose, original poster copy/layout, and the Pexels photograph, including current licence and model/property-release requirements.",
+    "Record final asset provenance and complete the unit-level rights review for original prose, original poster copy/layout and the CC0 photograph; check the asset for third-party marks or other visible rights concerns.",
     "Complete and record accessibility, visual, reading-demand and age/level suitability checks.",
     "Record explicit release approval only after all required gates are complete.",
   ],
   rightsNote:
-    "The prose and poster copy/layout are platform-authored. The poster uses Berk Aktas's photograph “People on a Bus Stop at Night” (Pexels, 2023): https://www.pexels.com/photo/people-on-a-bus-stop-at-night-19092243/. Pexels lists the photo as free to use under its Pexels License; confirm current licence terms and any model/property-release requirements before wider release.",
+    "The prose and poster copy/layout are platform-authored. The poster uses “Bus stop with platform during night.jpg” by Mateusz Konieczny, Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Bus_stop_with_platform_during_night.jpg. The file page records CC0 1.0 Universal Public Domain Dedication. The photo contains no identifiable people or visible commercial branding. Licence/source checked before selection on 26 October 2026; final unit-level rights review remains a separate release gate.",
   releaseNote:
     "Version 2 is a founder-review draft. Version 1 remains the previously reviewed pilot preview, but no approval automatically transfers to version 2. Official mapping, rights, accessibility and release approval are still open.",
 };
