@@ -1,10 +1,10 @@
 # IB and Cambridge Curriculum Research Workflow
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** Binding internal workflow for every level and course in the approved English scope  
 **Owner:** Curriculum director / academic lead  
 **Last reviewed:** 26 October 2026  
-**Applies to:** IB MYP Language and Literature Years 1–5; IB DP Language A: Language and Literature platform delivery Years 1–2; Cambridge Lower Secondary English (0861) Stages 7–9; Cambridge IGCSE First Language English (0500), with platform delivery bands treated as internal sequencing rather than separate qualifications.
+**Applies to:** IB MYP Language and Literature Years 1–5; IB DP Language A: Language and Literature platform delivery Years 1–2; Cambridge Lower Secondary English (0861) Stages 7–9; Cambridge IGCSE First Language English (0500); and CBSE English Grades 6–12, with platform delivery bands treated as internal sequencing rather than separate qualifications.
 
 ## 1. Standing access decision — do not ask the founder again
 
@@ -32,6 +32,17 @@ Complete and record these steps independently for each course, stage/year and ap
 10. **Checkpoint before the next unit.** Present the completed guide, implementation structure, source comparison, limitations, confidence rating and proposed next action. Obtain the founder's explicit approval before beginning each Unit 1 implementation/adaptation or other scope-gated unit work. Respect the approved curriculum-rotation order. Do not merge, publish or release without the applicable approvals.
 
 ## 3. Curriculum-specific rules
+
+### CBSE (Grades 6–12)
+- The founder has approved adding CBSE English Grades 6–12 to product scope. This does not change the architecture, reusable unit structure, curriculum rotation, research protocol or release gates.
+- Follow the dedicated scope note at `docs/curriculum/CBSE_ENGLISH_GRADES_6_12_PATHWAY_RESEARCH_BRIEF.md`.
+- Establish the exact current academic-session position separately for every grade. For Grades 6–8, check current NCERT textbooks, NCF-SE 2023 learning standards/competencies and relevant CBSE notices; do not assume a separate CBSE syllabus PDF exists for each class.
+- For Grades 9–10, verify the current CBSE secondary curriculum, NCERT alignment notices and applicable English route/options. For Grades 11–12, preserve the distinction between English Core and English Elective and verify current subject codes, prescribed texts and assessment structure.
+- Treat 2026–27 curriculum materials and circulars as the current starting point at the date of this workflow, not as proof that every grade has identical changes. Recheck official CBSE/NCERT updates before each grade's curriculum design.
+- Keep the R3/three-language scheme distinct from English subject requirements; do not misstate a third-language policy change as an English curriculum change.
+- Compare relevant India-focused and international specialist EdTech/teaching resources for implementation ideas, but never use a third-party platform as authority for CBSE syllabus requirements.
+- Retain the existing unit-by-unit cross-track rotation and all separate academic, official-mapping/currency, rights, accessibility, age/cultural suitability and release gates. The scope addition alone does not authorise unit implementation or publication.
+
 
 ### IB (MYP and DP)
 - Start with current public IB programme/subject pages, publicly accessible assessment information, subject briefs, public examiner instructions and any official public updates. Check relevant independent IB-specialist platforms and publishers for teaching structure and assessment interpretation.
