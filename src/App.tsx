@@ -403,7 +403,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
         <Label>IN THIS LESSON</Label>
         {lesson.sections.map((section,index)=><div className="proto-outline-row" key={section.id}><i>{String(index+1).padStart(2,"0")}</i><span><b>{section.heading.replace(/^\d+\.\s*/,"")}</b><small>{section.purpose}</small></span></div>)}
         <div className="proto-aside-tip"><span>Aa</span><b>Keep the evidence chain visible</b><p>Choice → association → effect in context. A quotation is the start of your explanation, not the whole explanation.</p></div>
-        <div className="proto-aside-tip"><span>i</span><b>About this version</b><p>{lesson.reviewRecord.outcome === "passed" ? `Academic content review passed on ${lesson.reviewRecord.reviewedAt}; the content is preview-only.` : `Version ${lesson.version} is awaiting founder review. Version 1's approval does not transfer to this revision.`} Official curriculum mapping is unverified.</p></div>
+        <div className="proto-aside-tip"><span>i</span><b>About this version</b><p>{lesson.reviewRecord.outcome === "passed" ? `Academic content review passed on ${lesson.reviewRecord.reviewedAt}; the content is preview-only.` : lesson.status === "founder-approved-candidate" ? "Founder-approved content candidate. Separate academic review, official mapping, rights, accessibility and release checks remain open." : `Version ${lesson.version} is awaiting founder review. Version 1's approval does not transfer to this revision.`} Official curriculum mapping is unverified.</p></div>
         <p className="proto-note-bottom">{lesson.learnerNote}</p>
       </aside>
     </div>
@@ -549,7 +549,7 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
         {selectedPathway.unitSlots.map(unit => (
           <article className="proto-level-unit-row" key={unit.id}>
             <span className="proto-level-unit-number">{String(unit.sequence).padStart(2, "0")}</span>
-            <div><h3>{unit.title}</h3><p>{unit.reviewNote}</p><div className="proto-level-status compact"><span>Mapping</span><b>Unverified</b><span>Release</span><b>Planned</b>{unit.id === pilotReviewSummary.unitId && <b className="proto-review-status">{pilotReviewSummary.reviewRecord.outcome === "passed" ? "Academic review passed for pilot preview v" + pilotReviewSummary.version : "Unit 1 version 2 awaiting founder review"}</b>}</div></div>
+            <div><h3>{unit.title}</h3><p>{unit.reviewNote}</p><div className="proto-level-status compact"><span>Mapping</span><b>Unverified</b><span>Release</span><b>Planned</b>{unit.id === pilotReviewSummary.unitId && <b className="proto-review-status">{pilotReviewSummary.reviewRecord.outcome === "passed" ? "Academic review passed for pilot preview v" + pilotReviewSummary.version : pilotReviewSummary.status === "founder-approved-candidate" ? "Founder-approved content candidate — other gates open" : "Unit 1 version 2 awaiting founder review"}</b>}</div></div>
             <button type="button" className="proto-text-link" onClick={() => openUnit(unit.id)}>{unit.id === pilotReviewSummary.unitId ? "View pilot unit" : "View unit details"} <span>↗</span></button>
           </article>
         ))}
@@ -568,10 +568,10 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
 
     {view === "unit" && selectedUnit && <>
       <div className="proto-crumb"><button type="button" onClick={backToCatalogue}>Pathways</button> / <button type="button" onClick={backToCurriculum}>{selectedPathway.programmeName} · {selectedPathway.courseName}</button> / <button type="button" onClick={backToLevel}>{selectedPathway.levelLabel}</button> / <b>Unit {selectedUnit.sequence}</b></div>
-      <InfoNote><b>Unit detail — planning preview.</b> This view separates academic review, curriculum mapping, and release status. {isPilotUnit && pilotReviewSummary.status === "draft-for-founder-review" ? "Unit 1 version 2 is awaiting founder review; version 1's preview approval does not transfer to this revision." : "This lesson is available only as a pilot preview and is not an officially mapped or released course."}</InfoNote>
+      <InfoNote><b>Unit detail — planning preview.</b> This view separates founder content approval, academic review, curriculum mapping, and release status. {isPilotUnit && pilotReviewSummary.status === "founder-approved-candidate" ? "The content of Unit 1 version 2 is founder-approved. Separate academic review and release gates remain open; version 1's academic-review outcome does not transfer." : isPilotUnit && pilotReviewSummary.status === "draft-for-founder-review" ? "Unit 1 version 2 is awaiting founder review; version 1's preview approval does not transfer to this revision." : "This lesson is available only as a pilot preview and is not an officially mapped or released course."}</InfoNote>
       <PageIntro
         eyebrow={selectedPathway.programmeName + " · " + selectedPathway.courseName + " · " + selectedPathway.levelLabel}
-        title={<>{isPilotUnit ? pilotReviewSummary.title : "Unit " + selectedUnit.sequence} <em>{isPilotUnit ? (pilotReviewSummary.status === "draft-for-founder-review" ? "review draft." : "pilot preview.") : "planning record."}</em></>}
+        title={<>{isPilotUnit ? pilotReviewSummary.title : "Unit " + selectedUnit.sequence} <em>{isPilotUnit ? (pilotReviewSummary.status === "founder-approved-candidate" ? "founder-approved candidate." : pilotReviewSummary.status === "draft-for-founder-review" ? "review draft." : "pilot preview.") : "planning record."}</em></>}
         subtitle={isPilotUnit ? pilotReviewSummary.proposedFocus : "This planning slot has no confirmed unit focus yet. Do not infer syllabus coverage from the placeholder."}
       />
       <section className="proto-unit-detail-panel">
@@ -600,7 +600,7 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
             
             <p><a href={pilotReviewSummary.source.url} target="_blank" rel="noreferrer">Open public IB MYP overview ↗</a> · <a href={pilotReviewSummary.source.subjectBriefUrl} target="_blank" rel="noreferrer">Open public subject brief (historical overview) ↗</a></p>
           </div>
-          <div className="proto-section-title"><div><h2>Remaining review and release checks</h2><p>{pilotReviewSummary.reviewRecord.outcome === "passed" ? "Content review passed for this version; other requirements remain separate." : "Version 2 awaits founder review; other requirements remain separate."}</p></div></div>
+          <div className="proto-section-title"><div><h2>Remaining review and release checks</h2><p>{pilotReviewSummary.reviewRecord.outcome === "passed" ? "Content review passed for this version; other requirements remain separate." : pilotReviewSummary.status === "founder-approved-candidate" ? "Founder content approval is recorded; academic review, official mapping, rights, accessibility and release requirements remain separate." : "Version 2 awaits founder review; other requirements remain separate."}</p></div></div>
           {pilotReviewSummary.remainingReleaseChecks.map((item, index) => <div className="proto-skill-row proto-readiness-row" key={item}><i className="warm">{String(index + 1).padStart(2, "0")}</i><div><b>{item}</b></div></div>)}
           <p className="proto-note-bottom">{pilotReviewSummary.releaseNote}</p>
         </> : <>
@@ -616,7 +616,7 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
           : { label: selectedPathway.levelLabel, path: pathwayPathForId(selectedPathway.id) }}
         next={isPilotUnit
           ? {
-              label: pilotReviewSummary.status === "draft-for-founder-review" ? "Unit 1 review draft" : "pilot lesson preview",
+              label: pilotReviewSummary.status === "founder-approved-candidate" ? "Unit 1 approved content candidate" : pilotReviewSummary.status === "draft-for-founder-review" ? "Unit 1 review draft" : "pilot lesson preview",
               path: lessonPathForId(selectedPathway.id, selectedUnit.id),
             }
           : nextUnit
