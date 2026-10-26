@@ -1,6 +1,6 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.4  
+**Version:** 1.5  
 **Research checked:** 26 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
@@ -122,6 +122,15 @@ Use the current public course page for course identity and the public 2026 Exami
 For exams 2027–2029, use the official Version 1 syllabus and current public specimen questions/mark schemes. Earlier papers are not assumed to match the revised question order and mark distribution. Cambridge explicitly warns that selected past papers may not reflect the current syllabus. For practice, preserve the current skill and response demand but create original reading extracts and questions rather than republishing protected papers.
 
 ## 5. Evidence status for current curriculum work
+
+### Age/grade-equivalence evidence for production sequencing
+
+- [Cambridge Lower Secondary — official programme page](https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/) — states the programme is typically for ages 11–14.
+- [Cambridge International, Implementing the Curriculum with Cambridge](https://www.cambridgeinternational.org/Images/134557-implementing-the-curriculum-with-cambridge.pdf) — provides example school structures in which Stage 7 can correspond to Grade 6 or another year/grade depending on the national context. Treat these as contextual examples, not a universal conversion table.
+- [Cambridge support: age group for Lower Secondary Checkpoint](https://help.cambridgeinternational.org/hc/en-gb/articles/23411513050770-Which-age-group-of-learners-is-the-Cambridge-Lower-Secondary-Checkpoint-for) — states Stages 7–9 cover approximately ages 11–14.
+
+**Production rule:** IB MYP Year 1, Cambridge Lower Secondary Stage 7 and CBSE Grade 6 form the first internal Grade 6-equivalent Unit 1 cohort. This is a workflow grouping only; keep the official curriculum/level names separate and verify each level's actual learner context. Complete all three before older-level Unit 1 or Unit 2 work.
+
 
 | Curriculum/track | Public evidence available | Evidence gap | What we may do now | What we must not claim yet |
 |---|---|---|---|---|
