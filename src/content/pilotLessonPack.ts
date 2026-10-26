@@ -38,17 +38,17 @@ export const pilotLessonPack: PilotLessonPack = {
       "Original passage written for this platform. It is not taken from an IB paper, textbook or third-party lesson.",
   },
   companionArtifact: {
-    label: "Original fictional night-bus poster",
+    label: "Fictional night-bus poster mock-up",
     kicker: "NORTHBANK NIGHT BUS",
     headline: "A LIGHT ON EVERY LAST JOURNEY",
     supportingText: "The late bus is still a way home.",
     footerText: "PLAN AHEAD · TRAVEL WITH CARE",
     visualDescription:
-      "A dark blue, rain-soaked street fills the lower half of the poster. A small bus shelter sits slightly right of centre. A warm amber rectangle of light spills from the shelter onto pale blue pavement, while one small figure stands beneath it. The pale headline sits above the scene. The bright shelter contrasts with the dark road.",
+      "A real photograph shows several people waiting at an illuminated bus stop on a rainy night. The shelter and waiting figures stand out against a dark urban street while city lights reflect from wet pavement. The original poster headline and supporting line are set around the photograph.",
     altText:
-      "Original poster with a large pale headline, a dark rainy street, a small bus shelter glowing warm amber, a figure beneath the shelter and light stretching across pale blue pavement. The headline reads “A light on every last journey”; the supporting line says “The late bus is still a way home.”",
+      "Photograph of several people waiting at an illuminated bus stop on a rainy night. Wet pavement reflects warm and white city lights; the shelter and waiting figures stand out against the dark urban street.",
     rightsNote:
-      "The poster wording and art direction are original to this platform. Its visual is rendered from HTML/CSS shapes and text, not a copied image.",
+      "Photograph by Berk Aktas, “People on a Bus Stop at Night” (Pexels, 2023): https://www.pexels.com/photo/people-on-a-bus-stop-at-night-19092243/. Pexels lists the photograph as free to use under its Pexels License. The poster copy and layout are platform-authored. Confirm current licence terms and any model/property-release requirements in the rights review before wider release.",
   },
   entryCheck: {
     prompt:
