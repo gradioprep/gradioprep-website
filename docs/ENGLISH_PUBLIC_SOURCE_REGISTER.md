@@ -1,6 +1,6 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.6  
+**Version:** 1.7  
 **Research checked:** 26 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
@@ -184,6 +184,15 @@ The five cross-track source families above are not a substitute for programme-sp
 
 The binding procedure is [`docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md`](IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md). The founder has confirmed that they do not have access to an authorised school account or gated IB PRC materials. **Do not ask them again for this access, and do not wait for gated resources before proceeding.** For every IB and Cambridge course/year/stage, research the exact current public official framework/syllabus and assessment resources first, then compare relevant specialist EdTech platforms, publishers and evidence-informed teaching resources for that specific level. Log source URLs, dates, edition/session, access state, what each source can support, cross-checks and confidence. When a current detailed official document is not publicly verifiable, continue with a clearly labelled public-framework-aligned internal guide and implementation structure; leave exact official mapping unverified rather than inventing it. Keep academic suitability, official mapping/currency, rights, accessibility, cultural/age suitability and release as separate gates. Public visibility is not permission to reproduce copyrighted content. This protocol applies across all levels, not only MYP Year 1, and supersedes any older workflow wording that requests the founder to provide gated materials.
 
+
+## Pedagogy references used in the Stage 7 Unit 1 v1.3 review
+
+These sources inform instructional design only; they do not define Cambridge curriculum requirements or official objective codes.
+
+- **Education Endowment Foundation, “Improving Literacy in Secondary Schools” (2018):** https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/literacy-ks3-Ks4 — secondary literacy guidance including vocabulary development, reading and support for learners who struggle.
+- **Education Endowment Foundation, “Reading comprehension strategies”:** https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/reading-comprehension-strategies — recommends explicit modelling of comprehension strategies, followed by guided and independent application, including inference and self-monitoring.
+
+The Stage 7 Unit 1 v1.3 candidate applies these general teaching principles through a clue → inference → reason worked model, optional plain-language support for access vocabulary, and task-specific formative descriptors. This is an AI-reviewed design change, not evidence of learner-testing or an independent human review.
 
 ## Mandatory photograph selection and rights-screening rule
 
