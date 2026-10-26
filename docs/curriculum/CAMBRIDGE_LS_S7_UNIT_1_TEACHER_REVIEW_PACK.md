@@ -1,7 +1,7 @@
 # Cambridge Lower Secondary English 0861 — Stage 7, Unit 1 Teacher/Editor Review Pack
 
 **Unit ID:** cambridge-ls-english-s7-u1  
-**Content version:** 1.1 draft  
+**Content version:** 1.2 draft  
 **Learner content:** docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md  
 **Status:** Draft only — review required before any learner-facing implementation or publication.  
 **Official mapping:** Partial public cross-check only: 7Ri.03 for explicit-information items (the warm-up's directly stated detail, guided practice A and independent practice 1). Cambridge's public framework-support overview explicitly identifies this objective code. Do not apply it to the entire unit. Inference and language-choice codes remain unassigned until the current applicable support-site framework is confirmed.  
@@ -70,19 +70,19 @@ Reasonable inference: Lina expects rain or changing weather and is packing up to
 
 ## 3. Suggested formative scoring (platform rubric only)
 
-This is an internal teaching aid, not a Cambridge mark scheme.
+This is an internal teaching aid, not a Cambridge mark scheme. It is deliberately a **15-point formative profile**, not a grade or a proxy for Cambridge assessment.
 
-For independent practice items 2–5, consider whether the learner's evidence/interpretation is:
-- **0 — Not yet evidenced:** no relevant answer or unsupported assertion.
-- **1 — Emerging:** a relevant idea or detail, but evidence or explanation is missing/unclear.
-- **2 — Secure for this task:** relevant evidence and a plausible explanation connected to the question.
+- **Independent practice item 1 — explicit retrieval (0–1 point):** 1 point for identifying the small rain gauge; 0 for an incorrect or absent answer. This short retrieval check is scored separately because it does not require the evidence-and-explanation rubric below.
+- **Independent practice items 2–5 (0–2 points each; 8 points total):**
+  - **0 — Not yet evidenced:** no relevant answer or an unsupported assertion.
+  - **1 — Emerging:** a relevant idea or detail, but evidence or explanation is missing or unclear.
+  - **2 — Secure for this task:** relevant evidence and a plausible explanation connected to the question.
+- **Extended response item 6 (0–6 points):**
+  1. **Interpretation (0–2):** explains the shift from observation to action.
+  2. **Text evidence (0–2):** selects at least two accurate and relevant details.
+  3. **Reasoning and communication (0–2):** explains why the details support the interpretation and communicates coherently.
 
-For the extended response (6 points total):
-1. **Interpretation (0–2):** explains the shift from observation to action.
-2. **Text evidence (0–2):** selects at least two accurate and relevant details.
-3. **Reasoning and communication (0–2):** explains why the details support the interpretation; communicates coherently.
-
-Do not convert these formative points into an official stage grade or a Cambridge predicted score. Record the exact evidence and next action with the result.
+**Maximum: 15 points** (item 1: 1; items 2–5: 8; item 6: 6). The exit check and reflection are unscored diagnostic activities; use them to plan next steps rather than add them to the total. Accept defensible alternative interpretations when supported by the text. Do not convert these formative points into an official stage grade or a Cambridge predicted score. Record the evidence and next action with the result.
 
 ## 4. Common errors and next-step recommendations
 
@@ -112,8 +112,8 @@ Do not convert these formative points into an official stage grade or a Cambridg
 - Cambridge help article directs educators to the Lower Secondary support site for framework, Teacher Guide and schemes of work: https://help.cambridgeinternational.org/hc/en-gb/articles/23410735702290-Where-can-I-find-the-new-Curriculum-Frameworks-and-support-resources.
 - Full currently applicable framework version and any additional objective IDs: **pending confirmation from the official support-site copy**.
 - Rights: original passage and tasks; no official past paper, textbook passage, mark scheme or third-party answer is copied.
-- Content version: 1.1 draft.
-- Review status: content QA revised to v1.1; independent academic review pending; accessibility review pending; release approval not granted.
+- Content version: 1.2 draft.
+- Review status: content revised to v1.2 to clarify formative scoring coverage; independent academic review pending; official framework/version verification pending; rights, accessibility and suitability reviews pending; release approval not granted.
 
 ## 7. Release checklist
 
