@@ -545,7 +545,7 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
         {selectedPathway.unitSlots.map(unit => (
           <article className="proto-level-unit-row" key={unit.id}>
             <span className="proto-level-unit-number">{String(unit.sequence).padStart(2, "0")}</span>
-            <div><h3>{unit.title}</h3><p>{unit.reviewNote}</p><div className="proto-level-status compact"><span>Mapping</span><b>Unverified</b><span>Release</span><b>Planned</b>{unit.id === pilotReviewSummary.unitId && <b className="proto-review-status">Academic review passed for pilot preview</b>}</div></div>
+            <div><h3>{unit.title}</h3><p>{unit.reviewNote}</p><div className="proto-level-status compact"><span>Mapping</span><b>Unverified</b><span>Release</span><b>Planned</b>{unit.id === pilotReviewSummary.unitId && <b className="proto-review-status">{pilotReviewSummary.reviewRecord.outcome === "passed" ? "Academic review passed for pilot preview v" + pilotReviewSummary.version : "Unit 1 version 2 awaiting founder review"}</b>}</div></div>
             <button type="button" className="proto-text-link" onClick={() => openUnit(unit.id)}>{unit.id === pilotReviewSummary.unitId ? "View pilot unit" : "View unit details"} <span>↗</span></button>
           </article>
         ))}
@@ -611,7 +611,10 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
           ? { label: `Unit ${previousUnit.sequence}`, path: unitPathForId(selectedPathway.id, previousUnit.id) }
           : { label: selectedPathway.levelLabel, path: pathwayPathForId(selectedPathway.id) }}
         next={isPilotUnit
-          ? { label: "pilot lesson preview", path: lessonPathForId(selectedPathway.id, selectedUnit.id) }
+          ? {
+              label: pilotReviewSummary.status === "draft-for-founder-review" ? "Unit 1 review draft" : "pilot lesson preview",
+              path: lessonPathForId(selectedPathway.id, selectedUnit.id),
+            }
           : nextUnit
             ? { label: `Unit ${nextUnit.sequence}`, path: unitPathForId(selectedPathway.id, nextUnit.id) }
             : {
