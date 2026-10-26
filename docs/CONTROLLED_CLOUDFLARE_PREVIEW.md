@@ -6,7 +6,7 @@
 
 - Uses Cloudflare Worker Previews with `npx wrangler preview`, not the production deployment command `npx wrangler deploy`.
 - Runs for same-repository pull requests targeting `main`, but never for forked PRs. Manual dispatch is restricted to the approved `preview/cambridge-stage-7-unit-1-accessibility` branch.
-- Creates or updates a separate `pr-<number>` Preview for each pull request and posts its URL to the PR when deployment succeeds. Manual runs use the stable name `cambridge-stage-7-unit-1-accessibility`.
+- Creates or updates a separate `pr-<number>` Preview for each pull request and posts its URL to the PR when deployment succeeds. Manual runs on the approved branch use `pr-15`, so they update the same Preview as PR #15.
 - Builds the application before attempting to upload the preview.
 - Deletes the pull-request Preview when that PR is closed, if credentials are configured.
 - Does not merge a PR, change the production deployment, change the main-domain DNS, or require the custom domain to be connected to Cloudflare.
