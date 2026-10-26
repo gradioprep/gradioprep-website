@@ -2,41 +2,44 @@ import type { PilotReviewSummary } from "./model";
 
 /**
  * Safe planning metadata for the Pathways screen.
- * This intentionally excludes worked explanations, model responses and answers.
+ * Contains no answer keys, worked answers or correct-option identifiers.
  */
 export const pilotReviewSummary: PilotReviewSummary = {
-  id: "review-summary-ib-myp-lal-y1-u1-v1",
+  id: "review-summary-ib-myp-lal-y1-u1-v2",
   unitId: "ib-myp-lal-y1-u1",
-  title: "How writers shape meaning",
+  version: 2,
+  status: "draft-for-founder-review",
+  title: "How writers and creators shape meaning",
   proposedFocus:
-    "A starter exploration of how deliberate word and sentence choices influence a reader's understanding and response.",
+    "Use precise textual and visual evidence to explain how creator choices may shape meaning and invite audience responses.",
   proposedLearningObjective:
-    "Identify a writer's choice in a short text and comment on how it may shape meaning or mood, using an example to support the explanation.",
+    "Explain how a writer's word choices and a visual creator's design choices may shape meaning or invite an audience response, using precise evidence and context.",
   mappingStatus: "unverified",
   officialObjectiveCodes: [],
   reviewRecord: {
-    outcome: "passed",
-    reviewedAt: "2026-10-24",
-    reviewerLabel: "Academic lead (approval confirmed by project owner; name not specified)",
+    outcome: "pending",
+    reviewedAt: null,
+    reviewerLabel: "Pending founder review",
     scopeNote:
-      "Academic content review passed for this version per project owner confirmation. This approval supports the pilot preview only; the official curriculum mapping remains unverified and release is not authorised.",
+      "Version 1 passed academic content review for pilot preview on 24 October 2026. Version 2 is a material revision and is awaiting founder review; its academic review has not yet passed.",
   },
   source: {
-    title: "IB MYP Language and Literature — public subject overview",
+    title: "IB MYP Language and Literature — current public subject overview",
     url: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
     subjectBriefUrl:
       "https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf",
     checkedAt: "2026-10-26",
     scopeNote:
-      "The current public IB overview describes the six MYP Language and Literature skill areas and broad programme aims, but it does not publish the detailed Year 1 objective/strand descriptors. This pilot is a public-framework-aligned learning design, not an officially mapped unit.",
+      "The current public IB overview supports broad subject aims and six connected skill areas. The indexed 2014/15 detailed guide is used only as a legacy reference; the latest applicable detailed edition and current Year 1 objective/strand mapping are not verified.",
   },
   remainingReleaseChecks: [
-    "Confirm that the unit’s public-framework alignment is described accurately and no official objective codes are displayed.",
-    "Keep exact official Year 1 objective/strand codes unmapped unless a current public source verifies the exact descriptors.",
-    "Complete and record the separate content-rights review.",
-    "Complete and record the accessibility review for the interactive lesson.",
-    "Record explicit release approval only after all required evidence is complete.",
+    "Founder review and approval of Unit 1 version 2.",
+    "Complete separate academic review for version 2.",
+    "Keep current official Year 1 objective/strand mapping unverified until the applicable guide is confirmed.",
+    "Complete and record content rights review for the prose and the HTML/CSS poster design.",
+    "Complete and record accessibility, age/level suitability and cultural/context review.",
+    "Record explicit release approval only after the required evidence is complete.",
   ],
   releaseNote:
-    "Academic content review passed for pilot preview version 1. The unit uses the broad publicly described MYP framework; exact official Year 1 objective mapping is not claimed. Rights review, accessibility review and explicit release approval remain outstanding.",
+    "Draft version 2 for founder review. Version 1's pilot-preview approval does not transfer to this revision. This is not an officially mapped or released unit; answers are not graded or saved in the prototype.",
 };
