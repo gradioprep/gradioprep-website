@@ -8,7 +8,7 @@
 
 | Curriculum group | Year/stage chapters available | Current guide state | Main unresolved check |
 |---|---|---|---|
-| IB MYP Language and Literature | Year 1 standalone guide: docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md; implementation: docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md | Public-framework-aligned guide v1.0 and implementation structure v1.0 complete; awaiting founder review | Official objective/strand mapping not claimed. Do not start Unit 1 production before founder approval. Years 2–5 in the legacy group file remain drafts. |
+| IB MYP Language and Literature | Year 1 standalone guide: docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md; implementation: docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md | Public-framework-aligned guide v1.1 and implementation structure v1.1 complete; awaiting founder review | Official objective/strand mapping not claimed. Do not start Unit 1 production before founder approval. Years 2–5 in the legacy group file remain drafts. |
 | Cambridge Lower Secondary English 0861 | Stages 7–9 in docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md | Public-framework-aligned group guide drafted | Pin the currently applicable official framework/version and verify exact objective IDs |
 | IB DP Language A: Language and Literature | Year 1/Year 2 in docs/curriculum/IB_DP_LANGUAGE_A_LANGUAGE_AND_LITERATURE_GUIDE.md | Public-source-aligned guide drafted | Verify session-specific assessment details/criterion version against current official materials before scored mocks |
 | Cambridge IGCSE First Language English 0500 | Syllabus-wide guide and two proposed delivery phases in docs/curriculum/CAMBRIDGE_IGCSE_FIRST_LANGUAGE_ENGLISH_0500_GUIDE.md | Current 2027–2029 syllabus/specimen baseline recorded | Record each learner's examination year and component/route; map every task against the exact syllabus/specimen |
@@ -28,12 +28,12 @@ A guide being drafted does not mean every objective is officially mapped, every 
 | 5 | cambridge-igcse-fle-phase-a-u1 | Cambridge IGCSE First Language English 0500 first proposed delivery phase | Planned; blocked until first cohort is complete | Later-level route; do not begin before the first cohort is complete. Use syllabus Version 1 for exams 2027–2029 and check candidate route/current specimens |
 | 6 | ib-myp-lal-y2-u1 | IB MYP Language and Literature Year 2 | Planned; blocked until first cohort is complete | Later grade band; public-framework-aligned original unit; do not invent official objective codes |
 | 7 | cambridge-ls-english-s8-u1 | Cambridge Lower Secondary English 0861 Stage 8 | Planned; blocked until first cohort is complete | Later grade band; verify framework version/objectives; build on Stage 7 but do not simply repeat it |
-| 8 | ib-dp-langlit-y2-u1 | IB DP Language A: Language and Literature Year 2 | Planned | Check school sequence, candidate SL/HL and applicable assessment session |
-| 9 | cambridge-ls-english-s9-u1 | Cambridge Lower Secondary English 0861 Stage 9 | Planned | Verify framework version/objectives and chosen next pathway |
-| 10 | cambridge-igcse-fle-phase-b-u1 | Cambridge IGCSE First Language English 0500 second proposed delivery phase | Planned | Same syllabus as phase A, not a separate qualification/syllabus; check exam year and route |
-| 11 | ib-myp-lal-y3-u1 | IB MYP Language and Literature Year 3 | Planned | Keep mapping labels honest |
-| 12 | ib-myp-lal-y4-u1 | IB MYP Language and Literature Year 4 | Planned | Keep mapping labels honest |
-| 13 | ib-myp-lal-y5-u1 | IB MYP Language and Literature Year 5 | Planned | Verify school-selected pathway; do not assume optional MYP eAssessment |
+| 8 | ib-dp-langlit-y2-u1 | IB DP Language A: Language and Literature Year 2 | Planned; blocked until first cohort is complete | Check school sequence, candidate SL/HL and applicable assessment session |
+| 9 | cambridge-ls-english-s9-u1 | Cambridge Lower Secondary English 0861 Stage 9 | Planned; blocked until first cohort is complete | Verify framework version/objectives and chosen next pathway |
+| 10 | cambridge-igcse-fle-phase-b-u1 | Cambridge IGCSE First Language English 0500 second proposed delivery phase | Planned; blocked until first cohort is complete | Same syllabus as phase A, not a separate qualification/syllabus; check exam year and route |
+| 11 | ib-myp-lal-y3-u1 | IB MYP Language and Literature Year 3 | Planned; blocked until first cohort is complete | Keep mapping labels honest |
+| 12 | ib-myp-lal-y4-u1 | IB MYP Language and Literature Year 4 | Planned; blocked until first cohort is complete | Keep mapping labels honest |
+| 13 | ib-myp-lal-y5-u1 | IB MYP Language and Literature Year 5 | Planned; blocked until first cohort is complete | Verify school-selected pathway; do not assume optional MYP eAssessment |
 | Later queue | cbse-english-g7-u1 | CBSE English Grade 7 | Planned; blocked until first cohort is complete | Research the current class/session syllabus and learning materials; assign its grade-band slot only after the age/grade sequence is verified |
 | Later queue | cbse-english-g8-u1 | CBSE English Grade 8 | Planned; blocked until first cohort is complete | Research the current class/session syllabus and learning materials; assign its grade-band slot only after the age/grade sequence is verified |
 | Later queue | cbse-english-g9-u1 | CBSE English Grade 9 | Planned; blocked until first cohort is complete | Verify current course options and subject codes before defining the exact route |
