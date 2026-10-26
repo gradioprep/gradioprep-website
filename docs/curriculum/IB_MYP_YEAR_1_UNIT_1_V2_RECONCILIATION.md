@@ -79,6 +79,16 @@ This is a documented origin claim, not completed legal/rights clearance. The rig
 - **Cambridge Stage 7:** Draft learner/teacher files remain in separate inactive draft PR #12; they are not part of this Unit 1 PR and must not advance yet.
 
 
+## Pre-founder-review content refinement — 26 October 2026
+
+A pre-review quality pass found that the initial definitions of “Choice” and “Evidence” could overlap. The learner-facing scaffold and the separate teacher/editor pack now distinguish the three moves explicitly:
+
+- **Choice:** name the creator’s linguistic or visual-design decision (for example, personification).
+- **Evidence:** quote the precise wording or identify the observable visual detail demonstrating that decision.
+- **Effect in context:** explain a plausible inference or audience effect and connect it to the moment and relevant context.
+
+The worked example, learner response frame and regression test were aligned to this distinction. This is a clarity refinement within the unapproved version 2 draft, not a review pass or release decision. The exact revised content still awaits founder review; other review gates remain open.
+
 ## Pre-selection photograph rights record
 
 - **Selected image:** “Bus stop with platform during night.jpg” by Mateusz Konieczny.
