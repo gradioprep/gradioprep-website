@@ -1,6 +1,6 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Status:** Approved pathway-scope decision; research and curriculum design not yet completed  
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
@@ -58,7 +58,7 @@ The first cross-track cohort is fixed as follows:
 
 Finish the student-facing Unit 1 content and record the required academic/content, rights/originality, accessibility, age/cultural suitability and release checks for each route before moving to older-level Unit 1 work or any Unit 2. Official mapping/currency is a separate status; never invent it. If one of the three is blocked, pause and report the blocker instead of skipping ahead. This rule supersedes earlier examples or lists that put DP, IGCSE or higher grades ahead of CBSE Grade 6.
 
-The platform's architecture, unit structure, research method and release process do not change. Keep the exact programme/course/stage/grade identity separate for every unit; the cohort is a production order, not a claim that the curricula share objectives or content.
+After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 → Cambridge Lower Secondary Stage 8 → CBSE Grade 7, subject to verifying actual age/grade alignment and current sources. Continue with Unit 1 across subsequent comparable bands (for example MYP Year 3 → Cambridge Stage 9 → CBSE Grade 8). Do not start Unit 2 for the first three pathways immediately after their Unit 1s finish; Unit 2 begins only after Unit 1 is complete across all approved in-scope levels. The platform's architecture, unit structure, research method and release process do not change. Keep the exact programme/course/stage/grade identity separate for every unit; the cohort is a production order, not a claim that the curricula share objectives or content.
 
 ## 6. Current status and limitations
 
