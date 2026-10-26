@@ -56,25 +56,57 @@ Pedagogy sources inform teaching design only. They do not define Cambridge requi
 - A third-party-hosted older framework copy is not sufficient evidence that a particular edition remains the currently applicable official version. Do not assign additional codes from it.
 - If the full support-site files remain inaccessible, retain the unit as clearly labelled public-framework-aligned practice and leave the broader official mapping unresolved. Do not ask the founder to obtain gated access.
 
-## 5. Separate gate status after v1.3 review
+## 5. Rights and originality desk screen — 26 October 2026
 
-| Gate | Current status | What is still required |
+**Scope:** Publicly indexed exact-phrase search and inspection of the current learner/teacher files. This is an initial desk screen, not a comprehensive plagiarism check, legal opinion or formal rights-clearance decision.
+
+Searches were run for distinctive strings from the learner material, including:
+- “At first, the rain fell softly against the library windows”
+- “A thin line of water crept along the path”
+- “The map's corners fluttered against Dev's wrist”
+- “The paper cup rolled along the platform”
+
+**Finding:** No exact passage-level match surfaced in the returned results for those searches. Other surfaced text shared generic rain/window imagery but did not match the distinctive phrases searched. This is limited evidence only; search engines may miss unindexed, private, paywalled or paraphrased material.
+
+The unit contains no photograph, illustration, screenshot, third-party literary excerpt, copied question set or copied model answer. The Cambridge and Education Endowment Foundation pages are used as source/context for curriculum scope and teaching approach, not reproduced as lesson text. The narrow Cambridge objective cross-reference is attributed to the public framework-support overview.
+
+**Gate result:** Public phrase-search desk screen completed; no exact match surfaced. **Formal rights/originality clearance remains pending** because this search does not independently establish authorship or guarantee that all possible third-party rights concerns have been excluded. The mandatory photo pre-selection process is not applicable to this text-only unit because it currently contains no photograph.
+
+## 6. Accessibility and suitability desk check — 26 October 2026
+
+### Content-level checks completed
+- The worked example models the reasoning steps before learners attempt the main passage.
+- Optional definitions are provided for access vocabulary (pane, hinge, rain gauge, paved patch, seed trays) while the two words assessed for language effect (“skittered” and “crept”) are not pre-explained.
+- Paper annotation is optional; learners may make brief notes or use S/I labels. Printing, colour-coding or drawing symbols is not required.
+- Questions distinguish explicit facts, inference, evidence selection and language explanation.
+- The narrative has a familiar school/garden context and no obvious distressing or culturally exclusionary material was identified in this desk review.
+
+### Checks not yet possible
+The unit is not integrated into the learner application, so this review cannot establish actual text/background contrast, font-size behaviour, keyboard navigation, focus order, screen-reader output, mobile reflow, labelled answer fields, error messages or text-to-speech behaviour. A manual or automated application test and, where feasible, learner testing are still needed. The 80–100 word response and the vocabulary/syntax load require human confirmation for the intended Stage 7 cohort.
+
+**Gate result:** Content-level accessibility/suitability preflight completed with no blocking text-only issue identified. **UI accessibility and human age/level/cultural suitability checks remain open.** No accessibility certification or learner pilot is claimed.
+
+## 7. Separate gate status after v1.3 review
+
+| Gate | Current status | Evidence still required |
 |---|---|---|
-| AI-led editorial and academic-content review | **Completed for review of v1.2; improvements incorporated into v1.3** | Founder/academic lead reviews exact v1.3 |
-| Human academic review and actual learner suitability | **Pending** | Review record from the founder/qualified human reviewer; learner pilot is not claimed |
-| Current full Cambridge framework/version and mapping | **Partially verified only** | Official support-site copy/version and item-level mapping if legitimately available; otherwise keep unresolved |
-| Rights/originality | **Pending** | Project rights/originality record; this review did not establish authorship independently or conduct a comprehensive plagiarism search |
-| Accessibility in the intended UI | **Pending** | Test actual contrast, keyboard/focus, screen-reader, responsive layout, text-to-speech and response-field behaviour after authorised integration |
-| Age/level and cultural/context suitability | **AI desk check complete; human confirmation pending** | Record founder/qualified reviewer decision for exact v1.3; learner testing not performed |
-| Founder decision on exact v1.3 | **Pending** | Approve this version or request revisions |
-| Release approval | **Not granted** | All required gates for the intended release status plus explicit decision |
+| AI-led curriculum/content review | **Completed for v1.3 candidate** | Human/academic-lead judgement remains separate |
+| Founder decision | **Approved to proceed with further review/release checks on 26 October 2026** | This is not final content approval or release approval |
+| Public exact-phrase rights screen | **Desk screen completed; no exact match surfaced** | Formal rights/originality clearance remains pending |
+| Content-level accessibility and context preflight | **Completed; no blocking text-only issue identified** | Human confirmation and actual application accessibility testing |
+| Human academic review and actual learner suitability | **Pending** | Founder/qualified reviewer decision for exact v1.3; learner pilot not claimed |
+| Current full Cambridge framework/version and mapping | **Partially verified only** | Applicable official support-site file/version and item-level mapping if legitimately available; otherwise keep unresolved |
+| UI accessibility | **Pending / not testable before integration** | Contrast, keyboard/focus, screen-reader, responsive layout, text-to-speech and response-field checks in intended UI |
+| Age/level and cultural/context suitability | **AI desk check complete; human confirmation pending** | Record reviewer, date, decision and exact version; learner testing not performed |
+| Release approval | **Not granted** | All required gates for intended release status and explicit release decision |
 
-## 6. Version history and next action
+## 8. Version history and next action
 
-- **v1.0–v1.1:** Original draft and first consistency corrections (including moving the rain gauge to an open paved patch and correcting the warm-up choice).
-- **v1.2:** Corrected formative scoring coverage and version alignment.
-- **v1.3:** Added a modelled inference example, optional word help, non-paper annotation alternatives and item-specific scoring descriptors after the AI-led academic/editorial review. This is a new candidate and has not inherited an approval or release state from v1.2.
+- **v1.0–v1.1:** Original draft and first consistency corrections, including the rain-gauge location and warm-up answer.
+- **v1.2:** Clarified formative scoring coverage and version alignment.
+- **v1.3:** Added a worked inference model, optional vocabulary help, non-paper annotation options and item-specific scoring descriptors.
+- **Gate review after v1.3:** On 26 October 2026, the founder approved proceeding with rights/originality, accessibility and suitability checks. The public exact-phrase desk screen found no exact match in returned results; the text-level accessibility preflight found no blocking issue. These are scoped findings and do not close the formal rights, UI-accessibility, human suitability or release gates.
 
-**Next action:** Founder/academic lead reviews the exact learner content v1.3, the teacher/editor pack v1.3 and this review record. The unit must remain a draft and must not be integrated into the learner-facing application or released until the remaining gates are recorded and the intended release is explicitly approved.
+**Next action:** Complete the remaining human academic/suitability judgement and UI accessibility checks when the unit is authorised for integration. Confirm the current official framework/version if it becomes accessible through permitted means; do not invent additional objective codes. Do not integrate or release this unit solely on the basis of the AI desk checks.
 
-**Production sequence remains:** IB MYP Year 1 Unit 1 → Cambridge Lower Secondary Stage 7 Unit 1 → CBSE Grade 6 Unit 1. Do not skip Stage 7 because the current official framework version is unresolved; record the mapping limit and keep the unit unreleased until the appropriate checks are complete.
+**Production sequence:** IB MYP Year 1 Unit 1 → Cambridge Lower Secondary Stage 7 Unit 1 → CBSE Grade 6 Unit 1. The Stage 7 checkpoint is not yet student-ready for release, so the production rotation must pause here rather than skip to CBSE Grade 6 or begin older-level Unit 1/Unit 2 work.
