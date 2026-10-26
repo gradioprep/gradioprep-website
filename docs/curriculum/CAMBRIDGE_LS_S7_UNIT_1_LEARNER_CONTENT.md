@@ -1,10 +1,10 @@
 # Cambridge Lower Secondary English 0861 — Stage 7, Unit 1
 
 **Unit ID:** cambridge-ls-english-s7-u1  
-**Content version:** 1.0 draft  
+**Content version:** 1.1 draft  
 **Title:** Read closely, infer and explain  
 **Status:** Draft for academic review. Not yet approved or published.  
-**Curriculum claim:** Public-framework-aligned practice for reading comprehension, inference and explanation. Exact official Stage 7 objective codes are not assigned until the applicable framework version is confirmed.  
+**Curriculum claim:** Public-framework-aligned practice for reading comprehension, inference and explanation. Limited public cross-check: Cambridge's public framework-support overview explicitly identifies 7Ri.03 (explicit information) and supports mapping only the explicit-information items to this code. This is not a full-unit map. The complete currently applicable framework copy remains to be confirmed through Cambridge's support site; inference and language-choice objective codes remain unassigned.  
 **Source base:** Cambridge International, Cambridge Lower Secondary English (0861), public subject page and official resource list; progression examples cross-checked against Cambridge's public framework-support overview. See docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md and docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md.  
 **Rights:** The passage and tasks below are original content written for this platform; no Cambridge paper, textbook passage or third-party model answer is reproduced.
 
@@ -25,7 +25,7 @@ You will practise how to:
 
 Read this original mini-example:
 
-*The map's corners fluttered against Dev's wrist. A loose chair scraped across the room.*
+*The map's corners fluttered against Dev's wrist. A loose sheet of paper skated across the floor.*
 
 Which statement is directly stated?
 - The room was cold.
@@ -40,7 +40,7 @@ Now consider this inference: *Air was moving through the room.* The two details 
 
 At first, the rain fell softly against the library windows, making each pane look as though it had been brushed with grey paint. Jamil placed his notebook on the table and watched the school garden beyond the glass. A thin line of water crept along the path; it stopped at the cracked stone beside the gate, then gathered until it slipped around the edge.
 
-Near the greenhouse, Ms Chen was trying to close a loose wooden door. She pushed once, listened to the hinge squeal, and looked toward the clouds. Jamil knew he was meant to finish his notes on plant growth, but he stood up and carried the small rain gauge to the covered steps. The plastic cylinder trembled in his hands as a gust sent leaves skittering across the tiles.
+Near the greenhouse, Ms Chen was trying to close a loose wooden door. She pushed once, listened to the hinge squeal, and looked toward the clouds. Jamil knew he was meant to finish his notes on plant growth, but he stood up and carried the small rain gauge to an open paved patch beside the greenhouse. The plastic cylinder trembled in his hands as a gust sent leaves skittering across the tiles.
 
 “Take care,” Ms Chen called. Her voice was calm, but she had already moved the seed trays away from the floor.
 
@@ -78,7 +78,7 @@ Use this frame if helpful:
 
 Answer without using the sentence frame if you can.
 
-1. **Explicit information:** What did Jamil carry to the covered steps?
+1. **Explicit information:** What did Jamil carry to the open paved patch beside the greenhouse?
 2. **Evidence selection:** Copy two short details that suggest the rain or wind is getting stronger.
 3. **Supported inference:** Why might Jamil decide to move the seed trays after recording the time? Use two details from the passage.
 4. **Language and meaning:** Explain how the word “crept” affects the way the reader imagines the first line of water on the path.
