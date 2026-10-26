@@ -140,7 +140,9 @@ test.describe("MYP Year 1 Unit 1 version 2 review preview", () => {
     ).toBe(true);
     await expect(page.getByText(/Photograph by Mateusz Konieczny, released under CC0 1\.0/i)).toBeVisible();
     await expect(page.getByText(/empty platform, orange streetlights and distant headlights/i)).toBeVisible();
-    await expect(page.getByText(/Choice — point to an exact word, phrase or visual feature/i)).toBeVisible();
+    await expect(page.getByText(/Choice — identify the creator's technique or design decision/i)).toBeVisible();
+    await expect(page.getByText(/Evidence — quote the exact word\/phrase or describe the precise visual detail/i)).toBeVisible();
+    await expect(page.getByText(/“personification” names the choice; “the last bus sighed” is evidence/i)).toBeVisible();
     await expect(page.getByText(/At sunrise, the empty platform shone silver/i)).toBeVisible();
 
     expect(pageErrors, "the Unit 1 preview should not produce browser JavaScript errors").toEqual([]);
