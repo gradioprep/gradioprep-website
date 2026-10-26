@@ -1,9 +1,9 @@
 # English Curriculum Research, Quality Rubric and Design Standard
 
-**Status:** Internal working reference v0.6 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
+**Status:** Internal working reference v0.7 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
 **Prepared:** 26 October 2026
 **Owner:** Academic lead / founder
-**Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary and Cambridge IGCSE. Official syllabus mappings must be verified separately for each course, year/stage and edition.
+**Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary, Cambridge IGCSE and CBSE English Grades 6–12. Official syllabus mappings must be verified separately for each course, class/year/stage and edition.
 **Do not publish this document as a claim of IB/Cambridge endorsement.**
 
 ## Binding workflow and access constraint
@@ -19,6 +19,10 @@ Build a specialist English learning system around a shared instructional engine,
 Each task should make visible: what skill is being practised, what quality looks like, why an example works, what the learner can improve, and what evidence supports the next recommendation. This is a product design hypothesis to validate with learners and families, not a claim of proven market uniqueness.
 
 The founder confirmed DP Language A: Language and Literature and Cambridge IGCSE First Language English 0500 only on 25 October 2026. The MYP Year 1 guide v1.1, implementation structure v1.1 and dedicated resource landscape review were completed on 26 October 2026 and are awaiting founder review. Do not begin/adapt Unit 1 until the founder approves this checkpoint; after Unit 1 is implemented and approved, rotate to the Cambridge Lower Secondary Stage 7 guide. Do not start later-track work merely because draft files already exist. When a detailed guide is gated, use the public-source policy in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md to develop an explicitly public-framework-aligned guide; do not invent official objective/strand codes or claim complete official mapping. The canonical MYP Year 1 guide is `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`; its implementation structure is `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`. Both are complete as an independent public-framework-aligned design, not as an official IB syllabus map. Its existing pilot remains approved for preview only; official objective mapping is not claimed, and rights review, accessibility review and release approval are not cleared by this research document.
+
+## CBSE pathway addition
+
+CBSE English Grades 6–12 is now approved as a pathway family in the product roadmap. This is a scope addition only; the architecture, reusable unit model, curriculum rotation, research method and separate release gates remain unchanged. Follow the dedicated scope note at `docs/curriculum/CBSE_ENGLISH_GRADES_6_12_PATHWAY_RESEARCH_BRIEF.md` and the expanded binding workflow. Treat current CBSE/NCERT public sources and NCF-SE 2023 as starting points, verify each grade and academic session independently, preserve secondary route and senior-secondary Core/Elective distinctions, and do not treat third-language R3 changes as English subject changes. No CBSE content or app implementation has been authorised by this scope decision.
 
 ## 2. Curriculum scope: confirmed versus requiring a decision
 
