@@ -1,6 +1,6 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** Approved pathway-scope decision; research and curriculum design not yet completed  
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
@@ -48,20 +48,17 @@ Follow the binding IB/Cambridge curriculum research workflow, extended to CBSE b
 6. Keep official codes/wording only where directly verified. Otherwise use clearly labelled internal skill outcomes and mark the official mapping unresolved.
 7. Keep academic/content review, official mapping/currency, rights/originality, accessibility, age/cultural suitability and release approval separate.
 
-## 5. Preserve the existing implementation pattern
+## 5. Binding Grade 6-equivalent Unit 1 order
 
-The platform's unit and content-release structure does not change. Work in the approved cross-track sequence, one unit at a time, rotating among tracks in the established pattern (for example: IB MYP Year 1 Unit 1 → Cambridge/IGCSE grade-equivalent Unit 1 where that route is validly defined → CBSE Grade 6 Unit 1 → next approved track/unit in the rotation). This example describes sequencing, not a declaration that IB MYP Year 1 and every Cambridge grade band are officially equivalent.
+The first cross-track cohort is fixed as follows:
 
-For every unit:
-- research the exact curriculum and level first;
-- prepare a level-specific guide and implementation brief;
-- document the source register and official-mapping status;
-- produce original or properly licensed materials;
-- complete academic, rights, accessibility and suitability reviews;
-- obtain the required explicit approval before proceeding to the next gated step;
-- release only after all applicable release gates pass.
+1. **IB MYP Language and Literature Year 1 — Unit 1.**
+2. **Cambridge Lower Secondary English 0861 Stage 7 — Unit 1.** Stage 7 is typically for ages 11–12; grade alignment varies by school/country, so this is a planning comparison rather than a universal equivalence.
+3. **CBSE English Grade 6 — Unit 1.**
 
-Adding CBSE does not authorise simultaneous bulk creation, skipping the rotation, changing the current unit template, bypassing approvals, or marking planned routes as implemented. Do not merge the pathway into the app or publish learner-facing content until a later implementation task explicitly authorises it.
+Finish the student-facing Unit 1 content and record the required academic/content, rights/originality, accessibility, age/cultural suitability and release checks for each route before moving to older-level Unit 1 work or any Unit 2. Official mapping/currency is a separate status; never invent it. If one of the three is blocked, pause and report the blocker instead of skipping ahead. This rule supersedes earlier examples or lists that put DP, IGCSE or higher grades ahead of CBSE Grade 6.
+
+The platform's architecture, unit structure, research method and release process do not change. Keep the exact programme/course/stage/grade identity separate for every unit; the cohort is a production order, not a claim that the curricula share objectives or content.
 
 ## 6. Current status and limitations
 
