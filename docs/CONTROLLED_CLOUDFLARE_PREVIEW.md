@@ -5,10 +5,10 @@
 ## What this preview does
 
 - Uses Cloudflare Worker Previews with `npx wrangler preview`, not the production deployment command `npx wrangler deploy`.
-- Runs only for the approved `preview/cambridge-stage-7-unit-1-accessibility` branch and the related same-repository review PR.
-- Updates a named preview for Cambridge Stage 7 Unit 1 and posts its URL to the PR when deployment succeeds.
+- Runs for same-repository pull requests targeting `main`, but never for forked PRs. Manual dispatch is restricted to the approved `preview/cambridge-stage-7-unit-1-accessibility` branch.
+- Creates or updates a separate `pr-<number>` Preview for each pull request and posts its URL to the PR when deployment succeeds. Manual runs use the stable name `cambridge-stage-7-unit-1-accessibility`.
 - Builds the application before attempting to upload the preview.
-- Deletes the preview when the related review PR is closed, if credentials are configured.
+- Deletes the pull-request Preview when that PR is closed, if credentials are configured.
 - Does not merge a PR, change the production deployment, change the main-domain DNS, or require the custom domain to be connected to Cloudflare.
 
 Cloudflare Worker Preview URLs are public unless Cloudflare Access is configured. Workers.dev Preview URLs include a no-index response header, but this is not access control. Do not use the preview for personal data, real student records, confidential material or public release of the candidate unit. The visible unit status must continue to say that it is not released or student-ready.
@@ -50,7 +50,7 @@ Open the resulting run. If it succeeds, the workflow summary and the draft PR co
 
 ## Future operation
 
-Commits pushed to the approved preview branch trigger another build and update the same named Preview. The normal production Worker remains unchanged. When the related review PR is closed, the cleanup job deletes that Preview if the required credentials are available.
+Commits pushed to a same-repository pull request trigger another build and update that PR's Preview. The normal production Worker remains unchanged. When a PR is closed, the cleanup job deletes its Preview if the required credentials are available.
 
 Cloudflare documentation:
 - Worker Previews: https://developers.cloudflare.com/workers/previews/
