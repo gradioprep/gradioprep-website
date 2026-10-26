@@ -1,6 +1,6 @@
 # English Curriculum Research, Quality Rubric and Design Standard
 
-**Status:** Internal working reference v1.1 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
+**Status:** Internal working reference v1.2 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
 **Prepared:** 26 October 2026
 **Owner:** Academic lead / founder
 **Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary, Cambridge IGCSE and CBSE English Grades 6–12. Official syllabus mappings must be verified separately for each course, class/year/stage and edition.
@@ -214,3 +214,12 @@ Every photo must be checked **before it is selected or embedded**: verify an exp
 ## 13. Stage 7 Unit 1 v1.3 post-approval gate review — 26 October 2026
 
 The founder approved proceeding with further review/release checks for the exact v1.3 candidate. A limited public exact-phrase screen did not surface an exact match for searched passage lines; no images or third-party excerpts appear in the unit. A text-level accessibility/context preflight found no blocking issue, given the worked model, word-help box and non-paper alternatives. These findings are not comprehensive plagiarism screening or legal clearance; UI accessibility and human age/level suitability remain untested. The project must remain paused at this Stage 7 checkpoint until human academic/suitability judgement, current framework/version handling, formal rights review, accessibility in the intended UI, and explicit release decision are recorded. The next planned content after Stage 7 is CBSE Grade 6 Unit 1, but the binding rotation does not permit skipping a blocked checkpoint.
+
+
+## 14. Controlled preview UI test outcome — 26 October 2026
+
+The founder approved a restricted preview integration for testing only. Draft PR [#15](https://github.com/gradioprep/gradioprep-website/pull/15) adds the isolated route `/preview/cambridge-lower-secondary/english/stage-7/unit-1` without linking it from ordinary navigation. The route renders learner-facing v1.3 content only; teacher/editor answers stay outside the client import graph, and learner responses are held only in temporary component state without scoring or persistence.
+
+GitHub Actions [Build check #225](https://github.com/gradioprep/gradioprep-website/actions/runs/40304946857) passed on commit `b1e6264a2ee2ed062e2084e33a0288c1241fc16c`: TypeScript/Vite build successful and 17/17 Chromium tests passed, of which six specifically cover the controlled preview. These test the unreleased label and content rendering, skip-link/disclosure keyboard operation, accessible names for 14 textareas, absence of horizontal overflow at 390px viewport width, clearing response drafts, and contrast sampling for selected text pairs.
+
+**Interpretation limit:** This is evidence that the route builds and passes a small automated interface/accessibility smoke suite, not a comprehensive WCAG audit. Manual screen-reader testing, broader keyboard and focus-order inspection, 200%/400% zoom/reflow, cross-browser/OS checks, text-to-speech review and human learner-suitability judgement remain open. The automated test server is local Wrangler within CI; no dedicated hosted Cloudflare branch-preview URL was verified. The unit remains draft/unreleased. Rights/originality, human academic/suitability, current full Cambridge framework/version and objective mapping, and explicit release approval are separate gates and must not be inferred from this test pass.
