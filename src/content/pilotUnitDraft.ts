@@ -1,90 +1,77 @@
 import type { PilotUnitDraft } from "./model";
 
 /**
- * Original pilot-unit brief. Academic content review passed for the pilot
- * preview; official curriculum mapping remains unverified.
+ * Unit 1 version 2 planning brief. This is a draft for founder review;
+ * version 1's pilot-preview approval does not carry forward automatically.
  */
 export const pilotUnitDraft: PilotUnitDraft = {
-  id: "draft-ib-myp-lal-y1-u1",
-  version: 1,
+  id: "draft-ib-myp-lal-y1-u1-v2",
+  version: 2,
   pathwayId: "ib-myp-lal-y1",
   unitId: "ib-myp-lal-y1-u1",
-  status: "approved-for-pilot-preview",
+  status: "draft-for-founder-review",
   reviewRecord: {
-    outcome: "passed",
-    reviewedAt: "2026-10-24",
-    reviewerLabel: "Academic lead (approval confirmed by project owner; name not specified)",
-    scopeNote: "Academic content review passed for this version per project owner confirmation. This approval supports the pilot preview only; the official curriculum mapping remains unverified and release is not authorised.",
+    outcome: "pending",
+    reviewedAt: null,
+    reviewerLabel: "Pending founder review",
+    scopeNote:
+      "Version 1 passed academic content review for pilot preview on 24 October 2026. This revised version 2 needs its own review and approval. It does not inherit the previous version's approval.",
   },
-  title: "How writers shape meaning",
+  title: "How writers and creators shape meaning",
   proposedFocus:
-    "A starter exploration of how deliberate word and sentence choices influence a reader's understanding and response.",
+    "Move from noticing to interpreting: use precise textual and visual evidence to explain how creator choices may shape meaning and audience response.",
   proposedLearningObjective:
-    "Identify a writer's choice in a short text and comment on how it may shape meaning or mood, using an example to support the explanation.",
+    "Explain how a writer's word choices and a visual creator's design choices may shape meaning or invite an audience response, using precise evidence and context.",
   mappingStatus: "unverified",
   officialObjectiveCodes: [],
   source: {
-    title: "IB MYP Language and Literature — public subject overview",
+    title: "IB MYP Language and Literature — current public subject overview",
     url: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
     subjectBriefUrl: "https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf",
     checkedAt: "2026-10-26",
     scopeNote:
-      "The current public IB overview describes broad programme aims and six skill domains but does not publish the detailed current Year 1 objective/strand descriptors. This unit is designed against the public framework, not an official objective-code mapping.",
+      "The current public overview supports the broad skill areas and text/creator focus. The detailed Year 1 guide indexed for 2014/15 is a legacy reference, not proof of the latest applicable edition. Exact current objective/strand mapping remains unverified.",
   },
   teachingSequence: [
-    {
-      number: "01",
-      title: "Notice a deliberate choice",
-      purpose:
-        "Identify a precise word, phrase or sentence pattern instead of naming a broad topic.",
-    },
-    {
-      number: "02",
-      title: "Select useful evidence",
-      purpose:
-        "Choose a short quotation that clearly shows the choice being discussed.",
-    },
-    {
-      number: "03",
-      title: "Explain the effect",
-      purpose:
-        "Explore what the choice may make a reader picture, notice, feel or question; avoid claiming every reader reacts identically.",
-    },
-    {
-      number: "04",
-      title: "Connect choice and meaning",
-      purpose:
-        "Link the evidence and explanation to the mood or meaning of the moment in the text.",
-    },
+    { number: "01", title: "Notice before interpreting", purpose: "Begin with literal observations from an original prose passage and an original poster; distinguish observation from inference." },
+    { number: "02", title: "Build an evidence chain", purpose: "Connect a precise word or visual choice to a plausible association and an effect in context." },
+    { number: "03", title: "Compare creator choices", purpose: "Explain how a story and poster can frame a similar late-bus journey differently for an audience." },
+    { number: "04", title: "Explain and qualify", purpose: "Use surrounding details to support, complicate or refine an interpretation instead of asserting one guaranteed response." },
+    { number: "05", title: "Transfer independently", purpose: "Apply the same thinking to a fresh original micro-extract, then self-review using success indicators." },
   ],
   originalExample: {
-    label: "Original micro-extract — written for this draft",
+    label: "Original micro-extract — from the lesson passage",
     text: "At the edge of the field, the last bus sighed, its headlights shrinking into the rain.",
     focus: "sighed",
     teachingNote:
-      "The verb 'sighed' gives the bus a human-like action. It can make the departure feel weary or reluctant, while the shrinking headlights and rain help create a sense of distance. These are plausible readings to support with evidence, not the only acceptable interpretation.",
+      "The verb gives the bus a human-like action. It may make the departure feel weary or reluctant. The interpretation is plausible, not mandatory; the explanation should connect it to the rain and the bus moving away.",
   },
   practicePrompt:
-    "Choose one word or phrase from the micro-extract. Explain how it helps create the mood of the moment.",
+    "Choose one precise word or phrase from the passage and one written or visual feature from the companion poster. Explain how those choices may invite different impressions of a late journey.",
   responseExpectation: [
-    "Selects a precise word or phrase from the extract.",
-    "Explains a plausible association or effect rather than only naming a technique.",
-    "Connects the explanation to the mood or meaning and supports it with evidence.",
+    "Identifies exact wording or a specific visual design feature.",
+    "Explains what the choice may suggest rather than only naming a technique.",
+    "Connects the interpretation to the surrounding context and/or intended audience.",
+    "Uses evidence from both artefacts when completing the comparison prompt.",
+    "Applies the thinking move to a fresh text in the exit check.",
   ],
   commonMisconceptions: [
-    "Naming a technique without explaining its effect.",
-    "Writing a general comment about the scene without referring to specific words.",
-    "Treating one interpretation as the only possible reading without supporting it.",
+    "Naming a technique without explaining the effect.",
+    "Treating an interpretation as fact or claiming all readers must feel the same way.",
+    "Describing a visual choice without explaining its relationship to message, emphasis or audience.",
+    "Quoting evidence but not explaining how it supports the point.",
+    "Ignoring context or a later detail that complicates the first interpretation.",
   ],
   remainingReleaseChecks: [
-    "Confirm the unit is presented accurately as a public-framework-aligned pilot, not an officially mapped unit.",
-    "Keep official objective/strand codes unmapped unless a current public source verifies exact descriptors.",
-    "Complete and record the separate content-rights review.",
-    "Complete and record the accessibility review for the interactive lesson.",
-    "Record explicit release approval only after all required evidence is complete.",
+    "Founder reviews and approves this exact version 2 before the curriculum rotation advances.",
+    "Complete item-level academic review; version 1 approval does not carry forward.",
+    "Keep official Year 1 objective/strand codes blank until the applicable current guide is verified.",
+    "Complete and record the rights review for original prose, poster wording and CSS-rendered composition.",
+    "Complete and record accessibility, visual, reading-demand and age/level suitability checks.",
+    "Record explicit release approval only after all required gates are complete.",
   ],
   rightsNote:
-    "The short example is original draft text. Replace or supplement it only with original material or material whose use is appropriately permitted and documented.",
+    "The prose, poster copy and poster art direction are original to this platform. The poster is rendered using HTML/CSS; retain this record and verify all later additions separately.",
   releaseNote:
-    "Approved for pilot preview only. Do not claim official curriculum mapping or release this as a syllabus-mapped course until the applicable guide edition/objective references and all remaining release gates are verified.",
+    "Version 2 is a founder-review draft. Version 1 remains the previously reviewed pilot preview, but no approval automatically transfers to version 2. Official mapping, rights, accessibility and release approval are still open.",
 };
