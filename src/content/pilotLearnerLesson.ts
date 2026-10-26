@@ -1,7 +1,7 @@
 import type { PilotLearnerLesson } from "./model";
 
 /**
- * Learner-safe version 2 candidate for founder review.
+ * Learner-safe version 2, approved by the founder as a content candidate.
  * Answer keys and model responses stay in pilotLessonPack.ts and are not
  * imported by the client UI. Interactions are temporary and are not graded.
  */
