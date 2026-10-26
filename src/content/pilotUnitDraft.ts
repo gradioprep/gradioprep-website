@@ -9,13 +9,13 @@ export const pilotUnitDraft: PilotUnitDraft = {
   version: 2,
   pathwayId: "ib-myp-lal-y1",
   unitId: "ib-myp-lal-y1-u1",
-  status: "draft-for-founder-review",
+  status: "founder-approved-candidate",
   reviewRecord: {
     outcome: "pending",
     reviewedAt: null,
-    reviewerLabel: "Pending founder review",
+    reviewerLabel: "Academic review pending",
     scopeNote:
-      "Version 1 passed academic content review for pilot preview on 24 October 2026. This revised version 2 needs its own review and approval. It does not inherit the previous version's approval.",
+      "The founder approved the content of version 2 on 26 October 2026. Its separate academic review remains pending and version 1's academic-review outcome does not transfer.",
   },
   title: "How writers and creators shape meaning",
   proposedFocus:
@@ -63,7 +63,7 @@ export const pilotUnitDraft: PilotUnitDraft = {
     "Ignoring context or a later detail that complicates the first interpretation.",
   ],
   remainingReleaseChecks: [
-    "Founder reviews and approves this exact version 2 before the curriculum rotation advances.",
+    "Complete the separate item-level academic review of this founder-approved version; it must not inherit version 1's review outcome.",
     "Complete item-level academic review; version 1 approval does not carry forward.",
     "Keep official Year 1 objective/strand codes blank until the applicable current guide is verified.",
     "Record final asset provenance and complete the unit-level rights review for original prose, original poster copy/layout and the CC0 photograph; check the asset for third-party marks or other visible rights concerns.",
@@ -73,5 +73,5 @@ export const pilotUnitDraft: PilotUnitDraft = {
   rightsNote:
     "The prose and poster copy/layout are platform-authored. The poster uses “Bus stop with platform during night.jpg” by Mateusz Konieczny, Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Bus_stop_with_platform_during_night.jpg. The file page records CC0 1.0 Universal Public Domain Dedication. The photo contains no identifiable people or visible commercial branding. Licence/source checked before selection on 26 October 2026; final unit-level rights review remains a separate release gate.",
   releaseNote:
-    "Version 2 is a founder-review draft. Version 1 remains the previously reviewed pilot preview, but no approval automatically transfers to version 2. Official mapping, rights, accessibility and release approval are still open.",
+    "Version 2 has founder content approval but remains an unreleased candidate. Version 1's academic-review outcome does not transfer. Official mapping, separate academic review, rights, accessibility, age/level suitability and release approval remain open.",
 };
