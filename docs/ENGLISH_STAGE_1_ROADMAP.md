@@ -1,12 +1,12 @@
 # English Stage 1 — Curriculum Roadmap
 
-**Status:** Working roadmap. The first pilot unit's instructional content review passed for preview version 1; official syllabus mapping remains unverified, and the other pathway sequences still require their own review. Pathway count and production targets follow the master brief.
+**Status:** Working roadmap. The MYP Year 1 curriculum guide v1.1, pathway implementation structure v1.1 and dedicated resource landscape review v1.0 are complete and awaiting founder review. The guide now has six proposed units and a separate legacy/Enhanced MYP transition control. Official objective/strand mapping is not claimed. The existing pilot's instructional content review passed for preview version 1 only. The 12-entry documentation scope does not mean the prototype's current 10-entry catalogue is already updated.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Purpose:** Turn the approved Stage 1 scope into a trackable production plan without claiming full syllabus coverage or inventing official curriculum mappings.
 
 ## 1. Rules that must not be broken
 
-- IB MYP Language and Literature, Cambridge Lower Secondary English and Cambridge IGCSE First Language English are separate pathways. Do not merge their objectives into one generic “Grade 6–10 English” course.
+- IB MYP Language and Literature, Cambridge Lower Secondary English (0861), IB DP Language A: Language and Literature, and Cambridge IGCSE First Language English (0500 only) are distinct curriculum tracks. Do not merge their objectives into one generic “Grade 6–10 English” course.
 - Grade equivalents are a navigation aid only. They are not a claim that a qualification or syllabus is officially defined by that school grade.
 - Before an item is published, record the relevant programme, course, year/stage, syllabus edition (where applicable), skill objective, task type and review status.
 - Verify mappings against the applicable official specification. Record the official URL, edition/code, date checked and reviewer. Do not invent objective codes or imply a syllabus edition has been checked when it has not.
@@ -16,7 +16,7 @@
 
 ## 2. Initial pathway register
 
-The approved planning target is 10 pathway entries. The two IGCSE rows below are learner-facing grade-equivalent bands under the relevant IGCSE course/syllabus, not separate official qualifications or automatically separate syllabuses.
+The founder-confirmed planning scope is 12 level/pathway entries. The two IGCSE rows are learner-facing delivery bands under Cambridge IGCSE First Language English 0500, not separate official qualifications or separate syllabuses. The two DP rows are platform delivery years under the single selected DP course, not separate official DP syllabuses.
 
 | Pathway ID | Programme / course | Learner-facing level | Initial unit slots | Mapping status |
 |---|---|---|---:|---|
@@ -27,9 +27,11 @@ The approved planning target is 10 pathway entries. The two IGCSE rows below are
 | `ib-myp-lal-y5` | IB MYP Language and Literature | Year 5 (approx. Grade 10 equivalent) | 3 | To verify |
 | `cambridge-ls-english-s7` | Cambridge Lower Secondary English | Stage 7 | 3 | To verify |
 | `cambridge-ls-english-s8` | Cambridge Lower Secondary English | Stage 8 | 3 | To verify |
-| `cambridge-ls-english-s9` | Cambridge Lower Secondary English | Stage 9 | 3 | To verify |
-| `cambridge-igcse-fle-band-9` | Cambridge IGCSE First Language English | Grade 9-equivalent learning band | 3 | Confirm appropriate current syllabus and mapping |
-| `cambridge-igcse-fle-band-10` | Cambridge IGCSE First Language English | Grade 10-equivalent learning band | 3 | Confirm appropriate current syllabus and mapping |
+| `cambridge-ls-english-s9` | Cambridge Lower Secondary English (0861) | Stage 9 | 3 | Current official framework/objectives to verify |
+| `ib-dp-langlit-y1` | IB DP Language A: Language and Literature | Year 1 delivery chapter | 3 | Scope confirmed; current course guide and local sequence to verify |
+| `ib-dp-langlit-y2` | IB DP Language A: Language and Literature | Year 2 delivery chapter | 3 | Scope confirmed; current course guide and local sequence to verify |
+| `cambridge-igcse-fle-band-9` | Cambridge IGCSE First Language English 0500 only | Grade 9-equivalent delivery band | 3 | Scope confirmed; exam-year syllabus, component/route and mapping to verify |
+| `cambridge-igcse-fle-band-10` | Cambridge IGCSE First Language English 0500 only | Grade 10-equivalent delivery band | 3 | Scope confirmed; use applicable 0500 syllabus unless verified route needs differ |
 
 **Do not release the IGCSE rows as distinct syllabus tracks unless the academic lead confirms that the distinction is useful and correctly mapped.** They may share the same qualification syllabus while differing in the recommended sequence or readiness support.
 
@@ -39,10 +41,10 @@ These are production targets from the master brief, not promises of complete cov
 
 | Measure | Initial target | Control |
 |---|---:|---|
-| Pathway entries | 10 | Keep official programme/course identity separate from grade-equivalent labels |
-| Skill units | About 30 | About 3 per pathway; final distribution may differ if academic review requires it |
-| Original short-form practice items | About 300 | Each must have a learning purpose, answer/explanation or appropriate marking guidance, and review status |
-| Extended-response tasks | About 30 | Each must have task instructions, expected response format, task-specific rubric/criteria and credit requirement if offered for human grading |
+| Pathway entries | 12 | Keep official programme/course identity separate from delivery-year/band and grade-equivalent labels |
+| Skill units | About 36 | About 3 per entry; final distribution may differ if academic review requires it |
+| Original short-form practice items | About 360 | Each must have a learning purpose, answer/explanation or appropriate marking guidance, and review status |
+| Extended-response tasks | About 36 | Each must have task instructions, expected response format, task-specific rubric/criteria and credit requirement if offered for human grading |
 | Diagnostic | One per pathway | Use only after skill mapping and scoring/recommendation rules are approved |
 | Annotated example(s) | At least one per pathway | Clearly link the example to a verified objective or mark it as general introductory material pending mapping |
 | Common mistakes and next steps | For each released unit | Must lead to a relevant skill or task, not a generic link |
@@ -113,10 +115,59 @@ A material edit to a published question, answer, rubric or syllabus mapping crea
 
 **Change control:** Approved/reviewed units, features and documentation remain revisable at any later date. Track a version and rationale, update dependent documents, and repeat affected review gates for material changes.
 
-A typed catalogue exists at `src/content/pathways.ts` with 10 planned pathways and three slots per pathway. The first IB MYP Year 1 pilot, **How writers shape meaning**, has a teacher/editor unit brief (`src/content/pilotUnitDraft.ts`), a learner-safe lesson source (`src/content/pilotLearnerLesson.ts`), an answer-free Pathways summary (`src/content/pilotReviewSummary.ts`) and a separate teacher/editor answer source (`src/content/pilotLessonPack.ts`). Academic content review for pilot-preview version 1 passed, as confirmed by the project owner on 24 October 2026. The Lesson screen is interactive: learners can select a choice, draft written answers and check success indicators. The preview does not score or persist responses.
+The current prototype's typed catalogue at `src/content/pathways.ts` still contains 10 planned pathways and three slots per pathway. The newly approved documentation scope now plans 12 entries; do not claim the catalogue or deployed route register has already been expanded. Update the code/data catalogue only after the curriculum guide and pathway implementation plan have been reviewed and the official mapping gates are respected. The first IB MYP Year 1 pilot, **How writers shape meaning**, has a teacher/editor unit brief (`src/content/pilotUnitDraft.ts`), a learner-safe lesson source (`src/content/pilotLearnerLesson.ts`), an answer-free Pathways summary (`src/content/pilotReviewSummary.ts`) and a separate teacher/editor answer source (`src/content/pilotLessonPack.ts`). Academic content review for pilot-preview version 1 passed, as confirmed by the project owner on 24 October 2026. The Lesson screen is interactive: learners can select a choice, draft written answers and check success indicators. The preview does not score or persist responses.
 
 The teacher/editor brief and answer guide are not imported into the client module graph; the client uses only the learner-safe lesson and non-answer review summary. This is adequate source separation for a static preview but is not production authorization. Real answer keys must be served only through a protected server-side path.
 
-The official IB guide edition and objective mapping remain unverified. Candidate Criterion A strands A(ii) and A(iii) are not recorded as official objective codes. The static readiness fixture now records the reviewed lesson and practice IDs, answer-key review and academic-review pass. Rights review, accessibility review and explicit release approval remain separate outstanding gates. Therefore the unit is **approved for pilot preview only**, not a released syllabus-mapped course.
+The detailed official IB guide edition and objective mapping remain unverified. The official [MYP Language and Literature page](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) links a public subject brief marked “From 2014”; the indexed detailed guide ([Language and literature guide](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf)) redirects to IB sign-in from this environment. Use the authenticated [Programme Resource Centre](https://resources.ibo.org/), search the exact guide title under MYP/English, and check its publication metadata plus “Updates to the publication.” If access is unavailable, ask an MYP coordinator/school librarian or check the [IB Store](https://store.ibo.org/). Do not use the public brief alone or a search crawl date to claim that the detailed edition is current. The previously surfaced candidate Criterion A strand references A(ii) and A(iii) are not verified mappings and must not be used as official objective codes or attached to the pilot. The static readiness fixture now records the reviewed lesson and practice IDs, answer-key review and academic-review pass. Rights review, accessibility review and explicit release approval remain separate outstanding gates. Therefore the unit is **approved for pilot preview only**, not a released syllabus-mapped course.
 
-Next, complete the independent source/mapping and rights/accessibility evidence, then implement production content storage and server-side learner/teacher authorization before real learner records or graded submissions are added. Do not infer a production release from this preview.
+The standalone MYP Year 1 guide (`docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`) and its implementation structure (`docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`) are complete for the public-source workflow and await founder review. No official Year 1 objective/strand mapping is claimed. **Checkpoint rule:** do not begin or revise Unit 1 as curriculum production until the founder approves this guide and implementation structure. The existing “How writers shape meaning” preview is not a new implementation and remains preview-only; after approval, review/adapt that existing version rather than duplicate it. Only after Unit 1 is implemented and approved should the rotation continue to Cambridge Lower Secondary Stage 7 guide, then DP Language A: Language and Literature Year 1, then Cambridge IGCSE 0500's first approved delivery band. Existing later-track draft files do not mean those later guide checkpoints are complete. Rights, accessibility and release approval remain separate.
+
+
+## 9. Curriculum guide and rotating unit-production policy
+
+The shared research and quality rubric is maintained in `docs/ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`; the verified public source and sample-paper protocol is `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md`; year/stage guide architecture and rotation are in `docs/ENGLISH_CURRICULUM_GUIDES.md`; the public-framework-aligned MYP Year 1 guide and pathway plan are `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md` and `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`.
+
+The founder's production rule is to create **one unit at a time across curriculum tracks**, not to complete an entire curricular group first. Initial order:
+1. IB MYP Language and Literature Year 1 — Unit 1.
+2. Cambridge Lower Secondary English (0861) Stage 7 — Unit 1.
+3. IB DP Language A: Language and Literature Year 1 — Unit 1.
+4. Cambridge IGCSE First Language English 0500 — first approved delivery band, Unit 1.
+5. IB MYP Year 2 — Unit 1.
+6. Cambridge Lower Secondary Stage 8 — Unit 1.
+7. IB DP Language A: Language and Literature Year 2 — Unit 1.
+8. Cambridge Lower Secondary Stage 9 — Unit 1.
+9. Cambridge IGCSE 0500 — next approved delivery band, Unit 1.
+10. IB MYP Year 3 — Unit 1.
+11. IB MYP Year 4 — Unit 1.
+12. IB MYP Year 5 — Unit 1.
+
+Then continue across the approved tracks for Unit 2, then Unit 3. The exact order after these initial slots may be revised only through a recorded decision. DP and IGCSE units are blocked until their current official guide/syllabus and school/exam-year sequence are verified. A blocked slot stays blocked; no invented content or mapping may be substituted merely to preserve rotation.
+
+
+## 10. Public-source method and curriculum guide rotation
+
+Use `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` as the source selection/currency gate. It sets five core source families and requires exact course, edition/session, paper type, access and rights checks. Do not select a worksheet or exam paper merely because it is easy to download. For Cambridge 0500 exams 2027–2029, prefer the current official syllabus and specimen/mark-scheme set; older papers require an item-level comparison. For DP Language A: Language and Literature, use public current IB course/examiner information and cross-check with specialist sites; do not mislabel Language A: Literature papers as Language and Literature specimens. For MYP, use the public six-skill framework and school-based assessment description to create original tasks; official Year 1 objective/strand codes stay blank if not verifiable.
+
+Guide creation order, before rotating unit-content production:
+1. IB MYP Language and Literature Year 1 — public-framework-aligned guide drafted; objective/strand mapping blocked.
+2. Cambridge Lower Secondary English 0861 Stage 7 — verify the current official framework/version, then write the public-source-supported guide.
+3. IB DP Language A: Language and Literature Year 1 — use public course and current examiner guidance; identify any criterion/version updates.
+4. Cambridge IGCSE First Language English 0500 — syllabus-wide guide anchored to Version 1 for 2027–2029; record component/route and exam year.
+5. IB MYP Year 2.
+6. Cambridge Lower Secondary Stage 8.
+7. IB DP Language A: Language and Literature Year 2.
+8. Cambridge Lower Secondary Stage 9.
+9. Cambridge IGCSE 0500 second proposed delivery band (same syllabus, not a separate qualification).
+10. IB MYP Year 3.
+11. IB MYP Year 4.
+12. IB MYP Year 5.
+
+This is an editorial production order, not an official IB/Cambridge unit order. When each guide cycle is complete, rotate unit-content production through the same track order rather than completing one programme group first. A source-access gap must be recorded—not filled with invented official mapping.
+
+
+## MYP Year 1 research revision — 26 October 2026
+
+Version 1.1 of the guide replaces the initial three-unit sketch with six proposed units plus shared diagnostic, language support, retrieval, revision and transfer time for a planned total of at least 50 teaching hours. Research now includes MYP-specific teaching/publisher/planning resources and a separate landscape review. The 2014/15 detailed IB guide is used only as a labelled legacy crosswalk; its continued current applicability is not confirmed. Enhanced MYP beta material remains a separate transition watch.
+
+This is a **documentation and research checkpoint only**. No Unit 1 adaptation or application change is authorized until the founder approves the revised guide and plan. The existing “How writers shape meaning” lesson remains preview-only and must not be duplicated.
