@@ -1,10 +1,14 @@
 # English Curriculum Research, Quality Rubric and Design Standard
 
-**Status:** Internal working reference v0.5 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
+**Status:** Internal working reference v0.6 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
 **Prepared:** 26 October 2026
 **Owner:** Academic lead / founder
 **Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary and Cambridge IGCSE. Official syllabus mappings must be verified separately for each course, year/stage and edition.
 **Do not publish this document as a claim of IB/Cambridge endorsement.**
+
+## Binding workflow and access constraint
+
+Follow [`docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md`](IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md) for every IB and Cambridge course/level. The founder has no authorised school-account access; this is a standing constraint, not an open request. Never ask the founder again to obtain gated school resources or pause research for them. The curriculum director must use the best available current public official sources, compare level-specific specialist EdTech/publisher resources, cross-check against credible pedagogy evidence, and record what remains unverified. A public-framework-aligned implementation design may proceed where detailed official material is gated, but official mapping must remain explicitly unverified unless directly supported by traceable current evidence. Academic review, mapping, rights, accessibility, suitability and release remain separate gates.
 
 ## 1. Executive recommendation
 
