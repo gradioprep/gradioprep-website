@@ -101,7 +101,7 @@ Use this planner for each of the six units, with current/legacy and Enhanced MYP
 
 The approved guide's Unit 1 slot has been implemented as candidate version 2 in draft PR #14. The existing version 1 was adapted rather than duplicated. The current candidate includes:
 
-1. The original prose passage plus a fictional poster mock-up using a real Pexels photograph, platform-authored copy/layout, visible text and descriptive alt text.
+1. The original prose passage plus a fictional poster mock-up using a real Wikimedia Commons photograph explicitly released under CC0 1.0, platform-authored copy/layout, visible text and descriptive alt text.
 2. An unscored starting observation that distinguishes literal observation from inference.
 3. A modelling sequence for precise choice → evidence → effect in context.
 4. A text/visual comparison task, guided explanations, an explanation-revision task and a fresh-text exit transfer.
