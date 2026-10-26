@@ -3,7 +3,7 @@
 **Unit ID:** cambridge-ls-english-s7-u1  
 **Content version:** 1.3 draft  
 **Learner content:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md`  
-**Status:** Draft only — founder review and separate review/release checks required before learner-facing implementation or publication.  
+**Status:** Draft only — the founder authorised controlled preview integration for interface accessibility testing only. This is not approval for publication, student-ready use, or release.  
 **Revision note:** Added a worked model for inference, optional learner-facing word support, alternatives to paper annotation, and item-specific formative scoring descriptors following the v1.2 academic/editorial review.  
 **Official mapping:** Partial public cross-check only: 7Ri.03 for explicit-information items (the warm-up's directly stated detail, guided practice A and independent practice 1). Cambridge's public framework-support overview explicitly identifies this objective code. Do not apply it to the entire unit. Inference and language-choice codes remain unassigned until the currently applicable support-site framework is confirmed.  
 **Rights:** All passage text and questions are original to this platform. Rights/originality clearance remains a separate gate; this note is not legal clearance.
@@ -154,3 +154,14 @@ This is an internal teaching aid, not a Cambridge mark scheme. It is deliberatel
 - [ ] Accessibility review tests contrast, keyboard operation, focus order, screen-reader behaviour, responsive layout, text-to-speech and answer-field errors in the intended UI.
 - [ ] Record reviewer, date, decision and exact content version.
 - [ ] Explicit release approval only after the required gates for the intended status are complete.
+
+
+## 9. Controlled preview implementation and test record — 26 October 2026
+
+The founder approved placing the learner-facing v1.3 candidate into an isolated preview route for interface accessibility testing. Draft PR [#15](https://github.com/gradioprep/gradioprep-website/pull/15) contains the controlled preview code and test suite; PR [#12](https://github.com/gradioprep/gradioprep-website/pull/12) remains the source-document/review candidate.
+
+The route is not linked in regular site navigation and displays an explicit “NOT RELEASED — NOT STUDENT-READY” notice. Only learner-facing content is rendered; this teacher/editor pack, answers and scoring guidance are not imported into client code. Learner response drafts are temporary in-page state only, with no scoring, submission or persistence.
+
+GitHub Actions [Build check run #225](https://github.com/gradioprep/gradioprep-website/actions/runs/40304946857) succeeded on commit `b1e6264a2ee2ed062e2084e33a0288c1241fc16c`: TypeScript/Vite production build passed and 17/17 Chromium tests passed, including six preview checks for rendering/status, keyboard-accessible controls, labels on all 14 textareas, 390px mobile overflow, clearing unsaved responses, and representative text-contrast sampling. This is automated test evidence, not a comprehensive accessibility audit. Tests ran using the local Wrangler-backed test server in CI; no dedicated hosted Cloudflare preview URL has been verified.
+
+**Gates still open:** formal rights/originality clearance; human academic/age/level/cultural suitability judgement; the full currently applicable Cambridge framework/version and further objective mapping; manual screen-reader, broader keyboard/focus, zoom/reflow, cross-browser and text-to-speech checks; and explicit release approval. The text-only unit has no image, so the photograph pre-selection gate is not applicable. Do not treat this integration or CI pass as student-ready status, and do not start CBSE Grade 6 Unit 1 until the Stage 7 release checkpoint is legitimately cleared.
