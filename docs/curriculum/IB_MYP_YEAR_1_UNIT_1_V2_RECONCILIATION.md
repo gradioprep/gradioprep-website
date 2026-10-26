@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 26 October 2026  
-**Status:** Implemented candidate; awaiting founder review in draft PR #14.  
+**Status:** Founder-approved content candidate; separate review/release gates remain open in draft PR #14.  
 **Unit:** IB MYP Language and Literature Year 1, Unit 1.  
 **Content version:** 2 — “How writers and creators shape meaning”.  
 **Guide baseline:** Approved guide v1.1 and implementation structure v1.2.  
@@ -55,7 +55,7 @@ This is a documented origin claim, not completed legal/rights clearance. The rig
 | Entry observation and fresh-text transfer | Implemented in preview branch | Both are temporary, not graded or persisted. |
 | Answer/model response separation | Implemented in source structure | CI/source review must confirm the teacher pack is not imported into client modules. |
 | Current official Year 1 map | Unverified | Keep officialObjectiveCodes empty. |
-| Academic review for v2 | Pending founder review | Version 1's review is retained as history only. |
+| Academic review for v2 | Pending | Founder content approval was recorded on 26 October 2026; version 1's academic-review outcome is retained as history only. |
 | Reading and visual description | Present | Screen-reader order and reading load still need testing. |
 | Keyboard, focus, zoom/reflow, contrast and small-screen layout | Review pending | JSX and CSS changed; formal accessibility review has not been completed. |
 | Age/level and cultural/context suitability | Review pending | Founder/academic review required. |
@@ -63,20 +63,18 @@ This is a documented origin claim, not completed legal/rights clearance. The rig
 
 ## 5. What must happen next
 
-1. Founder reviews the version 2 preview and its separate teacher/editor pack.
-2. Record accept/revise/reject for this exact version; never carry version 1 approval forward automatically.
-3. If revisions are requested, create the next version and update source/review metadata.
-4. Complete academic, rights, accessibility, age/level and cultural/context checks separately.
-5. Keep official objective/strand codes blank unless the applicable current IB guide is verified.
-6. Merge content/app changes only after the founder approves version 2 and required checks for the intended status have been addressed.
-7. Do not move the content rotation to Cambridge Lower Secondary Stage 7 until Unit 1 version 2 has been approved.
+1. Complete and record the separate academic review of the founder-approved version 2 content and teacher/editor pack.
+2. Complete academic, rights, accessibility, age/level and cultural/context checks separately.
+3. Keep official objective/strand codes blank unless the applicable current IB guide is verified.
+4. Merge/deploy content/app changes only after required checks for the intended status are addressed; founder content approval alone is not release approval.
+5. The production rotation now advances to Cambridge Lower Secondary English Stage 7 Unit 1. Review the existing draft in PR #12; do not create a duplicate. Stage 7 must pass its own review gates before implementation/release.
 
 ## 6. Current PR and deployment status
 
-- **PR #14:** Unit 1 v2 candidate plus supporting application/documentation changes; founder review pending.
+- **PR #14:** Unit 1 v2 content candidate approved by the founder on 26 October 2026; separate academic, mapping, rights, accessibility/suitability and release gates remain open. PR remains draft and unmerged.
 - **Main branch:** Still contains the previously reviewed version 1 preview; v2 is not on main.
 - **Production:** No deployment of version 2 has occurred.
-- **Cambridge Stage 7:** Draft learner/teacher files remain in separate inactive draft PR #12; they are not part of this Unit 1 PR and must not advance yet.
+- **Cambridge Stage 7:** Existing draft learner/teacher files in PR #12 are now the active production checkpoint; they remain drafts and are not integrated or released.
 
 
 ## Pre-founder-review content refinement — 26 October 2026
@@ -87,7 +85,7 @@ A pre-review quality pass found that the initial definitions of “Choice” and
 - **Evidence:** quote the precise wording or identify the observable visual detail demonstrating that decision.
 - **Effect in context:** explain a plausible inference or audience effect and connect it to the moment and relevant context.
 
-The worked example, learner response frame and regression test were aligned to this distinction. This is a clarity refinement within the unapproved version 2 draft, not a review pass or release decision. The exact revised content still awaits founder review; other review gates remain open.
+The worked example, learner response frame and regression test were aligned to this distinction. The founder approved this exact content version on 26 October 2026. The refinement is included in that approved content candidate. It is not a separate academic-review pass or release decision; other review gates remain open.
 
 ## Pre-selection photograph rights record
 
