@@ -1,7 +1,7 @@
 # IB MYP Language and Literature — Year 1 Pathway Implementation Plan
 
-**Version:** 1.1 — six-unit architecture and MYP resource/transition controls  
-**Status:** implementation structure revised for founder review; no application changes are included in this document checkpoint.  
+**Version:** 1.2 — Unit 1 version 2 implemented for founder review  
+**Status:** guide/structure approved by founder 26 October 2026; Unit 1 version 2 is implemented in a draft PR for review. No merge to main or production deployment has occurred.  
 **Pathway ID:** ib-myp-lal-y1.  
 **Linked guide:** docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md.  
 **Research audit:** docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.  
@@ -11,15 +11,7 @@
 
 This plan translates the revised six-unit public-framework-informed Year 1 guide into content architecture, metadata, review controls and a possible application implementation sequence.
 
-It does not:
-- claim IB endorsement or current official objective mapping;
-- mark any unit Published;
-- create or replace lesson content;
-- modify the app's current catalogue or route data;
-- author/adapt Unit 1 before founder approval;
-- advance the next curriculum checkpoint.
-
-The existing preview “How writers shape meaning” is a candidate for Unit 1 and must be reconciled, not duplicated, once the revised guide is approved.
+It does not claim IB endorsement or current official objective mapping, mark any unit Published, or advance the next curriculum checkpoint. The founder approved this guide and structure on 26 October 2026. Unit 1 version 2 has now been implemented by reconciling the existing “How writers shape meaning” preview, not duplicating it. The new revision remains unapproved until its separate founder review.
 
 ## 2. Learner-facing hierarchy
 
@@ -105,20 +97,19 @@ Use this planner for each of the six units, with current/legacy and Enhanced MYP
 - Reviewer and version history.
 - Release/readiness checklist independent of curriculum mapping.
 
-## 6. Target implementation sequence — conditional on guide approval
+## 6. Unit 1 version 2 implementation record
 
-**No application or Unit 1 work is authorized by this document revision.** Following founder approval, use the sequence below.
+The approved guide's Unit 1 slot has been implemented as candidate version 2 in draft PR #14. The existing version 1 was adapted rather than duplicated. The current candidate includes:
 
-1. Reconcile the existing preview with revised Unit 1 outcomes and source controls; do not duplicate it.
-2. Record a task-by-task alignment table connecting the preview's learning outcomes, examples, practice tasks and feedback to the revised guide. Treat the legacy A–D labels as a diagnostic crosswalk until currentness is validated.
-3. List all text/image/audio assets and verify rights; replace or rewrite any item without clear permission.
-4. Audit direct evidence for reading, viewing, writing, speaking/listening and transfer; include any skill that is claimed but not assessed.
-5. Revise the lesson and separate teacher/editor review pack only after the founder approves the guide.
-6. Complete academic, accessibility, cultural-suitability and rights reviews separately.
-7. Keep the pilot in preview until all applicable mapping, rights, accessibility and explicit release gates are passed.
-8. After Unit 1 content is complete, present it for founder approval. Do not move to the next curriculum guide before that approval.
-9. Only after content approval may authorized application changes be made in a branch/PR, with source metadata, route data, accessibility checks and automated tests.
-10. Verify CI and deployment from actual results. Do not infer that a changed document means the app is updated or deployed.
+1. The original prose passage plus a new original HTML/CSS-rendered poster, with visible copy and a text alternative.
+2. An unscored starting observation that distinguishes literal observation from inference.
+3. A modelling sequence for precise choice → evidence → effect in context.
+4. A text/visual comparison task, guided explanations, an explanation-revision task and a fresh-text exit transfer.
+5. A separate teacher/editor answer pack; the learner component does not import answer keys or model responses.
+6. Version-aware review metadata: version 2 is marked draft-for-founder-review; version 1's approval is kept as history and is not inherited by version 2.
+7. Readiness metadata keeps the current official objective map blank/unverified and keeps rights, accessibility, academic review and release approval separate.
+
+The preview changes are in a draft PR, not on main. There has been no production merge or deployment. After the founder approves v2, complete/record the remaining academic, rights, accessibility, cultural/context and release checks before advancing to Cambridge Lower Secondary Stage 7.
 
 ## 7. Enhanced MYP change-control workflow
 
@@ -140,17 +131,18 @@ A third-party update or beta interface alone must not trigger a claim that a new
 - [x] Six-unit annual sequence and at least 50-hour design allocation documented.
 - [x] Independent platform content is treated as comparative evidence, not official requirement.
 - [x] Unit IDs and source/status metadata contracts are specified.
-- [ ] Founder approves the revised guide and implementation structure.
+- [x] Founder approved the revised guide and implementation structure on 26 October 2026.
 
-### Future Unit 1 checkpoint
-- [ ] Founder approval recorded before lesson editing.
-- [ ] Existing preview reconciled, not duplicated.
-- [ ] Texts and media original or rights-cleared.
-- [ ] Current curriculum mapping or honest unmapped status reviewed.
-- [ ] Task evidence covers all skills it claims to assess.
-- [ ] Teacher/editor review pack separated from learner content.
-- [ ] Academic, accessibility, cultural/context and rights gates passed.
-- [ ] Founder approves the completed Unit 1 implementation before the next guide starts.
+### Unit 1 version 2 checkpoint
+- [x] Founder approval recorded for the guide/implementation structure before content editing.
+- [x] Existing preview reconciled, not duplicated.
+- [x] New prose and poster assets are documented as original to this platform; formal rights review remains pending.
+- [x] Current mapping remains honestly labelled unverified with official code fields empty.
+- [x] Reading, viewing, written explanation, comparison, revision and fresh-text transfer tasks are present. Speaking/listening is only an optional partner extension, not a scored skill in this preview.
+- [x] Teacher/editor review pack is separate from the learner-facing import graph.
+- [ ] Founder reviews/approves Unit 1 version 2.
+- [ ] Complete the separate academic, accessibility, cultural/context and rights gates for this exact version.
+- [ ] Record explicit release approval only after all required checks pass and the founder approves the completed unit before the next guide starts.
 
 ### Application/release checkpoint (only when separately authorized)
 - [ ] Route/catalogue metadata matches the actual data model and current code.
@@ -166,3 +158,6 @@ A third-party update or beta interface alone must not trigger a claim that a new
 - **v0.2 — 26 October 2026:** Public-source-first controls and approval gate.
 - **v1.0 — 26 October 2026:** Linked to initial three-unit guide and source/access limits.
 - **v1.1 — 26 October 2026:** Expanded MYP-specific resource audit; added six-unit/50-hour planning structure, versioned legacy crosswalk, Enhanced MYP watchlist and explicit boundary against starting Unit 1 before approval. No application change.
+
+
+- **v1.2 — 26 October 2026:** Recorded founder approval of guide/structure and implementation of Unit 1 version 2 as a draft review candidate. Added text/visual evidence, an entry observation, a fresh-text transfer and a version-aware approval state. No merge to main or production deployment; next-track rotation remains blocked until version 2 is approved.
