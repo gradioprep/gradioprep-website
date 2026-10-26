@@ -124,14 +124,14 @@ Initial approved English planning scope (the prototype catalogue will be updated
 - IB Diploma Programme (DP) English: **Language A: Language and Literature**, with Year 1 and Year 2 chapters as the platform's delivery sequence. These are not separate official DP syllabuses and must map to the full applicable course guide and approved school sequence.
 - Cambridge IGCSE First Language English: **syllabus 0500 only**. The two Grade 9-/10-equivalent entries are proposed learning-delivery bands under the selected official syllabus, not separate qualifications or separate syllabuses. The exam-year edition and available route/options must be verified for the learner's examination series.
 
-This produces 12 planned level/pathway entries: five MYP years, three Cambridge Lower Secondary stages, two DP delivery years and two IGCSE delivery bands. Cambridge 0990, O Level 1123 and English as a Second Language are outside the approved initial scope unless the founder explicitly changes it later. These programmes remain distinct; do not merge objectives, assessment rules or syllabus terminology. Official mappings must be verified against the applicable official guide/framework/syllabus before publication.
+The original IB/Cambridge planning baseline contained 12 level/pathway entries: five MYP years, three Cambridge Lower Secondary stages, two DP delivery years and two IGCSE delivery bands. The approved CBSE addition now adds Grades 6–12 as seven class-level planning entries at minimum; exact destination count may increase if current official CBSE course options require separate routes in Grades 9–12. Confirm route count through research rather than treating the old 12-entry baseline as the current total. Cambridge 0990, O Level 1123 and English as a Second Language remain outside the approved scope unless separately approved. Keep all programmes distinct and verify official mappings against the applicable current guide/framework/syllabus before publication.
 
 **Stage 1 is starter coverage, not exhaustive syllabus coverage.** Never market it as a complete course.
 
 Provisional planning baseline, not a quality quota:
 
-- 12 level/pathway entries.
-- About 3 skill units per entry (about 36 units).
+- 12 original IB/Cambridge level/pathway entries, plus the newly approved CBSE Grades 6–12 pathway (at least seven additional class-level planning entries; exact course-route count pending research).
+- About 3 skill units per level/course entry as a provisional planning estimate; revise total unit count once CBSE course-route distinctions are verified.
 - About 360 original short-form practice items.
 - About 36 extended-response tasks.
 - Each released pathway should have appropriate diagnostic evidence, annotated example(s), common-mistake guidance, assessment/marking guidance and a justified next-skill recommendation.
