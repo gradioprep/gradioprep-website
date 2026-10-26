@@ -1,6 +1,6 @@
 # English Stage 1 — Curriculum Roadmap
 
-**Status:** Working roadmap. MYP Year 1 guide v1.1 and implementation structure v1.1 were approved by the founder on 26 October 2026. Unit 1 version 2 is implemented in draft PR #14 and awaits founder review; version 1's preview-only approval does not transfer. Official Year 1 objective/strand mapping remains unverified, and rights/accessibility/release gates remain open. The documentation's six-unit Year 1 plan does not mean the application's current 10-entry catalogue or six MYP unit routes are implemented.
+**Status:** Working roadmap. MYP Year 1 guide v1.1 and implementation structure v1.1 were approved on 26 October 2026. The founder approved the content of Unit 1 version 2 on 26 October 2026; it remains an unmerged candidate in draft PR #14. Separate academic review, official objective/strand mapping, full rights, accessibility/age-level suitability and release gates remain open. The next active production checkpoint is the existing Cambridge Lower Secondary English 0861 Stage 7 Unit 1 draft in PR #12. The documented six-unit MYP plan does not mean the application's current 10-entry catalogue or six MYP unit routes are implemented.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Purpose:** Turn the approved Stage 1 scope into a trackable production plan without claiming full syllabus coverage or inventing official curriculum mappings.
 
@@ -150,8 +150,8 @@ Then continue across the approved tracks for Unit 2, then Unit 3. The exact orde
 Use `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` as the source selection/currency gate. It sets five core source families and requires exact course, edition/session, paper type, access and rights checks. Do not select a worksheet or exam paper merely because it is easy to download. For Cambridge 0500 exams 2027–2029, prefer the current official syllabus and specimen/mark-scheme set; older papers require an item-level comparison. For DP Language A: Language and Literature, use public current IB course/examiner information and cross-check with specialist sites; do not mislabel Language A: Literature papers as Language and Literature specimens. For MYP, use the public six-skill framework and school-based assessment description to create original tasks; official Year 1 objective/strand codes stay blank if not verifiable.
 
 Guide creation order, before rotating unit-content production:
-1. IB MYP Language and Literature Year 1 — guide/implementation structure approved; Unit 1 version 2 awaiting founder review; official objective/strand mapping remains unverified.
-2. Cambridge Lower Secondary English 0861 Stage 7 — verify the current official framework/version, then write the public-source-supported guide.
+1. IB MYP Language and Literature Year 1 — guide/implementation structure and Unit 1 v2 content approved by the founder; separate academic review, official objective/strand mapping, rights, accessibility/suitability and release gates remain open.
+2. Cambridge Lower Secondary English 0861 Stage 7 — active next checkpoint: verify the framework source, review/correct the existing Unit 1 draft, and record the limited 7Ri.03 public crosswalk without overclaiming a full official map.
 3. IB DP Language A: Language and Literature Year 1 — use public course and current examiner guidance; identify any criterion/version updates.
 4. Cambridge IGCSE First Language English 0500 — syllabus-wide guide anchored to Version 1 for 2027–2029; record component/route and exam year.
 5. IB MYP Year 2.
