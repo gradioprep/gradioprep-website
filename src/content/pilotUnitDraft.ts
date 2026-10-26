@@ -33,7 +33,7 @@ export const pilotUnitDraft: PilotUnitDraft = {
       "The current public overview supports the broad skill areas and text/creator focus. The detailed Year 1 guide indexed for 2014/15 is a legacy reference, not proof of the latest applicable edition. Exact current objective/strand mapping remains unverified.",
   },
   teachingSequence: [
-    { number: "01", title: "Notice before interpreting", purpose: "Begin with literal observations from an original prose passage and an original poster; distinguish observation from inference." },
+    { number: "01", title: "Notice before interpreting", purpose: "Begin with literal observations from an original prose passage and a photographic poster mock-up; distinguish observation from inference." },
     { number: "02", title: "Build an evidence chain", purpose: "Connect a precise word or visual choice to a plausible association and an effect in context." },
     { number: "03", title: "Compare creator choices", purpose: "Explain how a story and poster can frame a similar late-bus journey differently for an audience." },
     { number: "04", title: "Explain and qualify", purpose: "Use surrounding details to support, complicate or refine an interpretation instead of asserting one guaranteed response." },
@@ -66,12 +66,12 @@ export const pilotUnitDraft: PilotUnitDraft = {
     "Founder reviews and approves this exact version 2 before the curriculum rotation advances.",
     "Complete item-level academic review; version 1 approval does not carry forward.",
     "Keep official Year 1 objective/strand codes blank until the applicable current guide is verified.",
-    "Complete and record the rights review for original prose, poster wording and CSS-rendered composition.",
+    "Complete rights review for original prose, original poster copy/layout, and the Pexels photograph, including current licence and model/property-release requirements.",
     "Complete and record accessibility, visual, reading-demand and age/level suitability checks.",
     "Record explicit release approval only after all required gates are complete.",
   ],
   rightsNote:
-    "The prose, poster copy and poster art direction are original to this platform. The poster is rendered using HTML/CSS; retain this record and verify all later additions separately.",
+    "The prose and poster copy/layout are platform-authored. The poster uses Berk Aktas's photograph “People on a Bus Stop at Night” (Pexels, 2023): https://www.pexels.com/photo/people-on-a-bus-stop-at-night-19092243/. Pexels lists the photo as free to use under its Pexels License; confirm current licence terms and any model/property-release requirements before wider release.",
   releaseNote:
     "Version 2 is a founder-review draft. Version 1 remains the previously reviewed pilot preview, but no approval automatically transfers to version 2. Official mapping, rights, accessibility and release approval are still open.",
 };
