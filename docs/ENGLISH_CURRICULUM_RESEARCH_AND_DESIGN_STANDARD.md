@@ -206,6 +206,17 @@ The revised MYP Year 1 sequence has six proposed units and an eight-hour shared 
 
 ## 11. MYP Unit 1 version-control practice — v0.6 addition
 
-Treat each material content revision as a new version with a fresh review state. The existing “How writers shape meaning” version 1 was approved for pilot preview only. The revised version 2 adds a fictional poster mock-up using a real Pexels photograph with original platform-authored copy/layout, an entry observation, a comparison task and a fresh-text transfer check; the image licence and any applicable model/property-release requirements remain under rights review. It is marked draft-for-founder-review; do not carry over the previous review's date, outcome or release state. Keep learner-facing material free of correct-answer IDs and teacher model answers, and keep all curriculum mapping, rights, accessibility, academic review and release states separate.
+Treat each material content revision as a new version with a fresh review state. The existing “How writers shape meaning” version 1 was approved for pilot preview only. The revised version 2 adds a fictional poster mock-up using a real photograph explicitly released under CC0 1.0 with original platform-authored copy/layout, an entry observation, a comparison task and a fresh-text transfer check. All photographs must pass the mandatory pre-selection rights process in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md before they are chosen or embedded; free-to-use stock licences alone do not meet the copyright-free requirement. It is marked draft-for-founder-review; do not carry over the previous review's date, outcome or release state. Keep learner-facing material free of correct-answer IDs and teacher model answers, and keep all curriculum mapping, rights, accessibility, academic review and release states separate.
 
 The current MYP Year 1 guide/implementation structure are approved. The Unit 1 version 2 candidate is in PR #14 and not on main until accepted/merged. Do not proceed to the next curriculum guide/unit checkpoint until the founder approves this exact content version.
+
+
+## Mandatory photograph selection and rights screening
+
+- Do not select, embed, commit or preview a photograph until the exact source page and licence have been checked and recorded.
+- Use only an explicit CC0 1.0 Public Domain Dedication or an explicit public-domain release by the rights holder. “Free download,” “royalty-free” or a stock site's free-use licence alone is insufficient.
+- Record creator, exact file/source page, licence page and date checked in `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` before coding.
+- Inspect the actual image for identifiable people (especially children), logos/brands, artwork, private property, number plates and other third-party rights. CC0 addresses the creator's copyright to the extent dedicated; it does not automatically clear privacy, publicity, trademark, property or other rights. Reject the image if a separate right could apply and cannot be cleared.
+- Confirm topic fit and accessibility; write accurate alt text and a visible source/credit note. If the source page cannot be checked or the licence is ambiguous, do not use it.
+- Repeat the check for every replacement or materially different image. Keep the source record in the same PR as the asset. This is a conservative project control, not a legal guarantee.
+
