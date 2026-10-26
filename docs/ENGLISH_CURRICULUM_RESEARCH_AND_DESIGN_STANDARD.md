@@ -1,6 +1,6 @@
 # English Curriculum Research, Quality Rubric and Design Standard
 
-**Status:** Internal working reference v0.7 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
+**Status:** Internal working reference v0.8 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
 **Prepared:** 26 October 2026
 **Owner:** Academic lead / founder
 **Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary, Cambridge IGCSE and CBSE English Grades 6–12. Official syllabus mappings must be verified separately for each course, class/year/stage and edition.
@@ -18,7 +18,7 @@ Build a specialist English learning system around a shared instructional engine,
 
 Each task should make visible: what skill is being practised, what quality looks like, why an example works, what the learner can improve, and what evidence supports the next recommendation. This is a product design hypothesis to validate with learners and families, not a claim of proven market uniqueness.
 
-The founder confirmed DP Language A: Language and Literature and Cambridge IGCSE First Language English 0500 only on 25 October 2026. The MYP Year 1 guide v1.1, implementation structure v1.1 and dedicated resource landscape review were completed on 26 October 2026 and are awaiting founder review. Do not begin/adapt Unit 1 until the founder approves this checkpoint; after Unit 1 is implemented and approved, rotate to the Cambridge Lower Secondary Stage 7 guide. Do not start later-track work merely because draft files already exist. When a detailed guide is gated, use the public-source policy in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md to develop an explicitly public-framework-aligned guide; do not invent official objective/strand codes or claim complete official mapping. The canonical MYP Year 1 guide is `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`; its implementation structure is `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`. Both are complete as an independent public-framework-aligned design, not as an official IB syllabus map. Its existing pilot remains approved for preview only; official objective mapping is not claimed, and rights review, accessibility review and release approval are not cleared by this research document.
+The founder confirmed DP Language A: Language and Literature and Cambridge IGCSE First Language English 0500 only on 25 October 2026. The MYP Year 1 guide v1.1, implementation structure v1.1 and dedicated resource landscape review were completed on 26 October 2026 and are awaiting founder review. Do not begin/adapt Unit 1 until the founder approves this checkpoint. The binding first cohort for Unit 1 is IB MYP Language and Literature Year 1 → Cambridge Lower Secondary English 0861 Stage 7 → CBSE English Grade 6. All three must reach student-ready completion with required review/release gates recorded before any older-level Unit 1 or Unit 2 starts. Do not start later-track work merely because draft files already exist; if a cohort unit is blocked, pause and report the blocker. When a detailed guide is gated, use the public-source policy in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md to develop an explicitly public-framework-aligned guide; do not invent official objective/strand codes or claim complete official mapping. The canonical MYP Year 1 guide is `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`; its implementation structure is `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`. Both are complete as an independent public-framework-aligned design, not as an official IB syllabus map. Its existing pilot remains approved for preview only; official objective mapping is not claimed, and rights review, accessibility review and release approval are not cleared by this research document.
 
 ## CBSE pathway addition
 
@@ -141,24 +141,15 @@ Not every unit needs every task format. Each curriculum's own assessment rules a
 
 ## 7. Content rotation and production control
 
-After the curriculum guides are researched and approved, create **one unit at a time**, rotating across tracks rather than completing a full curriculum group. Initial Unit 1 rotation:
-1. IB MYP Language and Literature Year 1.
-2. Cambridge Lower Secondary English (0861) Stage 7.
-3. IB DP Language A: Language and Literature Year 1.
-4. Cambridge IGCSE First Language English 0500 first approved delivery band.
-5. IB MYP Year 2.
-6. Cambridge Lower Secondary Stage 8.
-7. IB DP Language A: Language and Literature Year 2.
-8. Cambridge Lower Secondary Stage 9.
-9. Cambridge IGCSE 0500 next approved delivery band.
-10. IB MYP Year 3.
-11. IB MYP Year 4.
-12. IB MYP Year 5.
+Create **one Unit 1 at a time** across comparable grade/age bands, not by completing an entire board first. The binding first cohort is:
 
-Then return across the same tracks for Unit 2 and later Unit 3. The order is a product-production rule, not an official IB/Cambridge unit sequence. Keep any track blocked while its official guide/syllabus, edition or objective mapping is unverified; do not substitute invented content.
+1. IB MYP Language and Literature Year 1 (typically the Grade 6-equivalent age band).
+2. Cambridge Lower Secondary English 0861 Stage 7 (typically ages 11–12; often aligns with Grade 6 in some school structures, but not universally).
+3. CBSE English Grade 6.
 
-Do not finish all units or the whole curriculum for one group before starting another. A rotation slot may be marked **blocked** if official mapping, course selection, rights or review prerequisites are unresolved; do not substitute invented content to keep the rotation moving. Keep this rule in the roadmap and production tracker.
+Do not start any older-level Unit 1 or any Unit 2 until all three first-cohort Unit 1s are student-ready and the required academic, rights/originality, accessibility, age/cultural suitability and release gates are recorded. Official mapping/currency is tracked separately and must never be fabricated. If any of these units is blocked, pause and report the blocker rather than skip it. This supersedes older rotation lists that placed DP/IGCSE or higher grades before CBSE Grade 6.
 
+After the first cohort is complete, continue one Unit 1 at a time across the remaining approved levels using the same principle: group comparable learner age/grade bands first, verify each programme's actual level and syllabus, preserve each curriculum's identity, and do not invent equivalence. Only after the full approved Unit 1 rotation is complete may the process return to Unit 2. This is a product-production rule, not an official IB/Cambridge/CBSE syllabus sequence.
 ## 8. Internal quality rubric and self-rating
 
 Score each dimension 0–5: 0 absent; 1 assertion only; 2 partial; 3 adequate with documented evidence; 4 strong and traceable; 5 independently reviewed and current. Overall score is the mean; a high score never overrides a mandatory curriculum/release gate.
