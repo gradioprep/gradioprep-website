@@ -1,6 +1,6 @@
 # IB and Cambridge Curriculum Research Workflow
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Status:** Binding internal workflow for every level and course in the approved English scope  
 **Owner:** Curriculum director / academic lead  
 **Last reviewed:** 26 October 2026  
@@ -32,6 +32,18 @@ Complete and record these steps independently for each course, stage/year and ap
 10. **Checkpoint before the next unit.** Present the completed guide, implementation structure, source comparison, limitations, confidence rating and proposed next action. Obtain the founder's explicit approval before beginning each Unit 1 implementation/adaptation or other scope-gated unit work. Respect the approved curriculum-rotation order. Do not merge, publish or release without the applicable approvals.
 
 ## 3. Curriculum-specific rules
+
+### Binding cross-track production order — Grade 6-equivalent Unit 1 cohort
+
+Before any older-level Unit 1 or any Unit 2 is started, complete the following first-cohort Unit 1 routes in order:
+
+1. IB MYP Language and Literature Year 1.
+2. Cambridge Lower Secondary English 0861 Stage 7.
+3. CBSE English Grade 6.
+
+This is a product-production grouping based on a comparable learner age/grade band, not an official equivalence or shared syllabus. Cambridge Lower Secondary covers Stages 7–9 for approximately ages 11–14; Stage 7 is typically ages 11–12, while school-grade alignment varies by country and school. Keep official programme, stage, grade and syllabus identities separate. Do not label Stage 7 universally as Grade 6 or Grade 7.
+
+A unit is complete for rotation purposes only when student-facing content is finished and the required academic/content, rights/originality, accessibility, age/cultural suitability and release gates are recorded. Official mapping/currency is a separate status and may not be invented. If any first-cohort unit is blocked, pause the rotation, document the precise blocker and report it; do not skip ahead to an older level or Unit 2. This order supersedes any earlier workflow wording that moved directly from MYP Year 1 to Stage 7 and then to older pathways.
 
 ### CBSE (Grades 6–12)
 - The founder has approved adding CBSE English Grades 6–12 to product scope. This does not change the architecture, reusable unit structure, curriculum rotation, research protocol or release gates.
