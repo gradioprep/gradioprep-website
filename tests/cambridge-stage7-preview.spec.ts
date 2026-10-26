@@ -35,14 +35,24 @@ test.describe("Cambridge Stage 7 Unit 1 controlled preview", () => {
     const textareas = page.locator(".s7-preview-main textarea");
     await expect(textareas).toHaveCount(14);
 
-    const unlabeledIds = await textareas.evaluateAll((nodes) => nodes
-      .filter((node) => {
-        const textarea = node as HTMLTextAreaElement;
-        return !textarea.labels || textarea.labels.length === 0;
-      })
-      .map((node) => (node as HTMLTextAreaElement).id));
+    const fieldAudit = await textareas.evaluateAll((nodes) => nodes.map((node) => {
+      const textarea = node as HTMLTextAreaElement;
+      return {
+        id: textarea.id,
+        labelCount: textarea.labels?.length ?? 0,
+        labelName: textarea.labels?.[0]?.textContent?.trim() ?? "",
+        describedBy: textarea.getAttribute("aria-describedby"),
+        descriptionExists: textarea.getAttribute("aria-describedby")
+          ? Boolean(document.getElementById(textarea.getAttribute("aria-describedby")!))
+          : false,
+      };
+    }));
 
-    expect(unlabeledIds).toEqual([]);
+    expect(fieldAudit.filter((field) => field.labelCount === 0 || !field.labelName).map((field) => field.id)).toEqual([]);
+    expect(new Set(fieldAudit.map((field) => field.labelName)).size).toBe(14);
+    expect(fieldAudit.filter((field) => field.describedBy && !field.descriptionExists).map((field) => field.id)).toEqual([]);
+    expect(fieldAudit.find((field) => field.id === "guided-a")?.describedBy).toBe("guided-a-prompt");
+    await expect(page.getByLabel("Your response — A. Find a fact")).toBeVisible();
     await expect(page.getByLabel("Your exit response")).toBeVisible();
     await expect(page.getByLabel("The strongest evidence I used today was…")).toBeVisible();
   });
