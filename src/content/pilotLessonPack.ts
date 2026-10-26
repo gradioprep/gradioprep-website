@@ -246,12 +246,12 @@ export const pilotLessonPack: PilotLessonPack = {
     "Review vocabulary, sentence length and cognitive load with a teacher before confirming age/level suitability.",
   ],
   remainingReleaseChecks: [
-    "Confirm the applicable current guide/edition used by the intended school and verify whether candidate strands A(ii), A(iii), both or neither are appropriate.",
-    "Record exact official objective/strand references only after checking that guide.",
+    "Confirm the unit is presented as public-framework-aligned and not as an official objective/strand mapping.",
+    "Leave official Year 1 objective/strand codes blank unless exact descriptors are verified in a current public source.",
     "Complete and record the separate content-rights review.",
     "Complete and record the accessibility review for the interactive lesson.",
     "Record explicit release approval only after all required evidence is complete.",
   ],
   releaseNote:
-    "Academic content review passed for pilot preview version 1. Do not describe this as an officially mapped MYP unit, grade it as an official IB achievement level, or release it as a syllabus-mapped course until the applicable guide edition/objective references, rights review, accessibility review and explicit release approval are recorded.",
+    "Academic content review passed for pilot preview version 1. The lesson uses the broad public MYP framework but has no verified official Year 1 objective/strand mapping. Do not grade it as an official IB achievement level or release it before rights, accessibility and explicit release approval are recorded.",
 };

@@ -188,19 +188,6 @@ export interface PilotUnitDraft {
     checkedAt: string;
     scopeNote: string;
   };
-  candidateGuide: {
-    title: string;
-    url: string;
-    checkedAt: string;
-    accessNote: string;
-  };
-  candidateObjectiveMappings: {
-    criterion: "A — Analysing";
-    strand: "A(ii)" | "A(iii)";
-    descriptor: string;
-    state: "candidate-unverified";
-    rationale: string;
-  }[];
   teachingSequence: {
     number: string;
     title: string;
@@ -242,19 +229,6 @@ export interface PilotReviewSummary {
     checkedAt: string;
     scopeNote: string;
   };
-  candidateGuide: {
-    title: string;
-    url: string;
-    checkedAt: string;
-    accessNote: string;
-  };
-  candidateObjectiveMappings: {
-    criterion: "A — Analysing";
-    strand: "A(ii)" | "A(iii)";
-    descriptor: string;
-    state: "candidate-unverified";
-    rationale: string;
-  }[];
   remainingReleaseChecks: string[];
   releaseNote: string;
 }
@@ -421,6 +395,7 @@ export interface UnitContentPlan {
 export type UnitReadinessGateId =
   | "official-source"
   | "learning-objective"
+  | "objective-mapping"
   | "lesson-content"
   | "practice-and-answers"
   | "academic-review"

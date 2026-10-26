@@ -548,13 +548,13 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
           </div>
           <div className="proto-feedback-columns">
             <div><small>PILOT LEARNING OBJECTIVE</small><p>{pilotReviewSummary.proposedLearningObjective}</p></div>
-            <div><small>CURRICULUM MAPPING</small><p>Unverified. Candidate references are not official objective codes; mapping remains blocked until the applicable guide edition is confirmed.</p></div>
+            <div><small>PUBLIC FRAMEWORK ALIGNMENT</small><p>This unit is designed against the broad skill areas described in public IB MYP information. Exact official Year 1 objective/strand mapping is not claimed.</p></div>
           </div>
           <div className="proto-extract">
-            <small>CANDIDATE IB OBJECTIVE REFERENCES · NOT VERIFIED</small>
-            <p>The detailed guide opens through IB curriculum sign-in, and the applicable school-guide edition has not been confirmed.</p>
-            {pilotReviewSummary.candidateObjectiveMappings.map(item => <div className="proto-skill-row proto-readiness-row" key={item.strand}><i>{item.strand}</i><div><b>{item.criterion}</b><small>{item.descriptor}</small><small>{item.rationale}</small></div><span>Candidate</span></div>)}
-            <p><a href={pilotReviewSummary.candidateGuide.url} target="_blank" rel="noreferrer">Open IB-hosted guide reference ↗</a> · <a href={pilotReviewSummary.source.subjectBriefUrl} target="_blank" rel="noreferrer">Open public IB subject brief ↗</a></p>
+            <small>PUBLIC MYP FRAMEWORK ALIGNMENT · NOT AN OFFICIAL OBJECTIVE MAP</small>
+            <p>The public overview describes broad skill areas but does not include exact current Year 1 objective/strand descriptors. No official codes are assigned to this unit.</p>
+            
+            <p><a href={pilotReviewSummary.source.url} target="_blank" rel="noreferrer">Open public IB MYP overview ↗</a> · <a href={pilotReviewSummary.source.subjectBriefUrl} target="_blank" rel="noreferrer">Open public subject brief (historical overview) ↗</a></p>
           </div>
           <div className="proto-section-title"><div><h2>Remaining release checks</h2><p>Content review passed; these independent requirements still need evidence.</p></div></div>
           {pilotReviewSummary.remainingReleaseChecks.map((item, index) => <div className="proto-skill-row proto-readiness-row" key={item}><i className="warm">{String(index + 1).padStart(2, "0")}</i><div><b>{item}</b></div></div>)}

@@ -47,12 +47,12 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
  */
 export function getUnitReadinessGates(plan: UnitContentPlan): UnitReadinessGate[] {
   const sourceVerified = Boolean(
-    plan.syllabusEditionCode &&
     plan.officialSourceUrl &&
     plan.officialSourceCheckedAt &&
-    plan.officialObjectiveCodes.length > 0
+    plan.officialSourceNote?.trim()
   );
   const objectiveApproved = Boolean(plan.learningObjective?.trim());
+  const objectiveMappingVerified = plan.officialObjectiveCodes.length > 0;
   const lessonLinked = plan.lessonIds.length > 0;
   const practiceLinked = plan.practiceQuestionIds.length > 0;
   const answersReviewed = plan.answerKeyReviewState === "passed";
@@ -68,17 +68,24 @@ export function getUnitReadinessGates(plan: UnitContentPlan): UnitReadinessGate[
   return [
     {
       id: "official-source",
-      title: "Verify the official curriculum source",
-      detail: "Record the applicable specification or framework edition, official source URL, date checked and objective references.",
+      title: "Verify the current public curriculum source",
+      detail: "Record the applicable public official page/document, course identity, source URL, date checked and what the source can and cannot establish.",
       owner: "Academic review",
       status: sourceVerified ? "complete" : "blocked",
     },
     {
       id: "learning-objective",
-      title: "Approve the learning objective",
-      detail: "Confirm the unit focus, objective wording and prerequisites before drafting the lesson.",
+      title: "Approve the platform learning objective",
+      detail: "Confirm the learning objective and prerequisites. If exact official descriptors are not publicly verifiable, label the objective as platform-authored and keep official mapping separate.",
       owner: "Academic decision",
       status: objectiveApproved && sourceVerified ? "complete" : "blocked",
+    },
+    {
+      id: "objective-mapping",
+      title: "Verify exact official objective mapping",
+      detail: "Use a current, traceable official objective/strand code only when the exact descriptor can be verified. If unavailable publicly, leave codes blank and state that the unit is public-framework-aligned rather than fully mapped.",
+      owner: "Academic review",
+      status: objectiveMappingVerified ? "complete" : "blocked",
     },
     {
       id: "lesson-content",
@@ -120,7 +127,7 @@ export function getUnitReadinessGates(plan: UnitContentPlan): UnitReadinessGate[
       title: "Approve the unit for release",
       detail: "Record who approved the release and when. This gate must not pass while earlier requirements are unresolved.",
       owner: "Release gate",
-      status: releaseApproved && sourceVerified && objectiveApproved &&
+      status: releaseApproved && sourceVerified && objectiveApproved && objectiveMappingVerified &&
         lessonLinked && practiceLinked && answersReviewed && academicReviewed &&
         rightsReviewed && accessibilityReviewed
         ? "complete"

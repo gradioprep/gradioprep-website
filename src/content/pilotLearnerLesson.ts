@@ -17,7 +17,7 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     reviewedAt: "2026-10-24",
     reviewerLabel: "Academic lead (approval confirmed by project owner; name not specified)",
     scopeNote:
-      "Academic review passed for the content preview. The official IB syllabus/guide edition and objective mapping remain unverified; this is not approval to claim official curriculum alignment or release a syllabus-mapped course.",
+      "Academic review passed for the content preview. This lesson is designed against broad public MYP Language and Literature framework information, not an official Year 1 objective/strand map. Do not claim complete syllabus alignment or a released course.",
   },
   title: "How writers shape meaning",
   estimatedMinutes: 25,

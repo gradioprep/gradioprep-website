@@ -24,38 +24,13 @@ export const pilotUnitDraft: PilotUnitDraft = {
   mappingStatus: "unverified",
   officialObjectiveCodes: [],
   source: {
-    title: "IB MYP Language and literature — official subject page",
+    title: "IB MYP Language and Literature — public subject overview",
     url: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
     subjectBriefUrl: "https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf",
-    checkedAt: "2026-10-24",
+    checkedAt: "2026-10-26",
     scopeNote:
-      "The public IB subject page and its subject brief describe the programme broadly and confirm the four assessment criteria, but do not themselves provide Year 1 strand descriptors. The more detailed candidate references below come from an IB-hosted guide result indexed as the 2014 Language and literature guide. Its applicability to the current guide used by the learner's school must be verified before mapping can be approved.",
+      "The current public IB overview describes broad programme aims and six skill domains but does not publish the detailed current Year 1 objective/strand descriptors. This unit is designed against the public framework, not an official objective-code mapping.",
   },
-  candidateGuide: {
-    title: "IB Language and literature guide — Year 1 objective strands",
-    url: "https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf",
-    checkedAt: "2026-10-24",
-    accessNote:
-      "The IB-hosted search-indexed guide excerpt lists Year 1 Criterion A strands, but opening the guide URL redirects to IB curriculum sign-in. Treat these as candidate references only and confirm against the current guide available to the school.",
-  },
-  candidateObjectiveMappings: [
-    {
-      criterion: "A — Analysing",
-      strand: "A(ii)",
-      descriptor: "Identify and comment upon the creator's choices.",
-      state: "candidate-unverified",
-      rationale:
-        "Closest candidate for noticing and commenting on a deliberate word or sentence choice. The current guide edition and the unit-level fit still need confirmation.",
-    },
-    {
-      criterion: "A — Analysing",
-      strand: "A(iii)",
-      descriptor: "Justify opinions and ideas using examples, explanations and terminology.",
-      state: "candidate-unverified",
-      rationale:
-        "Candidate support for requiring a precise example and an explanation. Confirm whether this strand should be included in the first unit.",
-    },
-  ],
   teachingSequence: [
     {
       number: "01",
@@ -102,8 +77,8 @@ export const pilotUnitDraft: PilotUnitDraft = {
     "Treating one interpretation as the only possible reading without supporting it.",
   ],
   remainingReleaseChecks: [
-    "Confirm the applicable MYP Language and literature guide/edition used by the intended school.",
-    "Verify whether candidate strands A(ii), A(iii), both or neither fit this unit, then record the exact official references.",
+    "Confirm the unit is presented accurately as a public-framework-aligned pilot, not an officially mapped unit.",
+    "Keep official objective/strand codes unmapped unless a current public source verifies exact descriptors.",
     "Complete and record the separate content-rights review.",
     "Complete and record the accessibility review for the interactive lesson.",
     "Record explicit release approval only after all required evidence is complete.",
