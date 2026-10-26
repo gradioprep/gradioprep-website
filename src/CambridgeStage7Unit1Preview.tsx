@@ -72,22 +72,26 @@ export default function CambridgeStage7Unit1Preview() {
     label: string,
     prompt?: string,
     rows = 4,
-  ) => (
-    <div className="s7-preview-response" key={id}>
-      {prompt && <p>{prompt}</p>}
-      <label htmlFor={id}>{label}</label>
-      <textarea
-        id={id}
-        name={id}
-        rows={rows}
-        value={responses[id] ?? ""}
-        onChange={(event) => updateResponse(id, event.target.value)}
-        placeholder="Write your thinking here…"
-        autoCapitalize="sentences"
-        spellCheck
-      />
-    </div>
-  );
+  ) => {
+    const promptId = prompt ? `${id}-prompt` : undefined;
+    return (
+      <div className="s7-preview-response" key={id}>
+        {prompt && <p id={promptId}>{prompt}</p>}
+        <label htmlFor={id}>{label}</label>
+        <textarea
+          id={id}
+          name={id}
+          aria-describedby={promptId}
+          rows={rows}
+          value={responses[id] ?? ""}
+          onChange={(event) => updateResponse(id, event.target.value)}
+          placeholder="Write your thinking here…"
+          autoCapitalize="sentences"
+          spellCheck
+        />
+      </div>
+    );
+  };
 
   return (
     <div className="s7-preview-shell">
@@ -236,14 +240,14 @@ export default function CambridgeStage7Unit1Preview() {
           <p className="s7-preview-label">04 · GUIDED PRACTICE · ABOUT 6 MINUTES</p>
           <h2 id="s7-guided-heading">Try these in order</h2>
           <p>Use this frame if helpful: <strong>I infer that… One clue is… A second clue is… These details support my idea because…</strong></p>
-          {guidedTasks.map((task) => responseField(task.id, "Your response", task.label + " — " + task.prompt, 3))}
+          {guidedTasks.map((task) => responseField(task.id, "Your response — " + task.label, task.label + " — " + task.prompt, 3))}
         </section>
 
         <section aria-labelledby="s7-independent-heading" className="s7-preview-panel">
           <p className="s7-preview-label">05 · INDEPENDENT PRACTICE · ABOUT 8–10 MINUTES</p>
           <h2 id="s7-independent-heading">Work independently</h2>
           <p>Answer without using the sentence frame if you can.</p>
-          {independentTasks.map((task) => responseField(task.id, "Your response", task.label + " — " + task.prompt, task.id === "independent-6" ? 6 : 3))}
+          {independentTasks.map((task) => responseField(task.id, "Your response — " + task.label, task.label + " — " + task.prompt, task.id === "independent-6" ? 6 : 3))}
         </section>
 
         <section aria-labelledby="s7-exit-heading" className="s7-preview-panel">
