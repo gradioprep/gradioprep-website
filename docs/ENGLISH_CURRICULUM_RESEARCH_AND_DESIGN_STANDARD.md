@@ -1,0 +1,204 @@
+# English Curriculum Research, Quality Rubric and Design Standard
+
+**Status:** Internal working reference v0.5 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
+**Prepared:** 26 October 2026
+**Owner:** Academic lead / founder
+**Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary and Cambridge IGCSE. Official syllabus mappings must be verified separately for each course, year/stage and edition.
+**Do not publish this document as a claim of IB/Cambridge endorsement.**
+
+## 1. Executive recommendation
+
+Build a specialist English learning system around a shared instructional engine, but maintain distinct curriculum-specific guides and objective maps. The differentiator should not be a larger question bank. It should be a traceable learning loop:
+
+**Diagnose a skill → study an annotated model → practise with scaffolded support → produce an independent response → receive criterion-linked feedback → revise → demonstrate transfer → choose a justified next step.**
+
+Each task should make visible: what skill is being practised, what quality looks like, why an example works, what the learner can improve, and what evidence supports the next recommendation. This is a product design hypothesis to validate with learners and families, not a claim of proven market uniqueness.
+
+The founder confirmed DP Language A: Language and Literature and Cambridge IGCSE First Language English 0500 only on 25 October 2026. The MYP Year 1 guide v1.1, implementation structure v1.1 and dedicated resource landscape review were completed on 26 October 2026 and are awaiting founder review. Do not begin/adapt Unit 1 until the founder approves this checkpoint; after Unit 1 is implemented and approved, rotate to the Cambridge Lower Secondary Stage 7 guide. Do not start later-track work merely because draft files already exist. When a detailed guide is gated, use the public-source policy in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md to develop an explicitly public-framework-aligned guide; do not invent official objective/strand codes or claim complete official mapping. The canonical MYP Year 1 guide is `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`; its implementation structure is `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`. Both are complete as an independent public-framework-aligned design, not as an official IB syllabus map. Its existing pilot remains approved for preview only; official objective mapping is not claimed, and rights review, accessibility review and release approval are not cleared by this research document.
+
+## 2. Curriculum scope: confirmed versus requiring a decision
+
+### Existing approved planning scope
+- IB MYP Language and Literature, Years 1–5.
+- Cambridge Lower Secondary English (0861), Stages 7–9.
+- Cambridge IGCSE First Language English **0500 only**; verify the exact exam-year syllabus and permitted component/route before mapping. Syllabus 0500 for exams 2027–2029 is listed on the official Cambridge page. Cambridge 0990, O Level 1123 and English as a Second Language are not in the initial scope unless separately approved.
+- IB DP **Language A: Language and Literature**, with Year 1 and Year 2 platform delivery chapters mapped to the full applicable guide and the relevant school's sequence; these are not separate official DP syllabuses.
+- Stage 1 is starter coverage, not exhaustive syllabus coverage.
+
+### Founder-confirmed scope decisions (25 October 2026)
+- IB DP English is **Language A: Language and Literature**. Preserve its distinction from Language A: Literature, Language B and Literature and Performance. Year 1 and Year 2 are platform delivery chapters mapped to the complete course guide and the relevant school's sequence, not separate official syllabuses or an IB-prescribed unit order.
+- Cambridge upper-secondary English is **Cambridge IGCSE First Language English 0500 only**. Do not silently add 0990, O Level 1123 or English as a Second Language.
+- Cambridge Lower Secondary English 0861 Stages 7–9 and IB MYP Language and Literature Years 1–5 remain in scope.
+- The detailed current MYP guide edition remains unverified. The official public subject page is updated 19 February 2026, but its linked subject brief is marked “From 2014”; the detailed guide URL redirects to IB sign-in here. The authenticated edition and its updates/errata must be checked before official objective mapping.
+
+## 3. Source hierarchy and research protocol
+
+Use sources in this order:
+1. Current official public syllabus, official specimen/mark scheme or public examiner instructions when available; record code, version, first-examination year and date checked.
+2. Current official public programme/subject page and public subject brief for course identity and broad learning aims.
+3. Official public guidance on assessment and progression.
+4. Current, reputable independent specialist sites for teaching examples, examiner-commentary interpretation and sample-response analysis, cross-checked against primary public sources.
+5. Peer-reviewed research/evidence clearinghouses for pedagogy, feedback and metacognition, and transparent independent studies of student/parent experiences.
+6. Our own consent-based student/parent research, with method, sample, date and limitations disclosed.
+
+Use the public-source protocol in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md. A source ranking is not a vote: independent popularity does not make a third-party claim official. If the detailed guide is behind an account, record that limitation and continue with a clearly labelled public-framework-aligned design if useful. Leave exact official objective/strand mapping blocked unless it is directly verifiable; do not use a search snippet, older guide or sample paper as a substitute for missing official descriptors. For every source-driven decision, store title, URL, course, edition/session, access state, what it can support, cross-check, reviewer, date and confidence/status.
+
+### Official and independent source starting points (checked 26 October 2026)
+
+The ranked source families, course applicability, currency rules and access limits are recorded in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md. The key current assessment finding for DP Language A: Language and Literature is that publicly indexed 2026 IB Examiner Instructions describe Paper 2 as a comparative literary essay and explicitly describe criterion B2 (comparative analysis); InThinking's May 2026 response discussion independently reports that the revised B2 criterion applies from the May 2026 session. This is a cross-checked current assessment feature, not permission to reuse third-party sample answers.
+
+For Cambridge 0500, the official syllabus version 1 applies to exams in 2027–2029 and was revised for first examination in 2027. The 2027–2029 sample paper/mark-scheme set is the practice baseline; older paper formats must not be treated as current without an item-level match. For MYP, the public official subject and assessment pages establish broad aims and the school-based/optional eAssessment distinction, but they do not expose the detailed Year 1 objective/strand descriptors or public specimen paper set.
+- IB MYP Language and Literature: https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/
+- IB MYP curriculum: https://www.ibo.org/programmes/middle-years-programme/curriculum/
+- IB DP studies in language and literature: https://ibo.org/programmes/diploma-programme/curriculum/language-and-literature/
+- IB DP Language A: Language and Literature: https://ibo.org/programmes/diploma-programme/curriculum/language-and-literature/language-a-language-and-literature/
+- IB DP Language A: Literature: https://ibo.org/programmes/diploma-programme/curriculum/language-and-literature/language-a-literature/
+- Cambridge Lower Secondary English 0861: https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/curriculum/english/
+- Cambridge IGCSE First Language English 0500: https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-english-first-language-0500/
+- Cambridge 0500 syllabus for exams 2027–2029: https://www.cambridgeinternational.org/Images/718783-2027-2029-syllabus.pdf
+- Cambridge syllabus-year FAQ: https://help.cambridgeinternational.org/hc/en-gb/articles/36857752637330-General-FAQ-Which-syllabus-year-should-I-use
+
+
+
+### MYP guide edition verification record
+The current official [MYP Language and Literature page](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) was updated 19 February 2026, but the linked public [subject brief](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) says “From 2014” and is not the detailed guide. IB's indexed [*Language and literature guide*](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) is redirected to IB sign-in in this environment. Its latest revision therefore remains unverified. Use the authenticated [Programme Resource Centre](https://resources.ibo.org/) search (exact title, MYP, English) and inspect metadata plus “Updates to the publication”; if access is unavailable, ask an MYP coordinator/school librarian or check the [IB Store](https://store.ibo.org/). Never treat the crawl date or a filename identifier as proof of the latest edition. The completed public-framework-aligned Year 1 guide is `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`; its implementation structure is `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`. The older group draft `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_GUIDE.md` is not the canonical Year 1 guide.
+
+## 4. Independent evidence base and design implications
+
+These sources support teaching-design principles. They do **not** prove that every parent/student pain point is universal or that a specific product feature will cause better outcomes.
+
+### Explicit modelling and writing strategy
+The US What Works Clearinghouse / Institute of Education Sciences practice guide *Teaching Secondary Students to Write Effectively* recommends explicitly teaching writing strategies using a Model–Practice–Reflect cycle (rated strong evidence), integrating reading and writing (moderate evidence), and using assessment of student writing to inform instruction (the guide rates the evidence for that recommendation as minimal). Apply this through worked examples, think-alouds, guided imitation, independent transfer and revision—not simply model-answer exposure.
+- https://ies.ed.gov/ncee/wwc/PracticeGuide/22
+- https://ies.ed.gov/ncee/rel/writing-middle-grades
+
+### Metacognition and self-regulation
+The Education Endowment Foundation's second-edition guidance report (published 13 November 2025) describes a strong research base for metacognition and self-regulation and recommends explicitly teaching, modelling and scaffolding planning, monitoring and evaluation in subject lessons. Apply this with short pre-task plans, confidence judgements, error analysis and post-task reflections tied to the actual response.
+- https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/metacognition/
+
+### Secondary literacy and disciplinary differences
+EEF's *Improving Literacy in Secondary Schools* guidance emphasises reading, writing, talk, vocabulary and support for struggling students, while recognising subject-specific literacy. English units should teach precise disciplinary moves—such as inference, analysing language choices, comparing perspectives, organising an argument and controlling register—rather than generic “comprehension” alone.
+- https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/literacy-ks3-ks4
+
+### Student support and family partnership
+OECD PISA 2022 reporting finds associations between supportive teacher relationships, student well-being and performance in its analysed contexts, and between family support and positive attitudes toward school and self-directed learning. These are associations, not proof of causality, and some cited performance analyses are mathematics-specific. Product implications are modest: provide actionable, respectful feedback; make progress evidence legible; offer parents a concise explanation of skills and next steps only with appropriate consent and privacy safeguards.
+- https://www.oecd.org/en/publications/2023/12/pisa-2022-results-volume-ii_222a5ef6/full-report/component-10.html
+- https://www.oecd.org/en/publications/2023/12/pisa-2022-results-volume-ii_a97db61c-en/full-report/component-14.html
+
+### Official programme principles
+IB describes MYP Language and Literature through listening, speaking, reading, writing, viewing and presenting, with inquiry, conceptual understanding, context and cultural perspectives central. The DP Language A: Language and Literature course foregrounds literary and non-literary texts, contexts of production/consumption, critical literacy and oral/written expression. Cambridge Lower Secondary English 0861 integrates reading, writing, speaking and listening and recommends a broad range of fiction, poetry, playscripts and non-fiction. These programme-specific differences must be preserved in each guide.
+- https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/
+- https://ibo.org/programmes/diploma-programme/curriculum/language-and-literature/language-a-language-and-literature/
+- https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/curriculum/english/
+
+## 5. Evidence-informed learner experience principles
+
+Use these as design hypotheses to test, not as unsupported claims about what “all parents” or “all students” want.
+
+1. **Make quality visible:** annotate what a strong response does and why, tied to a criterion or skill.
+2. **Turn feedback into action:** one or two high-value next steps, examples and a revision opportunity; avoid vague praise or unexplained scores.
+3. **Separate effort from mastery:** distinguish first attempt, supported practice, independent transfer and retention; do not infer mastery from clicks or self-checks alone.
+4. **Make progress explainable:** show the evidence and rule behind a skill status and recommendation. Avoid opaque AI scores and invented precision.
+5. **Support learner agency:** allow a clear next action, reflection and appropriate choice without overwhelming the learner with menus.
+6. **Design for different starting points:** short diagnostic probes, optional scaffolds, vocabulary support, gradual release and extension tasks; do not label a learner by a single result.
+7. **Connect reading and writing:** analyse mentor texts, then apply the observed craft in a new purpose/audience/context.
+8. **Preserve intellectual and cultural breadth:** varied genres, periods, perspectives and text types; avoid tokenism and unsupported claims of representativeness.
+9. **Respect teacher/parent roles:** share clear progress evidence only when privacy, consent and permissions are designed and implemented.
+10. **Use ethical content practices:** original passages where possible; rights ledger for quotations, images and adaptations; never reproduce protected exam material without permission.
+11. **Be accessible by design:** keyboard access, readable layouts, sufficient contrast, plain instructions, flexible ways to engage, reduced-motion support and testing with assistive technology.
+12. **Do not overclaim:** no promises of grades, exam success or syllabus completeness; no official IB/Cambridge endorsement implication.
+
+## 6. Recommended unit architecture
+
+Each unit guide should include:
+1. Scope statement and verified curriculum/source mapping.
+2. Entry knowledge and short diagnostic (not used as a high-stakes label).
+3. Essential question / inquiry or communicative purpose appropriate to the curriculum.
+4. Explicit learning intentions and observable success criteria.
+5. Knowledge and vocabulary needed.
+6. Annotated mentor text/example with a transparent think-aloud.
+7. Short teaching sequence: model → guided practice → independent practice → transfer.
+8. Deliberate practice set, with varied examples and a progression of challenge.
+9. Common misconceptions/errors and corrective explanations.
+10. Formative checks and feedback rules.
+11. Independent performance task and task-specific rubric/criteria.
+12. Revision opportunity and a reflection on strategy.
+13. Exit evidence and a rule-based next-step recommendation.
+14. Differentiation: support, core and stretch, without lowering the intended learning goal.
+15. Accessibility, cultural review and rights ledger.
+16. Teacher notes, answer/marking source separated from learner-facing materials.
+17. Version, authorship, reviewer, review date and release state.
+
+Not every unit needs every task format. Each curriculum's own assessment rules and intended learning outcomes take precedence over this common architecture.
+
+## 7. Content rotation and production control
+
+After the curriculum guides are researched and approved, create **one unit at a time**, rotating across tracks rather than completing a full curriculum group. Initial Unit 1 rotation:
+1. IB MYP Language and Literature Year 1.
+2. Cambridge Lower Secondary English (0861) Stage 7.
+3. IB DP Language A: Language and Literature Year 1.
+4. Cambridge IGCSE First Language English 0500 first approved delivery band.
+5. IB MYP Year 2.
+6. Cambridge Lower Secondary Stage 8.
+7. IB DP Language A: Language and Literature Year 2.
+8. Cambridge Lower Secondary Stage 9.
+9. Cambridge IGCSE 0500 next approved delivery band.
+10. IB MYP Year 3.
+11. IB MYP Year 4.
+12. IB MYP Year 5.
+
+Then return across the same tracks for Unit 2 and later Unit 3. The order is a product-production rule, not an official IB/Cambridge unit sequence. Keep any track blocked while its official guide/syllabus, edition or objective mapping is unverified; do not substitute invented content.
+
+Do not finish all units or the whole curriculum for one group before starting another. A rotation slot may be marked **blocked** if official mapping, course selection, rights or review prerequisites are unresolved; do not substitute invented content to keep the rotation moving. Keep this rule in the roadmap and production tracker.
+
+## 8. Internal quality rubric and self-rating
+
+Score each dimension 0–5: 0 absent; 1 assertion only; 2 partial; 3 adequate with documented evidence; 4 strong and traceable; 5 independently reviewed and current. Overall score is the mean; a high score never overrides a mandatory curriculum/release gate.
+
+| Dimension | Weight | Current self-rating | Reason |
+|---|---:|---:|---|
+| Official source currency and specificity | 20% | 3/5 | Current public official pages and 0500 2027–2029 syllabus identified; a 2014/15 detailed MYP guide with historical Year 1 descriptors is indexed, but current applicability/Enhanced MYP status remains unconfirmed; DP course scope is confirmed |
+| Breadth and quality of independent evidence | 15% | 4/5 | Includes IES/WWC, EEF and OECD sources; not a systematic review and no local parent/student study yet |
+| Curriculum fidelity and separation | 15% | 3/5 | Programme differences described; year-by-year objective mapping not yet verified |
+| Pedagogical coherence and assessment | 15% | 4/5 | Clear model–practice–reflect, formative feedback and revision architecture |
+| Inclusion, accessibility and learner wellbeing | 10% | 3/5 | Principles stated; no accessibility audit or learner testing performed |
+| Rights, ethics and data protection | 10% | 3/5 | Required gates defined; item-level rights and legal review remain outstanding |
+| Implementation traceability and QA | 10% | 4/5 | Versioned unit schema, release states and review controls specified |
+| Evidence of distinctiveness / product-market fit | 5% | 2/5 | Differentiation is a testable proposition; no authentic local parent/student research has been collected |
+| **Weighted total** | **100%** | **3.35/5** | **Internal draft only; not ready for final curriculum approval or publication** |
+
+### How to raise the rating
+- Record the current public official source/edition for every track and resolve source-access limitations honestly.
+- Have an independent curriculum specialist review every year-level guide and any official mapping.
+- Conduct ethical, consent-based interviews/surveys with students and parents; publish methodology, sample size, limitations and findings internally.
+- Test a prototype unit with representative learners, including accessibility needs, and compare baseline/revision performance using a pre-defined rubric.
+- Complete rights, accessibility, safeguarding/privacy and release review.
+
+## 9. Known limitations and non-claims
+
+- The source list and its five core source families are documented in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md; it ranks by relevance, traceability, currency and transparency, not traffic/popularity.
+- Public IB sample-paper listings surfaced English A: Literature papers, not a public Language A: Language and Literature specimen pack. Do not label Literature papers as Language and Literature samples. Current publicly indexed 2026 examiner instructions and specialist interpretation can inform task design, but the platform should create original practice tasks.
+
+- This is a desk-research synthesis, not a systematic review or a substitute for school/IB authorization.
+- The current IB public overview verifies broad Language and Literature aims and six skills, but does not itself provide a complete current Year 1 criterion map. A detailed IB guide indexed as for use from September 2014 or January 2015 provides a legacy A–D reference, not proof of the newest guide version. The latest applicable detailed guide and its update history still need confirmation; Enhanced MYP beta guidance remains separate until final official documentation is available.
+- Official syllabus alignment has not been approved for the existing pilot or any other unit.
+- Research findings from general secondary education cannot automatically be generalised to every IB/Cambridge learner, family or India-based context.
+- No primary research has yet verified local customer pain points or product-market fit.
+- Do not publish any unit as syllabus-mapped, rights-cleared, accessible or released until its own evidence and sign-off are recorded.
+
+
+## 10. MYP resource-landscape and transition standard — v0.5 addition
+
+For MYP Year 1, a broad “public source” search is not enough. The research record must include MYP-specific teaching platforms and publishers, not just the awarding body and generic research evidence. The source-register audit is in docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.
+
+Required distinction:
+- **Official current public framework:** use current IB public pages for facts they state.
+- **Legacy official detailed guide:** record the edition/date; use it only as a labelled historical crosswalk if currentness is not confirmed.
+- **Independent specialist teaching source:** use to benchmark unit topics, task types, scaffolds and progression, not to define official requirements.
+- **Publisher resource:** use public contents/samples only within access and copyright terms; do not infer latest mapping from an older book.
+- **School platform workflow:** use to improve the completeness of unit metadata, assessment evidence, reflection and implementation QA; do not treat vendor data as a syllabus.
+- **Marketplace item:** discovery only until its actual content, date, intended year, author, source basis and licence have been inspected.
+
+Enhanced MYP is a separate transition watch. The IB beta guidance states full release is scheduled for 2027; until the final applicable guide and effective date are verified, do not replace current framework fields with beta terminology or change official maps on the strength of a third-party update.
+
+The revised MYP Year 1 sequence has six proposed units and an eight-hour shared skills/diagnostic/transfer allocation, for at least 50 planned teaching hours. This is a product planning decision derived from the public 50-hour floor, not a prescribed IB unit structure. It remains founder-review pending. Unit 1 implementation and all later-track work remain blocked by the existing approval gate.

@@ -1,0 +1,73 @@
+# Unit Production Register
+
+**Status:** Internal control register v1.2 — MYP Year 1 guide v1.1, implementation structure v1.1 and resource landscape audit are complete for founder review; approval is required before Unit 1 curriculum production. Later track files remain drafts until their turn in the workflow.
+**Source of truth:** docs/PROJECT_MASTER_BRIEF.md, docs/ENGLISH_STAGE_1_ROADMAP.md, docs/ENGLISH_CURRICULUM_GUIDES.md, docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md and the relevant course guide.
+**Rule:** Do not finish an entire curriculum group before moving to the next eligible curriculum. Create one unit at a time in the order below. A blocked item stays blocked; do not invent syllabus objectives or substitute unrelated content to keep the rotation moving.
+
+## 1. Curriculum guide readiness register
+
+| Curriculum group | Year/stage chapters available | Current guide state | Main unresolved check |
+|---|---|---|---|
+| IB MYP Language and Literature | Year 1 standalone guide: docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md; implementation: docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md | Public-framework-aligned guide v1.0 and implementation structure v1.0 complete; awaiting founder review | Official objective/strand mapping not claimed. Do not start Unit 1 production before founder approval. Years 2–5 in the legacy group file remain drafts. |
+| Cambridge Lower Secondary English 0861 | Stages 7–9 in docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md | Public-framework-aligned group guide drafted | Pin the currently applicable official framework/version and verify exact objective IDs |
+| IB DP Language A: Language and Literature | Year 1/Year 2 in docs/curriculum/IB_DP_LANGUAGE_A_LANGUAGE_AND_LITERATURE_GUIDE.md | Public-source-aligned guide drafted | Verify session-specific assessment details/criterion version against current official materials before scored mocks |
+| Cambridge IGCSE First Language English 0500 | Syllabus-wide guide and two proposed delivery phases in docs/curriculum/CAMBRIDGE_IGCSE_FIRST_LANGUAGE_ENGLISH_0500_GUIDE.md | Current 2027–2029 syllabus/specimen baseline recorded | Record each learner's examination year and component/route; map every task against the exact syllabus/specimen |
+
+A guide being drafted does not mean every objective is officially mapped, every task is written, or a release gate has passed. For MYP Year 1, the guide and implementation structure are complete as independent public-framework-aligned documents, but founder review is pending. The existing Unit 1 preview has not been reimplemented under this guide. A Cambridge Lower Secondary Stage 7 Unit 1 draft also exists from earlier work; it is not the active checkpoint and must not advance before the founder approves the MYP Year 1 Unit 1 work.
+
+## 2. Unit 1 production rotation
+
+**Current checkpoint (26 October 2026):** MYP Year 1 guide v1.1, implementation structure v1.1 and resource landscape review v1.0 complete; **awaiting founder approval** before adapting/implementing Unit 1. Existing “How writers shape meaning” preview is not duplicated and remains preview-only. After the founder approves the guide and Unit 1 is implemented and approved, continue to Cambridge Lower Secondary Stage 7 guide/Unit 1. A Stage 7 Unit 1 draft already exists in this branch but remains a later-track draft and must be reviewed only when that rotation slot becomes active.
+
+| Order | Unit ID | Curriculum/year or delivery phase | Content status | Next action / blocking condition |
+|---:|---|---|---|---|
+| 1 | ib-myp-lal-y1-u1 | IB MYP Language and Literature Year 1 | Existing preview: **How writers shape meaning**, version 1; academic content review passed for preview | Keep as the first rotation slot. Reconcile it with the public-framework Year 1 guide; exact official mapping stays unverified; rights, accessibility and release approval remain outstanding |
+| 2 | cambridge-ls-english-s7-u1 | Cambridge Lower Secondary English 0861 Stage 7 | Draft 1.0 authored in this branch: learner content and separate teacher/editor review pack | Review original content against the currently applicable framework and the public-source guide; exact official objective codes remain blank; then complete academic, rights and accessibility review before UI implementation |
+| 3 | ib-dp-langlit-y1-u1 | IB DP Language A: Language and Literature Year 1 | Planned | Create after Stage 7 Unit 1; use current public course/examiner sources; verify session-specific assessment demands and SL/HL before labelling exam practice |
+| 4 | cambridge-igcse-fle-phase-a-u1 | Cambridge IGCSE First Language English 0500 first proposed delivery phase | Planned | Create after DP Year 1 Unit 1; current public baseline is syllabus Version 1 for exams 2027–2029; check candidate route and use matching current specimens |
+| 5 | ib-myp-lal-y2-u1 | IB MYP Language and Literature Year 2 | Planned | Public-framework-aligned original unit; do not invent official objective codes |
+| 6 | cambridge-ls-english-s8-u1 | Cambridge Lower Secondary English 0861 Stage 8 | Planned | Verify framework version/objectives; build on Stage 7 but do not simply repeat it |
+| 7 | ib-dp-langlit-y2-u1 | IB DP Language A: Language and Literature Year 2 | Planned | Check school sequence, candidate SL/HL and applicable assessment session |
+| 8 | cambridge-ls-english-s9-u1 | Cambridge Lower Secondary English 0861 Stage 9 | Planned | Verify framework version/objectives and chosen next pathway |
+| 9 | cambridge-igcse-fle-phase-b-u1 | Cambridge IGCSE First Language English 0500 second proposed delivery phase | Planned | Same syllabus as phase A, not a separate qualification/syllabus; check exam year and route |
+| 10 | ib-myp-lal-y3-u1 | IB MYP Language and Literature Year 3 | Planned | Keep mapping labels honest |
+| 11 | ib-myp-lal-y4-u1 | IB MYP Language and Literature Year 4 | Planned | Keep mapping labels honest |
+| 12 | ib-myp-lal-y5-u1 | IB MYP Language and Literature Year 5 | Planned | Verify school-selected pathway; do not assume optional MYP eAssessment |
+
+**Rotation rule:** Unit 1 is handled across the entire approved track list above before producing Unit 2. Then repeat the same order for Unit 3. If an item is blocked by an actual evidence gap, record the gap and pause that item; do not leap ahead to write Unit 2 or complete an entire curriculum group first.
+
+## 3. Unit-level production gates
+
+Before a unit is considered draft-complete:
+- [ ] Its course guide and current public-source basis have been checked and recorded.
+- [ ] The learning goal and proposed progression are original, clear and linked to that guide’s publicly verified skill structure.
+- [ ] The unit uses only official objective/criterion codes whose exact current descriptors are verified; otherwise the mapping field stays blank/unverified.
+- [ ] Its passage, questions and model/explanation are original or have a documented rights basis.
+- [ ] The content sequence includes explicit modelling, guided practice, independent transfer, feedback, revision and exit evidence where appropriate.
+- [ ] Answer keys/marking guidance are separate from learner-visible content.
+- [ ] A teacher/editor review pack exists separately from the learner-facing material.
+- [ ] Source/session/edition, content version and review status are recorded.
+- [ ] Accessibility, readability, cultural/age suitability and final release reviews are treated as separate gates.
+- [ ] The published/prototype route accurately states whether content is a planning draft, public-framework-aligned preview or fully mapped/released unit.
+
+## 4. Cross-curriculum release principles
+
+- A public-framework-aligned practice unit may teach verified general skills without pretending the detailed official objective/strand is known.
+- A source check, academic content review, rights review, accessibility review, official mapping verification and release approval are different evidence records. Passing one does not pass the others.
+- For Cambridge 0500, do not label legacy past papers as current-format practice without comparing question structure, marks, response length and mark scheme with the applicable syllabus/specimen.
+- For DP Language A: Language and Literature, do not use Language A: Literature past-paper pages as though they were the same course.
+- For MYP, do not use random “MYP past papers” from download sites as a substitute for protected official specimen assessments.
+- Do not promise scores, grades or complete syllabus coverage from a three-unit starter pathway.
+
+## 5. Current production position
+
+The first slot, IB MYP Year 1 Unit 1, already exists as the reviewed preview **How writers shape meaning**. The public-framework guide and route structure are complete, but the founder must approve them before Unit 1 is adapted/implemented as curriculum content. Do not duplicate the preview. Rights, accessibility, official mapping and final release remain unresolved. Do not duplicate it.
+
+A draft for the later slot, **Cambridge Lower Secondary English Stage 7 Unit 1**, already exists in docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md and docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_TEACHER_REVIEW_PACK.md. It has not passed academic review, been integrated into the application, or been released. Do not advance or review it as the active task until the founder approves the MYP Year 1 checkpoint and MYP Unit 1 work is approved. Then return to this existing Stage 7 draft rather than creating a duplicate.
+
+
+## 6. Expanded MYP research checkpoint — 26 October 2026
+
+Completed work: dedicated MYP-specific platform/publisher/planning-resource review; replacement of the three-unit sketch with six proposed units plus eight shared hours (at least 50 planned hours); versioned legacy criterion crosswalk; and separate Enhanced MYP transition watch. These are research/documentation deliverables only.
+
+Not completed: founder approval; Unit 1 adaptation; current official mapping verification; item-level rights, accessibility and final release approval. The existing preview is not duplicated. The Cambridge Lower Secondary Stage 7 draft remains inactive until MYP Unit 1 itself is implemented and approved by the founder.
