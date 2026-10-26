@@ -1,6 +1,6 @@
 # English Stage 1 — Curriculum Roadmap
 
-**Status:** Working roadmap. The MYP Year 1 curriculum guide v1.1, pathway implementation structure v1.1 and dedicated resource landscape review v1.0 are complete and awaiting founder review. The guide now has six proposed units and a separate legacy/Enhanced MYP transition control. Official objective/strand mapping is not claimed. The existing pilot's instructional content review passed for preview version 1 only. The 12-entry documentation scope does not mean the prototype's current 10-entry catalogue is already updated.
+**Status:** Working roadmap. MYP Year 1 guide v1.1 and implementation structure v1.1 were approved by the founder on 26 October 2026. Unit 1 version 2 is implemented in draft PR #14 and awaits founder review; version 1's preview-only approval does not transfer. Official Year 1 objective/strand mapping remains unverified, and rights/accessibility/release gates remain open. The documentation's six-unit Year 1 plan does not mean the application's current 10-entry catalogue or six MYP unit routes are implemented.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Purpose:** Turn the approved Stage 1 scope into a trackable production plan without claiming full syllabus coverage or inventing official curriculum mappings.
 
@@ -150,7 +150,7 @@ Then continue across the approved tracks for Unit 2, then Unit 3. The exact orde
 Use `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` as the source selection/currency gate. It sets five core source families and requires exact course, edition/session, paper type, access and rights checks. Do not select a worksheet or exam paper merely because it is easy to download. For Cambridge 0500 exams 2027–2029, prefer the current official syllabus and specimen/mark-scheme set; older papers require an item-level comparison. For DP Language A: Language and Literature, use public current IB course/examiner information and cross-check with specialist sites; do not mislabel Language A: Literature papers as Language and Literature specimens. For MYP, use the public six-skill framework and school-based assessment description to create original tasks; official Year 1 objective/strand codes stay blank if not verifiable.
 
 Guide creation order, before rotating unit-content production:
-1. IB MYP Language and Literature Year 1 — public-framework-aligned guide drafted; objective/strand mapping blocked.
+1. IB MYP Language and Literature Year 1 — guide/implementation structure approved; Unit 1 version 2 awaiting founder review; official objective/strand mapping remains unverified.
 2. Cambridge Lower Secondary English 0861 Stage 7 — verify the current official framework/version, then write the public-source-supported guide.
 3. IB DP Language A: Language and Literature Year 1 — use public course and current examiner guidance; identify any criterion/version updates.
 4. Cambridge IGCSE First Language English 0500 — syllabus-wide guide anchored to Version 1 for 2027–2029; record component/route and exam year.
@@ -170,4 +170,4 @@ This is an editorial production order, not an official IB/Cambridge unit order. 
 
 Version 1.1 of the guide replaces the initial three-unit sketch with six proposed units plus shared diagnostic, language support, retrieval, revision and transfer time for a planned total of at least 50 teaching hours. Research now includes MYP-specific teaching/publisher/planning resources and a separate landscape review. The 2014/15 detailed IB guide is used only as a labelled legacy crosswalk; its continued current applicability is not confirmed. Enhanced MYP beta material remains a separate transition watch.
 
-This is a **documentation and research checkpoint only**. No Unit 1 adaptation or application change is authorized until the founder approves the revised guide and plan. The existing “How writers shape meaning” lesson remains preview-only and must not be duplicated.
+The guide/implementation approval checkpoint is complete. Unit 1 version 2 now adapts rather than duplicates the existing preview. The draft preview implementation is in PR #14; it is not merged into main or deployed to production, and it does not inherit version 1's approval. The founder must review/approve this exact version before Cambridge Lower Secondary Stage 7 becomes active.
