@@ -62,10 +62,14 @@ const independentTasks = [
 
 export default function CambridgeStage7Unit1Preview() {
   const [responses, setResponses] = useState<Record<string, string>>(initialResponses);
+  const [warmupChoice, setWarmupChoice] = useState<"" | "cold" | "stated" | "frightened">("");
   const updateResponse = (id: string, value: string) => {
     setResponses((current) => ({ ...current, [id]: value }));
   };
-  const clearResponses = () => setResponses({});
+  const clearResponses = () => {
+    setResponses({});
+    setWarmupChoice("");
+  };
 
   const responseField = (
     id: string,
@@ -150,9 +154,9 @@ export default function CambridgeStage7Unit1Preview() {
           </blockquote>
           <fieldset className="s7-preview-choice">
             <legend>Which statement is directly stated?</legend>
-            <label><input type="radio" name="s7-warmup-fact" value="cold" /> The room was cold.</label>
-            <label><input type="radio" name="s7-warmup-fact" value="stated" /> The map’s corners moved and a sheet of paper skated across the floor.</label>
-            <label><input type="radio" name="s7-warmup-fact" value="frightened" /> Dev was frightened.</label>
+            <label><input type="radio" name="s7-warmup-fact" value="cold" checked={warmupChoice === "cold"} onChange={() => setWarmupChoice("cold")} /> The room was cold.</label>
+            <label><input type="radio" name="s7-warmup-fact" value="stated" checked={warmupChoice === "stated"} onChange={() => setWarmupChoice("stated")} /> The map’s corners moved and a sheet of paper skated across the floor.</label>
+            <label><input type="radio" name="s7-warmup-fact" value="frightened" checked={warmupChoice === "frightened"} onChange={() => setWarmupChoice("frightened")} /> Dev was frightened.</label>
           </fieldset>
           <details className="s7-preview-worked-model">
             <summary>Open the worked example</summary>
