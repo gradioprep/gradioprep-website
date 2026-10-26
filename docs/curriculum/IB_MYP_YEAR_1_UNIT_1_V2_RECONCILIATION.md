@@ -28,7 +28,7 @@ Version 2 is in a pull request preview branch, not merged to main and not deploy
 
 | Guide v1.1 requirement / design choice | Version 2 response | Evidence or limit |
 |---|---|---|
-| Read and view varied text forms | Keeps the original prose passage and adds a fictional night-bus campaign-poster mock-up using a real Pexels photograph with platform-authored copy and layout. | Direct reading and viewing opportunities; the photograph has descriptive alt text, and the visible copy remains selectable text. The image is a third-party asset, not an original illustration. |
+| Read and view varied text forms | Keeps the original prose passage and adds a fictional night-bus campaign-poster mock-up using a Wikimedia Commons photograph explicitly released under CC0 1.0, with platform-authored copy and layout. | Direct reading and viewing opportunities; the photograph has descriptive alt text, and the visible copy remains selectable text. The image is a third-party asset, not an original illustration. |
 | Establish a diagnostic before instruction | Adds an unscored starting observation: identify a word or visual detail and describe it before interpreting it. | Temporary UI state only; not a saved diagnostic, score or persistent learner record. |
 | Model an explicit evidence process | Uses choice → evidence → effect in context and an annotated example. | Learner instructions remain separate from answer keys/model responses. |
 | Explain creator choices, meaning and audience | Adds a comparison task that asks learners to use a specific phrase from the passage and a written/visual choice from the poster. | It teaches plausible audience effects; it does not assume every reader responds identically. |
@@ -41,7 +41,7 @@ Version 2 is in a pull request preview branch, not merged to main and not deploy
 
 ## 3. Review of text, poster and source rights
 
-The prose passage is original to the platform and retained from version 1. The fictional night-bus campaign-poster mock-up uses original platform-authored copy/layout with the real photograph “People on a Bus Stop at Night” by Berk Aktas (Pexels, 2023): https://www.pexels.com/photo/people-on-a-bus-stop-at-night-19092243/. Pexels labels the photo as free to use under its licence; the exact current licence terms and any model/property-release requirements still require rights review. The exit-ticket micro-extract is original. No protected IB question, textbook extract, specialist-platform lesson, model response or past-paper question is reproduced.
+The prose passage is original to the platform and retained from version 1. The fictional night-bus campaign-poster mock-up uses original platform-authored copy/layout with “Bus stop with platform during night.jpg” by Mateusz Konieczny: https://commons.wikimedia.org/wiki/File:Bus_stop_with_platform_during_night.jpg. The file page explicitly records CC0 1.0 Universal Public Domain Dedication. The image was visually screened before selection; no identifiable people or visible commercial branding were observed. The exit-ticket micro-extract is original. No protected IB question, textbook extract, specialist-platform lesson, model response or past-paper question is reproduced.
 
 This is a documented origin claim, not completed legal/rights clearance. The rights reviewer must still record the applicable approval basis for this exact version, including any future changes to copy, graphics, fonts or other assets. Do not add third-party materials without a fresh rights check.
 
@@ -77,3 +77,14 @@ This is a documented origin claim, not completed legal/rights clearance. The rig
 - **Main branch:** Still contains the previously reviewed version 1 preview; v2 is not on main.
 - **Production:** No deployment of version 2 has occurred.
 - **Cambridge Stage 7:** Draft learner/teacher files remain in separate inactive draft PR #12; they are not part of this Unit 1 PR and must not advance yet.
+
+
+## Pre-selection photograph rights record
+
+- **Selected image:** “Bus stop with platform during night.jpg” by Mateusz Konieczny.
+- **Source:** https://commons.wikimedia.org/wiki/File:Bus_stop_with_platform_during_night.jpg
+- **Licence:** CC0 1.0 Universal Public Domain Dedication, as stated on the file page: https://creativecommons.org/publicdomain/zero/1.0/.
+- **Date checked:** 26 October 2026, before committing the replacement image URL.
+- **Visual screen:** Night-time bus stop/platform, bus sign, orange streetlights and distant headlights; no identifiable people or visible commercial branding observed.
+- **Process standard:** All photographs must be screened and documented before selection under `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md`; free-to-use/royalty-free alone is not sufficient.
+- **Open status:** Source-level CC0 check complete; full unit-level rights review, accessibility review, academic review and release approval remain separate.
