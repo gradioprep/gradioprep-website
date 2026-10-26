@@ -1,6 +1,6 @@
 # Cambridge Lower Secondary English (0861) — Stages 7–9 Curriculum Guide
 
-**Document status:** Public-framework-aligned group guide v0.2. Stage 7 chapter drafted in detail; Stage 8 and Stage 9 design chapters added. Exact official objective-code mapping remains unverified until the currently applicable framework is confirmed.
+**Document status:** Public-framework-aligned group guide v0.3. Stage 7 chapter drafted in detail; Stages 8–9 remain design chapters. Stage 7 Unit 1 is now the active production checkpoint following founder approval of MYP Unit 1 v2. Cambridge's public support overview explicitly shows 7Ri.03 for explicit information, which is recorded as a limited crosswalk only. Other objective codes and the currently applicable full framework file remain unverified pending the official support site.
 **Course:** Cambridge Lower Secondary English (0861), Stage 7.
 **Pathway IDs:** cambridge-ls-english-s7, cambridge-ls-english-s8, cambridge-ls-english-s9.
 **Scope:** First-language English pathway, typically for learners aged 11–14 across Stages 7–9. Do not substitute the distinct English as a Second Language (0876) curriculum.
@@ -15,12 +15,12 @@
 - **Cambridge Lower Secondary English 0861 subject page:** https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/curriculum/english/ . The public page describes reading, writing, speaking and listening; communication for different audiences and purposes; and a broad range of fiction, poetry, playscripts and non-fiction. It identifies a curriculum framework, progression tests, Checkpoint papers, teacher guide and schemes of work as support materials.
 - **Cambridge Lower Secondary resource list for English 0861:** https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/resource-list/cambridge-lower-secondary-english-0861/ . Cambridge lists endorsed resources and says they have been reviewed against its framework and appropriate knowledge/skills criteria. Endorsement is a useful cross-check; it does not require our platform to reproduce a particular textbook or its sequence.
 - **Cambridge framework/support access help:** https://help.cambridgeinternational.org/hc/en-gb/articles/23410735702290-Where-can-I-find-the-new-Curriculum-Frameworks-and-support-resources . Cambridge directs schools to its Lower Secondary support site for frameworks, teacher guides and schemes of work.
-- **Framework objective/progression overview:** https://cambridge-community.org.uk/guide-to/cambridge-lower-secondary/english/ . This accessible teaching-support page gives examples of how learning-objective demands progress from Stage 7 to Stages 8 and 9. Use it only as a cross-check; verify exact objective wording and codes against the applicable framework before attributing them as official.
+- **Framework objective/progression overview:** https://cambridge-community.org.uk/guide-to/cambridge-lower-secondary/english/ . The public page explicitly labels 7Ri.03 (“Identify and explain the meaning of explicit information from a range of texts”) as taken from the Curriculum Framework and gives a Stage 7 learning activity for it. This verifies only the explicit-information mapping point used in Unit 1, not a complete unit map or the currentness of every objective.
 - **Publicly surfaced framework file:** https://ems.sch.qa/wp-content/uploads/2025/10/0861-Lower-Secondary-English-Curriculum-Framework-2020_tcm143-592623-1.pdf . The document metadata in this copy identifies Curriculum Framework version 2.0, published August 2021, with Stage 7–9 objective sections. Because it is hosted by a third party rather than Cambridge's own support domain, it is a cross-check only and not proof by itself that this is the latest approved version.
 
 ### Currency rule
 
-Cambridge's current public subject and resource pages identify English 0861 as the first-language Lower Secondary pathway and refer to framework learning objectives for each stage. The publicly surfaced version 2.0 copy appears consistent with framework materials for teaching from 2021, but the exact currently applicable document file/version must be reconfirmed through Cambridge's official resource/support site when possible. Do not claim “latest official objective mapping verified” solely from a school-hosted PDF or search index. Until the exact file and objective table are pinned, this is a public-framework-aligned design, not a signed-off objective-by-objective map.
+Cambridge's current public subject and resource pages identify English 0861 as the first-language Lower Secondary pathway and refer to framework learning objectives for each stage. Cambridge's public support overview provides one direct Stage 7 objective example (7Ri.03, explicit information), used only for questions that ask for explicit information. The publicly surfaced framework version 2.0 PDF is hosted by a third party; it is a cross-check only, not proof of the currently applicable official file. The full framework, progression grid and teacher guidance are directed to the Cambridge Lower Secondary support site. Until the applicable copy is checked, do not assign other codes from a mirrored PDF or claim the whole unit is officially mapped.
 
 ## 2. What this curriculum is — and is not
 
@@ -157,14 +157,15 @@ This is not Cambridge's official achievement judgement or a proxy for a Progress
 ## 10. Acceptance checklist and status
 
 - [ ] Confirm the exact currently applicable official 0861 framework/version from Cambridge's official resource/support site and save a dated source record.
-- [ ] Verify Stage 7 objective IDs and exact wording against the complete framework and progression grid; do not infer codes from third-party text.
+- [x] Record the limited public cross-check for 7Ri.03 (explicit information) from Cambridge's framework-support overview; use it only for explicit-information items.
+- [ ] Verify additional Stage 7 objective IDs and exact wording against the complete framework and progression grid; do not infer codes from third-party-hosted copies.
 - [ ] Check the proposed units against all relevant Stage 7 objectives; label gaps and adjust sequence based on evidence.
 - [ ] Check cross-stage progression against Stages 8 and 9.
 - [ ] Build original texts/questions and document text rights.
 - [ ] Complete academic, accessibility, age-suitability and release checks for exact versions.
 - [ ] Add the route to the prototype only after documentation and pathway review; the current app still has 10 entries while planning records 12.
 
-**Current status:** A practical public-framework-aligned Stage 7 guide is drafted. Exact official objective mapping is not claimed until the currently applicable framework version and objective table are pinned and reviewed. This guide does not imply Cambridge endorsement or official release.
+**Current status (26 October 2026):** A practical public-framework-aligned Stage 7 guide is drafted; its existing Unit 1 learner content and teacher pack are under active draft review in PR #12 and versioned to 1.1 for the first QA correction. The rain gauge has been moved in the passage to an open paved patch to avoid the contradiction of measuring rainfall under covered steps. Objective 7Ri.03 is publicly corroborated only for explicit-information items; the full current framework, inference/language-choice codes, academic review, rights, accessibility/suitability and release gates remain open. This guide does not imply Cambridge endorsement or official release.
 
 ## 11. Internal self-rating
 
