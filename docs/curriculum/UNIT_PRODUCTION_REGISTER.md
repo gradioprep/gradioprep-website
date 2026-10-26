@@ -80,7 +80,7 @@ Not completed for MYP: separate academic review for v2; current official mapping
 - **Teacher/editor pack:** updated separately, with worked answers kept out of the learner-facing import graph.
 - **Evidence design:** an original prose passage and a photographic poster mock-up using a third-party stock photo with original platform copy; an unscored starting observation; explicit modelling; guided and independent practice; text/visual comparison; response revision; and a fresh-text exit task.
 - **Current objective map:** official Year 1 objective/strand codes remain empty/unverified.
-- **Open review gates:** founder review of v2; academic review for this exact version; item-level rights; accessibility, age/level and cultural/context checks; explicit release approval.
+- **Open review gates:** separate academic review for this exact version; current official objective/strand mapping; item-level rights; accessibility, age/level and cultural/context checks; explicit release approval. Founder content approval is recorded and does not replace these checks.
 - **Rotation state:** MYP Unit 1 v2 content is founder-approved; Cambridge Lower Secondary Stage 7 Unit 1 is now the active draft QA checkpoint. This does not clear MYP's separate review/release gates or any Stage 7 gates.
 
 
