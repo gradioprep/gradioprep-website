@@ -1,7 +1,7 @@
 # IB MYP Language and Literature — Year 1 Pathway Implementation Plan
 
 **Version:** 1.1 — six-unit architecture and MYP resource/transition controls  
-**Status:** implementation structure revised for founder review; no application changes are included in this document checkpoint. Under the binding production order, MYP Year 1 Unit 1 is first in the Grade 6-equivalent cohort, followed by Cambridge Lower Secondary Stage 7 Unit 1 and CBSE Grade 6 Unit 1; no older-level Unit 1 or Unit 2 may start until all three are student-ready and required gates are recorded.  
+**Status:** implementation structure revised for founder review; no application changes are included in this document checkpoint. Under the binding production order, MYP Year 1 Unit 1 is first in the Grade 6-equivalent cohort, followed by Cambridge Lower Secondary Stage 7 Unit 1 and CBSE Grade 6 Unit 1. Next, create Unit 1 for the next comparable band (MYP Year 2, Cambridge Stage 8, CBSE Grade 7), then continue across subsequent bands. Do not start Unit 2 for the first cohort next; Unit 2 begins only after Unit 1 is complete across all approved in-scope levels and required gates are recorded.  
 **Pathway ID:** ib-myp-lal-y1.  
 **Linked guide:** docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md.  
 **Research audit:** docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.  
