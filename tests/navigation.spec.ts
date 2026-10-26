@@ -125,7 +125,7 @@ test.describe("MYP Year 1 Unit 1 version 2 review preview", () => {
 
     await page.goto(pilotLesson);
     await expect(page.getByText(/Founder-approved content candidate\. Separate academic review, official mapping, rights, accessibility and release checks remain open/i)).toBeVisible();
-    await expect(page.getByText(/Version 1's academic-review outcome does not transfer/i)).toBeVisible();
+    await expect(page.getByText(/Version 1's academic-review outcome does not transfer/i).first()).toBeVisible();
 
     await expect(page.getByRole("heading", { name: "Original practice passage" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "A LIGHT ON EVERY LAST JOURNEY" })).toBeVisible();
@@ -166,7 +166,7 @@ test.describe("MYP Year 1 Unit 1 version 2 review preview", () => {
 test("Unit 1 detail and level views preserve the separate academic-review gate after founder content approval", async ({ page }) => {
   await page.goto(ibUnitOne);
 
-  await expect(page.getByRole("heading", { name: /How writers and creators shape meaning.*review draft/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /How writers and creators shape meaning.*founder-approved candidate/i })).toBeVisible();
   await expect(page.getByText(/Awaiting review of version 2/i)).toBeVisible();
   await expect(page.getByText(/Version 1 approval does not transfer to this revision/i)).toBeVisible();
   await expect(page.getByRole("button", { name: /Continue to Unit 1 approved content candidate/i })).toBeVisible();
