@@ -65,5 +65,5 @@ jobs:
             echo ""
             echo "The application build passed, but the Cloudflare deployment credentials are not configured as repository Actions secrets."
             echo ""
-            echo "To enable the isolated preview, add repository secrets named `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. The token should have only the Cloudflare permissions needed to upload Worker previews. This workflow is restricted to the approved preview branch and uses `wrangler preview`, not `wrangler deploy`."
+            echo "To enable the isolated preview, add repository Actions secrets named CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID. The token should have only the Cloudflare permissions needed to upload Worker previews. This workflow is restricted to the approved preview branch and uses npx wrangler preview, not npx wrangler deploy."
           } >> "$GITHUB_STEP_SUMMARY"
