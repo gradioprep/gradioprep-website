@@ -1,7 +1,8 @@
 # IB MYP Language and Literature — Year 1 Curriculum Guide
 
 **Version:** 1.1 — expanded MYP-specific resource review and six-unit scope-and-sequence  
-**Status:** Internal curriculum design for founder review; not an official IB guide or complete verified syllabus map.  
+**Status:** Internal curriculum design for founder review; not an official IB guide or complete verified syllabus map.
+**Production sequence:** Unit 1 is first in the internal Grade 6-equivalent cohort; Cambridge Lower Secondary Stage 7 and CBSE Grade 6 Unit 1 must also be completed before older-level Unit 1 or any Unit 2 begins. This is not a claim of official curriculum equivalence.  
 **Programme/course:** IB Middle Years Programme (MYP), Language and Literature.  
 **Year:** Year 1.  
 **Pathway ID:** ib-myp-lal-y1.  
