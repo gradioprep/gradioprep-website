@@ -6,7 +6,7 @@
 **Learner file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md`  
 **Teacher/editor file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_TEACHER_REVIEW_PACK.md`  
 **Review type:** AI-led curriculum/editorial and learner-suitability review using public sources; improvements applied to v1.3. This is not an independent human academic-review pass or learner-testing result.  
-**Status:** v1.3 remains an unreleased draft. Founder authorised an isolated controlled-preview integration for interface testing only in draft PR #15; GitHub Actions Build check #225 passed the TypeScript/Vite build and 17/17 Chromium tests. This is limited automated UI evidence, not full accessibility certification, human academic approval, rights clearance, current full-framework mapping, or release approval. The learner content is not student-ready.
+**Status:** v1.3 remains an unreleased draft. Founder authorised an isolated controlled-preview integration for interface testing only in draft PR #15; GitHub Actions Build check #227 passed the TypeScript/Vite build and 17/17 Chromium tests. This is limited automated UI evidence, not full accessibility certification, human academic approval, rights clearance, current full-framework mapping, or release approval. The learner content is not student-ready.
 
 ## 1. Research basis checked
 
@@ -82,7 +82,7 @@ The unit contains no photograph, illustration, screenshot, third-party literary 
 - The narrative has a familiar school/garden context and no obvious distressing or culturally exclusionary material was identified in this desk review.
 
 ### Checks not yet possible
-The unit is not integrated into the learner application, so this review cannot establish actual text/background contrast, font-size behaviour, keyboard navigation, focus order, screen-reader output, mobile reflow, labelled answer fields, error messages or text-to-speech behaviour. A manual or automated application test and, where feasible, learner testing are still needed. The 80–100 word response and the vocabulary/syntax load require human confirmation for the intended Stage 7 cohort.
+At the time of this text-level desk check (before the later authorised preview integration), the unit was not integrated into the learner application, so that desk check could not establish actual text/background contrast, font-size behaviour, keyboard navigation, focus order, screen-reader output, mobile reflow, labelled answer fields, error messages or text-to-speech behaviour. The controlled preview's limited automated tests are recorded in Section 9; broader manual checks and, where feasible, learner testing are still needed. The 80–100 word response and the vocabulary/syntax load require human confirmation for the intended Stage 7 cohort.
 
 **Gate result:** Content-level accessibility/suitability preflight completed with no blocking text-only issue identified. **UI accessibility and human age/level/cultural suitability checks remain open.** No accessibility certification or learner pilot is claimed.
 
