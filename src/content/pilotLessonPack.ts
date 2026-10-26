@@ -1,257 +1,249 @@
 import type { PilotLessonPack } from "./model";
 
 /**
- * Teacher/editor source for the reviewed pilot lesson pack. This includes answer
- * keys and model responses, so MUST NOT be imported into the client application.
- * Academic review passed for the pilot preview on 2026-10-24; curriculum mapping
- * remains unverified and the pack is not an officially mapped or released MYP unit.
+ * Teacher/editor source for Unit 1 candidate version 2.
+ * Contains answer keys and model responses and MUST NOT be imported by the
+ * client application. It is awaiting founder review; version 1's review does
+ * not automatically transfer to this revision.
  */
 export const pilotLessonPack: PilotLessonPack = {
-  id: "draft-lesson-how-writers-shape-meaning",
-  version: 1,
+  id: "draft-lesson-how-writers-shape-meaning-v2",
+  version: 2,
   unitId: "ib-myp-lal-y1-u1",
-  status: "approved-for-pilot-preview",
+  status: "draft-for-founder-review",
   reviewRecord: {
-    outcome: "passed",
-    reviewedAt: "2026-10-24",
-    reviewerLabel: "Academic lead (approval confirmed by project owner; name not specified)",
-    scopeNote: "Academic content review passed for this version per project owner confirmation. This approval supports the pilot preview only; the official curriculum mapping remains unverified and release is not authorised.",
+    outcome: "pending",
+    reviewedAt: null,
+    reviewerLabel: "Pending founder review",
+    scopeNote:
+      "This is revised version 2 for founder review. Version 1 passed academic content review for pilot preview on 24 October 2026, but version 2 has not yet been reviewed or approved. Official Year 1 mapping, rights review, accessibility review and release approval remain separate gates.",
   },
-  title: "How writers shape meaning",
+  title: "How writers and creators shape meaning",
   audienceNote:
-    "Proposed for an early MYP learner audience; the Year 1 level fit has not yet been approved by the academic lead.",
-  estimatedMinutes: 25,
+    "Proposed for beginning MYP Language and Literature learners. Confirm reading demand, age/level fit and local school sequence during founder review.",
+  estimatedMinutes: 30,
   proposedLearningObjective:
-    "Identify a deliberate word or phrase choice and explain how it may shape meaning or mood, supporting the interpretation with precise evidence.",
+    "Explain how a writer's word choices and a visual creator's design choices may shape meaning or invite an audience response, using precise evidence and context.",
   mappingStatus: "unverified",
   successCriteria: [
-    "I can select a precise word or phrase rather than describe the whole passage generally.",
-    "I can explain a plausible association or effect instead of only naming a technique.",
-    "I can connect that effect to the moment in the passage and support it with evidence.",
+    "Select a precise word, phrase or visual design choice.",
+    "Explain a plausible association or effect instead of only naming a technique.",
+    "Connect the interpretation to context/audience using evidence, while accepting more than one reasonable reading.",
   ],
   passage: {
-    label: "Original practice passage — written for this draft",
+    label: "Original practice passage",
     text:
       "At the edge of the field, the last bus sighed, its headlights shrinking into the rain. Mara held her ticket beneath the shelter, smoothing its damp corners. Above her, the station clock clicked on. Across the road, the bakery's sign turned from OPEN to CLOSED. When the bus finally arrived, warm light spilled across the wet pavement. Mara took one step forward, then stopped.",
     rightsNote:
-      "The passage is original draft text written for this pilot. Any future additions must be original or have a documented, appropriate rights basis.",
+      "Original passage written for this platform. It is not taken from an IB paper, textbook or third-party lesson.",
+  },
+  companionArtifact: {
+    label: "Original fictional night-bus poster",
+    kicker: "NORTHBANK NIGHT BUS",
+    headline: "A LIGHT ON EVERY LAST JOURNEY",
+    supportingText: "The late bus is still a way home.",
+    footerText: "PLAN AHEAD · TRAVEL WITH CARE",
+    visualDescription:
+      "A dark blue, rain-soaked street fills the lower half of the poster. A small bus shelter sits slightly right of centre. A warm amber rectangle of light spills from the shelter onto pale blue pavement, while one small figure stands beneath it. The pale headline sits above the scene. The bright shelter contrasts with the dark road.",
+    altText:
+      "Original poster with a large pale headline, a dark rainy street, a small bus shelter glowing warm amber, a figure beneath the shelter and light stretching across pale blue pavement. The headline reads “A light on every last journey”; the supporting line says “The late bus is still a way home.”",
+    rightsNote:
+      "The poster wording and art direction are original to this platform. Its visual is rendered from HTML/CSS shapes and text, not a copied image.",
+  },
+  entryCheck: {
+    prompt:
+      "Before studying the model, choose one word from the passage or one detail in the poster that catches your attention. Describe what you can see or read without explaining its effect yet.",
+    placeholder: "I notice the word/detail … It literally shows …",
+    successIndicators: [
+      "The learner identifies a precise detail.",
+      "The learner gives an observation before adding an inference.",
+    ],
   },
   keyIdea: {
-    label: "An evidence chain",
+    label: "The evidence chain",
     pattern: [
-      "Choice — point to an exact word or phrase.",
-      "Association — explain what it may suggest or make the reader notice.",
-      "Effect in context — link the suggestion to the mood or meaning of this moment.",
+      "Choice — point to an exact word, phrase or visual feature.",
+      "Evidence — identify what is actually written or shown.",
+      "Effect in context — explain what it may suggest to this audience and why it matters here.",
     ],
     explanation:
-      "A technique name on its own is not a complete explanation. Interpretations can differ: support yours with the words on the page, use cautious language such as “may suggest”, and avoid claiming that every reader must react in the same way.",
+      "Technique-spotting is not a complete analysis. Ask what the selected choice may suggest, how the evidence supports the interpretation and why it matters in this context. Do not present a possible effect as a guaranteed audience reaction.",
   },
   sections: [
     {
       id: "observe",
       heading: "1. Notice before you interpret",
-      purpose: "Separate what the passage literally says from what you infer.",
+      purpose: "Separate an observable detail from an inferred idea.",
       explanation:
-        "Start with an observation you can point to. Then make an interpretation that the details support. For example, the passage says that the bus “sighed”; it does not directly tell us that the bus is sad. The verb invites a possible human association, which can shape how the departure feels.",
+        "The passage says the bus “sighed”; it does not literally say that it is sad. The verb attributes a human-like action to the bus. The poster's headline, placement and contrast are choices that can also be described before interpreting them.",
       learnerAction:
-        "Underline one word or phrase that stands out. In a few words, record what it literally describes before explaining what it might suggest.",
+        "Record one literal observation from the passage and one from the poster. Keep each observation close to the words or design details actually present.",
     },
     {
       id: "evidence-chain",
       heading: "2. Build an evidence chain",
-      purpose: "Connect a writer's choice to a reasoned explanation.",
+      purpose: "Link a specific choice to a contextual explanation.",
       explanation:
-        "Move from the chosen words to an association and then to the effect in this specific moment. Do not skip the middle step: “The writer uses personification” names a technique, but does not explain why that choice matters here.",
+        "Move from the exact choice to a plausible association, then to why that association matters in this moment. “The writer uses personification” names a technique but does not explain the effect.",
       learnerAction:
-        "Complete this frame in your own words: “The word/phrase ‘…’ may suggest … . In this moment, that makes … seem/feel … because … .”",
+        "Complete this frame: “The word/feature ‘…’ may suggest … . Here, it makes the moment/message seem … because … .”",
       example: {
         label: "Worked example",
         text: "“the last bus sighed”",
         explanation:
-          "The verb “sighed” gives the bus a human-like action. It may make the departure seem weary or reluctant, adding a subdued mood to the scene. This is a plausible interpretation, not the only acceptable one.",
+          "The verb “sighed” gives the bus a human-like action. It may make the departure feel weary or reluctant, fitting the rain and the bus moving away. This is plausible, not the only acceptable reading.",
       },
+    },
+    {
+      id: "compare",
+      heading: "3. Compare two creators' choices",
+      purpose: "Explain how text and visual design may frame a similar journey differently.",
+      explanation:
+        "The story follows Mara's uncertainty: the bus “sighed”, the headlights shrink into rain and Mara stops before boarding. The poster frames a late bus as “a way home” and makes the shelter the brightest part of the scene. Both can be read in more than one way, but evidence supports a contrast between uncertainty and reassurance.",
+      learnerAction:
+        "Choose a precise word/phrase from the passage and a written or visual feature from the poster. Explain how each can shape the audience's impression of a late journey.",
     },
     {
       id: "context",
-      heading: "3. Use the surrounding details",
-      purpose: "Keep an interpretation connected to the whole moment.",
+      heading: "4. Explain the choice in context",
+      purpose: "Use surrounding detail to develop or qualify an interpretation.",
       explanation:
-        "A phrase can do more than create a mood. The image of headlights “shrinking into the rain” suggests the bus moving farther away. Together with the damp ticket and the closing bakery, it may contribute to a sense of waiting, distance or uncertainty. Select the meaning you can best support.",
+        "“Warm light spilled across the wet pavement” may suggest welcome or comfort, but Mara's final hesitation complicates the moment. A strong explanation uses the wider scene rather than treating a phrase as if it were isolated.",
       learnerAction:
-        "Choose a second phrase from the passage. Explain how it supports, develops or changes your first interpretation.",
+        "Write two or three sentences about “warm light spilled across the wet pavement”. Explain one plausible effect and use Mara's final action to develop or qualify your interpretation.",
     },
     {
-      id: "independent",
-      heading: "4. Explain a choice independently",
-      purpose: "Write a short analytical response without relying on a sentence frame.",
+      id: "transfer",
+      heading: "5. Transfer the move",
+      purpose: "Apply the same thinking to a fresh text.",
       explanation:
-        "A useful response usually makes one clear point, supports it with a short quotation and explains the connection. It is better to explain one choice carefully than to list several techniques without analysis.",
+        "The exit uses a new micro-extract, so the learner must select new evidence. Don't reward a copied explanation that fits the bus passage but not the new context.",
       learnerAction:
-        "Write two or three sentences about “warm light spilled across the wet pavement”. Explain what the image may suggest at this point in the scene and support your reading with a detail from the passage.",
-      example: {
-        label: "Possible line of thinking",
-        text: "“warm light spilled across the wet pavement”",
-        explanation:
-          "“Warm” can suggest comfort or welcome, while “spilled” makes the light seem to spread freely. The contrast with the rain may briefly make the arrival feel inviting, although Mara's hesitation means the moment is not simply happy.",
-      },
+        "Use a word or phrase from the fresh micro-extract in your exit response and connect its effect to the moment described.",
     },
   ],
   practiceItems: [
     {
-      id: "pilot-q1",
+      id: "pilot-v2-q1",
       type: "best-explanation",
       focus: "Interpreting a word choice",
-      prompt:
-        "Which explanation is best supported by the phrase “the last bus sighed”?",
+      prompt: "Which explanation is best supported by the phrase “the last bus sighed”?",
       options: [
-        {
-          id: "A",
-          text: "It proves that the bus has a mechanical problem.",
-          feedback:
-            "The passage does not give evidence of a mechanical fault. Look at the human association created by the verb.",
-        },
-        {
-          id: "B",
-          text: "It may make the departure feel weary or reluctant.",
-          feedback:
-            "This is well supported: “sighed” describes a human-like action and can suggest tiredness or reluctance in the scene.",
-        },
-        {
-          id: "C",
-          text: "It tells us that Mara is physically exhausted.",
-          feedback:
-            "The phrase describes the bus, not Mara. You can consider how it shapes the scene, but do not transfer the action directly to her.",
-        },
-        {
-          id: "D",
-          text: "It means that every reader must feel sad.",
-          feedback:
-            "The wording can influence mood, but it cannot guarantee that every reader responds in the same way.",
-        },
+        { id: "A", text: "It proves that the bus has a mechanical problem.", feedback: "The text gives no evidence of a mechanical fault. Consider the human association created by the verb." },
+        { id: "B", text: "It may make the departure feel weary or reluctant.", feedback: "This is plausible: “sighed” gives the bus a human-like action and can suggest tiredness or reluctance in this context." },
+        { id: "C", text: "It tells us that Mara is physically exhausted.", feedback: "The phrase describes the bus, not Mara. Do not transfer the action directly to her." },
+        { id: "D", text: "It means that every reader must feel sad.", feedback: "A creator can invite a response but cannot guarantee that all readers respond identically." },
       ],
       bestOptionId: "B",
-      modelAnswer:
-        "B — “sighed” gives the bus a human-like action and may make its departure feel weary or reluctant.",
-      successIndicators: [
-        "Uses the wording in the passage as evidence.",
-        "Explains a plausible association rather than claiming certainty.",
-      ],
+      modelAnswer: "B — “sighed” gives the bus a human-like action and may make its departure feel weary or reluctant.",
+      successIndicators: ["Uses the wording as evidence.", "Explains a plausible association rather than claiming certainty."],
       feedbackForLearner: {
-        ifStrong:
-          "You connected the verb to a plausible effect and stayed close to the evidence.",
-        nextStep:
-          "Check whether your explanation is supported by the actual words and avoids claiming more than the passage shows.",
+        ifStrong: "You connected the verb to a plausible effect and stayed close to the evidence.",
+        nextStep: "Check that your explanation is supported by the actual words and does not claim more than the passage shows.",
       },
     },
     {
-      id: "pilot-q2",
+      id: "pilot-v2-q2",
       type: "short-response",
       focus: "Explaining imagery",
-      prompt:
-        "Explain how “its headlights shrinking into the rain” may shape the reader's view of the bus leaving. Use the quoted phrase in your answer.",
-      modelAnswer:
-        "“Shrinking into the rain” makes the headlights seem to grow smaller and less distinct as the bus moves away. This can emphasise distance and make the departure feel uncertain or final.",
+      prompt: "Explain how “its headlights shrinking into the rain” may shape the impression of the bus leaving. Use the phrase in your answer.",
+      modelAnswer: "“Shrinking into the rain” makes the headlights seem smaller and less distinct as the bus moves away. This can emphasise distance and make the departure feel uncertain or final.",
       successIndicators: [
-        "Quotes or identifies “shrinking into the rain”.",
+        "Identifies “shrinking into the rain”.",
         "Explains a plausible association such as distance or fading visibility.",
-        "Connects that association to the departure or mood of the scene.",
+        "Connects the association to the departure or mood of this scene.",
       ],
       feedbackForLearner: {
-        ifStrong:
-          "Your explanation connects the image to what is happening in the scene.",
-        nextStep:
-          "Add a precise phrase from the passage and explain what that phrase suggests; do not stop after naming a technique.",
+        ifStrong: "Your explanation connects the image with what is happening in the scene.",
+        nextStep: "Add a precise phrase and explain what it suggests; don't stop after naming a technique.",
       },
     },
     {
-      id: "pilot-q3",
+      id: "pilot-v2-q3",
+      type: "short-response",
+      focus: "Comparing text and visual design",
+      prompt: "Choose one precise detail from the passage and one from the poster. How could those choices invite different impressions of a late bus journey? Support both parts with evidence.",
+      modelAnswer: "The phrase “headlights shrinking into the rain” can make the bus seem to move away into distance and uncertainty. By contrast, the poster's headline “A light on every last journey” and the bright amber shelter against the dark street can present the late bus as reassuring and available. The contrast depends on the selected details and is not a guaranteed response for every audience.",
+      successIndicators: [
+        "Uses a specific word or phrase from the passage.",
+        "Uses a specific written or visual feature from the poster.",
+        "Explains a plausible difference in impression and links it to context or audience.",
+      ],
+      feedbackForLearner: {
+        ifStrong: "You compared choices from both artefacts instead of listing unrelated observations.",
+        nextStep: "Explain how each specific choice supports the contrast you identify.",
+      },
+    },
+    {
+      id: "pilot-v2-q4",
       type: "short-response",
       focus: "Interpreting a change in mood",
-      prompt:
-        "How might “warm light spilled across the wet pavement” change the mood as the bus arrives? Give one interpretation and support it with the wording.",
-      modelAnswer:
-        "“Warm light” may suggest comfort or welcome, briefly making the arrival feel more hopeful. The verb “spilled” presents the light as spreading across the pavement, although Mara's final hesitation leaves some uncertainty.",
+      prompt: "How might “warm light spilled across the wet pavement” shape the moment when the bus arrives? Explain one interpretation and consider Mara's final hesitation.",
+      modelAnswer: "“Warm light” may suggest welcome or comfort, and “spilled” makes the light seem to spread across the pavement. However, Mara takes one step and then stops, so the scene remains uncertain rather than simply happy.",
       successIndicators: [
-        "Selects at least one precise word or phrase.",
+        "Selects a precise word or phrase.",
         "Explains the association it may create.",
-        "Connects the interpretation to the arrival and recognises the final hesitation as relevant context.",
+        "Uses Mara's final action to support or qualify the interpretation.",
       ],
       feedbackForLearner: {
-        ifStrong:
-          "You explained how the language contributes to the moment and considered the surrounding context.",
-        nextStep:
-          "Explain why the selected words support your interpretation, and check whether the final sentence complicates your reading.",
+        ifStrong: "You explained how language shapes the moment and used the surrounding context.",
+        nextStep: "Check whether the last sentence supports, complicates or changes the interpretation you began with.",
       },
     },
     {
-      id: "pilot-q4",
+      id: "pilot-v2-q5",
       type: "response-revision",
-      focus: "Improving an analytical explanation",
-      prompt:
-        "Improve this weak response in two or three sentences: “The writer uses personification. It makes the story good.”",
-      modelAnswer:
-        "The verb “sighed” gives the bus a human-like action, which may make its departure seem weary or reluctant. This subdued impression fits the bus moving away into the rain and helps establish the scene's uncertain mood.",
+      focus: "Improving a visual analysis",
+      prompt: "Improve this weak response in two or three sentences: “The poster uses dark colours. It looks nice.”",
+      modelAnswer: "The dark street contrasts with the amber light around the shelter, so the viewer's attention may move towards the place where the passenger can wait. Together with the headline “A light on every last journey”, this contrast can support the poster's reassuring message about travelling late.",
       successIndicators: [
-        "Names an exact word or phrase.",
-        "Explains what the choice may suggest or how it may affect the moment.",
-        "Links the explanation to the surrounding scene rather than saying only that it is “good”.",
+        "Names a specific visual contrast or placement choice.",
+        "Explains what the choice may suggest or draw the audience's attention towards.",
+        "Connects the explanation to the poster's message about a late journey.",
       ],
       feedbackForLearner: {
-        ifStrong:
-          "The revision explains why the choice matters, rather than stopping at a technique name.",
-        nextStep:
-          "Replace general praise with evidence, a plausible interpretation and a connection to the scene.",
+        ifStrong: "You moved beyond a general opinion and explained a specific design choice.",
+        nextStep: "Name the visual detail, explain its possible effect and connect it to the intended message/audience.",
       },
     },
   ],
   exitTicket: {
-    prompt:
-      "Choose a different word or phrase from the passage and write two or three sentences explaining how it may shape meaning or mood. Do not use “sighed” or “warm light”.",
+    stimulus: {
+      label: "Fresh micro-extract — original transfer text",
+      text: "At sunrise, the empty platform shone silver. A single yellow scarf fluttered from the bench, pointing towards the open gate.",
+      rightsNote: "Original transfer text written for this platform; not an official IB sample.",
+    },
+    prompt: "Choose a word or phrase from this new extract. In two or three sentences, explain what it may suggest and how it shapes the moment. Use precise evidence and connect your interpretation to the context.",
     successIndicators: [
-      "Selects a precise piece of evidence.",
-      "Explains a plausible effect in their own words.",
-      "Connects the effect to the context of the passage.",
+      "Uses an exact word or phrase from the fresh extract.",
+      "Explains a plausible association or effect, not just a technique name.",
+      "Connects the explanation to the sunrise, empty platform, scarf or open gate.",
     ],
-    modelAnswer:
-      "“The station clock clicked on” may draw attention to the passing time through the small, repeated sound. In a quiet scene where Mara is waiting, this can make the wait feel more noticeable or tense.",
+    modelAnswer: "“Shone silver” may make the platform seem quiet, cool or almost still at sunrise. The “yellow scarf” stands out against that image, and the verb “pointing” may draw attention towards the open gate or suggest a possible way forward. The reading should be tied to those details rather than treated as the only possible meaning.",
   },
   feedbackGuide: [
-    {
-      area: "Evidence",
-      developing:
-        "The response describes the scene generally or refers to a broad idea without selecting useful words.",
-      secure:
-        "The response selects a specific word or short phrase that supports its point.",
-    },
-    {
-      area: "Explanation",
-      developing:
-        "The response only names a technique or says that the writing is effective.",
-      secure:
-        "The response explains a plausible association or effect and shows how the wording supports it.",
-    },
-    {
-      area: "Context",
-      developing:
-        "The explanation could be attached to almost any passage and does not address this moment.",
-      secure:
-        "The explanation connects the choice to the action, mood or meaning in this passage.",
-    },
+    { area: "Evidence choice", developing: "Makes a broad comment with no precise detail.", secure: "Selects a short exact phrase or identifiable visual feature that supports the point." },
+    { area: "Explanation", developing: "Names a technique or says something is effective without explaining why.", secure: "Explains a plausible association/effect and links the specific choice to it." },
+    { area: "Context and audience", developing: "Could apply the same comment to almost any text/poster.", secure: "Connects the interpretation to this moment, the wider scene or the intended audience." },
+    { area: "Comparison", developing: "Lists one feature from each artefact without explaining a relationship.", secure: "Explains how the choices create a similarity or difference in likely impression." },
+    { area: "Communication", developing: "Idea is difficult to follow or relies on an unsupported assertion.", secure: "Presents one reasoned point, uses evidence and qualifies an interpretation where useful." },
   ],
   accessibilitySupports: [
-    "Offer the passage in a readable, selectable text format; do not rely on colour alone to highlight evidence.",
-    "Allow learners to plan first using the three-part evidence chain: choice, association, effect in context.",
-    "Keep the short-response instructions visible beside the response field when this content is implemented in a real lesson.",
-    "Accept different evidence-supported interpretations and provide a next step rather than marking one literary reading as the only possible answer.",
-    "Review vocabulary, sentence length and cognitive load with a teacher before confirming age/level suitability.",
+    "The passage and poster copy remain selectable text. The poster includes a written visual description and does not rely on colour alone.",
+    "The entry check accepts a short observation before interpretation; it is not scored.",
+    "Keep task instructions visible beside written-response fields.",
+    "Accept different interpretations when supported by evidence and context.",
+    "Review keyboard navigation, focus visibility, screen-reader order, zoom/reflow, visual contrast and mobile layout before release.",
+    "Optional partner discussion: each learner names evidence, then repeats a partner's evidence before offering a different interpretation. This is an extension, not a scored task in the static preview.",
   ],
   remainingReleaseChecks: [
-    "Confirm the unit is presented as public-framework-aligned and not as an official objective/strand mapping.",
-    "Leave official Year 1 objective/strand codes blank unless exact descriptors are verified in a current public source.",
-    "Complete and record the separate content-rights review.",
-    "Complete and record the accessibility review for the interactive lesson.",
-    "Record explicit release approval only after all required evidence is complete.",
+    "Founder approves this exact Unit 1 version 2 before the production sequence advances.",
+    "Complete item-level academic review for version 2; version 1's review does not carry forward.",
+    "Keep official Year 1 objective/strand codes blank until the applicable current guide is verified.",
+    "Complete and record the separate rights review for text, poster copy and CSS visual composition.",
+    "Complete and record accessibility and age/level suitability reviews.",
+    "Only record explicit release approval after required gates are complete.",
   ],
   releaseNote:
-    "Academic content review passed for pilot preview version 1. The lesson uses the broad public MYP framework but has no verified official Year 1 objective/strand mapping. Do not grade it as an official IB achievement level or release it before rights, accessibility and explicit release approval are recorded.",
+    "Version 2 is a draft for founder review, not an approved release. Version 1 passed academic review for pilot preview only on 24 October 2026. Official Year 1 mapping remains unverified; rights review, accessibility review and explicit release approval are outstanding.",
 };
