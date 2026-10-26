@@ -126,7 +126,7 @@ export default function CambridgeStage7Unit1Preview() {
         </div>
       </header>
 
-      <main id="s7-preview-main" className="s7-preview-container s7-preview-main">
+      <main id="s7-preview-main" tabIndex={-1} className="s7-preview-container s7-preview-main">
         <section aria-labelledby="s7-objectives-heading" className="s7-preview-panel">
           <p className="s7-preview-label">LEARNING GOALS</p>
           <h2 id="s7-objectives-heading">What you will learn</h2>
@@ -261,11 +261,12 @@ export default function CambridgeStage7Unit1Preview() {
             The paper cup rolled along the platform. Lina glanced at the darkening sky and folded the picnic
             blanket into a square before tucking it into her bag.
           </blockquote>
-          <p>
-            Make one reasonable inference about why Lina is packing up. Identify two details that support
-            your inference, and explain how they fit together.
-          </p>
-          {responseField("s7-exit-response", "Your exit response", undefined, 5)}
+          {responseField(
+            "s7-exit-response",
+            "Your exit response",
+            "Make one reasonable inference about why Lina is packing up. Identify two details that support your inference, and explain how they fit together.",
+            5,
+          )}
         </section>
 
         <section aria-labelledby="s7-reflection-heading" className="s7-preview-panel">
