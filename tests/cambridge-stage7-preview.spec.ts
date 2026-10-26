@@ -72,7 +72,7 @@ test.describe("Cambridge Stage 7 Unit 1 controlled preview", () => {
     await page.getByRole("button", { name: "Clear all draft responses" }).click();
     await expect(response).toHaveValue("");
     await expect(page.getByText("Responses are held only in this open page session.", { exact: false })).toBeVisible();
-    await expect(page.getByText(/NOT GRADED/)).toBeVisible();
+    await expect(page.getByText(/not graded/i)).toBeVisible();
   });
 
   test("meets WCAG AA text contrast for sampled main, label, placeholder and button text", async ({ page }) => {
@@ -100,7 +100,19 @@ test.describe("Cambridge Stage 7 Unit 1 controlled preview", () => {
         if (!element) return { selector, ratio: 0 };
         const style = getComputedStyle(element, pseudo);
         const foreground = parse(style.color);
-        const background = parse(style.backgroundColor);
+        let current: Element | null = element;
+        let background: number[] | null = null;
+        while (current) {
+          const candidate = getComputedStyle(current).backgroundColor;
+          const rgb = parse(candidate);
+          const alpha = candidate.match(/rgba?\([^)]*,\s*([\d.]+)\s*\)$/i);
+          const isTransparent = candidate === "transparent" || (candidate.startsWith("rgba") && alpha && Number(alpha[1]) === 0);
+          if (rgb && !isTransparent) {
+            background = rgb;
+            break;
+          }
+          current = current.parentElement;
+        }
         if (!foreground || !background || background.length !== 3) return { selector, ratio: 0 };
         return { selector, ratio: contrast(foreground, background) };
       };
