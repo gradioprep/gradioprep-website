@@ -1,6 +1,6 @@
 # Cambridge Lower Secondary English (0861) — Stages 7–9 Curriculum Guide
 
-**Document status:** Public-framework-aligned group guide v0.3. Stage 7 chapter drafted in detail; Stages 8–9 remain design chapters. Stage 7 Unit 1 is now the active production checkpoint following founder approval of MYP Unit 1 v2. Cambridge's public support overview explicitly shows 7Ri.03 for explicit information, which is recorded as a limited crosswalk only. Other objective codes and the currently applicable full framework file remain unverified pending the official support site.
+**Document status:** Public-framework-aligned group guide v0.4. Stage 7 chapter drafted in detail; Stages 8–9 remain design chapters. Stage 7 Unit 1 is now the active production checkpoint following founder approval of MYP Unit 1 v2. Cambridge's public support overview explicitly shows 7Ri.03 for explicit information, which is recorded as a limited crosswalk only. Other objective codes and the currently applicable full framework file remain unverified pending the official support site.
 **Course:** Cambridge Lower Secondary English (0861), Stage 7.
 **Pathway IDs:** cambridge-ls-english-s7, cambridge-ls-english-s8, cambridge-ls-english-s9.
 **Scope:** First-language English pathway, typically for learners aged 11–14 across Stages 7–9. Do not substitute the distinct English as a Second Language (0876) curriculum.
@@ -165,7 +165,7 @@ This is not Cambridge's official achievement judgement or a proxy for a Progress
 - [ ] Complete academic, accessibility, age-suitability and release checks for exact versions.
 - [ ] Add the route to the prototype only after documentation and pathway review; the current app still has 10 entries while planning records 12.
 
-**Current status (26 October 2026):** A practical public-framework-aligned Stage 7 guide is drafted; its existing Unit 1 learner content and teacher pack are under active draft review in PR #12 and versioned to 1.1 for the first QA correction. The rain gauge has been moved in the passage to an open paved patch to avoid the contradiction of measuring rainfall under covered steps. Objective 7Ri.03 is publicly corroborated only for explicit-information items; the full current framework, inference/language-choice codes, academic review, rights, accessibility/suitability and release gates remain open. This guide does not imply Cambridge endorsement or official release.
+**Current status (26 October 2026):** A practical public-framework-aligned Stage 7 guide is drafted; its existing Unit 1 learner content and teacher pack are under active draft review in PR #12 and versioned to 1.2 after the first QA correction and the follow-up scoring-coverage fix. The rain gauge is placed in an open paved patch so it can plausibly collect rainfall; the follow-up scoring-coverage fix is reflected in the separate v1.2 teacher pack. Objective 7Ri.03 is publicly corroborated only for explicit-information items; the full current framework, inference/language-choice codes, academic review, rights, accessibility/suitability and release gates remain open. This guide does not imply Cambridge endorsement or official release.
 
 ## 11. Internal self-rating
 
@@ -286,3 +286,6 @@ The table is our planning model, inspired by public Cambridge progression exampl
 - **Assessment:** where Progression Test/Checkpoint practice is offered, verify the learner's stage and current authorised material; do not reproduce secure assessments. Do not call internal rubric results official test scores.
 - **Release:** each unit needs academic review, rights review, accessibility review and explicit approval for the exact version.
 
+
+
+**v0.4 update — 26 October 2026:** Stage 7 Unit 1 learner content and the separate teacher/editor pack are now version 1.2. AI editorial consistency pre-review found no blocking contradiction, but exact-version founder review, academic approval, current full framework/version verification, rights/originality, accessibility, age/level and cultural/context suitability, and release approval remain pending. Only the explicit-information items use the limited public 7Ri.03 cross-check; the complete unit is not officially mapped. Do not integrate or release based on this guide update alone.
