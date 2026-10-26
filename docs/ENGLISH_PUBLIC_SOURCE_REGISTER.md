@@ -1,8 +1,8 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.3  
+**Version:** 1.4  
 **Research checked:** 26 October 2026  
-**Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, and Cambridge IGCSE First Language English 0500.  
+**Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
 
 ## 1. Decision in response to access constraints
@@ -10,6 +10,25 @@
 The founder does not have school-account access to the IB Programme Resource Centre (PRC). We will therefore **not wait indefinitely for gated guides**. For MYP, we will build a clearly labelled, public-framework-aligned and evidence-informed Year 1 pathway using the official public subject overview, official public assessment information and carefully chosen public educational resources. For DP, use the public official course page and the publicly indexed 2026 examiner instructions where accessible, cross-checked against relevant specialist teaching sites. For Cambridge 0500, use the official public syllabus for exams 2027–2029 and its current specimen paper/mark-scheme set as the primary design source.
 
 This change does **not** permit a claim that the latest detailed guide has been replicated or that current official Year 1 mapping has been verified. The 2014/15 detailed Language and Literature guide is now located as an indexed official IB resource and its historical Year 1 A–D descriptors can inform a clearly labelled legacy crosswalk. That edition is not proof of the newest/current descriptor wording. Keep current official mapping unverified until the applicable edition and continuity are confirmed. No official codes or wording from gated documents are to be guessed. For any course, official identifiers, assessment format and syllabus claims require traceable sources.
+
+## CBSE English Grades 6–12 — public-source baseline (checked 26 October 2026)
+
+The CBSE pathway is newly approved for product scope. This register entry is a source starting point, not a completed class-by-class syllabus audit or official mapping. Follow `docs/curriculum/CBSE_ENGLISH_GRADES_6_12_PATHWAY_RESEARCH_BRIEF.md` and the binding curriculum research workflow.
+
+### Primary official sources
+- [CBSE Curriculum 2026–27](https://cbseacademic.nic.in/curriculum_2027.html) — the official portal lists English for Class IX, English Language and Literature and English Communicative options for Class X, and English Core and English Elective for Classes XI–XII. Verify the exact subject PDF/code and current assessment structure for each class before mapping.
+- [CBSE latest circulars](https://cbseacademic.nic.in/circulars.html) — official notices include 2026–27 curriculum release and changes. In particular, Acad-33/2026 concerns alignment of the language scheme in Classes IX–X with the NCERT syllabus from 2026–27; Acad-14/2026 announces the Classes IX–XII curriculum release; Acad-17/2026 concerns introduction of R3 in Class VI. The R3 notice is about the third-language scheme and must not be described as an English-subject syllabus change.
+- [NCF-SE 2023, English version](https://ncert.gov.in/pdf/focus-group/NCF-SE_2023EN.pdf) and [NCF framework portal](https://ncf.ncert.gov.in/) — national framework context for stage-specific learning standards, competencies, pedagogy and assessment. Use these to interpret and cross-check class-level requirements, not to invent CBSE subject codes.
+- [NCERT textbooks portal](https://ncert.nic.in/textbook.php) — check each grade's actual current textbook and edition. Record title, grade, publication/reprint date, relevant chapters and any official teacher/bridge material.
+- [Ministry of Education / PIB statement on NCERT syllabus alignment, 10 August 2026](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297094&lang=2&reg=48) — states that NCERT has brought out new syllabus and textbooks for Grades 1–9 and that learning material is developed through mapping of curricular goals, competencies and learning outcomes, with academic, pedagogical, language and sensitivity review.
+- [CBSE curriculum archive](https://cbseacademic.nic.in/curriculum_archive.html) — use to compare prior academic-session documents when assessing what changed and whether older practice material still matches the current requirements.
+
+### Currency and applicability cautions
+- As of 26 October 2026, the CBSE 2026–27 curriculum portal is the starting point for Classes IX–XII. Recheck the live portal and circulars before each course design and before any later release.
+- Grades 6–8 require separate verification of the applicable NCERT textbook, NCF-SE learning standards/competencies and CBSE guidance for each grade. Do not assume the same type of CBSE syllabus PDF is published for every middle grade.
+- Preserve the official route distinctions at Classes IX–X and XI–XII. Do not merge English Language and Literature, English Communicative, English Core or English Elective into a single assessment route.
+- The addition of R3/three-language requirements is not, by itself, evidence of a change to the English subject syllabus.
+- These sources establish an initial research base only. Exact class-wise official mapping and the latest effective textbook/syllabus position remain pending a dedicated audit. Independent EdTech resources may inform teaching design but cannot establish official CBSE requirements.
 
 ## 2. Core five-source set
 
