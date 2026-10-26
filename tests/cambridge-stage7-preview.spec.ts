@@ -22,6 +22,7 @@ test.describe("Cambridge Stage 7 Unit 1 controlled preview", () => {
     await expect(page.getByRole("link", { name: "Skip to lesson content" })).toBeFocused();
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/#s7-preview-main$/);
+    await expect(page.locator("#s7-preview-main")).toBeFocused();
 
     const workedExample = page.getByText("Open the worked example");
     await workedExample.focus();
@@ -51,25 +52,44 @@ test.describe("Cambridge Stage 7 Unit 1 controlled preview", () => {
     expect(fieldAudit.filter((field) => field.labelCount === 0 || !field.labelName).map((field) => field.id)).toEqual([]);
     expect(new Set(fieldAudit.map((field) => field.labelName)).size).toBe(14);
     expect(fieldAudit.filter((field) => field.describedBy && !field.descriptionExists).map((field) => field.id)).toEqual([]);
+    const describedByIds = fieldAudit
+      .filter((field) => field.describedBy)
+      .map((field) => field.describedBy)
+      .sort();
+    expect(describedByIds).toEqual([
+      "guided-a-prompt",
+      "guided-b-prompt",
+      "guided-c-prompt",
+      "guided-d-prompt",
+      "independent-1-prompt",
+      "independent-2-prompt",
+      "independent-3-prompt",
+      "independent-4-prompt",
+      "independent-5-prompt",
+      "independent-6-prompt",
+      "s7-exit-response-prompt",
+    ].sort());
     expect(fieldAudit.find((field) => field.id === "guided-a")?.describedBy).toBe("guided-a-prompt");
     await expect(page.getByLabel("Your response — A. Find a fact")).toBeVisible();
     await expect(page.getByLabel("Your exit response")).toBeVisible();
     await expect(page.getByLabel("The strongest evidence I used today was…")).toBeVisible();
   });
 
-  test("keeps the layout within a narrow mobile viewport", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+  test("keeps the layout within narrow mobile and tablet viewports", async ({ page }) => {
     await page.goto(previewPath);
 
-    const dimensions = await page.evaluate(() => ({
-      documentWidth: document.documentElement.scrollWidth,
-      viewportWidth: document.documentElement.clientWidth,
-      mainWidth: document.querySelector("main")?.getBoundingClientRect().width ?? 0,
-    }));
+    for (const width of [320, 390, 768, 1024]) {
+      await page.setViewportSize({ width, height: 844 });
+      const dimensions = await page.evaluate(() => ({
+        documentWidth: document.documentElement.scrollWidth,
+        viewportWidth: document.documentElement.clientWidth,
+        mainWidth: document.querySelector("main")?.getBoundingClientRect().width ?? 0,
+      }));
 
-    expect(dimensions.documentWidth).toBeLessThanOrEqual(dimensions.viewportWidth);
-    expect(dimensions.mainWidth).toBeGreaterThan(0);
-    await expect(page.getByRole("heading", { level: 1, name: "Read closely, infer and explain" })).toBeVisible();
+      expect(dimensions.documentWidth, `document width at ${width}px`).toBeLessThanOrEqual(dimensions.viewportWidth);
+      expect(dimensions.mainWidth, `main width at ${width}px`).toBeGreaterThan(0);
+      await expect(page.getByRole("heading", { level: 1, name: "Read closely, infer and explain" })).toBeVisible();
+    }
   });
 
   test("clears all draft responses and warm-up choice without scoring or saving", async ({ page }) => {
