@@ -297,15 +297,19 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
             <div className="proto-pilot-poster-card">
               <p className="proto-pilot-poster-kicker">{lesson.companionArtifact.kicker}</p>
               <h3>{lesson.companionArtifact.headline}</h3>
-              <div className="proto-pilot-poster-scene" aria-hidden="true">
-                <span className="proto-pilot-poster-glow" />
-                <span className="proto-pilot-poster-shelter" />
-                <span className="proto-pilot-poster-person" />
+              <div className="proto-pilot-poster-photo-wrap">
+                <img
+                  className="proto-pilot-poster-photo"
+                  src="https://images.pexels.com/photos/19092243/pexels-photo-19092243/free-photo-of-people-on-a-bus-stop-at-night.jpeg?auto=compress&dpr=1&h=750&w=1260"
+                  alt={lesson.companionArtifact.altText}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <p className="proto-pilot-poster-supporting">{lesson.companionArtifact.supportingText}</p>
               <p className="proto-pilot-poster-footer">{lesson.companionArtifact.footerText}</p>
             </div>
-            <figcaption>{lesson.companionArtifact.altText}</figcaption>
+            <figcaption>Notice how the illuminated shelter and waiting passengers contrast with the dark street and reflections on wet pavement.</figcaption>
             <p className="proto-unit-readiness-intro">{lesson.companionArtifact.rightsNote}</p>
           </figure>
         </section>
