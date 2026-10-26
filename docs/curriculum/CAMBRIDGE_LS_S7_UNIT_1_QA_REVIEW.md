@@ -1,10 +1,10 @@
 # Cambridge Lower Secondary English 0861 — Stage 7 Unit 1 v1.1 QA record
 
 **Review date:** 26 October 2026  
-**Reviewed version:** 1.1 draft  
+**Reviewed version:** 1.2 draft  
 **Learner file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md`  
 **Teacher/editor file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_TEACHER_REVIEW_PACK.md`  
-**Review type:** Independent editorial/content-consistency pre-review by AI assistant  
+**Review type:** Independent editorial/content-consistency pre-review by AI assistant; follow-up revision applied after founder requested QA changes  
 **Status:** Pre-review observations recorded; this is **not** the founder's academic approval, an independent human academic-review pass, official curriculum mapping, a rights clearance, accessibility certification, or release approval.
 
 ## 1. Checks completed from the versioned text
@@ -35,7 +35,7 @@ These are open checks, not claims that a defect has been proven.
 
 - **Stage-level academic judgement:** A qualified human reviewer should confirm that the passage length, syntax, vocabulary (“pane”, “hinge”, “skittered”), inference demand, and 80–100 word extended response are appropriate for the intended Stage 7 learner cohort. The current draft provides some support, but suitability should be tested against the actual learner group.
 - **Assessment coverage:** The lesson teaches explicit meaning, inference, evidence selection and language effect, but it is one short reading-focused unit. Do not imply that it assesses all four Cambridge English skills or provides complete Stage 7 coverage.
-- **Marking consistency:** Confirm whether the suggested scoring coverage (independent items 2–5 and the extended response) is intentional, because item 1 is factual retrieval and is not assigned a score in the suggested rubric. If so, state that explicitly in teacher implementation notes; otherwise revise the rubric.
+- **Marking consistency — revised:** Resolved in v1.2. The teacher pack now explicitly scores independent item 1 as a separate 0–1 retrieval check, items 2–5 at 0–2 each, and the extended response at 0–6, for a maximum of 15 formative points. The exit check and reflection are unscored diagnostic activities. This is an internal platform rubric, not a Cambridge mark scheme or grade. Human academic review of whether this scoring design is appropriate remains pending.
 - **Official mapping:** The 7Ri.03 crosswalk remains limited to explicit-information items. Do not assign inference or language-choice codes until the currently applicable official framework and progression grid are verified through the Cambridge support site.
 - **Rights/originality:** The text asserts that the passage and questions are original. This desk review checked the files for internal consistency but did not run a comprehensive plagiarism search or independently establish authorship. Keep the rights/originality gate open until the project’s required review is recorded.
 - **Accessibility in the actual product:** Markdown content alone cannot establish contrast, keyboard operation, focus order, screen-reader behaviour, responsive layout, text-to-speech compatibility or form error handling. These require implementation-level testing.
@@ -56,11 +56,13 @@ These are open checks, not claims that a defect has been proven.
 
 ## 5. Recommended next sequence
 
-1. Have the founder review the exact learner file and separate teacher/editor pack alongside this report.
-2. Resolve any requested edits and increment the content version if a material revision is made; do not carry this review forward automatically to a changed version.
+1. Founder requested revisions before approval; the scoring-coverage issue has now been resolved in draft v1.2 and documented in the teacher pack.
+2. Founder reviews the revised v1.2 learner file, teacher/editor pack and this updated QA report; academic approval remains pending until the founder explicitly approves this exact version.
 3. Obtain and verify the currently applicable Cambridge framework through the authorised support site; keep all unverified codes blank.
 4. Complete the separate rights, accessibility, age/level and cultural/context reviews.
 5. Record the named reviewers, dates, decisions and version reviewed.
 6. Request explicit release approval only after the applicable gates are complete.
+
+**Founder decision (26 October 2026):** Revise before academic approval; no additional comments. The scoring-coverage issue has been revised in draft v1.2. This does not constitute approval of v1.2 or any other gate.
 
 **Production instruction:** Keep PR #12 in draft. Do not merge it, import it into learner-facing application code, or publish the unit as released curriculum on the basis of this report.
