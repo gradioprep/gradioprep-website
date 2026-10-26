@@ -11,7 +11,7 @@ const directRouteChecks: Array<{ path: string; heading: RegExp }> = [
     heading: /Language and Literature pathway/i,
   },
   { path: ibYearOne, heading: /Year 1 learning plan/i },
-  { path: ibUnitOne, heading: /How writers and creators shape meaning.*review draft/i },
+  { path: ibUnitOne, heading: /How writers and creators shape meaning.*founder-approved candidate/i },
   { path: pilotLesson, heading: /Notice the choice\. Explain the effect\./i },
   {
     path: "/pathways/cambridge-igcse/first-language-english/grade-9-equivalent-band",
@@ -48,7 +48,7 @@ test.describe("curriculum pathway URLs", () => {
 
     await page.getByRole("button", { name: /Continue to Unit 1/ }).click();
     await expect(page).toHaveURL(new RegExp(`${ibUnitOne}$`));
-    await expect(page.getByRole("heading", { name: /How writers and creators shape meaning.*review draft/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /How writers and creators shape meaning.*founder-approved candidate/i })).toBeVisible();
 
     await page.getByRole("button", { name: /Continue to Unit 1 review draft/ }).click();
     await expect(page).toHaveURL(new RegExp(`${pilotLesson}$`));
@@ -124,7 +124,7 @@ test.describe("MYP Year 1 Unit 1 version 2 review preview", () => {
     page.on("pageerror", (error) => pageErrors.push(error.message));
 
     await page.goto(pilotLesson);
-    await expect(page.getByText(/Unit 1 version 2 is awaiting founder review/i)).toBeVisible();
+    await expect(page.getByText(/Founder-approved content candidate\. Separate academic review, official mapping, rights, accessibility and release checks remain open/i)).toBeVisible();
     await expect(page.getByText(/Version 1's preview approval does not automatically apply to this revision/i)).toBeVisible();
 
     await expect(page.getByRole("heading", { name: "Original practice passage" })).toBeVisible();
@@ -169,9 +169,9 @@ test("Unit 1 detail and level views show the v2 review gate instead of inheritin
   await expect(page.getByRole("heading", { name: /How writers and creators shape meaning.*review draft/i })).toBeVisible();
   await expect(page.getByText(/Awaiting review of version 2/i)).toBeVisible();
   await expect(page.getByText(/Version 1 approval does not transfer to this revision/i)).toBeVisible();
-  await expect(page.getByRole("button", { name: /Continue to Unit 1 review draft/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Continue to Unit 1 approved content candidate/i })).toBeVisible();
 
   await page.goto(ibYearOne);
-  await expect(page.getByText(/Unit 1 version 2 awaiting founder review/i)).toBeVisible();
+  await expect(page.getByText(/Founder-approved content candidate — other gates open/i)).toBeVisible();
   await expect(page.getByText(/Academic review passed for pilot preview v1/i)).toHaveCount(0);
 });
