@@ -1,6 +1,6 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Research checked:** 26 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, and Cambridge IGCSE First Language English 0500.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
@@ -150,3 +150,6 @@ The five cross-track source families above are not a substitute for programme-sp
 | IB Source Education / Tes marketplace | Discovery and competitor scan only; inspect each resource's actual content, target year, version, author and rights | Not adopted as curriculum evidence without item-level verification |
 
 **Control:** Never copy a protected lesson, textbook passage, sample response or assessment from these platforms into GradiPrep simply because its listing is public. Use these sources to identify design patterns and gaps, then create original or properly licensed materials. For transition details, keep the current/legacy framework separate from Enhanced MYP beta material until the IB publishes the final applicable guide.
+## 7. Standing workflow for every level
+
+The binding procedure is [`docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md`](IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md). The founder has confirmed that they do not have access to an authorised school account or gated IB PRC materials. **Do not ask them again for this access, and do not wait for gated resources before proceeding.** For every IB and Cambridge course/year/stage, research the exact current public official framework/syllabus and assessment resources first, then compare relevant specialist EdTech platforms, publishers and evidence-informed teaching resources for that specific level. Log source URLs, dates, edition/session, access state, what each source can support, cross-checks and confidence. When a current detailed official document is not publicly verifiable, continue with a clearly labelled public-framework-aligned internal guide and implementation structure; leave exact official mapping unverified rather than inventing it. Keep academic suitability, official mapping/currency, rights, accessibility, cultural/age suitability and release as separate gates. Public visibility is not permission to reproduce copyrighted content. This protocol applies across all levels, not only MYP Year 1, and supersedes any older workflow wording that requests the founder to provide gated materials.
