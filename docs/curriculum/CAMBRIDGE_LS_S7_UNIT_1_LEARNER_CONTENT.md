@@ -1,12 +1,12 @@
 # Cambridge Lower Secondary English 0861 — Stage 7, Unit 1
 
 **Unit ID:** cambridge-ls-english-s7-u1  
-**Content version:** 1.2 draft  
-**Revision note:** Clarified formative scoring coverage in the teacher pack; item 1 retrieval is now explicitly scored separately from items 2–5 and the extended response.  
+**Content version:** 1.3 draft  
+**Revision note:** Added a worked example that models how evidence supports an inference, optional learner-facing word help, and accessible alternatives to paper annotation. The teacher pack now uses item-specific formative scoring descriptors.  
 **Title:** Read closely, infer and explain  
-**Status:** Draft for academic review. Not yet approved or published.  
-**Curriculum claim:** Public-framework-aligned practice for reading comprehension, inference and explanation. Limited public cross-check: Cambridge's public framework-support overview explicitly identifies 7Ri.03 (explicit information) and supports mapping only the explicit-information items to this code. This is not a full-unit map. The complete currently applicable framework copy remains to be confirmed through Cambridge's support site; inference and language-choice objective codes remain unassigned.  
-**Source base:** Cambridge International, Cambridge Lower Secondary English (0861), public subject page and official resource list; progression examples cross-checked against Cambridge's public framework-support overview. See docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md and docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md.  
+**Status:** Draft for founder/academic review. Not approved for publication or release.  
+**Curriculum claim:** Public-framework-aligned practice for reading comprehension, inference and explanation. Limited public cross-check: Cambridge's public framework-support overview explicitly identifies 7Ri.03 (explicit information), applied only to the explicit-information items. This is not a full-unit map. The complete currently applicable framework copy remains to be confirmed through Cambridge's support site; inference and language-choice objective codes remain unassigned.  
+**Source base:** Cambridge International, Cambridge Lower Secondary English (0861), public subject page and official resource list; its public framework-support overview; and evidence-informed literacy pedagogy guidance. See `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` and `docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md`.  
 **Rights:** The passage and tasks below are original content written for this platform; no Cambridge paper, textbook passage or third-party model answer is reproduced.
 
 ## What you will learn
@@ -33,7 +33,17 @@ Which statement is directly stated?
 - The map's corners moved and a sheet of paper skated across the floor.
 - Dev was frightened.
 
-Now consider this inference: *Air was moving through the room.* The two details support that idea. They do not prove every possible explanation, so a good reader checks that an inference fits the whole context.
+The directly stated answer is the second option: it repeats what the sentences tell us.
+
+Now consider this inference: *Air was moving through the room.*
+
+**Worked example: clue → inference → reason**
+- **Clues the text states:** the map's corners fluttered, and a loose sheet of paper moved across the floor.
+- **Inference:** air was probably moving through the room.
+- **Why it fits:** both details describe light objects moving, which is consistent with air moving them.
+- **What I should not claim:** the text does not say that the room was cold or explain exactly why the air was moving.
+
+Use the same pattern in the passage: identify what the words actually state, make a reasonable inference, then explain how the clue supports it. An inference should fit the evidence; it is not a fact just because it seems possible.
 
 ## 2. Read the passage
 
@@ -51,12 +61,23 @@ He put the notebook away and began to move them.
 
 *This is an original practice passage written for this unit.*
 
+**Word help (use any hint you need)**
+- **pane:** one section of glass in a window.
+- **hinge:** the joint that lets a door open and close.
+- **rain gauge:** a container used to collect and measure rainfall.
+- **paved patch:** a small area covered with paving stones or another hard surface.
+- **seed trays:** shallow containers used to grow seeds or seedlings.
+
+You can try to work out other unfamiliar words from the surrounding sentence first. The questions about “skittered” and “crept” ask you to explain the effect of those word choices, so use the context rather than looking for a definition first.
+
 ## 3. Read with a purpose (5 minutes)
 
 First, read the question before searching the passage. Then:
-- underline details the text states directly;
-- circle a word or phrase that helps you picture what is happening;
-- put a small star beside a detail that could support an inference.
+- identify details the text states directly;
+- notice a word or phrase that helps you picture what is happening;
+- mark a detail that could support an inference.
+
+You may underline on paper, jot down a short phrase, or label notes **S** (stated) and **I** (inference). You do not need to print or annotate the passage to complete the activity.
 
 Do not decide what a character feels or intends from one word alone. Check whether the rest of the text supports your interpretation.
 
