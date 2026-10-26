@@ -1,6 +1,6 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.7  
+**Version:** 1.8  
 **Research checked:** 26 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
@@ -184,6 +184,14 @@ The five cross-track source families above are not a substitute for programme-sp
 
 The binding procedure is [`docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md`](IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md). The founder has confirmed that they do not have access to an authorised school account or gated IB PRC materials. **Do not ask them again for this access, and do not wait for gated resources before proceeding.** For every IB and Cambridge course/year/stage, research the exact current public official framework/syllabus and assessment resources first, then compare relevant specialist EdTech platforms, publishers and evidence-informed teaching resources for that specific level. Log source URLs, dates, edition/session, access state, what each source can support, cross-checks and confidence. When a current detailed official document is not publicly verifiable, continue with a clearly labelled public-framework-aligned internal guide and implementation structure; leave exact official mapping unverified rather than inventing it. Keep academic suitability, official mapping/currency, rights, accessibility, cultural/age suitability and release as separate gates. Public visibility is not permission to reproduce copyrighted content. This protocol applies across all levels, not only MYP Year 1, and supersedes any older workflow wording that requests the founder to provide gated materials.
 
+
+## Stage 7 Unit 1 v1.3 — text rights/originality desk screen (26 October 2026)
+
+Public exact-phrase searches were run for distinctive strings from the draft learner passage and mini-texts, including “At first, the rain fell softly against the library windows”, “A thin line of water crept along the path”, “The map's corners fluttered against Dev's wrist”, and “The paper cup rolled along the platform”. No exact passage-level match surfaced in the returned search results. This is a limited public-index screen: it cannot cover private, unindexed, paywalled or paraphrased sources and is not proof of legal ownership or a comprehensive plagiarism result.
+
+The Stage 7 Unit 1 learner and teacher files contain no photographs, illustrations, screenshots, third-party literary excerpts, copied questions or copied model answers. The Cambridge and Education Endowment Foundation sources inform curriculum/context and teaching approach; they are not reproduced as lesson passages. The narrow 7Ri.03 reference is attributed to the public framework-support overview.
+
+**Gate state:** Initial public phrase-search screen completed with no exact match surfaced; formal rights/originality clearance remains open. The mandatory pre-selection CC0/public-domain photo check is not applicable to this text-only unit. Do not describe the unit as legally cleared or fully plagiarism-checked on the basis of this screen.
 
 ## Pedagogy references used in the Stage 7 Unit 1 v1.3 review
 
