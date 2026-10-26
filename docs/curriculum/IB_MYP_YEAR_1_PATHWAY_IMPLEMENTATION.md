@@ -136,7 +136,7 @@ A third-party update or beta interface alone must not trigger a claim that a new
 ### Unit 1 version 2 checkpoint
 - [x] Founder approval recorded for the guide/implementation structure before content editing.
 - [x] Existing preview reconciled, not duplicated.
-- [x] The prose and poster copy/layout are platform-authored; the poster photograph is a third-party Pexels asset. Verify its current licence and any model/property-release requirements; formal rights review remains pending.
+- [x] The prose and poster copy/layout are platform-authored; the photograph is Mateusz Konieczny’s “Bus stop with platform during night.jpg” from Wikimedia Commons, explicitly released under CC0 1.0. The exact source/licence was checked before selection and visible third-party rights concerns were screened. The mandatory pre-selection process is documented in `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md`; full unit-level rights review remains a separate release gate.
 - [x] Current mapping remains honestly labelled unverified with official code fields empty.
 - [x] Reading, viewing, written explanation, comparison, revision and fresh-text transfer tasks are present. Speaking/listening is only an optional partner extension, not a scored skill in this preview.
 - [x] Teacher/editor review pack is separate from the learner-facing import graph.
