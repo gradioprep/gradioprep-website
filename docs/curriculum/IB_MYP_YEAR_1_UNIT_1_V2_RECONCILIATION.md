@@ -28,7 +28,7 @@ Version 2 is in a pull request preview branch, not merged to main and not deploy
 
 | Guide v1.1 requirement / design choice | Version 2 response | Evidence or limit |
 |---|---|---|
-| Read and view varied text forms | Keeps the original prose passage and adds an original fictional night-bus poster rendered with HTML/CSS. | Direct reading and viewing opportunities; poster includes visible text and a written visual description. |
+| Read and view varied text forms | Keeps the original prose passage and adds a fictional night-bus campaign-poster mock-up using a real Pexels photograph with platform-authored copy and layout. | Direct reading and viewing opportunities; the photograph has descriptive alt text, and the visible copy remains selectable text. The image is a third-party asset, not an original illustration. |
 | Establish a diagnostic before instruction | Adds an unscored starting observation: identify a word or visual detail and describe it before interpreting it. | Temporary UI state only; not a saved diagnostic, score or persistent learner record. |
 | Model an explicit evidence process | Uses choice → evidence → effect in context and an annotated example. | Learner instructions remain separate from answer keys/model responses. |
 | Explain creator choices, meaning and audience | Adds a comparison task that asks learners to use a specific phrase from the passage and a written/visual choice from the poster. | It teaches plausible audience effects; it does not assume every reader responds identically. |
@@ -41,7 +41,7 @@ Version 2 is in a pull request preview branch, not merged to main and not deploy
 
 ## 3. Review of text, poster and source rights
 
-The prose passage is original to the platform and retained from version 1. The night-bus poster uses original copy and art direction, rendered from HTML/CSS shapes and visible text. The exit-ticket micro-extract is also original. No protected IB question, textbook extract, specialist-platform lesson, model response or past-paper question is reproduced.
+The prose passage is original to the platform and retained from version 1. The fictional night-bus campaign-poster mock-up uses original platform-authored copy/layout with the real photograph “People on a Bus Stop at Night” by Berk Aktas (Pexels, 2023): https://www.pexels.com/photo/people-on-a-bus-stop-at-night-19092243/. Pexels labels the photo as free to use under its licence; the exact current licence terms and any model/property-release requirements still require rights review. The exit-ticket micro-extract is original. No protected IB question, textbook extract, specialist-platform lesson, model response or past-paper question is reproduced.
 
 This is a documented origin claim, not completed legal/rights clearance. The rights reviewer must still record the applicable approval basis for this exact version, including any future changes to copy, graphics, fonts or other assets. Do not add third-party materials without a fresh rights check.
 
@@ -50,7 +50,7 @@ This is a documented origin claim, not completed legal/rights clearance. The rig
 | Check | State | Note |
 |---|---|---|
 | Reconciled with approved Unit 1 focus | Complete for review | Retains evidence-based analysis and extends it to an original visual artefact. |
-| Original learner text/visual/transfer | Drafted | Final rights review remains open. |
+| Original learner text/visual/transfer | Drafted | Original prose, poster copy/layout and transfer extract are platform-authored; a third-party photograph is now used. Complete current licence and model/property-release review. |
 | Learning objective and success criteria | Drafted | Platform-authored; not an official IB objective statement. |
 | Entry observation and fresh-text transfer | Implemented in preview branch | Both are temporary, not graded or persisted. |
 | Answer/model response separation | Implemented in source structure | CI/source review must confirm the teacher pack is not imported into client modules. |
