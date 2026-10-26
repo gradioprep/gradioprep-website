@@ -1,20 +1,20 @@
 # English Curriculum Guides — Year/Stage Framework and Pathway Implementation Plan
 
-**Status:** Internal guide register v0.6. Draft curriculum chapters now exist for all 12 planned year/stage/delivery entries across four curriculum groups; exact official objective maps remain unverified where current descriptors are not directly available.
+**Status:** Internal guide register v0.7. Draft curriculum chapters now exist for all 12 planned year/stage/delivery entries across four curriculum groups; exact official objective maps remain unverified where current descriptors are not directly available.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`, `ENGLISH_STAGE_1_ROADMAP.md`, `ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`, and `ENGLISH_PUBLIC_SOURCE_REGISTER.md`.
 **Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences.
 
 ## 1. Document architecture decision
 
-Use **one independently reviewable guide per curriculum-year/stage track**, plus one shared research/pedagogy standard and a compact register. This is the best fit for the founder's workflow: finish one guide, finish its implementation structure, record the checkpoint, pause for Unit 1 approval, then rotate to the next track. It keeps approval, source editions, changes and completion status unambiguous; a single large group document can hide unfinished year-level work.
+Use **one independently reviewable guide per curriculum-year/stage track**, plus one shared research/pedagogy standard and a compact register. Finish a guide and implementation structure, record founder approval, then produce and review the relevant unit within the binding Unit 1 rotation. The active second item is Cambridge Stage 7 Unit 1 v1.3; founder review is pending. It keeps approval, source editions, changes and completion status unambiguous; a single large group document can hide unfinished year-level work.
 
 Use a separate implementation-plan document for each curriculum-year/stage track. Keep shared research methods, evidence standards, source-access limits and the rubric in the central research standard/register.
 
 Canonical guide files:
-- `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md` — **completed public-framework-aligned guide v1.0; founder review pending**.
-- `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md` — **completed corresponding implementation structure v1.0; no application changes included**.
+- `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md` — **public-framework-aligned guide v1.1; founder-approved 26 October 2026; current official objective mapping remains unverified**.
+- `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md` — **implementation structure v1.2; guide/structure founder-approved; Unit 1 v2 remains an unmerged candidate with separate review and release gates open**.
 - `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_GUIDE.md` — legacy group draft with Years 1–5 chapters; Year 1 is superseded by the standalone guide. Years 2–5 remain drafts, not completed/approved guides.
-- `docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md` — existing group draft; review/split Stage 7 as the next guide only after the founder approves MYP Year 1 Unit 1.
+- `docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md` — group guide v0.5; Stage 7 Unit 1 v1.3 is the active draft review candidate. Founder review of the exact unit remains pending; full current framework/version and objective codes beyond 7Ri.03 explicit-information items remain unverified.
 - `docs/curriculum/IB_DP_LANGUAGE_A_LANGUAGE_AND_LITERATURE_GUIDE.md` — existing group draft; review/split DP Year 1 as its own guide when it reaches the approved rotation.
 - `docs/curriculum/CAMBRIDGE_IGCSE_FIRST_LANGUAGE_ENGLISH_0500_GUIDE.md` — syllabus-wide 0500 source/assessment register. Delivery phases are platform conventions, not official syllabus years.
 - `docs/curriculum/UNIT_PRODUCTION_REGISTER.md` — source, completion checkpoint, Unit 1 rotation and release-gate register.
@@ -28,12 +28,12 @@ The entries below define **guide work to complete**, not official IB/Cambridge t
 
 | Track | Guide chapter | Scope to research | Current state |
 |---|---|---|---|
-| IB MYP Language and Literature | Year 1 | Public six-skill framework, inquiry, text/context/audience/purpose; progressive evidence-led unit plan | Standalone guide v1.0 and implementation plan v1.0 complete; founder review pending; official objective/strand mapping not claimed; Unit 1 implementation awaits approval |
+| IB MYP Language and Literature | Year 1 | Public six-skill framework, inquiry, text/context/audience/purpose; progressive evidence-led unit plan | Standalone guide v1.1 and implementation structure v1.2 founder-approved; Unit 1 v2 candidate remains subject to separate review gates; official objective/strand mapping not claimed |
 | IB MYP Language and Literature | Year 2 | Independent evidence selection, stronger reasoning and purposeful communication | Draft chapter exists; official mapping unverified |
 | IB MYP Language and Literature | Year 3 | Sustained analysis, evidence-driven argument and comparison | Draft chapter exists; official mapping unverified |
 | IB MYP Language and Literature | Year 4 | Layered interpretation, contextual nuance and synthesis | Draft chapter exists; official mapping unverified |
 | IB MYP Language and Literature | Year 5 | Independent transfer and preparation for school-selected assessment route; optional eAssessment is not assumed | Draft chapter exists; official Year 5/eAssessment descriptors remain unverified |
-| Cambridge Lower Secondary English 0861 | Stage 7 | Public-framework-aligned design for reading, writing, speaking/listening; official objective IDs must match the exact framework version | Draft guide created; objective-code verification pending |
+| Cambridge Lower Secondary English 0861 | Stage 7 | Public-framework-aligned design for reading, writing, speaking/listening; official objective IDs must match the exact framework version | Group guide v0.5; Unit 1 v1.3 is an AI-reviewed candidate awaiting founder review. 7Ri.03 is used only for explicit information; full framework/version and other codes remain unverified |
 | Cambridge Lower Secondary English 0861 | Stage 8 | Explain effects, choose planning approach and strengthen discussion/performance | Draft chapter exists; official objective-code verification pending |
 | Cambridge Lower Secondary English 0861 | Stage 9 | Analyse structure/effect, write independently, and prepare for chosen next pathway | Draft chapter exists; official objective-code verification pending |
 | IB DP Language A: Language and Literature | Year 1 delivery chapter | Close reading, purpose/context, analysis of choices and transfer to current assessed task types | Draft chapter exists; detailed assessment mapping and school sequence need review |
