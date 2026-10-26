@@ -1,6 +1,6 @@
 # English Curriculum Research, Quality Rubric and Design Standard
 
-**Status:** Internal working reference v1.2 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
+**Status:** Internal working reference v1.3 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
 **Prepared:** 26 October 2026
 **Owner:** Academic lead / founder
 **Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary, Cambridge IGCSE and CBSE English Grades 6–12. Official syllabus mappings must be verified separately for each course, class/year/stage and edition.
@@ -220,6 +220,11 @@ The founder approved proceeding with further review/release checks for the exact
 
 The founder approved a restricted preview integration for testing only. Draft PR [#15](https://github.com/gradioprep/gradioprep-website/pull/15) adds the isolated route `/preview/cambridge-lower-secondary/english/stage-7/unit-1` without linking it from ordinary navigation. The route renders learner-facing v1.3 content only; teacher/editor answers stay outside the client import graph, and learner responses are held only in temporary component state without scoring or persistence.
 
-GitHub Actions [Build check #227](https://github.com/gradioprep/gradioprep-website/actions/runs/40306144429) passed on commit `33150585030b64afd5059205b1436bea48898147`: TypeScript/Vite build successful and 17/17 Chromium tests passed, of which six specifically cover the controlled preview. These test the unreleased label and content rendering, skip-link/disclosure keyboard operation, unique task-specific accessible names for all 14 textareas and programmatic question-prompt associations, absence of horizontal overflow at 390px viewport width, clearing response drafts, and contrast sampling for selected text pairs.
+GitHub Actions [Build check #229](https://github.com/gradioprep/gradioprep-website/actions/runs/40307651156) passed on commit `ee8bc131718debc3fb10e51f1c7838f7308a081e`: TypeScript/Vite build successful and 17/17 Chromium tests passed, of which six specifically cover the controlled preview. These test the unreleased label and content rendering, skip-link/disclosure keyboard operation, unique task-specific accessible names for all 14 textareas and programmatic question-prompt associations, absence of horizontal overflow at 390px viewport width, clearing all response drafts and the warm-up choice, and contrast sampling for selected text pairs.
 
 **Interpretation limit:** This is evidence that the route builds and passes a small automated interface/accessibility smoke suite, not a comprehensive WCAG audit. Manual screen-reader testing, broader keyboard and focus-order inspection, 200%/400% zoom/reflow, cross-browser/OS checks, text-to-speech review and human learner-suitability judgement remain open. The automated test server is local Wrangler within CI; no dedicated hosted Cloudflare branch-preview URL was verified. The unit remains draft/unreleased. Rights/originality, human academic/suitability, current full Cambridge framework/version and objective mapping, and explicit release approval are separate gates and must not be inferred from this test pass.
+
+
+## 15. Final preview-test correction — 26 October 2026
+
+The final controlled-preview commit makes the clear-all control reset both typed response drafts and the warm-up radio selection. The corresponding regression test passed in [Build check #229](https://github.com/gradioprep/gradioprep-website/actions/runs/40307651156), together with the TypeScript/Vite build and all 17 Chromium tests. Preview testing remains automated smoke coverage only; manual screen-reader, broader focus/keyboard, zoom/reflow, text-to-speech and cross-browser checks remain open. The full current Cambridge framework/version, formal rights/originality clearance, human suitability review and explicit release approval also remain unresolved.
