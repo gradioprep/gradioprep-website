@@ -17,7 +17,7 @@ A guide being approved does not mean every objective is officially mapped, every
 
 ## 2. Unit 1 production rotation
 
-**Current checkpoint (26 October 2026):** MYP Year 1 guide v1.1 and implementation structure v1.1 approved by the founder. Unit 1 version 2 — “How writers and creators shape meaning” — is implemented as a candidate in draft PR #14 and awaits founder review. It includes a paired original poster, pre-instruction observation, explicit evidence chain, cross-mode comparison, five practice items and a fresh-text transfer check. No application release or production deployment is implied. After the founder approves Unit 1 version 2, continue to Cambridge Lower Secondary Stage 7 guide/Unit 1. Stage 7 draft files remain only in draft PR #12 and are not part of main.
+**Current checkpoint (26 October 2026):** MYP Year 1 guide v1.1 and implementation structure v1.1 approved by the founder. Unit 1 version 2 — “How writers and creators shape meaning” — is implemented as a candidate in draft PR #14 and awaits founder review. It includes a photographic campaign-poster mock-up using a Pexels night-bus-stop photo with original platform copy/layout, pre-instruction observation, explicit evidence chain, cross-mode comparison, five practice items and a fresh-text transfer check. No application release or production deployment is implied. After the founder approves Unit 1 version 2, continue to Cambridge Lower Secondary Stage 7 guide/Unit 1. Stage 7 draft files remain only in draft PR #12 and are not part of main.
 
 | Order | Unit ID | Curriculum/year or delivery phase | Content status | Next action / blocking condition |
 |---:|---|---|---|---|
@@ -78,7 +78,7 @@ Not completed: founder approval; Unit 1 adaptation; current official mapping ver
 - **Guide and implementation structure:** founder-approved.
 - **Learner preview:** revised candidate version 2 in draft PR #14; no approval inferred from version 1.
 - **Teacher/editor pack:** updated separately, with worked answers kept out of the learner-facing import graph.
-- **Evidence design:** an original prose passage and a paired original poster; an unscored starting observation; explicit modelling; guided and independent practice; text/visual comparison; response revision; and a fresh-text exit task.
+- **Evidence design:** an original prose passage and a photographic poster mock-up using a third-party stock photo with original platform copy; an unscored starting observation; explicit modelling; guided and independent practice; text/visual comparison; response revision; and a fresh-text exit task.
 - **Current objective map:** official Year 1 objective/strand codes remain empty/unverified.
 - **Open review gates:** founder review of v2; academic review for this exact version; item-level rights; accessibility, age/level and cultural/context checks; explicit release approval.
 - **Rotation hold:** do not start or advance Cambridge Lower Secondary Stage 7 until MYP Year 1 Unit 1 v2 has been approved by the founder.
