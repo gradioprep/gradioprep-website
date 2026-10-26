@@ -345,7 +345,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
 
         <section className="proto-panel proto-pilot-practice">
           <div className="proto-panel-heading">
-            <div><Label>04 · FORMATIVE PRACTICE</Label><h2>Put the idea to work</h2><p>{attemptedCount} of {lesson.practiceItems.length+1} activities reviewed in this open preview</p></div>
+            <div><Label>04 · FORMATIVE PRACTICE</Label><h2>Put the idea to work</h2><p>{attemptedCount} of {lesson.practiceItems.length+2} activities reviewed in this open preview</p></div>
             <span>NOT GRADED</span>
           </div>
           <p className="proto-unit-readiness-intro">Choose an option or write your response, then check the success indicators. This preview does not mark correctness, retain your work or send it anywhere.</p>
@@ -564,7 +564,7 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
 
     {view === "unit" && selectedUnit && <>
       <div className="proto-crumb"><button type="button" onClick={backToCatalogue}>Pathways</button> / <button type="button" onClick={backToCurriculum}>{selectedPathway.programmeName} · {selectedPathway.courseName}</button> / <button type="button" onClick={backToLevel}>{selectedPathway.levelLabel}</button> / <b>Unit {selectedUnit.sequence}</b></div>
-      <InfoNote><b>Unit detail — planning preview.</b> This view separates academic review, curriculum mapping, and release status. The lesson is available only as a pilot preview and is not an officially mapped or released course.</InfoNote>
+      <InfoNote><b>Unit detail — planning preview.</b> This view separates academic review, curriculum mapping, and release status. {isPilotUnit && pilotReviewSummary.status === "draft-for-founder-review" ? "Unit 1 version 2 is awaiting founder review; version 1's preview approval does not transfer to this revision." : "This lesson is available only as a pilot preview and is not an officially mapped or released course."}</InfoNote>
       <PageIntro
         eyebrow={selectedPathway.programmeName + " · " + selectedPathway.courseName + " · " + selectedPathway.levelLabel}
         title={<>{isPilotUnit ? pilotReviewSummary.title : "Unit " + selectedUnit.sequence} <em>{isPilotUnit ? (pilotReviewSummary.status === "draft-for-founder-review" ? "review draft." : "pilot preview.") : "planning record."}</em></>}
