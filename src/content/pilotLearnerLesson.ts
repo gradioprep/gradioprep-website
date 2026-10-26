@@ -9,13 +9,13 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
   id: "pilot-lesson-how-writers-shape-meaning-v2",
   version: 2,
   unitId: "ib-myp-lal-y1-u1",
-  status: "draft-for-founder-review",
+  status: "founder-approved-candidate",
   reviewRecord: {
     outcome: "pending",
     reviewedAt: null,
-    reviewerLabel: "Pending founder review",
+    reviewerLabel: "Academic review pending",
     scopeNote:
-      "Version 1 passed academic content review for pilot preview on 24 October 2026. This revised version 2 has not yet been reviewed or approved and does not inherit version 1's approval. It remains a public-framework-aligned draft, not an officially mapped or released unit.",
+      "The founder approved this exact content version on 26 October 2026. Version 2 still requires its separate academic review and does not inherit version 1's academic-review outcome. It remains a public-framework-aligned candidate, not an officially mapped or released unit.",
   },
   title: "How writers and creators shape meaning",
   estimatedMinutes: 30,
@@ -214,5 +214,5 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     "An optional partner discussion can ask learners to repeat a partner's evidence before offering a different interpretation; this is an extension, not a scored task in this preview.",
   ],
   learnerNote:
-    "This is revised draft version 2, awaiting founder review. Version 1 passed content review for pilot preview only; that approval does not automatically cover this revision. Responses exist only in this open preview and are not saved, graded or sent anywhere. Official Year 1 mapping, rights, accessibility and release approval remain open.",
+    "Founder-approved content candidate, version 2. This approval does not stand in for the separate academic review, and version 1's academic-review outcome does not transfer. Responses exist only in this open preview and are not saved, graded or sent anywhere. Official Year 1 mapping, rights, accessibility, age/level suitability and release approval remain open.",
 };
