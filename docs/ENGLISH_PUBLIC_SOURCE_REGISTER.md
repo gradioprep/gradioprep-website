@@ -1,6 +1,6 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.5  
+**Version:** 1.6  
 **Research checked:** 26 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, and Cambridge IGCSE First Language English 0500.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
@@ -154,13 +154,30 @@ The five cross-track source families above are not a substitute for programme-sp
 
 ## 9. MYP Unit 1 version 2 status update
 
-The guide and implementation plan have been approved by the founder. The existing pilot has been reconciled into a version 2 draft using the approved research method. It pairs the original prose passage with a fictional night-bus campaign-poster mock-up that uses a real Pexels photograph and platform-authored copy/layout. It also adds an unscored entry observation, comparison practice, revision and fresh-text transfer. Version 1's academic-review pass remains specific to the earlier preview. Version 2 is awaiting founder review in PR #14; current official mapping, image rights, accessibility and release approval remain open. The next curriculum-track unit remains inactive until Unit 1 v2 is approved.
+The guide and implementation plan have been approved by the founder. The existing pilot has been reconciled into a version 2 draft using the approved research method. It pairs the original prose passage with a fictional night-bus campaign-poster mock-up using a Wikimedia Commons photograph explicitly released under CC0 1.0, with platform-authored copy/layout. The image was screened for source/licence and visible third-party rights concerns before selection. It also adds an unscored entry observation, comparison practice, revision and fresh-text transfer. Version 1's academic-review pass remains specific to the earlier preview. Version 2 is awaiting founder review in PR #14; current official mapping, full unit-level rights review, accessibility and release approval remain open. The next curriculum-track unit remains inactive until Unit 1 v2 is approved.
 
-## 10. Photographic asset used in MYP Year 1 Unit 1 version 2
+## 10. Mandatory pre-selection photograph rights process
 
-- **Photo:** “People on a Bus Stop at Night,” by Berk Aktas, published on Pexels on 11 November 2023.
-- **Source page:** https://www.pexels.com/photo/people-on-a-bus-stop-at-night-19092243/
-- **Use in the platform:** Photograph placed in a fictional “Northbank Night Bus” campaign-poster mock-up for learners to analyse composition, lighting, contrast, setting and audience effect. The headline and supporting copy are platform-authored; this is not an official IB sample or a real transport-service advert.
-- **Licence information:** Pexels labels the photo “Free” on the source page. Review the current [Pexels License](https://www.pexels.com/license/) and its current terms before release.
-- **Open rights checks:** Confirm the current licence permits the intended use and review any applicable model/property-release and attribution requirements. Record the reviewer and date; the public source page alone does not complete legal clearance.
-- **Checked:** 26 October 2026.
+**Effective immediately for all new or replacement photographs.** A photograph must not be selected, embedded, committed or shown in a preview until its licence has been checked and recorded. “Free to download,” “royalty-free,” or a stock-site “free” label is not sufficient for the project's copyright-free requirement.
+
+1. **Eligible status:** Use only CC0 1.0 Public Domain Dedication or an explicit public-domain release by the rights holder. Check the exact image's own source/detail page, not a search result, image aggregator, social repost, or AI-generated summary.
+2. **Verify before use:** Confirm and record the exact image page, author/uploader, source URL, explicit CC0/public-domain statement and licence link, date checked, and that the licence applies to that exact file. Add this record before embedding the image in code.
+3. **Screen visible content:** Inspect the image itself for identifiable people, children, logos/trademarks, distinctive artwork, private/interior locations, number plates or other third-party material. CC0 clears the creator's copyright to the extent dedicated; it does not automatically clear privacy, publicity, trademark, property or other third-party rights. Prefer images without identifiable people or visible branding. If a separate right could apply and cannot be cleared, reject the image.
+4. **Check fit and accessibility:** Verify that the photograph genuinely supports the lesson topic and intended analysis; write accurate alt text and a visible source/credit note even where credit is not legally required.
+5. **Record and gate:** Record the file title, creator, source page, licence URL, date checked, reason for selection and visible-content screening. If the page is unavailable, licence is ambiguous, or a rights concern remains unresolved, do not use the image.
+6. **Recheck changes:** Every replacement or materially different image requires its own pre-selection check. Keep the source record in the same PR as the asset. A later review does not substitute for pre-selection screening.
+
+A photograph may technically remain copyrighted while its creator dedicates it to CC0. For this workflow, “copyright-free” means a documented CC0/public-domain dedication, not merely a free-to-use stock licence. This process reduces risk but is not a legal guarantee for rights beyond copyright.
+
+## 11. Photographic asset used in MYP Year 1 Unit 1 version 2
+
+- **Asset:** “Bus stop with platform during night.jpg”
+- **Creator:** Mateusz Konieczny.
+- **Source page:** https://commons.wikimedia.org/wiki/File:Bus_stop_with_platform_during_night.jpg
+- **Direct image:** https://upload.wikimedia.org/wikipedia/commons/7/7c/Bus_stop_with_platform_during_night.jpg
+- **Licence page:** https://creativecommons.org/publicdomain/zero/1.0/
+- **Licence status verified:** The Wikimedia Commons file page explicitly states that the copyright holder released the file under CC0 1.0 Universal Public Domain Dedication.
+- **Content screening:** Direct visual inspection shows an empty bus-stop platform at night, a bus-stop sign, orange streetlights, a dark road and distant headlights. No identifiable people or visible commercial branding were observed.
+- **Reason for selection:** A real night-time bus-stop photograph supports analysis of lighting, contrast, setting, mood and the suggestion of a late journey. No waiting passengers are depicted, so lesson wording must not imply they are visible.
+- **Checked:** 26 October 2026, before selection/embedding.
+- **Remaining gate:** Source-level CC0 verification does not replace the full unit-level rights review or release approval. Recheck if the file or its context changes.
