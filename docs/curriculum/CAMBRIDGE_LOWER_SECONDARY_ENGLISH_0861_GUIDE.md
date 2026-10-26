@@ -2,6 +2,7 @@
 
 **Document status:** Public-framework-aligned group guide v0.2. Stage 7 chapter drafted in detail; Stage 8 and Stage 9 design chapters added. Exact official objective-code mapping remains unverified until the currently applicable framework is confirmed.
 **Course:** Cambridge Lower Secondary English (0861), Stage 7.
+**Age/grade note:** Cambridge describes Lower Secondary as typically ages 11–14; Stage 7 is generally ages 11–12, and school-grade alignment varies by context. For GradiPrep production planning only, Stage 7 is grouped with IB MYP Year 1 and CBSE Grade 6 in the first Grade 6-equivalent Unit 1 cohort. This does not make the curricula officially equivalent or interchangeable.
 **Pathway IDs:** cambridge-ls-english-s7, cambridge-ls-english-s8, cambridge-ls-english-s9.
 **Scope:** First-language English pathway, typically for learners aged 11–14 across Stages 7–9. Do not substitute the distinct English as a Second Language (0876) curriculum.
 **Linked standards:** docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md; docs/ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md; docs/ENGLISH_CURRICULUM_GUIDES.md; docs/ENGLISH_STAGE_1_ROADMAP.md.
