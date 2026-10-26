@@ -1,8 +1,8 @@
 # Unit Production Register
 
-**Status:** Internal control register v1.3 — MYP Year 1 guide v1.1, implementation structure v1.1 and resource landscape audit are complete for founder review; approval is required before Unit 1 curriculum production. Later track files remain drafts until their turn in the workflow.
+**Status:** Internal control register v1.4 — MYP Year 1 guide v1.1, implementation structure v1.1 and resource landscape audit are complete for founder review; approval is required before Unit 1 curriculum production. Later track files remain drafts until their turn in the workflow.
 **Source of truth:** docs/PROJECT_MASTER_BRIEF.md, docs/ENGLISH_STAGE_1_ROADMAP.md, docs/ENGLISH_CURRICULUM_GUIDES.md, docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md and the relevant course guide.
-**Rule:** Complete Unit 1 for every route in the first Grade 6-equivalent cohort before starting older-level Unit 1 work or any Unit 2. The order is IB MYP Year 1 → Cambridge Lower Secondary Stage 7 → CBSE Grade 6. This is an internal production grouping, not official curriculum equivalence. A blocked item pauses the sequence; do not skip it or invent syllabus objectives.
+**Binding rule:** Complete Unit 1 across age/grade-band cohorts before starting Unit 2 anywhere. First cohort: IB MYP Year 1 → Cambridge Lower Secondary Stage 7 → CBSE Grade 6. Second cohort: IB MYP Year 2 → Cambridge Lower Secondary Stage 8 → CBSE Grade 7. Then continue to the next comparable band (for example MYP Year 3 → Cambridge Stage 9 → CBSE Grade 8), after verifying learner/grade alignment and current official sources. These are internal planning comparisons, not official equivalences. Do not start Unit 2 for the first cohort immediately after its Unit 1s finish. Unit 2 begins only after the approved Unit 1 rotation across all in-scope levels is complete. A blocked unit pauses the sequence; do not skip it or invent syllabus objectives.
 
 ## 1. Curriculum guide readiness register
 
@@ -41,7 +41,7 @@ A guide being drafted does not mean every objective is officially mapped, every 
 | Later queue | cbse-english-g11-u1 | CBSE English Grade 11 | Planned; blocked until first cohort is complete | Preserve English Core/Elective distinctions where applicable; exact routes depend on current official evidence |
 | Later queue | cbse-english-g12-u1 | CBSE English Grade 12 | Planned; blocked until first cohort is complete | Preserve English Core/Elective distinctions where applicable; exact routes depend on current official evidence |
 
-**Rotation rule:** Complete all three first-cohort Unit 1s (IB MYP Year 1, Cambridge Lower Secondary Stage 7, CBSE Grade 6) before beginning any older-level Unit 1. If a cohort unit is blocked, pause and report the blocker. Do not skip to another older track or start Unit 2. After the first cohort passes its completion standard, resume the remaining approved Unit 1 rotation. The CBSE Grade 7–12 rows are included as future queue entries only; their exact course routes and positions in the later age/grade-band sequence must be assigned after current official sources are checked. Return to Unit 2 only after the wider approved Unit 1 rotation is complete.
+**Rotation rule:** First complete Unit 1 across the Grade 6-equivalent cohort (MYP Year 1, Cambridge Stage 7, CBSE Grade 6). Then complete Unit 1 across the next comparable band (MYP Year 2, Cambridge Stage 8, CBSE Grade 7), followed by the next comparable band (MYP Year 3, Cambridge Stage 9, CBSE Grade 8), subject to verifying actual grade/age alignment and current sources. Continue through all approved levels in age/grade-band order, including older pathways. Do not start Unit 2 for any cohort until Unit 1 is complete across all approved in-scope levels. If any unit is blocked, pause and report the blocker rather than skipping ahead. This is a product-production sequence, not an official curriculum sequence.
 
 ## 3. Unit-level production gates
 
