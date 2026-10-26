@@ -1,6 +1,6 @@
 # English Curriculum Guides — Year/Stage Framework and Pathway Implementation Plan
 
-**Status:** Internal guide register v0.7. Draft curriculum chapters now exist for all 12 planned year/stage/delivery entries across four curriculum groups; exact official objective maps remain unverified where current descriptors are not directly available.
+**Status:** Internal guide register v0.8. The original 12 planned year/stage/delivery entries across four curriculum groups remain under versioned development; the separately approved CBSE English Grades 6–12 pathway is recorded in its research brief and the Unit Production Register, with class-wise research/guides still pending. Exact official objective maps remain unverified where current descriptors are not directly available.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`, `ENGLISH_STAGE_1_ROADMAP.md`, `ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`, and `ENGLISH_PUBLIC_SOURCE_REGISTER.md`.
 **Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences.
 
