@@ -72,15 +72,19 @@ test.describe("Cambridge Stage 7 Unit 1 controlled preview", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Read closely, infer and explain" })).toBeVisible();
   });
 
-  test("clears draft responses without scoring or saving them", async ({ page }) => {
+  test("clears all draft responses and warm-up choice without scoring or saving", async ({ page }) => {
     await page.goto(previewPath);
 
     const response = page.getByLabel("Your exit response");
+    const warmupChoice = page.getByRole("radio", { name: "The room was cold." });
     await response.fill("Two details support this inference.");
+    await warmupChoice.check();
     await expect(response).toHaveValue("Two details support this inference.");
+    await expect(warmupChoice).toBeChecked();
 
     await page.getByRole("button", { name: "Clear all draft responses" }).click();
     await expect(response).toHaveValue("");
+    await expect(warmupChoice).not.toBeChecked();
     await expect(page.getByText("Responses are held only in this open page session.", { exact: false })).toBeVisible();
     await expect(page.getByText(/not graded/i)).toBeVisible();
   });
