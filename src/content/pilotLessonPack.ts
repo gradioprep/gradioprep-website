@@ -44,7 +44,7 @@ export const pilotLessonPack: PilotLessonPack = {
     supportingText: "The late bus is still a way home.",
     footerText: "PLAN AHEAD · TRAVEL WITH CARE",
     visualDescription:
-      "A real photograph shows several people waiting at an illuminated bus stop on a rainy night. The shelter and waiting figures stand out against a dark urban street while city lights reflect from wet pavement. The original poster headline and supporting line are set around the photograph.",
+      "A real photograph shows an empty bus-stop platform at night. A bus-stop sign stands beside a dark road; orange streetlights illuminate the pavement and distant headlights approach. The original poster headline and supporting line are set around the photograph.",
     altText:
       "Photograph of an empty bus-stop platform at night. A bus-stop sign stands beside a dark road; orange streetlights illuminate the pavement and distant headlights approach.",
     rightsNote:
@@ -240,7 +240,7 @@ export const pilotLessonPack: PilotLessonPack = {
     "Founder approves this exact Unit 1 version 2 before the production sequence advances.",
     "Complete item-level academic review for version 2; version 1's review does not carry forward.",
     "Keep official Year 1 objective/strand codes blank until the applicable current guide is verified.",
-    "Complete and record the separate rights review for text, poster copy and CSS visual composition.",
+    "Complete and record the separate rights review for text, poster copy/layout and the verified CC0 photo source.",
     "Complete and record accessibility and age/level suitability reviews.",
     "Only record explicit release approval after required gates are complete.",
   ],
