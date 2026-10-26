@@ -62,12 +62,12 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
   keyIdea: {
     label: "The evidence chain",
     pattern: [
-      "Choice — point to an exact word, phrase or visual feature.",
-      "Evidence — identify what is actually written or shown.",
-      "Effect in context — explain what it may suggest to this audience and why it matters here.",
+      "Choice — identify the creator's technique or design decision, such as personification or a contrast in lighting.",
+      "Evidence — quote the exact word/phrase or describe the precise visual detail that demonstrates that choice.",
+      "Effect in context — explain what the evidence may suggest to this audience and why it matters in this moment.",
     ],
     explanation:
-      "Naming a technique is a starting point, not a full explanation. Use cautious language such as “may suggest”, connect your reading to this moment and consider who the creator is addressing. More than one interpretation can be reasonable when supported by evidence.",
+      "Keep the three steps distinct: name the decision, point to the words or visible detail that show it, then explain a plausible effect in context. For example, “personification” names the choice; “the last bus sighed” is evidence. The verb may make the departure feel weary or reluctant, which fits the rain and shrinking headlights. This is one plausible reading, not the only one.",
   },
   sections: [
     {
@@ -84,14 +84,14 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
       heading: "2. Build an evidence chain",
       purpose: "Connect the creator's choice to a reasoned explanation.",
       explanation:
-        "Move from a precise choice, to what it may suggest, to why that matters in this moment. “The writer uses personification” names a technique but leaves the explanation unfinished.",
+        "Move in three steps: name the creator's choice, identify the exact words or visible detail that shows it, then explain what it may suggest and why that matters in this moment. “The writer uses personification” names a technique; adding “the last bus sighed” gives evidence; explaining the weary or reluctant association develops the effect.",
       learnerAction:
-        "Complete this frame in your own words: “The word/feature ‘…’ may suggest … . Here, it makes the moment/message seem … because … .”",
+        "Use all three parts: “The creator chooses to … . I can see this in the words/detail ‘…’. This may suggest …; in this moment, that matters because … .”",
       example: {
         label: "Short worked example",
         text: "“the last bus sighed”",
         explanation:
-          "The verb “sighed” gives the bus a human-like action. It may make the departure feel weary or reluctant, which fits the rain and the bus moving away. This is a plausible reading, not the only possible one.",
+          "The writer uses personification (choice) in the words “the last bus sighed” (evidence). The verb “sighed” may make the departure feel weary or reluctant (possible effect), which fits the rain and the headlights moving away (context). This is a plausible reading, not the only possible one.",
       },
     },
     {
