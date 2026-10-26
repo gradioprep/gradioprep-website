@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import CambridgeStage7Unit1Preview from "./CambridgeStage7Unit1Preview";
 import { demoQuestionItems } from "./content/demoCatalog";
 import { englishPathways } from "./content/pathways";
 import { pilotReviewSummary } from "./content/pilotReviewSummary";
@@ -16,6 +17,7 @@ type PathwaysLocation =
 
 type AppRoute =
   | { type: "home" }
+  | { type: "cambridge-preview" }
   | { type: "page"; page: "dashboard" | "questions" | "assessment" }
   | PathwaysLocation
   | { type: "lesson"; pathwayId: string; unitId: string }
@@ -106,6 +108,9 @@ function pathnameForPage(page: Page): string {
 
 function resolvePathname(pathname: string): AppRoute {
   const segments = pathname.split("/").filter(Boolean);
+  if (segments.join("/") === "preview/cambridge-lower-secondary/english/stage-7/unit-1") {
+    return { type: "cambridge-preview" };
+  }
   if (segments.length === 0) return { type: "home" };
 
   if (segments.length === 1) {
@@ -645,6 +650,7 @@ export default function App() {
   const go: Navigate = next => navigatePath(pathnameForPage(next));
   const route = resolvePathname(pathname);
 
+  if (route.type === "cambridge-preview") return <CambridgeStage7Unit1Preview />;
   if (route.type === "home") return <Home go={go} />;
   if (route.type === "page") {
     if (route.page === "dashboard") return <Dashboard go={go} />;
