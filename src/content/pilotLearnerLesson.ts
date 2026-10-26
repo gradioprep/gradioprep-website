@@ -43,7 +43,7 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     supportingText: "The late bus is still a way home.",
     footerText: "PLAN AHEAD · TRAVEL WITH CARE",
     visualDescription:
-      "A real photograph shows several people waiting at an illuminated bus stop on a rainy night. The shelter and waiting figures stand out against a dark urban street while city lights reflect from wet pavement. The original poster headline and supporting line are set around the photograph.",
+      "A real photograph shows an empty bus-stop platform at night. A bus-stop sign stands beside a dark road; orange streetlights illuminate the pavement and distant headlights approach. The original poster headline and supporting line are set around the photograph.",
     altText:
       "Photograph of an empty bus-stop platform at night. A bus-stop sign stands beside a dark road; orange streetlights illuminate the pavement and distant headlights approach.",
     rightsNote:
