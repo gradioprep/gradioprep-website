@@ -46,9 +46,9 @@ export const pilotLessonPack: PilotLessonPack = {
     visualDescription:
       "A real photograph shows several people waiting at an illuminated bus stop on a rainy night. The shelter and waiting figures stand out against a dark urban street while city lights reflect from wet pavement. The original poster headline and supporting line are set around the photograph.",
     altText:
-      "Photograph of several people waiting at an illuminated bus stop on a rainy night. Wet pavement reflects warm and white city lights; the shelter and waiting figures stand out against the dark urban street.",
+      "Photograph of an empty bus-stop platform at night. A bus-stop sign stands beside a dark road; orange streetlights illuminate the pavement and distant headlights approach.",
     rightsNote:
-      "Photograph by Berk Aktas, “People on a Bus Stop at Night” (Pexels, 2023): https://www.pexels.com/photo/people-on-a-bus-stop-at-night-19092243/. Pexels lists the photograph as free to use under its Pexels License. The poster copy and layout are platform-authored. Confirm current licence terms and any model/property-release requirements in the rights review before wider release.",
+      "Photograph “Bus stop with platform during night.jpg” by Mateusz Konieczny, Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Bus_stop_with_platform_during_night.jpg. The file page explicitly records the creator’s CC0 1.0 Universal Public Domain Dedication. The image shows no identifiable people or visible commercial branding. Source and licence were checked before selection on 26 October 2026. Retain this source record and recheck the file page if the asset changes.",
   },
   entryCheck: {
     prompt:
