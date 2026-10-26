@@ -10,13 +10,13 @@ export const pilotLessonPack: PilotLessonPack = {
   id: "draft-lesson-how-writers-shape-meaning-v2",
   version: 2,
   unitId: "ib-myp-lal-y1-u1",
-  status: "draft-for-founder-review",
+  status: "founder-approved-candidate",
   reviewRecord: {
     outcome: "pending",
     reviewedAt: null,
-    reviewerLabel: "Pending founder review",
+    reviewerLabel: "Academic review pending",
     scopeNote:
-      "This is revised version 2 for founder review. Version 1 passed academic content review for pilot preview on 24 October 2026, but version 2 has not yet been reviewed or approved. Official Year 1 mapping, rights review, accessibility review and release approval remain separate gates.",
+      "The founder approved the content of version 2 on 26 October 2026. The separate academic review for version 2 remains pending; version 1's academic-review outcome does not transfer. Official Year 1 mapping, rights review, accessibility, age/level suitability and release approval remain separate gates.",
   },
   title: "How writers and creators shape meaning",
   audienceNote:
@@ -237,7 +237,7 @@ export const pilotLessonPack: PilotLessonPack = {
     "Optional partner discussion: each learner names evidence, then repeats a partner's evidence before offering a different interpretation. This is an extension, not a scored task in the static preview.",
   ],
   remainingReleaseChecks: [
-    "Founder approves this exact Unit 1 version 2 before the production sequence advances.",
+    "Record and complete the separate academic review of this founder-approved content version.",
     "Complete item-level academic review for version 2; version 1's review does not carry forward.",
     "Keep official Year 1 objective/strand codes blank until the applicable current guide is verified.",
     "Complete and record the separate rights review for text, poster copy/layout and the verified CC0 photo source.",
@@ -245,5 +245,5 @@ export const pilotLessonPack: PilotLessonPack = {
     "Only record explicit release approval after required gates are complete.",
   ],
   releaseNote:
-    "Version 2 is a draft for founder review, not an approved release. Version 1 passed academic review for pilot preview only on 24 October 2026. Official Year 1 mapping remains unverified; rights review, accessibility review and explicit release approval are outstanding.",
+    "Version 2 has founder content approval, but it is not an approved release. Version 1 passed academic review for pilot preview only on 24 October 2026; that outcome does not transfer to version 2. Official Year 1 mapping remains unverified; academic review, rights review, accessibility and suitability checks, and explicit release approval are outstanding.",
 };
