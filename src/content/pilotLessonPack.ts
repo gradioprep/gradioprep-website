@@ -62,12 +62,12 @@ export const pilotLessonPack: PilotLessonPack = {
   keyIdea: {
     label: "The evidence chain",
     pattern: [
-      "Choice — point to an exact word, phrase or visual feature.",
-      "Evidence — identify what is actually written or shown.",
-      "Effect in context — explain what it may suggest to this audience and why it matters here.",
+      "Choice — name the creator's linguistic or design decision, such as personification or contrast.",
+      "Evidence — quote the precise wording or identify the visible detail that demonstrates that decision.",
+      "Effect in context — explain a plausible suggestion or audience effect and link it to this specific moment.",
     ],
     explanation:
-      "Technique-spotting is not a complete analysis. Ask what the selected choice may suggest, how the evidence supports the interpretation and why it matters in this context. Do not present a possible effect as a guaranteed audience reaction.",
+      "Keep decision, proof and interpretation distinct. “Personification” names the choice; “the last bus sighed” is evidence; a possible association with weariness, linked to the rain and receding headlights, explains the effect in context. Do not present a possible effect as a guaranteed audience reaction.",
   },
   sections: [
     {
@@ -84,14 +84,14 @@ export const pilotLessonPack: PilotLessonPack = {
       heading: "2. Build an evidence chain",
       purpose: "Link a specific choice to a contextual explanation.",
       explanation:
-        "Move from the exact choice to a plausible association, then to why that association matters in this moment. “The writer uses personification” names a technique but does not explain the effect.",
+        "Move from decision to proof to interpretation: “personification” names the choice; “the last bus sighed” provides evidence; the plausible association with weariness, linked to the rain and receding headlights, explains the effect in context.",
       learnerAction:
-        "Complete this frame: “The word/feature ‘…’ may suggest … . Here, it makes the moment/message seem … because … .”",
+        "Use all three parts: “The creator chooses to … . I can see this in the words/detail ‘…’. This may suggest …; in this moment, that matters because … .”",
       example: {
         label: "Worked example",
         text: "“the last bus sighed”",
         explanation:
-          "The verb “sighed” gives the bus a human-like action. It may make the departure feel weary or reluctant, fitting the rain and the bus moving away. This is plausible, not the only acceptable reading.",
+          "The writer uses personification (choice) in the words “the last bus sighed” (evidence). The verb “sighed” may make the departure feel weary or reluctant (possible effect), which fits the rain and the headlights moving away (context). This is plausible, not the only acceptable reading.",
       },
     },
     {
