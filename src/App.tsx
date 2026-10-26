@@ -253,13 +253,15 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
     <InfoNote>
       {lesson.reviewRecord.outcome === "passed"
         ? <><b>Academic content review passed.</b> This version is approved for pilot preview only. Official Year 1 mapping and release approval remain open.</>
-        : <><b>Unit 1 version {lesson.version} is awaiting founder review.</b> Version 1's preview approval does not automatically apply to this revision. Official Year 1 mapping and release approval remain open.</>}
+        : lesson.status === "founder-approved-candidate"
+          ? <><b>Founder-approved content candidate — academic review pending.</b> Version 1's academic-review outcome does not transfer. Official Year 1 mapping, rights, accessibility and release checks remain open.</>
+          : <><b>Unit 1 version {lesson.version} is awaiting founder review.</b> Version 1's preview approval does not automatically apply to this revision. Official Year 1 mapping and release approval remain open.</>}
       {" "}Practice responses are temporary to this open preview; nothing is saved or graded.
     </InfoNote>
     <div className="proto-crumb"><button type="button" onClick={() => navigatePath("/pathways")}>Pathways</button> / <button type="button" onClick={() => navigatePath(curriculumPath)}>{pathway.programmeName} · {pathway.courseName}</button> / <button type="button" onClick={() => navigatePath(levelPath)}>{pathway.levelLabel}</button> / <button type="button" onClick={() => navigatePath(unitPath)}>Unit {unit.sequence}</button> / <b>Lesson</b></div>
     <div className="proto-lesson-head">
       <div>
-        <Label>IB MYP LANGUAGE & LITERATURE · UNIT 1 REVIEW PREVIEW</Label>
+        <Label>FOUNDER-APPROVED CONTENT CANDIDATE · NOT RELEASED</Label>
         <h1>Notice the choice.<br /><em>Explain the effect.</em></h1>
         <p>{lesson.proposedLearningObjective}</p>
       </div>
