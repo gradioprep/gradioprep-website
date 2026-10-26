@@ -6,7 +6,7 @@
 **Learner file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md`  
 **Teacher/editor file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_TEACHER_REVIEW_PACK.md`  
 **Review type:** AI-led curriculum/editorial and learner-suitability review using public sources; improvements applied to v1.3. This is not an independent human academic-review pass or learner-testing result.  
-**Status:** v1.2 was not accepted unchanged. The main instructional and assessment issues identified were corrected in v1.3. Founder/academic-lead review of exact v1.3 and separate source, rights, accessibility, suitability and release gates remain pending.
+**Status:** v1.3 remains an unreleased draft. Founder authorised an isolated controlled-preview integration for interface testing only in draft PR #15; GitHub Actions Build check #225 passed the TypeScript/Vite build and 17/17 Chromium tests. This is limited automated UI evidence, not full accessibility certification, human academic approval, rights clearance, current full-framework mapping, or release approval. The learner content is not student-ready.
 
 ## 1. Research basis checked
 
