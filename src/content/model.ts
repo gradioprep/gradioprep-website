@@ -163,7 +163,7 @@ export type ContentReviewState = "not-started" | "in-review" | "passed";
  * Production planning record for a pathway unit. It deliberately separates
  * the intended pathway from verified syllabus alignment and released content.
  */
-export type PilotContentStatus = "draft-for-founder-review" | "approved-for-pilot-preview";
+export type PilotContentStatus = "draft-for-founder-review" | "founder-approved-candidate" | "approved-for-pilot-preview";
 export type PilotReviewOutcome = "pending" | "passed";
 
 export interface PilotReviewRecord {
