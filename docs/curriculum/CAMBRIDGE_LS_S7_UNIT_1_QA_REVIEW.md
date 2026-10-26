@@ -1,4 +1,4 @@
-# Cambridge Lower Secondary English 0861 — Stage 7 Unit 1 v1.1 QA record
+# Cambridge Lower Secondary English 0861 — Stage 7 Unit 1 v1.2 QA record
 
 **Review date:** 26 October 2026  
 **Reviewed version:** 1.2 draft  
@@ -51,7 +51,7 @@ These are open checks, not claims that a defect has been proven.
 | Originality and rights | **Pending** | Project rights review record; this desk review is not clearance |
 | Accessibility | **Pending** | Tests in the intended learner UI and documented findings |
 | Age/level and cultural/context suitability | **Pending** | Human reviewer decision |
-| Founder decision on exact v1.1 | **Pending** | Explicit approval or requested revisions |
+| Founder decision on exact v1.2 | **Pending** | Explicit approval or requested revisions |
 | Release approval | **Not granted** | All required gates plus explicit release decision |
 
 ## 5. Recommended next sequence
