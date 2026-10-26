@@ -50,7 +50,7 @@ test.describe("curriculum pathway URLs", () => {
     await expect(page).toHaveURL(new RegExp(`${ibUnitOne}$`));
     await expect(page.getByRole("heading", { name: /How writers and creators shape meaning.*review draft/i })).toBeVisible();
 
-    await page.getByRole("button", { name: /Continue to pilot lesson preview/ }).click();
+    await page.getByRole("button", { name: /Continue to Unit 1 review draft/ }).click();
     await expect(page).toHaveURL(new RegExp(`${pilotLesson}$`));
     await expect(page.getByRole("heading", { name: /Notice the choice\. Explain the effect\./i })).toBeVisible();
 
