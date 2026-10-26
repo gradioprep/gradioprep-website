@@ -34,7 +34,6 @@ export const pilotReviewSummary: PilotReviewSummary = {
   },
   remainingReleaseChecks: [
     "Complete the separate academic review of version 2; founder content approval is recorded but does not replace this review.",
-    "Complete separate academic review for version 2.",
     "Keep current official Year 1 objective/strand mapping unverified until the applicable guide is confirmed.",
     "Complete and record content rights review for the original prose, original poster copy/layout and the CC0 photograph.",
     "Complete and record accessibility, age/level suitability and cultural/context review.",
