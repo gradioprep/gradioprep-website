@@ -117,3 +117,36 @@ test.describe("curriculum pathway URLs", () => {
   });
 
 });
+
+test.describe("MYP Year 1 Unit 1 version 2 review preview", () => {
+  test("labels the revised unit as pending review and shows the original paired artefacts", async ({ page }) => {
+    const pageErrors: string[] = [];
+    page.on("pageerror", (error) => pageErrors.push(error.message));
+
+    await page.goto(pilotLesson);
+    await expect(page.getByText(/Unit 1 version 2 is awaiting founder review/i)).toBeVisible();
+    await expect(page.getByText(/Version 1's preview approval does not automatically apply to this revision/i)).toBeVisible();
+
+    await expect(page.getByRole("heading", { name: "Original practice passage" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "A LIGHT ON EVERY LAST JOURNEY" })).toBeVisible();
+    await expect(page.getByText(/Original poster with a large pale headline/i)).toBeVisible();
+    await expect(page.getByText(/Choice — point to an exact word, phrase or visual feature/i)).toBeVisible();
+    await expect(page.getByText(/At sunrise, the empty platform shone silver/i)).toBeVisible();
+
+    expect(pageErrors, "the Unit 1 preview should not produce browser JavaScript errors").toEqual([]);
+  });
+
+  test("entry observation and fresh-text exit check can be reviewed without scoring", async ({ page }) => {
+    await page.goto(pilotLesson);
+
+    await page.getByLabel("Your first observation").fill("I notice the word 'sighed'. It literally describes the bus.");
+    await page.getByRole("button", { name: /Review my observation/i }).click();
+    await expect(page.getByText("Check your starting point")).toBeVisible();
+    await expect(page.getByText(/I have identified a precise detail I can point to/i)).toBeVisible();
+
+    await page.getByLabel("Your exit response").fill("The word 'silver' may make the platform seem still or cool at sunrise.");
+    await page.getByRole("button", { name: /Review exit response/i }).click();
+    await expect(page.getByText("Self-review checklist")).toBeVisible();
+    await expect(page.getByText(/This is a checklist, not a mark or a saved assessment/i)).toBeVisible();
+  });
+});
