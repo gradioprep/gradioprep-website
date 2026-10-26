@@ -1,7 +1,8 @@
 # Cambridge Lower Secondary English 0861 — Stage 7, Unit 1
 
 **Unit ID:** cambridge-ls-english-s7-u1  
-**Content version:** 1.1 draft  
+**Content version:** 1.2 draft  
+**Revision note:** Clarified formative scoring coverage in the teacher pack; item 1 retrieval is now explicitly scored separately from items 2–5 and the extended response.  
 **Title:** Read closely, infer and explain  
 **Status:** Draft for academic review. Not yet approved or published.  
 **Curriculum claim:** Public-framework-aligned practice for reading comprehension, inference and explanation. Limited public cross-check: Cambridge's public framework-support overview explicitly identifies 7Ri.03 (explicit information) and supports mapping only the explicit-information items to this code. This is not a full-unit map. The complete currently applicable framework copy remains to be confirmed through Cambridge's support site; inference and language-choice objective codes remain unassigned.  
