@@ -28,14 +28,20 @@ A guide being drafted does not mean every objective is officially mapped, every 
 | 5 | cambridge-igcse-fle-phase-a-u1 | Cambridge IGCSE First Language English 0500 first proposed delivery phase | Planned; blocked until first cohort is complete | Later-level route; do not begin before the first cohort is complete. Use syllabus Version 1 for exams 2027–2029 and check candidate route/current specimens |
 | 6 | ib-myp-lal-y2-u1 | IB MYP Language and Literature Year 2 | Planned; blocked until first cohort is complete | Later grade band; public-framework-aligned original unit; do not invent official objective codes |
 | 7 | cambridge-ls-english-s8-u1 | Cambridge Lower Secondary English 0861 Stage 8 | Planned; blocked until first cohort is complete | Later grade band; verify framework version/objectives; build on Stage 7 but do not simply repeat it |
-| 7 | ib-dp-langlit-y2-u1 | IB DP Language A: Language and Literature Year 2 | Planned | Check school sequence, candidate SL/HL and applicable assessment session |
-| 8 | cambridge-ls-english-s9-u1 | Cambridge Lower Secondary English 0861 Stage 9 | Planned | Verify framework version/objectives and chosen next pathway |
-| 9 | cambridge-igcse-fle-phase-b-u1 | Cambridge IGCSE First Language English 0500 second proposed delivery phase | Planned | Same syllabus as phase A, not a separate qualification/syllabus; check exam year and route |
-| 10 | ib-myp-lal-y3-u1 | IB MYP Language and Literature Year 3 | Planned | Keep mapping labels honest |
-| 11 | ib-myp-lal-y4-u1 | IB MYP Language and Literature Year 4 | Planned | Keep mapping labels honest |
-| 12 | ib-myp-lal-y5-u1 | IB MYP Language and Literature Year 5 | Planned | Verify school-selected pathway; do not assume optional MYP eAssessment |
+| 8 | ib-dp-langlit-y2-u1 | IB DP Language A: Language and Literature Year 2 | Planned | Check school sequence, candidate SL/HL and applicable assessment session |
+| 9 | cambridge-ls-english-s9-u1 | Cambridge Lower Secondary English 0861 Stage 9 | Planned | Verify framework version/objectives and chosen next pathway |
+| 10 | cambridge-igcse-fle-phase-b-u1 | Cambridge IGCSE First Language English 0500 second proposed delivery phase | Planned | Same syllabus as phase A, not a separate qualification/syllabus; check exam year and route |
+| 11 | ib-myp-lal-y3-u1 | IB MYP Language and Literature Year 3 | Planned | Keep mapping labels honest |
+| 12 | ib-myp-lal-y4-u1 | IB MYP Language and Literature Year 4 | Planned | Keep mapping labels honest |
+| 13 | ib-myp-lal-y5-u1 | IB MYP Language and Literature Year 5 | Planned | Verify school-selected pathway; do not assume optional MYP eAssessment |
+| Later queue | cbse-english-g7-u1 | CBSE English Grade 7 | Planned; blocked until first cohort is complete | Research the current class/session syllabus and learning materials; assign its grade-band slot only after the age/grade sequence is verified |
+| Later queue | cbse-english-g8-u1 | CBSE English Grade 8 | Planned; blocked until first cohort is complete | Research the current class/session syllabus and learning materials; assign its grade-band slot only after the age/grade sequence is verified |
+| Later queue | cbse-english-g9-u1 | CBSE English Grade 9 | Planned; blocked until first cohort is complete | Verify current course options and subject codes before defining the exact route |
+| Later queue | cbse-english-g10-u1 | CBSE English Grade 10 | Planned; blocked until first cohort is complete | Verify current course options and subject codes before defining the exact route |
+| Later queue | cbse-english-g11-u1 | CBSE English Grade 11 | Planned; blocked until first cohort is complete | Preserve English Core/Elective distinctions where applicable; exact routes depend on current official evidence |
+| Later queue | cbse-english-g12-u1 | CBSE English Grade 12 | Planned; blocked until first cohort is complete | Preserve English Core/Elective distinctions where applicable; exact routes depend on current official evidence |
 
-**Rotation rule:** Complete all three first-cohort Unit 1s (IB MYP Year 1, Cambridge Lower Secondary Stage 7, CBSE Grade 6) before beginning any older-level Unit 1. If a cohort unit is blocked, pause and report the blocker. Do not skip to another older track or start Unit 2. After the first cohort passes its completion standard, resume the remaining approved Unit 1 rotation, then return to Unit 2 only after the wider approved Unit 1 rotation is complete.
+**Rotation rule:** Complete all three first-cohort Unit 1s (IB MYP Year 1, Cambridge Lower Secondary Stage 7, CBSE Grade 6) before beginning any older-level Unit 1. If a cohort unit is blocked, pause and report the blocker. Do not skip to another older track or start Unit 2. After the first cohort passes its completion standard, resume the remaining approved Unit 1 rotation. The CBSE Grade 7–12 rows are included as future queue entries only; their exact course routes and positions in the later age/grade-band sequence must be assigned after current official sources are checked. Return to Unit 2 only after the wider approved Unit 1 rotation is complete.
 
 ## 3. Unit-level production gates
 
