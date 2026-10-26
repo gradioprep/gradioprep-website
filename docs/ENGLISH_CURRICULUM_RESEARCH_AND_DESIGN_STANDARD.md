@@ -1,6 +1,6 @@
 # English Curriculum Research, Quality Rubric and Design Standard
 
-**Status:** Internal working reference v0.5 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
+**Status:** Internal working reference v0.6 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
 **Prepared:** 26 October 2026
 **Owner:** Academic lead / founder
 **Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary and Cambridge IGCSE. Official syllabus mappings must be verified separately for each course, year/stage and edition.
@@ -14,7 +14,7 @@ Build a specialist English learning system around a shared instructional engine,
 
 Each task should make visible: what skill is being practised, what quality looks like, why an example works, what the learner can improve, and what evidence supports the next recommendation. This is a product design hypothesis to validate with learners and families, not a claim of proven market uniqueness.
 
-The founder confirmed DP Language A: Language and Literature and Cambridge IGCSE First Language English 0500 only on 25 October 2026. The MYP Year 1 guide v1.1, implementation structure v1.1 and dedicated resource landscape review were completed on 26 October 2026 and are awaiting founder review. Do not begin/adapt Unit 1 until the founder approves this checkpoint; after Unit 1 is implemented and approved, rotate to the Cambridge Lower Secondary Stage 7 guide. Do not start later-track work merely because draft files already exist. When a detailed guide is gated, use the public-source policy in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md to develop an explicitly public-framework-aligned guide; do not invent official objective/strand codes or claim complete official mapping. The canonical MYP Year 1 guide is `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`; its implementation structure is `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`. Both are complete as an independent public-framework-aligned design, not as an official IB syllabus map. Its existing pilot remains approved for preview only; official objective mapping is not claimed, and rights review, accessibility review and release approval are not cleared by this research document.
+The founder confirmed DP Language A: Language and Literature and Cambridge IGCSE First Language English 0500 only on 25 October 2026. The MYP Year 1 guide v1.1 and implementation structure v1.1 were approved by the founder on 26 October 2026. Unit 1 version 2 is implemented as a candidate in draft PR #14 and awaits founder review; version 1's preview approval does not transfer. After Unit 1 v2 is reviewed and approved, rotate to the Cambridge Lower Secondary Stage 7 guide. Do not start later-track work merely because draft files already exist. When a detailed guide is gated, use the public-source policy in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md to develop an explicitly public-framework-aligned guide; do not invent official objective/strand codes or claim complete official mapping. The canonical MYP Year 1 guide is `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`; its implementation structure is `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`. Both are complete as an independent public-framework-aligned design, not as an official IB syllabus map. Its existing pilot remains approved for preview only; official objective mapping is not claimed, and rights review, accessibility review and release approval are not cleared by this research document.
 
 ## 2. Curriculum scope: confirmed versus requiring a decision
 
@@ -201,4 +201,11 @@ Required distinction:
 
 Enhanced MYP is a separate transition watch. The IB beta guidance states full release is scheduled for 2027; until the final applicable guide and effective date are verified, do not replace current framework fields with beta terminology or change official maps on the strength of a third-party update.
 
-The revised MYP Year 1 sequence has six proposed units and an eight-hour shared skills/diagnostic/transfer allocation, for at least 50 planned teaching hours. This is a product planning decision derived from the public 50-hour floor, not a prescribed IB unit structure. It remains founder-review pending. Unit 1 implementation and all later-track work remain blocked by the existing approval gate.
+The revised MYP Year 1 sequence has six proposed units and an eight-hour shared skills/diagnostic/transfer allocation, for at least 50 planned teaching hours. This is a product planning decision derived from the public 50-hour floor, not a prescribed IB unit structure. The guide and implementation plan are founder-approved. Unit 1 version 2 now awaits its own founder review; rights, accessibility, current official mapping and release gates remain open. All later-track unit work remains blocked until Unit 1 v2 is approved.
+
+
+## 11. MYP Unit 1 version-control practice — v0.6 addition
+
+Treat each material content revision as a new version with a fresh review state. The existing “How writers shape meaning” version 1 was approved for pilot preview only. The revised version 2 adds a paired original poster, an entry observation, a comparison task and a fresh-text transfer check. It is marked draft-for-founder-review; do not carry over the previous review's date, outcome or release state. Keep learner-facing material free of correct-answer IDs and teacher model answers, and keep all curriculum mapping, rights, accessibility, academic review and release states separate.
+
+The current MYP Year 1 guide/implementation structure are approved. The Unit 1 version 2 candidate is in PR #14 and not on main until accepted/merged. Do not proceed to the next curriculum guide/unit checkpoint until the founder approves this exact content version.
