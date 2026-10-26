@@ -129,7 +129,9 @@ test.describe("MYP Year 1 Unit 1 version 2 review preview", () => {
 
     await expect(page.getByRole("heading", { name: "Original practice passage" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "A LIGHT ON EVERY LAST JOURNEY" })).toBeVisible();
-    await expect(page.getByText(/Original poster with a large pale headline/i)).toBeVisible();
+    await expect(page.getByRole("img", { name: /Photograph of several people waiting at an illuminated bus stop on a rainy night/i })).toBeVisible();
+    await expect(page.getByText(/Photograph by Berk Aktas.*Pexels, 2023/i)).toBeVisible();
+    await expect(page.getByText(/Notice how the illuminated shelter and waiting passengers contrast/i)).toBeVisible();
     await expect(page.getByText(/Choice — point to an exact word, phrase or visual feature/i)).toBeVisible();
     await expect(page.getByText(/At sunrise, the empty platform shone silver/i)).toBeVisible();
 
