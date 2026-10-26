@@ -1,6 +1,6 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.4  
+**Version:** 1.5  
 **Research checked:** 26 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, and Cambridge IGCSE First Language English 0500.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
@@ -154,9 +154,9 @@ The five cross-track source families above are not a substitute for programme-sp
 
 ## 9. MYP Unit 1 version 2 status update
 
-The guide and implementation plan have been approved by the founder. The existing pilot has been reconciled into a version 2 draft using the approved research method. It adds a paired original visual poster to the original prose passage, an unscored entry observation, comparison practice, revision and fresh-text transfer. Version 1's academic-review pass remains specific to the earlier preview. Version 2 is awaiting founder review in PR #14; current official mapping, rights, accessibility and release approval remain open. The next curriculum-track unit remains inactive until Unit 1 v2 is approved.
+The guide and implementation plan have been approved by the founder. The existing pilot has been reconciled into a version 2 draft using the approved research method. It pairs the original prose passage with a fictional night-bus campaign-poster mock-up that uses a real Pexels photograph and platform-authored copy/layout. It also adds an unscored entry observation, comparison practice, revision and fresh-text transfer. Version 1's academic-review pass remains specific to the earlier preview. Version 2 is awaiting founder review in PR #14; current official mapping, image rights, accessibility and release approval remain open. The next curriculum-track unit remains inactive until Unit 1 v2 is approved.
 
-## 9. Photographic asset used in MYP Year 1 Unit 1 version 2
+## 10. Photographic asset used in MYP Year 1 Unit 1 version 2
 
 - **Photo:** “People on a Bus Stop at Night,” by Berk Aktas, published on Pexels on 11 November 2023.
 - **Source page:** https://www.pexels.com/photo/people-on-a-bus-stop-at-night-19092243/
