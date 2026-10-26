@@ -1,6 +1,6 @@
 # English Curriculum Guides — Year/Stage Framework and Pathway Implementation Plan
 
-**Status:** Internal guide register v1.1. The original 12 planned year/stage/delivery entries across four curriculum groups remain under versioned development; the separately approved CBSE English Grades 6–12 pathway is recorded in its research brief and the Unit Production Register, with class-wise research/guides still pending. Exact official objective maps remain unverified where current descriptors are not directly available.
+**Status:** Internal guide register v1.2. The original 12 planned year/stage/delivery entries across four curriculum groups remain under versioned development; the separately approved CBSE English Grades 6–12 pathway is recorded in its research brief and the Unit Production Register, with class-wise research/guides still pending. Exact official objective maps remain unverified where current descriptors are not directly available.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`, `ENGLISH_STAGE_1_ROADMAP.md`, `ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`, and `ENGLISH_PUBLIC_SOURCE_REGISTER.md`.
 **Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences.
 
@@ -192,3 +192,8 @@ Draft PR [#15](https://github.com/gradioprep/gradioprep-website/pull/15) contain
 ## Final controlled-preview test correction — 26 October 2026
 
 The controlled Cambridge Stage 7 Unit 1 v1.3 preview remains an isolated interface-testing route in draft PR #15. The clear-all control has been corrected to reset both text responses and the warm-up selection, with regression coverage. GitHub Actions [Build check #229](https://github.com/gradioprep/gradioprep-website/actions/runs/40307651156) passed: TypeScript/Vite build and 17/17 Chromium tests. The route has not been deployed to a dedicated Cloudflare hosted-preview URL, and no production changes occurred. Keep manual accessibility, rights, human suitability, current full Cambridge framework/version and mapping, and release gates open; do not advance to CBSE Grade 6 before the Stage 7 checkpoint is cleared.
+
+
+## Final controlled-preview accessibility check — 26 October 2026
+
+The Cambridge Stage 7 Unit 1 v1.3 preview now associates the exit-check prompt with its writing field and moves focus to the main lesson content when the keyboard skip link is activated. The responsive layout check covers 320, 390, 768 and 1024 CSS-pixel widths. [Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed on commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`: TypeScript/Vite build and 17/17 Chromium tests passed. The controlled preview remains unmerged/unreleased; no hosted Cloudflare preview URL is verified. Do not treat this as full accessibility certification or a release gate pass. Rights/originality, human suitability, current full Cambridge framework/version and further objective mapping, manual assistive-technology review, and release approval remain open.
