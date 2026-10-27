@@ -7,13 +7,16 @@ on:
       - main
   workflow_dispatch:
 
+# Keep write access limited to the job that reports a preview URL to its PR.
 permissions:
   contents: read
-  issues: write
 
 jobs:
   preview:
     name: Build and deploy controlled preview only
+    permissions:
+      contents: read
+      pull-requests: write
     if: >-
       (github.event_name == 'pull_request' &&
        github.event.action != 'closed' &&
@@ -119,6 +122,8 @@ jobs:
 
   cleanup:
     name: Remove preview when the review PR closes
+    permissions:
+      contents: read
     if: >-
       github.event_name == 'pull_request' &&
       github.event.action == 'closed' &&
