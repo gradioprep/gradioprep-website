@@ -6,7 +6,7 @@
 **Learner file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md`  
 **Teacher/editor file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_TEACHER_REVIEW_PACK.md`  
 **Review type:** AI-led curriculum/editorial and learner-suitability review using public sources; improvements applied to v1.3. This is not an independent human academic-review pass or learner-testing result.  
-**Status:** v1.3 remains an unreleased draft. Founder authorised an isolated controlled-preview integration for interface testing only in draft PR #15; GitHub Actions Build check #231 passed the TypeScript/Vite build and 17/17 Chromium tests on the latest preview commit. This is limited automated UI evidence, not full accessibility certification, human academic approval, rights clearance, current full-framework mapping, or release approval. The learner content is not student-ready.
+**Status:** v1.3 remains an unreleased draft. Founder authorised an isolated controlled-preview integration for interface testing only in draft PR #15. Controlled preview run [#14](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206707) passed, including the PR URL update; Build check [#245](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206694) passed the TypeScript/Vite build and 17/17 Chromium tests on preview verification commit `127a7b82ccda52536b4bfd78e603499cd47281d6`. This is limited automated UI evidence, not full accessibility certification, manual review of the hosted page, human academic/suitability approval, rights clearance, current full-framework mapping, or release approval. The learner content is not student-ready.
 
 ## 1. Research basis checked
 
@@ -96,7 +96,7 @@ At the time of this text-level desk check (before the later authorised preview i
 | Content-level accessibility and context preflight | **Completed; no blocking text-only issue identified** | Human confirmation and actual application accessibility testing |
 | Human academic review and actual learner suitability | **Pending** | Founder/qualified reviewer decision for exact v1.3; learner pilot not claimed |
 | Current full Cambridge framework/version and mapping | **Partially verified only** | Applicable official support-site file/version and item-level mapping if legitimately available; otherwise keep unresolved |
-| UI accessibility | **Pending / not testable before integration** | Contrast, keyboard/focus, screen-reader, responsive layout, text-to-speech and response-field checks in intended UI |
+| UI accessibility | **Automated smoke checks passed; manual review pending** | The local Wrangler-backed suite passed; manual keyboard/focus, screen-reader, zoom/reflow, cross-browser, text-to-speech and response-field error checks remain required |
 | Age/level and cultural/context suitability | **AI desk check complete; human confirmation pending** | Record reviewer, date, decision and exact version; learner testing not performed |
 | Release approval | **Not granted** | All required gates for intended release status and explicit release decision |
 
@@ -123,3 +123,22 @@ The founder explicitly approved integrating the exact v1.3 learner content into 
 - **Environment limit:** the browser tests use the repository’s local Wrangler-backed test server in CI. No separate hosted Cloudflare preview URL has been verified. No production deployment, merge or publication occurred.
 
 These results clear only the **automated preview-UI smoke-check subset**. They do not constitute a full WCAG audit or usability study. Still required before any release decision: manual keyboard/focus-order review beyond the smoke check, screen-reader testing (including platform-specific output), 200%/400% zoom and reflow checks, additional browser/OS testing, text-to-speech assessment, answer-field/error-state review if applicable, human academic and age/level/cultural-suitability judgement, formal rights/originality clearance, current full Cambridge framework/version handling and appropriate objective mapping, and explicit release approval. Keep the content unreleased and pause the production rotation at Stage 7.
+
+
+## 10. Hosted preview verification and current-source recheck — 27 October 2026
+
+### Deployment and automated tests
+
+The controlled preview permission issue is resolved. The workflow keeps the default GitHub token at `contents: read` and scopes `pull-requests: write` only to the preview job. [Controlled preview run #14](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206707) completed successfully, including the “Update the pull request with the preview URL” step. [Build check #245](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206694) completed successfully on verification commit `127a7b82ccda52536b4bfd78e603499cd47281d6`: the TypeScript/Vite build passed and Playwright reported **17 passed**. Eleven existing curriculum-navigation tests and six preview-specific tests ran against local Wrangler assets. The preview-specific tests cover visible unreleased status, skip-link focus transfer, distinct accessible names and associations for the 14 response fields, responsive reflow at 320/390/768/1024 CSS-pixel widths, clearing all temporary input including the warm-up radio choice, and sampled text contrast.
+
+Cloudflare's Preview API returned HTTP 200 and confirmed the hosted `pr-15` URL [https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1](https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1); `deployed_on` was `2026-10-27T14:46:23Z` UTC at the post-run-#14 check. The remote page could not be independently fetched in the execution environment for visual smoke review; founder visual review remains open. The hosted URL is public unless Cloudflare Access is separately enabled. Do not use real student data.
+
+### Current curriculum-source recheck
+
+The current official Cambridge Lower Secondary English 0861 page confirms that this is the first-language English route; identifies reading, writing, speaking and listening as the four broad skill areas; recommends varied fiction, poetry, playscripts and non-fiction; and describes an integrated experience/reflection/improvement approach: https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/curriculum/english/.
+
+Cambridge's current support guidance says that the detailed Curriculum Framework, progression grid, mapping documents and Teacher Guides are available to registered schools via the secure Lower Secondary support site: https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/classroom-support/ and https://help.cambridgeinternational.org/hc/en-gb/articles/23410735702290-Where-can-I-find-the-new-Curriculum-Frameworks-and-support-resources. The public material reviewed does not verify the exact current full framework/version or any new item-level objective IDs. The 7Ri.03 crosswalk therefore remains limited to explicit-information questions; inference/language-choice identifiers remain unassigned. Do not use a legacy outline as proof of current detailed mapping.
+
+### Gate result and next action
+
+The hosted preview and automated browser checks are now verified; the content candidate is **not** cleared for release. Human academic review and actual Stage 7 suitability judgement for exact v1.3, formal rights/originality clearance, full current framework/version and any further mapping, manual accessibility checks (including screen-reader, keyboard/focus, zoom/reflow, text-to-speech and cross-browser), and explicit release approval remain pending. This addendum records technical/source verification only; it is not an independent human review or learner pilot. Keep PR #12 in draft and continue the already-authorised gate review before starting CBSE Grade 6 Unit 1.

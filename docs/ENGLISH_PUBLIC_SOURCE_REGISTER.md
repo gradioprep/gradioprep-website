@@ -1,7 +1,7 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.8  
-**Research checked:** 26 October 2026  
+**Version:** 1.9  
+**Research checked:** 27 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
 
@@ -205,3 +205,17 @@ The Stage 7 Unit 1 v1.3 candidate applies these general teaching principles thro
 ## Mandatory photograph selection and rights-screening rule
 
 Do not select, download, embed, commit or preview any photograph until its exact source page confirms an explicit CC0 dedication or public-domain status. Verify the licence on the specific file/page, screen visible third-party rights concerns (including identifiable people, artwork, trademarks or property where relevant), and record creator, title, exact source URL, licence evidence, date checked and subject/accessibility fit before selection. Free-to-use or royalty-free stock terms alone do not satisfy this project's copyright-free-photo requirement. If the licence or visible-rights position is unclear, do not use the photograph; use an original non-photographic treatment instead. A source/licence record is a prerequisite to selection, not a retrospective check. Full unit-level rights review remains a separate gate.
+
+## Stage 7 Unit 1 v1.3 — current public-source recheck and hosted-preview evidence (27 October 2026)
+
+The current official Cambridge English 0861 page was rechecked: https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/curriculum/english/. It states that 0861 is the first-language English course, lists reading, writing, speaking and listening as the four broad skill areas, recommends fiction, poetry, playscripts and non-fiction, and describes an integrated experience/reflection/improvement approach. This supports the unit's narrow public-framework-aligned reading scope but not a claim of complete Stage 7 coverage.
+
+Cambridge's current public classroom-support page and help article confirm that the full Curriculum Framework, progression grid, mapping documents and Teacher Guides are available through the secure Lower Secondary support site to registered schools:
+- https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/classroom-support/
+- https://help.cambridgeinternational.org/hc/en-gb/articles/23410735702290-Where-can-I-find-the-new-Curriculum-Frameworks-and-support-resources
+
+This check did not reveal the exact currently applicable full framework/version or additional item-level objective IDs. Do not infer new mappings from the historical public curriculum outline. Keep the 7Ri.03 crosswalk limited to explicit-information items; inference and language-choice codes remain blank/unverified.
+
+Technical evidence is recorded separately from curriculum mapping: controlled preview run [#14](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206707) passed; Build check [#245](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206694) passed the TypeScript/Vite build and 17/17 Chromium tests; Cloudflare's Preview API confirmed [the isolated Stage 7 v1.3 testing URL](https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1) with `deployed_on = 2026-10-27T14:46:23Z` UTC at the check. The URL is public unless Cloudflare Access is enabled. CI tests use local Wrangler assets and are not manual accessibility certification or a visual check of the hosted page.
+
+**Gate status unchanged:** Human academic and age/level/cultural suitability review, formal rights/originality clearance, current full framework/version and any further mapping, manual accessibility review and explicit release approval remain open. The Stage 7 candidate remains unreleased; do not skip to CBSE Grade 6 or start Unit 2 until required gates are addressed.

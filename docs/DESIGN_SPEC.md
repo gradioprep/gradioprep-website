@@ -1,8 +1,8 @@
 # Criterion Lab — Design Specification
 
-**Version:** 1.7  
+**Version:** 1.8  
 **Status:** Approved design system; curriculum-first navigation implemented and live-verified in the Cloudflare Workers preview; Cambridge Stage 7 Unit 1 has an isolated, unreleased interface-testing preview in draft PR #15  
-**Last updated:** 26 October 2026  
+**Last updated:** 27 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
@@ -446,3 +446,10 @@ Do not import the teacher/editor review pack, answer key, correct-answer IDs or 
 ## 14. Final automated interaction and reflow evidence — 26 October 2026
 
 On final controlled preview test commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`, [Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed the TypeScript/Vite build and all 17 Chromium tests. The preview-specific tests check (1) direct rendering with an explicit unreleased status; (2) skip-link keyboard operation and focus transfer to the main content; (3) task-specific names for all 14 response fields and programmatic associations for all guided, independent and exit-check prompts; (4) horizontal reflow/overflow at 320, 390, 768 and 1024 CSS-pixel viewports; (5) clearing all temporary response input including the warm-up radio selection; and (6) representative WCAG AA text-contrast samples. These automated checks do not replace manual assistive-technology review, broad WCAG evaluation, human suitability review or formal release approval. The CI browser uses local Wrangler assets; no dedicated hosted Cloudflare preview URL is verified.
+
+
+## 15. Hosted preview and workflow permission verification — 27 October 2026
+
+The original controlled-preview workflow built the application and created the preview, but failed when the GitHub token attempted to read/update the pull-request conversation. The workflow now keeps the default token at `contents: read`, grants `pull-requests: write` only to the preview job, and keeps cleanup read-only. [Controlled preview run #14](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206707) passed, including the “Update the pull request with the preview URL” step. [Build check #245](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206694) passed the TypeScript/Vite build and 17/17 Chromium tests on commit `127a7b82ccda52536b4bfd78e603499cd47281d6`.
+
+Cloudflare's Preview API confirmed the isolated `pr-15` URL [https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1](https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1); its `deployed_on` field returned `2026-10-27T14:46:23Z` UTC at the verification check. The six preview-specific automated tests cover unreleased status, skip-link focus transfer, accessible names and prompt associations for all 14 response fields, no horizontal overflow at 320/390/768/1024 CSS-pixel widths, clear-all behavior including the warm-up choice, and sampled text contrast. All browser tests use local Wrangler assets. The execution environment could not independently fetch the hosted page for a manual visual smoke review; founder visual review remains open. Manual screen-reader, keyboard/focus, 200%/400% zoom/reflow, text-to-speech and cross-browser checks remain necessary. The preview stays unlinked from normal navigation, public unless Cloudflare Access is configured, and unreleased. No merge, production deployment, or DNS update occurred.
