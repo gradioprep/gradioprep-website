@@ -178,3 +178,10 @@ Current official references reconfirm broad course identity and scope:
 - Cambridge help article on the new frameworks/resources: https://help.cambridgeinternational.org/hc/en-gb/articles/23410735702290-Where-can-I-find-the-new-Curriculum-Frameworks-and-support-resources
 
 The public material does not reveal the current full framework/version and progression grid. No additional objective IDs are added: 7Ri.03 remains limited to the explicit-information tasks, and inference/language-choice mapping remains unverified. Academic review by a human reviewer, age/level/cultural suitability confirmation, formal rights/originality clearance, manual accessibility review and explicit release approval remain open.
+
+
+## 11. Supplemental v1.3 internal-consistency review — 27 October 2026
+
+An AI-assisted check compared the current teacher/editor guidance with the exact v1.3 learner file. The answer guidance corresponds to the prompts in the current passage; alternatives remain allowed where text evidence supports them. The item-level formative profile sums correctly to 15 points (1 + 2 + 2 + 2 + 2 + 6); the exit check and reflection remain unscored. No clear inconsistency was found that warranted a content revision, so the learner and teacher/editor files remain v1.3.
+
+This is a limited AI editorial check only. It does not fulfil the unchecked human academic/age-level/cultural review item in Section 8, prove official curriculum mapping, constitute legal rights clearance, or replace manual accessibility and explicit release approval.

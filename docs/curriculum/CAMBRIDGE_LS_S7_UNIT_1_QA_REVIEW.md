@@ -149,3 +149,17 @@ The hosted preview and automated browser checks are now verified; the content ca
 Eight additional exact-phrase searches were run for distinctive sentences/clauses not limited to the original four queried fragments. The query set included the library-window opening image, Jamil watching the garden, the rain-gauge/gust sentence, Ms Chen's moved seed trays, the bench and smallest trays detail, the exit-check paper-cup/packing sentence, and the distinctive combination of Jamil's inference clue chain. No exact passage-level match appeared in the returned public search results; results included general pedagogy/inference pages rather than matching text.
 
 This expands the earlier desk screen but **does not close the rights gate**. Search engines may miss private, unindexed, paywalled, translated or paraphrased material. The search is not comprehensive plagiarism detection, legal advice or proof of authorship. Formal rights/originality clearance remains pending. The candidate remains unreleased.
+
+
+## 12. Supplemental v1.3 internal-consistency check — 27 October 2026
+
+A second AI-assisted editorial check compared the exact v1.3 learner file and separate teacher/editor pack.
+
+- All files remain labelled v1.3 draft; no unreviewed content changes were introduced.
+- Warm-up direct-information guidance matches its two-sentence mini-example; guided-practice answers were checked against the current passage.
+- Independent-practice answer guidance was checked against all six current prompts, including the extended response and the distinction between a possible interpretation and a supported inference.
+- The exit-check guidance aligns with its mini-passage; the exit check and reflection remain unscored.
+- The rubric total is arithmetically consistent: 1 + 2 + 2 + 2 + 2 + 6 = **15 formative points**, not a Cambridge grade or mark scheme.
+- No clear internal contradiction was detected that warranted a content edit.
+
+**Result:** No change to the learner content is justified by this AI consistency check; keep version 1.3. This is not a human academic/suitability pass, learner test, official full-framework mapping, formal rights decision or accessibility/release approval. Human review of the exact v1.3 candidate remains pending.
