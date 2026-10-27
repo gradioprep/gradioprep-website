@@ -62,7 +62,9 @@ jobs:
           set -euo pipefail
           output="$(npx wrangler preview --name "$PREVIEW_NAME" --json)"
           printf '%s\n' "$output"
-          preview_url="$(printf '%s' "$output" | jq -er '.preview.urls[0]')"
+          # Wrangler prints progress messages before the JSON response. Extract the JSON object first.
+          preview_json="$(printf '%s\n' "$output" | awk 'BEGIN { capture = 0 } /^[[:space:]]*[{]/ { capture = 1 } capture { print }')"
+          preview_url="$(printf '%s\n' "$preview_json" | jq -er '.preview.urls[0]')"
           echo "preview_url=$preview_url" >> "$GITHUB_OUTPUT"
           {
             echo "### Cloudflare Preview deployment succeeded"
