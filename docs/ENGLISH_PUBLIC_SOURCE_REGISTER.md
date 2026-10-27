@@ -1,6 +1,6 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.9  
+**Version:** 2.0  
 **Research checked:** 27 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
@@ -219,3 +219,8 @@ This check did not reveal the exact currently applicable full framework/version 
 Technical evidence is recorded separately from curriculum mapping: controlled preview run [#14](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206707) passed; Build check [#245](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206694) passed the TypeScript/Vite build and 17/17 Chromium tests; Cloudflare's Preview API confirmed [the isolated Stage 7 v1.3 testing URL](https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1) with `deployed_on = 2026-10-27T14:46:23Z` UTC at the check. The URL is public unless Cloudflare Access is enabled. CI tests use local Wrangler assets and are not manual accessibility certification or a visual check of the hosted page.
 
 **Gate status unchanged:** Human academic and age/level/cultural suitability review, formal rights/originality clearance, current full framework/version and any further mapping, manual accessibility review and explicit release approval remain open. The Stage 7 candidate remains unreleased; do not skip to CBSE Grade 6 or start Unit 2 until required gates are addressed.
+
+
+## Stage 7 Unit 1 v1.3 — supplemental rights/originality query record (27 October 2026)
+
+A second limited search pass queried eight additional distinctive sentence fragments from the Stage 7 learner passage and exit check. No exact passage-level match surfaced in the returned public search results; the returned results were general reading/inference teaching resources rather than exact text matches. This is not proof of authorship, a comprehensive plagiarism check or legal clearance. Formal rights/originality review remains open. No photograph or third-party literary excerpt is used in the unit, so the photo pre-selection process is not applicable to this content.

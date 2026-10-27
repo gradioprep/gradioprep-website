@@ -142,3 +142,10 @@ Cambridge's current support guidance says that the detailed Curriculum Framework
 ### Gate result and next action
 
 The hosted preview and automated browser checks are now verified; the content candidate is **not** cleared for release. Human academic review and actual Stage 7 suitability judgement for exact v1.3, formal rights/originality clearance, full current framework/version and any further mapping, manual accessibility checks (including screen-reader, keyboard/focus, zoom/reflow, text-to-speech and cross-browser), and explicit release approval remain pending. This addendum records technical/source verification only; it is not an independent human review or learner pilot. Keep PR #12 in draft and continue the already-authorised gate review before starting CBSE Grade 6 Unit 1.
+
+
+## 11. Supplemental public exact-phrase screen — 27 October 2026
+
+Eight additional exact-phrase searches were run for distinctive sentences/clauses not limited to the original four queried fragments. The query set included the library-window opening image, Jamil watching the garden, the rain-gauge/gust sentence, Ms Chen's moved seed trays, the bench and smallest trays detail, the exit-check paper-cup/packing sentence, and the distinctive combination of Jamil's inference clue chain. No exact passage-level match appeared in the returned public search results; results included general pedagogy/inference pages rather than matching text.
+
+This expands the earlier desk screen but **does not close the rights gate**. Search engines may miss private, unindexed, paywalled, translated or paraphrased material. The search is not comprehensive plagiarism detection, legal advice or proof of authorship. Formal rights/originality clearance remains pending. The candidate remains unreleased.
