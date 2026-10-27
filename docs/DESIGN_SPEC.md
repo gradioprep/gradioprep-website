@@ -1,8 +1,8 @@
 # Criterion Lab — Design Specification
 
-**Version:** 1.5  
-**Status:** Approved design system; curriculum-first navigation implemented and live-verified in the Cloudflare Workers preview  
-**Last updated:** 25 October 2026  
+**Version:** 1.6  
+**Status:** Approved design system; curriculum-first navigation live-verified; controlled Cambridge Stage 7 Unit 1 interface preview CI-verified, with content-release gates still open  
+**Last updated:** 27 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
@@ -418,3 +418,12 @@ The design can be considered ready for functional implementation when:
 
 
 **Version 0.9 change note — 25 October 2026:** Tightened vertical spacing on the Pathways page by approximately half for transitions between curriculum groups and the selected-pathway planning panels. Taxonomy bands now sit close to their group headings and cards, rather than being visually centred between adjacent content blocks. Keep this spacing adjustment scoped to catalogue groups; preserve the shared site-wide spacing system and existing typography/palette. The former below-catalogue planning-panel placement is superseded by version 1.0.
+
+
+## 13. Controlled Cloudflare preview — verification record (27 October 2026)
+
+The unlinked Cambridge Lower Secondary English 0861 Stage 7 Unit 1 v1.3 interface-testing route remains isolated in draft PR [#15](https://github.com/gradioprep/gradioprep-website/pull/15). The controlled Cloudflare preview workflow's permission fix is scoped to the preview job (`pull-requests: write`); the workflow default is `contents: read`, and the preview-cleanup job also has only `contents: read`. Controlled preview run [#10](https://github.com/gradioprep/gradioprep-website/actions/runs/40522673831) passed, including creation/update of the PR comment. Build check [#241](https://github.com/gradioprep/gradioprep-website/actions/runs/40522673892) passed the TypeScript/Vite build and 17/17 Chromium tests on commit `6b7c4e961482785d3170cb5debbcd7f15a22cee7`.
+
+The 17-test suite includes the six controlled-preview checks (visible unreleased status, keyboard skip-link focus transfer, unique accessible names and prompt association for all 14 response fields, responsive layout at 320/390/768/1024 CSS-pixel widths, clearing temporary responses and the warm-up choice, and sampled text contrast) plus the existing 11 curriculum-navigation tests. These are automated interface checks against locally served Wrangler assets; they are not a manual screen-reader evaluation, complete WCAG audit, learner suitability review, or academic/curriculum-release approval.
+
+Cloudflare's API verified the current `pr-15` Preview, deployed at `2026-10-27T14:36:55Z` UTC. The direct hosted page could not be fetched from the automation environment for an independent visual smoke review; founder visual review remains outstanding. The URL is publicly reachable unless Cloudflare Access is separately enabled. Do not use real student data, add the route to normal navigation, merge the draft PR, or treat this preview as a release. This record does not change the approved design tokens or production deployment state.

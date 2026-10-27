@@ -1,12 +1,12 @@
 # Controlled Cloudflare Preview Setup
 
-**Status (26 October 2026):** The preview workflow is committed to the draft code PR branch, and its application build succeeds. A hosted preview has **not** yet been deployed because the repository does not yet have the two required GitHub Actions secrets. The workflow intentionally skips the deployment when either secret is absent.
+**Status (27 October 2026):** The controlled preview is deployed and verified in Cloudflare. The previous failure was limited to the PR-comment step; the application build and preview creation had succeeded. After a narrowly scoped GitHub token-permission fix, controlled preview run [#10](https://github.com/gradioprep/gradioprep-website/actions/runs/40522673831) passed, and Build check [#241](https://github.com/gradioprep/gradioprep-website/actions/runs/40522673892) passed the TypeScript/Vite build and 17/17 Chromium tests. The preview URL is [https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev](https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev). Cloudflare's API reports its latest preview deployment at 2026-10-27 14:36:55 UTC. This is an unreleased interface-testing preview, not production or student-ready content.
 
 ## What this preview does
 
 - Uses Cloudflare Worker Previews with `npx wrangler preview`, not the production deployment command `npx wrangler deploy`.
 - Runs for same-repository pull requests targeting `main`, but never for forked PRs. Manual dispatch is restricted to the approved `preview/cambridge-stage-7-unit-1-accessibility` branch.
-- Creates or updates a separate `pr-<number>` Preview for each pull request and posts its URL to the PR when deployment succeeds. Manual runs on the approved branch use `pr-15`, so they update the same Preview as PR #15.
+- Creates or updates a separate `pr-<number>` Preview for each pull request and posts its URL to the PR when deployment succeeds. Manual runs on the approved branch use `pr-15`, so they update the same Preview as PR #15. The current workflow keeps the default token permission at `contents: read`, grants `pull-requests: write` only to the preview job, and keeps the cleanup job read-only.
 - Builds the application before attempting to upload the preview.
 - Deletes the pull-request Preview when that PR is closed, if credentials are configured.
 - Does not merge a PR, change the production deployment, change the main-domain DNS, or require the custom domain to be connected to Cloudflare.
@@ -56,3 +56,13 @@ Cloudflare documentation:
 - Worker Previews: https://developers.cloudflare.com/workers/previews/
 - GitHub Actions authentication and API tokens: https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/
 - Cloudflare Access for Workers: https://developers.cloudflare.com/workers/configuration/cloudflare-access/
+
+
+## Verification record — 27 October 2026
+
+- **Failure identified:** Controlled preview run #9 built the app and created the Cloudflare Preview, then failed while calling the GitHub Issues comments API to read the PR conversation. GitHub returned HTTP 403, `Resource not accessible by integration`, with the effective accepted permissions header showing `issues=read; pull_requests=read`.
+- **Fix committed:** commit `6b7c4e961482785d3170cb5debbcd7f15a22cee7` scopes `pull-requests: write` to the preview job only. The workflow-level default is `contents: read`; the cleanup job remains `contents: read`.
+- **Workflow verification:** [Controlled preview run #10 passed](https://github.com/gradioprep/gradioprep-website/actions/runs/40522673831), including the “Update the pull request with the preview URL” step. The current URL is posted in the [PR #15 conversation](https://github.com/gradioprep/gradioprep-website/pull/15).
+- **Build/browser verification:** [Build check #241 passed](https://github.com/gradioprep/gradioprep-website/actions/runs/40522673892); the TypeScript/Vite build succeeded and all 17 Chromium tests passed, including six Stage 7 preview checks and 11 existing navigation tests. Browser tests use locally served Wrangler assets.
+- **Hosted preview verification:** Cloudflare's API returned HTTP 200 and confirmed the `pr-15` preview URL `https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev`, with deployment timestamp `2026-10-27T14:36:55Z` UTC. The remote page could not be fetched directly from this execution environment for an independent visual smoke check; founder visual review is still outstanding.
+- **Safety boundary:** No PR was merged, no production deploy was run, and no DNS changes were made. The preview is public unless Cloudflare Access is enabled. Do not use it for student/personal data or present this candidate as released/student-ready.
