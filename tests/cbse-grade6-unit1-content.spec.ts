@@ -5,7 +5,7 @@ test("CBSE Grade 6 Unit 1 remains unreleased with partial source alignment and n
   expect(cbseGrade6Unit1LearnerLesson.releaseStatus).toBe("draft-unreleased");
   expect(cbseGrade6Unit1LearnerLesson.curriculum.mappingStatus).toBe("partial-source-alignment-code-unverified");
   expect(cbseGrade6Unit1LearnerLesson.curriculum.officialObjectiveCodes).toEqual([]);
-  expect(cbseGrade6Unit1LearnerLesson.curriculum.reviewNote).toContain("no unit-specific official CBSE objective code");
+  expect(cbseGrade6Unit1LearnerLesson.curriculum.reviewNote).toMatch(/no unit-specific official CBSE objective code/i);
   expect(cbseGrade6Unit1LearnerLesson.sourceContext.references).toContain(
     "https://ncert.nic.in/pdf/Bridge_Month_Program/Grade6/BMP_Grade-6-English%28R2%29.pdf",
   );
