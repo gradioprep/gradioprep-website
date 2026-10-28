@@ -100,3 +100,8 @@ The current draft, **“The Missing Bell,”** uses a short original animal narr
 **Mapping state:** unverified. No official CBSE objective/competency code is assigned. Before any mapping claim or release, confirm the applicable current NCERT textbook reprint and the appropriate Grade 6 English learning outcome/competency in an exact official source. Do not infer a code from the activity page alone.
 
 **Source/rights state:** the lesson's short text and tasks are platform-original and have received a limited public distinctive-phrase screen with no exact passage-level match found in returned results. The unit is not yet human-approved. The exact-source and no-copy rule remains binding for future sourced text/media. The separate QA record logs the review scope and limitations.
+
+
+## 9. Implementation record for Unit 1 — 28 October 2026
+
+The first candidate **“The Red Marker”** is now drafted with an original short passage, direct-information and inference questions, event sequencing, location-preposition practice and an independent retelling. Separate files record the learner content, teacher/editor answer pack, and QA/provenance review. A learner-safe TypeScript source exists but is intentionally not imported into the app UI. No official CBSE objective code is assigned; the current official pages establish context but not exact item-level mapping. The candidate is unreleased and requires its own human academic/suitability review and accessibility/release decisions. Do not treat earlier Cambridge approvals as approval of this distinct unit.
