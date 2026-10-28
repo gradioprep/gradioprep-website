@@ -1,7 +1,7 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.2  
-**Research checked:** 28 October 2026  
+**Version:** 2.3  
+**Research checked:** 28 October 2026; Grade 6 source recheck added 28 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
 
@@ -31,6 +31,16 @@ The CBSE pathway is newly approved for product scope. This register entry is a s
 - Preserve the official route distinctions at Classes IX–X and XI–XII. Do not merge English Language and Literature, English Communicative, English Core or English Elective into a single assessment route.
 - The addition of R3/three-language requirements is not, by itself, evidence of a change to the English subject syllabus.
 - These sources establish an initial research base only. Exact class-wise official mapping and the latest effective textbook/syllabus position remain pending a dedicated audit. Independent EdTech resources may inform teaching design but cannot establish official CBSE requirements.
+
+
+### Grade 6 English — current textbook and task-design source check (28 October 2026)
+
+- [NCERT advisory for schools](https://www.ncert.nic.in/pdf/announcement/NCERT-Advisory-for-Schools.pdf) identifies **Poorvi** as the Grade 6 English textbook. Use this for title/identity only; verify the live NCERT catalogue and the exact edition/reprint before any future release.
+- [NCERT CIET Grade 6 activities](https://www.ciet.ncert.gov.in/activity/grade6?lang=en) lists *Poorvi*, Chapter 1, “Fables and Folk Tales”, including learning activities on prepositions of location. This supports the high-level text-type and language-skill context for the candidate, not an official unit-level objective code or complete CBSE syllabus map.
+- [NCERT textbook portal and copyright notice](https://ncert.nic.in/textbook.php) states that NCERT textbooks are copyrighted and that republication, redistribution and incorporation into digital content packages/software are prohibited without the stated permission basis. Use the textbook as a source for curriculum context only; do not copy or adapt chapter prose, exercises, illustrations or screenshots into the platform. The current candidate uses a short platform-original passage and original tasks, and embeds no external image.
+- [Ministry of Education / PIB, “Alignment of NCERT Syllabus with National Education Policy 2020” (10 August 2026)](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297094&lang=1&reg=48) reports that NCERT has brought out new syllabus/textbooks for Grades 1–9 and that material development includes mapping of curricular goals, competencies and learning outcomes with academic, pedagogical, language and sensitivity review. This supports checking current textbooks and learning standards, not inventing a Grade 6 English code.
+
+**Candidate mapping boundary:** describe the work as an independently designed, public-source-aligned CBSE Grade 6 practice unit. No official class-specific objective code is assigned in the absence of an exact current Grade 6 English descriptor. The exact NCERT edition/reprint should be checked again before any publication decision.
 
 ## 2. Core five-source set
 
@@ -236,4 +246,4 @@ The content source register governs curriculum/source research; the separate con
 - Public availability, a “copyright free” label, search-result text, attribution alone, or an educational use case is not proof of rights. If terms are ambiguous, select a clearer source. Use permission or an explicitly documented legal basis for copyrighted content outside the reusable-source route.
 - Do not confuse an internal originality/provenance pass with a verified third-party licence or a formal legal opinion. Escalate only when a concrete concern remains unresolved; do not repeat broad searches on unchanged text without a reason.
 
-The Stage 7 Unit 1 v1.3 short original passage has the internal originality/provenance screen status **PASSED** as recorded on 28 October 2026; the founder confirms the exact version received human review approval. The unit is text-only, so no third-party asset licence applies to it. Its separate curriculum mapping, manual accessibility and release gates remain open.
+The Stage 7 Unit 1 v1.3 short original passage has the internal originality/provenance screen status **PASSED** as recorded on 28 October 2026; the founder confirms the exact version received human review approval and now confirms that the required verification/approval decisions previously described as outstanding were already given. This does not add any further official objective code to the documented 7Ri.03 crosswalk, and the interface preview remains unmerged/unreleased until the approved code-release step is performed.
