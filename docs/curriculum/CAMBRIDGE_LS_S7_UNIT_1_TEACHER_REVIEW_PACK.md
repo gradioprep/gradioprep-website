@@ -3,10 +3,10 @@
 **Unit ID:** cambridge-ls-english-s7-u1  
 **Content version:** 1.3 draft  
 **Learner content:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md`  
-**Status:** Draft only — the founder authorised controlled preview integration for interface accessibility testing only. This is not approval for publication, student-ready use, or release.  
+**Status:** Draft only — the founder confirmed human review and approval of the exact v1.3 learner content on 28 October 2026. The controlled preview integration remains for interface testing only; this does not approve publication, student-ready use or release.  
 **Revision note:** Added a worked model for inference, optional learner-facing word support, alternatives to paper annotation, and item-specific formative scoring descriptors following the v1.2 academic/editorial review.  
 **Official mapping:** Partial public cross-check only: 7Ri.03 for explicit-information items (the warm-up's directly stated detail, guided practice A and independent practice 1). Cambridge's public framework-support overview explicitly identifies this objective code. Do not apply it to the entire unit. Inference and language-choice codes remain unassigned until the currently applicable support-site framework is confirmed.  
-**Rights:** All passage text and questions are original to this platform. Rights/originality clearance remains a separate gate; this note is not legal clearance.
+**Rights/provenance:** The short passage and its questions/tasks are original to this platform. The initial exact-phrase screen plus eight supplemental searches found no exact passage-level match in returned public results; the internal originality/provenance screen is **PASSED** under docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md (28 October 2026). This is not a formal legal opinion or guarantee of exclusive authorship. The current unit contains no third-party excerpt or image. Longer texts and image/poster/document stimuli in other units require exact-source public-domain/open-licence verification before selection/embedding.
 
 ## 1. Learning-design summary
 
@@ -185,3 +185,9 @@ The public material does not reveal the current full framework/version and progr
 An AI-assisted check compared the current teacher/editor guidance with the exact v1.3 learner file. The answer guidance corresponds to the prompts in the current passage; alternatives remain allowed where text evidence supports them. The item-level formative profile sums correctly to 15 points (1 + 2 + 2 + 2 + 2 + 6); the exit check and reflection remain unscored. No clear inconsistency was found that warranted a content revision, so the learner and teacher/editor files remain v1.3.
 
 This is a limited AI editorial check only. It does not fulfil the unchecked human academic/age-level/cultural review item in Section 8, prove official curriculum mapping, constitute legal rights clearance, or replace manual accessibility and explicit release approval.
+
+## Review and source-control update — 28 October 2026
+
+The founder confirms human review/approval of exact v1.3 learner content, including academic and age/level/cultural suitability. The formative total remains 15 points and the exit check/reflection remain unscored. This pack is for teacher/editor use and is not imported into the learner client.
+
+The internal originality/provenance screen for the current short passage/tasks is passed; no formal legal opinion is claimed. The unit remains unreleased pending current official Cambridge framework/version and further objective mapping, manual accessibility/hosted visual review and explicit release approval. Apply the source requirements for longer passages and visual/documentary tasks in docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md. Do not reuse an unverified image/poster or assume “educational use” alone confers permission.
