@@ -18,3 +18,7 @@
 Playwright tests cover direct-route behaviour, absence of normal-navigation links, status/mapping boundaries, keyboard skip-link focus, accessible names and unique control IDs, reset behaviour, horizontal overflow at 320/390/768/1024 CSS-pixel widths, sampled text contrast and no teacher-only answer-key text. These automated checks are not a full WCAG audit or a substitute for manual keyboard, screen-reader and hosted-preview review.
 
 The preview is publicly reachable if hosted on a public Workers.dev preview URL. Use fictional test responses only. Do not merge, enable normal learner navigation, or promote to production from this PR.
+
+## Hosted preview deployment
+
+The preview branch carries the existing least-privilege Controlled Cloudflare Worker preview workflow. For this approved branch it runs on pushes to `preview/cbse-grade-6-unit-1-accessibility` and uses the distinct Worker Preview name `pr-17`. It executes `npx wrangler preview`, not `npx wrangler deploy`; production Worker deployment, production DNS and the Cambridge `pr-15` preview are not changed. The generated Workers.dev preview is public unless Cloudflare Access is separately enabled. Use fictional test responses only.
