@@ -62,13 +62,13 @@ The teacher/editor pack has a **12-point internal formative guide** for consiste
 - The learner passage and tasks are platform-original; the limited internal phrase screen and its limitations are recorded in the QA document.
 - Do not embed or reproduce *Poorvi* text, exercises, illustrations, screenshots or page scans. NCERT's published terms restrict republication and inclusion in digital content packages/software unless the stated permission basis applies.
 - This version is text-only. No photo, poster, external illustration or third-party excerpt is used. The strict project rule requiring explicit CC0/public-domain evidence on the exact source page before choosing a photograph remains binding if a future revision considers one.
-- Use semantic headings, selectable text, short instructions and examples that do not rely on colour alone. A full interface is not yet implemented, so keyboard, screen-reader, zoom/reflow and hosted visual checks are not claimed.
+- Use semantic headings, selectable text, short instructions and examples that do not rely on colour alone. A controlled direct-only interface preview is implemented in draft PR #17. Automated checks cover labels/IDs, skip-link focus, responsive overflow and sampled text contrast; this is not full accessibility certification. Manual hosted visual, keyboard, screen-reader and zoom/reflow checks remain pending.
 - Provide the text as written content, not as an image. Avoid requiring drawing or colour identification. The learner may answer sequence tasks with numbered steps.
 
 ## 6. Remaining work before any release
 
 - Verify the current applicable Grade 6 NCERT *Poorvi* textbook reprint/edition. Keep the bridge-programme outcome alignment limited to what the source actually supports; do not invent a code.
-- Obtain explicit authorization before adding a controlled, unlinked preview route for UI/accessibility checks. Keep the content out of normal learner navigation until the separate integration and review gates are approved.
-- Complete keyboard/focus, screen-reader, 200%/400% zoom/reflow, cross-browser, hosted contrast and task/response-burden checks on the eventual preview; automated content-file checks are not a usability or WCAG audit.
+- A controlled, unlinked preview route is available in draft [PR #17](https://github.com/gradioprep/gradioprep-website/pull/17): [open the hosted preview](https://pr-17-gradioprep-website.wandering-scene-1822.workers.dev/preview/cbse-grade-6/english/unit-1). It is for interface/accessibility review only and is not in normal learner navigation.
+- Complete manual hosted visual, keyboard/focus, screen-reader, 200%/400% zoom/reflow, cross-browser and task/response-burden checks. Automated checks in Build check #256 are supporting evidence, not a usability or WCAG audit.
 - Keep the teacher/editor pack separate from every learner-facing import bundle.
 - Record distinct decisions for interface integration, official mapping, any learner pilot, and release. Content approval alone does not approve UI integration or release.

@@ -1,9 +1,9 @@
 # CBSE English Grade 6 Unit 1 — QA and Provenance Record
 
-**Version:** 1.1 — founder-approved learner content; mapping/source update  
+**Version:** 1.2 — controlled preview and accessibility test record  
 **Date:** 28 October 2026  
 **Unit ID:** cbse-english-g6-u1  
-**Status:** Founder approval of the exact learner-facing v1.0 for the academic-content gate recorded on 28 October 2026; internal originality/provenance screen passed within its stated limits; official source alignment is partial; UI accessibility and release gates remain open  
+**Status:** Founder approval of exact learner-facing v1.0 recorded on 28 October 2026; internal originality/provenance screen passed within its stated limits; source alignment is partial. A controlled unlinked preview is available in draft PR #17; automated browser checks passed, while manual accessibility review and release approval remain open  
 **Learner content version:** 1.0 — “The Turning Sign”
 
 ## 1. Candidate summary
@@ -48,7 +48,7 @@ No exact match to the revised passage surfaced in the returned public search res
 - The draft uses selectable text and does not rely on colour to convey the correct response.
 - The practice progression moves from direct information to inference, sequence, language in context and independent retelling.
 
-**Still not checked/claimed:** learner/teacher pilot; manual keyboard/focus and screen-reader operation; 200%/400% zoom or reflow; cross-browser behavior; hosted UI contrast; formal accessibility certification. The content has not been integrated into a UI route.
+**Still not checked/claimed:** learner/teacher pilot; manual hosted-page visual review; independent keyboard/focus and screen-reader operation; 200%/400% zoom/reflow; cross-browser behaviour; formal accessibility certification. A direct-only controlled preview exists in draft PR #17; it is not linked from normal navigation and is not a release.
 
 ## 6. Current gate table
 
@@ -59,7 +59,7 @@ No exact match to the revised passage surfaced in the returned public search res
 | Third-party asset licence | Not applicable to this text-only version | Reopen if any external text/media is proposed |
 | Official outcome alignment / objective code | Partial alignment only; official code unverified | NCERT Grade 6 English Bridge Month Programme supports story/event reading and sequencing; CIET lists location-preposition activities. Keep `officialObjectiveCodes` empty and do not claim complete CBSE mapping |
 | Human academic and age/cultural suitability | Approved for learner-facing v1.0 by founder on 28 October 2026 | Approval applies to the exact learner-facing passage/tasks as reviewed; a material change requires re-review |
-| Accessibility and interface review | Pending | After separate UI integration |
+| Accessibility and interface review | Controlled preview implemented; automated checks passed; manual review pending | Inspect [PR #17 hosted preview](https://pr-17-gradioprep-website.wandering-scene-1822.workers.dev/preview/cbse-grade-6/english/unit-1); perform manual visual, keyboard/focus, screen-reader and zoom/reflow review. Automation is not WCAG certification |
 | Learner release | Not approved | Keep outside normal navigation until its own checks are complete |
 
 ## 7. Version/review history
@@ -68,4 +68,5 @@ No exact match to the revised passage surfaced in the returned public search res
 - **28 October 2026 — phrase-screen refinement:** rewrote the story mechanism and wording before review to avoid an unnecessary phrase/image-pattern overlap discovered during supplementary search; reran phrase screens on “The Turning Sign.”
 - **28 October 2026 — founder review:** learner-facing v1.0 “The Turning Sign” and its passage/tasks were reviewed and approved for the academic-content gate. This does not approve UI integration, accessibility or release, and does not assign an official CBSE code.
 - **28 October 2026 — official outcome-source check:** added the NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024); recorded limited alignment to reading stories/identifying main ideas, characters and events and using sequencing assessment. Current *Poorvi* reprint and any official unit-specific code remain unverified.
+- **28 October 2026 — controlled interface preview:** implemented a direct-only route in draft [PR #17](https://github.com/gradioprep/gradioprep-website/pull/17). Build check [#256](https://github.com/gradioprep/gradioprep-website/actions/runs/40705131153) passed 20/20 Chromium tests, including nine CBSE preview checks for direct routing/status, no normal-navigation link, skip-link focus, control labels/IDs, response clearing, 320/390/768/1024px overflow, sampled 4.5:1 contrast, answer-pack separation and unknown routes. Controlled preview run [#22](https://github.com/gradioprep/gradioprep-website/actions/runs/40705131098) deployed the hosted preview. Manual hosted visual, keyboard and screen-reader review remains pending; the URL is public unless Cloudflare Access is enabled. Release remains unapproved.
 - Any material future edit must be versioned and receive the relevant updated checks. Cambridge Stage 7 approvals do not transfer to this independent CBSE unit.

@@ -1,10 +1,10 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.4  
-**Status:** Approved pathway scope and authorised implementation; learner-facing Grade 6 Unit 1 v1.0 (“The Turning Sign”) has founder academic-content approval recorded 28 October 2026. Its source alignment is partial; no unit-specific official CBSE objective code is assigned. Current *Poorvi* reprint verification, controlled-preview/UI accessibility review and release approval remain separate gates.  
+**Version:** 1.5  
+**Status:** Approved pathway scope and authorised implementation; learner-facing Grade 6 Unit 1 v1.0 (“The Turning Sign”) has founder academic-content approval recorded 28 October 2026. Its source alignment is partial; no unit-specific official CBSE objective code is assigned. A controlled, unlinked interface preview is available in draft PR #17; manual accessibility review, current *Poorvi* reprint verification and release approval remain separate gates.  
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
-**Implementation status (28 October 2026):** The learner-facing v1.0 candidate was approved for the academic-content gate by the founder. The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) now provides limited source-backed alignment for narrative reading and event sequencing, but no unique objective code. No application route/catalogue addition or release is included; candidate code remains unimported by the live UI.
+**Implementation status (28 October 2026):** The learner-facing v1.0 candidate was approved for the academic-content gate by the founder. The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports limited source alignment for narrative reading and event sequencing, but no unique objective code. A direct-only controlled preview is implemented in [draft PR #17](https://github.com/gradioprep/gradioprep-website/pull/17), deployed for accessibility review at [the hosted preview URL](https://pr-17-gradioprep-website.wandering-scene-1822.workers.dev/preview/cbse-grade-6/english/unit-1). No normal navigation or release is added; manual accessibility review and the separate release gate remain outstanding.
 
 ## 1. Product decision
 
@@ -64,7 +64,7 @@ After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 �
 
 - Pathway family and implementation sequence approved.
 - Grade 6 source context checked against official NCERT/CIET public pages on 28 October 2026.
-- The platform-original learner-facing v1.0 candidate for CBSE Grade 6 Unit 1 has founder approval for the academic-content gate (28 October 2026); it remains unreleased and outside normal navigation.
+- The platform-original learner-facing v1.0 candidate for CBSE Grade 6 Unit 1 has founder approval for the academic-content gate (28 October 2026); it remains unreleased and outside normal navigation. A controlled, unlinked accessibility preview is available in PR #17.
 - The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports a limited alignment to narrative reading and event sequencing; CIET lists location-preposition activities. No official CBSE objective code is assigned. The exact current *Poorvi* reprint/version remains unverified.
 - Exact textbook reprint/version and all grade-specific competencies/outcomes still require a scoped follow-up before a future official mapping claim.
 - Specialist EdTech comparison and wider class-wise official-source audit for Grades 6–12 remain incomplete.
@@ -99,7 +99,7 @@ The current learner-facing v1.0, **“The Turning Sign,”** uses a short origin
 
 **Mapping state:** partial source alignment; official code unverified. The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports narrative-reading/event-sequencing alignment. CIET lists location-preposition activity context. The current *Poorvi* reprint/version and any unit-specific official CBSE objective code remain unverified; do not infer a code from the activity page or bridge programme.
 
-**Source/rights state:** the lesson's short text and tasks are platform-original and have received a limited public distinctive-phrase screen with no exact passage-level match found in returned results. The learner-facing v1.0 received founder academic-content approval on 28 October 2026. This approval does not extend to UI integration or learner release. The exact-source and no-copy rule remains binding for future sourced text/media. The separate QA record logs the review scope and limitations.
+**Source/rights state:** the lesson's short text and tasks are platform-original and have received a limited public distinctive-phrase screen with no exact passage-level match found in returned results. The learner-facing v1.0 received founder academic-content approval on 28 October 2026. Controlled UI testing is available in draft PR #17, but this does not authorize normal navigation or learner release. Manual hosted accessibility review and the release decision remain open. The exact-source and no-copy rule remains binding for future sourced text/media.
 
 
 ## 9. Implementation record for Unit 1 — 28 October 2026
