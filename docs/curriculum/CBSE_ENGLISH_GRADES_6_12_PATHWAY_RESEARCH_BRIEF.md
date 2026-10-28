@@ -95,7 +95,7 @@ The founder approved the CBSE Grades 6–12 pathway scope and has now instructed
 
 ### Candidate design boundary
 
-The current draft, **“The Missing Bell,”** uses a short original animal narrative to teach reading a story for events, clues and supported inference, plus a brief activity on prepositions of location. It does not reproduce the named *Poorvi* stories or their exercise wording. No external image/photo, third-party excerpt, textbook scan or copied NCERT asset is included.
+The current draft, **“The Turning Sign,”** uses a short original animal narrative to teach reading a story for events, clues and supported inference, plus a brief activity on prepositions of location. It does not reproduce the named *Poorvi* stories or their exercise wording. No external image/photo, third-party excerpt, textbook scan or copied NCERT asset is included.
 
 **Mapping state:** unverified. No official CBSE objective/competency code is assigned. Before any mapping claim or release, confirm the applicable current NCERT textbook reprint and the appropriate Grade 6 English learning outcome/competency in an exact official source. Do not infer a code from the activity page alone.
 
