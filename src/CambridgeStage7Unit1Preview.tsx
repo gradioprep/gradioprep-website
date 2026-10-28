@@ -110,9 +110,11 @@ export default function CambridgeStage7Unit1Preview() {
           <div className="s7-preview-alert" role="note" aria-label="Preview status">
             <strong>NOT RELEASED — NOT STUDENT-READY</strong>
             <p>
-              This page exists only for interface accessibility testing. The complete current Cambridge
-              framework, full objective mapping, formal rights/originality clearance, human academic and
-              suitability judgement, and release approval remain outstanding. Nothing is graded or saved.
+              This page exists only for interface accessibility testing. Human review of this exact v1.3
+              content is complete and approved. The short platform-original passage has passed the internal
+              originality/provenance screen; this is not a formal legal opinion. The current full Cambridge
+              framework/version and further objective mapping, manual accessibility review, and release
+              approval remain open. Nothing is graded or saved.
             </p>
           </div>
           <nav aria-label="Breadcrumb" className="s7-preview-breadcrumb">
