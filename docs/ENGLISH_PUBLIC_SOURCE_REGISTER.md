@@ -1,11 +1,11 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.1  
-**Research checked:** 27 October 2026  
+**Version:** 2.2  
+**Research checked:** 28 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
 
-**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md. Short platform-original passages may proceed after a proportionate internal originality/provenance screen and human review; longer passages and image/poster/document stimuli must use a specific verified public-domain or suitably open-licensed source unless a separate permission/legal basis is recorded. Check exact terms before selection or embedding.
+**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md. Short platform-original passages may proceed after a proportionate internal originality/provenance screen and human review; longer passages and image/poster/document stimuli must use a specific verified public-domain or suitably open-licensed source unless a separate permission/legal basis is recorded. Check exact terms before selection or embedding. The existing stricter photograph rule remains binding: a photograph must have explicit CC0/public-domain evidence on the exact file page before it is selected/embedded.
 
 ## 1. Decision in response to access constraints
 
@@ -193,7 +193,7 @@ Public exact-phrase searches were run for distinctive strings from the draft lea
 
 The Stage 7 Unit 1 learner and teacher files contain no photographs, illustrations, screenshots, third-party literary excerpts, copied questions or copied model answers. The Cambridge and Education Endowment Foundation sources inform curriculum/context and teaching approach; they are not reproduced as lesson passages. The narrow 7Ri.03 reference is attributed to the public framework-support overview.
 
-**Gate state:** Initial public phrase-search screen completed with no exact match surfaced; formal rights/originality clearance remains open. The mandatory pre-selection CC0/public-domain photo check is not applicable to this text-only unit. Do not describe the unit as legally cleared or fully plagiarism-checked on the basis of this screen.
+**Gate state:** Initial public phrase-search screen (26 October 2026): no exact match surfaced. This historical note is superseded by the 28 October record below: the unchanged short original text has passed the internal originality/provenance screen after supplemental searches and founder human approval; no formal legal opinion is claimed. The mandatory pre-selection CC0/public-domain photo check is not applicable to this text-only unit. Do not describe the unit as legally cleared or fully plagiarism-checked on the basis of this screen.
 
 ## Pedagogy references used in the Stage 7 Unit 1 v1.3 review
 
