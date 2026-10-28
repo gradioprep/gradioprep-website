@@ -1,7 +1,7 @@
 # English Curriculum Research, Quality Rubric and Design Standard
 
-**Status:** Internal working reference v1.4 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
-**Prepared:** 26 October 2026
+**Status:** Internal working reference v1.5 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
+**Prepared:** 28 October 2026
 **Owner:** Academic lead / founder
 **Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary, Cambridge IGCSE and CBSE English Grades 6–12. Official syllabus mappings must be verified separately for each course, class/year/stage and edition.
 **Do not publish this document as a claim of IB/Cambridge endorsement.**
@@ -233,3 +233,7 @@ The final controlled-preview commit makes the clear-all control reset both typed
 ## 16. Final focus and responsive regression checks — 26 October 2026
 
 [Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed on the latest controlled preview test commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`: TypeScript/Vite build and 17/17 Chromium tests passed. The final suite confirms that the skip link transfers keyboard focus to the main content, all question prompts including the exit-check prompt are programmatically associated with their response textareas, every response field has a unique task-specific accessible name, and the layout has no horizontal overflow at 320, 390, 768 and 1024 CSS-pixel viewports. The clear-all action removes all draft input, including the radio choice. This is automated smoke evidence only—not full accessibility certification or user testing. Manual screen-reader, broader focus-order, zoom/reflow and cross-browser checks remain open.
+
+## Content-rights procedure update — 28 October 2026
+
+The founder has approved the binding risk-based process in `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md`. Original writing is limited to short platform-created passages/excerpts and supporting learning/assessment text; source longer passages and visual/documentary stimuli from a specific public-domain or suitably open-licensed work with intended-use rights verified before selection/embedding. For the exact Cambridge Stage 7 Unit 1 v1.3 text-only candidate, founder human review is approved and the internal originality/provenance screen is passed. Do not label this a formal legal opinion. Its current full Cambridge framework/version and further objective mapping, manual accessibility/hosted visual review, and explicit release approval remain open.
