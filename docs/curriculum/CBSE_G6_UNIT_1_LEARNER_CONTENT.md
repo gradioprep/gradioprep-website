@@ -3,8 +3,8 @@
 **Version:** 1.0 — draft candidate  
 **Unit ID:** cbse-english-g6-u1  
 **Title:** The Turning Sign  
-**Status:** Unreleased; not yet human-approved  
-**Curriculum mapping:** Unverified; no official CBSE objective code assigned  
+**Status:** Founder-approved for the academic-content gate on 28 October 2026; unreleased and not integrated into normal learner navigation  
+**Curriculum alignment:** Partial source alignment to NCERT Grade 6 English Bridge Month Programme for narrative reading/event sequencing; no official CBSE objective code assigned  
 **Rights note:** Short platform-original passage and tasks; no NCERT passage, exercise, image or other third-party stimulus reproduced
 
 ## Why are we learning this?
@@ -64,4 +64,4 @@ There may be more than one reasonable explanation, but it must fit the passage.
 
 ---
 
-**Learner-facing version note:** This is an original practice draft based on publicly checked Grade 6 textbook/activity context. It is not an official CBSE chapter, official objective map, released course or board assessment.
+**Learner-facing version note:** This is the platform-original v1.0 candidate approved for the academic-content gate on 28 October 2026. The limited source alignment is not an official CBSE objective map or a complete syllabus claim. This unit remains unreleased and is not a board assessment.

@@ -1,10 +1,10 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.3  
-**Status:** Approved pathway scope and authorised implementation; Grade 6 Unit 1 v1.0 exists as an unreleased draft candidate in a separate stacked pull request. It is independently designed, not an official CBSE syllabus map. Unit-specific academic review, exact source/rights checks, accessibility/suitability, final mapping and release approval remain separate gates.  
+**Version:** 1.4  
+**Status:** Approved pathway scope and authorised implementation; learner-facing Grade 6 Unit 1 v1.0 (“The Turning Sign”) has founder academic-content approval recorded 28 October 2026. Its source alignment is partial; no unit-specific official CBSE objective code is assigned. Current *Poorvi* reprint verification, controlled-preview/UI accessibility review and release approval remain separate gates.  
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
-**Implementation status (28 October 2026):** Curriculum design and learner-safe source draft for CBSE Grade 6 Unit 1 are now proposed in a separate pull request; no application route/catalogue addition or release is included. Candidate code is not imported into the live UI.
+**Implementation status (28 October 2026):** The learner-facing v1.0 candidate was approved for the academic-content gate by the founder. The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) now provides limited source-backed alignment for narrative reading and event sequencing, but no unique objective code. No application route/catalogue addition or release is included; candidate code remains unimported by the live UI.
 
 ## 1. Product decision
 
@@ -64,8 +64,8 @@ After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 �
 
 - Pathway family and implementation sequence approved.
 - Grade 6 source context checked against official NCERT/CIET public pages on 28 October 2026.
-- A platform-original candidate for CBSE Grade 6 Unit 1 has been drafted with separate learner content, teacher/editor pack and QA/source record; it remains unreleased and has not received unit-specific human approval.
-- The unit is not assigned an official CBSE objective code; the source evidence checked supports broad course/textbook context and prepositions of location, not an exact current Grade 6 English objective descriptor.
+- The platform-original learner-facing v1.0 candidate for CBSE Grade 6 Unit 1 has founder approval for the academic-content gate (28 October 2026); it remains unreleased and outside normal navigation.
+- The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports a limited alignment to narrative reading and event sequencing; CIET lists location-preposition activities. No official CBSE objective code is assigned. The exact current *Poorvi* reprint/version remains unverified.
 - Exact textbook reprint/version and all grade-specific competencies/outcomes still require a scoped follow-up before a future official mapping claim.
 - Specialist EdTech comparison and wider class-wise official-source audit for Grades 6–12 remain incomplete.
 - No application routes/catalogue changes or public release are made by the curriculum draft.
@@ -76,7 +76,7 @@ After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 �
 - Specialist EdTech/platform comparison for CBSE grades: pending.
 - Class-wise curriculum guides and unit sequences: not yet created by this addition.
 - Official mapping: not yet established.
-- Rights, accessibility, academic suitability and release approvals: not assessed by this scope document.
+- Human academic-content approval for learner-facing v1.0: recorded 28 October 2026. Rights/provenance desk screen passed within its limited scope; current-textbook version, official code, controlled-preview accessibility review and release gates remain distinct.
 - Application/catalogue changes: explicitly not requested and not made.
 
 ## 7. Approval interpretation
@@ -95,11 +95,11 @@ The founder approved the CBSE Grades 6–12 pathway scope and has now instructed
 
 ### Candidate design boundary
 
-The current draft, **“The Turning Sign,”** uses a short original animal narrative to teach reading a story for events, clues and supported inference, plus a brief activity on prepositions of location. It does not reproduce the named *Poorvi* stories or their exercise wording. No external image/photo, third-party excerpt, textbook scan or copied NCERT asset is included.
+The current learner-facing v1.0, **“The Turning Sign,”** uses a short original animal narrative to teach reading a story for events, clues and supported inference, plus a brief activity on prepositions of location. The founder approved this exact learner-facing version for the academic-content gate on 28 October 2026. It does not reproduce the named *Poorvi* stories or their exercise wording. No external image/photo, third-party excerpt, textbook scan or copied NCERT asset is included.
 
-**Mapping state:** unverified. No official CBSE objective/competency code is assigned. Before any mapping claim or release, confirm the applicable current NCERT textbook reprint and the appropriate Grade 6 English learning outcome/competency in an exact official source. Do not infer a code from the activity page alone.
+**Mapping state:** partial source alignment; official code unverified. The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports narrative-reading/event-sequencing alignment. CIET lists location-preposition activity context. The current *Poorvi* reprint/version and any unit-specific official CBSE objective code remain unverified; do not infer a code from the activity page or bridge programme.
 
-**Source/rights state:** the lesson's short text and tasks are platform-original and have received a limited public distinctive-phrase screen with no exact passage-level match found in returned results. The unit is not yet human-approved. The exact-source and no-copy rule remains binding for future sourced text/media. The separate QA record logs the review scope and limitations.
+**Source/rights state:** the lesson's short text and tasks are platform-original and have received a limited public distinctive-phrase screen with no exact passage-level match found in returned results. The learner-facing v1.0 received founder academic-content approval on 28 October 2026. This approval does not extend to UI integration or learner release. The exact-source and no-copy rule remains binding for future sourced text/media. The separate QA record logs the review scope and limitations.
 
 
 ## 9. Implementation record for Unit 1 — 28 October 2026
@@ -108,3 +108,9 @@ The first candidate **“The Turning Sign”** is now drafted with an original s
 
 
 The initial “The Red Marker” wording was revised before human review after a supplementary public search surfaced an unrelated phrase/title resemblance and a similar red-strand-by-thorn clue image. The current candidate is “The Turning Sign,” and its QA record documents the change and the limited re-screen. The new CBSE draft is tracked in [draft PR #16](https://github.com/gradioprep/gradioprep-website/pull/16), stacked on [PR #12](https://github.com/gradioprep/gradioprep-website/pull/12); it is not human-approved or UI-integrated.
+
+## 10. Learner-content approval and limited outcome alignment — 28 October 2026
+
+The founder has reviewed and approved the exact learner-facing “The Turning Sign” v1.0 for the academic-content gate. The source-backed learning-outcome check identified the NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024): the programme names reading stories and identifying main ideas, characters and events as a major learning outcome, and recommends comprehension questions and sequencing. This supports the reading/event-sequencing elements only. CIET's Grade 6 activity list provides context for the location-preposition practice.
+
+No official CBSE objective code is assigned. Current *Poorvi* reprint/version verification, a controlled unlinked preview for accessibility/UI checks, and explicit release decisions remain outstanding. The learner-safe TS data is still not imported into the UI. Do not add the unit to normal navigation or release it from this documentation decision.

@@ -1,8 +1,8 @@
 # CBSE English Grade 6 — Internal Curriculum Guide
 
-**Version:** 1.0 — draft candidate  
+**Version:** 1.1 — learner-content approval and outcome-source update  
 **Prepared:** 28 October 2026  
-**Status:** Internal, public-source-aligned design; not an official CBSE syllabus map, NCERT replacement or released course  
+**Status:** Internal guide; learner-facing Unit 1 v1.0 received founder academic-content approval on 28 October 2026. This remains a limited source-aligned candidate, not a complete official CBSE syllabus map, NCERT replacement or released course  
 **Pathway ID (planned):** cbse-english-g6  
 **First-cohort unit:** cbse-english-g6-u1 — The Turning Sign
 
@@ -13,16 +13,17 @@ This guide uses official public source pages only to establish the Grade 6 Engli
 | Source | What was checked | What it supports | What it does not establish |
 |---|---|---|---|
 | [NCERT advisory for schools](https://www.ncert.nic.in/pdf/announcement/NCERT-Advisory-for-Schools.pdf) | Lists *Poorvi* as the Grade 6 English textbook | Textbook identity at the level stated in the advisory | The exact current reprint used by every school, or a complete list of English learning outcomes |
-| [NCERT CIET Grade 6 activity list](https://www.ciet.ncert.gov.in/activity/grade6?lang=en) | Under *Poorvi*, Chapter 1 “Fables and Folk Tales”, lists “Learning Prepositions of Location” and a picture-dictation activity | A public-source context for an original narrative and location-word practice | Permission to reproduce textbook prose/assets or an official unit-level CBSE objective code |
+| [NCERT CIET Grade 6 activity list](https://www.ciet.ncert.gov.in/activity/grade6?lang=en) | Under *Poorvi*, Chapter 1 “Fables and Folk Tales”, lists “Learning Prepositions of Location” and a picture-dictation activity | A public-source context for original location-word practice | Permission to reproduce textbook prose/assets or an official unit-level CBSE objective code |
+| [NCERT Grade 6 English Bridge Month Programme (English R2), first edition April 2024](https://ncert.nic.in/pdf/Bridge_Month_Program/Grade6/BMP_Grade-6-English%28R2%29.pdf) | Its major learning outcomes include reading stories and identifying main ideas, characters and events; suggested comprehension assessment includes MCQs, short answers and sequencing | Limited source-backed alignment for narrative reading and event-sequencing tasks | The current *Poorvi* reprint, a unique CBSE objective code, or official mapping for inference/prepositions |
 | [NCERT textbook portal and terms](https://ncert.nic.in/textbook.php) | Copyright and reuse conditions | Need to avoid copying/repackaging textbook materials; link to official sources rather than reproduce them | A blanket licence for third-party digital use |
 | [Ministry of Education / PIB statement, 10 August 2026](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297094&lang=2&reg=48) | General NCF-SE / updated textbook context | Need to check the current grade-specific edition and curricular material | An exact Grade 6 English descriptor or code |
 
-**Mapping state: UNVERIFIED.** No official CBSE objective/competency code is assigned. The current public references support broad Grade 6 context and the relevant activity theme, not the exact formal mapping of this independently authored unit. Check the exact current textbook reprint and a traceable grade-specific learning outcome before making a future official mapping claim.
+**Mapping state: PARTIAL SOURCE ALIGNMENT; OFFICIAL CODE UNVERIFIED.** NCERT's Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports alignment of narrative reading and event sequencing with its stated outcome for reading stories and identifying main ideas, characters and events. CIET lists “Learning Prepositions of Location” as activity context. This is not a complete CBSE syllabus map, does not establish that the Bridge Programme matches the current *Poorvi* reprint used by every school, and does not assign a unit-specific CBSE objective code. Keep all official code fields empty until an exact applicable descriptor is verified.
 
 ## 2. Candidate unit focus
 
 **Unit title:** The Turning Sign  
-**Content status:** Draft candidate; not human-approved or released  
+**Content status:** Learner-facing v1.0 approved for the academic-content gate by founder on 28 October 2026; unreleased and not integrated into normal learner navigation  
 **Intended learner group:** Grade 6 English learners  
 **Estimated time:** 30–35 minutes, to validate with teachers/learners  
 **Text type:** Short, original fable-style narrative written for this platform  
@@ -66,8 +67,8 @@ The teacher/editor pack has a **12-point internal formative guide** for consiste
 
 ## 6. Remaining work before any release
 
-- Verify the current applicable Grade 6 NCERT textbook reprint/edition and the exact official learning outcome/competency if mapping is needed.
-- Complete human academic, age-level and cultural review of this exact candidate version.
-- Complete the separate accessibility and interface review after integration; automated content-file checks are not a usability or WCAG audit.
-- Keep the teacher/editor pack separate from any learner-facing import bundle.
-- Record a versioned decision before connecting the content to a learner route. Do not add a CBSE catalogue route as if this candidate were approved or officially mapped.
+- Verify the current applicable Grade 6 NCERT *Poorvi* textbook reprint/edition. Keep the bridge-programme outcome alignment limited to what the source actually supports; do not invent a code.
+- Obtain explicit authorization before adding a controlled, unlinked preview route for UI/accessibility checks. Keep the content out of normal learner navigation until the separate integration and review gates are approved.
+- Complete keyboard/focus, screen-reader, 200%/400% zoom/reflow, cross-browser, hosted contrast and task/response-burden checks on the eventual preview; automated content-file checks are not a usability or WCAG audit.
+- Keep the teacher/editor pack separate from every learner-facing import bundle.
+- Record distinct decisions for interface integration, official mapping, any learner pilot, and release. Content approval alone does not approve UI integration or release.

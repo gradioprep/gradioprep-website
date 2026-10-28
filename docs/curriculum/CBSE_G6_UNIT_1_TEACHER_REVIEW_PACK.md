@@ -3,8 +3,8 @@
 **Version:** 1.0 — draft candidate  
 **Unit ID:** cbse-english-g6-u1  
 **Title:** The Turning Sign  
-**Status:** Internal only; not learner-facing, not yet human-approved  
-**Mapping:** Unverified; no official CBSE objective code  
+**Status:** Internal only; not learner-facing. The founder approval recorded on 28 October 2026 applies to learner-facing Unit 1 v1.0; this answer pack stays separate from learner-facing bundles  
+**Mapping:** Partial source alignment for story reading/event sequencing; no official CBSE objective code  
 **Separation rule:** Keep this pack out of the client import graph and all learner-facing bundles.
 
 ## 1. Intended learning evidence

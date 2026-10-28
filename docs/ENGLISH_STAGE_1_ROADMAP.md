@@ -1,6 +1,6 @@
 # English Stage 1 — Curriculum Roadmap
 
-**Status:** Working roadmap. MYP Year 1 guide/implementation and Unit 1 v2 remain a separate content candidate with their own gates. Cambridge Stage 7 Unit 1 v1.3 has human review and approval confirmed by the founder; the founder has now stated that the required verification/approval decisions previously described as outstanding were already given. Build checks #250/#251 and controlled preview runs #19/#20 passed; the preview branch's current build had 18/18 Chromium tests passing. The route remains in an unmerged, unreleased testing preview. Its documented Cambridge objective mapping stays limited to 7Ri.03 for explicit-information items. Next implementation step completed as a draft: CBSE Grade 6 Unit 1 “The Turning Sign” is prepared in [draft PR #16](https://github.com/gradioprep/gradioprep-website/pull/16) with learner-safe source data, separate teacher/editor guidance, QA/provenance documentation and an automated boundary test. The new unit is not yet human-approved, officially mapped, UI-integrated or released.
+**Status:** Working roadmap. MYP Year 1 guide/implementation and Unit 1 v2 remain a separate content candidate with their own gates. Cambridge Stage 7 Unit 1 v1.3 has founder-confirmed review/approval; its officially evidenced mapping stays limited to 7Ri.03 for explicit-information items. Build checks #250/#251 and preview runs #19/#20 passed on the Cambridge preview branch. CBSE Grade 6 Unit 1 “The Turning Sign” learner-facing v1.0 has now been approved for the academic-content gate by the founder (28 October 2026). The NCERT Grade 6 English Bridge Month Programme supports partial alignment for narrative reading and event sequencing; no unit-specific CBSE code is assigned. PR #16 remains draft/unmerged and unreleased; the TypeScript data is unimported. Next is a separately authorized, controlled unlinked preview for interface/accessibility review, not normal navigation or release.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Purpose:** Turn the approved Stage 1 scope into a trackable production plan without claiming full syllabus coverage or inventing official curriculum mappings.
 
@@ -213,3 +213,9 @@ The initial draft was revised before review after a supplementary phrase/image-p
 
 
 **Narrative provenance refinement — 28 October 2026:** The currently proposed Grade 6 unit is “The Turning Sign.” Its earlier wording and clue image were revised before review after a supplementary search, and the updated QA record reports the finding and limited re-screen. The draft remains in PR [#16](https://github.com/gradioprep/gradioprep-website/pull/16), with no UI integration or release.
+
+## Current CBSE Grade 6 Unit 1 decision — 28 October 2026
+
+Learner-facing v1.0 “The Turning Sign” is approved for the academic-content gate. NCERT's Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports limited alignment for reading a story, identifying main ideas/characters/events and sequencing; CIET's activity list supports contextual focus on location prepositions. No official CBSE objective code is assigned, and the exact current *Poorvi* reprint remains unverified.
+
+The next implementation step is a controlled, unlinked preview for accessibility and interface testing only, but that integration requires explicit authorization. Until then, keep the TypeScript content unimported, the teacher pack out of learner bundles, and the candidate out of normal navigation. Release remains unapproved.

@@ -1,6 +1,6 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.4  
+**Version:** 2.5  
 **Research checked:** 28 October 2026; Grade 6 source recheck added 28 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
@@ -259,3 +259,11 @@ The new draft uses a short original animal narrative and original practice tasks
 A supplementary search on the initial draft surfaced one unrelated article with highly similar generic headline wording to “A clue is not the same as proof” and a separate fictional result with a red strand tangled on a thorn. Neither was an exact copy, but we removed that generic line and changed the clue mechanism before finalising the current candidate. Three searches on distinctive phrases from the revised “The Turning Sign” passage did not show an exact passage-level match; one returned a general discussion of hoofprints as natural signs, not the candidate story. Treat this as a **limited internal originality/provenance screen for the revised draft only**, not comprehensive plagiarism detection, proof of authorship or a legal opinion. Repeat it if the passage is materially changed or a concrete concern is identified.
 
 The source-context links are [NCERT's Grade 6 textbook advisory](https://www.ncert.nic.in/pdf/announcement/NCERT-Advisory-for-Schools.pdf), the [CIET Grade 6 activity list](https://www.ciet.ncert.gov.in/activity/grade6?lang=en), the [NCERT textbook portal and copyright terms](https://ncert.nic.in/textbook.php), and the [Ministry of Education/PIB statement dated 10 August 2026](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297094&lang=2&reg=48). They support textbook/task-design context only. The applicable current textbook reprint and exact Grade 6 English learning outcome remain unverified. No official CBSE objective code is assigned. No image or third-party excerpt is embedded; NCERT story text, exercises, illustrations and screenshots are not copied.
+
+### CBSE Grade 6 English outcome source — update (28 October 2026)
+
+**Official source:** [NCERT, Bridge Month Programme for Grade 6, English (R2), Annexure IV, first edition April 2024](https://ncert.nic.in/pdf/Bridge_Month_Program/Grade6/BMP_Grade-6-English%28R2%29.pdf). The NCERT programme page lists it under the Grade 6 Middle Stage resources.
+
+The programme's holistic-assessment section states a major learning outcome: reading a variety of texts, including stories, and identifying main ideas, characters and events. Its suggested assessment methods include comprehension questions, multiple-choice questions, short answers and sequencing. This supports **limited source alignment** for “The Turning Sign”'s narrative-reading and event-sequencing elements.
+
+**Limits:** The PDF is labelled English (R2), first edition April 2024. It does not identify a unique unit-specific CBSE objective code; it is not confirmation of the exact current *Poorvi* reprint used at a given school and does not directly assign this unit's inference or location-preposition tasks to a formal code. Keep `officialObjectiveCodes` empty. The exact applicable *Poorvi* reprint/version remains to be checked before a current-edition or complete official-mapping claim.

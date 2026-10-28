@@ -15,10 +15,10 @@ export const cbseGrade6Unit1LearnerLesson = {
     level: "Grade 6",
     unitId: "cbse-english-g6-u1",
     syllabusEdition: null,
-    mappingStatus: "unverified",
+    mappingStatus: "partial-source-alignment-code-unverified",
     officialObjectiveCodes: [],
     reviewNote:
-      "Public-source-aligned independent practice draft. No exact official Grade 6 English objective descriptor was verified; do not assign an official code.",
+      "Partial source alignment to NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) for narrative reading and event sequencing. No unit-specific official CBSE objective code is assigned; current Poorvi reprint remains unverified.",
   },
   title: "The Turning Sign",
   estimatedMinutes: 35,
@@ -31,6 +31,7 @@ export const cbseGrade6Unit1LearnerLesson = {
       "https://www.ncert.nic.in/pdf/announcement/NCERT-Advisory-for-Schools.pdf",
       "https://www.ciet.ncert.gov.in/activity/grade6?lang=en",
       "https://ncert.nic.in/textbook.php",
+      "https://ncert.nic.in/pdf/Bridge_Month_Program/Grade6/BMP_Grade-6-English%28R2%29.pdf",
     ],
   },
   learningGoals: [
