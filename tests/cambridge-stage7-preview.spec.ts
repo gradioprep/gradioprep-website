@@ -10,8 +10,9 @@ test.describe("Cambridge Stage 7 Unit 1 controlled preview", () => {
     await expect(page.getByText("NOT RELEASED — NOT STUDENT-READY")).toBeVisible();
     await expect(page.getByText(/Human review of this exact v1\.3 content is complete and approved/i)).toBeVisible();
     await expect(page.getByText(/internal originality\/provenance screen/i)).toBeVisible();
-    await expect(page.getByText(/current Cambridge framework\/version and further objective mapping, manual accessibility review, and release approval remain open/i)).toBeVisible();
-    await expect(page.getByText(/formal rights\/originality clearance, human academic and suitability judgement.*remain outstanding/i)).toHaveCount(0);
+    const statusBanner = page.locator(".s7-preview-alert");
+    await expect(statusBanner).toContainText("current full Cambridge framework/version and further objective mapping, manual accessibility review, and release approval remain open.");
+    await expect(statusBanner).not.toContainText("formal rights/originality clearance, human academic and suitability judgement");
     await expect(page.getByRole("heading", { level: 2, name: "The Rain Gauge" })).toBeVisible();
     await expect(page.getByText("The applicable current Cambridge", { exact: false })).toHaveCount(0);
     await expect(page.getByText("At first, the rain fell softly against the library windows", { exact: false })).toBeVisible();
