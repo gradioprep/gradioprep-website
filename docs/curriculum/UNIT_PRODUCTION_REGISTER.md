@@ -138,3 +138,6 @@ The public-source review does not establish a current exact CBSE Grade 6 English
 
 
 **Refinement note — 28 October 2026:** The initial phrase-screen identified avoidable similarities in a generic sentence and red-cloth/thorn clue image. Before human review, the narrative was changed to “The Turning Sign”; the separate QA record captures the initial search, revision and subsequent limited screen. The current draft remains unapproved and not UI-integrated.
+
+
+**Current story version — 28 October 2026:** The learner draft and source data are now titled “The Turning Sign.” The first “Red Marker” phrasing/clue was replaced before review after a supplementary search surfaced avoidable phrase/image-pattern overlap. See docs/curriculum/CBSE_G6_UNIT_1_QA_REVIEW.md for the transparent history. Draft PR [#16](https://github.com/gradioprep/gradioprep-website/pull/16) remains open, stacked on PR #12, and not released.

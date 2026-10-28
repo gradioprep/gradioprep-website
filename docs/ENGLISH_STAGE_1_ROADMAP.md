@@ -210,3 +210,6 @@ The unit candidate “The Turning Sign” is drafted with an original narrative,
 
 
 The initial draft was revised before review after a supplementary phrase/image-pattern query surfaced avoidable overlap with generic wording and a red-cloth/thorn motif. The current narrative is “The Turning Sign”; see the QA/provenance record for the transparent history and limited re-screen. Its status remains draft/unapproved/unreleased.
+
+
+**Narrative provenance refinement — 28 October 2026:** The currently proposed Grade 6 unit is “The Turning Sign.” Its earlier wording and clue image were revised before review after a supplementary search, and the updated QA record reports the finding and limited re-screen. The draft remains in PR [#16](https://github.com/gradioprep/gradioprep-website/pull/16), with no UI integration or release.

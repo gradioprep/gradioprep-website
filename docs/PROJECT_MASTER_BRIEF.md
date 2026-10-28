@@ -441,3 +441,6 @@ The assistant must not invent these decisions or silently replace them with a ge
 
 
 The initial CBSE story phrase-screen raised an avoidable generic phrase/image-pattern overlap; before review, it was replaced with “The Turning Sign,” which uses a displaced wooden wedge and a turned direction arrow. The updated QA record transparently records the initial search finding, the revision and the limited second screen. The learner-facing source remains unapproved and unconnected to the live UI.
+
+
+**Narrative provenance refinement — 28 October 2026:** The first candidate wording and clue motif were replaced before human review after a supplementary public search surfaced a generic phrase/title resemblance and an unrelated red-strand/thorn motif. The current “The Turning Sign” draft uses a turned wooden arrow and a displaced wedge. The current QA record captures the refinement and second limited phrase screen. The CBSE candidate is tracked in draft PR [#16](https://github.com/gradioprep/gradioprep-website/pull/16); it remains unapproved and unconnected to the live UI.
