@@ -5,8 +5,8 @@
 **Updated candidate:** v1.3 draft  
 **Learner file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md`  
 **Teacher/editor file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_TEACHER_REVIEW_PACK.md`  
-**Review type:** AI-led curriculum/editorial and learner-suitability review using public sources; improvements applied to v1.3. This is not an independent human academic-review pass or learner-testing result.  
-**Status:** v1.3 remains an unreleased draft. Founder authorised an isolated controlled-preview integration for interface testing only in draft PR #15. Controlled preview run [#14](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206707) passed, including the PR URL update; Build check [#245](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206694) passed the TypeScript/Vite build and 17/17 Chromium tests on preview verification commit `127a7b82ccda52536b4bfd78e603499cd47281d6`. This is limited automated UI evidence, not full accessibility certification, manual review of the hosted page, human academic/suitability approval, rights clearance, current full-framework mapping, or release approval. The learner content is not student-ready.
+**Review type:** AI-led curriculum/editorial pass plus founder-confirmed human review of the exact learner-facing v1.3 content. Human review/academic and age/level/cultural suitability was approved on 28 October 2026. No learner pilot is claimed.  
+**Status:** v1.3 remains an unreleased draft. Founder authorised an isolated controlled-preview integration for interface testing only in draft PR #15. Controlled preview run [#14](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206707) passed, including the PR URL update; Build check [#245](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206694) passed the TypeScript/Vite build and 17/17 Chromium tests on preview verification commit `127a7b82ccda52536b4bfd78e603499cd47281d6`. These are limited automated UI checks, not full accessibility certification or manual review of the hosted page. Human review of exact v1.3 is approved (28 October 2026). The internal originality/provenance screen is passed under the risk-based protocol; this is not a formal legal opinion. Still open: current full Cambridge framework/version and further objective mapping, manual accessibility/visual review, and explicit release approval. The learner content is not student-ready.
 
 ## 1. Research basis checked
 
@@ -92,9 +92,9 @@ At the time of this text-level desk check (before the later authorised preview i
 |---|---|---|
 | AI-led curriculum/content review | **Completed for v1.3 candidate** | Human/academic-lead judgement remains separate |
 | Founder decision | **Approved to proceed with further review/release checks on 26 October 2026** | This is not final content approval or release approval |
-| Public exact-phrase rights screen | **Desk screen completed; no exact match surfaced** | Formal rights/originality clearance remains pending |
+| Public exact-phrase rights screen | **Internal originality/provenance screen passed under the risk-based protocol** | No concerning match surfaced in the initial plus eight supplemental searches; not a formal legal opinion |
 | Content-level accessibility and context preflight | **Completed; no blocking text-only issue identified** | Human confirmation and actual application accessibility testing |
-| Human academic review and actual learner suitability | **Pending** | Founder/qualified reviewer decision for exact v1.3; learner pilot not claimed |
+| Human academic review and age/level/cultural suitability | **Approved 28 October 2026** | Founder confirms review of exact v1.3; no learner pilot is claimed |
 | Current full Cambridge framework/version and mapping | **Partially verified only** | Applicable official support-site file/version and item-level mapping if legitimately available; otherwise keep unresolved |
 | UI accessibility | **Automated smoke checks passed; manual review pending** | The local Wrangler-backed suite passed; manual keyboard/focus, screen-reader, zoom/reflow, cross-browser, text-to-speech and response-field error checks remain required |
 | Age/level and cultural/context suitability | **AI desk check complete; human confirmation pending** | Record reviewer, date, decision and exact version; learner testing not performed |
@@ -163,3 +163,14 @@ A second AI-assisted editorial check compared the exact v1.3 learner file and se
 - No clear internal contradiction was detected that warranted a content edit.
 
 **Result:** No change to the learner content is justified by this AI consistency check; keep version 1.3. This is not a human academic/suitability pass, learner test, official full-framework mapping, formal rights decision or accessibility/release approval. Human review of the exact v1.3 candidate remains pending.
+
+## Current decision and remaining gates — 28 October 2026
+
+This update supersedes prior notes in this file that described human review and formal rights/originality clearance as pending; those lines remain as a dated record of the earlier state.
+
+1. **Human review — APPROVED:** the founder confirms that human review of the exact v1.3 learner-facing version is complete and approved on 28 October 2026, including academic and age/level/cultural suitability. No learner pilot is claimed.
+2. **Internal originality/provenance screen — PASSED:** the short passage “The Rain Gauge” and its tasks were created for this platform. The initial screen and eight additional distinctive-phrase searches found no exact passage-level match in the returned public search results. No specific unresolved rights indicator has been identified. Under docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md, this is sufficient to pass the internal screen for this unchanged short original text; it is not a comprehensive plagiarism result, guarantee of exclusivity, or formal legal opinion. A separate legal opinion is not a routine blocker in the absence of a concrete concern.
+3. **No third-party asset rights check applies to this current unit:** it is text-only and includes no photograph, poster or third-party excerpt. Future longer passages and visual/documentary task stimuli must use a specific verified public-domain or suitably open-licensed source, with intended-use rights documented before selection/embedding.
+4. **Still open:** the currently applicable full Cambridge framework/version and any additional objective mapping; manual accessibility and hosted visual review (including keyboard/focus, screen-reader, zoom/reflow, text-to-speech and cross-browser checks); explicit release approval.
+
+PR #12 and its isolated UI preview PR #15 remain draft/unmerged. The preview is not student-ready, does not enter normal navigation and must not be described as released. Do not start CBSE Grade 6 Unit 1 until the remaining Stage 7 gates are resolved and a separate release decision is made.
