@@ -38,7 +38,7 @@ Before selecting the exact text/image/poster/document:
 - Preserve the original source/rights evidence with the unit record. Attribution is required when the licence requires it, but attribution alone does not create permission.
 - Treat “copyright free” as a description to verify, not proof. A search result, repost, public availability, school use, or “for educational purposes” label is not itself a rights basis.
 
-For images and other visual files, the exact file and licence must be checked **before selection or embedding**, not retrospectively. Prefer CC0/public-domain assets or other licences that clearly permit all intended uses. If the terms or jurisdiction are uncertain, choose a clearer asset rather than holding up the whole unit.
+For all images and other visual files, the exact file and licence must be checked **before selection or embedding**, not retrospectively. **Project-specific photograph rule:** do not select, download, embed, commit or preview a photograph unless the exact source page explicitly confirms CC0 dedication or public-domain status; free-to-use, royalty-free and other open licences alone do not meet this stricter photo requirement. For illustrations, posters and other non-photographic visual assets, an exact open licence may be used when it clearly permits all intended commercial/online uses and any edits. Screen any visible third-party rights concerns and record the evidence before selection. If the terms or jurisdiction are uncertain, choose a clearer asset rather than holding up the whole unit.
 
 ## 4. Existing copyrighted material
 
