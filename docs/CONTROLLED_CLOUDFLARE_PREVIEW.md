@@ -72,3 +72,11 @@ Cloudflare documentation:
 The founder confirms that human review of the exact Cambridge Stage 7 Unit 1 v1.3 learner content is complete and approved. Under the risk-based content process, the short platform-original passage and tasks have passed the internal originality/provenance screen: the initial phrase screen and eight supplemental searches found no exact passage-level match in returned public results. This status is not a formal legal opinion or guarantee of exclusivity. The current text-only unit uses no third-party image or excerpt.
 
 The preview warning banner is kept aligned with these facts. Still open are the current full Cambridge framework/version and additional objective mapping, manual accessibility and hosted-page visual review, and explicit release approval. The public Worker Preview remains interface-testing-only, unmerged and not student-ready. No personal/student information belongs on it.
+
+## Verification update — 28 October 2026
+
+- [Build check #248](https://github.com/gradioprep/gradioprep-website/actions/runs/40679128540) passed on commit `bd49025150c9346c856f3ef1d39fe8c36d4de2c3`. TypeScript/Vite build passed; all 18 Chromium tests passed (11 navigation tests and seven Stage 7 preview-specific tests).
+- [Controlled preview run #17](https://github.com/gradioprep/gradioprep-website/actions/runs/40679128362) passed, including preview creation/update and the PR URL comment. The current candidate is available at `https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1`.
+- The regression suite now confirms the preview banner records founder human review approval and the internal originality/provenance screen result accurately, and checks basic semantic landmarks, linked section headings, unique IDs, breadcrumb naming and the warm-up legend.
+- This automated evidence does not equal a full WCAG audit or manual visual/keyboard/screen-reader review. Those checks and a separate explicit release decision remain open, as do the current full Cambridge framework/version and objective mapping.
+- PR #15 remains draft/unmerged. No production deployment or DNS change occurred.
