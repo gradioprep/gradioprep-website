@@ -1,9 +1,11 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.0  
+**Version:** 2.1  
 **Research checked:** 27 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
+
+**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md. Short platform-original passages may proceed after a proportionate internal originality/provenance screen and human review; longer passages and image/poster/document stimuli must use a specific verified public-domain or suitably open-licensed source unless a separate permission/legal basis is recorded. Check exact terms before selection or embedding.
 
 ## 1. Decision in response to access constraints
 
@@ -224,3 +226,14 @@ Technical evidence is recorded separately from curriculum mapping: controlled pr
 ## Stage 7 Unit 1 v1.3 — supplemental rights/originality query record (27 October 2026)
 
 A second limited search pass queried eight additional distinctive sentence fragments from the Stage 7 learner passage and exit check. No exact passage-level match surfaced in the returned public search results; the returned results were general reading/inference teaching resources rather than exact text matches. This is not proof of authorship, a comprehensive plagiarism check or legal clearance. Formal rights/originality review remains open. No photograph or third-party literary excerpt is used in the unit, so the photo pre-selection process is not applicable to this content.
+
+## Content stimulus selection and clearance rule — 28 October 2026
+
+The content source register governs curriculum/source research; the separate content originality and rights protocol governs rights evidence. These controls are intentionally proportionate:
+
+- Original platform content is limited to short, task-purposeful passages/excerpts and the brief instructional/assessment material around them. Record provenance, proportionate phrase-screen scope/result, and human approval. If no specific concern is identified, the internal originality/provenance screen may be marked passed; formal legal review is not a blanket prerequisite for every unchanged short original passage.
+- Longer passages/excerpts and source artefacts for tasks—including images, posters, notices, adverts, infographics and book/document images—should be drawn from verified public-domain works or licences that permit the exact intended commercial/online use and any edits. Identify the exact work/file, edition/translation where relevant, source URL, licence/version, permitted uses, attribution, modifications and date checked before selection/embedding.
+- Public availability, a “copyright free” label, search-result text, attribution alone, or an educational use case is not proof of rights. If terms are ambiguous, select a clearer source. Use permission or an explicitly documented legal basis for copyrighted content outside the reusable-source route.
+- Do not confuse an internal originality/provenance pass with a verified third-party licence or a formal legal opinion. Escalate only when a concrete concern remains unresolved; do not repeat broad searches on unchanged text without a reason.
+
+The Stage 7 Unit 1 v1.3 short original passage has the internal originality/provenance screen status **PASSED** as recorded on 28 October 2026; the founder confirms the exact version received human review approval. The unit is text-only, so no third-party asset licence applies to it. Its separate curriculum mapping, manual accessibility and release gates remain open.
