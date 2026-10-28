@@ -4,8 +4,7 @@
 **Prepared:** 28 October 2026  
 **Status:** Internal, public-source-aligned design; not an official CBSE syllabus map, NCERT replacement or released course  
 **Pathway ID (planned):** cbse-english-g6  
-**First-cohort unit:** cbse-english-g6-u1 — The Red Marker  
-**Companion:** CBSE Grade 6 Unit 1 learner content, teacher/editor review pack and QA record in this folder
+**First-cohort unit:** cbse-english-g6-u1 — The Turning Sign
 
 ## 1. Evidence boundary
 
@@ -22,7 +21,7 @@ This guide uses official public source pages only to establish the Grade 6 Engli
 
 ## 2. Candidate unit focus
 
-**Unit title:** The Red Marker  
+**Unit title:** The Turning Sign  
 **Content status:** Draft candidate; not human-approved or released  
 **Intended learner group:** Grade 6 English learners  
 **Estimated time:** 30–35 minutes, to validate with teachers/learners  
@@ -37,12 +36,12 @@ The design is informed by the topic labels and activity headings on the official
 
 ## 3. Learning sequence
 
-1. **Orient — 3 minutes:** Read the short passage once. Establish what is missing and why it matters.
-2. **Track events — 5 minutes:** Identify the problem, the clue, the discovery and the resolution.
-3. **Model evidence-based inference — 5 minutes:** Show the difference between noticing hoofprints and proving who moved the marker. A relevant clue should guide a search, not become an unsupported accusation.
-4. **Guided practice — 8 minutes:** Answer one explicit-information question, one inference question and one sequencing activity.
-5. **Language in context — 5 minutes:** Locate the marker and trace the cloth using *beside, under, across, around,* and *behind*.
-6. **Independent transfer — 5–8 minutes:** Write a 50–70 word retelling with a sequence connector, two location prepositions and one supported idea about Piku's change of view.
+1. **Orient — 3 minutes:** Read the short passage once. Establish what has changed about the sign and why that matters.
+2. **Track events — 5 minutes:** Identify the problem, the hoofprint clue, the displaced wedge, and the solution.
+3. **Model evidence-based inference — 5 minutes:** Show the difference between noticing hoofprints and proving who moved the sign. A relevant clue should guide a search, not become an unsupported accusation.
+4. **Guided practice — 8 minutes:** Answer one explicit-information question, one inference question and a sequencing activity.
+5. **Language in context — 5 minutes:** Locate the sign and trace the search using *at, near, down, behind,* and *beside*.
+6. **Independent transfer — 5–8 minutes:** Write a 50–70 word retelling with a sequence connector, two location words and one supported idea about Lali's change of view.
 
 Timings are planning estimates, not measured learner-performance results.
 
@@ -59,7 +58,7 @@ The teacher/editor pack has a **12-point internal formative guide** for consiste
 
 ## 5. Rights, originality and accessible design
 
-- The learner passage and tasks are platform-original; the internal phrase screen and its limits are recorded in the QA document.
+- The learner passage and tasks are platform-original; the limited internal phrase screen and its limitations are recorded in the QA document.
 - Do not embed or reproduce *Poorvi* text, exercises, illustrations, screenshots or page scans. NCERT's published terms restrict republication and inclusion in digital content packages/software unless the stated permission basis applies.
 - This version is text-only. No photo, poster, external illustration or third-party excerpt is used. The strict project rule requiring explicit CC0/public-domain evidence on the exact source page before choosing a photograph remains binding if a future revision considers one.
 - Use semantic headings, selectable text, short instructions and examples that do not rely on colour alone. A full interface is not yet implemented, so keyboard, screen-reader, zoom/reflow and hosted visual checks are not claimed.

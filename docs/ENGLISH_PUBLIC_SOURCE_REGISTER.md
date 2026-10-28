@@ -249,13 +249,13 @@ The content source register governs curriculum/source research; the separate con
 The Stage 7 Unit 1 v1.3 short original passage has the internal originality/provenance screen status **PASSED** as recorded on 28 October 2026; the founder confirms the exact version received human review approval and now confirms that the required verification/approval decisions previously described as outstanding were already given. This does not add any further official objective code to the documented 7Ri.03 crosswalk, and the interface preview remains unmerged/unreleased until the approved code-release step is performed.
 
 
-### CBSE Grade 6 Unit 1 “The Red Marker” — provenance and source-screen record (28 October 2026)
+### CBSE Grade 6 Unit 1 “The Turning Sign” — provenance and source-screen record (28 October 2026)
 
 The new draft uses a short original animal narrative and original practice tasks. It was written independently for this platform after reviewing public source context; the passage does not reproduce *Poorvi* or any third-party work. Three distinctive phrase queries were checked:
-- “Piku the parakeet saw hoofprints near the post”
-- “A narrow strip of red cloth was caught on a thorn under a low branch”
-- “A clue is not the same as proof”
+- “Lali the langur noticed hoofprints near the post”
+- “A fallen branch had knocked the wedge from its slot”
+- “Hoofprints show that a deer passed here”
 
-The returned public search results did not show an exact passage-level match to the drafted text. One result discussed clues/evidence generally, not the candidate passage. Treat this as a **limited internal originality/provenance screen for the current draft only**, not comprehensive plagiarism detection, proof of authorship or a legal opinion. Repeat it if the passage is materially changed or a concrete concern is identified.
+A supplementary search on the initial draft surfaced one unrelated article with highly similar generic headline wording to “A clue is not the same as proof” and a separate fictional result with a red strand tangled on a thorn. Neither was an exact copy, but we removed that generic line and changed the clue mechanism before finalising the current candidate. Three searches on distinctive phrases from the revised “The Turning Sign” passage did not show an exact passage-level match; one returned a general discussion of hoofprints as natural signs, not the candidate story. Treat this as a **limited internal originality/provenance screen for the revised draft only**, not comprehensive plagiarism detection, proof of authorship or a legal opinion. Repeat it if the passage is materially changed or a concrete concern is identified.
 
 The source-context links are [NCERT's Grade 6 textbook advisory](https://www.ncert.nic.in/pdf/announcement/NCERT-Advisory-for-Schools.pdf), the [CIET Grade 6 activity list](https://www.ciet.ncert.gov.in/activity/grade6?lang=en), the [NCERT textbook portal and copyright terms](https://ncert.nic.in/textbook.php), and the [Ministry of Education/PIB statement dated 10 August 2026](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297094&lang=2&reg=48). They support textbook/task-design context only. The applicable current textbook reprint and exact Grade 6 English learning outcome remain unverified. No official CBSE objective code is assigned. No image or third-party excerpt is embedded; NCERT story text, exercises, illustrations and screenshots are not copied.
