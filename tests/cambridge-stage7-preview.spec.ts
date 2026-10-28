@@ -8,11 +8,45 @@ test.describe("Cambridge Stage 7 Unit 1 controlled preview", () => {
 
     await expect(page.getByRole("heading", { level: 1, name: "Read closely, infer and explain" })).toBeVisible();
     await expect(page.getByText("NOT RELEASED — NOT STUDENT-READY")).toBeVisible();
+    await expect(page.getByText(/Human review of this exact v1\.3 content is complete and approved/i)).toBeVisible();
+    await expect(page.getByText(/internal originality\/provenance screen/i)).toBeVisible();
+    await expect(page.getByText(/current Cambridge framework\/version and further objective mapping, manual accessibility review, and release approval remain open/i)).toBeVisible();
+    await expect(page.getByText(/formal rights\/originality clearance, human academic and suitability judgement.*remain outstanding/i)).toHaveCount(0);
     await expect(page.getByRole("heading", { level: 2, name: "The Rain Gauge" })).toBeVisible();
     await expect(page.getByText("The applicable current Cambridge", { exact: false })).toHaveCount(0);
     await expect(page.getByText("At first, the rain fell softly against the library windows", { exact: false })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Work independently" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Try the thinking move independently" })).toBeVisible();
+  });
+
+  test("keeps document landmarks, heading references and element IDs coherent", async ({ page }) => {
+    await page.goto(previewPath);
+
+    const audit = await page.evaluate(() => {
+      const ids = Array.from(document.querySelectorAll("[id]")).map((node) => node.id);
+      const labelledSections = Array.from(document.querySelectorAll("section[aria-labelledby]")).every((section) => {
+        const targetId = section.getAttribute("aria-labelledby");
+        const target = targetId ? document.getElementById(targetId) : null;
+        return Boolean(target && target.textContent?.trim());
+      });
+      return {
+        h1Count: document.querySelectorAll("h1").length,
+        mainCount: document.querySelectorAll("main").length,
+        mainHasName: Boolean(document.querySelector("main")?.id),
+        duplicateIds: ids.filter((id, index) => ids.indexOf(id) !== index),
+        labelledSections,
+        breadcrumbNamed: Boolean(document.querySelector('nav[aria-label="Breadcrumb"]')),
+        warmupHasLegend: Boolean(document.querySelector("fieldset legend")?.textContent?.trim()),
+      };
+    });
+
+    expect(audit.h1Count).toBe(1);
+    expect(audit.mainCount).toBe(1);
+    expect(audit.mainHasName).toBe(true);
+    expect(audit.duplicateIds).toEqual([]);
+    expect(audit.labelledSections).toBe(true);
+    expect(audit.breadcrumbNamed).toBe(true);
+    expect(audit.warmupHasLegend).toBe(true);
   });
 
   test("exposes a working skip link and keyboard-operable worked example", async ({ page }) => {
