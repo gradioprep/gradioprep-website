@@ -1,8 +1,8 @@
 # Criterion Lab — Design Specification
 
-**Version:** 1.5  
-**Status:** Approved design system; curriculum-first navigation implemented and live-verified in the Cloudflare Workers preview  
-**Last updated:** 25 October 2026  
+**Version:** 1.8  
+**Status:** Approved design system; curriculum-first navigation implemented and live-verified in the Cloudflare Workers preview; Cambridge Stage 7 Unit 1 has an isolated, unreleased interface-testing preview in draft PR #15  
+**Last updated:** 27 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
@@ -25,6 +25,13 @@
 **Version 1.3 change note — 25 October 2026:** Added Chromium browser tests for direct curriculum URLs, the catalogue-to-pilot-lesson journey, Back/Forward history, and unavailable provisional IGCSE routes. Tests run against locally served Wrangler assets in CI. The current Chromium suite passed all 9 tests and the associated Cloudflare preview build succeeded on commit `e7f3982aecacb8d069ce7a6877235bd538bf4d22`; see PR #10 for build and preview URLs. Keep this separate from the manual check of the Cloudflare preview and production site; do not mark a live deployment as verified until it has actually been checked. The approved palette, typography, layout and curriculum/release statuses are unchanged.
 
 **Version 1.4 change note — 25 October 2026:** Added a consistent in-page Previous/Next control bar to supported curriculum, level, unit and lesson destinations. Keep navigation contextual and route-driven, maintain programme/subject identity, and show a plain explanation instead of an active link when no safe next destination exists. Cambridge IGCSE level navigation stays unavailable until its applicable syllabus/level structure is verified. Do not add a default-selected pathway or navigation bar to the Pathways catalogue itself. Chromium checks passed 11/11 in GitHub Actions run 63, and the corresponding Cloudflare preview build succeeded on commit `035b3a6d37d9df05dbe0ab6b2371b6fdc5998cb8`. Palette, typography, spacing tokens and academic/release statuses remain unchanged.
+
+
+
+**Version 1.6 change note — 26 October 2026:** Added a controlled, unlinked Cambridge Lower Secondary English 0861 Stage 7 Unit 1 v1.3 preview route for interface accessibility testing only (draft PR [#15](https://github.com/gradioprep/gradioprep-website/pull/15)). It reuses the approved font, typography, colour and surface tokens; introduces a visible unreleased-status notice, keyboard skip link, semantic section headings, accessible expandable word-help/model panels, task-specific text-field names with associated prompts, mobile reflow and a clear-all action. This is a test route, not normal navigation or release approval. No teacher/editor answer pack is in the client import graph; answers are not scored or persisted. GitHub Actions Build check [#229](https://github.com/gradioprep/gradioprep-website/actions/runs/40307651156) passed the TypeScript/Vite build and 17/17 Chromium tests. The final regression test verifies the clear-all action resets both typed responses and the warm-up radio choice. CI runs against local Wrangler assets; no dedicated hosted branch-preview URL is verified. Manual screen-reader and broader accessibility testing remain separate gates. No production deployment or public release is implied.
+
+**Version 1.7 change note — 26 October 2026:** Final keyboard and responsive checks refined the Stage 7 preview: the skip link now transfers focus to the main lesson content, the exit-check question is programmatically associated with its response field, and the responsive-layout test covers 320/390/768/1024 CSS-pixel widths. Build check [#231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed the TypeScript/Vite build and 17/17 Chromium tests on commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`. This remains limited automated evidence, not full accessibility certification, and is not approval to release. The preview remains unmerged and no production deployment is made.
+
 
 **Version 1.5 change note — 25 October 2026:** PR [#10](https://github.com/gradioprep/gradioprep-website/pull/10) merged as `7d8d4ff53eaab5cef468bc4e0d3b633e51907e25`; the production Cloudflare Workers build `99301a5d-91f7-4939-af95-f356f20268a7` succeeded and deployed at `2026-10-25T17:26:16.522Z` (UTC). The owner confirmed the live Pathways journey, in-page Previous/Next controls, browser Back/Forward and direct URLs. GitHub Actions run #64 passed with 11/11 Chromium browser tests. This is navigation verification for the preview deployment—not commercial release approval—and does not change the palette, typography, spacing, curriculum mapping, academic review or release gates.
 
@@ -418,3 +425,31 @@ The design can be considered ready for functional implementation when:
 
 
 **Version 0.9 change note — 25 October 2026:** Tightened vertical spacing on the Pathways page by approximately half for transitions between curriculum groups and the selected-pathway planning panels. Taxonomy bands now sit close to their group headings and cards, rather than being visually centred between adjacent content blocks. Keep this spacing adjustment scoped to catalogue groups; preserve the shared site-wide spacing system and existing typography/palette. The former below-catalogue planning-panel placement is superseded by version 1.0.
+
+
+## 13. Controlled preview — Cambridge Stage 7 Unit 1 v1.3
+
+This route is reserved for interface testing: `/preview/cambridge-lower-secondary/english/stage-7/unit-1`. Keep it out of ordinary navigation. Present a persistent, visible status panel stating that the page is a controlled preview and the unit is **not released or student-ready**. Do not label it as fully curriculum-mapped or Cambridge-approved.
+
+Use the approved global design tokens rather than creating a second visual system. The preview should include:
+- one page-level heading, ordered section headings and a keyboard-reachable skip link that transfers focus to the main content;
+- native radio inputs with associated visible labels and keyboard interaction;
+- native `details/summary` elements for optional worked-model and vocabulary help;
+- learner passage rendered as selectable text, with no decorative photo or image dependency;
+- one visible label per text area, a unique task-specific accessible name, and a programmatic association to each task prompt, including the exit-check prompt;
+- strong visible focus, high-contrast status treatment, responsive layout at narrow widths, and a clear-all action that resets every temporary learner input;
+- plain notice that responses remain in the open page only, are not graded, sent to the server or saved to an account.
+
+Do not import the teacher/editor review pack, answer key, correct-answer IDs or grading notes into the client module graph. Do not add the route to the catalogue, breadcrumbs, or ordinary next/previous navigation. Keep this controlled preview branch-based and unmerged. CI checks using the local Wrangler server provide automated smoke evidence only; do not represent them as a complete accessibility audit. The hosted Cloudflare preview URL and its verification limits are recorded in Section 15. Manual keyboard/focus, screen-reader, zoom/reflow and cross-browser checks remain necessary before any accessibility gate can be called complete.
+
+
+## 14. Final automated interaction and reflow evidence — 26 October 2026
+
+On final controlled preview test commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`, [Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed the TypeScript/Vite build and all 17 Chromium tests. The preview-specific tests check (1) direct rendering with an explicit unreleased status; (2) skip-link keyboard operation and focus transfer to the main content; (3) task-specific names for all 14 response fields and programmatic associations for all guided, independent and exit-check prompts; (4) horizontal reflow/overflow at 320, 390, 768 and 1024 CSS-pixel viewports; (5) clearing all temporary response input including the warm-up radio selection; and (6) representative WCAG AA text-contrast samples. These automated checks do not replace manual assistive-technology review, broad WCAG evaluation, human suitability review or formal release approval. The CI browser uses local Wrangler assets; no dedicated hosted Cloudflare preview URL is verified.
+
+
+## 15. Hosted preview and workflow permission verification — 27 October 2026
+
+The original controlled-preview run failed only when posting/updating the pull-request conversation: GitHub returned HTTP 403 `Resource not accessible by integration`. The workflow was corrected so the default token has `contents: read`, while `pull-requests: write` is limited to the preview job; the cleanup job remains read-only for GitHub contents. [Controlled preview run #13](https://github.com/gradioprep/gradioprep-website/actions/runs/40523592690) passed, including the PR-comment update. [Build check #244](https://github.com/gradioprep/gradioprep-website/actions/runs/40523592680) passed the TypeScript/Vite build and 17/17 Chromium tests on commit `064b1a2eea832a9b8ee495226c36cc8a52358c34`.
+
+Cloudflare's Preview API confirmed the URL [https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1](https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1) for the isolated `pr-15` preview. At the post-run-#13 API check, its `deployed_on` field returned `2026-10-27T14:42:19Z` UTC. This is an unreleased, public interface-testing preview unless Cloudflare Access is separately configured. The automated tests run against local Wrangler assets and do not establish that the remotely hosted page was manually inspected. The assistant's execution environment could not fetch that page for a live visual smoke check; founder visual review remains open. No merge, production deployment or DNS update occurred. The route stays unlinked from normal navigation, the teacher/editor pack stays outside the client import graph, and answers remain temporary, ungraded and not persisted.
