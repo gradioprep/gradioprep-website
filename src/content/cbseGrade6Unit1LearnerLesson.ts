@@ -6,7 +6,7 @@
  * guidance in docs/curriculum/CBSE_G6_UNIT_1_TEACHER_REVIEW_PACK.md.
  */
 export const cbseGrade6Unit1LearnerLesson = {
-  id: "cbse-english-g6-u1-the-red-marker",
+  id: "cbse-english-g6-u1-the-turning-sign",
   version: "1.0",
   releaseStatus: "draft-unreleased",
   curriculum: {
@@ -20,7 +20,7 @@ export const cbseGrade6Unit1LearnerLesson = {
     reviewNote:
       "Public-source-aligned independent practice draft. No exact official Grade 6 English objective descriptor was verified; do not assign an official code.",
   },
-  title: "The Red Marker",
+  title: "The Turning Sign",
   estimatedMinutes: 35,
   sourceContext: {
     textbookTitle: "Poorvi",
@@ -42,7 +42,7 @@ export const cbseGrade6Unit1LearnerLesson = {
   passage: {
     label: "Original practice passage",
     text:
-      "Along a forest path, the animals had tied a red marker to a post beside the stream. It showed the safest place to cross after rain. One morning, the marker was gone. Piku the parakeet noticed hoofprints near the post and guessed that the deer had pulled it away. Keshav the tortoise asked him to look more carefully. A narrow strip of red cloth was caught on a thorn under a low branch. It continued across the mud and curled around a fallen log. Behind the log, the marker had wrapped around a bush when a strong gust blew through the trees. Piku loosened the string and carried the marker back. He retied it higher on the post, then apologised to the deer for his guess. The animals placed a second marker beside the footpath. “A clue is not the same as proof,” Keshav reminded them. “Look for the whole story before you decide.”",
+      "Each morning, the animals followed a narrow trail from the hill to a pool. At a fork stood a wooden arrow showing the path that stayed dry after rain. One evening, a gust turned the arrow toward the steep bank. Lali the langur noticed hoofprints near the post and guessed that the deer had pushed it. Naren the tortoise asked her to examine the ground before deciding. Beside the post, they found a fresh scrape in the soil. It continued down the slope to a loose wooden wedge lying behind a broad root. A fallen branch had knocked the wedge from its slot, leaving the arrow free to turn in the wind. Lali set the wedge back and pointed the arrow toward the safe path. She apologised to the deer. The animals placed two flat stones beside the post, so anyone could see where its base belonged. Naren reminded them, “Hoofprints show that a deer passed here; they do not explain who moved the sign.”",
     rightsNote:
       "Written for this platform. It is not copied or adapted from an NCERT passage or a third-party story.",
   },
@@ -51,13 +51,12 @@ export const cbseGrade6Unit1LearnerLesson = {
       id: "cbse-g6-u1-q1",
       kind: "multiple-choice",
       focus: "Find a direct clue",
-      prompt:
-        "Which detail helps the animals discover where the marker has gone?",
+      prompt: "Which detail helps explain why the arrow turned?",
       options: [
         { id: "A", text: "The deer had walked near the post." },
-        { id: "B", text: "A strip of red cloth led towards the fallen log." },
-        { id: "C", text: "The marker was used after rain." },
-        { id: "D", text: "The animals placed a second marker beside the footpath." },
+        { id: "B", text: "A loose wooden wedge lay behind a broad root." },
+        { id: "C", text: "The arrow showed the route that stayed dry after rain." },
+        { id: "D", text: "The animals placed two flat stones beside the post." },
       ],
       responseType: "single-choice",
     },
@@ -66,7 +65,7 @@ export const cbseGrade6Unit1LearnerLesson = {
       kind: "short-response",
       focus: "Explain an inference",
       prompt:
-        "Why does Piku apologise to the deer? Use one detail from the passage to support your explanation.",
+        "Why does Lali apologise to the deer? Use one detail from the passage to support your explanation.",
       responseType: "text",
       expectedLength: "2–3 sentences",
     },
@@ -76,10 +75,10 @@ export const cbseGrade6Unit1LearnerLesson = {
       focus: "Track event order",
       prompt: "Number the four events in the order they occur.",
       items: [
-        "The marker is found wrapped around a bush.",
-        "Piku notices hoofprints and makes a guess.",
-        "Piku apologises to the deer and reties the marker.",
-        "A strip of red cloth is traced past the thorn and fallen log.",
+        "The loose wooden wedge is found behind a broad root.",
+        "Lali notices hoofprints and makes a guess.",
+        "Lali apologises to the deer and resets the arrow.",
+        "A scrape in the soil leads down the slope to the loose wedge.",
       ],
       responseType: "ordered-list",
     },
@@ -88,13 +87,13 @@ export const cbseGrade6Unit1LearnerLesson = {
       kind: "fill-in",
       focus: "Prepositions of location",
       prompt:
-        "Complete the sentences with beside, under, across, around or behind. Use each word once.",
+        "Complete the sentences with at, near, down, behind or beside. Use each word once.",
       items: [
-        "The marker was tied to a post ___ the stream.",
-        "The red cloth was caught on a thorn ___ a low branch.",
-        "The strip continued ___ the mud.",
-        "The cloth curled ___ a fallen log.",
-        "The marker was found ___ the log.",
+        "The wooden arrow stood ___ a fork in the trail.",
+        "The hoofprints were ___ the post.",
+        "The scrape continued ___ the slope.",
+        "The loose wedge lay ___ a broad root.",
+        "The flat stones were placed ___ the post.",
       ],
       responseType: "text",
     },
@@ -102,7 +101,7 @@ export const cbseGrade6Unit1LearnerLesson = {
   exitTask: {
     id: "cbse-g6-u1-exit",
     prompt:
-      "Write 50–70 words explaining how the animals found the marker and what Piku learned. Include one event-order word, at least two location prepositions from the passage, and one detail explaining why Piku changed his mind.",
+      "Write 50–70 words explaining how the animals found out why the arrow turned and what Lali learned. Include one event-order word, at least two location prepositions from the passage, and one detail explaining why Lali changed her mind.",
     responseType: "text",
   },
   supportNotes: [
