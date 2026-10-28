@@ -1,9 +1,6 @@
 name: Controlled Cloudflare Worker preview
 
 on:
-  push:
-    branches:
-      - preview/cbse-grade-6-unit-1-accessibility
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
@@ -24,8 +21,6 @@ jobs:
       (github.event_name == 'pull_request' &&
        github.event.action != 'closed' &&
        github.event.pull_request.head.repo.full_name == github.repository) ||
-      (github.event_name == 'push' &&
-       github.ref == 'refs/heads/preview/cbse-grade-6-unit-1-accessibility') ||
       (github.event_name == 'workflow_dispatch' &&
        (github.ref == 'refs/heads/preview/cambridge-stage-7-unit-1-accessibility' ||
         github.ref == 'refs/heads/preview/cbse-grade-6-unit-1-accessibility'))
