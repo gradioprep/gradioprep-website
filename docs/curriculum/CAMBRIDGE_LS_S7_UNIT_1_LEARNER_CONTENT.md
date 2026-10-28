@@ -7,7 +7,7 @@
 **Status:** Draft for founder/academic review. Not approved for publication or release.  
 **Curriculum claim:** Public-framework-aligned practice for reading comprehension, inference and explanation. Limited public cross-check: Cambridge's public framework-support overview explicitly identifies 7Ri.03 (explicit information), applied only to the explicit-information items. This is not a full-unit map. The complete currently applicable framework copy remains to be confirmed through Cambridge's support site; inference and language-choice objective codes remain unassigned.  
 **Source base:** Cambridge International, Cambridge Lower Secondary English (0861), public subject page and official resource list; its public framework-support overview; and evidence-informed literacy pedagogy guidance. See `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` and `docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md`.  
-**Rights:** The passage and tasks below are original content written for this platform; no Cambridge paper, textbook passage or third-party model answer is reproduced.
+**Rights/provenance:** The short passage and tasks below were created for this platform; no Cambridge paper, textbook passage or third-party model answer is intentionally reproduced. Initial plus eight supplemental distinctive-phrase searches found no exact passage-level match in returned public results. The internal originality/provenance screen is **PASSED** under docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md (28 October 2026); this is not a formal legal opinion or guarantee. Founder human review of exact v1.3 is approved. The unit is still unreleased, with curriculum-mapping, manual accessibility and release gates open.
 
 ## What you will learn
 
