@@ -1,6 +1,7 @@
 # Logical Data Model — Curriculum, Practice and Assessment
 
-**Status:** Proposed implementation blueprint; no database or real learner records are connected yet.
+**Status:** Proposed implementation blueprint; no database or real learner records are connected yet.  
+**Revision:** 1.1 — records ideal response targets and the retrospective, non-restrictive live word counter (30 October 2026).
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Goal:** Define relationships and permission boundaries before connecting the current prototype to a database. This document is provider-independent; the master brief's proposed Supabase approach still requires a current plan/terms review before real student data is stored.
 
@@ -36,12 +37,20 @@ This is a logical model, not yet a live SQL schema. Names can be adapted during 
 | `units` | ID, pathway ID, title, sequence, release state, version | A pathway contains ordered units |
 | `lessons` | ID, unit ID, title, learning objective, body metadata, sequence, release state, version | Content belongs to a unit and has a versioned lifecycle |
 | `lesson_blocks` | ID, lesson version ID, block type, sequence, structured content | Allows text, worked example, callout and other reusable blocks |
-| `tasks` | ID, task type, prompt/instructions, response type, difficulty label where justified, estimated time, release state, version | Use for practice, diagnostics and extended-response tasks; do not expose answer keys by default |
+| `tasks` | ID, task type, prompt/instructions, response type, expected response range, ideal word-count target for typed responses, difficulty label where justified, estimated time, release state, version | Use for practice, diagnostics and extended-response tasks; do not expose answer keys by default |
 | `task_skill_mappings` | Task ID, skill ID, mapping role/weight if approved, review status | Use mapping weights only if the academic method is documented and approved |
 | `answer_keys` | Task version ID, expected answer, rationale/explanation, accepted variants as appropriate | Restrict access until the intended reveal state; keep production keys server-side |
 | `rubrics` and `rubric_versions` | Stable rubric ID, version, task family, version date, approval state | Rubric versions are immutable once used for a published assessment |
 | `rubric_criteria` | Rubric version ID, criterion ID, label, descriptor/levels, scoring rules | Task-specific rubric scope and score rules are explicit |
 | `task_rubric_mappings` | Task version ID, rubric version ID, required credits, expected response format/scope | Define what one credit covers before the learner submits |
+
+### Typed-response range and live word-count guidance
+
+For each typed-response task, store its approved expected range and a separate ideal word-count target as versioned task/content metadata. The ideal target is a learner guidance value, not a maximum or validation constraint.
+
+The live `current/ideal` word counter is computed in the client from the current text value. It updates on typing, paste, editing, deletion and clear-all, and it continues counting above target (for example, `59/50`). It must never truncate, reject or block text, and no `maxLength` restriction should be derived from the target. Apply it to all existing typed-response fields retrospectively and to all future fields.
+
+The counter value itself is transient UI state, not a separate learner record and not a grade/score. Persisted attempts/responses, if implemented in a future approved phase, store the learner's actual response and the task/content version used—not a separate counter snapshot. The current prototype still does not save learner responses or provide live grading.
 
 ### Accounts, relationships and access
 
