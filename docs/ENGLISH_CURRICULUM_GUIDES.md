@@ -1,20 +1,20 @@
 # English Curriculum Guides — Year/Stage Framework and Pathway Implementation Plan
 
-**Status:** Internal guide register v0.6. Draft curriculum chapters now exist for all 12 planned year/stage/delivery entries across four curriculum groups; exact official objective maps remain unverified where current descriptors are not directly available.
+**Status:** Internal guide register v1.3. The original 12 planned year/stage/delivery entries across four curriculum groups remain under versioned development; the separately approved CBSE English Grades 6–12 pathway is recorded in its research brief and the Unit Production Register, with class-wise research/guides still pending. Exact official objective maps remain unverified where current descriptors are not directly available.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`, `ENGLISH_STAGE_1_ROADMAP.md`, `ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`, and `ENGLISH_PUBLIC_SOURCE_REGISTER.md`.
 **Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences.
 
 ## 1. Document architecture decision
 
-Use **one independently reviewable guide per curriculum-year/stage track**, plus one shared research/pedagogy standard and a compact register. This is the best fit for the founder's workflow: finish one guide, finish its implementation structure, record the checkpoint, pause for Unit 1 approval, then rotate to the next track. It keeps approval, source editions, changes and completion status unambiguous; a single large group document can hide unfinished year-level work.
+Use **one independently reviewable guide per curriculum-year/stage track**, plus one shared research/pedagogy standard and a compact register. Finish a guide and implementation structure, record founder approval, then produce and review the relevant unit within the binding Unit 1 rotation. The active second item is Cambridge Stage 7 Unit 1 v1.3 in draft PR #12; its learner-facing content has an isolated controlled UI preview in draft PR #15, and latest build/18-test CI passed. Founder human review is approved and the short-original-text internal originality/provenance screen has passed; full framework/version and mapping, manual accessibility/hosted visual review and release remain pending. This keeps approval, source editions, changes and completion status unambiguous; a single large group document can hide unfinished year-level work.
 
 Use a separate implementation-plan document for each curriculum-year/stage track. Keep shared research methods, evidence standards, source-access limits and the rubric in the central research standard/register.
 
 Canonical guide files:
-- `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md` — **completed public-framework-aligned guide v1.0; founder review pending**.
-- `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md` — **completed corresponding implementation structure v1.0; no application changes included**.
+- `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md` — **public-framework-aligned guide v1.1; founder-approved 26 October 2026; current official objective mapping remains unverified**.
+- `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md` — **implementation structure v1.2; guide/structure founder-approved; Unit 1 v2 remains an unmerged candidate with separate review and release gates open**.
 - `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_GUIDE.md` — legacy group draft with Years 1–5 chapters; Year 1 is superseded by the standalone guide. Years 2–5 remain drafts, not completed/approved guides.
-- `docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md` — existing group draft; review/split Stage 7 as the next guide only after the founder approves MYP Year 1 Unit 1.
+- `docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md` — group guide v0.5; Stage 7 Unit 1 v1.3 is the active draft review candidate. Founder human review of exact v1.3 was approved 28 October 2026; full current framework/version and objective codes beyond 7Ri.03 explicit-information items remain unverified.
 - `docs/curriculum/IB_DP_LANGUAGE_A_LANGUAGE_AND_LITERATURE_GUIDE.md` — existing group draft; review/split DP Year 1 as its own guide when it reaches the approved rotation.
 - `docs/curriculum/CAMBRIDGE_IGCSE_FIRST_LANGUAGE_ENGLISH_0500_GUIDE.md` — syllabus-wide 0500 source/assessment register. Delivery phases are platform conventions, not official syllabus years.
 - `docs/curriculum/UNIT_PRODUCTION_REGISTER.md` — source, completion checkpoint, Unit 1 rotation and release-gate register.
@@ -28,12 +28,12 @@ The entries below define **guide work to complete**, not official IB/Cambridge t
 
 | Track | Guide chapter | Scope to research | Current state |
 |---|---|---|---|
-| IB MYP Language and Literature | Year 1 | Public six-skill framework, inquiry, text/context/audience/purpose; progressive evidence-led unit plan | Standalone guide v1.0 and implementation plan v1.0 complete; founder review pending; official objective/strand mapping not claimed; Unit 1 implementation awaits approval |
+| IB MYP Language and Literature | Year 1 | Public six-skill framework, inquiry, text/context/audience/purpose; progressive evidence-led unit plan | Standalone guide v1.1 and implementation structure v1.2 founder-approved; Unit 1 v2 candidate remains subject to separate review gates; official objective/strand mapping not claimed |
 | IB MYP Language and Literature | Year 2 | Independent evidence selection, stronger reasoning and purposeful communication | Draft chapter exists; official mapping unverified |
 | IB MYP Language and Literature | Year 3 | Sustained analysis, evidence-driven argument and comparison | Draft chapter exists; official mapping unverified |
 | IB MYP Language and Literature | Year 4 | Layered interpretation, contextual nuance and synthesis | Draft chapter exists; official mapping unverified |
 | IB MYP Language and Literature | Year 5 | Independent transfer and preparation for school-selected assessment route; optional eAssessment is not assumed | Draft chapter exists; official Year 5/eAssessment descriptors remain unverified |
-| Cambridge Lower Secondary English 0861 | Stage 7 | Public-framework-aligned design for reading, writing, speaking/listening; official objective IDs must match the exact framework version | Draft guide created; objective-code verification pending |
+| Cambridge Lower Secondary English 0861 | Stage 7 | Public-framework-aligned design for reading, writing, speaking/listening; official objective IDs must match the exact framework version | Group guide v0.6; Unit 1 v1.3 human review approved 28 October 2026 and short-text internal originality/provenance screen passed. Full framework/version and mapping, manual accessibility/hosted visual review and release remain open. 7Ri.03 is used only for explicit information |
 | Cambridge Lower Secondary English 0861 | Stage 8 | Explain effects, choose planning approach and strengthen discussion/performance | Draft chapter exists; official objective-code verification pending |
 | Cambridge Lower Secondary English 0861 | Stage 9 | Analyse structure/effect, write independently, and prepare for chosen next pathway | Draft chapter exists; official objective-code verification pending |
 | IB DP Language A: Language and Literature | Year 1 delivery chapter | Close reading, purpose/context, analysis of choices and transfer to current assessed task types | Draft chapter exists; detailed assessment mapping and school sequence need review |
@@ -79,7 +79,7 @@ For each year/stage chapter, complete all sections below. If a field is not yet 
    - Do not promise automatic grading or official grades.
 7. **Text and rights plan**
    - Genre/text-type range and rationale.
-   - Original writing or documented rights basis.
+   - Every reading passage/extract must be a registered excerpt from a recognised writer's verified public-domain work; original writing is permitted for prompts, teaching notes, questions, explanations, models and feedback, not as a replacement reading passage.
    - Cultural breadth, age suitability and sensitive-content review.
 8. **Inclusive teaching and access**
    - Vocabulary/pre-teaching, scaffolded and stretch pathways, accessibility, assistive technology and readable formats.
@@ -181,4 +181,34 @@ The current pilot **How writers shape meaning** remains academic-review passed f
 
 The v1.0 guide's research scope was too narrow for the founder's request to assess MYP-focused EdTech platforms. Version 1.1 now includes a dedicated comparative audit of InThinking/ThinkIB, ASJ Learning, Hachette Learning/MYP by Concept, ManageBac+, Toddle, My IB Hub and lower-confidence marketplace sources, alongside current public IB pages and the indexed 2014/15 detailed guide reference.
 
-The old detailed guide is treated as a **legacy reference, not verified current edition**. Enhanced MYP beta guidance remains a separate transition watch. Year 1 is now six proposed units plus shared time for diagnostics, language support, retrieval, revision and transfer, totaling at least 50 planned teaching hours. These unit names/order are platform decisions, not IB-prescribed structure. The revised guide and implementation structure await founder review; keep Unit 1 and the later-track rotation blocked until approvals are recorded.
+The old detailed guide is treated as a **legacy reference, not verified current edition**. Enhanced MYP beta guidance remains a separate transition watch. Year 1 is now six proposed units plus shared time for diagnostics, language support, retrieval, revision and transfer, totaling at least 50 planned teaching hours. These unit names/order are platform decisions, not IB-prescribed structure. The MYP guide and implementation structure have founder approval, while MYP Unit 1 v2 remains subject to separate review and release gates. Stage 7 Unit 1 v1.3 is the active draft in PR #12 with controlled preview UI testing in PR #15; automated interface checks passed, while human academic/suitability, formal rights, current framework/version/mapping, manual accessibility and release gates remain open. The later production rotation remains blocked until the required gate records are complete.
+
+
+## Controlled preview test checkpoint — 26 October 2026
+
+Draft PR [#15](https://github.com/gradioprep/gradioprep-website/pull/15) contains the isolated, unlinked interface-testing route for Cambridge Stage 7 Unit 1 v1.3. It is a controlled preview only and does not place the unit in regular site navigation, import teacher/editor answers into the client, grade responses or persist them. GitHub Actions [Build check #229](https://github.com/gradioprep/gradioprep-website/actions/runs/40307651156) passed on 26 October 2026: TypeScript/Vite build passed, and 17/17 Chromium tests passed, including six new UI checks. The CI browser test uses the local Wrangler-backed server; no hosted branch preview URL has been verified. Keep the unit unreleased until formal rights/originality clearance, human academic/age/level/cultural suitability review, current full Cambridge framework/version and objective mapping, manual accessibility testing, and explicit release approval are complete. Do not begin CBSE Grade 6 Unit 1 while Stage 7 remains blocked.
+
+
+## Final controlled-preview test correction — 26 October 2026
+
+The controlled Cambridge Stage 7 Unit 1 v1.3 preview remains an isolated interface-testing route in draft PR #15. The clear-all control has been corrected to reset both text responses and the warm-up selection, with regression coverage. GitHub Actions [Build check #229](https://github.com/gradioprep/gradioprep-website/actions/runs/40307651156) passed: TypeScript/Vite build and 17/17 Chromium tests. The route has not been deployed to a dedicated Cloudflare hosted-preview URL, and no production changes occurred. Keep manual accessibility, rights, human suitability, current full Cambridge framework/version and mapping, and release gates open; do not advance to CBSE Grade 6 before the Stage 7 checkpoint is cleared.
+
+
+## Final controlled-preview accessibility check — 26 October 2026
+
+The Cambridge Stage 7 Unit 1 v1.3 preview now associates the exit-check prompt with its writing field and moves focus to the main lesson content when the keyboard skip link is activated. The responsive layout check covers 320, 390, 768 and 1024 CSS-pixel widths. [Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed on commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`: TypeScript/Vite build and 17/17 Chromium tests passed. The controlled preview remains unmerged/unreleased; no hosted Cloudflare preview URL is verified. Do not treat this as full accessibility certification or a release gate pass. Rights/originality, human suitability, current full Cambridge framework/version and further objective mapping, manual assistive-technology review, and release approval remain open.
+
+## Stage 7 Unit 1 v1.3 status and source rule — 28 October 2026
+
+The founder confirmed human review/approval of the exact v1.3 learner content. The short platform-original passage and accompanying tasks have passed the internal originality/provenance screen under docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md; the searches found no exact passage-level match in returned public results, but no formal legal opinion or learner pilot is claimed. Earlier entries describing human review and formal rights/originality clearance as pending document the previous state and are superseded for the exact v1.3 text-only unit.
+
+Do not describe the unit as released/student-ready. Its current full Cambridge framework/version and further objective mapping, manual accessibility/hosted visual review, and explicit release approval remain open. For future longer passages or visual/document-based tasks, verify the exact public-domain/open-licence source and intended-use terms before selection/embedding.
+
+
+## Binding literary-excerpt and teacher-pack requirements — 30 October 2026
+
+All curriculum guides must use the new common rules in `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0 and `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`. Every short and long reading stimulus—including warm-ups, mini-extracts, transfer passages and assessment extracts—must come from a recognised writer's verified public-domain work and must be recorded in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before use. The former short platform-original passage allowance is withdrawn. Original supporting pedagogy, tasks and model/feedback material remain permitted.
+
+Every objective question requires answer reasoning and a rationale for each alternative; every typed response requires a question-specific expected length, model response and feedback. Keep these common standards separate from each curriculum's own assessment model, official mapping and criteria.
+
+The existing first-cohort materials must be revised in this order: **IB MYP Year 1 Unit 1 → Cambridge Lower Secondary Stage 7 Unit 1 → CBSE Grade 6 Unit 1**. This sequence applies to teacher/editor packs and associated passages, not only learner-facing files. Do not complete the CBSE Unit 1 teacher pack before both IB and Cambridge revisions have passed their content/consistency checks. Existing approval states remain limited to the exact earlier versions. Later IB DP and Cambridge IGCSE guides/content must follow the new source standard from first draft.
