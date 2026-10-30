@@ -145,6 +145,28 @@ test.describe("IB MYP Year 1 Unit 1 version 3 learner guidance", () => {
         viewport: document.documentElement.clientWidth,
         content: document.documentElement.scrollWidth,
       }));
+      if (dimensions.content > dimensions.viewport) {
+        const offenders = await page.locator("body *").evaluateAll((elements) =>
+          elements
+            .map((element) => {
+              const rect = element.getBoundingClientRect();
+              const style = window.getComputedStyle(element);
+              return {
+                tag: element.tagName,
+                className: typeof element.className === "string" ? element.className : "",
+                width: Math.round(rect.width),
+                right: Math.round(rect.right),
+                minWidth: style.minWidth,
+                whiteSpace: style.whiteSpace,
+                text: (element.textContent || "").trim().slice(0, 90),
+              };
+            })
+            .filter((element) => element.right > window.innerWidth + 4 || element.width > window.innerWidth + 4)
+            .sort((a, b) => b.width - a.width)
+            .slice(0, 20)
+        );
+        console.log("RESPONSIVE_OVERFLOW_ELEMENTS", JSON.stringify(offenders));
+      }
       expect(dimensions.content, `horizontal overflow at ${width}px viewport`).toBeLessThanOrEqual(dimensions.viewport);
     }
   });
