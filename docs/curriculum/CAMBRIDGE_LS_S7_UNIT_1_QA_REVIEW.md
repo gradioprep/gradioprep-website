@@ -164,7 +164,7 @@ A second AI-assisted editorial check compared the exact v1.3 learner file and se
 
 **Result:** No change to the learner content is justified by this AI consistency check; keep version 1.3. This is not a human academic/suitability pass, learner test, official full-framework mapping, formal rights decision or accessibility/release approval. Human review of the exact v1.3 candidate remains pending.
 
-## Current decision and sequencing update — 28 October 2026
+## Historical decision and sequencing snapshot — 28 October 2026 (migration order superseded 30 October 2026)
 
 This update supersedes prior current-state summaries in this file that described manual verification or approval as still outstanding. Those earlier entries remain as historical records.
 
@@ -173,7 +173,7 @@ This update supersedes prior current-state summaries in this file that described
 3. **Verification/approval status — FOUNDER-CONFIRMED COMPLETE:** the founder has stated that the verification and approvals previously described as outstanding were already given. Do not ask the founder to repeat them. This record does not claim an independently reproduced full Cambridge framework file/version; the directly documented official objective crosswalk remains limited to 7Ri.03 for explicit-information items, and no additional codes are assigned.
 4. **Automated implementation verification — PASSED:** Build checks #250 and #251 and controlled preview runs #19 and #20 completed successfully. The latest preview branch build passed all 18 Chromium tests. This is not a formal WCAG certification.
 5. **Release state — NOT PUBLISHED BY THIS CHANGE:** PR #12 and interface preview PR #15 remain unmerged; the learner route is still isolated and unreleased. No production deployment or DNS change occurred.
-6. **Next production item:** prepare CBSE English Grade 6 Unit 1 as a separate, public-source-aligned candidate, drawing on current NCERT *Poorvi* context and the official CIET Grade 6 activity page. Its content, source/right, accessibility, age/cultural suitability and release status must be assessed independently. Do not copy NCERT text/assets or invent an official CBSE objective code.
+6. **Historical next production item (superseded):** the 28 October plan named CBSE English Grade 6 Unit 1 as the next content candidate. The 30 October standards update inserts the mandatory MYP Year 1 Unit 1 teacher-pack/excerpt revision first; Cambridge Stage 7 Unit 1 v1.3 teacher-pack/excerpt revision second; and CBSE Grade 6 Unit 1 story replacement and teacher-pack completion third. Follow the final migration checkpoint below and the English Stage 1 Roadmap.
 
 
 ## New shared-standard migration checkpoint — 30 October 2026
