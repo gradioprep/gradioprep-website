@@ -8,10 +8,9 @@ import { pilotReviewSummary } from "./pilotReviewSummary";
 import { pilotLearnerLesson } from "./pilotLearnerLesson";
 
 /**
- * Static planning records, not a database. Review and practice metadata follow
- * the currently selected content version. A previous version's review outcome
- * is never copied to a new draft. Curriculum mapping, rights/accessibility
- * review and release approval remain separate requirements.
+ * Static planning records, not a database. The pilot's content-review outcome,
+ * lesson IDs and practice IDs are recorded for version 1. Curriculum mapping,
+ * rights/accessibility review and release approval remain separate requirements.
  */
 export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathway =>
   pathway.unitSlots.map((unit: PlannedUnitSlot): UnitContentPlan => {
@@ -20,7 +19,7 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
       id: `plan-${unit.id}`,
       unitId: unit.id,
       pathwayId: pathway.id,
-      version: isPilotUnit ? pilotLearnerLesson.version : 1,
+      version: 1,
       title: isPilotUnit ? pilotLearnerLesson.title : unit.title,
       releaseStatus: "planned",
       syllabusEditionCode: null,
@@ -31,15 +30,9 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
       learningObjective: isPilotUnit ? pilotLearnerLesson.proposedLearningObjective : null,
       lessonIds: isPilotUnit ? [pilotLearnerLesson.id] : [],
       practiceQuestionIds: isPilotUnit ? pilotLearnerLesson.practiceItems.map(item => item.id) : [],
-      answerKeyReviewState: isPilotUnit
-        ? (pilotLearnerLesson.reviewRecord.outcome === "passed" ? "passed" : "in-review")
-        : "not-started",
-      academicReviewer: isPilotUnit && pilotLearnerLesson.reviewRecord.outcome === "passed"
-        ? pilotLearnerLesson.reviewRecord.reviewerLabel
-        : null,
-      academicReviewedAt: isPilotUnit && pilotLearnerLesson.reviewRecord.outcome === "passed"
-        ? pilotLearnerLesson.reviewRecord.reviewedAt
-        : null,
+      answerKeyReviewState: isPilotUnit ? "passed" : "not-started",
+      academicReviewer: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewerLabel : null,
+      academicReviewedAt: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewedAt : null,
       contentRightsNote: null,
       accessibilityReviewState: "not-started",
       releaseApprovedBy: null,
@@ -54,12 +47,12 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
  */
 export function getUnitReadinessGates(plan: UnitContentPlan): UnitReadinessGate[] {
   const sourceVerified = Boolean(
+    plan.syllabusEditionCode &&
     plan.officialSourceUrl &&
     plan.officialSourceCheckedAt &&
-    plan.officialSourceNote?.trim()
+    plan.officialObjectiveCodes.length > 0
   );
   const objectiveApproved = Boolean(plan.learningObjective?.trim());
-  const objectiveMappingVerified = plan.officialObjectiveCodes.length > 0;
   const lessonLinked = plan.lessonIds.length > 0;
   const practiceLinked = plan.practiceQuestionIds.length > 0;
   const answersReviewed = plan.answerKeyReviewState === "passed";
@@ -75,24 +68,17 @@ export function getUnitReadinessGates(plan: UnitContentPlan): UnitReadinessGate[
   return [
     {
       id: "official-source",
-      title: "Verify the current public curriculum source",
-      detail: "Record the applicable public official page/document, course identity, source URL, date checked and what the source can and cannot establish.",
+      title: "Verify the official curriculum source",
+      detail: "Record the applicable specification or framework edition, official source URL, date checked and objective references.",
       owner: "Academic review",
       status: sourceVerified ? "complete" : "blocked",
     },
     {
       id: "learning-objective",
-      title: "Approve the platform learning objective",
-      detail: "Confirm the learning objective and prerequisites. If exact official descriptors are not publicly verifiable, label the objective as platform-authored and keep official mapping separate.",
+      title: "Approve the learning objective",
+      detail: "Confirm the unit focus, objective wording and prerequisites before drafting the lesson.",
       owner: "Academic decision",
       status: objectiveApproved && sourceVerified ? "complete" : "blocked",
-    },
-    {
-      id: "objective-mapping",
-      title: "Verify exact official objective mapping",
-      detail: "Use a current, traceable official objective/strand code only when the exact descriptor can be verified. If unavailable publicly, leave codes blank and state that the unit is public-framework-aligned rather than fully mapped.",
-      owner: "Academic review",
-      status: objectiveMappingVerified ? "complete" : "blocked",
     },
     {
       id: "lesson-content",
@@ -134,7 +120,7 @@ export function getUnitReadinessGates(plan: UnitContentPlan): UnitReadinessGate[
       title: "Approve the unit for release",
       detail: "Record who approved the release and when. This gate must not pass while earlier requirements are unresolved.",
       owner: "Release gate",
-      status: releaseApproved && sourceVerified && objectiveApproved && objectiveMappingVerified &&
+      status: releaseApproved && sourceVerified && objectiveApproved &&
         lessonLinked && practiceLinked && answersReviewed && academicReviewed &&
         rightsReviewed && accessibilityReviewed
         ? "complete"

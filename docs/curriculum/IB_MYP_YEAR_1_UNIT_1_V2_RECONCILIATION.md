@@ -96,3 +96,10 @@ The worked example, learner response frame and regression test were aligned to t
 - **Visual screen:** Night-time bus stop/platform, bus sign, orange streetlights and distant headlights; no identifiable people or visible commercial branding observed.
 - **Process standard:** All photographs must be screened and documented before selection under `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md`; free-to-use/royalty-free alone is not sufficient.
 - **Open status:** Source-level CC0 check complete; full unit-level rights review, accessibility review, academic review and release approval remain separate.
+
+
+## Mandatory shared-standard migration — 30 October 2026
+
+The founder has approved `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` and `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0. This supersedes earlier permission for short platform-original reading passages. The v2 main prose passage and transfer micro-extract are now legacy stimuli and must be replaced by separately registered public-domain excerpts. Record stable Excerpt IDs and exact Source IDs in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before use.
+
+Revise the full teacher-only pack so every objective item has the answer, question-specific reasoning and a rationale for each alternative; ordering/matching tasks must explain the sequence or pairing logic. Typed responses need a question-specific length, model response, accepted interpretations and item-specific feedback. Audit all other mini-texts and stimuli during this work. The existing 26 October founder content approval remains historical for the exact former v2 only; the revised version requires fresh review. This MYP revision is first in the new migration sequence, followed by Cambridge Stage 7 and then CBSE Grade 6.

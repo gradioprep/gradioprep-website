@@ -1,15 +1,46 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 1.7  
-**Research checked:** 26 October 2026  
-**Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, and Cambridge IGCSE First Language English 0500.  
+**Version:** 2.6  
+**Research checked:** 30 October 2026; literary excerpt requirements updated 30 October 2026  
+**Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
+
+**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.0. Every short or long reading passage/extract, including warm-ups and transfer texts, must come from a recognised writer's verified public-domain work. The former short platform-original passage allowance is withdrawn. Register every excerpt in docs/LITERARY_EXCERPT_SOURCE_REGISTER.md before use. Original instructions, questions, explanations, model responses and feedback remain allowed. The stricter photograph rule remains binding: the exact file page must confirm CC0/public-domain status before a photograph is selected or embedded.
 
 ## 1. Decision in response to access constraints
 
 The founder does not have school-account access to the IB Programme Resource Centre (PRC). We will therefore **not wait indefinitely for gated guides**. For MYP, we will build a clearly labelled, public-framework-aligned and evidence-informed Year 1 pathway using the official public subject overview, official public assessment information and carefully chosen public educational resources. For DP, use the public official course page and the publicly indexed 2026 examiner instructions where accessible, cross-checked against relevant specialist teaching sites. For Cambridge 0500, use the official public syllabus for exams 2027–2029 and its current specimen paper/mark-scheme set as the primary design source.
 
 This change does **not** permit a claim that the latest detailed guide has been replicated or that current official Year 1 mapping has been verified. The 2014/15 detailed Language and Literature guide is now located as an indexed official IB resource and its historical Year 1 A–D descriptors can inform a clearly labelled legacy crosswalk. That edition is not proof of the newest/current descriptor wording. Keep current official mapping unverified until the applicable edition and continuity are confirmed. No official codes or wording from gated documents are to be guessed. For any course, official identifiers, assessment format and syllabus claims require traceable sources.
+
+## CBSE English Grades 6–12 — public-source baseline (checked 26 October 2026)
+
+The CBSE pathway is newly approved for product scope. This register entry is a source starting point, not a completed class-by-class syllabus audit or official mapping. Follow `docs/curriculum/CBSE_ENGLISH_GRADES_6_12_PATHWAY_RESEARCH_BRIEF.md` and the binding curriculum research workflow.
+
+### Primary official sources
+- [CBSE Curriculum 2026–27](https://cbseacademic.nic.in/curriculum_2027.html) — the official portal lists English for Class IX, English Language and Literature and English Communicative options for Class X, and English Core and English Elective for Classes XI–XII. Verify the exact subject PDF/code and current assessment structure for each class before mapping.
+- [CBSE latest circulars](https://cbseacademic.nic.in/circulars.html) — official notices include 2026–27 curriculum release and changes. In particular, Acad-33/2026 concerns alignment of the language scheme in Classes IX–X with the NCERT syllabus from 2026–27; Acad-14/2026 announces the Classes IX–XII curriculum release; Acad-17/2026 concerns introduction of R3 in Class VI. The R3 notice is about the third-language scheme and must not be described as an English-subject syllabus change.
+- [NCF-SE 2023, English version](https://ncert.gov.in/pdf/focus-group/NCF-SE_2023EN.pdf) and [NCF framework portal](https://ncf.ncert.gov.in/) — national framework context for stage-specific learning standards, competencies, pedagogy and assessment. Use these to interpret and cross-check class-level requirements, not to invent CBSE subject codes.
+- [NCERT textbooks portal](https://ncert.nic.in/textbook.php) — check each grade's actual current textbook and edition. Record title, grade, publication/reprint date, relevant chapters and any official teacher/bridge material.
+- [Ministry of Education / PIB statement on NCERT syllabus alignment, 10 August 2026](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297094&lang=2&reg=48) — states that NCERT has brought out new syllabus and textbooks for Grades 1–9 and that learning material is developed through mapping of curricular goals, competencies and learning outcomes, with academic, pedagogical, language and sensitivity review.
+- [CBSE curriculum archive](https://cbseacademic.nic.in/curriculum_archive.html) — use to compare prior academic-session documents when assessing what changed and whether older practice material still matches the current requirements.
+
+### Currency and applicability cautions
+- As of 26 October 2026, the CBSE 2026–27 curriculum portal is the starting point for Classes IX–XII. Recheck the live portal and circulars before each course design and before any later release.
+- Grades 6–8 require separate verification of the applicable NCERT textbook, NCF-SE learning standards/competencies and CBSE guidance for each grade. Do not assume the same type of CBSE syllabus PDF is published for every middle grade.
+- Preserve the official route distinctions at Classes IX–X and XI–XII. Do not merge English Language and Literature, English Communicative, English Core or English Elective into a single assessment route.
+- The addition of R3/three-language requirements is not, by itself, evidence of a change to the English subject syllabus.
+- These sources establish an initial research base only. Exact class-wise official mapping and the latest effective textbook/syllabus position remain pending a dedicated audit. Independent EdTech resources may inform teaching design but cannot establish official CBSE requirements.
+
+
+### Grade 6 English — current textbook and task-design source check (28 October 2026)
+
+- [NCERT advisory for schools](https://www.ncert.nic.in/pdf/announcement/NCERT-Advisory-for-Schools.pdf) identifies **Poorvi** as the Grade 6 English textbook. Use this for title/identity only; verify the live NCERT catalogue and the exact edition/reprint before any future release.
+- [NCERT CIET Grade 6 activities](https://www.ciet.ncert.gov.in/activity/grade6?lang=en) lists *Poorvi*, Chapter 1, “Fables and Folk Tales”, including learning activities on prepositions of location. This supports the high-level text-type and language-skill context for the candidate, not an official unit-level objective code or complete CBSE syllabus map.
+- [NCERT textbook portal and copyright notice](https://ncert.nic.in/textbook.php) states that NCERT textbooks are copyrighted and that republication, redistribution and incorporation into digital content packages/software are prohibited without the stated permission basis. Use the textbook as a source for curriculum context only; do not copy or adapt chapter prose, exercises, illustrations or screenshots into the platform. The current candidate uses a short platform-original passage and original tasks, and embeds no external image.
+- [Ministry of Education / PIB, “Alignment of NCERT Syllabus with National Education Policy 2020” (10 August 2026)](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297094&lang=1&reg=48) reports that NCERT has brought out new syllabus/textbooks for Grades 1–9 and that material development includes mapping of curricular goals, competencies and learning outcomes with academic, pedagogical, language and sensitivity review. This supports checking current textbooks and learning standards, not inventing a Grade 6 English code.
+
+**Candidate mapping boundary:** describe the work as an independently designed, public-source-aligned CBSE Grade 6 practice unit. No official class-specific objective code is assigned in the absence of an exact current Grade 6 English descriptor. The exact NCERT edition/reprint should be checked again before any publication decision.
 
 ## 2. Core five-source set
 
@@ -33,6 +64,8 @@ Verified resources:
 ### Source 2 — Cambridge International official resources
 **Domains:** cambridgeinternational.org and help.cambridgeinternational.org.  
 **Role:** Definitive source for Cambridge syllabus edition, exam structure, assessment objectives, public specimen papers and mark schemes.
+
+**Stage 7 Unit 1 limited public cross-check (26 October 2026):** Cambridge's public framework-support overview lists 7Ri.03 for identifying and explaining explicit information. The current Stage 7 Unit 1 draft applies this code only to explicit-information items. This publicly visible overview is a narrow cross-check, not proof of the latest applicable full framework version; Cambridge says the complete framework, progression grid and Teacher Guide are provided through the secure support site for registered schools. Inference and language-choice objective codes remain unassigned. [Official English 0861 page](https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/curriculum/english/); [public framework-support overview showing 7Ri.03](https://cambridge-community.org.uk/guide-to/cambridge-lower-secondary/english/); [Cambridge support-site access guidance](https://help.cambridgeinternational.org/hc/en-gb/articles/23410735702290-Where-can-I-find-the-new-Curriculum-Frameworks-and-support-resources).
 
 Verified resources:
 - [Cambridge IGCSE First Language English 0500](https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-english-first-language-0500/) — lists 2024–2026 and 2027–2029 syllabuses and explains the syllabus-year convention.
@@ -72,14 +105,6 @@ Verified resources:
 
 **Use:** Independent cross-check and explanation only. Verify every mark, component, timing, command word and assessment claim against the official syllabus/specimen; a third-party site is not an awarding-body specification.
 
-### Cambridge Lower Secondary English 0861 — Stage 7 source check (26 October 2026)
-
-- **Official subject page:** https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/curriculum/english/ — confirms first-language English 0861, reading/writing/speaking/listening, audience and purpose, and broad fiction/poetry/playscript/non-fiction contexts. This does not publish the complete objective matrix.
-- **Official support-resource guidance:** https://help.cambridgeinternational.org/hc/en-gb/articles/23410735702290-Where-can-I-find-the-new-Curriculum-Frameworks-and-support-resources — directs schools to the Cambridge Lower Secondary support site for curriculum frameworks, Teacher Guides and schemes of work.
-- **Public Cambridge framework-support overview:** https://cambridge-community.org.uk/guide-to/cambridge-lower-secondary/english/ — explicitly lists 7Ri.03, “Identify and explain the meaning of explicit information from a range of texts,” as taken from the Curriculum Framework. Use this as a limited public crosswalk for explicit-information questions only.
-- **Framework PDF cross-check:** https://ems.sch.qa/wp-content/uploads/2025/10/0861-Lower-Secondary-English-Curriculum-Framework-2020_tcm143-592623-1.pdf — a third-party-hosted framework copy states Version 2.0. It is not accepted as proof that the file is the currently applicable official version or as the sole authority for additional objective codes.
-- **Unit 1 decision:** The current Stage 7 draft may record the explicit-information mapping to 7Ri.03 for the fact-finding items only. Inference and language-choice objective codes remain unassigned pending verification against the applicable support-site framework and progression grid. This is partial public-source verification, not a complete official mapping.
-
 ## 3. What counts as current enough to use
 
 Every source or sample must pass the following checks before it drives a learning objective, question, rubric or route:
@@ -112,11 +137,20 @@ For exams 2027–2029, use the official Version 1 syllabus and current public sp
 
 ## 5. Evidence status for current curriculum work
 
+### Age/grade-equivalence evidence for production sequencing
+
+- [Cambridge Lower Secondary — official programme page](https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/) — states the programme is typically for ages 11–14.
+- [Cambridge International, Implementing the Curriculum with Cambridge](https://www.cambridgeinternational.org/Images/134557-implementing-the-curriculum-with-cambridge.pdf) — provides example school structures in which Stage 7 can correspond to Grade 6 or another year/grade depending on the national context. Treat these as contextual examples, not a universal conversion table.
+- [Cambridge support: age group for Lower Secondary Checkpoint](https://help.cambridgeinternational.org/hc/en-gb/articles/23411513050770-Which-age-group-of-learners-is-the-Cambridge-Lower-Secondary-Checkpoint-for) — states Stages 7–9 cover approximately ages 11–14.
+
+**Production rule:** IB MYP Year 1, Cambridge Lower Secondary Stage 7 and CBSE Grade 6 form the first internal Grade 6-equivalent Unit 1 cohort. This is a workflow grouping only; keep the official curriculum/level names separate and verify each level's actual learner context. Complete all three before older-level Unit 1 or Unit 2 work.
+
+
 | Curriculum/track | Public evidence available | Evidence gap | What we may do now | What we must not claim yet |
 |---|---|---|---|---|
-| IB MYP Language and Literature Year 1 | Current public subject/assessment pages (last updated 19 Feb 2026), 50-hour baseline, six skill areas; detailed guide for use from 2014/15 surfaced with historical Year 1 A–D descriptors; MYP specialist/publisher/planning platforms reviewed | Latest applicable detailed guide edition, continuity of the old descriptors, final Enhanced MYP guidance and gated official specimen set remain unverified | **Guide v1.1 and implementation plan approved by founder; Unit 1 v2 candidate in PR #14 awaiting founder review**; use original tasks and keep current official codes blank | Current official mapping, full syllabus coverage, current criterion descriptor wording, or official IB approval/endorsement |
+| IB MYP Language and Literature Year 1 | Current public subject/assessment pages (last updated 19 Feb 2026), 50-hour baseline, six skill areas; detailed guide for use from 2014/15 surfaced with historical Year 1 A–D descriptors; MYP specialist/publisher/planning platforms reviewed | Latest applicable detailed guide edition, continuity of the old descriptors, final Enhanced MYP guidance and gated official specimen set remain unverified | **Guide v1.1 and implementation structure v1.2 founder-approved; Unit 1 v2 is an unmerged candidate**; use six proposed units and original tasks, clearly labelled platform design | Current official mapping, full syllabus coverage, current criterion descriptor wording, or official IB approval/endorsement; separate review/release gates for Unit 1 v2 remain open |
 | IB DP Language A: Language and Literature, Years 1/2 | Public subject overview (last updated 19 Feb 2026); publicly indexed 2026 Examiner Instructions; specialist teaching/sample-response resources with mixed access | Full official subject guide and much of the actual past-paper archive are restricted; school sequences vary | Build a progressive delivery plan from verified public course/assessment features; cross-check criterion changes and create original practice | Present a third-party claim as official without cross-check, or call Language A: Literature packs exact Language A: Language and Literature specimens |
-| Cambridge Lower Secondary English 0861 | Official public subject/resource pages; Cambridge framework-support overview explicitly shows 7Ri.03 for explicit information; full framework/Teacher Guide/progression grid via school support site | Exact currently applicable full framework file/version and the rest of the Stage 7 objective matrix remain to be verified from the support site | Use broad official course aims and the limited 7Ri.03 crosswalk for explicit-information items only; keep other codes unassigned and label the unit public-framework-aligned | Do not infer a full official map from 7Ri.03, a third-party-hosted framework copy, or generic Stage 7 labels |
+| Cambridge Lower Secondary English 0861 | Official public framework/curriculum page and published Cambridge framework resources (verify file/version for each stage) | Current framework document/version and appropriately public sample assessments for each stage still need to be recorded | Draft skills and sequence only with versioned framework evidence and clearly labelled design choices | A generic worksheet is current Cambridge Stage 7 content just because it says “Stage 7” |
 | Cambridge IGCSE First Language English 0500, exams 2027–2029 | Official Version 1 syllabus; official public specimen/mark-scheme resources; public 2027–2029 page | Full school-support archive, some examiner reports and candidate responses may require registered-school access | Build a syllabus-sensitive route and original practice based on the current structure and public specimens | Older paper format is the current pattern, or unofficial copied papers are free to redistribute |
 
 ## 6. Required record for every future source or sample
@@ -158,34 +192,85 @@ The five cross-track source families above are not a substitute for programme-sp
 | IB Source Education / Tes marketplace | Discovery and competitor scan only; inspect each resource's actual content, target year, version, author and rights | Not adopted as curriculum evidence without item-level verification |
 
 **Control:** Never copy a protected lesson, textbook passage, sample response or assessment from these platforms into GradiPrep simply because its listing is public. Use these sources to identify design patterns and gaps, then create original or properly licensed materials. For transition details, keep the current/legacy framework separate from Enhanced MYP beta material until the IB publishes the final applicable guide.
+## 7. Standing workflow for every level
+
+The binding procedure is [`docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md`](IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md). The founder has confirmed that they do not have access to an authorised school account or gated IB PRC materials. **Do not ask them again for this access, and do not wait for gated resources before proceeding.** For every IB and Cambridge course/year/stage, research the exact current public official framework/syllabus and assessment resources first, then compare relevant specialist EdTech platforms, publishers and evidence-informed teaching resources for that specific level. Log source URLs, dates, edition/session, access state, what each source can support, cross-checks and confidence. When a current detailed official document is not publicly verifiable, continue with a clearly labelled public-framework-aligned internal guide and implementation structure; leave exact official mapping unverified rather than inventing it. Keep academic suitability, official mapping/currency, rights, accessibility, cultural/age suitability and release as separate gates. Public visibility is not permission to reproduce copyrighted content. This protocol applies across all levels, not only MYP Year 1, and supersedes any older workflow wording that requests the founder to provide gated materials.
 
 
-## 9. MYP Unit 1 version 2 status update
+## Stage 7 Unit 1 v1.3 — text rights/originality desk screen (26 October 2026)
 
-The guide and implementation plan have been approved by the founder. The existing pilot has been reconciled into a version 2 draft using the approved research method. It pairs the original prose passage with a fictional night-bus campaign-poster mock-up using a Wikimedia Commons photograph explicitly released under CC0 1.0, with platform-authored copy/layout. The image was screened for source/licence and visible third-party rights concerns before selection. It also adds an unscored entry observation, comparison practice, revision and fresh-text transfer. Version 1's academic-review pass remains specific to the earlier preview. Version 2 is awaiting founder review in PR #14; current official mapping, full unit-level rights review, accessibility and release approval remain open. The next curriculum-track unit remains inactive until Unit 1 v2 is approved.
+Public exact-phrase searches were run for distinctive strings from the draft learner passage and mini-texts, including “At first, the rain fell softly against the library windows”, “A thin line of water crept along the path”, “The map's corners fluttered against Dev's wrist”, and “The paper cup rolled along the platform”. No exact passage-level match surfaced in the returned search results. This is a limited public-index screen: it cannot cover private, unindexed, paywalled or paraphrased sources and is not proof of legal ownership or a comprehensive plagiarism result.
 
-## 10. Mandatory pre-selection photograph rights process
+The Stage 7 Unit 1 learner and teacher files contain no photographs, illustrations, screenshots, third-party literary excerpts, copied questions or copied model answers. The Cambridge and Education Endowment Foundation sources inform curriculum/context and teaching approach; they are not reproduced as lesson passages. The narrow 7Ri.03 reference is attributed to the public framework-support overview.
 
-**Effective immediately for all new or replacement photographs.** A photograph must not be selected, embedded, committed or shown in a preview until its licence has been checked and recorded. “Free to download,” “royalty-free,” or a stock-site “free” label is not sufficient for the project's copyright-free requirement.
+**Gate state:** Initial public phrase-search screen (26 October 2026): no exact match surfaced. This historical note is superseded by the 28 October record below: the unchanged short original text has passed the internal originality/provenance screen after supplemental searches and founder human approval; no formal legal opinion is claimed. The mandatory pre-selection CC0/public-domain photo check is not applicable to this text-only unit. Do not describe the unit as legally cleared or fully plagiarism-checked on the basis of this screen.
 
-1. **Eligible status:** Use only CC0 1.0 Public Domain Dedication or an explicit public-domain release by the rights holder. Check the exact image's own source/detail page, not a search result, image aggregator, social repost, or AI-generated summary.
-2. **Verify before use:** Confirm and record the exact image page, author/uploader, source URL, explicit CC0/public-domain statement and licence link, date checked, and that the licence applies to that exact file. Add this record before embedding the image in code.
-3. **Screen visible content:** Inspect the image itself for identifiable people, children, logos/trademarks, distinctive artwork, private/interior locations, number plates or other third-party material. CC0 clears the creator's copyright to the extent dedicated; it does not automatically clear privacy, publicity, trademark, property or other third-party rights. Prefer images without identifiable people or visible branding. If a separate right could apply and cannot be cleared, reject the image.
-4. **Check fit and accessibility:** Verify that the photograph genuinely supports the lesson topic and intended analysis; write accurate alt text and a visible source/credit note even where credit is not legally required.
-5. **Record and gate:** Record the file title, creator, source page, licence URL, date checked, reason for selection and visible-content screening. If the page is unavailable, licence is ambiguous, or a rights concern remains unresolved, do not use the image.
-6. **Recheck changes:** Every replacement or materially different image requires its own pre-selection check. Keep the source record in the same PR as the asset. A later review does not substitute for pre-selection screening.
+## Pedagogy references used in the Stage 7 Unit 1 v1.3 review
 
-A photograph may technically remain copyrighted while its creator dedicates it to CC0. For this workflow, “copyright-free” means a documented CC0/public-domain dedication, not merely a free-to-use stock licence. This process reduces risk but is not a legal guarantee for rights beyond copyright.
+These sources inform instructional design only; they do not define Cambridge curriculum requirements or official objective codes.
 
-## 11. Photographic asset used in MYP Year 1 Unit 1 version 2
+- **Education Endowment Foundation, “Improving Literacy in Secondary Schools” (2018):** https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/literacy-ks3-Ks4 — secondary literacy guidance including vocabulary development, reading and support for learners who struggle.
+- **Education Endowment Foundation, “Reading comprehension strategies”:** https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/reading-comprehension-strategies — recommends explicit modelling of comprehension strategies, followed by guided and independent application, including inference and self-monitoring.
 
-- **Asset:** “Bus stop with platform during night.jpg”
-- **Creator:** Mateusz Konieczny.
-- **Source page:** https://commons.wikimedia.org/wiki/File:Bus_stop_with_platform_during_night.jpg
-- **Direct image:** https://upload.wikimedia.org/wikipedia/commons/7/7c/Bus_stop_with_platform_during_night.jpg
-- **Licence page:** https://creativecommons.org/publicdomain/zero/1.0/
-- **Licence status verified:** The Wikimedia Commons file page explicitly states that the copyright holder released the file under CC0 1.0 Universal Public Domain Dedication.
-- **Content screening:** Direct visual inspection shows an empty bus-stop platform at night, a bus-stop sign, orange streetlights, a dark road and distant headlights. No identifiable people or visible commercial branding were observed.
-- **Reason for selection:** A real night-time bus-stop photograph supports analysis of lighting, contrast, setting, mood and the suggestion of a late journey. No waiting passengers are depicted, so lesson wording must not imply they are visible.
-- **Checked:** 26 October 2026, before selection/embedding.
-- **Remaining gate:** Source-level CC0 verification does not replace the full unit-level rights review or release approval. Recheck if the file or its context changes.
+The Stage 7 Unit 1 v1.3 candidate applies these general teaching principles through a clue → inference → reason worked model, optional plain-language support for access vocabulary, and task-specific formative descriptors. This is an AI-reviewed design change, not evidence of learner-testing or an independent human review.
+
+## Mandatory photograph selection and rights-screening rule
+
+Do not select, download, embed, commit or preview any photograph until its exact source page confirms an explicit CC0 dedication or public-domain status. Verify the licence on the specific file/page, screen visible third-party rights concerns (including identifiable people, artwork, trademarks or property where relevant), and record creator, title, exact source URL, licence evidence, date checked and subject/accessibility fit before selection. Free-to-use or royalty-free stock terms alone do not satisfy this project's copyright-free-photo requirement. If the licence or visible-rights position is unclear, do not use the photograph; use an original non-photographic treatment instead. A source/licence record is a prerequisite to selection, not a retrospective check. Full unit-level rights review remains a separate gate.
+
+## Stage 7 Unit 1 v1.3 — current public-source recheck and hosted-preview evidence (27 October 2026)
+
+The current official Cambridge English 0861 page was rechecked: https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/curriculum/english/. It states that 0861 is the first-language English course, lists reading, writing, speaking and listening as the four broad skill areas, recommends fiction, poetry, playscripts and non-fiction, and describes an integrated experience/reflection/improvement approach. This supports the unit's narrow public-framework-aligned reading scope but not a claim of complete Stage 7 coverage.
+
+Cambridge's current public classroom-support page and help article confirm that the full Curriculum Framework, progression grid, mapping documents and Teacher Guides are available through the secure Lower Secondary support site to registered schools:
+- https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-lower-secondary/classroom-support/
+- https://help.cambridgeinternational.org/hc/en-gb/articles/23410735702290-Where-can-I-find-the-new-Curriculum-Frameworks-and-support-resources
+
+This check did not reveal the exact currently applicable full framework/version or additional item-level objective IDs. Do not infer new mappings from the historical public curriculum outline. Keep the 7Ri.03 crosswalk limited to explicit-information items; inference and language-choice codes remain blank/unverified.
+
+Technical evidence is recorded separately from curriculum mapping: controlled preview run [#14](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206707) passed; Build check [#245](https://github.com/gradioprep/gradioprep-website/actions/runs/40524206694) passed the TypeScript/Vite build and 17/17 Chromium tests; Cloudflare's Preview API confirmed [the isolated Stage 7 v1.3 testing URL](https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev/preview/cambridge-lower-secondary/english/stage-7/unit-1) with `deployed_on = 2026-10-27T14:46:23Z` UTC at the check. The URL is public unless Cloudflare Access is enabled. CI tests use local Wrangler assets and are not manual accessibility certification or a visual check of the hosted page.
+
+**Gate status at the 27 October check (superseded by the 28 October update below):** At that point, human review and formal rights/originality status were still open. The later 28 October record supersedes these two fields for the exact v1.3 text-only unit; its internal originality/provenance screen is now passed and founder human review is approved. The current full framework/version and further mapping, manual accessibility/hosted visual review, and explicit release approval remain open. The Stage 7 candidate remains unreleased; do not skip to CBSE Grade 6 or start Unit 2 until required gates are addressed.
+
+
+## Stage 7 Unit 1 v1.3 — supplemental rights/originality query record (27 October 2026)
+
+A second limited search pass queried eight additional distinctive sentence fragments from the Stage 7 learner passage and exit check. No exact passage-level match surfaced in the returned public search results; the returned results were general reading/inference teaching resources rather than exact text matches. This is not proof of authorship, a comprehensive plagiarism check or legal clearance. Formal rights/originality review remains open. No photograph or third-party literary excerpt is used in the unit, so the photo pre-selection process is not applicable to this content.
+
+## Content stimulus selection and clearance rule — 28 October 2026
+
+The content source register governs curriculum/source research; the separate content originality and rights protocol governs rights evidence. These controls are intentionally proportionate:
+
+- Original platform content is limited to short, task-purposeful passages/excerpts and the brief instructional/assessment material around them. Record provenance, proportionate phrase-screen scope/result, and human approval. If no specific concern is identified, the internal originality/provenance screen may be marked passed; formal legal review is not a blanket prerequisite for every unchanged short original passage.
+- Longer passages/excerpts and source artefacts for tasks—including images, posters, notices, adverts, infographics and book/document images—should be drawn from verified public-domain works or licences that permit the exact intended commercial/online use and any edits. Identify the exact work/file, edition/translation where relevant, source URL, licence/version, permitted uses, attribution, modifications and date checked before selection/embedding.
+- Public availability, a “copyright free” label, search-result text, attribution alone, or an educational use case is not proof of rights. If terms are ambiguous, select a clearer source. Use permission or an explicitly documented legal basis for copyrighted content outside the reusable-source route.
+- Do not confuse an internal originality/provenance pass with a verified third-party licence or a formal legal opinion. Escalate only when a concrete concern remains unresolved; do not repeat broad searches on unchanged text without a reason.
+
+The Stage 7 Unit 1 v1.3 short original passage has the internal originality/provenance screen status **PASSED** as recorded on 28 October 2026; the founder confirms the exact version received human review approval and now confirms that the required verification/approval decisions previously described as outstanding were already given. This does not add any further official objective code to the documented 7Ri.03 crosswalk, and the interface preview remains unmerged/unreleased until the approved code-release step is performed.
+
+
+### CBSE Grade 6 Unit 1 “The Turning Sign” — provenance and source-screen record (28 October 2026)
+
+The new draft uses a short original animal narrative and original practice tasks. It was written independently for this platform after reviewing public source context; the passage does not reproduce *Poorvi* or any third-party work. Three distinctive phrase queries were checked:
+- “Lali the langur noticed hoofprints near the post”
+- “A fallen branch had knocked the wedge from its slot”
+- “Hoofprints show that a deer passed here”
+
+A supplementary search on the initial draft surfaced one unrelated article with highly similar generic headline wording to “A clue is not the same as proof” and a separate fictional result with a red strand tangled on a thorn. Neither was an exact copy, but we removed that generic line and changed the clue mechanism before finalising the current candidate. Three searches on distinctive phrases from the revised “The Turning Sign” passage did not show an exact passage-level match; one returned a general discussion of hoofprints as natural signs, not the candidate story. Treat this as a **limited internal originality/provenance screen for the revised draft only**, not comprehensive plagiarism detection, proof of authorship or a legal opinion. Repeat it if the passage is materially changed or a concrete concern is identified.
+
+The source-context links are [NCERT's Grade 6 textbook advisory](https://www.ncert.nic.in/pdf/announcement/NCERT-Advisory-for-Schools.pdf), the [CIET Grade 6 activity list](https://www.ciet.ncert.gov.in/activity/grade6?lang=en), the [NCERT textbook portal and copyright terms](https://ncert.nic.in/textbook.php), and the [Ministry of Education/PIB statement dated 10 August 2026](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297094&lang=2&reg=48). They support textbook/task-design context only. The applicable current textbook reprint and exact Grade 6 English learning outcome remain unverified. No official CBSE objective code is assigned. No image or third-party excerpt is embedded; NCERT story text, exercises, illustrations and screenshots are not copied.
+
+### CBSE Grade 6 English outcome source — update (28 October 2026)
+
+**Official source:** [NCERT, Bridge Month Programme for Grade 6, English (R2), Annexure IV, first edition April 2024](https://ncert.nic.in/pdf/Bridge_Month_Program/Grade6/BMP_Grade-6-English%28R2%29.pdf). The NCERT programme page lists it under the Grade 6 Middle Stage resources.
+
+The programme's holistic-assessment section states a major learning outcome: reading a variety of texts, including stories, and identifying main ideas, characters and events. Its suggested assessment methods include comprehension questions, multiple-choice questions, short answers and sequencing. This supports **limited source alignment** for “The Turning Sign”'s narrative-reading and event-sequencing elements.
+
+**Limits:** The PDF is labelled English (R2), first edition April 2024. It does not identify a unique unit-specific CBSE objective code; it is not confirmation of the exact current *Poorvi* reprint used at a given school and does not directly assign this unit's inference or location-preposition tasks to a formal code. Keep `officialObjectiveCodes` empty. The exact applicable *Poorvi* reprint/version remains to be checked before a current-edition or complete official-mapping claim.
+
+
+## Literary excerpt source register — binding companion record (30 October 2026)
+
+This curriculum/source register remains the record for official curriculum references, specialist resources and sample-paper currency. It is not the per-excerpt provenance ledger. Every learner reading passage, short warm-up, mini-extract and transfer passage must also have an Excerpt ID and exact Source ID in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. The excerpt register records the work, author, exact edition/transcription, URL, public-domain basis and territory check, precise location, question/unit use and replacement history. Complete it before adopting the passage.
+
+The prior source records for original platform-created passages are historical only and do not satisfy the new literary-source standard. Existing MYP Year 1, Cambridge Stage 7 and CBSE Grade 6 passage stimuli are marked replacement-required and must be revised sequentially under the English Stage 1 roadmap.

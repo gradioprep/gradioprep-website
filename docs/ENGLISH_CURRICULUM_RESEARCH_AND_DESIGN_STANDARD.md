@@ -1,10 +1,14 @@
 # English Curriculum Research, Quality Rubric and Design Standard
 
-**Status:** Internal working reference v0.6 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
-**Prepared:** 26 October 2026
+**Status:** Internal working reference v1.6 — research synthesis, public-source protocol and quality rubric; not an official curriculum mapping.
+**Prepared:** 30 October 2026
 **Owner:** Academic lead / founder
-**Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary and Cambridge IGCSE. Official syllabus mappings must be verified separately for each course, year/stage and edition.
+**Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary, Cambridge IGCSE and CBSE English Grades 6–12. Official syllabus mappings must be verified separately for each course, class/year/stage and edition.
 **Do not publish this document as a claim of IB/Cambridge endorsement.**
+
+## Binding workflow and access constraint
+
+Follow [`docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md`](IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md) for every IB and Cambridge course/level. The founder has no authorised school-account access; this is a standing constraint, not an open request. Never ask the founder again to obtain gated school resources or pause research for them. The curriculum director must use the best available current public official sources, compare level-specific specialist EdTech/publisher resources, cross-check against credible pedagogy evidence, and record what remains unverified. A public-framework-aligned implementation design may proceed where detailed official material is gated, but official mapping must remain explicitly unverified unless directly supported by traceable current evidence. Academic review, mapping, content-rights evidence, accessibility, suitability and release remain distinct statuses. Binding content-rights rule: every short or long reading passage/extract, including warm-up and transfer mini-texts, must come from a recognised writer's verified public-domain work. The previous allowance for short platform-original reading passages is withdrawn. Register every excerpt in docs/LITERARY_EXCERPT_SOURCE_REGISTER.md before use. Original task instructions, questions, explanations, model responses and feedback remain permitted. Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.0 and docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md.
 
 ## 1. Executive recommendation
 
@@ -14,7 +18,11 @@ Build a specialist English learning system around a shared instructional engine,
 
 Each task should make visible: what skill is being practised, what quality looks like, why an example works, what the learner can improve, and what evidence supports the next recommendation. This is a product design hypothesis to validate with learners and families, not a claim of proven market uniqueness.
 
-The founder confirmed DP Language A: Language and Literature and Cambridge IGCSE First Language English 0500 only on 25 October 2026. The MYP Year 1 guide v1.1 and implementation structure v1.1 were approved on 26 October 2026; the founder approved the content of Unit 1 version 2 on 26 October 2026. PR #14 remains an unmerged candidate because separate academic review, official mapping, rights, accessibility/suitability and release gates remain open; version 1's review outcome does not transfer. The production rotation has advanced to the existing Cambridge Lower Secondary Stage 7 Unit 1 draft in PR #12. Review and correct the draft rather than duplicate it, and do not claim a complete official objective map while the full framework remains support-site gated. Do not start later-track work merely because draft files already exist. When a detailed guide is gated, use the public-source policy in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md to develop an explicitly public-framework-aligned guide; do not invent official objective/strand codes or claim complete official mapping. The canonical MYP Year 1 guide is `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`; its implementation structure is `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`. Both are complete as an independent public-framework-aligned design, not as an official IB syllabus map. Unit 1 version 2 has founder content approval as a candidate but has not passed its separate academic review; official objective mapping is not claimed, and rights, accessibility/suitability and release gates remain open.
+The founder approved the MYP Year 1 guide v1.1 and implementation structure v1.2 on 26 October 2026, and separately approved the content of MYP Unit 1 v2 as a candidate. The v2 content remains subject to its own academic, mapping, rights, accessibility/suitability and release gates. The binding first Unit 1 cohort is IB MYP Language and Literature Year 1 → Cambridge Lower Secondary English 0861 Stage 7 → CBSE English Grade 6; finish this first cohort and its required release checks before older-level Unit 1 or any Unit 2 begins. Cambridge Stage 7 Unit 1 v1.2 received an AI-led curriculum/content review; its identified instructional and scoring improvements were applied in draft v1.3. Founder human review of exact v1.3 was approved on 28 October 2026; the internal originality/provenance screen for its short original text passed under the rule then in force. Under the 30 October 2026 standard, that original passage is now replacement-required and the prior screen does not satisfy the public-domain excerpt requirement. Current full framework/version and extra objective mapping, manual accessibility/hosted visual review and explicit release approval remain open. Do not start later work just because draft files exist; a blocked cohort unit pauses the sequence. Where detailed official materials are not public, use the documented public-source protocol and leave current official mapping unverified rather than inventing objective codes. The MYP Year 1 guide and implementation structure are public-framework-aligned independent design documents, not official IB syllabus maps. Their content is not cleared for full release merely by founder content approval.
+
+## CBSE pathway addition
+
+CBSE English Grades 6–12 is now approved as a pathway family in the product roadmap. This is a scope addition only; the architecture, reusable unit model, curriculum rotation, research method and separate release gates remain unchanged. Follow the dedicated scope note at `docs/curriculum/CBSE_ENGLISH_GRADES_6_12_PATHWAY_RESEARCH_BRIEF.md` and the expanded binding workflow. Treat current CBSE/NCERT public sources and NCF-SE 2023 as starting points, verify each grade and academic session independently, preserve secondary route and senior-secondary Core/Elective distinctions, and do not treat third-language R3 changes as English subject changes. No CBSE content or app implementation has been authorised by this scope decision.
 
 ## 2. Curriculum scope: confirmed versus requiring a decision
 
@@ -133,24 +141,15 @@ Not every unit needs every task format. Each curriculum's own assessment rules a
 
 ## 7. Content rotation and production control
 
-After the curriculum guides are researched and approved, create **one unit at a time**, rotating across tracks rather than completing a full curriculum group. Initial Unit 1 rotation:
-1. IB MYP Language and Literature Year 1.
-2. Cambridge Lower Secondary English (0861) Stage 7.
-3. IB DP Language A: Language and Literature Year 1.
-4. Cambridge IGCSE First Language English 0500 first approved delivery band.
-5. IB MYP Year 2.
-6. Cambridge Lower Secondary Stage 8.
-7. IB DP Language A: Language and Literature Year 2.
-8. Cambridge Lower Secondary Stage 9.
-9. Cambridge IGCSE 0500 next approved delivery band.
-10. IB MYP Year 3.
-11. IB MYP Year 4.
-12. IB MYP Year 5.
+Create **one Unit 1 at a time** across comparable grade/age bands, not by completing an entire board first. The binding first cohort is:
 
-Then return across the same tracks for Unit 2 and later Unit 3. The order is a product-production rule, not an official IB/Cambridge unit sequence. Keep any track blocked while its official guide/syllabus, edition or objective mapping is unverified; do not substitute invented content.
+1. IB MYP Language and Literature Year 1 (typically the Grade 6-equivalent age band).
+2. Cambridge Lower Secondary English 0861 Stage 7 (typically ages 11–12; often aligns with Grade 6 in some school structures, but not universally).
+3. CBSE English Grade 6.
 
-Do not finish all units or the whole curriculum for one group before starting another. A rotation slot may be marked **blocked** if official mapping, course selection, rights or review prerequisites are unresolved; do not substitute invented content to keep the rotation moving. Keep this rule in the roadmap and production tracker.
+Do not start any older-level Unit 1 or any Unit 2 until all three first-cohort Unit 1s are student-ready and the required academic, rights/originality, accessibility, age/cultural suitability and release gates are recorded. Official mapping/currency is tracked separately and must never be fabricated. If any of these units is blocked, pause and report the blocker rather than skip it. This supersedes older rotation lists that placed DP/IGCSE or higher grades before CBSE Grade 6.
 
+After the first cohort is complete, continue with Unit 1 for the next comparable band (IB MYP Year 2 → Cambridge Lower Secondary Stage 8 → CBSE Grade 7), then the next band (MYP Year 3 → Cambridge Stage 9 → CBSE Grade 8), verifying each programme's actual age/grade alignment and current syllabus before assigning it to a band. Continue through all approved levels in age/grade-band order, preserving each curriculum's identity and never inventing equivalence. **Do not switch to Unit 2 of the first three pathways after the first cohort finishes.** Unit 2 begins only after Unit 1 is complete across the full approved in-scope level sequence. This is a product-production rule, not an official IB/Cambridge/CBSE syllabus sequence.
 ## 8. Internal quality rubric and self-rating
 
 Score each dimension 0–5: 0 absent; 1 assertion only; 2 partial; 3 adequate with documented evidence; 4 strong and traceable; 5 independently reviewed and current. Overall score is the mean; a high score never overrides a mandatory curriculum/release gate.
@@ -201,22 +200,53 @@ Required distinction:
 
 Enhanced MYP is a separate transition watch. The IB beta guidance states full release is scheduled for 2027; until the final applicable guide and effective date are verified, do not replace current framework fields with beta terminology or change official maps on the strength of a third-party update.
 
-The revised MYP Year 1 sequence has six proposed units and an eight-hour shared skills/diagnostic/transfer allocation, for at least 50 planned teaching hours. This is a product planning decision derived from the public 50-hour floor, not a prescribed IB unit structure. The guide and implementation plan are founder-approved, as is the content of Unit 1 version 2. Separate academic review, rights, accessibility/suitability, current official mapping and release gates remain open. Per the production rotation, Cambridge Lower Secondary Stage 7 Unit 1 is now active for draft review; later-track units remain blocked until their turn.
+The revised MYP Year 1 sequence has six proposed units and an eight-hour shared skills/diagnostic/transfer allocation, for at least 50 planned teaching hours. This is a product planning decision derived from the public 50-hour floor, not a prescribed IB unit structure. The guide, implementation structure and content of Unit 1 version 2 have founder approval as a candidate; separate academic review, official mapping, rights, accessibility/suitability and release gates remain open. The active production candidate is Cambridge Lower Secondary Stage 7 Unit 1 v1.3, with AI-led review improvements applied after review of v1.2. Founder review of exact v1.3 and separate gates remain open. CBSE Grade 6 Unit 1 remains the third mandatory item in the first cohort. Do not start older-level Unit 1 work or Unit 2 while a required first-cohort checkpoint is blocked.
 
 
-## 11. MYP Unit 1 version-control practice — v0.6 addition
+## 11. Cambridge Stage 7 Unit 1 v1.3 academic-content review
 
-Treat each material content revision as a new version with a fresh review state. The existing “How writers shape meaning” version 1 was approved for pilot preview only. The revised version 2 adds a fictional poster mock-up using a real photograph explicitly released under CC0 1.0 with original platform-authored copy/layout, an entry observation, a comparison task and a fresh-text transfer check. All photographs must pass the mandatory pre-selection rights process in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md before they are chosen or embedded; free-to-use stock licences alone do not meet the copyright-free requirement. It is marked draft-for-founder-review; do not carry over the previous review's date, outcome or release state. Keep learner-facing material free of correct-answer IDs and teacher model answers, and keep all curriculum mapping, rights, accessibility, academic review and release states separate.
+AI-led review of v1.2 used the current public Cambridge 0861 course overview, the public 7Ri.03 example and Education Endowment Foundation guidance on secondary literacy and reading-comprehension strategies. Three areas were improved in v1.3: an explicit worked model of clues → inference → reasoning; optional word support and alternatives to paper annotation; and item-specific formative scoring so a selection-only item is not judged against an explanation criterion. The formative maximum remains 15 and is not a Cambridge grade or mark scheme. The candidate remains public-framework-aligned practice, not a complete official map. Only explicit-information items use the narrow 7Ri.03 cross-check; the full current framework/version and other objective codes remain unverified. This is not independent human academic sign-off or a learner pilot. On 26 October 2026, the founder approved proceeding with further review/release checks for exact v1.3. A limited public phrase-search desk screen surfaced no exact match, and content-level accessibility/context preflight found no blocking text-only issue. The founder has since approved human review of the exact v1.3 learner content (28 October 2026), and the short original text has passed the internal originality/provenance screen under the risk-based protocol. Current full framework/version and further mapping, manual accessibility/hosted visual review, and explicit release approval remain open. Do not integrate or publish before the required checks for the intended status are recorded.
 
-The current MYP Year 1 guide/implementation structure and the content of Unit 1 version 2 are founder-approved. PR #14 remains draft and unmerged until outstanding gates for the intended status are addressed. The next production checkpoint is Cambridge Lower Secondary Stage 7 Unit 1, whose existing draft is under review in PR #12.
+## 12. Mandatory photograph pre-selection rule
+
+Every photo must be checked **before it is selected or embedded**: verify an explicit CC0/public-domain dedication on its exact file page, screen visible third-party rights concerns, and record creator/title, exact URL, licence evidence and date checked. Free-to-use/royalty-free stock licences alone do not satisfy this requirement. Do not use a photo if licence or visible-rights status is unclear. This pre-selection process does not replace a separate unit-level rights review.
+
+## 13. Stage 7 Unit 1 v1.3 post-approval gate review — 26 October 2026
+
+The founder approved proceeding with further review/release checks for the exact v1.3 candidate. A limited public exact-phrase screen did not surface an exact match for searched passage lines; no images or third-party excerpts appear in the unit. A text-level accessibility/context preflight found no blocking issue, given the worked model, word-help box and non-paper alternatives. These findings are not comprehensive plagiarism screening or legal clearance; UI accessibility and human age/level suitability remain untested. The project must remain paused at this Stage 7 checkpoint until human academic/suitability judgement, current framework/version handling, formal rights review, accessibility in the intended UI, and explicit release decision are recorded. The next planned content after Stage 7 is CBSE Grade 6 Unit 1, but the binding rotation does not permit skipping a blocked checkpoint.
 
 
-## Mandatory photograph selection and rights screening
+## 14. Controlled preview UI test outcome — 26 October 2026
 
-- Do not select, embed, commit or preview a photograph until the exact source page and licence have been checked and recorded.
-- Use only an explicit CC0 1.0 Public Domain Dedication or an explicit public-domain release by the rights holder. “Free download,” “royalty-free” or a stock site's free-use licence alone is insufficient.
-- Record creator, exact file/source page, licence page and date checked in `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` before coding.
-- Inspect the actual image for identifiable people (especially children), logos/brands, artwork, private property, number plates and other third-party rights. CC0 addresses the creator's copyright to the extent dedicated; it does not automatically clear privacy, publicity, trademark, property or other rights. Reject the image if a separate right could apply and cannot be cleared.
-- Confirm topic fit and accessibility; write accurate alt text and a visible source/credit note. If the source page cannot be checked or the licence is ambiguous, do not use it.
-- Repeat the check for every replacement or materially different image. Keep the source record in the same PR as the asset. This is a conservative project control, not a legal guarantee.
+The founder approved a restricted preview integration for testing only. Draft PR [#15](https://github.com/gradioprep/gradioprep-website/pull/15) adds the isolated route `/preview/cambridge-lower-secondary/english/stage-7/unit-1` without linking it from ordinary navigation. The route renders learner-facing v1.3 content only; teacher/editor answers stay outside the client import graph, and learner responses are held only in temporary component state without scoring or persistence.
 
+GitHub Actions [Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed on commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`: TypeScript/Vite build successful and 17/17 Chromium tests passed, of which six specifically cover the controlled preview. These test the unreleased label and content rendering, skip-link/disclosure keyboard operation, unique task-specific accessible names for all 14 textareas and programmatic question-prompt associations, absence of horizontal overflow at 320/390/768/1024 CSS-pixel viewport widths, clearing all response drafts and the warm-up choice, and contrast sampling for selected text pairs.
+
+**Interpretation limit:** This is evidence that the route builds and passes a small automated interface/accessibility smoke suite, not a comprehensive WCAG audit. Manual screen-reader testing, broader keyboard and focus-order inspection, 200%/400% zoom/reflow, cross-browser/OS checks, text-to-speech review and human learner-suitability judgement remain open. The automated test server is local Wrangler within CI; no dedicated hosted Cloudflare branch-preview URL was verified. The unit remains draft/unreleased. Rights/originality, human academic/suitability, current full Cambridge framework/version and objective mapping, and explicit release approval are separate gates and must not be inferred from this test pass.
+
+
+## 15. Final preview-test correction — 26 October 2026
+
+The final controlled-preview commit makes the clear-all control reset both typed response drafts and the warm-up radio selection. The corresponding regression test passed in [Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925), together with the TypeScript/Vite build and all 17 Chromium tests. Preview testing remains automated smoke coverage only; manual screen-reader, broader focus/keyboard, zoom/reflow, text-to-speech and cross-browser checks remain open. The full current Cambridge framework/version, formal rights/originality clearance, human suitability review and explicit release approval also remain unresolved.
+
+
+## 16. Final focus and responsive regression checks — 26 October 2026
+
+[Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed on the latest controlled preview test commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`: TypeScript/Vite build and 17/17 Chromium tests passed. The final suite confirms that the skip link transfers keyboard focus to the main content, all question prompts including the exit-check prompt are programmatically associated with their response textareas, every response field has a unique task-specific accessible name, and the layout has no horizontal overflow at 320, 390, 768 and 1024 CSS-pixel viewports. The clear-all action removes all draft input, including the radio choice. This is automated smoke evidence only—not full accessibility certification or user testing. Manual screen-reader, broader focus-order, zoom/reflow and cross-browser checks remain open.
+
+## Content-rights procedure update — 28 October 2026
+
+The founder has approved the binding risk-based process in `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md`. Original writing is limited to short platform-created passages/excerpts and supporting learning/assessment text; source longer passages and visual/documentary stimuli from a specific public-domain or suitably open-licensed work with intended-use rights verified before selection/embedding. For the exact Cambridge Stage 7 Unit 1 v1.3 text-only candidate, founder human review is approved and the internal originality/provenance screen is passed. Do not label this a formal legal opinion. Its current full Cambridge framework/version and further objective mapping, manual accessibility/hosted visual review, and explicit release approval remain open.
+
+## 18. Binding teacher-pack, assessment-feedback and literary-excerpt revision — 30 October 2026
+
+The founder approved a new common standard. Every objective/closed-response item needs an AI-drafted, human-validated correct answer, question-specific reasoning and a separate rationale for every alternative; ordering tasks need a sequence explanation. Every typed-response item needs a learner-visible expected length/word range, an appropriately sized model response, acceptable alternative interpretations and feedback tied to the exact question, excerpt and learner response. Generic comments are not sufficient. The full item schema is in `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`.
+
+All reading passages/extracts, including short warm-ups and transfer texts, must be taken from recognised public-domain works by well-known writers. This supersedes every earlier reference in this document or its historical addenda that permits platform-original short reading passages. Each excerpt must be assigned a stable Excerpt ID and exact Source ID in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before use. The quick check is limited to exact work/edition, public-domain status in intended territory, and style/syntax/semantic/age/task fit; choose another source rather than turning routine selection into prolonged legal research.
+
+**Mandatory first-cohort revision order:**
+1. IB MYP Language and Literature Year 1 Unit 1 v2 — revise `src/content/pilotLessonPack.ts` and its linked learner/source material; replace the existing original main and transfer excerpts; then re-review.
+2. Cambridge Lower Secondary English 0861 Stage 7 Unit 1 v1.3 — revise the existing teacher review pack and learner file; replace “The Rain Gauge” and the original warm-up mini-text; revise dependent answers and feedback; then re-review.
+3. CBSE English Grade 6 Unit 1 “The Turning Sign” v1.0 — revise the learner passage and complete the teacher pack only after steps 1 and 2.
+
+Earlier human/founder review outcomes remain accurate for the precise historical versions but do not transfer to materially revised content. No PR merge, route integration or release is authorised by this documentation update. Other IB DP, Cambridge IGCSE and later-level content must use the new standards from its first draft.

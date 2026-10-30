@@ -163,41 +163,19 @@ export type ContentReviewState = "not-started" | "in-review" | "passed";
  * Production planning record for a pathway unit. It deliberately separates
  * the intended pathway from verified syllabus alignment and released content.
  */
-export type PilotContentStatus = "draft-for-founder-review" | "founder-approved-candidate" | "approved-for-pilot-preview";
-export type PilotReviewOutcome = "pending" | "passed";
-
-export interface PilotReviewRecord {
-  outcome: PilotReviewOutcome;
-  reviewedAt: string | null;
-  reviewerLabel: string;
-  scopeNote: string;
-}
-
-export interface PilotCompanionArtifact {
-  label: string;
-  kicker: string;
-  headline: string;
-  supportingText: string;
-  footerText: string;
-  visualDescription: string;
-  altText: string;
-  rightsNote: string;
-}
-
-export interface PilotEntryCheck {
-  prompt: string;
-  placeholder: string;
-  successIndicators: string[];
-}
-
 /** An original pilot unit brief, intentionally kept separate from released lesson content. */
 export interface PilotUnitDraft {
   id: string;
-  version: number;
+  version: 1;
   pathwayId: string;
   unitId: string;
-  status: PilotContentStatus;
-  reviewRecord: PilotReviewRecord;
+  status: "approved-for-pilot-preview";
+  reviewRecord: {
+    outcome: "passed";
+    reviewedAt: string;
+    reviewerLabel: string;
+    scopeNote: string;
+  };
   title: string;
   proposedFocus: string;
   proposedLearningObjective: string;
@@ -210,6 +188,19 @@ export interface PilotUnitDraft {
     checkedAt: string;
     scopeNote: string;
   };
+  candidateGuide: {
+    title: string;
+    url: string;
+    checkedAt: string;
+    accessNote: string;
+  };
+  candidateObjectiveMappings: {
+    criterion: "A — Analysing";
+    strand: "A(ii)" | "A(iii)";
+    descriptor: string;
+    state: "candidate-unverified";
+    rationale: string;
+  }[];
   teachingSequence: {
     number: string;
     title: string;
@@ -233,14 +224,17 @@ export interface PilotUnitDraft {
 export interface PilotReviewSummary {
   id: string;
   unitId: string;
-  version: number;
-  status: PilotContentStatus;
   title: string;
   proposedFocus: string;
   proposedLearningObjective: string;
   mappingStatus: "unverified";
   officialObjectiveCodes: string[];
-  reviewRecord: PilotReviewRecord;
+  reviewRecord: {
+    outcome: "passed";
+    reviewedAt: string;
+    reviewerLabel: string;
+    scopeNote: string;
+  };
   source: {
     title: string;
     url: string;
@@ -248,6 +242,19 @@ export interface PilotReviewSummary {
     checkedAt: string;
     scopeNote: string;
   };
+  candidateGuide: {
+    title: string;
+    url: string;
+    checkedAt: string;
+    accessNote: string;
+  };
+  candidateObjectiveMappings: {
+    criterion: "A — Analysing";
+    strand: "A(ii)" | "A(iii)";
+    descriptor: string;
+    state: "candidate-unverified";
+    rationale: string;
+  }[];
   remainingReleaseChecks: string[];
   releaseNote: string;
 }
@@ -289,10 +296,15 @@ export interface PilotPracticeItem {
 
 export interface PilotLessonPack {
   id: string;
-  version: number;
+  version: 1;
   unitId: string;
-  status: PilotContentStatus;
-  reviewRecord: PilotReviewRecord;
+  status: "approved-for-pilot-preview";
+  reviewRecord: {
+    outcome: "passed";
+    reviewedAt: string;
+    reviewerLabel: string;
+    scopeNote: string;
+  };
   title: string;
   audienceNote: string;
   estimatedMinutes: number;
@@ -304,8 +316,6 @@ export interface PilotLessonPack {
     text: string;
     rightsNote: string;
   };
-  companionArtifact: PilotCompanionArtifact;
-  entryCheck: PilotEntryCheck;
   keyIdea: {
     label: string;
     pattern: string[];
@@ -314,7 +324,6 @@ export interface PilotLessonPack {
   sections: PilotLessonSection[];
   practiceItems: PilotPracticeItem[];
   exitTicket: {
-    stimulus: { label: string; text: string; rightsNote: string };
     prompt: string;
     successIndicators: string[];
     modelAnswer: string;
@@ -332,10 +341,15 @@ export interface PilotLessonPack {
 /** The learner-facing version deliberately excludes answer keys and model answers. */
 export interface PilotLearnerLesson {
   id: string;
-  version: number;
+  version: 1;
   unitId: string;
-  status: PilotContentStatus;
-  reviewRecord: PilotReviewRecord;
+  status: "approved-for-pilot-preview";
+  reviewRecord: {
+    outcome: "passed";
+    reviewedAt: string;
+    reviewerLabel: string;
+    scopeNote: string;
+  };
   title: string;
   estimatedMinutes: number;
   audienceNote: string;
@@ -347,8 +361,6 @@ export interface PilotLearnerLesson {
     text: string;
     rightsNote: string;
   };
-  companionArtifact: PilotCompanionArtifact;
-  entryCheck: PilotEntryCheck;
   keyIdea: {
     label: string;
     pattern: string[];
@@ -375,7 +387,6 @@ export interface PilotLearnerLesson {
     successIndicators: string[];
   }[];
   exitTicket: {
-    stimulus: { label: string; text: string; rightsNote: string };
     prompt: string;
     successIndicators: string[];
   };
@@ -410,7 +421,6 @@ export interface UnitContentPlan {
 export type UnitReadinessGateId =
   | "official-source"
   | "learning-objective"
-  | "objective-mapping"
   | "lesson-content"
   | "practice-and-answers"
   | "academic-review"
