@@ -1,11 +1,11 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.6  
-**Research checked:** 30 October 2026; literary excerpt requirements updated 30 October 2026  
+**Version:** 2.7  
+**Research checked:** 30 October 2026; passage-length threshold and live word-counter standard updated 30 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
 
-**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.0. Every short or long reading passage/extract, including warm-ups and transfer texts, must come from a recognised writer's verified public-domain work. The former short platform-original passage allowance is withdrawn. Register every excerpt in docs/LITERARY_EXCERPT_SOURCE_REGISTER.md before use. Original instructions, questions, explanations, model responses and feedback remain allowed. The stricter photograph rule remains binding: the exact file page must confirm CC0/public-domain status before a photograph is selected or embedded.
+**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1. Project-original reading passage bodies up to and including 250 words are allowed and existing qualifying short originals may remain. Reading passages over 250 words must use a recognised writer's verified public-domain work. External third-party copyrighted text is not permitted merely because it is short. Give every passage an Excerpt ID and the appropriate authorship/provenance or public-domain source record in docs/LITERARY_EXCERPT_SOURCE_REGISTER.md. Original instructions, questions, explanations, model responses and feedback remain allowed. The stricter photograph rule remains binding: the exact file page must confirm CC0/public-domain status before a photograph is selected or embedded.
 
 ## 1. Decision in response to access constraints
 
@@ -241,8 +241,9 @@ A second limited search pass queried eight additional distinctive sentence fragm
 
 The content source register governs curriculum/source research; the separate content originality and rights protocol governs rights evidence. These controls are intentionally proportionate:
 
-- Original platform content is limited to short, task-purposeful passages/excerpts and the brief instructional/assessment material around them. Record provenance, proportionate phrase-screen scope/result, and human approval. If no specific concern is identified, the internal originality/provenance screen may be marked passed; formal legal review is not a blanket prerequisite for every unchanged short original passage.
-- Longer passages/excerpts and source artefacts for tasks—including images, posters, notices, adverts, infographics and book/document images—should be drawn from verified public-domain works or licences that permit the exact intended commercial/online use and any edits. Identify the exact work/file, edition/translation where relevant, source URL, licence/version, permitted uses, attribution, modifications and date checked before selection/embedding.
+- Platform-original reading passage bodies may be up to and including 250 words. Record exact word count, authorship/version and proportionate phrase-screen scope/result, plus suitability. Existing qualifying short originals may remain; a material rewrite receives the relevant new review. This internal provenance screen is not a legal opinion.
+- Passage bodies over 250 words must be excerpts from recognised writers' verified public-domain works. Record exact work, edition/transcription, source URL, location, applicable territory term check and date in the literary source register before selection/embedding.
+- Visual/documentary artefacts—including photographs, posters, notices, adverts, infographics and book/document images—remain subject to their own asset-specific rights/licence rules. Their rights do not follow the passage word-count threshold.
 - Public availability, a “copyright free” label, search-result text, attribution alone, or an educational use case is not proof of rights. If terms are ambiguous, select a clearer source. Use permission or an explicitly documented legal basis for copyrighted content outside the reusable-source route.
 - Do not confuse an internal originality/provenance pass with a verified third-party licence or a formal legal opinion. Escalate only when a concrete concern remains unresolved; do not repeat broad searches on unchanged text without a reason.
 
@@ -271,6 +272,6 @@ The programme's holistic-assessment section states a major learning outcome: rea
 
 ## Literary excerpt source register — binding companion record (30 October 2026)
 
-This curriculum/source register remains the record for official curriculum references, specialist resources and sample-paper currency. It is not the per-excerpt provenance ledger. Every learner reading passage, short warm-up, mini-extract and transfer passage must also have an Excerpt ID and exact Source ID in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. The excerpt register records the work, author, exact edition/transcription, URL, public-domain basis and territory check, precise location, question/unit use and replacement history. Complete it before adopting the passage.
+This curriculum/source register remains the record for official curriculum references, specialist resources and sample-paper currency. It is not the per-excerpt provenance ledger. Every learner reading passage, short warm-up, mini-extract and transfer passage must have a stable Excerpt ID in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. A platform-original passage ≤250 words receives an authorship/provenance and word-count record; a public-domain passage >250 words receives an exact Source ID, edition, location and territory record. The excerpt register records the work, author, exact edition/transcription, URL, public-domain basis and territory check, precise location, question/unit use and replacement history. Complete it before adopting the passage.
 
-The prior source records for original platform-created passages are historical only and do not satisfy the new literary-source standard. Existing MYP Year 1, Cambridge Stage 7 and CBSE Grade 6 passage stimuli are marked replacement-required and must be revised sequentially under the English Stage 1 roadmap.
+The MYP v3 passages already use registered Dickens and Carroll public-domain sources and remain unchanged. For the existing Cambridge Stage 7 and CBSE Grade 6 originals, audit exact passage-body word counts during each unit's scheduled revision: retain unchanged if 250 words or fewer; use public-domain excerpts for passages over 250 words. Do not mark every short original as replacement-required.
