@@ -1,6 +1,6 @@
 # English Curriculum Guides — Year/Stage Framework and Pathway Implementation Plan
 
-**Status:** Internal guide register v1.3. The original 12 planned year/stage/delivery entries across four curriculum groups remain under versioned development; the separately approved CBSE English Grades 6–12 pathway is recorded in its research brief and the Unit Production Register, with class-wise research/guides still pending. Exact official objective maps remain unverified where current descriptors are not directly available.
+**Status:** Internal guide register v1.4. The original 12 planned year/stage/delivery entries across four curriculum groups remain under versioned development; the separately approved CBSE English Grades 6–12 pathway is recorded in its research brief and the Unit Production Register, with class-wise research/guides still pending. Exact official objective maps remain unverified where current descriptors are not directly available.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`, `ENGLISH_STAGE_1_ROADMAP.md`, `ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`, and `ENGLISH_PUBLIC_SOURCE_REGISTER.md`.
 **Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences.
 
@@ -79,7 +79,7 @@ For each year/stage chapter, complete all sections below. If a field is not yet 
    - Do not promise automatic grading or official grades.
 7. **Text and rights plan**
    - Genre/text-type range and rationale.
-   - Every reading passage/extract must be a registered excerpt from a recognised writer's verified public-domain work; original writing is permitted for prompts, teaching notes, questions, explanations, models and feedback, not as a replacement reading passage.
+   - Platform-original reading passage bodies up to and including 250 words are allowed; existing qualifying short originals may remain unchanged. Passage bodies over 250 words must use a recognised writer's verified public-domain work. Record every passage under the correct short-original provenance or long-public-domain source record. Do not use third-party copyrighted text merely because it is short. Preserve separate visual/photo rights controls.
    - Cultural breadth, age suitability and sensitive-content review.
 8. **Inclusive teaching and access**
    - Vocabulary/pre-teaching, scaffolded and stretch pathways, accessibility, assistive technology and readable formats.
@@ -200,15 +200,23 @@ The Cambridge Stage 7 Unit 1 v1.3 preview now associates the exit-check prompt w
 
 ## Stage 7 Unit 1 v1.3 status and source rule — 28 October 2026
 
-Historical review record for Cambridge v1.3: the founder confirmed human review/approval of the exact learner content, and the short platform-original passage passed the limited internal originality/provenance screen under the rules then in force. That finding remains a historical fact for v1.3 only; under the 30 October 2026 public-domain excerpt rule, the original passage is now replacement-required. It is not a current source-compliance pass, and the revised version must be re-reviewed.
+Historical review record for Cambridge v1.3: the founder confirmed human review/approval of the exact learner content, and the short platform-original passage passed the limited internal originality/provenance screen under the rules then in force. That finding remains a historical fact for v1.3 only. Under the later 250-word threshold, audit the exact passage body when the unit is revised: retain it if it is 250 words or fewer; if it is longer, use a recognised writer's verified public-domain excerpt in the revised version and re-review the affected tasks.
 
 Do not describe the unit as released/student-ready. Its current full Cambridge framework/version and further objective mapping, manual accessibility/hosted visual review, and explicit release approval remain open. For future longer passages or visual/document-based tasks, verify the exact public-domain/open-licence source and intended-use terms before selection/embedding.
 
 
-## Binding literary-excerpt and teacher-pack requirements — 30 October 2026
+## Binding passage-length, teacher-pack and live-counter requirements — 30 October 2026
 
-All curriculum guides must use the new common rules in `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0 and `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`. Every short and long reading stimulus—including warm-ups, mini-extracts, transfer passages and assessment extracts—must come from a recognised writer's verified public-domain work and must be recorded in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before use. The former short platform-original passage allowance is withdrawn. Original supporting pedagogy, tasks and model/feedback material remain permitted.
+All curriculum guides and unit production must follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1, docs/LITERARY_EXCERPT_SOURCE_REGISTER.md v1.1 and docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md v1.1.
 
-Every objective question requires answer reasoning and a rationale for each alternative; every typed response requires a question-specific expected length, model response and feedback. Keep these common standards separate from each curriculum's own assessment model, official mapping and criteria.
+- Project-original reading passage bodies up to and including 250 words are permitted; qualifying existing short originals may remain unchanged.
+- Passage bodies over 250 words must use recognised writers' verified public-domain works. Check the exact work/edition and intended territories before use.
+- A short length does not permit copying third-party copyrighted text. Visual/documentary/photo rights remain independently controlled.
+- Every passage receives an Excerpt ID. Short originals require authorship/provenance/word-count/suitability evidence; longer public-domain excerpts require a Source ID and complete edition/location/territory record.
+- Objective items require correct-answer reasoning and a separate rationale for each alternative. Typed responses require a question-specific expected range, an ideal target, a model response and question-specific feedback.
+- Every typed-response field must show a real-time current/ideal word counter. The denominator is a guide, not a limit; learners may type and retain responses above it. Apply the counter retrospectively to every existing field and from first integration to every future field.
 
-The existing first-cohort materials must be revised in this order: **IB MYP Year 1 Unit 1 → Cambridge Lower Secondary Stage 7 Unit 1 → CBSE Grade 6 Unit 1**. This sequence applies to teacher/editor packs and associated passages, not only learner-facing files. Do not complete the CBSE Unit 1 teacher pack before both IB and Cambridge revisions have passed their content/consistency checks. Existing approval states remain limited to the exact earlier versions. Later IB DP and Cambridge IGCSE guides/content must follow the new source standard from first draft.
+**First-cohort integration order:** (1) preserve MYP Year 1 Unit 1 v3 content as founder-approved and retrofit the counter across its six typed-response fields (targets 20/50/75/55/55/50); (2) revise the Cambridge Stage 7 teacher/editor materials, audit the “Rain Gauge” and warm-up text against the 250-word threshold, and retrofit its existing response fields; (3) revise the CBSE Grade 6 teacher/editor pack, audit “The Turning Sign” against the threshold, and retrofit all response fields. Do not start the Cambridge revision until the MYP counter retrofit and its review/authorization checkpoint are addressed. Do not complete CBSE before Cambridge.
+
+Existing MYP v3 content is not changed by this policy update. Founder content approval does not substitute for fresh human academic review, official mapping, rights, suitability, accessibility or release approval.
+

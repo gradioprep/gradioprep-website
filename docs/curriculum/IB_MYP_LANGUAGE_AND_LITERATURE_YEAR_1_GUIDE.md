@@ -1,6 +1,6 @@
 # IB MYP Language and Literature — Year 1 Curriculum Guide
 
-**Version:** 1.2 — expanded MYP-specific resource review and six-unit scope-and-sequence  
+**Version:** 1.3 — expanded MYP-specific resource review, six-unit scope-and-sequence and current 250-word/live-counter standards  
 **Status:** Internal curriculum design for founder review; not an official IB guide or complete verified syllabus map.  
 **Programme/course:** IB Middle Years Programme (MYP), Language and Literature.  
 **Year:** Year 1.  
@@ -180,7 +180,7 @@ Not every unit requires every task format; the exact evidence must fit its learn
 
 ## 8. Inclusion, text selection and rights
 
-- For reading passages/extracts of any length, use only registered excerpts from recognised writers' verified public-domain works. This supersedes earlier references to original short passages. Apply separate rights checks to visual assets.
+- Platform-original reading passage bodies up to and including 250 words are permitted; qualifying existing short originals may remain unchanged. Passage bodies over 250 words must use registered excerpts from recognised writers' verified public-domain works. Apply separate rights checks to visual assets and do not reuse third-party copyrighted material merely because it is short.
 - Maintain a rights ledger with author/creator, title, source, licence/permission basis, adaptation details and permitted distribution.
 - Do not copy InThinking, ASJ, Hachette, ManageBac, Toddle, marketplace or examination content into the product merely because a description or sample is public.
 - Ensure broad perspectives without using a single text as a proxy for a culture or group.
@@ -229,14 +229,19 @@ Academic review, official mapping verification, rights review, accessibility rev
 - **Legacy criteria:** A–D summarized only as a dated 2014/15 reference; current edition/continuity needs confirmation.
 - **Enhanced MYP:** separate transition watchlist; beta material is not being treated as final.
 - **Existing preview, “How writers shape meaning”:** candidate for Unit 1, not a new implementation; its prior academic review applies only to preview version 1.
-- **Unit 1 implementation:** not started under this revised guide; requires founder approval first.
+- **Unit 1 implementation:** version 3 learner and teacher/editor content is implemented and founder-approved as an exact content candidate on 30 October 2026; its retrospective live-counter retrofit is next. Fresh human academic review and the separate official mapping, rights, age/level, accessibility and release gates remain open.
 - **Official mapping, rights, accessibility and release approval:** not cleared by this guide.
 
 This guide must not be described as IB-approved or fully mapped to the latest official subject guide.
 
 
-## Binding excerpt and teacher-pack standard — 30 October 2026
+## Binding passage-length, teacher-pack and live-counter standard — updated 30 October 2026
 
-All reading stimuli in MYP Year 1, including short examples and transfer extracts, must come from recognised writers' verified public-domain works. The former allowance for short platform-original reading passages is withdrawn. Use `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0 and register every exact extract in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before use.
+For all MYP Year 1 content, apply docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1, docs/LITERARY_EXCERPT_SOURCE_REGISTER.md v1.1 and docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md v1.1.
 
-The existing MYP Unit 1 v2 main passage and transfer micro-extract are legacy platform-original stimuli and must be replaced. Revise the separate teacher-only answer source against `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`: objective answers need question-specific reasoning and rationales for each alternative; typed responses need a stated expected length, a question-specific model response, acceptable interpretations and specific feedback. This unit is first in the approved migration sequence, before Cambridge Stage 7 and CBSE Grade 6. Previous approvals remain limited to the exact earlier version.
+Project-original reading passage bodies up to and including 250 words are permitted; existing qualifying originals may remain. Passages over 250 words must use recognised writers' verified public-domain works, with exact edition/source and intended-territory checks recorded before use. This does not permit copied third-party text merely because it is short. Visual-asset rights remain separate.
+
+The founder approved the exact MYP Year 1 Unit 1 v3 content candidate on 30 October 2026. It already uses registered public-domain excerpts for both the main reading and independent transfer. Do not alter its passage text, prompts, questions, response ranges, answer content, model responses or teacher/editor pack because of this standards update.
+
+The next technical step is the retrospective live word counter across all six existing typed-response fields (entry 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50). Preserve the existing response ranges. Display current/ideal values such as 38/50 and 59/50; never cap, truncate, reject or block an over-target response. Apply the same counter to all later MYP typed-response fields from first integration.
+

@@ -1,6 +1,6 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.6  
+**Version:** 1.7  
 **Status:** Approved pathway scope and authorised implementation; learner-facing Grade 6 Unit 1 v1.0 (“The Turning Sign”) has founder academic-content approval recorded 28 October 2026. Its source alignment is partial; no unit-specific official CBSE objective code is assigned. A controlled, unlinked interface preview is available in draft PR #17; manual accessibility review, current *Poorvi* reprint verification and release approval remain separate gates.  
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
@@ -116,8 +116,15 @@ The founder has reviewed and approved the exact learner-facing “The Turning Si
 No official CBSE objective code is assigned. Current *Poorvi* reprint/version verification, a controlled unlinked preview for accessibility/UI checks, and explicit release decisions remain outstanding. The learner-safe TS data is still not imported into the UI. Do not add the unit to normal navigation or release it from this documentation decision.
 
 
-## Binding literary-excerpt and teacher-pack standard — 30 October 2026
+## Binding passage-length and teacher-pack standard — updated 30 October 2026
 
-The founder's new rule applies to every CBSE Grade 6–12 reading stimulus: short and long passages, warm-ups, mini-extracts and transfer texts must come from recognised writers' verified public-domain works. The prior permission for short platform-original reading passages is withdrawn. Original prompts, instructions, explanations, model answers and feedback remain permitted. Register every extract before use in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` under `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0.
+The founder-approved passage threshold applies across CBSE English Grades 6–12:
+- Platform-original reading passage bodies up to and including 250 words are permitted; existing qualifying short originals may remain unchanged.
+- Passage bodies over 250 words must use recognised writers' verified public-domain works, with exact source/edition and intended-territory checks completed before use.
+- The threshold does not permit copying third-party copyrighted text merely because it is short. Photo/documentary-asset rights remain separate.
+- Give every passage an Excerpt ID. Short originals receive an authorship/provenance/word-count/suitability record; long public-domain excerpts receive a Source ID and full source record.
 
-The current Grade 6 Unit 1 “The Turning Sign” is a legacy platform-original passage. Its exact v1.0 founder approval remains historical but does not make the passage compliant with the new standard. It must be replaced and its question/answer guidance revised after the existing MYP Year 1 and Cambridge Stage 7 teacher packs have been migrated. Do not finalise the CBSE teacher pack or begin assessment-feature implementation ahead of those two steps. Apply `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` to every objective and typed-response item.
+The current Grade 6 Unit 1 “The Turning Sign” is a platform-original story. At the scheduled revised-version checkpoint, audit the story-body word count. Retain it unchanged if it is 250 words or fewer. If it exceeds 250 words, use a registered public-domain excerpt in the revised version and update dependent questions/answer guidance. The exact v1.0 founder approval remains historical for the original passage/tasks only; do not change the existing v1.0 content solely because the policy has changed.
+
+The CBSE teacher/editor pack is not complete under the new teacher-pack standard. Do not finalise it or begin its assessment-feature build before revising the IB MYP Year 1 and Cambridge Stage 7 teacher packs in that order. When CBSE reaches its turn, include AI-drafted/human-validated objective explanations, per-alternative rationales, ordering/fill-in logic, question-specific typed-response ranges and ideal targets, model responses and question-specific feedback. Apply the live current/ideal counter retrospectively to every typed-response field; over-target text must remain fully accepted and visible.
+
