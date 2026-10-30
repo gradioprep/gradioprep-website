@@ -202,7 +202,7 @@ For longer reading passages and image/poster/document-based tasks, use an exact 
 
 ## Current decision — 28 October 2026
 
-The founder confirms that the required Stage 7 Unit 1 verification and approval decisions were already given; do not repeat those requests. This closes the outstanding founder-approval checkpoint for the production sequence, but it does not justify adding Cambridge objective codes beyond those directly supported by the recorded source evidence. Stage 7 remains an isolated, unmerged interface preview until a separate code-release action is completed. Proceed with the next first-cohort item, CBSE English Grade 6 Unit 1, using the current *Poorvi* textbook context and official CIET activity page as sources. The new candidate must not copy NCERT textbook wording or assets, claim an unverified official objective map, or inherit Cambridge's review statuses.
+Historical next-step note — 28 October 2026 (superseded by the 30 October standards update): the earlier plan would have advanced directly from Stage 7 to CBSE Grade 6. The founder's new decision requires revising existing MYP Year 1 Unit 1 v2 teacher materials and excerpts first, then revising Cambridge Stage 7 Unit 1 v1.3 teacher materials and excerpts, and only then completing the CBSE Grade 6 Unit 1 teacher pack. Use the binding sequence in Section 12. The CBSE source checks and no-copy rules remain applicable.
 
 ## CBSE Grade 6 Unit 1 — initial draft completed, 28 October 2026
 
