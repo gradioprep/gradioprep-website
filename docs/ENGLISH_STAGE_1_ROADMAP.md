@@ -218,7 +218,7 @@ The initial draft was revised before review after a supplementary phrase/image-p
 
 Learner-facing v1.0 “The Turning Sign” is approved for the academic-content gate. NCERT's Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports limited alignment for reading a story, identifying main ideas/characters/events and sequencing; CIET's activity list supports contextual focus on location prepositions. No official CBSE objective code is assigned, and the exact current *Poorvi* reprint remains unverified.
 
-The controlled, unlinked preview for accessibility and interface testing is implemented in draft PR #17 and deployed at [the hosted preview URL](https://pr-17-gradioprep-website.wandering-scene-1822.workers.dev/preview/cbse-grade-6/english/unit-1). Build check #256 passed 20/20 Chromium tests; controlled preview run #22 succeeded. Next: manual hosted visual, keyboard/focus, screen-reader, zoom/reflow and cross-browser review. Keep the teacher pack out of learner bundles, keep the route out of normal navigation, and do not release without a separate decision.
+**Historical CBSE preview checkpoint — 28 October 2026:** The unlinked interface-test route in draft PR #17 was built against the original v1.0 passage and passed 20/20 Chromium tests. It is not a preview of the forthcoming public-domain replacement version. Keep it out of normal navigation; after the third-stage CBSE content revision, update/rebuild the controlled preview and repeat affected visual, keyboard/focus, screen-reader, zoom/reflow and cross-browser checks before any separate release decision.
 
 
 ## 12. Mandatory migration to the approved excerpt and feedback standards — 30 October 2026
