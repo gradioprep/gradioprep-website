@@ -4,8 +4,8 @@ const unitSequences: readonly UnitSequence[] = [1, 2, 3];
 
 /**
  * Create planned catalogue slots. Most remain empty; the first IB MYP Year 1
- * slot points to reviewed pilot-preview content. Neither the slot nor preview
- * implies official syllabus coverage or a production release.
+ * slot points to the version 3 candidate awaiting fresh review. Neither the
+ * candidate nor its preview implies official syllabus coverage or release.
  */
 function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
   return unitSequences.map((sequence) => {

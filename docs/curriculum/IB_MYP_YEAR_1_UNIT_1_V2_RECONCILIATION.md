@@ -1,12 +1,14 @@
-# MYP Year 1 Unit 1 — Version 2 Reconciliation and Review Record
+# MYP Year 1 Unit 1 — Version 3 Reconciliation and Review Record
 
-**Version:** 1.0  
-**Date:** 26 October 2026  
-**Status:** Founder-approved content candidate; separate review/release gates remain open in draft PR #14.  
+**Version:** 1.1  
+**Date:** 30 October 2026  
+**Status:** Version 3 revised candidate in draft PR #14; founder approval, fresh human academic review and independent mapping, rights, suitability, accessibility and release gates remain open.  
 **Unit:** IB MYP Language and Literature Year 1, Unit 1.  
-**Content version:** 2 — “How writers and creators shape meaning”.  
-**Guide baseline:** Approved guide v1.1 and implementation structure v1.2.  
+**Content version:** 3 — “How writers and creators shape meaning”.  
+**Guide baseline:** Approved guide v1.1 and implementation structure v1.2; current detailed IB Year 1 guide edition and exact official objective/strand mapping remain unverified.  
 **Important:** This record is not an official IB mapping, academic-review pass, rights clearance, accessibility approval or release authorization.
+
+The version 1 and version 2 sections below are historical records. Their founder/academic approvals apply only to those exact versions and do not transfer to version 3.
 
 ## 1. Decision and version history
 
@@ -61,7 +63,9 @@ This is a documented origin claim, not completed legal/rights clearance. The rig
 | Age/level and cultural/context suitability | Review pending | Founder/academic review required. |
 | Release approval | Not approved | No released/syllabus-mapped-course claim. |
 
-## 5. What must happen next
+## 5. What must happen next — historical version 2 checkpoint
+
+This section records the next actions as they stood before the version 3 migration on 30 October 2026. It is superseded by the version 3 checkpoint in section 7.
 
 1. Complete and record the separate academic review of the founder-approved version 2 content and teacher/editor pack.
 2. Complete academic, rights, accessibility, age/level and cultural/context checks separately.
@@ -69,7 +73,7 @@ This is a documented origin claim, not completed legal/rights clearance. The rig
 4. Merge/deploy content/app changes only after required checks for the intended status are addressed; founder content approval alone is not release approval.
 5. The production rotation now advances to Cambridge Lower Secondary English Stage 7 Unit 1. Review the existing draft in PR #12; do not create a duplicate. Stage 7 must pass its own review gates before implementation/release.
 
-## 6. Current PR and deployment status
+## 6. PR and deployment status at the version 2 checkpoint — historical
 
 - **PR #14:** Unit 1 v2 content candidate approved by the founder on 26 October 2026; separate academic, mapping, rights, accessibility/suitability and release gates remain open. PR remains draft and unmerged.
 - **Main branch:** Still contains the previously reviewed version 1 preview; v2 is not on main.

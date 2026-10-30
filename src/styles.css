@@ -990,11 +990,11 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   .proto-approach-grid { grid-template-columns: 1fr; gap: 34px; }
   .proto-approach > div > div:first-child > p { max-width: 570px; }
   .proto-release-panel { gap: 25px; padding: 31px; }
-  .proto-app-layout { grid-template-columns: 1fr; }
-  .proto-sidebar { position: static; height: auto; min-height: 0; padding: 10px 18px 0; border-right: 0; border-bottom: 1px solid #D8D1E0; }
+  .proto-app-layout { grid-template-columns: minmax(0,1fr); min-width: 0; width: 100%; }
+  .proto-sidebar { position: static; min-width: 0; max-width: 100%; height: auto; min-height: 0; padding: 10px 18px 0; border-right: 0; border-bottom: 1px solid #D8D1E0; }
   .proto-sidebar > .proto-logo { display: none; }
   .proto-workspace { margin: 0 0 8px; }
-  .proto-sidebar nav { flex-direction: row; gap: 4px; overflow-x: auto; padding-bottom: 9px; }
+  .proto-sidebar nav { min-width: 0; max-width: 100%; flex-direction: row; gap: 4px; overflow-x: auto; padding-bottom: 9px; }
   .proto-sidebar nav button { width: auto; min-height: 35px; flex: 0 0 auto; gap: 7px; padding-inline: 9px; white-space: nowrap; }
   .proto-sidebar nav button > i { width: 16px; font-size: 13px; }
   .proto-sidebar nav button > b { right: auto; bottom: 0; left: 8px; width: calc(100% - 16px); height: 2px; }

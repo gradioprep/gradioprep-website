@@ -1,6 +1,6 @@
 # English Stage 1 — Curriculum Roadmap
 
-**Status:** Working roadmap updated 30 October 2026. The first-cohort order remains IB MYP Year 1 → Cambridge Lower Secondary Stage 7 → CBSE Grade 6. Under the newly approved common standards, the existing MYP, Cambridge and CBSE learner passages/teacher materials are legacy versions pending sequential revision. MYP teacher-pack and excerpt revision is next; Cambridge follows; CBSE teacher-pack completion is deferred until both earlier revisions are complete. Existing previews remain isolated/unreleased; this is a documentation-only update.
+**Status:** Working roadmap updated 30 October 2026. The first-cohort order remains IB MYP Year 1 → Cambridge Lower Secondary Stage 7 → CBSE Grade 6. The mandatory MYP Year 1 Unit 1 migration is now implemented as version 3 on existing draft PR #14; the candidate is undergoing final automated verification and awaits fresh founder and human academic review plus its separate mapping, rights, suitability, accessibility and release gates. Cambridge Stage 7 follows only after the revised MYP checkpoint is reviewed and the founder authorises the next step. CBSE teacher-pack completion remains deferred until the Cambridge revision is completed and authorised. Existing previews remain isolated and unreleased; no merge or production deployment is implied.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Purpose:** Turn the approved Stage 1 scope into a trackable production plan without claiming full syllabus coverage or inventing official curriculum mappings.
 

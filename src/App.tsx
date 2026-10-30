@@ -255,7 +255,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
         ? <><b>Academic content review passed.</b> This version is approved for pilot preview only. Official Year 1 mapping and release approval remain open.</>
         : lesson.status === "founder-approved-candidate"
           ? <><b>Founder-approved content candidate — academic review pending.</b> Version 1's academic-review outcome does not transfer. Official Year 1 mapping, rights, accessibility and release checks remain open.</>
-          : <><b>Unit 1 version {lesson.version} is awaiting founder and academic review.</b> Version 1's preview approval does not automatically apply to this revision. Official Year 1 mapping and release approval remain open.</>}
+          : <><b>Unit 1 version {lesson.version} is awaiting founder and academic review.</b> Approvals for versions 1 and 2 do not automatically apply to this revision. Official Year 1 mapping and release approval remain open.</>}
       {" "}Practice responses are temporary to this open preview; nothing is saved or graded.
     </InfoNote>
     <div className="proto-crumb"><button type="button" onClick={() => navigatePath("/pathways")}>Pathways</button> / <button type="button" onClick={() => navigatePath(curriculumPath)}>{pathway.programmeName} · {pathway.courseName}</button> / <button type="button" onClick={() => navigatePath(levelPath)}>{pathway.levelLabel}</button> / <button type="button" onClick={() => navigatePath(unitPath)}>Unit {unit.sequence}</button> / <b>Lesson</b></div>
@@ -410,7 +410,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
         <Label>IN THIS LESSON</Label>
         {lesson.sections.map((section,index)=><div className="proto-outline-row" key={section.id}><i>{String(index+1).padStart(2,"0")}</i><span><b>{section.heading.replace(/^\d+\.\s*/,"")}</b><small>{section.purpose}</small></span></div>)}
         <div className="proto-aside-tip"><span>Aa</span><b>Keep the evidence chain visible</b><p>Choice → association → effect in context. A quotation is the start of your explanation, not the whole explanation.</p></div>
-        <div className="proto-aside-tip"><span>i</span><b>About this version</b><p>{lesson.reviewRecord.outcome === "passed" ? `Academic content review passed on ${lesson.reviewRecord.reviewedAt}; the content is preview-only.` : lesson.status === "founder-approved-candidate" ? "Founder-approved content candidate. Separate academic review, official mapping, rights, accessibility and release checks remain open." : `Version ${lesson.version} is awaiting founder review. Version 1's approval does not transfer to this revision.`} Official curriculum mapping is unverified.</p></div>
+        <div className="proto-aside-tip"><span>i</span><b>About this version</b><p>{lesson.reviewRecord.outcome === "passed" ? `Academic content review passed on ${lesson.reviewRecord.reviewedAt}; the content is preview-only.` : lesson.status === "founder-approved-candidate" ? "Founder-approved content candidate. Separate academic review, official mapping, rights, accessibility and release checks remain open." : `Version ${lesson.version} is awaiting fresh founder and academic review. Approvals for earlier versions do not transfer to this revision.`} Official curriculum mapping is unverified.</p></div>
         <p className="proto-note-bottom">{lesson.learnerNote}</p>
       </aside>
     </div>
@@ -599,14 +599,14 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
           </div>
           <div className="proto-feedback-columns">
             <div><small>PILOT LEARNING OBJECTIVE</small><p>{pilotReviewSummary.proposedLearningObjective}</p></div>
-            <div><small>CURRICULUM MAPPING</small><p>Unverified. Candidate references are not official objective codes; mapping remains blocked until the applicable guide edition is confirmed.</p></div>
+            <div><small>CURRICULUM MAPPING</small><p>Unverified. Mapping remains blocked until the applicable current IB Year 1 guide edition and its relevant objectives and strands are verified.</p></div>
           </div>
           <div className="proto-extract">
              <small>OFFICIAL OBJECTIVES AND STRANDS · UNVERIFIED</small>
              <p>The applicable current detailed Year 1 guide edition and exact objective/strand mapping have not been verified. No official objective codes are assigned to this candidate.</p>
              <p><a href={pilotReviewSummary.source.subjectBriefUrl} target="_blank" rel="noreferrer">Open public IB subject brief ↗</a></p>
            </div>
-           <div className="proto-section-title"><div><h2>Remaining release checks</h2><p>Content review passed; these independent requirements still need evidence.</p></div></div>
+           <div className="proto-section-title"><div><h2>Remaining release checks</h2><p>This candidate has not passed its fresh content reviews; the separate checks below also remain open.</p></div></div>
           {pilotReviewSummary.remainingReleaseChecks.map((item, index) => <div className="proto-skill-row proto-readiness-row" key={item}><i className="warm">{String(index + 1).padStart(2, "0")}</i><div><b>{item}</b></div></div>)}
           <p className="proto-note-bottom">{pilotReviewSummary.releaseNote}</p>
         </> : <>

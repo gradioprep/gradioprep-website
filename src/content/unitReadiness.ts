@@ -19,7 +19,7 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
       id: `plan-${unit.id}`,
       unitId: unit.id,
       pathwayId: pathway.id,
-      version: pilotLearnerLesson.version,
+      version: isPilotUnit ? pilotLearnerLesson.version : 1,
       title: isPilotUnit ? pilotLearnerLesson.title : unit.title,
       releaseStatus: "planned",
       syllabusEditionCode: null,
