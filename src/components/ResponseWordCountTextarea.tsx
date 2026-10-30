@@ -1,7 +1,7 @@
 import type { ChangeEvent } from "react";
 
 const RESPONSE_WORD_PATTERN =
-  /[\\p{L}\\p{N}]+(?:['’][\\p{L}\\p{N}]+|[-\\u2010\\u2011][\\p{L}\\p{N}]+)*/gu;
+  /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+|[-\u2010\u2011][\p{L}\p{N}]+)*/gu;
 
 /**
  * Counts lexical words consistently with the content-rights word-count rule:
@@ -30,7 +30,7 @@ export function ResponseWordCountTextarea({
   placeholder,
   onChange,
 }: ResponseWordCountTextareaProps) {
-  const countId = `${id}-word-count`;
+  const countId = id + "-word-count";
 
   return (
     <>
