@@ -29,7 +29,12 @@ test.describe("MYP Year 1 Unit 1 live response word counters", () => {
     const field = page.locator("#myp-y1-u1-entry-response");
     const counter = page.locator("#myp-y1-u1-entry-response-word-count");
 
-    await field.fill("Don't use well-known examples: 42.");
+    await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.evaluate(async () => {
+      await navigator.clipboard.writeText("Don't use well-known examples: 42.");
+    });
+    await field.focus();
+    await page.keyboard.press("Control+V");
     await expect(counter).toHaveText("5/20 words");
 
     await field.pressSequentially(" now");
