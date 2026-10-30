@@ -1,8 +1,8 @@
 # MYP Year 1 Unit 1 — Version 3 Reconciliation and Review Record
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Date:** 30 October 2026  
-**Status:** Version 3 revised candidate in draft PR #14; founder approval, fresh human academic review and independent mapping, rights, suitability, accessibility and release gates remain open.  
+**Status:** Version 3 content candidate approved by the founder on 30 October 2026; fresh human academic review and independent mapping, rights, suitability, accessibility and release gates remain open in draft PR #14.  
 **Unit:** IB MYP Language and Literature Year 1, Unit 1.  
 **Content version:** 3 — “How writers and creators shape meaning”.  
 **Guide baseline:** Approved guide v1.1 and implementation structure v1.2; current detailed IB Year 1 guide edition and exact official objective/strand mapping remain unverified.  
@@ -133,7 +133,7 @@ Revise the full teacher-only pack so every objective item has the answer, questi
 
 | Gate | Version 3 state | Notes |
 |---|---|---|
-| Founder content approval | Pending | Prior v2 approval does not transfer. |
+| Founder content approval | **Approved 30 October 2026** | Applies to the exact v3 learner and teacher/editor content candidate; prior v1/v2 approvals remain historical. This is not a human academic-review pass or release approval. |
 | Human academic review | Pending | AI-assisted drafts are not human validation. Review every question, answer, option rationale, model response and feedback item. |
 | Official IB mapping | Unverified | Applicable current detailed Year 1 guide edition and objective/strand mapping are not verified; official code array remains empty. |
 | Rights | Source-level India/UK term checks recorded; unit-level approval pending | US and other territory use not cleared; separately verify each edition, translation and visual asset. |
@@ -148,3 +148,9 @@ Revise the full teacher-only pack so every objective item has the answer, questi
 - The current main-branch site shell and navigation are retained. The learner app imports `pilotLearnerLesson.ts` and does not import `pilotLessonPack.ts`.
 - GitHub Actions Build check [#279](https://github.com/gradioprep/gradioprep-website/actions/runs/41008214446) passed on commit `5308b81fd067b49ce0f6573ad36478a3094a2b41`: TypeScript/Vite production build successful; teacher-pack separation guard verified across one browser JavaScript asset; 13/13 Chromium tests passed, including URL/navigation checks, v3 extract/response-range checks and responsive overflow at 360, 390, 768, 1024 and 1440 CSS pixels. Cloudflare Workers branch-preview build `3b783bde-53e0-4b12-8106-f776d03901a6` succeeded. This is a preview build, not a production deployment. Manual accessibility and content/rights review remain open.
 - No merge, production deployment, DNS change or Cloudflare setting change is part of this candidate.
+
+### Forward-looking passage and live-counter update — 30 October 2026
+
+The founder's later threshold decision does not change this v3 candidate: its Dickens and Carroll public-domain extracts, learner questions, current response ranges, model responses and teacher/editor pack remain unchanged. For new/materially revised passages, project-original text up to and including 250 words is allowed; over 250 words requires a recognised writer's verified public-domain work.
+
+The next code integration is the retrospective live word counter across all six existing typed-response fields: entry 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50. Keep existing response ranges and all content unchanged. Display current/ideal words in real time (e.g. 38/50, 59/50), and never limit or truncate entry. Test the counter on type, paste, edit, delete, clear-all and over-target input. After MYP, carry it into the Cambridge and CBSE revisions and all later typed-response fields.

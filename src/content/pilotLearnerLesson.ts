@@ -9,13 +9,13 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
   id: "pilot-lesson-how-writers-shape-meaning-v3",
   version: 3,
   unitId: "ib-myp-lal-y1-u1",
-  status: "draft-for-founder-review",
+  status: "founder-approved-candidate",
   reviewRecord: {
     outcome: "pending",
     reviewedAt: null,
-    reviewerLabel: "Founder and academic review pending",
+    reviewerLabel: "Founder content approval recorded 30 October 2026; fresh human academic review pending",
     scopeNote:
-      "Version 3 is a new candidate prepared after the 30 October 2026 standards were approved. Version 2's founder approval and version 1's academic-preview approval apply only to those exact earlier versions. No academic review or release approval is claimed for version 3.",
+      "The founder approved this exact version 3 content candidate on 30 October 2026. Version 1 and version 2 approvals remain historical and do not transfer. Fresh human academic review and separate mapping, rights, suitability, accessibility and release decisions remain pending.",
   },
   title: "How writers and creators shape meaning",
   estimatedMinutes: 35,
@@ -239,5 +239,5 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     "Review keyboard order, focus visibility, screen-reader order, zoom/reflow, visual contrast and mobile layout before release.",
   ],
   learnerNote:
-    "Unit 1 version 3 is a revised candidate and is not released. Founder and academic review, official Year 1 mapping, rights, age/level suitability, accessibility and release approval remain open. Your responses are temporary and are not saved or graded.",
+    "Unit 1 version 3 is a founder-approved content candidate and is not released. Fresh human academic review, official Year 1 mapping, rights, age/level suitability, accessibility and release approval remain open. Your responses are temporary and are not saved or graded.",
 };

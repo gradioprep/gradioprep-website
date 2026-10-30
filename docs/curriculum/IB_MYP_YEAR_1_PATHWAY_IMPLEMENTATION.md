@@ -1,7 +1,7 @@
 # IB MYP Language and Literature — Year 1 Pathway Implementation Plan
 
-**Version:** 1.1 — six-unit architecture and MYP resource/transition controls  
-**Status:** implementation structure revised for founder review; no application changes are included in this document checkpoint.  
+**Version:** 1.2 — six-unit architecture, v3 review state and 250-word/live-counter controls  
+**Status:** implementation structure approved; MYP Year 1 Unit 1 v3 content candidate approved by the founder on 30 October 2026. Fresh human academic review, official mapping, rights, suitability, manual accessibility and release gates remain separate.  
 **Pathway ID:** ib-myp-lal-y1.  
 **Linked guide:** docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md.  
 **Research audit:** docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.  
@@ -170,7 +170,7 @@ A third-party update or beta interface alone must not trigger a claim that a new
 
 ## 10. Shared excerpt and teacher-pack standard — 30 October 2026
 
-The founder-approved common standard now applies to this MYP unit. Replace the original v2 main prose passage and the original transfer micro-extract with separately registered public-domain excerpts by recognised writers. Assign stable Excerpt IDs and exact Source IDs in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before selecting/embedding the replacements. The previous short-original passage allowance is withdrawn.
+The 30 October v2.0 standard was applied to this MYP unit: its v2 main prose and transfer micro-extract were replaced in candidate v3 by separately registered Dickens and Carroll public-domain excerpts. This migration is complete and the v3 content is unchanged by the later v2.1 threshold update. The current general rule allows platform-original passages up to and including 250 words; passages over 250 words use public-domain works, as set out in `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.1.
 
 Revise the teacher-only pack (`src/content/pilotLessonPack.ts`) so every objective item carries the correct answer, AI-drafted/human-validated reasoning and rationale for every alternative; ordering or matching tasks must explain the sequence/pairing logic. Every typed-response task must show an expected length and include a question-specific model response, acceptable interpretations, criteria and feedback. Follow `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`.
 
@@ -182,4 +182,14 @@ The mandatory 30 October shared content and rights standard applies to the exist
 
 The revised teacher pack covers every entry, practice and exit response. It adds objective answer reasoning and a separate rationale per answer option; typed-response ranges, model responses, evidence expectations, accepted interpretations, strong/developing/weak response traits, tailored feedback and next steps. The learner interface displays response ranges before typing and remains temporary and ungraded. No automated grading or persistence is introduced.
 
-Version 3 starts with fresh review statuses. No approval from v1 or v2 transfers. Official mapping remains unverified; do not invent objective/strand codes. The India/UK source-level term check is not unit-level legal sign-off and does not clear the US or other territories. Human academic review, rights, age/level/context suitability, accessibility and release approval are separate gates. This remains the active first item in the mandatory IB MYP Year 1 Unit 1 → Cambridge Stage 7 Unit 1 → CBSE Grade 6 Unit 1 sequence. Do not advance beyond MYP under this task.
+The founder approved the exact v3 content candidate on 30 October 2026. That approval is specific to v3; v1/v2 approvals remain historical. Fresh human academic review, official mapping, final unit-level rights/territory review, age/level/context suitability, manual accessibility and release approval remain separate gates. The India/UK source-level term checks are not unit-level rights sign-off and do not clear other territories.
+
+**Next integration work:** add the retrospective live word counter to every existing typed-response field in v3 (entry target 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50). Keep all existing text, prompts, response ranges, answer content and teacher-pack content unchanged. Use current/ideal display values (e.g. 38/50, 59/50) and never impose an input limit. Verify typing, paste, edit, delete, clear-all, over-target entries, keyboard/screen-reader support and responsive layouts. Complete this before the Cambridge Stage 7 migration; later units inherit the same counter.
+
+## 11. Founder approval and forward-looking passage/counter standards — 30 October 2026
+
+The founder approved the exact IB MYP Year 1 Unit 1 v3 learner/teacher content candidate on 30 October 2026. No passage text, question, response range, model response or teacher/editor answer is changed by the standards update.
+
+For new or materially revised passage content from this point forward, platform-original passages of 250 words or fewer are permitted; passages over 250 words must use a recognised writer's verified public-domain work. The current MYP v3 uses registered public-domain passages and remains unchanged.
+
+The live word counter is retrospective: implement it across all existing typed-response fields, beginning with the six MYP v3 fields, then apply it to any existing question-bank/preview fields and all future typed-response fields. Display current/ideal count (e.g. 38/50, 59/50); the ideal target is not a maximum.

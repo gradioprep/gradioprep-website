@@ -5,7 +5,7 @@ export const pilotReviewSummary: PilotReviewSummary = {
   id: "review-summary-ib-myp-lal-y1-u1-v3",
   unitId: "ib-myp-lal-y1-u1",
   version: 3,
-  status: "draft-for-founder-review",
+  status: "founder-approved-candidate",
   title: "How writers and creators shape meaning",
   proposedFocus: "Language, imagery, atmosphere and visual design choices.",
   proposedLearningObjective:
@@ -15,9 +15,9 @@ export const pilotReviewSummary: PilotReviewSummary = {
   reviewRecord: {
     outcome: "pending",
     reviewedAt: null,
-    reviewerLabel: "Founder and academic review pending",
+    reviewerLabel: "Founder content approval recorded 30 October 2026; fresh human academic review pending",
     scopeNote:
-      "Version 3 is an unreleased candidate. Version 2 founder approval and version 1 pilot-preview academic approval are historical only and do not apply to this version.",
+      "The founder approved this exact version 3 content candidate on 30 October 2026. Version 1 and version 2 approvals remain historical and do not transfer. This candidate remains unreleased; human academic review and separate mapping, rights, suitability, accessibility and release gates remain pending.",
   },
   source: {
     title: "IB MYP Language and Literature public programme overview; detailed Year 1 guide edition not verified",
