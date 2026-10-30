@@ -1,7 +1,7 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.0  
-**Status:** Approved design system and curriculum-first navigation; live typed-word counter specification added for retrospective and future typed-response fields. MYP Year 1 Unit 1 v3 content is founder-approved in draft PR #14; human academic and release gates remain open.  
+**Version:** 2.1  
+**Status:** Approved design system and curriculum-first navigation; reusable live typed-word counter implemented across all six MYP Year 1 Unit 1 v3 typed-response fields in draft PR #14. Human academic and release gates remain open; latest implementation CI verification is pending.  
 **Last updated:** 30 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
@@ -472,3 +472,6 @@ Cloudflare's Preview API confirmed the isolated `pr-15` URL [https://pr-15-gradi
 
 
 **Version 1.9 change note — 30 October 2026:** Added mandatory question-specific length, objective answer reasoning, distractor/sequence explanation, immediate item-specific formative feedback and server-side answer-key boundaries. See `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`. This documents the approved target behaviour; it does not claim the current preview screens implement automatic marking or AI feedback.
+
+
+**Version 2.1 change note — 30 October 2026:** Implemented the typed-response counter interaction on the MYP Year 1 Unit 1 v3 lesson. All six textareas use the shared `ResponseWordCountTextarea` component and one lexical counter helper; each shows the approved current/ideal count, including values above the target. Ideal targets are 20, 50, 75, 55, 55 and 50 words in entry/Q2/Q3/Q4/Q5/exit order. Existing expected ranges, prompts and content remain unchanged. The counter is visually secondary, uses existing design-system typography and colour tokens, is programmatically associated with its textarea and updates through a polite assistive-technology status. There is no cap, `maxLength`, grading, persistence or submission behavior. Automated checks are in `tests/word-counter.spec.ts`; CI verification for the latest commit is pending.
