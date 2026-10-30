@@ -254,7 +254,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
       {lesson.reviewRecord.outcome === "passed"
         ? <><b>Academic content review passed.</b> This version is approved for pilot preview only. Official Year 1 mapping and release approval remain open.</>
         : lesson.status === "founder-approved-candidate"
-          ? <><b>Founder-approved content candidate — academic review pending.</b> Version 1's academic-review outcome does not transfer. Official Year 1 mapping, rights, accessibility and release checks remain open.</>
+          ? <><b>Founder-approved content candidate — fresh human academic review pending.</b> Version 1 and version 2 approvals remain historical and do not transfer to v3. Official Year 1 mapping, rights, accessibility and release checks remain open.</>
           : <><b>Unit 1 version {lesson.version} is awaiting founder and academic review.</b> Approvals for versions 1 and 2 do not automatically apply to this revision. Official Year 1 mapping and release approval remain open.</>}
       {" "}Practice responses are temporary to this open preview; nothing is saved or graded.
     </InfoNote>
