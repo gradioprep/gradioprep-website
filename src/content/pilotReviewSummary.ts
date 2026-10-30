@@ -1,67 +1,39 @@
 import type { PilotReviewSummary } from "./model";
 
-/**
- * Safe planning metadata for the Pathways screen.
- * This intentionally excludes worked explanations, model responses and answers.
- */
+/** Safe, learner-visible review metadata for the current Unit 1 candidate. */
 export const pilotReviewSummary: PilotReviewSummary = {
-  id: "review-summary-ib-myp-lal-y1-u1-v1",
+  id: "review-summary-ib-myp-lal-y1-u1-v3",
   unitId: "ib-myp-lal-y1-u1",
-  title: "How writers shape meaning",
-  proposedFocus:
-    "A starter exploration of how deliberate word and sentence choices influence a reader's understanding and response.",
+  version: 3,
+  status: "draft-for-founder-review",
+  title: "How writers and creators shape meaning",
+  proposedFocus: "Language, imagery, atmosphere and visual design choices.",
   proposedLearningObjective:
-    "Identify a writer's choice in a short text and comment on how it may shape meaning or mood, using an example to support the explanation.",
+    "Explain how a writer's language choices and a visual creator's design choices may shape atmosphere and meaning, using precise evidence and the surrounding context.",
   mappingStatus: "unverified",
   officialObjectiveCodes: [],
   reviewRecord: {
-    outcome: "passed",
-    reviewedAt: "2026-10-24",
-    reviewerLabel: "Academic lead (approval confirmed by project owner; name not specified)",
+    outcome: "pending",
+    reviewedAt: null,
+    reviewerLabel: "Founder and academic review pending",
     scopeNote:
-      "Academic content review passed for this version per project owner confirmation. This approval supports the pilot preview only; the official curriculum mapping remains unverified and release is not authorised.",
+      "Version 3 is an unreleased candidate. Version 2 founder approval and version 1 pilot-preview academic approval are historical only and do not apply to this version.",
   },
   source: {
-    title: "IB MYP Language and literature — official subject page",
+    title: "IB MYP Language and Literature public programme overview; detailed Year 1 guide edition not verified",
     url: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
-    subjectBriefUrl:
-      "https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf",
-    checkedAt: "2026-10-24",
+    subjectBriefUrl: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
+    checkedAt: "2026-10-30",
     scopeNote:
-      "The public IB subject page and its subject brief describe the programme broadly but do not themselves provide Year 1 strand descriptors. The detailed guide source is still awaiting confirmation against the edition used by the intended school.",
+      "High-level programme context only. The applicable current detailed Year 1 guide and exact objective/strand mapping remain unverified. Official objective codes are intentionally blank.",
   },
-  candidateGuide: {
-    title: "IB Language and literature guide — candidate Year 1 strands",
-    url: "https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf",
-    checkedAt: "2026-10-24",
-    accessNote:
-      "A search-indexed excerpt suggests Year 1 Criterion A strands A(ii) and A(iii), but the guide opens through IB curriculum sign-in. These references are candidates only until the applicable school-guide edition is verified.",
-  },
-  candidateObjectiveMappings: [
-    {
-      criterion: "A — Analysing",
-      strand: "A(ii)",
-      descriptor: "Identify and comment upon the creator's choices.",
-      state: "candidate-unverified",
-      rationale:
-        "A plausible candidate reference for the reviewed focus; confirm the applicable guide edition before accepting it as a mapping.",
-    },
-    {
-      criterion: "A — Analysing",
-      strand: "A(iii)",
-      descriptor: "Justify opinions and ideas using examples, explanations and terminology.",
-      state: "candidate-unverified",
-      rationale:
-        "A plausible candidate reference for using evidence and explanations; confirm the applicable guide edition before accepting it as a mapping.",
-    },
-  ],
   remainingReleaseChecks: [
-    "Confirm the applicable MYP Language and literature guide/edition used by the intended school.",
-    "Verify whether candidate strands A(ii), A(iii), both or neither fit this unit, then record exact official references.",
-    "Complete and record the separate content-rights review.",
-    "Complete and record the accessibility review for the interactive lesson.",
-    "Record explicit release approval only after all required evidence is complete.",
+    "Fresh human academic review of version 3, including all questions, distractor rationales, model responses and feedback.",
+    "Verification of the exact current official Year 1 guide and any claimed objective/strand mapping.",
+    "Separate final unit-level rights approval for text and visual assets.",
+    "Age/level suitability and accessibility review.",
+    "Explicit founder release approval.",
   ],
   releaseNote:
-    "Academic content review passed for pilot preview version 1. Do not claim official curriculum mapping or release this as a syllabus-mapped course until the applicable guide edition/objective references and all remaining release gates are verified.",
+    "Version 3 is not released. Practice is temporary and ungraded. The teacher pack is separate from the learner-facing application. Official IB mapping, academic review, rights, accessibility, age/level suitability and release approval remain open.",
 };
