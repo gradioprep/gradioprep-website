@@ -1505,3 +1505,123 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   .proto-pathway-next-unavailable { align-items: flex-start; text-align: left; }
 }
 
+
+
+/* Unit 1 v3 poster, entry and transfer styling; inherits current site tokens. */
+.proto-pilot-poster {
+  margin: 22px 0 0;
+}
+.proto-pilot-poster-card {
+  overflow: hidden;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--text-inverse);
+  background: var(--plum-charcoal);
+}
+.proto-pilot-poster-kicker {
+  margin: 0;
+  color: var(--pale-blue);
+  font: var(--type-caption)/1.5 var(--font-mono);
+  letter-spacing: .1em;
+}
+.proto-pilot-poster-card h3 {
+  max-width: 440px;
+  margin: 10px 0 17px;
+  color: var(--text-inverse);
+  font: 700 clamp(22px, 3.5vw, 34px)/1.12 var(--font-display);
+  letter-spacing: -.035em;
+}
+.proto-pilot-poster-photo-wrap {
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 7px;
+  background: var(--dusty-blue);
+}
+.proto-pilot-poster-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 52%;
+}
+.proto-pilot-poster-supporting {
+  margin: 16px 0 0;
+  color: var(--text-inverse);
+  font-size: var(--type-body-small);
+  line-height: 1.65;
+}
+.proto-pilot-poster-footer {
+  margin: 16px 0 0;
+  padding-top: 11px;
+  border-top: 1px solid rgba(247,248,252,.22);
+  color: var(--pale-blue);
+  font: var(--type-caption)/1.5 var(--font-mono);
+  letter-spacing: .05em;
+}
+.proto-pilot-poster figcaption {
+  margin-top: 9px;
+  color: var(--text-secondary);
+  font-size: var(--type-body-small);
+  line-height: 1.6;
+}
+.proto-pilot-entry-check {
+  margin-bottom: var(--section-gap-standard);
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--pale-blue);
+}
+.proto-pilot-entry-check h2 {
+  margin: 8px 0;
+  color: var(--text-primary);
+  font: 700 var(--type-card-title)/1.35 var(--font-display);
+}
+.proto-pilot-entry-check > p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--type-body-small);
+  line-height: 1.75;
+}
+.proto-pilot-entry-check .proto-pilot-response-label {
+  display: block;
+  margin-top: 15px;
+}
+.proto-pilot-entry-check textarea {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  background: var(--paper);
+  font: var(--type-body-small)/1.7 var(--font-body);
+  resize: vertical;
+}
+.proto-pilot-transfer-stimulus {
+  margin: 15px 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--lilac);
+}
+.proto-pilot-transfer-stimulus > small {
+  color: var(--text-secondary);
+  font: var(--type-caption)/1.55 var(--font-mono);
+  letter-spacing: .04em;
+}
+.proto-pilot-transfer-stimulus blockquote {
+  margin: 11px 0 0;
+  color: var(--text-primary);
+  font: 600 var(--type-body-large)/1.7 var(--font-display);
+}
+.proto-pilot-transfer-stimulus > p {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+  font-size: var(--type-caption);
+  line-height: 1.6;
+}
+
+.proto-response-length { font-weight: 600; color: var(--text-primary); }

@@ -14,13 +14,13 @@ function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
       id: `${pathwayId}-u${sequence}`,
       pathwayId,
       sequence,
-      title: isPilotPreview ? "Pilot preview — How writers shape meaning" : "Unit focus to be confirmed",
+      title: isPilotPreview ? "Revised candidate — How writers and creators shape meaning" : "Unit focus to be confirmed",
       learningObjective: null,
       officialObjectiveCodes: [],
       mappingStatus: "unverified",
       releaseStatus: "planned",
       reviewNote: isPilotPreview
-        ? "Academic content review passed for pilot preview version 1; official Year 1 objective mapping remains unverified and this unit is not released."
+        ? "Version 3 is a revised candidate awaiting fresh founder and academic review. Official Year 1 mapping, rights, accessibility, age/level suitability and release gates remain open; this unit is not released."
         : "Planning slot only. Add a skill focus and official objective references after academic review.",
     };
   });

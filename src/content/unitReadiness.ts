@@ -9,7 +9,7 @@ import { pilotLearnerLesson } from "./pilotLearnerLesson";
 
 /**
  * Static planning records, not a database. The pilot's content-review outcome,
- * lesson IDs and practice IDs are recorded for version 1. Curriculum mapping,
+ * lesson IDs and practice IDs are recorded for the current version-specific candidate. Curriculum mapping,
  * rights/accessibility review and release approval remain separate requirements.
  */
 export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathway =>
@@ -19,7 +19,7 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
       id: `plan-${unit.id}`,
       unitId: unit.id,
       pathwayId: pathway.id,
-      version: 1,
+      version: pilotLearnerLesson.version,
       title: isPilotUnit ? pilotLearnerLesson.title : unit.title,
       releaseStatus: "planned",
       syllabusEditionCode: null,
@@ -30,8 +30,8 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
       learningObjective: isPilotUnit ? pilotLearnerLesson.proposedLearningObjective : null,
       lessonIds: isPilotUnit ? [pilotLearnerLesson.id] : [],
       practiceQuestionIds: isPilotUnit ? pilotLearnerLesson.practiceItems.map(item => item.id) : [],
-      answerKeyReviewState: isPilotUnit ? "passed" : "not-started",
-      academicReviewer: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewerLabel : null,
+      answerKeyReviewState: isPilotUnit ? "in-review" : "not-started",
+      academicReviewer: null,
       academicReviewedAt: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewedAt : null,
       contentRightsNote: null,
       accessibilityReviewState: "not-started",
