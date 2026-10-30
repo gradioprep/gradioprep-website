@@ -200,7 +200,7 @@ The Cambridge Stage 7 Unit 1 v1.3 preview now associates the exit-check prompt w
 
 ## Stage 7 Unit 1 v1.3 status and source rule — 28 October 2026
 
-The founder confirmed human review/approval of the exact v1.3 learner content. The short platform-original passage and accompanying tasks have passed the internal originality/provenance screen under docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md; the searches found no exact passage-level match in returned public results, but no formal legal opinion or learner pilot is claimed. Earlier entries describing human review and formal rights/originality clearance as pending document the previous state and are superseded for the exact v1.3 text-only unit.
+Historical review record for Cambridge v1.3: the founder confirmed human review/approval of the exact learner content, and the short platform-original passage passed the limited internal originality/provenance screen under the rules then in force. That finding remains a historical fact for v1.3 only; under the 30 October 2026 public-domain excerpt rule, the original passage is now replacement-required. It is not a current source-compliance pass, and the revised version must be re-reviewed.
 
 Do not describe the unit as released/student-ready. Its current full Cambridge framework/version and further objective mapping, manual accessibility/hosted visual review, and explicit release approval remain open. For future longer passages or visual/document-based tasks, verify the exact public-domain/open-licence source and intended-use terms before selection/embedding.
 
