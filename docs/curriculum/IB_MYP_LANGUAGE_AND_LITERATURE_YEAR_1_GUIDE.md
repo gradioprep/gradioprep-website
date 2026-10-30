@@ -141,7 +141,7 @@ Every unit should use the following adaptable cycle. This is the platform's inst
 
 1. **Inquiry and entry check:** introduce a meaningful question; obtain a low-stakes first response.
 2. **Explicit goal and success evidence:** state the skill in accessible language and show what evidence would demonstrate it.
-3. **Model:** think aloud through one challenging decision; annotate a short original or rights-cleared model.
+3. **Model:** think aloud through one challenging decision; annotate a registered public-domain literary excerpt; keep any original think-aloud explanation clearly separate from the reading stimulus.
 4. **Guided practice:** rehearse one decision at a time with prompts and corrective feedback.
 5. **Deliberate practice:** vary the texts and reduce prompts progressively; include at least one misconception or weak example to diagnose.
 6. **Independent transfer:** apply the skill to a fresh text or task.
@@ -165,7 +165,7 @@ Each unit's detailed plan must contain:
 3. source/version confidence and status label for all curriculum statements;
 4. relevant framework concepts/contexts/ATL only where their current status is verified;
 5. measurable learner outcomes and success evidence;
-6. a range of original/cleared texts with genre, mode, culture/context, estimated reading demand and rights record;
+6. a range of registered public-domain literary excerpts with genre, mode, culture/context, estimated reading demand and source-register record;
 7. vocabulary and language-form support as needed;
 8. annotated exemplar and teacher think-aloud;
 9. guided, independent and transfer tasks of increasing independence;
