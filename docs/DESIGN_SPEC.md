@@ -1,7 +1,7 @@
 # Criterion Lab — Design Specification
 
 **Version:** 2.0  
-**Status:** Approved design system and curriculum-first navigation; live typed-word counter specification added for retrospective and future typed-response fields. MYP v3 remains a draft preview candidate in PR #14.  
+**Status:** Approved design system and curriculum-first navigation; live typed-word counter specification added for retrospective and future typed-response fields. MYP Year 1 Unit 1 v3 content is founder-approved in draft PR #14; human academic and release gates remain open.  
 **Last updated:** 30 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
