@@ -1,7 +1,7 @@
 # IB MYP Language and Literature — Year 1 Pathway Implementation Plan
 
 **Version:** 1.1 — six-unit architecture and MYP resource/transition controls  
-**Status:** implementation structure revised for founder review; no application changes are included in this document checkpoint. Under the binding production order, MYP Year 1 Unit 1 is first in the Grade 6-equivalent cohort, followed by Cambridge Lower Secondary Stage 7 Unit 1 and CBSE Grade 6 Unit 1. Next, create Unit 1 for the next comparable band (MYP Year 2, Cambridge Stage 8, CBSE Grade 7), then continue across subsequent bands. Do not start Unit 2 for the first cohort next; Unit 2 begins only after Unit 1 is complete across all approved in-scope levels and required gates are recorded.  
+**Status:** implementation structure revised for founder review; no application changes are included in this document checkpoint.  
 **Pathway ID:** ib-myp-lal-y1.  
 **Linked guide:** docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md.  
 **Research audit:** docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.  
@@ -166,3 +166,12 @@ A third-party update or beta interface alone must not trigger a claim that a new
 - **v0.2 — 26 October 2026:** Public-source-first controls and approval gate.
 - **v1.0 — 26 October 2026:** Linked to initial three-unit guide and source/access limits.
 - **v1.1 — 26 October 2026:** Expanded MYP-specific resource audit; added six-unit/50-hour planning structure, versioned legacy crosswalk, Enhanced MYP watchlist and explicit boundary against starting Unit 1 before approval. No application change.
+
+
+## 10. Shared excerpt and teacher-pack standard — 30 October 2026
+
+The founder-approved common standard now applies to this MYP unit. Replace the original v2 main prose passage and the original transfer micro-extract with separately registered public-domain excerpts by recognised writers. Assign stable Excerpt IDs and exact Source IDs in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before selecting/embedding the replacements. The previous short-original passage allowance is withdrawn.
+
+Revise the teacher-only pack (`src/content/pilotLessonPack.ts`) so every objective item carries the correct answer, AI-drafted/human-validated reasoning and rationale for every alternative; ordering or matching tasks must explain the sequence/pairing logic. Every typed-response task must show an expected length and include a question-specific model response, acceptable interpretations, criteria and feedback. Follow `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`.
+
+This is the next item in the mandatory sequence, ahead of Cambridge Stage 7 and CBSE Grade 6. The old content version's founder approval is not a review pass for the revised version. No UI, route, build or release is authorised by this documentation note.
