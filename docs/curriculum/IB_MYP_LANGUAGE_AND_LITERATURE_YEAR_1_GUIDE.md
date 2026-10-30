@@ -1,8 +1,7 @@
 # IB MYP Language and Literature — Year 1 Curriculum Guide
 
-**Version:** 1.1 — expanded MYP-specific resource review and six-unit scope-and-sequence  
-**Status:** Internal curriculum design for founder review; not an official IB guide or complete verified syllabus map.
-**Production sequence:** Complete Unit 1 across the first cohort (MYP Year 1, Cambridge Lower Secondary Stage 7, CBSE Grade 6), then the next comparable band (MYP Year 2, Cambridge Stage 8, CBSE Grade 7), and subsequent bands in order after verifying actual age/grade alignment. Do not begin Unit 2 for the first cohort next; Unit 2 starts only after Unit 1 is complete across all approved in-scope levels. This is an internal production plan, not a claim of official curriculum equivalence.  
+**Version:** 1.2 — expanded MYP-specific resource review and six-unit scope-and-sequence  
+**Status:** Internal curriculum design for founder review; not an official IB guide or complete verified syllabus map.  
 **Programme/course:** IB Middle Years Programme (MYP), Language and Literature.  
 **Year:** Year 1.  
 **Pathway ID:** ib-myp-lal-y1.  
@@ -181,7 +180,7 @@ Not every unit requires every task format; the exact evidence must fit its learn
 
 ## 8. Inclusion, text selection and rights
 
-- Prefer original or demonstrably rights-cleared passages, images and audio.
+- For reading passages/extracts of any length, use only registered excerpts from recognised writers' verified public-domain works. This supersedes earlier references to original short passages. Apply separate rights checks to visual assets.
 - Maintain a rights ledger with author/creator, title, source, licence/permission basis, adaptation details and permitted distribution.
 - Do not copy InThinking, ASJ, Hachette, ManageBac, Toddle, marketplace or examination content into the product merely because a description or sample is public.
 - Ensure broad perspectives without using a single text as a proxy for a culture or group.
@@ -234,3 +233,10 @@ Academic review, official mapping verification, rights review, accessibility rev
 - **Official mapping, rights, accessibility and release approval:** not cleared by this guide.
 
 This guide must not be described as IB-approved or fully mapped to the latest official subject guide.
+
+
+## Binding excerpt and teacher-pack standard — 30 October 2026
+
+All reading stimuli in MYP Year 1, including short examples and transfer extracts, must come from recognised writers' verified public-domain works. The former allowance for short platform-original reading passages is withdrawn. Use `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0 and register every exact extract in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before use.
+
+The existing MYP Unit 1 v2 main passage and transfer micro-extract are legacy platform-original stimuli and must be replaced. Revise the separate teacher-only answer source against `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`: objective answers need question-specific reasoning and rationales for each alternative; typed responses need a stated expected length, a question-specific model response, acceptable interpretations and specific feedback. This unit is first in the approved migration sequence, before Cambridge Stage 7 and CBSE Grade 6. Previous approvals remain limited to the exact earlier version.
