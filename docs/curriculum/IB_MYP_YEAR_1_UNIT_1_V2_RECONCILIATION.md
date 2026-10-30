@@ -110,7 +110,7 @@ Revise the full teacher-only pack so every objective item has the answer, questi
 
 ## Version 3 reconciliation — 30 October 2026
 
-**Current candidate:** version 3, “How writers and creators shape meaning”, prepared on the existing branch `feat/myp-y1-unit1-v2` in draft PR #14. This section supersedes the earlier “What must happen next” and current-status paragraphs above for present-day work. The earlier v1/v2 records and their approvals remain historical and unchanged.
+**Current candidate:** version 3, “How writers and creators shape meaning”, prepared on the existing branch `feat/myp-y1-unit1-v2` in draft PR #14. This section supersedes the earlier “What must happen next” and version 2 current-status paragraphs above for present-day work. The earlier v1/v2 records and their approvals remain historical and unchanged.
 
 ### Source selection and replacement
 
@@ -146,5 +146,5 @@ Revise the full teacher-only pack so every objective item has the answer, questi
 - PR #18 was merged to `main` on 30 October 2026 (merge commit `72689a529c3d2c4b1961803ea88d95e77a87c8ba`).
 - PR #14 remains draft and unmerged. Work remains on its existing branch; no duplicate PR was created.
 - The current main-branch site shell and navigation are retained. The learner app imports `pilotLearnerLesson.ts` and does not import `pilotLessonPack.ts`.
-- Build and test results must be recorded from the actual post-update CI run; no successful result is assumed here.
+- GitHub Actions Build check [#279](https://github.com/gradioprep/gradioprep-website/actions/runs/41008214446) passed on commit `5308b81fd067b49ce0f6573ad36478a3094a2b41`: TypeScript/Vite production build successful; teacher-pack separation guard verified across one browser JavaScript asset; 13/13 Chromium tests passed, including URL/navigation checks, v3 extract/response-range checks and responsive overflow at 360, 390, 768, 1024 and 1440 CSS pixels. Cloudflare Workers branch-preview build `3b783bde-53e0-4b12-8106-f776d03901a6` succeeded. This is a preview build, not a production deployment. Manual accessibility and content/rights review remain open.
 - No merge, production deployment, DNS change or Cloudflare setting change is part of this candidate.
