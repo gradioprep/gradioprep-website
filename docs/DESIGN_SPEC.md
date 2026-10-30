@@ -1,8 +1,8 @@
 # Criterion Lab — Design Specification
 
-**Version:** 1.9  
-**Status:** Approved design system; curriculum-first navigation implemented and live-verified in the Cloudflare Workers preview; Cambridge Stage 7 Unit 1 has an isolated, unreleased interface-testing preview in draft PR #15  
-**Last updated:** 27 October 2026  
+**Version:** 2.0  
+**Status:** Approved design system and curriculum-first navigation; live typed-word counter specification added for retrospective and future typed-response fields. MYP v3 remains a draft preview candidate in PR #14.  
+**Last updated:** 30 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
@@ -305,7 +305,11 @@ Keep the reading column comfortable on desktop and remove side-by-side distracti
 
 ### Practice interaction
 
-- Each question must have its task context, instructions and response format, including a question-specific expected word count/range for every typed response.
+- Each question must have its task context, instructions and response format, including a question-specific expected word count/range and ideal target for every typed response.
+- Each typed-response field must display a real-time current/ideal counter (for example 38/50, then 59/50 when the learner goes over). Update on typing, paste, edit, deletion and clear-all.
+- The denominator is an ideal target, not a maximum. Never truncate/reject text, disable the field, block submission or set maxLength based on the target. Preserve the entire learner response above the target.
+- Apply the counter retrospectively to every existing typed-response field and to every new field from first integration. This is a client-side writing aid, not a grade, score, save or submission feature.
+- Count lexical words consistently: letters/digits form words, punctuation-only tokens do not count, and contractions/hyphenated compounds count as one. Expose the changing count accessibly without disrupting typing.
 - For objective/closed questions, provide immediate question-specific feedback after the learner checks/submits: the correct answer, the reasoning that makes it correct, and why each alternative does not fit. Ordering tasks must explain the chronological, causal, referential or logical sequence.
 - For typed responses configured for AI-assisted practice feedback, provide immediate feedback grounded in the learner's actual answer, the exact excerpt and the item's approved criteria. Identify a supported strength, a specific missing/weak link and one useful next step.
 - Reveal model responses and full marking guidance only in the intended post-attempt state. Never reveal answer keys or hidden criteria before the learner's attempt.
@@ -404,7 +408,7 @@ At initial launch, label the founder “Founding Academic Lead.” Do not manufa
 
 ### Answer-key and feedback security
 
-- Learner-facing bundles may contain only the selected public-domain excerpt, question, instructions and fields needed to attempt the task.
+- Learner-facing bundles may contain only the selected task stimulus (a verified public-domain excerpt when it exceeds 250 words, or an approved platform-original passage of 250 words or fewer), question, instructions and fields needed to attempt the task. Do not include teacher-only answers or rationales.
 - Correct-answer IDs, full answer keys, per-option rationale, model responses, private rubrics and teacher notes stay server-side behind access controls when live marking is introduced.
 - The server returns only the feedback authorised for the current attempt/reveal state; never send the full teacher pack to the browser.
 - Do not describe the current preview/self-check interactions as automated grading. A secure Worker endpoint, validation, rate limiting and privacy design are required before live AI-assisted evaluation.

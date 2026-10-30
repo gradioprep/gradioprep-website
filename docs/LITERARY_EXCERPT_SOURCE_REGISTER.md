@@ -1,34 +1,34 @@
 # Literary Excerpt Source Register
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Created:** 30 October 2026  
 **Access:** Internal/private project record. Do not expose teacher-only source notes or unreleased assessment material to learners.  
 **Authority:** `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`.
 
 ## 1. Purpose
 
-This register records the exact public-domain source and excerpt used by every reading stimulus. It is the single lookup point for replacing a passage without redesigning the website, navigation, layout, learner/teacher data boundary or assessment architecture.
+This register records the provenance of every learner passage and the full public-domain source details required for passages over 250 words. It is the single lookup point for replacing a passage without redesigning the website, navigation, layout, learner/teacher data boundary or assessment architecture. Platform-original passages of 250 words or fewer receive an authorship/provenance record here but do not receive a fictitious public-domain Source ID.
 
 Use two identifiers:
 
 - **Excerpt ID:** stable identifier for the location/role of an excerpt in a unit. Keep it when the passage is replaced.
-- **Source ID:** identifies the exact public-domain work, edition/transcription and excerpt. Create a new Source ID whenever the work, edition or excerpt changes.
+- **Source ID:** identifies the exact public-domain work, edition/transcription and excerpt for a passage over 250 words. Create a new Source ID whenever the work, edition or excerpt changes.
+- **Original-authorship record:** for a platform-original passage of 250 words or fewer, record author/owner, word count, creation date/version, linked task IDs, originality/provenance screen and suitability; do not create a public-domain Source ID.
 
-No new passage may be inserted until its Excerpt ID and completed source record are present here. Preserve old records and mark them replaced rather than deleting them.
+No new passage may be inserted until its Excerpt ID and the correct record type (short-original provenance or long-form public-domain source) are present here. Preserve old records and mark them replaced rather than deleting them.
 
-## 2. Current legacy excerpts requiring migration
 
-The rows below inventory the existing platform-original stimuli. They are not public-domain source records and must not be represented as having passed the new source check. Assign the public-domain Source ID during the sequential content revision.
+## 2. Existing passage/source audit baseline
+
+The rows below preserve the earlier passage inventory. Apply the new 250-word threshold during each unit's scheduled revision; do not replace a project-authored passage solely because it is original.
 
 | Excerpt ID | Track / unit | Existing passage or stimulus | Current source location | Current status | Required action |
 |---|---|---|---|---|---|
-| `EXC-IB-MYP-Y1-U1-MAIN` | IB MYP Language and Literature Year 1 Unit 1 | v1/v2 main passage beginning “At the edge of the field, the last bus sighed…” | `src/content/pilotLearnerLesson.ts` and `src/content/pilotLessonPack.ts` (v2) | Replaced in candidate v3 by `SRC-IB-MYP-Y1-U1-001`; v1/v2 records remain historical | Keep this stable Excerpt ID; use the new Dickens source record below and rework all dependent questions/answers. |
-| `EXC-IB-MYP-Y1-U1-TRANSFER` | IB MYP Language and Literature Year 1 Unit 1 | v2 original sunrise-platform transfer micro-extract beginning “At sunrise, the empty platform…” | `src/content/pilotLessonPack.ts` (v2) | Replaced in candidate v3 by `SRC-IB-MYP-Y1-U1-002`; v2 record remains historical | Keep this stable Excerpt ID; use the new Carroll source record below and rewrite the independent transfer task. |
-| `EXC-CAM-LS-S7-U1-WARMUP` | Cambridge Lower Secondary English 0861 Stage 7 Unit 1 | “The map's corners fluttered…” warm-up mini-text | `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md` | Legacy platform-original; replacement required | Replace with a public-domain excerpt or recast as clearly instructional prose, not a reading stimulus. |
-| `EXC-CAM-LS-S7-U1-MAIN` | Cambridge Lower Secondary English 0861 Stage 7 Unit 1 | “The Rain Gauge” passage | `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md` and teacher pack | Legacy platform-original; replacement required | Replace with a public-domain literary excerpt; rework dependent tasks, answers and feedback. |
-| `EXC-CBSE-G6-U1-MAIN` | CBSE English Grade 6 Unit 1 | “The Turning Sign” passage | `docs/curriculum/CBSE_G6_UNIT_1_LEARNER_CONTENT.md` and learner-safe source data | Legacy platform-original; replacement required | Replace with a public-domain excerpt suited to the Grade 6 learning purpose; revise dependent questions and answer pack after IB and Cambridge revisions. |
-
-**Audit note:** This is the initial known inventory based on identified learner/teacher files, not a certified exhaustive list. During each unit revision, inspect the complete learner file, teacher pack and data sources; add a row for every additional standalone passage, quotation or mini-extract discovered.
+| EXC-IB-MYP-Y1-U1-MAIN | IB MYP Language and Literature Year 1 Unit 1 | v1/v2 main passage | src/content/pilotLearnerLesson.ts / prior v2 teacher pack | Replaced in approved candidate v3 by Dickens Source ID SRC-IB-MYP-Y1-U1-001 | Keep v3 unchanged; v1/v2 records remain historical. |
+| EXC-IB-MYP-Y1-U1-TRANSFER | IB MYP Language and Literature Year 1 Unit 1 | v2 original transfer micro-extract | Prior src/content/pilotLessonPack.ts | Replaced in approved candidate v3 by Carroll Source ID SRC-IB-MYP-Y1-U1-002 | Keep v3 unchanged; v2 record remains historical. |
+| EXC-CAM-LS-S7-U1-WARMUP | Cambridge Lower Secondary English 0861 Stage 7 Unit 1 | “The map's corners fluttered…” warm-up mini-text | Cambridge v1.3 learner material / QA record | Platform-original; exact word count to be audited at its scheduled revision | Retain if 250 words or fewer. If over 250 and still a reading stimulus, replace with a registered public-domain excerpt; recasting/removal is a content-design choice within the authorised revision. |
+| EXC-CAM-LS-S7-U1-MAIN | Cambridge Lower Secondary English 0861 Stage 7 Unit 1 | “The Rain Gauge” | Cambridge v1.3 learner material / QA record | Platform-original; exact word count to be audited at its scheduled revision | Retain if 250 words or fewer. If over 250, use a registered public-domain excerpt in the revised version and update dependent tasks/answers. |
+| EXC-CBSE-G6-U1-MAIN | CBSE English Grade 6 Unit 1 “The Turning Sign” | Original narrative | CBSE v1.0 learner content / QA record | Platform-original; exact word count to be audited at its scheduled revision | Retain if 250 words or fewer. If over 250, use a registered public-domain excerpt in the revised version and update dependent tasks/answers. |
 
 ## 3. Required fields for each public-domain source record
 
