@@ -733,16 +733,20 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   outline: 2px solid var(--green);
   outline-offset: 2px;
 }
-.proto-pilot-response-label {
+.proto-pilot-response-field {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 13px;
+}
+.proto-pilot-response-label {
+  display: block;
+  margin: 0;
   color: var(--text-primary);
   font-size: var(--type-body-small);
   font-weight: 600;
 }
-.proto-pilot-response-label textarea {
+.proto-pilot-response-field textarea {
   width: 100%;
   min-height: 100px;
   padding: 12px;
@@ -753,10 +757,16 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   font: 400 var(--type-body-small)/1.7 var(--font-body);
   resize: vertical;
 }
-.proto-pilot-response-label textarea:focus-visible {
+.proto-pilot-response-field textarea:focus-visible {
   border-color: var(--green);
   outline: 2px solid var(--green);
   outline-offset: 2px;
+}
+.proto-response-word-count {
+  align-self: flex-end;
+  color: var(--text-secondary);
+  font: var(--type-caption)/1.5 var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 .proto-pilot-question-footer {
   display: flex;

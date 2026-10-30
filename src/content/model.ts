@@ -189,6 +189,11 @@ export interface ExpectedResponseLength {
   maxWords: number;
 }
 
+/** Learner-facing response metadata with its separately approved ideal target. */
+export interface IdealExpectedResponseLength extends ExpectedResponseLength {
+  idealWords: number;
+}
+
 export interface PilotVocabularyItem {
   term: string;
   meaning: string;
@@ -394,7 +399,9 @@ export interface PilotLearnerLesson {
     rightsNote: string;
   };
   companionArtifact: PilotCompanionArtifact;
-  entryCheck: PilotEntryCheck;
+  entryCheck: Omit<PilotEntryCheck, "expectedResponseLength"> & {
+    expectedResponseLength: IdealExpectedResponseLength;
+  };
   vocabularySupport: PilotVocabularyItem[];
   keyIdea: {
     label: string;
@@ -419,13 +426,13 @@ export interface PilotLearnerLesson {
     focus: string;
     prompt: string;
     options?: { id: string; text: string }[];
-    expectedResponseLength?: ExpectedResponseLength;
+    expectedResponseLength?: IdealExpectedResponseLength;
     successIndicators: string[];
   }[];
   exitTicket: {
     stimulus: { excerptId: string; sourceId: string; label: string; text: string; rightsNote: string };
     prompt: string;
-    expectedResponseLength: ExpectedResponseLength;
+    expectedResponseLength: IdealExpectedResponseLength;
     vocabularySupport: PilotVocabularyItem[];
     successIndicators: string[];
   };

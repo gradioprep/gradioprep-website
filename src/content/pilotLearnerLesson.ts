@@ -65,7 +65,7 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     prompt:
       "Choose one word or phrase from the Dickens extract, or one visible detail from the poster. Describe exactly what you notice before explaining its effect.",
     placeholder: "I notice the phrase/detail … It literally shows …",
-    expectedResponseLength: { minWords: 15, maxWords: 25 },
+    expectedResponseLength: { minWords: 15, maxWords: 25, idealWords: 20 },
     successIndicators: [
       "Identifies a precise word, phrase or visible detail.",
       "Describes what is literally present before adding an interpretation.",
@@ -158,7 +158,7 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
       focus: "Explaining a writer's description of fog",
       prompt:
         "Explain how the words “pouring in at every chink and keyhole” and “mere phantoms” shape the atmosphere of the street.",
-      expectedResponseLength: { minWords: 40, maxWords: 55 },
+      expectedResponseLength: { minWords: 40, maxWords: 55, idealWords: 50 },
       successIndicators: [
         "Uses at least one of the quoted phrases accurately.",
         "Explains a plausible association, such as the fog seeming to enter everywhere or the houses becoming hard to see.",
@@ -171,7 +171,7 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
       focus: "Comparing written and visual choices",
       prompt:
         "Compare how Dickens's description and the night-bus poster could shape an audience's impression of being out at night. Use one precise detail from each.",
-      expectedResponseLength: { minWords: 65, maxWords: 85 },
+      expectedResponseLength: { minWords: 65, maxWords: 85, idealWords: 75 },
       successIndicators: [
         "Uses an exact phrase from the Dickens extract.",
         "Uses a specific written or visual feature from the poster.",
@@ -185,7 +185,7 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
       focus: "Interpreting personification and exaggeration",
       prompt:
         "What might Dickens suggest by imagining that Nature “lived hard by” and was “brewing” the fog? Explain how the image fits the scene.",
-      expectedResponseLength: { minWords: 45, maxWords: 65 },
+      expectedResponseLength: { minWords: 45, maxWords: 65, idealWords: 55 },
       successIndicators: [
         "Uses the words “lived hard by” or “brewing” as evidence.",
         "Explains the personification or exaggeration rather than treating the image literally.",
@@ -198,7 +198,7 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
       focus: "Improving a vague explanation",
       prompt:
         "Improve this weak response in two or three sentences: “The fog is described. It makes the writing interesting.” Use one precise phrase from Dickens and explain its effect.",
-      expectedResponseLength: { minWords: 45, maxWords: 65 },
+      expectedResponseLength: { minWords: 45, maxWords: 65, idealWords: 55 },
       successIndicators: [
         "Replaces the vague comment with a specific phrase from the extract.",
         "Explains what the phrase may suggest or help the reader imagine.",
@@ -217,7 +217,7 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     },
     prompt:
       "Choose a word or phrase from this extract. Explain how Carroll makes the fall seem unusual or surprising, and connect your interpretation to what Alice experiences.",
-    expectedResponseLength: { minWords: 45, maxWords: 60 },
+    expectedResponseLength: { minWords: 45, maxWords: 60, idealWords: 50 },
     vocabularySupport: [
       { term: "dipped", meaning: "sloped or moved downward" },
       { term: "make out", meaning: "see or recognise clearly" },
