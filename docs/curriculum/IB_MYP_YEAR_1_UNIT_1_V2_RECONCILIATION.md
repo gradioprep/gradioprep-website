@@ -103,3 +103,44 @@ The worked example, learner response frame and regression test were aligned to t
 The founder has approved `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` and `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0. This supersedes earlier permission for short platform-original reading passages. The v2 main prose passage and transfer micro-extract are now legacy stimuli and must be replaced by separately registered public-domain excerpts. Record stable Excerpt IDs and exact Source IDs in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before use.
 
 Revise the full teacher-only pack so every objective item has the answer, question-specific reasoning and a rationale for each alternative; ordering/matching tasks must explain the sequence or pairing logic. Typed responses need a question-specific length, model response, accepted interpretations and item-specific feedback. Audit all other mini-texts and stimuli during this work. The existing 26 October founder content approval remains historical for the exact former v2 only; the revised version requires fresh review. This MYP revision is first in the new migration sequence, followed by Cambridge Stage 7 and then CBSE Grade 6.
+
+## Version 3 reconciliation — 30 October 2026
+
+**Current candidate:** version 3, “How writers and creators shape meaning”, prepared on the existing branch `feat/myp-y1-unit1-v2` in draft PR #14. This section supersedes the earlier “What must happen next” and current-status paragraphs above for present-day work. The earlier v1/v2 records and their approvals remain historical and unchanged.
+
+### Source selection and replacement
+
+- Main reading: Charles Dickens, *A Christmas Carol in Prose, Being a Ghost Story of Christmas* (London: Chapman & Hall, 1843), Stave I, “Marley's Ghost”. Exact excerpt anchor: `EXC-IB-MYP-Y1-U1-MAIN` / `SRC-IB-MYP-Y1-U1-001`.
+- Independent transfer: Lewis Carroll, *Alice's Adventures in Wonderland* (London: Macmillan and Co., 1866-dated issue), Chapter I, “Down the rabbit-hole”. Exact excerpt anchor: `EXC-IB-MYP-Y1-U1-TRANSFER` / `SRC-IB-MYP-Y1-U1-002`.
+- The two Source IDs were registered before the corresponding excerpt-bearing candidate files were committed. Both extracts are original-English historical texts, not modern translations or adaptations.
+- The source-level rights term check covers India and the United Kingdom only. Exact editions, locations, text anchors and applicable term calculations are recorded in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. The United States and other territories are not cleared by this record. Final unit-level rights approval remains open.
+- The existing bus-stop photograph by Mateusz Konieczny remains in the poster because the Wikimedia Commons file page expressly records CC0 1.0. Poster wording/layout are platform-authored. The photograph's source/CC0 check does not close the separate unit-level rights or accessibility gates.
+
+### Version 3 learning and assessment revision
+
+- Replaces both platform-written v2 stimuli and rewrites all five dependent practice items and the independent exit ticket.
+- Retains the choice → evidence → effect-in-context teaching sequence and current site design/navigation. Adds visible vocabulary support for Victorian language and the Carroll transfer extract.
+- Entry observation: 15–25 words. Typed practice: Q2 40–55 words; Q3 65–85 words; Q4 45–65 words; Q5 45–65 words. Independent exit response: 45–60 words. Guidance appears before each input and is not enforced as a limit.
+- Teacher pack v3 supplies an entry model and response guide; Q1 exact correct answer and question-specific reasoning plus a separate rationale for all four options; and for every typed practice response and the exit task, model response, evidence targets, accepted interpretations, strong/developing/weak traits, tailored feedback and an actionable next step.
+- Learner data contains no correct-answer IDs, model responses, per-option rationales or teacher scoring bands. A build-time guard checks browser assets for teacher-only markers.
+- No automatic grading, live AI marking, grading API, authentication, persistence, payments or release infrastructure is added. Responses remain temporary and ungraded.
+
+### Version-specific review state and open gates
+
+| Gate | Version 3 state | Notes |
+|---|---|---|
+| Founder content approval | Pending | Prior v2 approval does not transfer. |
+| Human academic review | Pending | AI-assisted drafts are not human validation. Review every question, answer, option rationale, model response and feedback item. |
+| Official IB mapping | Unverified | Applicable current detailed Year 1 guide edition and objective/strand mapping are not verified; official code array remains empty. |
+| Rights | Source-level India/UK term checks recorded; unit-level approval pending | US and other territory use not cleared; separately verify each edition, translation and visual asset. |
+| Age/level and context suitability | Pending | Review Victorian vocabulary, syntax, genre/context and transfer task with the actual learner level. |
+| Accessibility | Pending | Automated responsive tests are not a full accessibility audit; manual keyboard, screen-reader, contrast, reflow and hosted visual checks remain. |
+| Release approval | Not approved | Keep v3 unreleased and separate from production content. |
+
+### Technical and PR record
+
+- PR #18 was merged to `main` on 30 October 2026 (merge commit `72689a529c3d2c4b1961803ea88d95e77a87c8ba`).
+- PR #14 remains draft and unmerged. Work remains on its existing branch; no duplicate PR was created.
+- The current main-branch site shell and navigation are retained. The learner app imports `pilotLearnerLesson.ts` and does not import `pilotLessonPack.ts`.
+- Build and test results must be recorded from the actual post-update CI run; no successful result is assumed here.
+- No merge, production deployment, DNS change or Cloudflare setting change is part of this candidate.

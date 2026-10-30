@@ -162,3 +162,11 @@ The new binding standards are `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`, `doc
 **Register completeness gate:** inspect each complete learner file and teacher pack during its revision and add an Excerpt ID/Source ID record for every passage, quotation or mini-extract. The initial inventory in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` is a starting audit, not a claim that no other stimulus exists.
 
 **Approval/version control:** old academic/founder review outcomes remain valid only for the exact versions previously reviewed. Replacing a passage materially changes its context; update the content version, answer pack, QA record and any learner-facing references, then repeat affected review. Do not import answer packs into client modules or claim actual AI grading until the protected server-side workflow is separately implemented and verified.
+
+## 17. Current IB MYP Year 1 Unit 1 revision checkpoint — 30 October 2026
+
+PR #18 has been merged. The mandatory next content task is being carried out on the existing PR #14 branch as a version 3 replacement candidate; the earlier version 2 approval remains historical and does not apply to v3. The old MYP v2 main original prose and sunrise-platform transfer extract have been replaced in v3 by two registered English public-domain works. The source register records the exact work, edition, location, excerpt anchors, rights calculations and territory limits.
+
+Version 3 includes a rebuilt teacher/editor pack for the entry activity, all five practice items and the independent transfer exit. Objective-answer reasoning and a separate rationale for every option are recorded. All typed responses have question-specific response ranges, model responses, evidence targets, accepted interpretations, strong/developing/weak response bands and tailored improvement feedback. Learner-facing response guidance is visible before each typed field. The teacher pack remains separate from the learner application.
+
+**Review state:** v3 is unreleased and awaiting founder review, fresh human academic validation, current official IB guide/mapping verification, unit-level rights approval, age/level suitability review, accessibility review and explicit release approval. Keep official objective codes blank. Continue to pause at MYP Year 1 Unit 1; do not start Cambridge Stage 7 or CBSE Grade 6 under this task.
