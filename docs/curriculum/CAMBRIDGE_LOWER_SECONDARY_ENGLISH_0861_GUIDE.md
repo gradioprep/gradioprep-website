@@ -319,3 +319,8 @@ The Stage 7 teacher/editor pack must contain per-option rationales, correct-answ
 The current candidate is v1.3 in draft PR #12. Founder-confirmed review/verification approval applies to that exact version; do not request those confirmations again. The route-specific Top Five for Stage 7 is pending and must be completed separately from the MYP review. Its public-source findings must be applied to this guide and the implementation structure before the research checkpoint is marked complete.
 
 The current original passage bodies are 16 words (warm-up), 221 words (“The Rain Gauge”) and 27 words (exit mini-passage). They may remain under the approved 250-word rule. The existing teacher/editor pack needs migration to standard v1.2, and each typed response needs a current/ideal live counter in the preview. This content/technical migration follows the MYP review checkpoint and precedes the CBSE Grade 6 migration.
+
+
+## Diagnostic-first sequencing clarification — 31 October 2026
+
+The new Cambridge diagnostic cycle is the founder-requested **Grade 6** target. It is not to be silently routed to Cambridge Lower Secondary Stage 7. The exact official Cambridge stage/course for Grade 6 remains a scope-lock task in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`; this Lower Secondary Stage 7–9 guide remains a separate existing curriculum record. Stage 7 Unit 1 content, its completed Top Five review and outstanding pack/counter/release tasks are preserved but deferred while the Grade 9 IB MYP and Cambridge Grade 6 diagnostic cycles are completed. No Stage 7 diagnostic research or Stage 7 content migration is authorised by this clarification.
