@@ -20,7 +20,7 @@ test.describe("MYP Year 1 Unit 1 live response word counters", () => {
     for (const field of responseFields) {
       await expect(page.locator(`#${field.id}`)).toBeVisible();
       await expect(page.locator(`#${field.id}-word-count`)).toHaveText(`0/${field.target} words`);
-      const describedBy = (await page.locator(`#${field.id}`).getAttribute("aria-describedby") ?? "").split(/\\s+/);
+      const describedBy = (await page.locator(`#${field.id}`).getAttribute("aria-describedby") ?? "").split(/\s+/);
       expect(describedBy).toContain(field.prompt);
       expect(describedBy).toContain(field.range);
       expect(describedBy).toContain(`${field.id}-word-count`);
