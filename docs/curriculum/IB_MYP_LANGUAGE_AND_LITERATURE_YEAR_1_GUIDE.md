@@ -1,13 +1,13 @@
 # IB MYP Language and Literature — Year 1 Curriculum Guide
 
-**Version:** 1.1 — expanded MYP-specific resource review and six-unit scope-and-sequence  
+**Version:** 1.5 — route-specific Top Five independent-source research refresh  
 **Status:** Internal curriculum design for founder review; not an official IB guide or complete verified syllabus map.  
 **Programme/course:** IB Middle Years Programme (MYP), Language and Literature.  
 **Year:** Year 1.  
 **Pathway ID:** ib-myp-lal-y1.  
 **Companion research audit:** docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.  
 **Companion implementation plan:** docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md.  
-**Research checked:** 26 October 2026.
+**Research checked:** 31 October 2026 (including the route-specific Top Five independent-source audit).
 
 ## 1. Executive decision
 
@@ -17,7 +17,10 @@ This is a **public-framework-informed, MYP-resource-benchmarked independent path
 
 ### Key evidence and limitations
 
-- The current public [IB Language and Literature overview](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) identifies listening, speaking, reading, writing, viewing and presenting; inquiry; varied literary and non-literary texts; and attention to context, audience, purpose and linguistic/literary choices.
+- The current public [IB Language and Literature overview](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) (page marked last updated 19 February 2026) identifies listening, speaking, reading, writing, viewing and presenting; inquiry; varied literary and non-literary texts; and attention to context, audience, purpose and linguistic/literary choices.
+- The current public [MYP assessment and exams page](https://www.ibo.org/programmes/middle-years-programme/assessment-and-exams/) (also marked last updated 19 February 2026) says school-based assessment uses tasks created and marked by classroom teachers against prescribed subject-group objectives and criteria; optional external eAssessment is separate.
+- The publicly linked [Language and Literature subject brief](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) is labelled “From 2014”. The indexed [detailed Language and literature guide](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) identifies itself as for use from September 2014 or January 2015. Treat its Year 1 A–D descriptors as legacy reference only unless the applicable current school guide is authenticated.
+- The official [Enhanced MYP beta unit-planning guidance](https://pds.ibo.org/Prototype10MYPBeta-EN/course/en/assets/6752a5296bbe08d1d82df1c6/file.pdf) states full release is scheduled for 2027. Beta planning information is not a final current subject guide or a current Year 1 objective map.
 - The public [MYP curriculum overview](https://www.ibo.org/programmes/middle-years-programme/curriculum/) says at least 50 hours of teaching time are required for each subject group per MYP year. Our design therefore plans at least 50 guided hours, although a school's actual timetable and delivery plan may differ.
 - The current public [How the MYP works](https://ibo.org/programmes/middle-years-programme/what-is-the-myp/how-the-myp-works/) page describes key/related concepts, global contexts and approaches to learning (ATL) in the current framework.
 - An official IB resource indexed at [Language and literature guide](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) identifies itself as for use from September 2014 or January 2015. Search-indexed sections include Year 1 descriptors for Criteria A–D. This provides a useful **legacy-framework reference**, but it does not establish that the descriptors are the latest current edition. The direct resource did not resolve consistently in this research session.
@@ -141,7 +144,7 @@ Every unit should use the following adaptable cycle. This is the platform's inst
 
 1. **Inquiry and entry check:** introduce a meaningful question; obtain a low-stakes first response.
 2. **Explicit goal and success evidence:** state the skill in accessible language and show what evidence would demonstrate it.
-3. **Model:** think aloud through one challenging decision; annotate a short original or rights-cleared model.
+3. **Model:** think aloud through one challenging decision; annotate a registered public-domain literary excerpt; keep any original think-aloud explanation clearly separate from the reading stimulus.
 4. **Guided practice:** rehearse one decision at a time with prompts and corrective feedback.
 5. **Deliberate practice:** vary the texts and reduce prompts progressively; include at least one misconception or weak example to diagnose.
 6. **Independent transfer:** apply the skill to a fresh text or task.
@@ -165,7 +168,7 @@ Each unit's detailed plan must contain:
 3. source/version confidence and status label for all curriculum statements;
 4. relevant framework concepts/contexts/ATL only where their current status is verified;
 5. measurable learner outcomes and success evidence;
-6. a range of original/cleared texts with genre, mode, culture/context, estimated reading demand and rights record;
+6. a range of registered public-domain literary excerpts with genre, mode, culture/context, estimated reading demand and source-register record;
 7. vocabulary and language-form support as needed;
 8. annotated exemplar and teacher think-aloud;
 9. guided, independent and transfer tasks of increasing independence;
@@ -180,7 +183,7 @@ Not every unit requires every task format; the exact evidence must fit its learn
 
 ## 8. Inclusion, text selection and rights
 
-- Prefer original or demonstrably rights-cleared passages, images and audio.
+- Platform-original reading passage bodies up to and including 250 words are permitted; qualifying existing short originals may remain unchanged. Passage bodies over 250 words must use registered excerpts from recognised writers' verified public-domain works. Apply separate rights checks to visual assets and do not reuse third-party copyrighted material merely because it is short.
 - Maintain a rights ledger with author/creator, title, source, licence/permission basis, adaptation details and permitted distribution.
 - Do not copy InThinking, ASJ, Hachette, ManageBac, Toddle, marketplace or examination content into the product merely because a description or sample is public.
 - Ensure broad perspectives without using a single text as a proxy for a culture or group.
@@ -229,7 +232,49 @@ Academic review, official mapping verification, rights review, accessibility rev
 - **Legacy criteria:** A–D summarized only as a dated 2014/15 reference; current edition/continuity needs confirmation.
 - **Enhanced MYP:** separate transition watchlist; beta material is not being treated as final.
 - **Existing preview, “How writers shape meaning”:** candidate for Unit 1, not a new implementation; its prior academic review applies only to preview version 1.
-- **Unit 1 implementation:** not started under this revised guide; requires founder approval first.
+- **Unit 1 implementation:** version 3 learner and teacher/editor content is implemented and founder-approved as an exact content candidate on 30 October 2026; the six-field live-counter retrofit is implemented and automated tests passed on 31 October. AI-assisted editorial desk review is recorded separately from human academic validation. Fresh human academic review, exact current official mapping, rights, age/level, manual accessibility and release gates remain open.
 - **Official mapping, rights, accessibility and release approval:** not cleared by this guide.
 
 This guide must not be described as IB-approved or fully mapped to the latest official subject guide.
+
+
+## Binding passage-length, teacher-pack and live-counter standard — updated 30 October 2026
+
+For all MYP Year 1 content, apply docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1, docs/LITERARY_EXCERPT_SOURCE_REGISTER.md v1.1 and docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md v1.1.
+
+Project-original reading passage bodies up to and including 250 words are permitted; existing qualifying originals may remain. Passages over 250 words must use recognised writers' verified public-domain works, with exact edition/source and intended-territory checks recorded before use. This does not permit copied third-party text merely because it is short. Visual-asset rights remain separate.
+
+The founder approved the exact MYP Year 1 Unit 1 v3 content candidate on 30 October 2026. It already uses registered public-domain excerpts for both the main reading and independent transfer. Do not alter its passage text, prompts, questions, response ranges, answer content, model responses or teacher/editor pack because of this standards update.
+
+The retrospective live word counter across all six existing typed-response fields (entry 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50) is implemented and verified in run #295. Existing response ranges remain unchanged. Display current/ideal values such as 38/50 and 59/50; never cap, truncate, reject or block an over-target response. Apply the same component to all later MYP typed-response fields from first integration.
+
+## 12. MYP Year 1 Unit 1 v3 review checkpoint — 31 October 2026
+
+The founder-approved v3 candidate remains an independently designed, public-framework-informed platform unit. The current public IB pages support the broad six-skill and school-based assessment context; they do not provide the applicable current detailed Year 1 objective/strand wording. The public subject brief is labelled “From 2014”; the indexed detailed guide is for use from 2014/15; Enhanced MYP beta guidance anticipates full release in 2027. Keep official objective codes blank and mapping unverified.
+
+The AI-assisted editorial desk review recorded in `docs/PILOT_UNIT_REVIEW.md` found the item sequence, answer rationales, typed-response guidance and model lengths internally consistent, with two minor quotation/visual-description points to be resolved by a human reviewer. It did not change v3 content and is not human academic approval. The six live counters remain implemented; their accessible prompt/range/counter associations passed automated Chromium tests in GitHub Actions run #295. Manual accessibility, human suitability, unit-level rights and release decisions remain open. Do not start Cambridge content work until those MYP conditions and the separate founder authorization checkpoint are satisfied.
+
+## 12. Route-specific Top Five research refresh — 31 October 2026
+
+The required Top Five independent-source audit for **IB MYP Language and Literature Year 1** is complete. The ranked sources and item-level access/limitations record are in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1:
+
+1. **InThinking / ThinkIB (4.70/5):** direct MYP English L&L specialist teaching units, year bands, assessments, differentiation and current visible updates.
+2. **ASJ Learning (4.55/5):** MYP English L&L conceptual scope-and-sequence, vertical concept progression and formative assessment ideas.
+3. **ManageBac+ (4.30/5):** publicly inspectable MYP unit-planning workflow, inquiry/action/reflection, assessment, ATL and lesson/resource linking.
+4. **Hachette Learning (3.98/5):** MYP 1 textbook/chapter architecture benchmark; older edition and limited public sample access.
+5. **Toddle (3.85/5):** MYP curriculum-to-unit/lesson/assessment workflow and curriculum analytics; actual resource library access is limited.
+
+Scores use the shared route-specific rubric and are internal comparative judgements, not external quality certifications. Official IB sources were researched separately and are not counted among the five.
+
+### Design decisions informed by the Top Five
+
+- Retain the proposed six-unit Year 1 architecture and 50-hour planning baseline. The independent sources do not provide a defensible reason to copy a different provider's sequence or represent it as the IB sequence.
+- Require an explicit vertical-progression note for each unit: what the learner has already met, what becomes more complex in this year, and how the idea/skill may be revisited later. Use InThinking's year bands and ASJ's concept progression as comparison points only.
+- Keep the full-year experience genuinely multi-modal. For each unit, specify the skill modes actually taught and evidenced—listening, speaking, reading, writing, viewing and presenting—and check whole-year distribution.
+- Use an inquiry → learning experiences → assessment/evidence → reflection structure in each internal unit plan. Connect each assessment task to its model, resource, feedback rule and next step; provide a student-readable unit summary and separate teacher/editor notes.
+- Keep vocabulary instruction, formative choice, independent transfer, differentiation and accessibility visible in each unit plan. The Hachette and platform examples are completeness checks, not content to reproduce.
+- Preserve the guide's independent-design status. No third-party site establishes official IB objectives, criteria, current year descriptors or endorsement.
+
+The public official IB sources verify the broad subject framework and programme context. The exact applicable current detailed Year 1 guide/strand map remains unverified. **This uncertainty does not block this internal guide or implementation structure.** It limits only claims of verified official mapping. The proposed six-unit sequence is still a GradiPrep design, not an IB-prescribed order.
+
+This research-only refresh does not change the founder-approved MYP Year 1 Unit 1 v3 passage text, questions, response ranges, model responses or teacher/editor pack. Human academic validation, unit-level rights/territory, visual-context, age/level suitability, manual accessibility and release approval remain separate.
