@@ -20,7 +20,7 @@ export const pilotLessonPack: PilotLessonPack = {
   },
   title: "How writers and creators shape meaning",
   audienceNote:
-    "Proposed for beginning MYP Language and Literature learners. Victorian prose demand, vocabulary load and sequence require a human age/level and accessibility review.",
+    "Proposed for beginning MYP Language and Literature learners. The founder / project owner has approved the age/level and contextual suitability of exact v4; vocabulary scaffolding and teacher-led chunking remain available. Manual accessibility review is separate and remains pending.",
   estimatedMinutes: 35,
   proposedLearningObjective:
     "Explain how a writer's language choices and a visual creator's design choices may shape atmosphere and meaning, using precise evidence and the surrounding context.",
@@ -421,9 +421,8 @@ export const pilotLessonPack: PilotLessonPack = {
     "Review keyboard navigation, focus visibility, screen-reader order, zoom/reflow, visual contrast and mobile layout before release.",
   ],
   remainingReleaseChecks: [
-    "Complete final unit-level rights/territory review of both text excerpts and the exact photo/poster use.",
+    "Complete final unit-level rights/territory review of both text excerpts, the exact photograph and poster use.",
     "Keep official IB objective/strand mapping unverified and codes blank until the exact applicable current official guide supports them.",
-    "Complete final unit-level rights review of both text excerpts, the photo, poster copy/layout and the exact text incorporated in the public build.",
     "Complete manual accessibility review, including screen-reader labels/order, keyboard access, zoom/reflow, contrast and mobile layout.",
     "Keep answer keys and model responses out of the client build and verify the separation in production output.",
     "Record explicit founder release approval only after all independent gates are complete.",
