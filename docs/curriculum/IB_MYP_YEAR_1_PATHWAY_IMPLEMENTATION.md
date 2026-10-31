@@ -1,7 +1,7 @@
 # IB MYP Language and Literature — Year 1 Pathway Implementation Plan
 
-**Version:** 1.4 — six-unit architecture and route-specific Top Five research implementation  
-**Status:** implementation structure approved; MYP Year 1 Unit 1 v3 candidate is founder-approved, its six-field live counter is implemented, and the 31 October AI-assisted editorial/source desk review is recorded. Human academic review, current objective mapping, unit-level rights, suitability, manual accessibility and release approval remain separate and open.  
+**Version:** 1.5 — diagnostic-first sequencing clarification  
+**Status:** The Year 1 guide/implementation structure and route-specific curriculum-content Top Five remain existing approved/reviewed records. The current Year 1 Unit 1 candidate is v4 (not v3); founder approval for exact v4 content, human academic review and age/level/context suitability is recorded. Unit-level rights/territory, visual-context, manual accessibility and release gates remain open. All further Year 1 content work is deferred during the diagnostic-first cycles.  
 **Pathway ID:** ib-myp-lal-y1.  
 **Linked guide:** docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md.  
 **Research audit:** docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.  
@@ -176,7 +176,7 @@ The 30 October v2.0 standard was applied to this MYP unit: its v2 main prose and
 
 Revise the teacher-only pack (`src/content/pilotLessonPack.ts`) so every objective item carries the correct answer, AI-drafted/human-validated reasoning and rationale for every alternative; ordering or matching tasks must explain the sequence/pairing logic. Every typed-response task must show an expected length and include a question-specific model response, acceptable interpretations, criteria and feedback. Follow `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`.
 
-This is the next item in the mandatory sequence, ahead of Cambridge Stage 7 and CBSE Grade 6. The old content version's founder approval is not a review pass for the revised version. No UI, route, build or release is authorised by this documentation note.
+Historical sequence instruction superseded 31 October 2026. No MYP Year 1 teacher-pack revision or Cambridge Stage 7/CBSE Unit 1 migration is active during the diagnostic-first cycles. Existing exact-version approvals and outstanding gates remain unchanged. No UI, route, build or release is authorised by this documentation note.
 
 ## 9. Unit 1 v3 candidate revision and review gates — 30 October 2026
 
@@ -202,7 +202,7 @@ The earlier sequence sections that describe the live counter as future work are 
 
 Current public IB evidence verifies the broad six skill areas, school-based assessment model and 50-hour annual baseline, but not the applicable current detailed Year 1 objective/strand mapping. The dated public 2014/15 material is legacy reference; Enhanced MYP beta is not final current guidance. Keep `officialObjectiveCodes` empty and `mappingStatus` unverified.
 
-AI-assisted editorial review and current source notes are in `docs/PILOT_UNIT_REVIEW.md`. Human academic validation remains pending. The human reviewer must resolve the Q4 source-capitalization and Q3 “shelter”/poster-description notes, assess actual learner-level suitability, and sign the exact v3 material. Unit-level rights/territory approval, visual-asset/context review and manual accessibility remain separate. No release is authorized; keep PR #14 draft/unmerged. Do not begin the Cambridge Stage 7 content migration until the MYP gates are addressed and the founder explicitly authorizes the next step.
+AI-assisted editorial review and current source notes are in `docs/PILOT_UNIT_REVIEW.md`. Human academic validation remains pending. The human reviewer must resolve the Q4 source-capitalization and Q3 “shelter”/poster-description notes, assess actual learner-level suitability, and sign the exact v3 material. Unit-level rights/territory approval, visual-asset/context review and manual accessibility remain separate. No release is authorized; keep PR #14 draft/unmerged. Historical next-step instruction superseded 31 October 2026: even after the outstanding MYP Year 1 rights/accessibility gates are addressed, do not automatically begin Cambridge Stage 7 content migration. Finish the selected Grade 9 IB MYP and Cambridge Grade 6 diagnostic cycles first, then follow the founder's explicit curriculum-content order.
 
 ## 13. Route-specific Top Five research applied to the implementation structure — 31 October 2026
 
@@ -221,3 +221,10 @@ The MYP Year 1 guide refresh is backed by a completed, ranked Top Five independe
 **Research gate status:** MYP Year 1 guide/implementation research is complete for the current public evidence and ranked Top Five. No official detailed Year 1 mapping has been inferred. This completed research does not grant release approval or alter the remaining v3 academic, rights, suitability, accessibility and release gates.
 
 This addendum is documentation/implementation-structure work only. It does not authorize a change to the approved v3 learner/teacher content, app code, route data, merge or production deployment.
+
+
+## 14. Diagnostic-first sequencing overlay — 31 October 2026
+
+This plan remains the implementation record for **IB MYP Year 1**, not the requested Grade 9 / MYP Year 4 diagnostic cycle. The current active learning-readiness work is defined in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`: Grade 9 IB MYP first (MYP Year 4 is a working assumption; verify actual school placement), then Cambridge Grade 6 (exact course/stage to be verified). The new diagnostic and evaluation process has its own standard and implementation QA; do not reuse this Year 1 implementation plan as its test blueprint without fresh research and validation.
+
+All further Unit 1 and curriculum-content production/migration is paused while those two diagnostic cycles are completed. This Year 1 guide, implementation structure, Top Five and exact-v4 content approval are preserved; rights/territory, visual context, manual accessibility and release gates remain open. The previous MYP Year1 → Cambridge Stage7 → CBSE unit sequence is historical, not active. After the diagnostic cycles the founder will specify the next content order. Existing architecture and academic, teacher-pack, rights, accessibility, QA and release processes remain unchanged.
