@@ -1,7 +1,7 @@
 # Teacher-Pack, Question Design and Feedback Standard
 
-**Version:** 1.2  
-**Approved:** 30 October 2026  
+**Version:** 1.3  
+**Approved:** 31 October 2026  
 **Status:** Binding standard for all English learning tracks and all current/future learner-facing objective and typed-response tasks.  
 **Related source of truth:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md`, `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md`, and `docs/curriculum/UNIT_PRODUCTION_REGISTER.md`.
 
@@ -122,3 +122,24 @@ When genuine marking is implemented:
 Do not add live AI/API cost, a database, authentication, a production grading endpoint or any other paid/infrastructure dependency without the required founder approval.
 
 **Version 1.2 implementation clarification — 31 October 2026:** The MYP v3 implementation now uses the shared response-field component to associate prompt, expected range and live count with each input. This is the required pattern for all new/current typed-response fields; tests check the accessible name and all referenced descriptions. Automated tests do not replace manual screen-reader and keyboard review.
+
+
+## 8. Diagnostic and remedial teacher/editor materials — 31 October 2026
+
+For diagnostics and the five-day remedial layer, apply Sections 2–7 above to every relevant objective and typed-response item, with the following additional requirements.
+
+### Diagnostic item records
+
+The separate diagnostic teacher/editor pack must record each item's stable ID/version, the construct/skill and sub-skill it measures, intended demand, response format, stimulus/source, correct/accepted response, scoring rule, evidence expected, common misconceptions and the reason the item provides evidence of that skill. Where partial credit or alternative interpretations are possible, document them. Include the item-to-skill map, coverage balance, scoring aggregation and confidence/insufficient-evidence rules. Do not treat a wrong response as a confirmed skill gap without sufficient supporting evidence.
+
+Record a separate rationale for every selected/distractor option and each sequence position, as appropriate. The scoring and skill-priority logic must be independently checked by the human academic reviewer against the actual item and selected curriculum-age context.
+
+### Remedial lesson records
+
+The remedial course must use the same structure and quality bar as the existing units. Every day/task needs a learning objective, explicit purpose ("why the learner is doing this task"), time allocation, instruction/explanation, worked model where appropriate, guided and independent practice, enough questions/activities for the allotted time, evidence of success, feedback and an exit check. Each of the five sessions must total 60 minutes. Each identified diagnostic improvement area must map to at least one specific remedial task; map tasks in descending Remediation Priority 5 to 1 order.
+
+The teacher/editor pack must also include each diagnostic improvement area's source evidence, priority rationale, target skill, the relevant day/task IDs, expected successful performance, accepted alternatives and next steps. Keep teacher-only scoring keys and private priority logic outside the learner-facing bundle.
+
+The complete five-day course must include the fresh post-course outcome check and a clear item/construct crosswalk to the diagnostic baseline. Avoid exact question repetition where it could create a practice effect. Report outcome differences only when scoring and constructs are comparable.
+
+This addition does not relax the existing human-validation, content-rights, accessibility, data/privacy, teacher-pack separation or explicit release requirements. See `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md` for the binding cycle-level requirements.
