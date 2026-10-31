@@ -5,7 +5,7 @@
 **Learner source:** `src/content/pilotLearnerLesson.ts`  
 **Teacher/editor source:** `src/content/pilotLessonPack.ts`  
 **Review record updated:** 31 October 2026  
-**Current disposition:** Founder-approved exact v3 content candidate; AI-assisted editorial desk review completed; human academic review and all release gates remain pending.  
+**Current disposition:** Founder-approved exact v3 content candidate; AI-assisted editorial desk review completed 31 October 2026; MYP Year 1 Top Five research completed and applied to the guide/implementation plan. Two minor editorial points and human academic, rights/territory/image-context, age/level, manual accessibility and release gates remain open.
 **PR:** [#14 — draft and unmerged](https://github.com/gradioprep/gradioprep-website/pull/14)
 
 ## 1. Version and approval boundary
@@ -109,3 +109,9 @@ The earlier preview version 1 received an academic content-review pass for pilot
 ## 9. Release guardrail
 
 Version 3 remains an unreleased founder-approved content candidate. Do not merge, publish to normal learner navigation or treat the preview as an official IB course. Keep teacher/editor answers out of the client bundle. Do not begin the Cambridge Stage 7 content revision until the MYP v3 technical checkpoint and the remaining MYP review/authorization requirements have been addressed and the founder explicitly authorizes the next sequence step.
+
+## 7. Cross-cohort status update — 31 October 2026
+
+The MYP-specific Top Five independent-source audit is complete and recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1; its findings are already applied in the Year 1 guide and implementation plan. This does not close the separate review gates in Sections 3–6 above. The two flagged editorial points remain unresolved by design; do not silently edit founder-approved v3. Any agreed content correction must be versioned and reviewed again.
+
+The cross-curriculum sequence, current candidate status, Cambridge/CBSE passage counts and remaining implementation steps are maintained in `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md`. Cambridge Stage 7 is not to begin content migration until the MYP review checkpoint is addressed and the next step is explicitly authorised.
