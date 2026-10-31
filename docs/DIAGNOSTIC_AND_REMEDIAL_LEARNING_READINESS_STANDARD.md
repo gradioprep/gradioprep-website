@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Approved:** 31 October 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
@@ -73,7 +73,7 @@ The report is a central learning product, not a score sheet. It must translate d
 - Demonstrated strengths and areas for development.
 - A confidence/evidence indicator for each judgement, including insufficient evidence where appropriate.
 - Remediation priority and the reason for it.
-- Exact links from each priority area to five-day remedial tasks.
+- Exact links from each priority area to the personalised remedial tasks and post-course check.
 - Clear next steps and a post-remediation comparison after valid reassessment.
 
 Use readable horizontal bars for skill comparisons; radar charts only where a small set of comparable dimensions is interpretable; circle/donut charts only where categories form a meaningful whole and denominators are clear; and line graphs only when at least two valid measurements over time exist. Never manufacture a trend from one diagnostic, use decorative charts or overstate precision. Keep tables and dense data blocks to a minimum. Provide short explanations beside charts, accessible text equivalents, direct labels and honest scales. Do not show percentiles, grade predictions or population comparisons without a current, appropriately matched and documented norming basis.
@@ -92,7 +92,7 @@ These are instructional routing priorities, not school/examination grades, perma
 
 ## 8. Five-day personalised remedial course
 
-Each learner receives a plan based on their own diagnostic profile. The course is **five sessions of 60 minutes each**. Every identified improvement area must map to at least one specific teaching/practice task. If all needs cannot reasonably be addressed in five hours, state what remains and recommend further support rather than promise mastery.
+Each learner receives a plan based on their own diagnostic profile. **The default design target is five sessions of 60 minutes each; five sessions is a recommendation, not a fixed limit.** Select the number of sessions needed to address every identified area of improvement comprehensively, with a maximum of **seven sessions of 60 minutes each**. Every identified improvement area must map to one or more specific teaching/practice tasks, with sufficient teaching, guided practice, independent transfer and feedback. Do not compress or omit a significant improvement area merely to force a five-session plan. If all needs cannot reasonably be addressed within seven sessions, state what remains and recommend further support rather than promise mastery.
 
 Follow the same approved unit structure and teacher-pack standards as existing curriculum units. Each day includes clear objectives, the explicit purpose of every task, teaching/explanation, worked model or think-aloud where appropriate, guided practice, independent application/transfer, formative feedback and an exit check/reflection. Include enough meaningful questions and activities to use the full hour without padding.
 
@@ -124,9 +124,12 @@ Use synthetic test records and fictional answers in development/hosted previews.
 
 ## 12. Completion gates for each cycle
 
-A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; skill taxonomy, test blueprint, scoring and priority rules are approved; diagnostic items and teacher/editor rationales are human-validated; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the five-day plan contains five 60-minute sessions and maps every improvement area; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
+A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; skill taxonomy, test blueprint, scoring and priority rules are approved; diagnostic items and teacher/editor rationales are human-validated; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the personalised remedial course contains five 60-minute sessions by default, or the justified number up to the maximum of seven 60-minute sessions, and maps every improvement area comprehensively; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
 
 Drafting or passing automated tests alone does not complete or release a cycle. No next cycle or curriculum-content queue begins automatically. No merge, production deployment or release occurs without separate explicit approval.
 
 
 **Version 1.1 scope confirmation — 31 October 2026:** The Founder has explicitly confirmed that Grade 9 corresponds to MYP Year 4 in the relevant school/programme context. This replaces the earlier working-assumption wording for Cycle 1. The official IB MYP age band (11–16) is a programme-level reference, not a substitute for an individual learner's age where age-specific accommodations or interpretation require it. Cycle 1 provider research is complete and awaits Founder review; skill taxonomy, blueprint, item authoring and implementation remain gated by that review.
+
+
+**Version 1.2 founder clarification — 31 October 2026:** The Founder clarified that five 60-minute sessions are a suggested default, not a mandatory duration or session count. Use up to seven 60-minute sessions when necessary to address all diagnostic improvement areas comprehensively. Never exceed seven sessions; do not omit or inadequately teach an identified improvement area solely to preserve a five-session plan. This rule applies to all diagnostic cycles and supersedes earlier rigid five-session wording.
