@@ -1,7 +1,7 @@
 # IB MYP Language and Literature — Year 1 Pathway Implementation Plan
 
-**Version:** 1.2 — six-unit architecture, v3 review state and 250-word/live-counter controls  
-**Status:** implementation structure approved; MYP Year 1 Unit 1 v3 content candidate approved by the founder on 30 October 2026. Fresh human academic review, official mapping, rights, suitability, manual accessibility and release gates remain separate.  
+**Version:** 1.3 — six-unit architecture, current IB-source boundary and MYP v3 review checkpoint  
+**Status:** implementation structure approved; MYP Year 1 Unit 1 v3 candidate is founder-approved, its six-field live counter is implemented, and the 31 October AI-assisted editorial/source desk review is recorded. Human academic review, current objective mapping, unit-level rights, suitability, manual accessibility and release approval remain separate and open.  
 **Pathway ID:** ib-myp-lal-y1.  
 **Linked guide:** docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md.  
 **Research audit:** docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.  
@@ -193,3 +193,11 @@ The founder approved the exact IB MYP Year 1 Unit 1 v3 learner/teacher content c
 For new or materially revised passage content from this point forward, platform-original passages of 250 words or fewer are permitted; passages over 250 words must use a recognised writer's verified public-domain work. The current MYP v3 uses registered public-domain passages and remains unchanged.
 
 The live word counter is retrospective: implement it across all existing typed-response fields, beginning with the six MYP v3 fields, then apply it to any existing question-bank/preview fields and all future typed-response fields. Display current/ideal count (e.g. 38/50, 59/50); the ideal target is not a maximum.
+
+## 12. Current MYP Year 1 Unit 1 v3 review/authorization checkpoint — 31 October 2026
+
+The earlier sequence sections that describe the live counter as future work are historical. The reusable counter is implemented across entry, Q2–Q5 and exit with the approved ideal targets 20/50/75/55/55/50; all existing response ranges and all approved v3 learner/teacher content remain unchanged. Each field now exposes its task prompt, expected response range and changing live count through its accessible description. GitHub Actions run #295 passed the TypeScript/Vite build, teacher-pack separation and 16/16 Chromium tests.
+
+Current public IB evidence verifies the broad six skill areas, school-based assessment model and 50-hour annual baseline, but not the applicable current detailed Year 1 objective/strand mapping. The dated public 2014/15 material is legacy reference; Enhanced MYP beta is not final current guidance. Keep `officialObjectiveCodes` empty and `mappingStatus` unverified.
+
+AI-assisted editorial review and current source notes are in `docs/PILOT_UNIT_REVIEW.md`. Human academic validation remains pending. The human reviewer must resolve the Q4 source-capitalization and Q3 “shelter”/poster-description notes, assess actual learner-level suitability, and sign the exact v3 material. Unit-level rights/territory approval, visual-asset/context review and manual accessibility remain separate. No release is authorized; keep PR #14 draft/unmerged. Do not begin the Cambridge Stage 7 content migration until the MYP gates are addressed and the founder explicitly authorizes the next step.

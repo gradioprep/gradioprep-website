@@ -1,7 +1,7 @@
 # MYP Year 1 Unit 1 — Version 3 Reconciliation and Review Record
 
-**Version:** 1.3  
-**Date:** 30 October 2026  
+**Version:** 1.4  
+**Date:** 31 October 2026  
 **Status:** Version 3 content candidate approved by the founder on 30 October 2026; fresh human academic review and independent mapping, rights, suitability, accessibility and release gates remain open in draft PR #14.  
 **Unit:** IB MYP Language and Literature Year 1, Unit 1.  
 **Content version:** 3 — “How writers and creators shape meaning”.  
@@ -165,3 +165,36 @@ The counter updates from the controlled text value when the learner types, paste
 Playwright tests were added for the six initial counts, accessibility linkage, word tokenisation, typing/editing/clearing, no `maxLength`, and over-target response preservation. The newest GitHub Actions run must pass before the technical checkpoint is marked verified. The existing v3 content and separate teacher/editor pack are unchanged. No Cambridge/CBSE content revision, merge, production deployment or Cloudflare configuration change is included.
 
 **Unchanged independent gates:** fresh human academic review, current official IB mapping, final unit-level rights/territory review, age/level suitability, manual accessibility review and explicit release approval remain open. Do not start Cambridge until the MYP technical verification and remaining review/authorization checkpoint are addressed.
+
+## 19. MYP v3 editorial, source and accessibility checkpoint — 31 October 2026
+
+### Current official-source position
+
+The current public IB Language and Literature page confirms the six skill areas and broad text/context/audience/purpose scope. The current public assessment page says school-based tasks are created and marked by teachers against prescribed objectives/criteria. The public subject brief is dated “From 2014”; the indexed detailed guide is for use from September 2014 or January 2015. Enhanced MYP beta planning guidance identifies 2027 as its full-release year. These sources do not verify the applicable current detailed Year 1 subject guide. Keep official mapping unverified and codes blank; use legacy A–D only as an internal historical audit lens.
+
+### AI-assisted editorial review
+
+The 31 October desk review is recorded in `docs/PILOT_UNIT_REVIEW.md`. It checks prompt-to-model fit, answer/distractor logic, response-range fit, evidence targets, feedback specificity and learner/teacher data separation. All six current model answers were counted with the project convention and fall inside their preserved ranges (entry 17/20 target; Q2 47/50; Q3 72/75; Q4 45/55; Q5 45/55; exit 48/50). No passage, question, prompt, range, answer, model or teacher-pack content was edited during this pass.
+
+Two human-review points remain: Q4's model quotation capitalization differs from the exact excerpt (“On a large scale” versus “on a large scale”); Q3's teacher/model mention of a “bright shelter” should be checked against the actual photograph and current visual description/alt text. Do not silently amend these approved v3 materials.
+
+### Rights/source record
+
+The Dickens and Carroll excerpt bodies are 95 and 129 words respectively under the project's lexical method. The registered English historical editions and their passage anchors were rechecked against their source records. The source register documents India Copyright Act section 22 and UK CDPA 1988 section 12 term calculations for the underlying works. The Commons file page for the existing night-bus photo states CC0 1.0 and names Mateusz Konieczny. These are source/file-page checks, not final unit-level legal/territory clearance, verification of the visual fit or a blanket clearance for other territories. Unit-level rights, exact image/alt-text consistency and any other relevant visual rights remain pending.
+
+### Accessible response context
+
+The response textareas now reference three pieces of information through `aria-describedby`: the exact question/entry/exit prompt, the expected response-range guidance and the live word count. The Playwright test verifies those IDs, visible prompts/ranges and accessible field names. GitHub Actions run #295 passed the build, separation check and 16/16 Chromium tests. This is code-level and automated evidence only; human screen-reader, keyboard/focus, contrast, zoom/reflow and cross-browser review remain pending.
+
+### Independent gates and sequencing
+
+- Founder approval: recorded for exact v3 on 30 October 2026; not release approval.
+- AI-assisted editorial review: completed 31 October; two minor human-review points above remain.
+- Human academic validation: **pending**.
+- Exact current official Year 1 mapping: **unverified**; no codes assigned.
+- Unit-level rights/territory and visual review: **pending**.
+- Age/level/context suitability: **pending**.
+- Manual accessibility: **pending**.
+- Release approval: **not granted**.
+
+PR #14 remains draft and unmerged. The counter/source/desk review do not authorize Cambridge. Proceed to Cambridge Stage 7 only after the remaining MYP academic, mapping, rights, suitability, accessibility and authorization requirements are resolved and the founder explicitly approves the next step.
