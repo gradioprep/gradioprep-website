@@ -108,7 +108,7 @@ The founder has approved `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` and `docs/
 
 Revise the full teacher-only pack so every objective item has the answer, question-specific reasoning and a rationale for each alternative; ordering/matching tasks must explain the sequence or pairing logic. Typed responses need a question-specific length, model response, accepted interpretations and item-specific feedback. Audit all other mini-texts and stimuli during this work. The existing 26 October founder content approval remains historical for the exact former v2 only; the revised version requires fresh review. This MYP revision is first in the new migration sequence, followed by Cambridge Stage 7 and then CBSE Grade 6.
 
-## Version 3 reconciliation — 30 October 2026
+## Historical Version 3 reconciliation — 30 October 2026
 
 **Current candidate:** version 3, “How writers and creators shape meaning”, prepared on the existing branch `feat/myp-y1-unit1-v2` in draft PR #14. This section supersedes the earlier “What must happen next” and version 2 current-status paragraphs above for present-day work. The earlier v1/v2 records and their approvals remain historical and unchanged.
 
@@ -156,7 +156,7 @@ The founder's later threshold decision does not change this v3 candidate: its Di
 At the time this 30 October record was written, the next code integration was the retrospective live word counter across all six existing typed-response fields. That retrofit is now complete and verified in GitHub Actions run #295. Existing response ranges and approved v3 content remain unchanged. Apply the shared counter to all later typed-response fields.
 
 
-## 18. Retrospective MYP v3 live-counter implementation — 30 October 2026
+## 18. Historical retrospective MYP v3 live-counter implementation — 30 October 2026
 
 The word counter is implemented on the existing PR #14 branch in commit `0a90f3eb550bba9e7b17e7db1594826f28e1cca7`. It is a shared reusable client-side component and one lexical word-count helper. All six existing learner-facing typed-response fields display their approved current/ideal target: entry 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50. Their expected ranges remain unchanged: 15–25; 40–55; 65–85; 45–65; 45–65; and 45–60 respectively.
 
@@ -176,7 +176,7 @@ The current public IB Language and Literature page confirms the six skill areas 
 
 The 31 October desk review is recorded in `docs/PILOT_UNIT_REVIEW.md`. It checks prompt-to-model fit, answer/distractor logic, response-range fit, evidence targets, feedback specificity and learner/teacher data separation. All six current model answers were counted with the project convention and fall inside their preserved ranges (entry 17/20 target; Q2 47/50; Q3 72/75; Q4 45/55; Q5 45/55; exit 48/50). No passage, question, prompt, range, answer, model or teacher-pack content was edited during this pass.
 
-Two human-review points remain: Q4's model quotation capitalization differs from the exact excerpt (“On a large scale” versus “on a large scale”); Q3's teacher/model mention of a “bright shelter” should be checked against the actual photograph and current visual description/alt text. Do not silently amend these approved v3 materials.
+At the 31 October v3 desk-review checkpoint, two human-review points remained: Q4's model quotation capitalization differed from the exact excerpt (“On a large scale” versus “on a large scale”); Q3's teacher/model mention of a “bright shelter” did not align with the then-current visual description/alt text. These historical v3 flags were resolved as targeted edits in the separate v4 candidate described in Section 20; v4 now requires its own fresh founder and human academic review.
 
 ### Rights/source record
 
