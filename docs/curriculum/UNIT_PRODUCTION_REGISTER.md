@@ -8,7 +8,7 @@
 
 | Curriculum group | Year/stage chapters available | Current guide state | Main unresolved check |
 |---|---|---|---|
-| IB MYP Language and Literature | Year 1 standalone guide: docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md; implementation: docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md | Guide v1.1, implementation v1.2 and Unit 1 v2 content founder-approved as a candidate; separate academic/mapping/rights/accessibility/suitability/release gates open | Official objective/strand mapping not claimed. Founder approved the v2 content as a candidate; separate academic, rights, accessibility/suitability and release gates remain open. Years 2–5 in the legacy group file remain drafts. |
+| IB MYP Language and Literature | Year 1 standalone guide: docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md; implementation: docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md | Guide v1.5, implementation v1.4, MYP Year 1 Top Five review complete; current Unit 1 v4 editorial-correction candidate in draft PR #14 | Founder approval remains specific to exact v3 and does not transfer. Fresh v4 founder/human academic review, rights, accessibility/suitability and release gates remain open; official objective/strand mapping remains unverified. Years 2–5 remain drafts. |
 | Cambridge Lower Secondary English 0861 | Stages 7–9 in docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md | Public-framework-aligned group guide drafted | Pin the currently applicable official framework/version and verify exact objective IDs |
 | IB DP Language A: Language and Literature | Year 1/Year 2 in docs/curriculum/IB_DP_LANGUAGE_A_LANGUAGE_AND_LITERATURE_GUIDE.md | Public-source-aligned guide drafted | Verify session-specific assessment details/criterion version against current official materials before scored mocks |
 | Cambridge IGCSE First Language English 0500 | Syllabus-wide guide and two proposed delivery phases in docs/curriculum/CAMBRIDGE_IGCSE_FIRST_LANGUAGE_ENGLISH_0500_GUIDE.md | Current 2027–2029 syllabus/specimen baseline recorded | Record each learner's examination year and component/route; map every task against the exact syllabus/specimen |
@@ -165,7 +165,7 @@ The binding standards are docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md v1.1, docs/
 
 **Approval/version control:** previous approval outcomes remain valid only for the exact versions reviewed. Material content changes require a new content version and relevant review. Adding the counter is a UI change and does not itself alter passage/question/teacher-pack content. Keep teacher-only data out of client imports and do not claim live grading or persistence.
 
-## 17. Current IB MYP Year 1 Unit 1 version 3 checkpoint — 30 October 2026
+## 17. Historical IB MYP Year 1 Unit 1 version 3 checkpoint — 30 October 2026
 
 PR #18 was merged to `main` on 30 October 2026. The MYP Year 1 Unit 1 migration was implemented as version 3 in existing PR #14. The founder approved this exact v3 learner/teacher content on 30 October 2026. Automated verification passed in GitHub Actions run #280 on commit `4c86a3fa570f75374da0b22197f66bc5f3752047`: TypeScript/Vite build, teacher-pack separation guard and 13/13 Chromium browser tests. The Cloudflare Workers branch-preview build also succeeded, without production deployment.
 
@@ -174,11 +174,11 @@ Version 3 includes the Dickens and Carroll public-domain extracts, an updated en
 **Review state:** founder content approval for exact v3 is recorded. Fresh human academic validation, current official IB guide/mapping verification, final unit-level rights/territory approval, age/level suitability, manual accessibility and explicit release approval remain open. Keep official objective codes blank. Do not start the Cambridge migration before the retrospective MYP word-counter step is complete and the founder explicitly authorises that transition.
 
 
-## 18. MYP Year 1 Unit 1 v3 live-counter retrofit — 30 October 2026
+## 18. Historical MYP Year 1 Unit 1 v3 live-counter retrofit — 30 October 2026
 
 Implemented on the existing PR #14 branch. The shared reusable counter appears on entry, Q2, Q3, Q4, Q5 and exit responses with ideal targets 20/50/75/55/55/50. Existing expected ranges and approved learner/teacher content remain unchanged. The shared tokenizer follows the rights-protocol word-count convention; counts remain live and unrestricted above target. Run #295 passed the build, teacher-pack separation, accessibility-association checks and all 16 Chromium tests. No content migration or production deployment occurred.
 
-## 19. MYP Year 1 Unit 1 v3 review checkpoint — 31 October 2026
+## 19. Historical MYP Year 1 Unit 1 v3 review checkpoint — 31 October 2026
 
 The current MYP candidate remains founder-approved v3 in PR #14. The word counter is implemented across entry/Q2/Q3/Q4/Q5/exit with targets 20/50/75/55/55/50 and the original response ranges preserved. The accessible response context now links prompt, range and live count. GitHub Actions run #295 passed all 16 Chromium tests, the TypeScript/Vite build and the teacher-pack separation guard. The draft PR remains unmerged; no production release occurred.
 
