@@ -1,14 +1,14 @@
-# MYP Year 1 Unit 1 — Version 3 Reconciliation and Review Record
+# MYP Year 1 Unit 1 — Version 4 Reconciliation and Review Record
 
-**Version:** 1.4  
+**Version:** 1.5  
 **Date:** 31 October 2026  
-**Status:** Version 3 content candidate approved by the founder on 30 October 2026; fresh human academic review and independent mapping, rights, suitability, accessibility and release gates remain open in draft PR #14.  
+**Status:** Version 4 is a draft editorial-correction candidate in PR #14; founder approval remains specific to exact v3 and does not transfer. Fresh human academic review and independent mapping, rights, suitability, accessibility and release gates remain open.  
 **Unit:** IB MYP Language and Literature Year 1, Unit 1.  
-**Content version:** 3 — “How writers and creators shape meaning”.  
+**Content version:** 4 — “How writers and creators shape meaning” (editorial-correction draft).  
 **Guide baseline:** MYP Year 1 guide v1.4 and implementation structure v1.3; current detailed IB Year 1 guide edition and exact official objective/strand mapping remain unverified.  
 **Important:** This record is not an official IB mapping, academic-review pass, rights clearance, accessibility approval or release authorization.
 
-The version 1 and version 2 sections below are historical records. Their founder/academic approvals apply only to those exact versions and do not transfer to version 3.
+The version 1, version 2 and version 3 sections below are historical records. Their approvals apply only to those exact versions and do not transfer to version 4.
 
 ## 1. Decision and version history
 
@@ -166,7 +166,7 @@ Playwright tests cover the six initial counts, accessible linkage to prompt/rang
 
 **Unchanged independent gates:** fresh human academic review, current official IB mapping, final unit-level rights/territory review, age/level suitability, manual accessibility review and explicit release approval remain open. Do not start Cambridge until the MYP technical verification and remaining review/authorization checkpoint are addressed.
 
-## 19. MYP v3 editorial, source and accessibility checkpoint — 31 October 2026
+## 19. Historical MYP v3 editorial, source and accessibility checkpoint — 31 October 2026
 
 ### Current official-source position
 
@@ -198,3 +198,15 @@ The response textareas now reference three pieces of information through `aria-d
 - Release approval: **not granted**.
 
 PR #14 remains draft and unmerged. The counter/source/desk review do not authorize Cambridge. Proceed to Cambridge Stage 7 only after the remaining MYP academic, mapping, rights, suitability, accessibility and authorization requirements are resolved and the founder explicitly approves the next step.
+
+
+## 20. Version 4 editorial corrections and current gate state — 31 October 2026
+
+The current PR #14 candidate is v4. It preserves the v3 lesson structure, both reading passages, all questions/prompts, response ranges, item IDs and teacher-pack architecture. Version 3 founder approval (30 October 2026) remains recorded for v3 only; v4 has not yet been approved by the founder or a human academic reviewer.
+
+- Q4 model-answer quotation casing is corrected to the original lowercase “on a large scale”.
+- Q3's unsupported “bright shelter” wording is removed. The exact Commons photograph was visually inspected and shows an open, raised paved platform, sign, orange streetlights, nearby tree and approaching headlights, with no shelter. Learner/teacher comparison language and visual description/alt text now align with the visible evidence.
+- Six live counters remain on entry/Q2/Q3/Q4/Q5/exit with ideal targets 20/50/75/55/55/50 and unchanged ranges 15–25, 40–55, 65–85, 45–65, 45–65 and 45–60. No cap, truncation or `maxLength` is used. Run #295 verifies v3 only; v4 needs a fresh CI run.
+- MYP Year 1 independent Top Five remains complete and already applied. No repeat audit is required.
+
+Human academic review of exact v4, founder approval of exact v4, age/level/context suitability, unit-level image/text rights and territory review, manual accessibility, and explicit release approval remain open. Exact current official IB Year 1 mapping is still unverified; do not assign codes. Cambridge Stage 7 remains inactive until the MYP human gates are addressed and the founder explicitly authorizes the next stage.
