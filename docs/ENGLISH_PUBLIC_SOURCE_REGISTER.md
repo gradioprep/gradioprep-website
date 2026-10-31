@@ -301,7 +301,7 @@ The MYP Year 1 route-specific Top Five is complete and recorded in `docs/curricu
 
 | Route | Independent Top Five state | Application to guide/implementation | Passage inventory relevant to current Unit 1 |
 |---|---|---|---|
-| IB MYP Language and Literature Year 1 | **Complete** — five providers individually ranked and evidence-inspected in the dedicated MYP landscape review v1.1 | Applied in Year 1 guide v1.5 and implementation plan v1.4 | Current MYP Year 1 Unit 1 v4 uses registered Dickens/Carroll public-domain extracts (95/129 words) |
+| IB MYP Language and Literature Year 1 | **Complete** — five providers individually ranked and evidence-inspected in the dedicated MYP landscape review v1.1 | Applied in Year 1 guide v1.5 and implementation plan v1.5 | Current MYP Year 1 Unit 1 v4 uses registered Dickens/Carroll public-domain extracts (95/129 words) |
 | Cambridge Lower Secondary English 0861 Stage 7 | **Complete** — five ranked and evidence-inspected providers in `CAMBRIDGE_LS_S7_RESOURCE_LANDSCAPE_REVIEW.md` v1.0 | Applied in the Stage 7 group guide v1.2; unsupported official mapping remains unverified | Current original warm-up/main/exit bodies: 16/221/27 words; all within threshold |
 | CBSE English Grade 6 | **Pending/deferred** — its curriculum-content Top Five is not active during diagnostic cycles | Apply only after the audit when the founder resumes CBSE content work; keep outcomes distinct | Current original “The Turning Sign” body: 165 words; within threshold |
 
