@@ -1,7 +1,7 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.3  
-**Status:** Approved pathway scope and authorised implementation; Grade 6 Unit 1 v1.0 exists as an unreleased draft candidate in a separate stacked pull request. It is independently designed, not an official CBSE syllabus map. Unit-specific academic review, exact source/rights checks, accessibility/suitability, final mapping and release approval remain separate gates.  
+**Version:** 1.9  
+**Status:** Approved pathway scope and authorised implementation. Grade 6 Unit 1 v1.0 “The Turning Sign” received founder approval for the academic-content gate on 28 October 2026; its 165-word original story may remain under the 250-word allowance. The internal originality/provenance screen passed within its recorded limits. The route-specific Grade 6 Top Five remains pending until the Cambridge checkpoint; the teacher pack and live-counter migration also remain pending. The exact current *Poorvi* reprint and unit-specific official CBSE objective code remain unverified. The unit is unreleased; manual accessibility and release decisions remain open.  
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
 **Implementation status (28 October 2026):** Curriculum design and learner-safe source draft for CBSE Grade 6 Unit 1 are now proposed in a separate pull request; no application route/catalogue addition or release is included. Candidate code is not imported into the live UI.
@@ -64,7 +64,7 @@ After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 �
 
 - Pathway family and implementation sequence approved.
 - Grade 6 source context checked against official NCERT/CIET public pages on 28 October 2026.
-- A platform-original candidate for CBSE Grade 6 Unit 1 has been drafted with separate learner content, teacher/editor pack and QA/source record; it remains unreleased and has not received unit-specific human approval.
+- The platform-original learner-facing v1.0 “The Turning Sign” was approved by the founder for the academic-content gate on 28 October 2026. Its internal originality/provenance screen passed within its stated limitations; it remains unreleased.
 - The unit is not assigned an official CBSE objective code; the source evidence checked supports broad course/textbook context and prepositions of location, not an exact current Grade 6 English objective descriptor.
 - Exact textbook reprint/version and all grade-specific competencies/outcomes still require a scoped follow-up before a future official mapping claim.
 - Specialist EdTech comparison and wider class-wise official-source audit for Grades 6–12 remain incomplete.
@@ -81,7 +81,7 @@ After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 �
 
 ## 7. Approval interpretation
 
-The founder approved the CBSE Grades 6–12 pathway scope and has now instructed implementation of the next logical step after confirming that prior verification and approvals were already given for the preceding Cambridge Stage 7 checkpoint. This authorises development of a CBSE Grade 6 Unit 1 draft candidate, not an official syllabus mapping or automatic release approval for this new unit.
+The founder approved the CBSE Grades 6–12 pathway scope and the exact learner-facing Grade 6 Unit 1 v1.0 “The Turning Sign” for the academic-content gate on 28 October 2026. This approval applies only to that exact learner content; it does not establish an official CBSE map, complete the teacher-pack/counter migration, close manual accessibility or grant release approval.
 
 
 ## 8. Grade 6 Unit 1 candidate source check — 28 October 2026
@@ -95,8 +95,8 @@ The founder approved the CBSE Grades 6–12 pathway scope and has now instructed
 
 ### Candidate design boundary
 
-The current draft, **“The Missing Bell,”** uses a short original animal narrative to teach reading a story for events, clues and supported inference, plus a brief activity on prepositions of location. It does not reproduce the named *Poorvi* stories or their exercise wording. No external image/photo, third-party excerpt, textbook scan or copied NCERT asset is included.
+The learner-facing v1.0, **“The Turning Sign,”** uses a short platform-original animal narrative to teach reading a story for events, clues and supported inference, plus a brief activity on prepositions of location. The story body is 165 words under the project's lexical convention and may remain under the 250-word allowance. It does not reproduce the named *Poorvi* stories or their exercise wording. No external image/photo, third-party excerpt, textbook scan or copied NCERT asset is included.
 
 **Mapping state:** unverified. No official CBSE objective/competency code is assigned. Before any mapping claim or release, confirm the applicable current NCERT textbook reprint and the appropriate Grade 6 English learning outcome/competency in an exact official source. Do not infer a code from the activity page alone.
 
-**Source/rights state:** the lesson's short text and tasks are platform-original and have received a limited public distinctive-phrase screen with no exact passage-level match found in returned results. The unit is not yet human-approved. The exact-source and no-copy rule remains binding for future sourced text/media. The separate QA record logs the review scope and limitations.
+**Source/provenance state:** the lesson's short text and tasks are platform-original and the internal originality/provenance screen passed within the recorded search limits; this is not a formal legal opinion or a guarantee of exclusivity. Founder approval of exact v1.0 for the academic-content gate is recorded on 28 October 2026. The exact current *Poorvi* reprint and any unit-specific official CBSE mapping remain unverified. The separate QA record logs the review scope and limitations.
