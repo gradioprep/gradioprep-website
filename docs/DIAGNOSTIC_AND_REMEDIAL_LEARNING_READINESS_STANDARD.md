@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Approved:** 31 October 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
@@ -18,7 +18,7 @@ Complete and validate all three features for one selected level before starting 
 
 The current order is defined only in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`:
 
-1. **Grade 9 — IB MYP Language and Literature.** MYP Year 4 is a working assumption; verify the student's actual school MYP year and age.
+1. **Grade 9 — IB MYP Language and Literature.** Grade 9 = MYP Year 4 is confirmed by the Founder for the relevant school/programme context. Do not treat it as a working assumption or ask the Founder to reconfirm it. The official MYP programme age band is 11–16; the individual learner's chronological age has not been separately specified.
 2. **Grade 6 — Cambridge English.** Verify the official Cambridge stage/course and language route. Do not substitute Lower Secondary Stage 7 for the requested Grade 6 target.
 
 There is no automatic rotation or cyclical order. Do not pre-research the other year/stage, create a generic all-years diagnostic, or start a later cycle before the preceding cycle is complete and the founder directs the transition.
@@ -27,7 +27,7 @@ All existing curriculum-unit production and queued unit migrations are paused wh
 
 ## 3. Scope lock for each selected level
 
-Before provider research or item authoring, record the requested school-grade label, actual programme/course, school year/stage, learner age range, language route, applicable official framework and edition/session where identifiable, and any local/abbreviated implementation that affects placement. State what is verified, provisional or unresolved.
+Before provider research or item authoring, record the requested school-grade label, actual programme/course, school year/stage, learner age range, language route, applicable official framework and edition/session where identifiable, and any local/abbreviated implementation that affects placement. State what is verified, provisional or unresolved. For Cycle 1, the Founder has confirmed Grade 9 = MYP Year 4 for the relevant school/programme context; the official programme age band is 11–16. Do not reopen the grade/year mapping. Record the individual learner's exact age only if it becomes necessary for item accessibility, accommodation or interpretation.
 
 A school-grade label is not an official curriculum stage. Do not silently turn uncertain mapping into an official course-code or objective claim. If the exact placement cannot be confirmed, keep the requested grade label and record the limitation; do not silently substitute another stage.
 
@@ -127,3 +127,6 @@ Use synthetic test records and fictional answers in development/hosted previews.
 A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; skill taxonomy, test blueprint, scoring and priority rules are approved; diagnostic items and teacher/editor rationales are human-validated; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the five-day plan contains five 60-minute sessions and maps every improvement area; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
 
 Drafting or passing automated tests alone does not complete or release a cycle. No next cycle or curriculum-content queue begins automatically. No merge, production deployment or release occurs without separate explicit approval.
+
+
+**Version 1.1 scope confirmation — 31 October 2026:** The Founder has explicitly confirmed that Grade 9 corresponds to MYP Year 4 in the relevant school/programme context. This replaces the earlier working-assumption wording for Cycle 1. The official IB MYP age band (11–16) is a programme-level reference, not a substitute for an individual learner's age where age-specific accommodations or interpretation require it. Cycle 1 provider research is complete and awaits Founder review; skill taxonomy, blueprint, item authoring and implementation remain gated by that review.
