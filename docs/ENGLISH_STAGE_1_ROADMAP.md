@@ -1,6 +1,6 @@
 # English Stage 1 — Curriculum Roadmap
 
-**Status:** Working roadmap. MYP Year 1 guide/implementation and Unit 1 v2 remain a separate content candidate with their own gates. Cambridge Stage 7 Unit 1 v1.3 has founder-confirmed review/approval; its officially evidenced mapping stays limited to 7Ri.03 for explicit-information items. Build checks #250/#251 and preview runs #19/#20 passed on the Cambridge preview branch. CBSE Grade 6 Unit 1 “The Turning Sign” learner-facing v1.0 has now been approved for the academic-content gate by the founder (28 October 2026). The NCERT Grade 6 English Bridge Month Programme supports partial alignment for narrative reading and event sequencing; no unit-specific CBSE code is assigned. PR #16 remains draft/unmerged and unreleased; its content data remains unimported in normal app routes. A controlled unlinked preview is now available in [PR #17](https://github.com/gradioprep/gradioprep-website/pull/17), deployed at [the hosted preview URL](https://pr-17-gradioprep-website.wandering-scene-1822.workers.dev/preview/cbse-grade-6/english/unit-1). Automated checks passed; manual hosted visual, keyboard/focus, screen-reader and zoom/reflow review remains next. This is not normal navigation or release.
+**Status:** Current first-cohort status is maintained in `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md` (31 October 2026). Sequence remains MYP Year 1 → Cambridge Stage 7 → CBSE Grade 6. MYP v3 counters and automated checks are complete, but its human review flags and release gates remain open. Cambridge v1.3 prior review confirmations are retained; its route-specific Top Five and teacher-pack/counter migration remain outstanding. CBSE v1.0 remains an approved content candidate, with its own Top Five, teacher-pack and counter migration outstanding. Exact current official mapping remains unverified where noted; this does not block independent research. Do not skip a blocked cohort, start Unit 2, merge or deploy.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Purpose:** Turn the approved Stage 1 scope into a trackable production plan without claiming full syllabus coverage or inventing official curriculum mappings.
 
@@ -11,7 +11,8 @@
 - Before an item is published, record the relevant programme, course, year/stage, syllabus edition (where applicable), skill objective, task type and review status.
 - Verify mappings against the applicable official specification. Record the official URL, edition/code, date checked and reviewer. Do not invent objective codes or imply a syllabus edition has been checked when it has not.
 - Stage 1 is a starter pathway, not exhaustive syllabus coverage. Quality and verified mapping take precedence over item counts.
-- Apply docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md: use short platform-original passages/excerpts plus functional learning tasks; source longer passages and task stimuli such as images/posters/documents from verified public-domain or suitably open-licensed works. Record the source and intended-use rights before selecting/embedding the exact asset. Do not copy protected exam papers or paid materials without documented permission or a specific legal basis.
+- Apply docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1: project-original passage bodies up to and including 250 words are allowed; passage bodies over 250 words must be from a recognised writer's verified public-domain work. Existing qualifying short originals may remain. Record every passage with an Excerpt ID and the correct short-original provenance or long-public-domain source record. This does not permit reuse of third-party copyrighted text based only on length. Preserve the separate stricter visual/photo rights controls.
+- Apply docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md v1.1: every typed response has its existing/approved response range plus an ideal target and a real-time current/ideal counter; the target never limits text entry.
 - Every current screen example remains demonstration content until individually reviewed and approved.
 
 ## 2. Initial pathway register
@@ -147,7 +148,7 @@ Then continue across the approved tracks for Unit 2, then Unit 3. The exact orde
 
 ## 10. Public-source method and curriculum guide rotation
 
-Use `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` as the source selection/currency gate. It sets five core source families and requires exact course, edition/session, paper type, access and rights checks. Do not select a worksheet or exam paper merely because it is easy to download. For Cambridge 0500 exams 2027–2029, prefer the current official syllabus and specimen/mark-scheme set; older papers require an item-level comparison. For DP Language A: Language and Literature, use public current IB course/examiner information and cross-check with specialist sites; do not mislabel Language A: Literature papers as Language and Literature specimens. For MYP, use the public six-skill framework and school-based assessment description to create original tasks; official Year 1 objective/strand codes stay blank if not verifiable.
+Use `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` as the shared source/currency register and `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A for the mandatory ranked Top Five independent websites for every exact route. The shared cross-track starter set is not the route-specific Top Five. Record exact course, year/stage/grade, edition/session, paper/sample type, access, inspectable evidence and rights checks. Do not select a worksheet or exam paper merely because it is easy to download. For Cambridge 0500 exams 2027–2029, prefer the current official syllabus and specimen/mark-scheme set; older papers require an item-level comparison. For DP Language A: Language and Literature, use public current IB course/examiner information and cross-check with specialist sites; do not mislabel Language A: Literature papers as Language and Literature specimens. For MYP, use the public six-skill framework and school-based assessment description to create original tasks; official Year 1 objective/strand codes stay blank if not verifiable.
 
 Guide creation order, before rotating unit-content production:
 1. IB MYP Language and Literature Year 1 — guide/implementation structure and Unit 1 v2 content approved by the founder; separate academic review, official objective/strand mapping, rights, accessibility/suitability and release gates remain open.
@@ -166,7 +167,7 @@ Guide creation order, before rotating unit-content production:
 This is an editorial production order, not an official IB/Cambridge unit order. When each guide cycle is complete, rotate unit-content production through the same track order rather than completing one programme group first. A source-access gap must be recorded—not filled with invented official mapping.
 
 
-## MYP Year 1 research revision — 26 October 2026
+## Historical MYP Year 1 research revision — 26 October 2026
 
 Version 1.1 of the guide replaces the initial three-unit sketch with six proposed units plus shared diagnostic, language support, retrieval, revision and transfer time for a planned total of at least 50 teaching hours. Research now includes MYP-specific teaching/publisher/planning resources and a separate landscape review. The 2014/15 detailed IB guide is used only as a labelled legacy crosswalk; its continued current applicability is not confirmed. Enhanced MYP beta material remains a separate transition watch.
 
@@ -202,7 +203,7 @@ For longer reading passages and image/poster/document-based tasks, use an exact 
 
 ## Current decision — 28 October 2026
 
-The founder confirms that the required Stage 7 Unit 1 verification and approval decisions were already given; do not repeat those requests. This closes the outstanding founder-approval checkpoint for the production sequence, but it does not justify adding Cambridge objective codes beyond those directly supported by the recorded source evidence. Stage 7 remains an isolated, unmerged interface preview until a separate code-release action is completed. Proceed with the next first-cohort item, CBSE English Grade 6 Unit 1, using the current *Poorvi* textbook context and official CIET activity page as sources. The new candidate must not copy NCERT textbook wording or assets, claim an unverified official objective map, or inherit Cambridge's review statuses.
+Historical next-step note — 28 October 2026 (superseded by the 30 October standards update): the earlier plan would have advanced directly from Stage 7 to CBSE Grade 6. The founder's new decision requires revising existing MYP Year 1 Unit 1 v2 teacher materials and excerpts first, then revising Cambridge Stage 7 Unit 1 v1.3 teacher materials and excerpts, and only then completing the CBSE Grade 6 Unit 1 teacher pack. Use the binding sequence in Section 12. The CBSE source checks and no-copy rules remain applicable.
 
 ## CBSE Grade 6 Unit 1 — initial draft completed, 28 October 2026
 
@@ -218,4 +219,59 @@ The initial draft was revised before review after a supplementary phrase/image-p
 
 Learner-facing v1.0 “The Turning Sign” is approved for the academic-content gate. NCERT's Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports limited alignment for reading a story, identifying main ideas/characters/events and sequencing; CIET's activity list supports contextual focus on location prepositions. No official CBSE objective code is assigned, and the exact current *Poorvi* reprint remains unverified.
 
-The controlled, unlinked preview for accessibility and interface testing is implemented in draft PR #17 and deployed at [the hosted preview URL](https://pr-17-gradioprep-website.wandering-scene-1822.workers.dev/preview/cbse-grade-6/english/unit-1). Build check #256 passed 20/20 Chromium tests; controlled preview run #22 succeeded. Next: manual hosted visual, keyboard/focus, screen-reader, zoom/reflow and cross-browser review. Keep the teacher pack out of learner bundles, keep the route out of normal navigation, and do not release without a separate decision.
+**Historical CBSE preview checkpoint — 28 October 2026:** The unlinked interface-test route in draft PR #17 was built against the original v1.0 passage and passed 20/20 Chromium tests. It is not a preview of the forthcoming public-domain replacement version. Keep it out of normal navigation; after the third-stage CBSE content revision, update/rebuild the controlled preview and repeat affected visual, keyboard/focus, screen-reader, zoom/reflow and cross-browser checks before any separate release decision.
+
+
+
+## 12. Mandatory migration and feature-integration plan — updated 30 October 2026
+
+The founder-approved 250-word threshold and live-counter rules below supersede the previous blanket instruction that every short passage must be replaced by public-domain literature. The current approved MYP v3 content is unchanged. Passage changes are made only during the relevant scheduled content revision; qualifying platform-original passages of 250 words or fewer may remain.
+
+**Order and integration gates:**
+
+1. **IB MYP Year 1 Unit 1 v3 — approved content; counter implementation and automated verification complete.** The learner content, Dickens/Carroll extracts, questions, current response ranges and teacher/editor pack remain as created. The founder approved this exact candidate on 30 October 2026. The reusable counter is implemented across entry, Q2, Q3, Q4, Q5 and exit with targets 20/50/75/55/55/50 and unchanged response ranges. Each textarea references its prompt, response-range guidance and live count. GitHub Actions run #295 passed the production build, teacher-pack separation and 16/16 Chromium tests. AI-assisted editorial/source QA is documented, but human academic validation and the separate current IB mapping, unit-level rights, suitability, manual accessibility and release gates remain open. Do not begin Cambridge content work until these MYP gates are resolved and the founder explicitly authorizes the next step.
+2. **Cambridge Lower Secondary English 0861 Stage 7 Unit 1 v1.3 — second.** Revise the teacher/editor pack and perform a word-count audit of “The Rain Gauge” and the warm-up mini-text. Retain each platform-original passage unchanged if its body is 250 words or fewer. If a passage is over 250 words and remains a reading stimulus, replace it in the revised content version with a registered public-domain excerpt; then update dependent answers and feedback. Retrofit live counters to all existing typed-response fields as part of preview/build QA. Previous v1.3 approval applies to that exact version only; material revision requires relevant fresh review.
+3. **CBSE English Grade 6 Unit 1 “The Turning Sign” v1.0 — third.** At its scheduled revision, audit the story-body word count. Retain the platform-original story unchanged if it is 250 words or fewer; if over 250 words, use a registered public-domain excerpt and update all passage-dependent tasks/answers. Complete the teacher/editor pack under v1.1, and add the live counter to every typed-response field. The former v1.0 approval remains exact-version history and does not transfer to a revised version.
+
+For every new unit from this point forward, classify each reading passage by the same threshold during drafting; do not author a passage over 250 words as platform-original. Every new typed-response field must include an ideal target and the live counter from its first integration.
+
+**Live counter acceptance tests:** update on typing, paste, edit, deletion and clear-all; display current/ideal counts such as 38/50 and 59/50; never limit or truncate the response; no maxLength; use the same word-tokenisation convention as the rights protocol; expose the counter accessibly; test all current and future typed-response fields.
+
+**Project boundaries:** teacher-only answers remain out of browser bundles; response state remains temporary and ungraded unless separately approved; no authentication, database, real grading, payments, production deployment, DNS or Cloudflare configuration change is included in this plan.
+
+## Current first-cohort checkpoint — IB MYP Year 1 Unit 1 v3 — 30 October 2026
+
+PR #18 (“Approved content standards: public-domain excerpts and question-specific feedback”) was merged to `main` on 30 October 2026. The first mandatory migration has been implemented on the existing PR #14 branch `feat/myp-y1-unit1-v2`, using a new, versioned **Unit 1 v3** candidate rather than duplicating the unit. GitHub Actions run [#279](https://github.com/gradioprep/gradioprep-website/actions/runs/41008214446) passed the TypeScript/Vite production build, teacher-pack separation guard and all 13 Chromium browser tests, including the 360/390/768/1024/1440px responsive-width check. The Cloudflare Workers branch-preview build also succeeded; no production deployment occurred.
+
+The v3 revision replaces the old platform-written main and transfer extracts with registered historical English works: Dickens's 1843 *A Christmas Carol* and Carroll's 1866-dated Macmillan issue of *Alice's Adventures in Wonderland*. Stable Excerpt IDs are retained; new Source IDs were recorded in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before the excerpt text was committed. Source-level term checks cover India and the United Kingdom only; the United States and other territories are not cleared in this record. The bus-stop photograph remains only because its Commons file page expressly states CC0 1.0; other unit-level rights and accessibility checks remain separate.
+
+The revised teacher/editor pack covers the entry activity, all five practice items and independent transfer exit. It provides question-specific ranges, model responses, correct-answer reasoning, individual distractor rationales, accepted interpretations, strong/developing/weak response guidance and actionable feedback. The learner UI displays each expected word range before typing; the range is guidance, not an automatic limit. Teacher answers and scoring guides are kept out of learner data, and a build-time bundle guard is included.
+
+**Current gate state:** founder content approval for exact v3 recorded on 30 October 2026; fresh human academic review pending; exact current IB Year 1 guide/objective mapping unverified; final unit-level rights/territory approval pending; age/level suitability pending; manual accessibility pending; release not approved. Version 1 and version 2 approvals apply only to their exact historical versions. Do not advance to the Cambridge content revision until the retrospective MYP live-counter implementation is complete, the revised MYP candidate's remaining review gates have been addressed as required, and the founder has authorised the next step. CBSE remains after Cambridge. No deployment or production change is part of this task.
+
+
+## Current MYP counter implementation checkpoint — 30 October 2026
+
+The six-field retrospective live word counter is implemented on the existing PR #14 branch, commit `0a90f3eb550bba9e7b17e7db1594826f28e1cca7`. All six ideal targets are present and existing response ranges are preserved. The counter is reusable for future typed-response fields and does not cap input. New Playwright tests cover all six targets, lexical counting, editing/clearing and over-target text. Fresh GitHub Actions verification is pending. This implementation does not itself complete the independent academic, mapping, rights, suitability, manual accessibility or release gates, and does not authorize the Cambridge migration.
+
+## MYP Year 1 Unit 1 v3 review checkpoint — 31 October 2026
+
+The six-field counter retrofit and accessible links to prompt, response guidance and live count are implemented. The latest CI run #295 passed the build, teacher-pack separation and all 16 Chromium tests. The current public IB sources support broad programme context but not the exact applicable current Year 1 objective/strand map; keep official codes blank. The AI-assisted editorial review is complete and two minor source-fidelity/visual-description points are flagged for the human academic reviewer. Final unit-level rights and visual review, human academic validation, age/level suitability, manual accessibility and release approval remain open. Cambridge Stage 7 is next only after those gates are addressed and explicit founder authorization is recorded.
+
+## 13. Route-specific Top Five research checkpoint — 31 October 2026
+
+The binding method now requires a ranked Top Five independent-website comparison for every exact course/level/edition, with official awarding-body/government sources assessed separately. The research must inspect accessible material, score relevance, expertise/transparency, currency, evidence quality and teaching/implementation usefulness, then trace conclusions into the guide and implementation structure.
+
+**Completed:** IB MYP Language and Literature Year 1. The five independent sources and design implications are recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1 and applied in the Year 1 guide v1.5 and implementation plan v1.4.
+
+**Outstanding, in sequence:** Cambridge Lower Secondary English 0861 Stage 7 requires its own Top Five; CBSE English Grade 6 then requires a separate India-relevant Top Five. Do not copy the MYP list across tracks. Continue using public evidence when official detail is gated; leave only unsupported official mapping unverified. This research requirement is separate from the mandatory MYP→Cambridge→CBSE learner-content/teacher-pack revision order and its distinct human review, rights, accessibility, suitability and release gates.
+
+## 14. Current first-cohort reconciliation — 31 October 2026
+
+The authoritative three-route status, exact-version approval boundaries, passage counts, branch controls and nine-step completion queue are in [Unit 1 Cohort Status and Reconciliation](UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md). This section supersedes older “current” summaries in Sections 10–13 where their sequence/status language conflicts.
+
+- Route-specific independent Top Five: MYP Year 1 complete; Cambridge Stage 7 pending; CBSE Grade 6 pending after Cambridge.
+- Passage count: Cambridge 16/221/27; CBSE 165. All are platform-original and within the 250-word allowance. No replacement is presently required; repeat the count if a passage changes.
+- Teacher-pack/counter work: MYP pack and six counters are complete; Cambridge pack and counters remain to be migrated; CBSE pack and counters remain to be migrated after Cambridge.
+- Next checkpoint: close the outstanding MYP human academic, visual/rights, suitability and manual accessibility decisions before beginning Cambridge content migration. Do not ask the founder to repeat the previously confirmed Cambridge v1.3 review/verification decisions.
+- All five relevant draft PRs remain separate and unmerged. Synchronize shared documents and reconcile the older stacked PR #16 base before any merge review.
