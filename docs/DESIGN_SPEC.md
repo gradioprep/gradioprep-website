@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.3  
+**Version:** 2.4  
 **Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. Existing MYP Year 1 live counters remain documented; diagnostic analytics are not yet implemented.  
 **Last updated:** 31 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -502,7 +502,7 @@ The evaluation report should prioritise, in order:
 2. A clear skill-profile visual with direct labels and readable scales.
 3. A small number of skill-level bar/radar or other meaningful charts, accompanied by short explanations.
 4. Evidence-backed strengths and improvement priorities, each linked to the remedial course.
-5. The personalised five-day remedial plan and its daily objectives/time allocations.
+5. The personalised remedial plan, normally five 60-minute sessions; show six or seven only where evaluation analytics justify the additional time.
 
 Minimise tables and dense data blocks. Avoid repeating the same score in several visual forms. Use a table only where comparison truly requires rows/columns. Provide concise explanatory text beside a chart rather than expecting students to infer meaning from colours or labels alone.
 
@@ -515,8 +515,11 @@ Minimise tables and dense data blocks. Avoid repeating the same score in several
 - Use explicit chart titles, labels, units/scale and explanatory annotations. Include a text equivalent for assistive technology and ensure contrast in actual data marks and labels.
 - Avoid false precision, unvalidated norm comparisons, arbitrary percentages and misleading axis scales. Where evidence is limited, show that limitation visibly.
 
-The chart calculation and displayed figure must be traceable to the underlying diagnostic responses and approved scoring rules. An attractive visual is not a substitute for measurement validity.
+The chart calculation and displayed figure must be traceable to the underlying diagnostic responses and approved scoring rules. Never display internal provider percentiles, ordinal ranks, provider test-taker counts or their ranking methodology in learner/parent reports, downloads, dashboard views or report payloads, including logged-in views. Do not include such fields in the learner-report data model or client bundle. These are internal research records only. An attractive visual is not a substitute for measurement validity.
 
 ### 16.4 Responsive and accessible presentation
 
 Charts must remain understandable on narrow screens, at 200%/400% zoom and with keyboard/screen-reader use. Do not use colour as the only indicator of strength, status or priority. Supply readable text summaries/labels; make tooltips optional rather than the sole source of information. Keep the same semantic heading hierarchy and focus order as the existing site.
+
+
+**Version 2.4 Founder decision update — 31 October 2026:** The MYP Grade 9 provider research is approved; the draft taxonomy/blueprint is awaiting Founder review. Provider ranking data and its 50/50 basis are internal-only and must not appear in learner/parent reports or logged-in views. The remedial plan should use five 60-minute sessions where sufficient, extending to six or seven only when evaluation analytics justify it.
