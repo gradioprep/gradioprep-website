@@ -7,8 +7,8 @@ import type { PilotLessonPack } from "./model";
  * AI-assisted drafting is not a human academic review.
  */
 export const pilotLessonPack: PilotLessonPack = {
-  id: "draft-lesson-how-writers-shape-meaning-v3",
-  version: 3,
+  id: "draft-lesson-how-writers-shape-meaning-v4",
+  version: 4,
   unitId: "ib-myp-lal-y1-u1",
   status: "draft-for-founder-review",
   reviewRecord: {
@@ -46,9 +46,9 @@ export const pilotLessonPack: PilotLessonPack = {
     supportingText: "The late bus is still a way home.",
     footerText: "PLAN AHEAD · TRAVEL WITH CARE",
     visualDescription:
-      "A photograph shows an empty bus-stop platform at night. A bus-stop sign stands beside a dark road; orange streetlights illuminate the pavement and distant headlights approach. The platform-created poster headline and supporting line are placed around the photograph.",
+      "A photograph shows an empty, raised paved bus-stop platform beside a dark road at night. A tall bus-stop sign stands by the platform; orange streetlights illuminate the pavement and a nearby tree, while headlights approach along the road. The platform is open to the sky, with no shelter or people visible. The poster headline and supporting line are placed around the photograph.",
     altText:
-      "An empty bus-stop platform at night beside a dark road. Orange streetlights light the pavement and distant headlights approach; no people are visible.",
+      "An empty raised paved bus-stop platform at night beside a dark road. A tall bus-stop sign stands on the platform; orange streetlights illuminate the pavement and a nearby tree, while distant headlights approach. The platform is open to the sky; no shelter or people are visible.",
     rightsNote:
       "Photograph “Bus stop with platform during night.jpg” by Mateusz Konieczny; Wikimedia Commons file page records CC0 1.0 Universal Public Domain Dedication. File/licence rechecked 30 October 2026. Platform-authored headline, supporting line and layout are original content. Reconfirm asset, attribution and accessibility at final rights review.",
   },
@@ -132,7 +132,7 @@ export const pilotLessonPack: PilotLessonPack = {
       heading: "3. Compare two creators' choices",
       purpose: "Explain how a written description and a visual campaign may frame night-time streets differently.",
       explanation:
-        "Dickens describes thick fog and buildings that are difficult to see. The poster places a bright shelter and the words “A light on every last journey” against a dark street. The poster may appear reassuring, although the dark setting could also remind some viewers to take care when travelling.",
+        "Dickens describes thick fog and buildings that are difficult to see. The poster places an empty, orange-lit platform and the words “A light on every last journey” against a dark street. The poster may appear reassuring, although the dark setting could also remind some viewers to take care when travelling.",
       learnerAction:
         "Choose one exact phrase from Dickens and one written or visual feature from the poster. Explain how each could shape an audience's impression of being out at night.",
     },
@@ -243,7 +243,7 @@ export const pilotLessonPack: PilotLessonPack = {
         "Compare how Dickens's description and the night-bus poster could shape an audience's impression of being out at night. Use one precise detail from each.",
       expectedResponseLength: { minWords: 65, maxWords: 85 },
       modelAnswer:
-        "The Dickens extract makes the street difficult to see: the fog is “pouring in” and nearby houses become “mere phantoms”, so the setting feels closed-in and uncertain. The poster frames night travel more reassuringly. Its bright shelter and headline “A light on every last journey” draw attention to a visible place to wait and suggest that a journey home is available. The dark background may also remind some viewers to take care.",
+        "The Dickens extract makes the street difficult to see: the fog is “pouring in” and nearby houses become “mere phantoms”, so the setting feels closed-in and uncertain. The poster frames night travel more reassuringly. Its orange-lit platform, bus-stop sign and headline “A light on every last journey” draw attention to a place to wait and suggest that a journey home is available. The dark background may also remind some viewers to take care.",
       successIndicators: [
         "Uses an exact phrase from the Dickens extract.",
         "Uses a specific written or visual feature from the poster.",
@@ -253,12 +253,12 @@ export const pilotLessonPack: PilotLessonPack = {
       responseGuidance: {
         evidenceTargets: [
           "Dickens: “pouring in”, “mere phantoms”, candles or the brown air.",
-          "Poster: headline “A light on every last journey”, bright amber shelter, dark street or approaching headlights.",
+          "Poster: headline “A light on every last journey”, orange-lit platform, bus-stop sign, dark street or approaching headlights.",
           "An explicit comparison of the impression each choice may create.",
         ],
         acceptedInterpretations: [
           "The Dickens scene may feel obscured, enclosed, eerie, confusing or oppressive.",
-          "The poster may feel reassuring, hopeful or practical because the shelter is brightly lit and a way home is promised.",
+          "The poster may feel reassuring, hopeful or practical because the open platform is visibly lit and the headline promises a way home.",
           "The poster's dark backdrop may also suggest risk, caution or uncertainty. Accept this if supported by the image and copy.",
           "Accept another interpretation when the learner supports it with a precise feature from each artefact.",
         ],
@@ -285,7 +285,7 @@ export const pilotLessonPack: PilotLessonPack = {
         "What might Dickens suggest by imagining that Nature “lived hard by” and was “brewing” the fog? Explain how the image fits the scene.",
       expectedResponseLength: { minWords: 45, maxWords: 65 },
       modelAnswer:
-        "By imagining Nature as a neighbour “brewing” something, Dickens makes the fog seem deliberately produced rather than ordinary weather. “On a large scale” exaggerates its size and force. The playful image makes the cloud seem almost alive while showing how completely it hides the street.",
+        "By imagining Nature as a neighbour “brewing” something, Dickens makes the fog seem deliberately produced rather than ordinary weather. “on a large scale” exaggerates its size and force. The playful image makes the cloud seem almost alive while showing how completely it hides the street.",
       successIndicators: [
         "Uses the words “lived hard by” or “brewing” as evidence.",
         "Explains the personification or exaggeration rather than treating the image literally.",
