@@ -9,13 +9,13 @@ export const pilotUnitDraft: PilotUnitDraft = {
   version: 4,
   pathwayId: "ib-myp-lal-y1",
   unitId: "ib-myp-lal-y1-u1",
-  status: "draft-for-founder-review",
+  status: "founder-approved-candidate",
   reviewRecord: {
-    outcome: "pending",
-    reviewedAt: null,
-    reviewerLabel: "Founder and academic review pending",
+    outcome: "passed",
+    reviewedAt: "2026-10-31",
+    reviewerLabel: "Founder / project owner",
     scopeNote:
-      "Version 4 contains two editorial corrections to the founder-approved v3 candidate. Both registered passages, question/prompt intent, response ranges and counter targets are preserved. Founder approval for v3 does not transfer; fresh v4 founder and academic review are pending.",
+      "Version 4 was approved by the founder / project owner on 31 October 2026 after full human academic and age/level/context review. Approval applies to exact v4 only. Both registered passages, learner questions/prompts, response ranges and counter targets are preserved. Rights/territory, manual accessibility, official mapping and release remain separate gates.",
   },
   title: "How writers and creators shape meaning",
   proposedFocus: "Language, imagery, atmosphere and visual design choices.",
@@ -64,16 +64,15 @@ export const pilotUnitDraft: PilotUnitDraft = {
     "The Alice transfer must be analysed using its own evidence, not copied comments about Dickens's fog.",
   ],
   remainingReleaseChecks: [
-    "Fresh human academic review of all learner items, teacher rationales, model responses and feedback.",
+    "Final unit-level rights/territory approval for the text excerpts and photo/poster asset.",
     "Official current IB Year 1 guide edition and objective/strand mapping remain unverified.",
     "Complete unit-level rights approval for the text excerpts and separate poster/photo asset review.",
-    "Complete age/level and vocabulary/syntax suitability review.",
-    "Complete accessibility and responsive reflow review.",
+    "Complete manual accessibility and responsive reflow review, including keyboard/focus, screen-reader order, contrast and zoom.",
     "Verify no teacher-only answer content enters the learner application bundle.",
     "Obtain explicit founder release approval after all separate gates pass.",
   ],
   rightsNote:
     "Candidate main excerpt: EXC-IB-MYP-Y1-U1-MAIN / SRC-IB-MYP-Y1-U1-001. Candidate transfer excerpt: EXC-IB-MYP-Y1-U1-TRANSFER / SRC-IB-MYP-Y1-U1-002. Original English texts from historical editions; source-level term checks for India and the United Kingdom recorded 30 October 2026; the United States and other territories are not cleared in this record. Final unit-level rights sign-off remains pending.",
   releaseNote:
-    "Unreleased version 4 editorial-correction candidate. Founder approval applies only to version 3 and does not transfer. Fresh human academic review, official IB mapping, final rights/territory, age/level suitability, manual accessibility and release gates remain open.",
+    "Unreleased version 4 founder-approved content candidate. Founder / project owner review on 31 October 2026 covers the exact learner/teacher content and academic, age/level/context suitability. Official IB mapping remains unverified; final rights/territory, manual accessibility and release gates remain open.",
 };
