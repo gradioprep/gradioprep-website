@@ -1,6 +1,6 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.3  
+**Version:** 1.4  
 **Last updated:** 31 October 2026  
 **Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement is confirmed; its Top Five provider research is complete and awaiting Founder review. Taxonomy/blueprint, item authoring and implementation have not started. Cycle 2 remains blocked.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
@@ -10,7 +10,7 @@
 
 | Order | Requested school-grade target | Working curriculum alignment | Current status |
 |---:|---|---|---|
-| 1 | Grade 9 — IB MYP Language and Literature | MYP Year 4 is confirmed by the Founder for the relevant school/programme context; do not reopen this as an assumption. Official MYP programme age band: 11–16; individual chronological age not separately supplied | First cycle; Top Five research complete, Founder review pending |
+| 1 | Grade 9 — IB MYP Language and Literature | MYP Year 4 is confirmed by the Founder for the relevant school/programme context; do not reopen this as an assumption. Official MYP programme age band: 11–16; individual chronological age not separately supplied | First cycle; provider research approved; draft taxonomy/blueprint submitted for Founder review |
 | 2 | Grade 6 — Cambridge English | Exact Cambridge stage and English route remain to be verified. Cambridge Primary Stage 6 / English 0058 is a candidate only where the learner age and first-language route support it. Cambridge Lower Secondary Stage 7 is not a substitute for the requested Grade 6 target | Second cycle; blocked until Cycle 1 is complete and the founder directs the transition |
 
 Grade 9 = MYP Year 4 is a Founder-confirmed placement for Cycle 1, not an unresolved mapping. Cambridge Grade 6 remains a requested school-grade label whose exact official stage/course must be established during Cycle 2 scope lock. Never substitute Cambridge Lower Secondary Stage 7 for Grade 6.
@@ -57,9 +57,9 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 
 | Feature / gate | Cycle 1: Grade 9 IB MYP | Cycle 2: Grade 6 Cambridge |
 |---|---|---|
-| Official grade/year/course scope locked | Not started | Blocked |
-| Diagnostic Top Five research | Not started | Blocked |
-| Skill taxonomy and blueprint approved | Not started | Blocked |
+| Official grade/year/course scope locked | Complete (Founder-confirmed) | Blocked |
+| Diagnostic Top Five research | Complete; Founder-approved | Blocked |
+| Skill taxonomy and blueprint approved | Draft submitted; Founder approval pending | Blocked |
 | Diagnostic built and validated | Not started | Blocked |
 | Evaluation report and analytics built/validated | Not started | Blocked |
 | Five-day remedial course and teacher pack complete | Not started | Blocked |
@@ -79,11 +79,14 @@ The diagnostic-first decision changes the immediate work order only. It does not
 The former Unit 1 rotation and queued migration plans are historical work queues only. They do not determine the next task while the diagnostic cycles are active. After both diagnostic cycles are approved, the Founder / project owner will specify the next curriculum-content order and scope. This may include completing multiple units for Grade 9 IB MYP or Cambridge Grade 6 before switching to another level, or another explicitly selected order. The former Unit 1 rotation remains inactive unless explicitly reinstated by the founder.
 
 
-## 3. Cycle 1 — Grade 9 IB MYP Language and Literature provider research
+## 5. Cycle 1 — Grade 9 IB MYP Language and Literature
 
-**Status:** Top Five research complete; Founder review pending. See `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_PROVIDER_REVIEW.md` for the full evidence audit, weighted scoring, limitations and sources. The official IB programme/context sources are separate from the five independent providers. Do not finalise the skill taxonomy or diagnostic blueprint until the Founder has reviewed the provider findings.
+**Status:** Top Five provider research approved by Founder on 31 October 2026. Draft taxonomy/blueprint submitted for Founder review; see docs/curriculum/IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md. Item authoring and implementation remain gated. Provider percentile evidence is maintained internally in docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. See `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_PROVIDER_REVIEW.md` for the full evidence audit, weighted scoring, limitations and sources. The official IB programme/context sources are separate from the five independent providers. The Founder has approved the provider findings. The draft taxonomy and blueprint are now presented for review; do not author diagnostic items or implement the diagnostic until this next gate is approved.
 
 **Confirmed placement:** Grade 9 = MYP Year 4, as explicitly confirmed by the Founder for the relevant school/programme context.
 
 
 **Founder clarification — 31 October 2026:** Five 60-minute sessions are the default suggestion, not a fixed rule. The personalised course may use up to seven 60-minute sessions to address all improvement areas comprehensively. This clarification supersedes earlier wording that required exactly five sessions.
+
+
+**Founder decision — 31 October 2026:** The Top Five provider research is approved. Provider percentiles use the internal 50/50 actual test-taker / independent research method; all ranking data and methodology are excluded from learner/parent reports, including logged-in views. The draft MYP Year 4 taxonomy/blueprint is submitted for review. Five remedial sessions are preferred; extend to six or seven only when evaluation analytics justify it.
