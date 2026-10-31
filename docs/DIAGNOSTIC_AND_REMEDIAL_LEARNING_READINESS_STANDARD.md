@@ -90,7 +90,7 @@ Assign each improvement area a **Remediation Priority 5–1**:
 
 These are instructional routing priorities, not school/examination grades, permanent ability labels or judgements of learner worth. Student-facing language must remain respectful and strengths-based: use “focus area”, “next skill to strengthen” and “recommended practice”, not “weak”. Priority is based on evidence and likely effect on future learning, not simply the percentage of incorrect answers. Specify and human-review the assignment method and thresholds for each cycle. Record uncertainty instead of forcing every result into a confident category.
 
-## 8. Five-day personalised remedial course
+## 8. Personalised remedial course
 
 Each learner receives a plan based on their own diagnostic profile. **The default design target is five sessions of 60 minutes each; five sessions is a recommendation, not a fixed limit.** Select the number of sessions needed to address every identified area of improvement comprehensively, with a maximum of **seven sessions of 60 minutes each**. Every identified improvement area must map to one or more specific teaching/practice tasks, with sufficient teaching, guided practice, independent transfer and feedback. Do not compress or omit a significant improvement area merely to force a five-session plan. If all needs cannot reasonably be addressed within seven sessions, state what remains and recommend further support rather than promise mastery.
 
