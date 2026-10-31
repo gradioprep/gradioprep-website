@@ -7,16 +7,16 @@ import type { PilotLearnerLesson } from "./model";
  * hidden rationales or teacher-only scoring guidance.
  */
 export const pilotLearnerLesson: PilotLearnerLesson = {
-  id: "pilot-lesson-how-writers-shape-meaning-v3",
-  version: 3,
+  id: "pilot-lesson-how-writers-shape-meaning-v4",
+  version: 4,
   unitId: "ib-myp-lal-y1-u1",
-  status: "founder-approved-candidate",
+  status: "draft-for-founder-review",
   reviewRecord: {
     outcome: "pending",
     reviewedAt: null,
-    reviewerLabel: "Founder content approval recorded 30 October 2026; fresh human academic review pending",
+    reviewerLabel: "Version 3 founder content approval recorded 30 October 2026; version 4 editorial correction candidate awaiting founder and fresh human academic review",
     scopeNote:
-      "The founder approved this exact version 3 content candidate on 30 October 2026. Version 1 and version 2 approvals remain historical and do not transfer. Fresh human academic review and separate mapping, rights, suitability, accessibility and release decisions remain pending.",
+      "Version 3 was approved by the founder on 30 October 2026. This version 4 candidate makes only the two documented editorial corrections: aligns the Q4 quotation with Dickens's lowercase source wording and replaces the unsupported Q3 shelter reference with details visible in the photograph. Version 4 has not yet received founder approval or fresh human academic review. All other v3 passages, questions, prompts, ranges and counter targets remain unchanged; separate mapping, rights, suitability, accessibility and release decisions remain pending.",
   },
   title: "How writers and creators shape meaning",
   estimatedMinutes: 35,
@@ -46,9 +46,9 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     supportingText: "The late bus is still a way home.",
     footerText: "PLAN AHEAD · TRAVEL WITH CARE",
     visualDescription:
-      "A photograph shows an empty bus-stop platform at night. A bus-stop sign stands beside a dark road; orange streetlights illuminate the pavement and distant headlights approach. The platform-created poster headline and supporting line are placed around the photograph.",
+      "A photograph shows an empty, raised paved bus-stop platform beside a dark road at night. A tall bus-stop sign stands by the platform; orange streetlights illuminate the pavement and a nearby tree, while headlights approach along the road. The platform is open to the sky, with no shelter or people visible. The poster headline and supporting line are placed around the photograph.",
     altText:
-      "An empty bus-stop platform at night beside a dark road. Orange streetlights light the pavement and distant headlights approach; no people are visible.",
+      "An empty raised paved bus-stop platform at night beside a dark road. A tall bus-stop sign stands on the platform; orange streetlights illuminate the pavement and a nearby tree, while distant headlights approach. The platform is open to the sky; no shelter or people are visible.",
     rightsNote:
       "The photograph “Bus stop with platform during night.jpg” by Mateusz Konieczny is recorded on Wikimedia Commons under the CC0 1.0 Universal Public Domain Dedication. The file page and licence were rechecked on 30 October 2026. The poster wording and layout are original platform-authored material. The image and text remain subject to the separate asset and accessibility gates.",
   },
@@ -111,7 +111,7 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
       heading: "3. Compare two creators' choices",
       purpose: "Explain how a written description and a visual campaign may frame night-time streets differently.",
       explanation:
-        "Dickens describes thick fog and buildings that are difficult to see. The poster places a bright shelter and the words “A light on every last journey” against a dark street. The poster may appear reassuring, although the dark setting could also remind some viewers to take care when travelling.",
+        "Dickens describes thick fog and buildings that are difficult to see. The poster places an empty, orange-lit platform and the words “A light on every last journey” against a dark street. The poster may appear reassuring, although the dark setting could also remind some viewers to take care when travelling.",
       learnerAction:
         "Choose one exact phrase from Dickens and one written or visual feature from the poster. Explain how each could shape an audience's impression of being out at night.",
     },
