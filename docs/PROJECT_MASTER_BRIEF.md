@@ -1,8 +1,10 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 4.22  
+**Version:** 4.23  
 **Last updated:** 31 October 2026  
-**Status:** Frontend and pathway navigation remain live-verified. First-cohort Unit 1 candidates exist for IB MYP Year 1 (v4 founder-approved for exact content, human academic review and age/level/context suitability; unreleased pending rights/manual accessibility/release gates), Cambridge Stage 7 (v1.3, founder-confirmed exact-version review; independent Top Five complete) and CBSE Grade 6 (v1.0, founder-approved for the academic-content gate); none is released. MYP Top Five and six counters are complete; latest v4 CI run #366 passed. Cambridge Stage 7 Top Five is complete and applied to the group guide; teacher-pack/counter migration remains after MYP rights/territory and manual accessibility gates close. CBSE Top Five and pack/counter work follow Cambridge. Exact official mapping remains unverified where noted; unavailable full frameworks do not block independent research. PRs #12/#14/#15/#16/#17 remain draft/unmerged; reconcile PR #16's older PR #12 base before merge review. No production deployment, DNS or Cloudflare configuration change is included.
+**Status:** The current work order is diagnostic-first, not the former cross-track Unit 1 rotation. Cycle 1 is Grade 9 IB MYP (MYP Year 4 working assumption, school placement to verify); Cycle 2 is Cambridge Grade 6 (exact stage/course to verify; do not substitute Stage 7). Each cycle requires its own Top Five diagnostic-provider research, skill-based diagnostic, evaluation report/analytics, personalised five-day remedial course and outcome check before the next cycle. All existing curriculum content queues and their approval/release gates are preserved but deferred. MYP Year 1 Unit 1 v4 remains exact-version approved but unreleased with rights/territory and manual accessibility gates open; Cambridge Stage 7 Top Five is complete but its pack/counter migration is deferred; CBSE Grade 6 content remains an exact-version candidate. PRs #12/#14/#15/#16/#17 remain draft/unmerged; PR #16's older PR #12 base is not changed. No merge, production deployment, DNS or Cloudflare configuration change is included.
+
+**v4.23 diagnostic-first learning-readiness layer — 31 October 2026:** The founder approved a pre-curriculum sequence of diagnostic → evaluation report with detailed skill analytics → personalised five-day remedial course. The selected order is Grade 9 IB MYP first (MYP Year 4 is a working assumption in a conventional five-year MYP; confirm the school's actual MYP year), followed by Cambridge Grade 6 (exact official stage/course remains to be scope-locked; do not substitute Cambridge Lower Secondary Stage 7). Research the five strongest diagnostic/evaluation providers separately for each exact level; do not reuse a generic or cross-cycle list. All current curriculum content production and former Unit 1 rotation are paused/deferred, not cancelled. Existing content, version approvals and open gates remain intact. The binding process is in `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`; selected order/status is in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`. Documentation update is awaiting founder review; no cycle research or implementation has started.
 
 **v4.22 Cambridge Stage 7 Top Five completion and MYP review reconciliation — 31 October 2026:** Founder / project owner approval for exact MYP v4 content, human academic review and age/level/context suitability is recorded; its unit-level rights/territory and manual accessibility gates remain open, and official Year 1 mapping remains unverified. The Cambridge Lower Secondary English 0861 Stage 7 independent Top Five is complete in `docs/curriculum/CAMBRIDGE_LS_S7_RESOURCE_LANDSCAPE_REVIEW.md` v1.0 and applied to the group guide v1.2. Two providers are directly listed in Cambridge's current 0861 resource list; three others are explicitly age-band comparators only. The complete current official framework/version remains unverified; only 7Ri.03 for explicit information is publicly supported. Stage 7 v1.3's existing review approval remains valid for that exact version. Its teacher-pack migration and live-counter retrofit remain sequenced after MYP rights/territory and manual accessibility closure. CBSE remains third. The 165-word CBSE original passage and Cambridge 16/221/27-word originals remain within the 250-word allowance. All PRs remain draft/unmerged; PR #16's older base is unchanged.
 
@@ -392,6 +394,8 @@ Review current Supabase free-tier limits, pause/backup limitations and email sen
 
 ## 12. First 30-day launch plan
 
+**Sequence clarification — 31 October 2026:** The day-based plan below is a historical planning hypothesis, not the current active delivery schedule. The current sequence is the diagnostic-first order in Section 16 and the diagnostic cycle register. Do not use these day numbers as a delivery commitment.
+
 ### Days 1–15: Build English Stage 1
 
 - Days 1–2: founder-finalised roadmap, syllabus mapping, content schema, role and database design.
@@ -422,7 +426,10 @@ LinkedIn is the only planned promotional channel for the initial months. Use hel
 
 At minimum, measure:
 
-- Diagnostic completion rate.
+- Diagnostic completion rate and completion by skill domain.
+- Evidence confidence/coverage for reported skill judgements.
+- Priority-area progression and post-remediation reassessment change.
+- Five-day remedial course completion and session engagement.
 - First-week active learner rate.
 - Practice completion and repeat attempts.
 - Percentage of students who revise after receiving feedback.
@@ -439,7 +446,7 @@ Do not scale marketing, prepaid credit sales or reviewer recruitment until servi
 ## 15. Decisions still owned by the founder
 
 The founder will finalise before bulk content creation:
-1. Exact English syllabus roadmap, topics, task types and their sequence.
+1. The order for subsequent curriculum-content production after the diagnostic cycles, and any later change to the selected diagnostic-cycle order.
 2. The rubric(s) for each task family and the criteria for multi-credit tasks.
 3. Final brand/domain and public description.
 4. The exact privacy, consent, refund, credit-expiry and service terms after appropriate review.
@@ -450,9 +457,56 @@ The assistant must not invent these decisions or silently replace them with a ge
 
 ---
 
+## 16. Diagnostic-first learning-readiness layer — approved 31 October 2026
+
+### 16.1 Binding scope and order
+
+The Diagnostic → Evaluation Report & Analytics → Five-Day Remedial Course is a new pre-curriculum layer. It assesses the underlying skills and prerequisites needed to learn and perform well; it is not a unit quiz, mock examination or substitute for the selected curriculum. The three features are developed and validated for one founder-selected level at a time.
+
+**Current selected order:**
+1. **Grade 9 — IB MYP Language and Literature.** MYP Year 4 is a working assumption for a conventional five-year programme, not a universal grade equivalence. Verify the student's actual school MYP year and age.
+2. **Grade 6 — Cambridge English.** Confirm the official Cambridge stage/course and first-language route during scope lock. Cambridge Lower Secondary Stage 7 is not a substitute for the requested Grade 6 target.
+
+There is no cyclical/rotational order. No later-year or later-curriculum research starts until the preceding cycle's three core features, outcome check, integration, QA and founder approval are complete. After both selected cycles, the founder will specify the curriculum-content sequence; no automatic Unit 1 rotation or Unit 2 progression applies.
+
+### 16.2 Required work per selected level
+
+1. Research and rank the five best diagnostic/evaluation providers for that particular learner level using the separate weighted rubric in the diagnostic standard. This is distinct from the existing Top Five audit for curriculum content.
+2. Finalise a skill taxonomy and diagnostic blueprint based on underlying, transferable prerequisite skills, not merely the curriculum's upcoming unit topics.
+3. Build a valid diagnostic with skill/sub-skill tags, evidence, scoring and confidence controls.
+4. Build a clear evaluation report with detailed skill analytics, constructive priorities, strengths, evidence and exact remedial links.
+5. Build a personalised remedial course of five 60-minute days, following the existing unit and teacher-pack format. Remediation Priority 5 is addressed first, then 4, 3, 2 and 1. Every identified improvement area must map to a task.
+6. Include a fresh post-course outcome check; verify the complete diagnostic → report → remedial journey and approve the exact cycle.
+
+Student-facing priority descriptions must be constructive and must not label a learner as weak or permanently capable/incapable. The report must disclose insufficient evidence and avoid unvalidated grade predictions or percentiles.
+
+### 16.3 Design and architecture constraints
+
+Use the approved design system, with a predominantly white/cool-white background for report and analytics surfaces, accessible charts, minimal tables/data blocks and restrained Palette B accents. Do not introduce a black/dark report theme or alter global typography, palette tokens or navigation architecture.
+
+Reuse the current React/TypeScript application structure and existing teacher-pack/content separation. The current prototype does not provide authentication, database-backed learner records or persistent progress. No new database, authentication, AI endpoint, paid service, backend/platform change or architectural redesign is approved by this sequencing decision. Record an architecture-feasibility check and report any limitation rather than claiming unsupported persistence or adding infrastructure silently.
+
+### 16.4 Hold on existing curriculum content
+
+All further curriculum-unit creation and existing queued unit migrations are paused while the two selected diagnostic cycles are completed. Existing MYP Year 1, Cambridge Stage 7 and CBSE Grade 6 unit candidates, approvals, research records, open PRs and outstanding rights/accessibility/mapping/release gates remain preserved and unchanged. They are deferred, not cancelled, approved by implication or released. On completion of both diagnostic cycles, the founder will explicitly set the next content order and the existing content production processes will resume.
+
+### 16.5 Source-of-truth documents
+
+Follow:
+- `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`
+- `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`
+- `docs/ENGLISH_STAGE_1_ROADMAP.md`
+- `docs/ENGLISH_CURRICULUM_GUIDES.md`
+- `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`
+- `docs/DESIGN_SPEC.md`
+
+No diagnostic provider research or implementation was started by approving this standard or updating its documentation. Separate founder approval of the updated records is the gate before the first Grade 9 IB MYP research cycle begins.
+
+---
+
 ## New-chat kickoff prompt
 
-> We are continuing an approved product build. Read the attached `IB/IGCSE Learning Platform — Master Project Brief` and the linked Teacher-Pack, Literary Excerpt Rights and Literary Excerpt Source Register documents as the source of truth. Do not silently change approved pricing, review-credit rules, SLAs, grader rating formula, curriculum scope, access-control requirements or the 15-day build/15-day validation plan. The founder has 18 years of IB, IGCSE and SAT tutoring experience and will initially be the sole grader and academic lead. The founder will finalise the curriculum roadmap. Start by summarising the current approved specification and identifying the immediate next action only; then proceed step by step, updating the master brief whenever a decision is explicitly approved. Keep all code, credentials and student data secure. Before choosing a vendor or relying on free-tier terms, verify current official documentation. The working name is a placeholder, not final. For content work, follow `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. For frontend work, follow the locked typography and text-colour tokens in Section 1 and `docs/DESIGN_SPEC.md`; do not add ad-hoc font families, sizes or grey text colours, or change tokens without explicit approval.
+> We are continuing the GradiPrep project. Read `docs/PROJECT_MASTER_BRIEF.md` Sections 1, 3 and 12–16, `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, the relevant roadmap/guide sections, and the linked Teacher-Pack, Literary Excerpt Rights and Source Register documents as the source of truth. The current priority is Cycle 1: Grade 9 IB MYP (MYP Year 4 is a working assumption; verify the actual school placement). Do not start provider research until the founder has approved the updated documentation. Complete diagnostic, evaluation/analytics and five-day remedial for that level before the Cambridge Grade 6 cycle. Do not substitute Cambridge Stage 7 for the requested Grade 6 target or follow the historical Unit 1 rotation. Do not silently change approved pricing, review-credit rules, SLAs, grader rating formula, curriculum scope, access-control requirements or the 15-day build/15-day validation plan. The founder has 18 years of IB, IGCSE and SAT tutoring experience and will initially be the sole grader and academic lead. The founder will finalise the curriculum roadmap. Start by summarising the current approved specification and identifying the immediate next action only; then proceed step by step, updating the master brief whenever a decision is explicitly approved. Keep all code, credentials and student data secure. Before choosing a vendor or relying on free-tier terms, verify current official documentation. The working name is a placeholder, not final. For content work, follow `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. For frontend work, follow the locked typography and text-colour tokens in Section 1 and `docs/DESIGN_SPEC.md`; do not add ad-hoc font families, sizes or grey text colours, or change tokens without explicit approval.
 
 ## Official service-policy links to re-check before deployment
 
