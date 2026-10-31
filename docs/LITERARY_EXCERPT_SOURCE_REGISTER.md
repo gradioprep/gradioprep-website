@@ -1,7 +1,7 @@
 # Literary Excerpt Source Register
 
-**Version:** 1.1  
-**Created:** 30 October 2026  
+**Version:** 1.2  
+**Created:** 30 October 2026; source record recheck updated 31 October 2026  
 **Access:** Internal/private project record. Do not expose teacher-only source notes or unreleased assessment material to learners.  
 **Authority:** `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`.
 
@@ -131,4 +131,14 @@ The term calculations concern the underlying literary works and the specified hi
 
 ### 6.4 Existing poster photograph — recheck
 
-The existing photograph “Bus stop with platform during night.jpg” by Mateusz Konieczny remains a separate visual asset. The Wikimedia Commons file page identifies the creator and expressly states CC0 1.0 Universal Public Domain Dedication: https://commons.wikimedia.org/wiki/File:Bus_stop_with_platform_during_night.jpg. Rechecked 30 October 2026. The original fictional poster copy and layout remain platform-authored. Asset-level source review does not complete the separate unit-level rights or accessibility gate.
+The existing photograph “Bus stop with platform during night.jpg” by Mateusz Konieczny remains a separate visual asset. The Wikimedia Commons file page identifies the creator and expressly states CC0 1.0 Universal Public Domain Dedication: https://commons.wikimedia.org/wiki/File:Bus_stop_with_platform_during_night.jpg. Rechecked 31 October 2026. The original fictional poster copy and layout remain platform-authored. Asset-level source review does not complete the separate unit-level rights, visual-context or accessibility gate.
+
+## 7. MYP v3 excerpt and visual-source recheck — 31 October 2026
+
+The two current learner text excerpts were checked again against their registered source pages and opening/closing anchors. Under the project's lexical word-count rule, the Dickens main extract is 95 words and the Carroll transfer extract is 129 words. Both are historical original-English text passages well below the 250-word threshold; they were not changed during the recheck.
+
+The project source register continues to record the intended-territory term calculations: India Copyright Act, 1957, section 22 (known-author life plus 60 years, counted from the beginning of the following calendar year) and UK Copyright, Designs and Patents Act 1988, section 12 (life plus 70 years, counted from the end of the year of death). The associated source pages and author-date references remain in Sections 6.1–6.3. These calculations concern the underlying Dickens and Carroll works only; they do not clear modern translations/editions outside the checked text, later editorial material or all territories. The current source record checks India and the UK only; the United States and other territories remain uncleared.
+
+The Wikimedia Commons page for “Bus stop with platform during night.jpg” by Mateusz Konieczny was rechecked and continues to state CC0 1.0 Universal Public Domain Dedication. This record does not establish that the photograph visually supports every teacher-pack description (including “bright shelter”), nor does it replace human review of privacy, model/property, publicity, contextual or accessibility concerns. The image and its use remain subject to final unit-level human review.
+
+**Disposition:** source/file-page recheck recorded; no v3 excerpt, photo, poster copy, alt text, question, answer or teacher-pack content was changed. Final unit-level rights and territory approval remain pending.

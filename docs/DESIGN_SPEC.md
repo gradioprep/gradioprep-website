@@ -1,8 +1,8 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.1  
-**Status:** Approved design system and curriculum-first navigation; reusable live typed-word counter implemented across all six MYP Year 1 Unit 1 v3 typed-response fields in draft PR #14. Human academic and release gates remain open; latest implementation CI verification is pending.  
-**Last updated:** 30 October 2026  
+**Version:** 2.2  
+**Status:** Approved design system and curriculum-first navigation; reusable live typed-word counter implemented across all six MYP Year 1 Unit 1 v3 typed-response fields in draft PR #14, with accessible descriptions linking each prompt, expected range and live count. Human academic, manual accessibility and release gates remain open; automated build, teacher-pack and 16-test verification passed in run #295.  
+**Last updated:** 31 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
@@ -475,3 +475,5 @@ Cloudflare's Preview API confirmed the isolated `pr-15` URL [https://pr-15-gradi
 
 
 **Version 2.1 change note — 30 October 2026:** Implemented the typed-response counter interaction on the MYP Year 1 Unit 1 v3 lesson. All six textareas use the shared `ResponseWordCountTextarea` component and one lexical counter helper; each shows the approved current/ideal count, including values above the target. Ideal targets are 20, 50, 75, 55, 55 and 50 words in entry/Q2/Q3/Q4/Q5/exit order. Existing expected ranges, prompts and content remain unchanged. The counter is visually secondary, uses existing design-system typography and colour tokens, is programmatically associated with its textarea and updates through a polite assistive-technology status. There is no cap, `maxLength`, grading, persistence or submission behavior. Automated checks are in `tests/word-counter.spec.ts`; CI verification for the latest commit is pending.
+
+**Version 2.2 change note — 31 October 2026:** The shared MYP response textarea now associates the learner's response field with its task/entry/exit prompt, the expected response-range guidance and the live current/ideal count through `aria-describedby`. The browser test checks all three ID references, the visible prompt/range and the accessible name. This supplements (and does not replace) the polite live counter status. CI run #295 passed 16/16 Chromium tests. Manual screen-reader, keyboard/focus, zoom/reflow, contrast and cross-browser checks remain required before release.

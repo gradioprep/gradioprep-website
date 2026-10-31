@@ -1,7 +1,7 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.7  
-**Research checked:** 30 October 2026; passage-length threshold and live word-counter standard updated 30 October 2026  
+**Version:** 2.8  
+**Research checked:** 31 October 2026; MYP public-source currency and v3 review checkpoint updated 31 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
 
@@ -275,3 +275,18 @@ The programme's holistic-assessment section states a major learning outcome: rea
 This curriculum/source register remains the record for official curriculum references, specialist resources and sample-paper currency. It is not the per-excerpt provenance ledger. Every learner reading passage, short warm-up, mini-extract and transfer passage must have a stable Excerpt ID in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. A platform-original passage ≤250 words receives an authorship/provenance and word-count record; a public-domain passage >250 words receives an exact Source ID, edition, location and territory record. The excerpt register records the work, author, exact edition/transcription, URL, public-domain basis and territory check, precise location, question/unit use and replacement history. Complete it before adopting the passage.
 
 The MYP v3 passages already use registered Dickens and Carroll public-domain sources and remain unchanged. For the existing Cambridge Stage 7 and CBSE Grade 6 originals, audit exact passage-body word counts during each unit's scheduled revision: retain unchanged if 250 words or fewer; use public-domain excerpts for passages over 250 words. Do not mark every short original as replacement-required.
+
+## 7. MYP Year 1 current public-source currency check — 31 October 2026
+
+### Current official public pages
+
+- [MYP Language and Literature](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) — page displays last updated 19 February 2026. It identifies listening, speaking, reading, writing, viewing and presenting as the six skill areas and describes inquiry, literary/non-literary text variety, context, audience, purpose and linguistic/literary choices.
+- [MYP assessment and exams](https://www.ibo.org/programmes/middle-years-programme/assessment-and-exams/) — page displays last updated 19 February 2026. It states school-based assessment uses tasks created and marked by classroom teachers against prescribed subject-group objectives and criteria; optional external eAssessment is distinct.
+- [MYP curriculum](https://www.ibo.org/programmes/middle-years-programme/curriculum/) — page displays last updated 19 February 2026 and states at least 50 hours of teaching time per subject group in each MYP year.
+- [Public MYP Language and Literature subject brief](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) — the publicly linked brief is labelled “From 2014”; use as a broad historical course outline only.
+- [Detailed Language and literature guide reference](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) — indexed as the guide for use from September 2014 or January 2015. It provides legacy A–D/Year 1 reference material; it does not prove that those descriptors are the currently applicable detailed guide.
+- [Enhanced MYP beta unit-planning guidance](https://pds.ibo.org/Prototype10MYPBeta-EN/course/en/assets/6752a5296bbe08d1d82df1c6/file.pdf) — states full release is scheduled for 2027. Treat beta planner guidance as transition information, not finalized subject-objective wording.
+
+### Mapping consequence
+
+These public sources support the platform's broad, independently designed learning focus and the need to gather task evidence. They do not expose a verified current detailed Year 1 subject guide/strand map for this candidate. Leave the MYP v3 `mappingStatus` as `unverified` and `officialObjectiveCodes` as an empty array until the applicable school guide is verified through an authorized/current source. Do not map to legacy A–D codes simply because they appear in the 2014/15 reference.

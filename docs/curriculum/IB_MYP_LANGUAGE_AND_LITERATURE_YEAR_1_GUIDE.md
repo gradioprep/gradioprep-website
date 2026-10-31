@@ -1,13 +1,13 @@
 # IB MYP Language and Literature — Year 1 Curriculum Guide
 
-**Version:** 1.3 — expanded MYP-specific resource review, six-unit scope-and-sequence and current 250-word/live-counter standards  
+**Version:** 1.4 — refreshed public-source currency and MYP v3 review checkpoint  
 **Status:** Internal curriculum design for founder review; not an official IB guide or complete verified syllabus map.  
 **Programme/course:** IB Middle Years Programme (MYP), Language and Literature.  
 **Year:** Year 1.  
 **Pathway ID:** ib-myp-lal-y1.  
 **Companion research audit:** docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.  
 **Companion implementation plan:** docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md.  
-**Research checked:** 26 October 2026.
+**Research checked:** 31 October 2026.
 
 ## 1. Executive decision
 
@@ -17,7 +17,10 @@ This is a **public-framework-informed, MYP-resource-benchmarked independent path
 
 ### Key evidence and limitations
 
-- The current public [IB Language and Literature overview](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) identifies listening, speaking, reading, writing, viewing and presenting; inquiry; varied literary and non-literary texts; and attention to context, audience, purpose and linguistic/literary choices.
+- The current public [IB Language and Literature overview](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) (page marked last updated 19 February 2026) identifies listening, speaking, reading, writing, viewing and presenting; inquiry; varied literary and non-literary texts; and attention to context, audience, purpose and linguistic/literary choices.
+- The current public [MYP assessment and exams page](https://www.ibo.org/programmes/middle-years-programme/assessment-and-exams/) (also marked last updated 19 February 2026) says school-based assessment uses tasks created and marked by classroom teachers against prescribed subject-group objectives and criteria; optional external eAssessment is separate.
+- The publicly linked [Language and Literature subject brief](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) is labelled “From 2014”. The indexed [detailed Language and literature guide](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) identifies itself as for use from September 2014 or January 2015. Treat its Year 1 A–D descriptors as legacy reference only unless the applicable current school guide is authenticated.
+- The official [Enhanced MYP beta unit-planning guidance](https://pds.ibo.org/Prototype10MYPBeta-EN/course/en/assets/6752a5296bbe08d1d82df1c6/file.pdf) states full release is scheduled for 2027. Beta planning information is not a final current subject guide or a current Year 1 objective map.
 - The public [MYP curriculum overview](https://www.ibo.org/programmes/middle-years-programme/curriculum/) says at least 50 hours of teaching time are required for each subject group per MYP year. Our design therefore plans at least 50 guided hours, although a school's actual timetable and delivery plan may differ.
 - The current public [How the MYP works](https://ibo.org/programmes/middle-years-programme/what-is-the-myp/how-the-myp-works/) page describes key/related concepts, global contexts and approaches to learning (ATL) in the current framework.
 - An official IB resource indexed at [Language and literature guide](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) identifies itself as for use from September 2014 or January 2015. Search-indexed sections include Year 1 descriptors for Criteria A–D. This provides a useful **legacy-framework reference**, but it does not establish that the descriptors are the latest current edition. The direct resource did not resolve consistently in this research session.
@@ -229,7 +232,7 @@ Academic review, official mapping verification, rights review, accessibility rev
 - **Legacy criteria:** A–D summarized only as a dated 2014/15 reference; current edition/continuity needs confirmation.
 - **Enhanced MYP:** separate transition watchlist; beta material is not being treated as final.
 - **Existing preview, “How writers shape meaning”:** candidate for Unit 1, not a new implementation; its prior academic review applies only to preview version 1.
-- **Unit 1 implementation:** version 3 learner and teacher/editor content is implemented and founder-approved as an exact content candidate on 30 October 2026; its retrospective live-counter retrofit is next. Fresh human academic review and the separate official mapping, rights, age/level, accessibility and release gates remain open.
+- **Unit 1 implementation:** version 3 learner and teacher/editor content is implemented and founder-approved as an exact content candidate on 30 October 2026; the six-field live-counter retrofit is implemented and automated tests passed on 31 October. AI-assisted editorial desk review is recorded separately from human academic validation. Fresh human academic review, exact current official mapping, rights, age/level, manual accessibility and release gates remain open.
 - **Official mapping, rights, accessibility and release approval:** not cleared by this guide.
 
 This guide must not be described as IB-approved or fully mapped to the latest official subject guide.
@@ -245,3 +248,8 @@ The founder approved the exact MYP Year 1 Unit 1 v3 content candidate on 30 Octo
 
 The next technical step is the retrospective live word counter across all six existing typed-response fields (entry 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50). Preserve the existing response ranges. Display current/ideal values such as 38/50 and 59/50; never cap, truncate, reject or block an over-target response. Apply the same counter to all later MYP typed-response fields from first integration.
 
+## 12. MYP Year 1 Unit 1 v3 review checkpoint — 31 October 2026
+
+The founder-approved v3 candidate remains an independently designed, public-framework-informed platform unit. The current public IB pages support the broad six-skill and school-based assessment context; they do not provide the applicable current detailed Year 1 objective/strand wording. The public subject brief is labelled “From 2014”; the indexed detailed guide is for use from 2014/15; Enhanced MYP beta guidance anticipates full release in 2027. Keep official objective codes blank and mapping unverified.
+
+The AI-assisted editorial desk review recorded in `docs/PILOT_UNIT_REVIEW.md` found the item sequence, answer rationales, typed-response guidance and model lengths internally consistent, with two minor quotation/visual-description points to be resolved by a human reviewer. It did not change v3 content and is not human academic approval. The six live counters remain implemented; their accessible prompt/range/counter associations passed automated Chromium tests in GitHub Actions run #295. Manual accessibility, human suitability, unit-level rights and release decisions remain open. Do not start Cambridge content work until those MYP conditions and the separate founder authorization checkpoint are satisfied.
