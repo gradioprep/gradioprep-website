@@ -199,7 +199,7 @@ All new and materially revised English units must follow:
 5. CBSE Grade 6 Unit 1 v1.0 retains its 165-word original story under the current threshold. Its curriculum-content research, teacher-pack and counter work are deferred.
 6. When the founder later selects curriculum-content work, the same unrestricted, accessible current/ideal counter and passage/teacher-pack standards apply to all relevant typed-response content.
 
-The passage, question, teacher-pack and response-counter standards remain binding for all future curriculum work. Their existence does not change the current diagnostic-first order. The counter implementation is recorded in v4.16/v4.17 as a UI-only change; the approved v3 passage, question, prompt, response-range, model-answer and teacher/editor content remains unchanged.
+The passage, question, teacher-pack and response-counter standards remain binding for all future curriculum work. Their existence does not change the current diagnostic-first order. The counter implementation is recorded in v4.16/v4.17 as a UI-only change; the v3 counter retrofit is preserved in the v4 candidate, whose only learner-content changes are the two recorded editorial corrections (Q4 quotation casing and Q3 visual-evidence description); response targets/ranges and teaching intent remain otherwise unchanged.
 
 ## 4. The student-facing product
 
