@@ -2,7 +2,7 @@
 
 **Version:** 4.25  
 **Last updated:** 31 October 2026  
-**Status:** The current work order is diagnostic-first, not the former cross-track Unit 1 rotation. Cycle 1 is Grade 9 IB MYP Language and Literature, with Grade 9 = MYP Year 4 confirmed by the Founder for the relevant school/programme context. Its independent Top Five provider research is complete and awaiting Founder review; skill taxonomy and diagnostic blueprint are not yet finalised. Cycle 2 is Cambridge Grade 6 (exact stage/course to verify; do not substitute Stage 7) and remains blocked until Cycle 1 is completed and approved. Each cycle requires its own Top Five diagnostic-provider research, skill-based diagnostic, evaluation report/analytics, personalised remedial course and outcome check before the next cycle. All existing curriculum content queues and their approval/release gates are preserved but deferred. MYP Year 1 Unit 1 v4 remains exact-version approved but unreleased with rights/territory and manual accessibility gates open; Cambridge Stage 7 Top Five is complete but its pack/counter migration is deferred; CBSE Grade 6 content remains an exact-version candidate. PRs #12/#14/#15/#16/#17 remain draft/unmerged; PR #16's older PR #12 base is not changed. No merge, production deployment, DNS or Cloudflare configuration change is included.
+**Status:** The current work order is diagnostic-first, not the former cross-track Unit 1 rotation. Cycle 1 is Grade 9 IB MYP Language and Literature, with Grade 9 = MYP Year 4 confirmed by the Founder for the relevant school/programme context. Its independent Top Five provider research is complete and awaiting Founder review; skill taxonomy and diagnostic blueprint are not yet finalised. Cycle 2 is Cambridge Grade 6 (exact stage/course to verify; do not substitute Stage 7) and remains blocked until Cycle 1 is completed and approved. Each cycle requires its own Top Five diagnostic-provider research, skill-based diagnostic, evaluation report/analytics, personalised remedial course and outcome check before the next cycle. All existing curriculum content queues and their approval/release gates are preserved but deferred. MYP Year 1 Unit 1 v4 remains exact-version approved but unreleased with rights/territory and manual accessibility gates open; Cambridge Stage 7 Top Five is complete but its pack/counter migration is deferred; CBSE Grade 6 content remains an exact-version candidate. PRs #12/#14/#15/#16/#17 and diagnostic research PR #19 remain draft/unmerged; PR #16's older PR #12 base is not changed. No merge, production deployment, DNS or Cloudflare configuration change is included.
 
 **v4.26 remedial-course flexibility clarification — 31 October 2026:** The Founder clarified that five 60-minute remedial sessions are a suggested default, not a fixed rule. Use as many as needed up to a strict maximum of seven 60-minute sessions so every diagnostic improvement area is comprehensively addressed. This clarification is reconciled in the readiness standard, teacher-pack standard, cycle register, roadmap and unit production register.
 
@@ -466,7 +466,7 @@ The assistant must not invent these decisions or silently replace them with a ge
 
 ### 16.1 Binding scope and order
 
-The Diagnostic → Evaluation Report & Analytics → Five-Day Remedial Course is a new pre-curriculum layer. It assesses the underlying skills and prerequisites needed to learn and perform well; it is not a unit quiz, mock examination or substitute for the selected curriculum. The three features are developed and validated for one founder-selected level at a time.
+The Diagnostic → Evaluation Report & Analytics → Personalised Remedial Course is a new pre-curriculum layer. It assesses the underlying skills and prerequisites needed to learn and perform well; it is not a unit quiz, mock examination or substitute for the selected curriculum. The three features are developed and validated for one founder-selected level at a time.
 
 **Current selected order:**
 1. **Grade 9 — IB MYP Language and Literature.** Grade 9 = MYP Year 4 is confirmed by the Founder for the relevant school/programme context. Do not reopen it as a working assumption.
@@ -505,7 +505,7 @@ Follow:
 - `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`
 - `docs/DESIGN_SPEC.md`
 
-No diagnostic provider research or implementation was started by approving this standard or updating its documentation. Separate founder approval of the updated records is the gate before the first Grade 9 IB MYP research cycle begins.
+Cycle 1's Grade 9 IB MYP provider research is complete and is recorded in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_PROVIDER_REVIEW.md`; it is submitted for Founder review. The skill taxonomy, diagnostic blueprint, item authoring and implementation remain gated until the Founder reviews and approves the research findings.
 
 ---
 
