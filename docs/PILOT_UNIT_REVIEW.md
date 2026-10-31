@@ -80,7 +80,7 @@ This is code-level association and automated browser evidence only. Manual keybo
 | Independent gate | Current state | Evidence required to close |
 |---|---|---|
 | Founder content approval | **Approved for exact v4, 31 October 2026** | Confirmed in this session; exact content approval only, not release approval. |
-| AI-assisted editorial desk review | **v3 desk review completed, 31 October 2026; v4 corrections recorded** | Human academic review of exact v4 is still pending. |
+| AI-assisted editorial desk review | **v3 desk review completed; v4 editorial corrections recorded** | The founder / project owner has separately approved the exact v4 content and human academic review. |
 | Human academic review | **Passed for exact v4, 31 October 2026** | Reviewer: Founder / project owner; includes learner/teacher content, prompts, answers, alternatives, models and feedback. |
 | Official IB mapping | **Unverified** | Applicable current detailed Year 1 subject guide and exact wording/strand evidence. Keep codes blank until then. |
 | Unit-level rights and territory | **Pending** | Human unit-level confirmation of both text excerpts, the exact photograph and its use; territory coverage for planned distribution. |
@@ -119,7 +119,7 @@ The cross-curriculum sequence, current candidate status, Cambridge/CBSE passage 
 
 ## 10. Version 4 editorial-correction record — 31 October 2026
 
-**Current version:** v4, on the existing draft PR #14 branch. **Approval state:** founder-approved for content, human academic review and age/level/context suitability on 31 October 2026. **Scope:** two editorial corrections only.
+**Current version:** v4, on the existing draft PR #14 branch. **Approval state:** founder-approved for exact content, human academic review and age/level/context suitability on 31 October 2026. **Scope:** two editorial corrections only.
 
 1. **Q4 quotation fidelity:** the model answer now quotes “on a large scale” with the same lowercase initial as Dickens's source extract. The 95-word source passage, question, response range, model-answer reasoning and counter target are unchanged.
 2. **Q3 poster evidence:** the exact Commons photograph was visually inspected. It shows an open, raised paved platform, bus-stop sign, orange streetlights, nearby tree and approaching headlights; it does not show a shelter. Learner and teacher materials now refer to the orange-lit platform/sign rather than a shelter. The visual description and alt text were updated to describe the open-air platform accurately. The learner Q3 task/prompt intent, response range, ideal target and counter remain unchanged.
