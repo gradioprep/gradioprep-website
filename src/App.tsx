@@ -255,8 +255,8 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
       {lesson.reviewRecord.outcome === "passed"
         ? <><b>Academic content review passed.</b> This version is approved for pilot preview only. Official Year 1 mapping and release approval remain open.</>
         : lesson.status === "founder-approved-candidate"
-          ? <><b>Founder-approved content candidate — fresh human academic review pending.</b> Version 1 and version 2 approvals remain historical and do not transfer to v3. Official Year 1 mapping, rights, accessibility and release checks remain open.</>
-          : <><b>Unit 1 version {lesson.version} is awaiting founder and academic review.</b> Approvals for versions 1 and 2 do not automatically apply to this revision. Official Year 1 mapping and release approval remain open.</>}
+          ? <><b>Draft version 4 editorial-correction candidate — founder and fresh human academic review pending.</b> Founder approval applies only to version 3 and does not transfer to v4. Official Year 1 mapping, rights, suitability, accessibility and release checks remain open.</>
+          : <><b>Unit 1 version {lesson.version} is awaiting founder and academic review.</b> Approvals for versions 1, 2 and 3 do not automatically apply to this revision. Official Year 1 mapping and release approval remain open.</>}
       {" "}Practice responses are temporary to this open preview; nothing is saved or graded.
     </InfoNote>
     <div className="proto-crumb"><button type="button" onClick={() => navigatePath("/pathways")}>Pathways</button> / <button type="button" onClick={() => navigatePath(curriculumPath)}>{pathway.programmeName} · {pathway.courseName}</button> / <button type="button" onClick={() => navigatePath(levelPath)}>{pathway.levelLabel}</button> / <button type="button" onClick={() => navigatePath(unitPath)}>Unit {unit.sequence}</button> / <b>Lesson</b></div>
@@ -586,7 +586,7 @@ function Pathways({ go, route, navigatePath }: { go: Navigate; route: PathwaysLo
         {selectedPathway.unitSlots.map(unit => (
           <article className="proto-level-unit-row" key={unit.id}>
             <span className="proto-level-unit-number">{String(unit.sequence).padStart(2, "0")}</span>
-            <div><h3>{unit.title}</h3><p>{unit.reviewNote}</p><div className="proto-level-status compact"><span>Mapping</span><b>Unverified</b><span>Release</span><b>Planned</b>{unit.id === pilotReviewSummary.unitId && <b className="proto-review-status">Candidate v3 — review pending</b>}</div></div>
+            <div><h3>{unit.title}</h3><p>{unit.reviewNote}</p><div className="proto-level-status compact"><span>Mapping</span><b>Unverified</b><span>Release</span><b>Planned</b>{unit.id === pilotReviewSummary.unitId && <b className="proto-review-status">Candidate v4 — review pending</b>}</div></div>
             <button type="button" className="proto-text-link" onClick={() => openUnit(unit.id)}>{unit.id === pilotReviewSummary.unitId ? "View pilot unit" : "View unit details"} <span>↗</span></button>
           </article>
         ))}
