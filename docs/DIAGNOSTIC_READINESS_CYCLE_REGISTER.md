@@ -1,6 +1,6 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Last updated:** 31 October 2026  
 **Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement is confirmed; its Top Five provider research is complete and awaiting Founder review. Taxonomy/blueprint, item authoring and implementation have not started. Cycle 2 remains blocked.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
@@ -50,7 +50,7 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 3. Skill taxonomy, diagnostic blueprint and item plan.
 4. Validated diagnostic and separate teacher/editor pack.
 5. Evaluation report and analytics.
-6. Personalised five-day remedial course (five × 60 minutes).
+6. Personalised remedial course (five × 60-minute sessions recommended; up to seven sessions maximum, as needed to address every improvement area).
 7. Post-course outcome check.
 8. Complete student-journey integration and QA.
 9. Founder approval; only then consider the next cycle when explicitly directed.
@@ -84,3 +84,6 @@ The former Unit 1 rotation and queued migration plans are historical work queues
 **Status:** Top Five research complete; Founder review pending. See `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_PROVIDER_REVIEW.md` for the full evidence audit, weighted scoring, limitations and sources. The official IB programme/context sources are separate from the five independent providers. Do not finalise the skill taxonomy or diagnostic blueprint until the Founder has reviewed the provider findings.
 
 **Confirmed placement:** Grade 9 = MYP Year 4, as explicitly confirmed by the Founder for the relevant school/programme context.
+
+
+**Founder clarification — 31 October 2026:** Five 60-minute sessions are the default suggestion, not a fixed rule. The personalised course may use up to seven 60-minute sessions to address all improvement areas comprehensively. This clarification supersedes earlier wording that required exactly five sessions.
