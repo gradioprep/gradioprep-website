@@ -5,7 +5,7 @@
 **Status:** Version 3 content candidate approved by the founder on 30 October 2026; fresh human academic review and independent mapping, rights, suitability, accessibility and release gates remain open in draft PR #14.  
 **Unit:** IB MYP Language and Literature Year 1, Unit 1.  
 **Content version:** 3 — “How writers and creators shape meaning”.  
-**Guide baseline:** Approved guide v1.1 and implementation structure v1.2; current detailed IB Year 1 guide edition and exact official objective/strand mapping remain unverified.  
+**Guide baseline:** MYP Year 1 guide v1.4 and implementation structure v1.3; current detailed IB Year 1 guide edition and exact official objective/strand mapping remain unverified.  
 **Important:** This record is not an official IB mapping, academic-review pass, rights clearance, accessibility approval or release authorization.
 
 The version 1 and version 2 sections below are historical records. Their founder/academic approvals apply only to those exact versions and do not transfer to version 3.
@@ -153,7 +153,7 @@ Revise the full teacher-only pack so every objective item has the answer, questi
 
 The founder's later threshold decision does not change this v3 candidate: its Dickens and Carroll public-domain extracts, learner questions, current response ranges, model responses and teacher/editor pack remain unchanged. For new/materially revised passages, project-original text up to and including 250 words is allowed; over 250 words requires a recognised writer's verified public-domain work.
 
-The next code integration is the retrospective live word counter across all six existing typed-response fields: entry 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50. Keep existing response ranges and all content unchanged. Display current/ideal words in real time (e.g. 38/50, 59/50), and never limit or truncate entry. Test the counter on type, paste, edit, delete, clear-all and over-target input. After MYP, carry it into the Cambridge and CBSE revisions and all later typed-response fields.
+At the time this 30 October record was written, the next code integration was the retrospective live word counter across all six existing typed-response fields. That retrofit is now complete and verified in GitHub Actions run #295. Existing response ranges and approved v3 content remain unchanged. Apply the shared counter to all later typed-response fields.
 
 
 ## 18. Retrospective MYP v3 live-counter implementation — 30 October 2026
@@ -162,7 +162,7 @@ The word counter is implemented on the existing PR #14 branch in commit `0a90f3e
 
 The counter updates from the controlled text value when the learner types, pastes, edits, deletes or clears. It counts Unicode letters/digits as lexical words, ignores punctuation-only tokens and counts contractions/hyphenated compounds as one. It continues above the ideal (for example 59/50); no input cap, `maxLength`, blocked review action, grading, saving or submission has been added. Each textarea is programmatically linked to its counter, which is announced through a polite status region.
 
-Playwright tests were added for the six initial counts, accessibility linkage, word tokenisation, typing/editing/clearing, no `maxLength`, and over-target response preservation. The newest GitHub Actions run must pass before the technical checkpoint is marked verified. The existing v3 content and separate teacher/editor pack are unchanged. No Cambridge/CBSE content revision, merge, production deployment or Cloudflare configuration change is included.
+Playwright tests cover the six initial counts, accessible linkage to prompt/range/count, word tokenisation, real clipboard paste, typing/editing/clearing, no `maxLength`, and over-target response preservation. GitHub Actions run #295 passed on 31 October 2026. The existing v3 content and separate teacher/editor pack are unchanged. No Cambridge/CBSE content revision, merge, production deployment or Cloudflare configuration change is included.
 
 **Unchanged independent gates:** fresh human academic review, current official IB mapping, final unit-level rights/territory review, age/level suitability, manual accessibility review and explicit release approval remain open. Do not start Cambridge until the MYP technical verification and remaining review/authorization checkpoint are addressed.
 

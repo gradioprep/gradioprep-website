@@ -246,7 +246,7 @@ Project-original reading passage bodies up to and including 250 words are permit
 
 The founder approved the exact MYP Year 1 Unit 1 v3 content candidate on 30 October 2026. It already uses registered public-domain excerpts for both the main reading and independent transfer. Do not alter its passage text, prompts, questions, response ranges, answer content, model responses or teacher/editor pack because of this standards update.
 
-The next technical step is the retrospective live word counter across all six existing typed-response fields (entry 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50). Preserve the existing response ranges. Display current/ideal values such as 38/50 and 59/50; never cap, truncate, reject or block an over-target response. Apply the same counter to all later MYP typed-response fields from first integration.
+The retrospective live word counter across all six existing typed-response fields (entry 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50) is implemented and verified in run #295. Existing response ranges remain unchanged. Display current/ideal values such as 38/50 and 59/50; never cap, truncate, reject or block an over-target response. Apply the same component to all later MYP typed-response fields from first integration.
 
 ## 12. MYP Year 1 Unit 1 v3 review checkpoint — 31 October 2026
 

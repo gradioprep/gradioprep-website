@@ -184,7 +184,7 @@ The revised teacher pack covers every entry, practice and exit response. It adds
 
 The founder approved the exact v3 content candidate on 30 October 2026. That approval is specific to v3; v1/v2 approvals remain historical. Fresh human academic review, official mapping, final unit-level rights/territory review, age/level/context suitability, manual accessibility and release approval remain separate gates. The India/UK source-level term checks are not unit-level rights sign-off and do not clear other territories.
 
-**Next integration work:** add the retrospective live word counter to every existing typed-response field in v3 (entry target 20; Q2 50; Q3 75; Q4 55; Q5 55; exit 50). Keep all existing text, prompts, response ranges, answer content and teacher-pack content unchanged. Use current/ideal display values (e.g. 38/50, 59/50) and never impose an input limit. Verify typing, paste, edit, delete, clear-all, over-target entries, keyboard/screen-reader support and responsive layouts. Complete this before the Cambridge Stage 7 migration; later units inherit the same counter.
+**Historical next integration instruction:** the retrospective live counter described above was implemented across all six v3 typed-response fields and passed build, teacher-pack separation and 16/16 Chromium checks in run #295. Keep v3 content unchanged. The next step is to resolve the human academic, current mapping, rights, suitability, manual accessibility and release gates, not to start Cambridge automatically.
 
 ## 11. Founder approval and forward-looking passage/counter standards — 30 October 2026
 
