@@ -60,7 +60,7 @@ The close scores for ranks 1–3 should not be read as a large quality gap. They
 
 **Age/grade fit and constructs.** The December 2025 technical manual covers PK–12 Reading and Grades 2–12 Writing & Language. Reading includes literary and informational texts; Writing & Language covers writing and language. This includes Grade 9 directly and is substantially broader than a reading-only screener.
 
-**Assessment and evidence.** Computer-adaptive delivery adjusts item difficulty to responses. The manual reports Grade 9 norming samples of 55,851 for Reading and 41,440 for Writing & Language. Grade 9 internal consistency is reported as .94 for both components. Grade 9 classification accuracy/consistency is .928/.898 for Reading and .916/.883 for Writing & Language. For Grades 9–12, 30-day test-retest ICCs are described as good (above .60), rather than excellent; do not overstate these as perfect stability.
+**Assessment and evidence.** Computer-adaptive delivery adjusts item difficulty to responses. The manual reports Grade 9 internal-consistency analysis samples of 55,851 for Reading and 41,440 for Writing & Language. Grade 9 internal consistency is reported as .94 for both components. Grade 9 classification accuracy/consistency is .928/.898 for Reading and .916/.883 for Writing & Language. For Grades 9–12, 30-day test-retest ICCs are described as good (above .60), rather than excellent; do not overstate these as perfect stability.
 
 **Reports/remediation.** Public documentation shows diagnostic levels by strand, a Diagnostic Strand Analysis, student-level recommendations, an action plan, progress/growth reporting and teacher reports. The technical manual describes personalized recommendations based on the learner's diagnostic profile.
 
