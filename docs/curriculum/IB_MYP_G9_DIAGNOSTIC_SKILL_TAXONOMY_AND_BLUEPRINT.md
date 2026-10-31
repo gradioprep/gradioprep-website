@@ -79,17 +79,18 @@ All six skill areas must receive observable evidence. A written multiple-choice 
 
 ## 4. Proposed assessment blueprint
 
-**Proposed duration:** approximately 90 minutes, split into two sittings to reduce fatigue. This is a planning estimate, not a locked test duration. A small pilot and Founder review must confirm timing, accessibility and evidence sufficiency before implementation.
+**Proposed duration:** 90 minutes, split into two 45-minute sittings to reduce fatigue. This is a planning estimate, not a locked test duration. A small pilot and Founder review must confirm timing, accessibility and evidence sufficiency before implementation.
 
 | Part | Approx. time | Proposed task / evidence | Main skill and criterion coverage |
 |---|---:|---|---|
-| 1. Read and view | 22 min | Two short, contrasting stimuli (one literary and one non-literary/multimodal); a balanced set of selected-response and short constructed-response prompts. | Reading, viewing; A1–A7, with B/D evidence where observable |
-| 2. Listen | 10 min | One short, clearly recorded spoken stimulus; selected and brief constructed responses on meaning, inference, purpose and tone. | Listening; A1–A4, D5 receptive language support |
-| 3. Analytical writing | 23 min | A focused response analysing an unseen text or paired text features, requiring claims, evidence, explanation and coherent structure. | Writing; A, B and D |
-| 4. Creative / purposeful production | 20 min | A fresh short text based on an original prompt or rights-cleared visual/text stimulus; learner chooses from a small set of age-appropriate forms. | Writing; B, C and D |
-| 5. Speaking / presenting | 15 min | Brief preparation, a 2–3 minute oral response and a short follow-up prompt; assess delivery and audience awareness. | Speaking, presenting; B, C and D |
+| Sitting 1 — Part 1. Read and view | 25 min | Two short, contrasting stimuli (one literary and one non-literary/multimodal); selected-response and short constructed-response prompts. | Reading, viewing; A1–A7, with B/D evidence where observable |
+| Sitting 1 — Part 2. Listen | 10 min | One short, clearly recorded spoken stimulus; selected and brief constructed responses on meaning, inference, purpose and tone. | Listening; A1–A4 |
+| Sitting 1 — Part 3. Language in context | 10 min | Short, context-rich tasks sampling vocabulary, sentence meaning, grammar, punctuation and register without turning the diagnostic into a decontextualised grammar drill. | D1–D4; supporting A and B |
+| Sitting 2 — Part 4. Analytical writing | 20 min | A focused response analysing an unseen text or paired text features, requiring claims, evidence, explanation and coherent structure. | Writing; A, B and D |
+| Sitting 2 — Part 5. Creative / purposeful production | 15 min | A fresh short text based on an original prompt or rights-cleared visual/text stimulus; learner chooses from a small set of age-appropriate forms. | Writing; B, C and D |
+| Sitting 2 — Part 6. Speaking / presenting | 10 min | Brief preparation, a 2–3 minute oral response and a short follow-up prompt; assess delivery and audience awareness. | Speaking, presenting; B, C and D |
 
-**Total planned time:** 90 minutes. The table's individual estimates total 90 minutes. Do not silently increase timed task demands to fill the envelope.
+**Total planned time:** 90 minutes across two 45-minute sittings. Sitting 1 = 25 + 10 + 10 minutes; Sitting 2 = 20 + 15 + 10 minutes. Do not silently increase timed task demands to fill the envelope.
 
 ### Proposed stimulus and task balance
 
@@ -106,6 +107,7 @@ The following is a draft coverage target for blueprint development, not a final 
 
 - Reading/viewing: approximately 8–10 scored observations across selected response and short constructed response.
 - Listening: approximately 4–5 scored observations, including at least one inference/purpose item.
+- Language in context: approximately 4–5 scored observations embedded in meaningful sentences and short texts.
 - Analytical writing: one extended constructed response scored across analysis, organisation and language evidence.
 - Creative/purposeful writing: one constructed response scored across production, organisation and language evidence.
 - Speaking/presenting: one oral performance plus a brief follow-up, with criterion-linked evidence.
