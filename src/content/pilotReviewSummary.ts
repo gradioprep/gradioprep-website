@@ -30,7 +30,6 @@ export const pilotReviewSummary: PilotReviewSummary = {
   remainingReleaseChecks: [
     "Final unit-level rights and intended-territory review for text and visual assets.",
     "Verification of the exact current official Year 1 guide and any claimed objective/strand mapping.",
-    "Separate final unit-level rights approval for text and visual assets.",
     "Manual accessibility review, including keyboard/focus, screen reader, contrast and zoom/reflow.",
     "Explicit founder release approval.",
   ],
