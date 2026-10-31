@@ -239,5 +239,5 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     "Review keyboard order, focus visibility, screen-reader order, zoom/reflow, visual contrast and mobile layout before release.",
   ],
   learnerNote:
-    "Unit 1 version 3 is a founder-approved content candidate and is not released. Fresh human academic review, official Year 1 mapping, rights, age/level suitability, accessibility and release approval remain open. Your responses are temporary and are not saved or graded.",
+    "Unit 1 version 4 is approved by the Founder / project owner for its exact content, human academic review and age/level/context suitability (31 October 2026). The unit is not released: official Year 1 mapping remains unverified, and unit-level rights/territory, manual accessibility and release approval remain open. Your responses are temporary and are not saved or graded.",
 };
