@@ -62,7 +62,7 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 | Skill taxonomy and blueprint approved | Draft submitted; Founder approval pending | Blocked |
 | Diagnostic built and validated | Not started | Blocked |
 | Evaluation report and analytics built/validated | Not started | Blocked |
-| Five-day remedial course and teacher pack complete | Not started | Blocked |
+| Personalised remedial course (five sessions preferred; six/seven only if analytics justify) and teacher pack complete | Not started | Blocked |
 | Post-course check validated | Not started | Blocked |
 | Integration and full QA passed | Not started | Blocked |
 | Founder approval for complete cycle | Not started | Blocked |
