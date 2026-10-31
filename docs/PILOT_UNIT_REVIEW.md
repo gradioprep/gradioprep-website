@@ -1,20 +1,20 @@
 # IB MYP Year 1 Unit 1 — Versioned Academic and Quality Review Record
 
-**Current candidate:** Version 3 — “How writers and creators shape meaning”  
+**Current candidate:** Version 4 — “How writers and creators shape meaning” (editorial-correction draft)  
 **Pathway slot:** `ib-myp-lal-y1-u1`  
 **Learner source:** `src/content/pilotLearnerLesson.ts`  
 **Teacher/editor source:** `src/content/pilotLessonPack.ts`  
-**Review record updated:** 31 October 2026  
-**Current disposition:** Founder-approved exact v3 content candidate; AI-assisted editorial desk review completed 31 October 2026; MYP Year 1 Top Five research completed and applied to the guide/implementation plan. Two minor editorial points and human academic, rights/territory/image-context, age/level, manual accessibility and release gates remain open.
+**Review record updated:** 31 October 2026 — v4 editorial-correction record  
+**Current disposition:** Exact v4 learner and teacher/editor content approved by the founder / project owner on 31 October 2026 following human academic and age/level/context review. MYP Year 1 Top Five is complete. Unit-level rights/territory and visual-context approval, manual accessibility and release gates remain open; v4 is not released.
 **PR:** [#14 — draft and unmerged](https://github.com/gradioprep/gradioprep-website/pull/14)
 
 ## 1. Version and approval boundary
 
-The founder approved the exact v3 learner and teacher/editor content candidate on 30 October 2026. That approval records the founder's content decision only. It is not a human academic-review pass, official IB mapping, rights clearance, age/level suitability approval, accessibility sign-off or release authorization.
+The founder approved the exact v3 learner and teacher/editor content candidate on 30 October 2026. This approval remains valid for v3 only. Version 4 makes two targeted editorial corrections and is founder-approved for content and human academic/age-level/context suitability on 31 October 2026. This exact-version approval is not official IB mapping, rights clearance, manual accessibility sign-off or release authorization.
 
-The approvals recorded for preview v1 and candidate v2 remain historical and apply only to those exact earlier versions. They do not transfer to v3. This record supersedes the v1-only summary at the top of the former review sheet; the original v1 review outcome is retained in Section 8 below.
+The approvals recorded for preview v1, candidate v2 and candidate v3 are historical and apply only to those exact earlier versions. None transfers to v4. This record supersedes the v1-only summary at the top of the former review sheet; the original v1 review outcome is retained in Section 8 below.
 
-The v3 passages, questions, prompts, current response ranges, model answers, teacher/editor pack and founder-approved learning content have not been rewritten during the 31 October review. The counter implementation and accessible prompt/range associations are UI changes only.
+Version 4 preserves both v3 literary extracts, all question prompts and intended tasks, the existing response ranges, the counter targets and the overall separate teacher/editor pack structure. It changes only Q3 visual wording/description and Q4 quotation casing as recorded in Section 10.
 
 ## 2. Current content and assessment scope
 
@@ -30,7 +30,7 @@ The approved ideal word-count targets for the live counter are entry 20, Q2 50, 
 
 The learner module contains no model answers, correct-answer IDs or teacher-only rationale data. The app remains a temporary, ungraded preview; responses are not saved or submitted.
 
-## 3. AI-assisted editorial desk review — 31 October 2026
+## 3. Historical v3 AI-assisted editorial desk review — 31 October 2026
 
 **Scope:** AI-assisted editorial desk review only.
 
@@ -51,7 +51,7 @@ An AI-assisted consistency and source-fidelity review compared the current v3 le
 1. **Q4 quotation capitalization:** the Q4 teacher model writes “On a large scale”, whereas the exact source excerpt reads “on a large scale” in lower case. This is a minor quotation-fidelity issue in the model-answer text. It has not been silently changed because v3 content and teacher-pack approval are version-specific.
 2. **Q3 poster “shelter” reference:** Q3's teacher/model guidance refers to a “bright shelter” / “bright amber shelter”, while the current poster visual description and alt text identify an empty bus-stop platform, bus-stop sign, dark road, orange streetlights and approaching headlights, without naming a shelter. The actual photograph must be visually inspected to establish whether the term is accurate and whether the alt text is sufficiently precise. No content or alt text has been changed during this desk review.
 
-The human reviewer should decide whether these points warrant a correction. Any agreed wording or source-description change must create a new content/teacher-pack version and receive the applicable review again.
+At the time of the v3 desk review, these two findings required human resolution and any adopted correction had to be versioned. Their current disposition is recorded in Section 10: v4 contains the targeted corrections and must now receive fresh human review.
 
 ## 4. Current official IB source and mapping position — 31 October 2026
 
@@ -73,18 +73,18 @@ The 31 October source-register recheck records:
 
 ## 6. Accessibility, age/level and release gates
 
-The counter textareas now associate each input with its task prompt, expected response-range guidance and live counter using `aria-describedby`. The changing count is exposed through a polite status region. GitHub Actions run #295 passed the TypeScript/Vite build, teacher-pack separation guard and 16/16 Chromium tests, including those accessible-description assertions.
+The counter textareas associate each input with its task prompt, expected response-range guidance and live counter using `aria-describedby`; the changing count is exposed through a polite status region. Historical v3 run #295 passed the TypeScript/Vite build, teacher-pack separation guard and 16/16 Chromium tests. Fresh v4 CI run [#341](https://github.com/gradioprep/gradioprep-website/actions/runs/41212826874) passed the TypeScript/Vite build, teacher-pack separation guard and 16/16 Chromium tests for the PR #14 branch snapshot at commit `c157ed2470e9c0e94e6758c075bb71484b767002`. Automation does not replace manual accessibility review.
 
 This is code-level association and automated browser evidence only. Manual keyboard/focus, screen-reader reading order/announcements, contrast, 200%/400% zoom, reflow and cross-browser/hosted visual review remain open. The Dickens/Carroll vocabulary and syntax supports are present, but actual age/level, cultural/context suitability and readability must be confirmed by a human reviewer familiar with the intended learners.
 
 | Independent gate | Current state | Evidence required to close |
 |---|---|---|
-| Founder content approval | **Approved for exact v3, 30 October 2026** | Applies to v3 only; not a release decision. |
-| AI-assisted editorial desk review | **Completed, 31 October 2026** | Two minor editorial points above remain for human decision. |
-| Human academic review | **Pending** | Named academic reviewer, date, written decision and scope covering each task, option rationale, model, feedback and flagged points. |
+| Founder content approval | **Approved for exact v4, 31 October 2026** | Confirmed in this session; exact content approval only, not release approval. |
+| AI-assisted editorial desk review | **v3 desk review completed; v4 editorial corrections recorded** | The founder / project owner has separately approved the exact v4 content and human academic review. |
+| Human academic review | **Passed for exact v4, 31 October 2026** | Reviewer: Founder / project owner; includes learner/teacher content, prompts, answers, alternatives, models and feedback. |
 | Official IB mapping | **Unverified** | Applicable current detailed Year 1 subject guide and exact wording/strand evidence. Keep codes blank until then. |
 | Unit-level rights and territory | **Pending** | Human unit-level confirmation of both text excerpts, the exact photograph and its use; territory coverage for planned distribution. |
-| Age/level and cultural/context suitability | **Pending** | Human review of syntax, vocabulary, assumptions, text context and scaffold sufficiency with intended learners in mind. |
+| Age/level and cultural/context suitability | **Approved for exact v4, 31 October 2026** | Founder / project owner reviewed the extracts, vocabulary, syntax, visual context and scaffolding. |
 | Manual accessibility | **Pending** | Keyboard/focus, screen reader, contrast, zoom/reflow and hosted visual checks. |
 | Release approval | **Not granted** | Explicit founder release decision after all required independent gates are complete. |
 
@@ -92,11 +92,11 @@ This is code-level association and automated browser evidence only. Manual keybo
 
 | Field | Value |
 |---|---|
-| Human academic reviewer | **Pending — not supplied** |
-| Review date | **Pending** |
-| Decision for exact v3 | **Pending** |
-| Q4 quotation capitalization decision | **Pending** |
-| Q3 photograph/shelter description decision | **Pending** |
+| Human academic reviewer | **Founder / project owner** |
+| Review date | **31 October 2026** |
+| Decision for exact v4 | **Approved 31 October 2026 by Founder / project owner** |
+| Q4 quotation capitalization decision | **Approved in v4; exact source casing retained** |
+| Q3 photograph/shelter description decision | **Approved in v4; description and alt text match visible open platform (no shelter)** |
 | Age/level and context suitability | **Pending** |
 | Rights/territory sign-off | **Pending** |
 | Manual accessibility sign-off | **Pending** |
@@ -108,10 +108,29 @@ The earlier preview version 1 received an academic content-review pass for pilot
 
 ## 9. Release guardrail
 
-Version 3 remains an unreleased founder-approved content candidate. Do not merge, publish to normal learner navigation or treat the preview as an official IB course. Keep teacher/editor answers out of the client bundle. Do not begin the Cambridge Stage 7 content revision until the MYP v3 technical checkpoint and the remaining MYP review/authorization requirements have been addressed and the founder explicitly authorizes the next sequence step.
+Version 4 is a founder-approved content candidate for the exact learner/teacher materials. It remains unreleased because rights/territory, manual accessibility and release gates remain open. Do not merge, publish to normal learner navigation or treat the preview as an official IB course. Keep teacher/editor answers out of the client bundle. Historical next-step statement superseded 31 October 2026: the Cambridge Stage 7 Top Five is now complete, but its learner-content/teacher-pack/counter migration is deferred while the diagnostic-first cycles run. The outstanding MYP rights and manual accessibility gates remain open and are not waived by the sequence change.
 
 ## 7. Cross-cohort status update — 31 October 2026
 
-The MYP-specific Top Five independent-source audit is complete and recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1; its findings are already applied in the Year 1 guide and implementation plan. This does not close the separate review gates in Sections 3–6 above. The two flagged editorial points remain unresolved by design; do not silently edit founder-approved v3. Any agreed content correction must be versioned and reviewed again.
+The MYP-specific Top Five independent-source audit is complete and recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1; its findings are already applied in the Year 1 guide and implementation plan. This does not close the separate review gates in Sections 3–6 above. The two v3 editorial flags have been corrected in the separate v4 draft after inspection of the exact photograph. V4 founder/human academic review and age/level/context suitability were approved on 31 October 2026; rights/territory and manual accessibility remain open. V3 remains intact as approved history.
 
-The cross-curriculum sequence, current candidate status, Cambridge/CBSE passage counts and remaining implementation steps are maintained in `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md`. Cambridge Stage 7 is not to begin content migration until the MYP review checkpoint is addressed and the next step is explicitly authorised.
+The cross-curriculum sequence, current candidate status, Cambridge/CBSE passage counts and remaining implementation steps are maintained in `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md`. Cambridge Stage 7 learner-content migration remains deferred during the diagnostic-first cycles. Closing the MYP Year 1 gates does not automatically reactivate the Stage 7 work queue.
+
+
+## 10. Version 4 editorial-correction record — 31 October 2026
+
+**Current version:** v4, on the existing draft PR #14 branch. **Approval state:** founder-approved for exact content, human academic review and age/level/context suitability on 31 October 2026. **Scope:** two editorial corrections only.
+
+1. **Q4 quotation fidelity:** the model answer now quotes “on a large scale” with the same lowercase initial as Dickens's source extract. The 95-word source passage, question, response range, model-answer reasoning and counter target are unchanged.
+2. **Q3 poster evidence:** the exact Commons photograph was visually inspected. It shows an open, raised paved platform, bus-stop sign, orange streetlights, nearby tree and approaching headlights; it does not show a shelter. Learner and teacher materials now refer to the orange-lit platform/sign rather than a shelter. The visual description and alt text were updated to describe the open-air platform accurately. The learner Q3 task/prompt intent, response range, ideal target and counter remain unchanged.
+
+All other v3 learner content and teacher-pack material is preserved. The two literary extracts remain 95 and 129 words. The six ideal counter targets remain 20/50/75/55/55/50, and the existing response ranges remain 15–25, 40–55, 65–85, 45–65, 45–65 and 45–60. Counters remain unrestricted: no maximum, truncation or `maxLength`. Fresh v4 CI run [#341](https://github.com/gradioprep/gradioprep-website/actions/runs/41212826874) passed the TypeScript/Vite build, teacher-pack separation guard and all 16 Chromium tests for the PR #14 branch snapshot at commit `c157ed2470e9c0e94e6758c075bb71484b767002`. Historical v3 run #295 remains v3-only evidence.
+
+**Still pending for v4:** final unit-level image/text rights and territory review (existing literary-text term checks cover India and the UK only; the US and other territories are not cleared); manual keyboard/focus, screen-reader, contrast, 200%/400% zoom/reflow and cross-browser checks; and explicit release approval. Keep exact current IB Year 1 mapping unverified and official objective codes blank unless applicable official evidence is verified.
+
+
+## 11. Current diagnostic-first work-order overlay — 31 October 2026
+
+This review document governs the exact IB MYP Year 1 Unit 1 v4 candidate and its approval/release gates only. It does not govern the newly selected Grade 9 / MYP Year 4 diagnostic cycle. The active diagnostic order is Grade 9 IB MYP first (MYP Year 4 is a working assumption; verify actual school placement), then Cambridge Grade 6 (exact Cambridge stage/course and language route to be confirmed; do not substitute Lower Secondary Stage 7).
+
+All existing MYP Year 1, Cambridge Stage 7 and CBSE Grade 6 Unit 1 content tasks and migrations are preserved but deferred while the two diagnostic cycles run. For this MYP Year 1 v4 candidate, exact content, human academic review and age/level/context suitability remain approved; unit-level rights/territory, visual-context review, manual accessibility and explicit release approval remain open. The new sequencing decision closes none of these gates and changes no underlying content standards. After both diagnostic cycles, the founder will set the next curriculum-content order.
