@@ -1,6 +1,6 @@
 # English Stage 1 — Curriculum Roadmap
 
-**Status:** Working roadmap updated 31 October 2026. The first-cohort order remains IB MYP Year 1 → Cambridge Lower Secondary Stage 7 → CBSE Grade 6. MYP Year 1 Unit 1 v3 remains the founder-approved candidate in draft PR #14. The six live counters and accessible prompt/range/counter associations are implemented; GitHub Actions run #295 passed the build, teacher-pack separation and 16/16 Chromium tests. AI-assisted editorial and current public IB-source reviews are recorded, but human academic validation, exact official mapping, final unit-level rights, age/level suitability, manual accessibility and release gates remain open. The MYP checkpoint must be completed and the founder must explicitly authorize the transition before Cambridge content revision starts. CBSE remains third. Existing previews remain isolated and unreleased; no merge or production deployment is implied.
+**Status:** Current first-cohort status is maintained in `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md` (31 October 2026). Sequence remains MYP Year 1 → Cambridge Stage 7 → CBSE Grade 6. MYP v3 counters and automated checks are complete, but its human review flags and release gates remain open. Cambridge v1.3 prior review confirmations are retained; its route-specific Top Five and teacher-pack/counter migration remain outstanding. CBSE v1.0 remains an approved content candidate, with its own Top Five, teacher-pack and counter migration outstanding. Exact current official mapping remains unverified where noted; this does not block independent research. Do not skip a blocked cohort, start Unit 2, merge or deploy.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Purpose:** Turn the approved Stage 1 scope into a trackable production plan without claiming full syllabus coverage or inventing official curriculum mappings.
 
@@ -265,3 +265,13 @@ The binding method now requires a ranked Top Five independent-website comparison
 **Completed:** IB MYP Language and Literature Year 1. The five independent sources and design implications are recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1 and applied in the Year 1 guide v1.5 and implementation plan v1.4.
 
 **Outstanding, in sequence:** Cambridge Lower Secondary English 0861 Stage 7 requires its own Top Five; CBSE English Grade 6 then requires a separate India-relevant Top Five. Do not copy the MYP list across tracks. Continue using public evidence when official detail is gated; leave only unsupported official mapping unverified. This research requirement is separate from the mandatory MYP→Cambridge→CBSE learner-content/teacher-pack revision order and its distinct human review, rights, accessibility, suitability and release gates.
+
+## 14. Current first-cohort reconciliation — 31 October 2026
+
+The authoritative three-route status, exact-version approval boundaries, passage counts, branch controls and nine-step completion queue are in [Unit 1 Cohort Status and Reconciliation](UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md). This section supersedes older “current” summaries in Sections 10–13 where their sequence/status language conflicts.
+
+- Route-specific independent Top Five: MYP Year 1 complete; Cambridge Stage 7 pending; CBSE Grade 6 pending after Cambridge.
+- Passage count: Cambridge 16/221/27; CBSE 165. All are platform-original and within the 250-word allowance. No replacement is presently required; repeat the count if a passage changes.
+- Teacher-pack/counter work: MYP pack and six counters are complete; Cambridge pack and counters remain to be migrated; CBSE pack and counters remain to be migrated after Cambridge.
+- Next checkpoint: close the outstanding MYP human academic, visual/rights, suitability and manual accessibility decisions before beginning Cambridge content migration. Do not ask the founder to repeat the previously confirmed Cambridge v1.3 review/verification decisions.
+- All five relevant draft PRs remain separate and unmerged. Synchronize shared documents and reconcile the older stacked PR #16 base before any merge review.
