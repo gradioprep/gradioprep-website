@@ -1,7 +1,7 @@
 # IB MYP Language and Literature — Year 1 Curriculum Guide
 
 **Version:** 1.5 — route-specific Top Five independent-source research refresh  
-**Status:** Internal curriculum design for founder review; not an official IB guide or complete verified syllabus map.  
+**Status:** Founder-reviewed internal curriculum design; not an official IB guide or complete verified syllabus map. Year 1 guide/research records are preserved; any further Year 1 Unit 1 work is deferred during the diagnostic-first cycles.  
 **Programme/course:** IB Middle Years Programme (MYP), Language and Literature.  
 **Year:** Year 1.  
 **Pathway ID:** ib-myp-lal-y1.  
@@ -252,7 +252,7 @@ The retrospective live word counter across all six existing typed-response field
 
 The founder-approved v3 candidate remains an independently designed, public-framework-informed platform unit. The current public IB pages support the broad six-skill and school-based assessment context; they do not provide the applicable current detailed Year 1 objective/strand wording. The public subject brief is labelled “From 2014”; the indexed detailed guide is for use from 2014/15; Enhanced MYP beta guidance anticipates full release in 2027. Keep official objective codes blank and mapping unverified.
 
-The AI-assisted editorial desk review recorded in `docs/PILOT_UNIT_REVIEW.md` found the item sequence, answer rationales, typed-response guidance and model lengths internally consistent, with two minor quotation/visual-description points to be resolved by a human reviewer. It did not change v3 content and is not human academic approval. The six live counters remain implemented; their accessible prompt/range/counter associations passed automated Chromium tests in GitHub Actions run #295. Manual accessibility, human suitability, unit-level rights and release decisions remain open. Do not start Cambridge content work until those MYP conditions and the separate founder authorization checkpoint are satisfied.
+The AI-assisted editorial desk review recorded in `docs/PILOT_UNIT_REVIEW.md` found the item sequence, answer rationales, typed-response guidance and model lengths internally consistent, with two minor quotation/visual-description points to be resolved by a human reviewer. It did not change v3 content and is not human academic approval. The six live counters remain implemented; their accessible prompt/range/counter associations passed automated Chromium tests in GitHub Actions run #295. Manual accessibility, human suitability, unit-level rights and release decisions remain open. Historical next-step instruction superseded 31 October 2026: all further curriculum-unit production and migrations are deferred while the Grade 9 IB MYP and Cambridge Grade 6 diagnostic-readiness cycles run. Do not automatically advance to Cambridge Stage 7 when the MYP unit gates close.
 
 ## 12. Route-specific Top Five research refresh — 31 October 2026
 
@@ -278,3 +278,8 @@ Scores use the shared route-specific rubric and are internal comparative judgeme
 The public official IB sources verify the broad subject framework and programme context. The exact applicable current detailed Year 1 guide/strand map remains unverified. **This uncertainty does not block this internal guide or implementation structure.** It limits only claims of verified official mapping. The proposed six-unit sequence is still a GradiPrep design, not an IB-prescribed order.
 
 This research-only refresh does not change the founder-approved MYP Year 1 Unit 1 v3 passage text, questions, response ranges, model responses or teacher/editor pack. Human academic validation, unit-level rights/territory, visual-context, age/level suitability, manual accessibility and release approval remain separate.
+
+
+## 13. Diagnostic-first work-order clarification — 31 October 2026
+
+This is the existing **IB MYP Year 1** guide and is not the Grade 9 / MYP Year 4 diagnostic cycle. Its content, source audit, Year 1 Unit 1 v4 approval and outstanding unit-level rights/territory, visual-context, manual accessibility and release gates remain preserved. No additional MYP Year 1 unit, Cambridge Stage 7 unit or other curriculum content work is active during the new diagnostic-first cycles. The active first cycle is Grade 9 IB MYP (MYP Year 4 working assumption, verify actual school placement); the second is Cambridge Grade 6 (exact Cambridge course/stage to be verified, not Stage 7 by assumption). Follow the dedicated diagnostic standard and cycle register. The Year 1 guide does not substitute for or pre-empt the Grade 9 research.
