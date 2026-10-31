@@ -1,6 +1,6 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Last updated:** 31 October 2026  
 **Status:** Sequence approved; this documentation is awaiting founder review. No diagnostic-provider research, test blueprint, item authoring or implementation has started.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
@@ -76,4 +76,4 @@ The diagnostic-first decision changes the immediate work order only. It does not
 - CBSE Grade 6 Unit 1 v1.0 remains its exact-version academic-content candidate; its planned Top Five, pack/counter work and remaining review gates are deferred.
 - PRs #12, #14, #15, #16 and #17 remain separate draft/unmerged candidates/previews. PR #16's older base is not rebased or altered by this decision.
 
-The former Unit 1 rotation and queued migration plans are historical work queues only. They do not determine the next task while the diagnostic cycles are active. After both cycles are approved, the founder will specify the next content-production order.
+The former Unit 1 rotation and queued migration plans are historical work queues only. They do not determine the next task while the diagnostic cycles are active. After both diagnostic cycles are approved, the Founder / project owner will specify the next curriculum-content order and scope. This may include completing multiple units for Grade 9 IB MYP or Cambridge Grade 6 before switching to another level, or another explicitly selected order. The former Unit 1 rotation remains inactive unless explicitly reinstated by the founder.
