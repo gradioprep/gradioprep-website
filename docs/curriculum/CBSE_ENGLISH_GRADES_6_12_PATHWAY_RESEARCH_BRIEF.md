@@ -1,6 +1,6 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.7  
+**Version:** 1.8  
 **Status:** Approved pathway scope and authorised implementation; learner-facing Grade 6 Unit 1 v1.0 (“The Turning Sign”) has founder academic-content approval recorded 28 October 2026. Its source alignment is partial; no unit-specific official CBSE objective code is assigned. A controlled, unlinked interface preview is available in draft PR #17; manual accessibility review, current *Poorvi* reprint verification and release approval remain separate gates.  
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
@@ -38,16 +38,15 @@ These are starting points, not a completed syllabus audit. Before developing any
 
 ## 4. Required research and design method
 
-Follow the binding IB/Cambridge curriculum research workflow, extended to CBSE by the update recorded in the workflow. For each grade and applicable course route:
+Follow the binding English Curriculum Research Workflow for each grade and applicable route:
 
 1. Identify the current official CBSE/NCERT curriculum, textbook, learning outcomes/competencies, syllabus edition and assessment rules.
 2. Trace relevant NCF-SE 2023 principles to grade-specific official sources rather than applying broad principles as if they were exact syllabus requirements.
-3. Compare relevant India-focused and international English EdTech/teaching platforms and publishers at the same age/grade band. Review only what can be verified publicly: progression, unit architecture, text types, modelling, practice, feedback, assessments, differentiation, accessibility and teacher/learner workflow.
+3. Complete a ranked Top Five review of independent websites separately for the exact CBSE grade and English route. Include relevant India-focused and international specialist teaching/EdTech providers, publishers and educator resources; inspect publicly available grade-band/course-specific material and record dates, access and evidence. Do not count CBSE/NCERT/government sources toward the five. Use the binding weighted rubric in `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A.
 4. Cross-check proposed pedagogy against reputable evidence and the public-source register. Use platform research to inform implementation quality, not to determine official CBSE requirements.
 5. Design a distinct grade-specific curriculum guide and unit sequence, with source traceability and explicit confidence/status for each mapping.
 6. Keep official codes/wording only where directly verified. Otherwise use clearly labelled internal skill outcomes and mark the official mapping unresolved.
 7. Keep academic/content review, official mapping/currency, rights/originality, accessibility, age/cultural suitability and release approval separate.
-
 ## 5. Binding Grade 6-equivalent Unit 1 order
 
 The first cross-track cohort is fixed as follows:
@@ -128,3 +127,8 @@ The current Grade 6 Unit 1 “The Turning Sign” is a platform-original story. 
 
 The CBSE teacher/editor pack is not complete under the new teacher-pack standard. Do not finalise it or begin its assessment-feature build before revising the IB MYP Year 1 and Cambridge Stage 7 teacher packs in that order. When CBSE reaches its turn, include AI-drafted/human-validated objective explanations, per-alternative rationales, ordering/fill-in logic, question-specific typed-response ranges and ideal targets, model responses and question-specific feedback. Apply the live current/ideal counter retrospectively to every typed-response field; over-target text must remain fully accepted and visible.
 
+## 12. Route-specific Top Five research requirement — 31 October 2026
+
+Every CBSE English grade requires its own ranked Top Five independent-source audit before that grade's curriculum guide and implementation structure are marked research-complete. A Grade 6 audit does not automatically transfer to Grades 7–12, and an international source used for MYP or Cambridge does not count automatically for CBSE. Evaluate sources for Indian grade relevance, current textbook/learning-outcome context, age suitability, pedagogical credibility, inspectable teaching/assessment examples, transparency and rights. Keep official CBSE/NCERT/National Curriculum Framework references in a separate authority register.
+
+**Grade 6 status:** the Top Five independent-source audit is **not yet completed**. This is an outstanding research task in the approved production sequence—not a reason to wait for a new or gated official CBSE guide. Continue with the best available public NCERT/CBSE evidence plus a defensible independent comparison, and mark only unsupported official class-specific mapping as unverified. Do not claim a five-source audit has been completed until its source-by-source record exists.
