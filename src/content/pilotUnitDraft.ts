@@ -24,12 +24,12 @@ export const pilotUnitDraft: PilotUnitDraft = {
   mappingStatus: "unverified",
   officialObjectiveCodes: [],
   source: {
-    title: "IB MYP Language and Literature public programme overview; detailed Year 1 guide edition not verified",
+    title: "IB MYP Language and Literature public programme overview and dated subject brief; current detailed Year 1 guide edition not verified",
     url: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
-    subjectBriefUrl: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
-    checkedAt: "2026-10-30",
+    subjectBriefUrl: "https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf",
+    checkedAt: "2026-10-31",
     scopeNote:
-      "The public programme overview is a broad reference only. It does not verify the applicable detailed Year 1 guide edition, exact objective wording or strand mapping. Official objective codes remain blank.",
+      "The public programme overview and linked subject brief were rechecked on 31 October 2026; the brief is labelled From 2014. These are broad programme references only and do not verify the applicable current detailed Year 1 guide edition, exact objective wording or strand mapping. Official objective codes remain blank.",
   },
   teachingSequence: [
     { number: "01", title: "Notice before interpreting", purpose: "Separate observable details from inferences in a literary description and a visual campaign." },

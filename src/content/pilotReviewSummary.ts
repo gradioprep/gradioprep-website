@@ -20,12 +20,12 @@ export const pilotReviewSummary: PilotReviewSummary = {
       "The founder approved this exact version 3 content candidate on 30 October 2026. Version 1 and version 2 approvals remain historical and do not transfer. This candidate remains unreleased; human academic review and separate mapping, rights, suitability, accessibility and release gates remain pending.",
   },
   source: {
-    title: "IB MYP Language and Literature public programme overview; detailed Year 1 guide edition not verified",
+    title: "IB MYP Language and Literature public programme overview and dated subject brief; current detailed Year 1 guide edition not verified",
     url: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
-    subjectBriefUrl: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
-    checkedAt: "2026-10-30",
+    subjectBriefUrl: "https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf",
+    checkedAt: "2026-10-31",
     scopeNote:
-      "High-level programme context only. The applicable current detailed Year 1 guide and exact objective/strand mapping remain unverified. Official objective codes are intentionally blank.",
+      "Public programme context and the linked subject brief were rechecked on 31 October 2026; the brief is labelled From 2014. The applicable current detailed Year 1 guide and exact objective/strand mapping remain unverified. Official objective codes are intentionally blank.",
   },
   remainingReleaseChecks: [
     "Fresh human academic review of version 3, including all questions, distractor rationales, model responses and feedback.",
