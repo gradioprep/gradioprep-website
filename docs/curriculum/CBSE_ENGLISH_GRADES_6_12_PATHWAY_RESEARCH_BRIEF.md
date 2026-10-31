@@ -133,11 +133,11 @@ Every CBSE English grade requires its own ranked Top Five independent-source aud
 
 **Grade 6 status:** the Top Five independent-source audit is **not yet completed**. This is an outstanding research task in the approved production sequence—not a reason to wait for a new or gated official CBSE guide. Continue with the best available public NCERT/CBSE evidence plus a defensible independent comparison, and mark only unsupported official class-specific mapping as unverified. Do not claim a five-source audit has been completed until its source-by-source record exists.
 
-## 13. Current Grade 6 Unit 1 specification checkpoint — 31 October 2026
+## 13. Historical Grade 6 Unit 1 specification checkpoint — 31 October 2026 (deferred)
 
 The exact learner-facing v1.0 “The Turning Sign” remains founder-approved for the academic-content gate. Its story body is 165 words under the project's lexical convention; it qualifies as a short original and does not require replacement solely because the passage rule changed.
 
-The Grade 6 route-specific Top Five is still pending. Complete it separately for CBSE English Grade 6 and apply its findings to the guide/implementation structure after the Cambridge Stage 7 checkpoint. The existing v1.0 teacher/editor pack is not complete under teacher-pack standard v1.2; it still needs per-alternative reasoning, sequence logic, question-specific typed-response guidance/ideal targets, models and tailored feedback. Add a live current/ideal counter to every typed response when updating the learner preview. PR #17 is the earlier v1.0 interface preview and does not yet satisfy this counter requirement.
+The Grade 6 curriculum-content Top Five remains pending but is deferred during the diagnostic-first cycles. The existing v1.0 teacher/editor pack is not complete under the current teacher-pack standard; it still needs per-alternative reasoning, sequence logic, question-specific typed-response guidance/ideal targets, models and tailored feedback. The live current/ideal counter must be added to every typed response when this Unit 1 candidate is next revised. PR #17 is the earlier v1.0 interface preview and does not yet satisfy this counter requirement. Do not use the former Cambridge Stage 7 checkpoint as the current next-step trigger.
 
 The latest *Poorvi* reprint and unit-specific official CBSE objective code remain unverified. Do not reproduce NCERT material or invent objective codes. The absence of a current exact official descriptor does not block the independent Top Five or a clearly labelled internal guide. The cross-route sequence and release boundaries are controlled by `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md`.
 
