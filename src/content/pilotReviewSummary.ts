@@ -35,5 +35,5 @@ export const pilotReviewSummary: PilotReviewSummary = {
     "Explicit founder release approval.",
   ],
   releaseNote:
-    "Version 3 is not released. Practice is temporary and ungraded. The teacher pack is separate from the learner-facing application. Official IB mapping, academic review, rights, accessibility, age/level suitability and release approval remain open.",
+    "Version 4 is not released. Practice is temporary and ungraded. The teacher pack is separate from the learner-facing application. Official IB mapping, academic review, rights, accessibility, age/level suitability and release approval remain open.",
 };
