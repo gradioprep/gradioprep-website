@@ -146,13 +146,13 @@ The founder's production rule is to create **one unit at a time across curriculu
 Then continue across the approved tracks for Unit 2, then Unit 3. The exact order after these initial slots may be revised only through a recorded decision. DP and IGCSE units are blocked until their current official guide/syllabus and school/exam-year sequence are verified. A blocked slot stays blocked; no invented content or mapping may be substituted merely to preserve rotation.
 
 
-## 10. Public-source method and curriculum guide rotation
+## 10. Public-source method and historical curriculum guide order (deferred)
 
 Use `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md` as the shared source/currency register and `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A for the mandatory ranked Top Five independent websites for every exact route. The shared cross-track starter set is not the route-specific Top Five. Record exact course, year/stage/grade, edition/session, paper/sample type, access, inspectable evidence and rights checks. Do not select a worksheet or exam paper merely because it is easy to download. For Cambridge 0500 exams 2027–2029, prefer the current official syllabus and specimen/mark-scheme set; older papers require an item-level comparison. For DP Language A: Language and Literature, use public current IB course/examiner information and cross-check with specialist sites; do not mislabel Language A: Literature papers as Language and Literature specimens. For MYP, use the public six-skill framework and school-based assessment description to create original tasks; official Year 1 objective/strand codes stay blank if not verifiable.
 
-Guide creation order, before rotating unit-content production:
-1. IB MYP Language and Literature Year 1 — guide/implementation structure and Unit 1 v2 content approved by the founder; separate academic review, official objective/strand mapping, rights, accessibility/suitability and release gates remain open.
-2. Cambridge Lower Secondary English 0861 Stage 7 — active checkpoint: founder/academic-lead review of exact v1.3; AI-led academic-content review improvements are documented. The full current framework/version and codes beyond the limited 7Ri.03 explicit-information crosswalk remain unverified.
+**Historical guide-creation order only — no guide or unit production from this list is active during the diagnostic cycles.** The public-source method above remains binding when curriculum content work resumes, but the founder will set the next content order after both readiness cycles. Former guide order:
+1. IB MYP Language and Literature Year 1 — guide/implementation structure and Unit 1 v4 exact content, human academic review and age/level/context suitability are now founder-approved. Official mapping, rights/territory, visual context, manual accessibility and release gates remain open; all further Year 1 unit work is deferred.
+2. Cambridge Lower Secondary English 0861 Stage 7 — historical checkpoint: exact v1.3 founder-confirmed review and curriculum-content Top Five are complete; full framework/version and codes beyond 7Ri.03 remain unverified. Stage 7 pack/counter migration is deferred; Stage 7 is not the requested Cambridge Grade 6 diagnostic cycle.
 3. IB DP Language A: Language and Literature Year 1 — use public course and current examiner guidance; identify any criterion/version updates.
 4. Cambridge IGCSE First Language English 0500 — syllabus-wide guide anchored to Version 1 for 2027–2029; record component/route and exam year.
 5. IB MYP Year 2.
@@ -256,7 +256,7 @@ The six-field retrospective live word counter is implemented on the existing PR 
 
 ## Historical MYP Year 1 Unit 1 v3 review checkpoint — 31 October 2026
 
-The six-field counter retrofit and accessible links to prompt, response guidance and live count are implemented. The latest CI run #295 passed the build, teacher-pack separation and all 16 Chromium tests. The current public IB sources support broad programme context but not the exact applicable current Year 1 objective/strand map; keep official codes blank. The AI-assisted editorial review is complete and two minor source-fidelity/visual-description points are flagged for the human academic reviewer. Final unit-level rights and visual review, human academic validation, age/level suitability, manual accessibility and release approval remain open. Cambridge Stage 7 is next only after those gates are addressed and explicit founder authorization is recorded.
+The six-field counter retrofit and accessible links to prompt, response guidance and live count are implemented. The latest CI run #295 passed the build, teacher-pack separation and all 16 Chromium tests for the earlier v3 snapshot. The public IB sources support broad programme context but not exact applicable current Year 1 mapping; keep official codes blank. This is a historical v3 checkpoint: its two editorial flags were corrected in v4, and human academic/age-context review is now approved for exact v4. Rights/territory, visual context, manual accessibility and release remain open. Any former instruction to move next to Cambridge Stage 7 is superseded by the diagnostic-first cycle register.
 
 ## 13. Historical curriculum-content Top Five research checkpoint — 31 October 2026
 
@@ -273,7 +273,7 @@ The authoritative three-route status, exact-version approval boundaries, passage
 - Route-specific independent Top Five: MYP Year 1 and Cambridge Stage 7 complete; CBSE Grade 6 pending after Cambridge.
 - Passage count: Cambridge 16/221/27; CBSE 165. All are platform-original and within the 250-word allowance. No replacement is presently required; repeat the count if a passage changes.
 - Teacher-pack/counter work: MYP pack and six counters are complete; Cambridge pack and counters remain to be migrated; CBSE pack and counters remain to be migrated after Cambridge.
-- Next checkpoint: close the outstanding MYP unit-level rights/territory and manual accessibility gates. Cambridge Stage 7 Top Five is complete; its teacher-pack/counter migration begins only after those MYP gates close. Do not ask the founder to repeat the previously confirmed Cambridge v1.3 review/verification decisions.
+- Deferred content checkpoint: MYP unit-level rights/territory and manual accessibility gates remain open. Cambridge Stage 7 Top Five is complete, but its pack/counter migration does not begin automatically when MYP gates close. All Unit 1 work is deferred during the diagnostic cycles; do not ask the founder to repeat the previously confirmed Cambridge v1.3 review/verification decisions.
 - All five relevant draft PRs remain separate and unmerged. Synchronize shared documents and reconcile the older stacked PR #16 base before any merge review.
 
 
