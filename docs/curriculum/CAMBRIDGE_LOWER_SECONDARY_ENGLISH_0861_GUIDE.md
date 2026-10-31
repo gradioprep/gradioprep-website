@@ -1,6 +1,6 @@
 # Cambridge Lower Secondary English (0861) — Stages 7–9 Curriculum Guide
 
-**Document status:** Public-framework-aligned group guide v1.0. Stage 7 chapter drafted in detail; Stages 8–9 remain design chapters. MYP Year 1 Unit 1 v3 is the founder-approved content candidate; its retrospective live-counter retrofit precedes the Stage 7 Unit 1 content/teacher-pack revision. A controlled preview route was added for automated interface accessibility checks, but the unit remains an unreleased draft. Cambridge's public support overview explicitly shows 7Ri.03 for explicit information, which is recorded as a limited crosswalk only. Other objective codes and the currently applicable full framework file remain unverified pending the official support site.
+**Document status:** Public-framework-aligned group guide v1.1. Stage 7 chapter is drafted; Stages 8–9 remain design chapters. MYP Year 1 Unit 1 v3 and its review checkpoint come first. Stage 7 Unit 1 v1.3 retains founder-confirmed exact-version review/verification approval; its independent Top Five, revised teacher pack and live typed-response counters remain outstanding. Its 16/221/27-word original stimuli all meet the 250-word allowance. Cambridge's public support overview evidences only 7Ri.03 for explicit information; the full current framework/version and other objective codes remain unverified.
 **Course:** Cambridge Lower Secondary English (0861), Stage 7.
 **Pathway IDs:** cambridge-ls-english-s7, cambridge-ls-english-s8, cambridge-ls-english-s9.
 **Scope:** First-language English pathway, typically for learners aged 11–14 across Stages 7–9. Do not substitute the distinct English as a Second Language (0876) curriculum.
@@ -314,3 +314,8 @@ The Stage 7 teacher/editor pack must contain per-option rationales, correct-answ
 
 **Sequence:** Stage 7 follows the retrospective MYP v3 counter retrofit and its required review/authorization checkpoint, and precedes CBSE Grade 6. Previous Stage 7 v1.3 approval applies only to that exact version; material revision triggers the relevant fresh review.
 
+## Stage 7 Unit 1 current research/migration status — 31 October 2026
+
+The current candidate is v1.3 in draft PR #12. Founder-confirmed review/verification approval applies to that exact version; do not request those confirmations again. The route-specific Top Five for Stage 7 is pending and must be completed separately from the MYP review. Its public-source findings must be applied to this guide and the implementation structure before the research checkpoint is marked complete.
+
+The current original passage bodies are 16 words (warm-up), 221 words (“The Rain Gauge”) and 27 words (exit mini-passage). They may remain under the approved 250-word rule. The existing teacher/editor pack needs migration to standard v1.2, and each typed response needs a current/ideal live counter in the preview. This content/technical migration follows the MYP review checkpoint and precedes the CBSE Grade 6 migration.
