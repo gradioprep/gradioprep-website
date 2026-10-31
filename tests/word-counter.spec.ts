@@ -3,12 +3,12 @@ import { expect, test } from "@playwright/test";
 const pilotLesson = "/pathways/ib-myp/language-and-literature/year-1/units/unit-1/lesson";
 
 const responseFields = [
-  { id: "myp-y1-u1-entry-response", target: 20 },
-  { id: "pilot-v3-q2-response", target: 50 },
-  { id: "pilot-v3-q3-response", target: 75 },
-  { id: "pilot-v3-q4-response", target: 55 },
-  { id: "pilot-v3-q5-response", target: 55 },
-  { id: "myp-y1-u1-exit-response", target: 50 },
+  { id: "myp-y1-u1-entry-response", target: 20, prompt: "myp-y1-u1-entry-prompt", range: "myp-y1-u1-entry-range", label: "Your first observation" },
+  { id: "pilot-v3-q2-response", target: 50, prompt: "pilot-v3-q2-prompt", range: "pilot-v3-q2-range", label: "Your response" },
+  { id: "pilot-v3-q3-response", target: 75, prompt: "pilot-v3-q3-prompt", range: "pilot-v3-q3-range", label: "Your response" },
+  { id: "pilot-v3-q4-response", target: 55, prompt: "pilot-v3-q4-prompt", range: "pilot-v3-q4-range", label: "Your response" },
+  { id: "pilot-v3-q5-response", target: 55, prompt: "pilot-v3-q5-prompt", range: "pilot-v3-q5-range", label: "Your response" },
+  { id: "myp-y1-u1-exit-response", target: 50, prompt: "myp-y1-u1-exit-prompt", range: "myp-y1-u1-exit-range", label: "Your exit response" },
 ];
 
 test.describe("MYP Year 1 Unit 1 live response word counters", () => {
@@ -20,7 +20,13 @@ test.describe("MYP Year 1 Unit 1 live response word counters", () => {
     for (const field of responseFields) {
       await expect(page.locator(`#${field.id}`)).toBeVisible();
       await expect(page.locator(`#${field.id}-word-count`)).toHaveText(`0/${field.target} words`);
-      await expect(page.locator(`#${field.id}`)).toHaveAttribute("aria-describedby", `${field.id}-word-count`);
+      const describedBy = (await page.locator(`#${field.id}`).getAttribute("aria-describedby") ?? "").split(/\\s+/);
+      expect(describedBy).toContain(field.prompt);
+      expect(describedBy).toContain(field.range);
+      expect(describedBy).toContain(`${field.id}-word-count`);
+      await expect(page.locator(`#${field.id}`)).toHaveAccessibleName(field.label);
+      await expect(page.locator(`#${field.prompt}`)).toBeVisible();
+      await expect(page.locator(`#${field.range}`)).toBeVisible();
       await expect(page.locator(`#${field.id}`)).not.toHaveAttribute("maxlength", /.+/);
     }
   });

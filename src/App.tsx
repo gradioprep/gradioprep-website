@@ -320,8 +320,8 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
         <section className="proto-panel proto-pilot-entry-check">
           <Label>STARTING POINT · NOT GRADED</Label>
           <h2>What do you notice first?</h2>
-          <p>{lesson.entryCheck.prompt}</p>
-          <p className="proto-unit-readiness-intro proto-response-length">Expected response: {lesson.entryCheck.expectedResponseLength.minWords}–{lesson.entryCheck.expectedResponseLength.maxWords} words. This is guidance, not a limit.</p>
+          <p id="myp-y1-u1-entry-prompt">{lesson.entryCheck.prompt}</p>
+          <p id="myp-y1-u1-entry-range" className="proto-unit-readiness-intro proto-response-length">Expected response: {lesson.entryCheck.expectedResponseLength.minWords}–{lesson.entryCheck.expectedResponseLength.maxWords} words. This is guidance, not a limit.</p>
           <div className="proto-pilot-response-field">
             <label className="proto-pilot-response-label" htmlFor="myp-y1-u1-entry-response">Your first observation</label>
             <ResponseWordCountTextarea
@@ -329,6 +329,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
               rows={3}
               value={entryResponse}
               idealWords={lesson.entryCheck.expectedResponseLength.idealWords}
+              describedBy="myp-y1-u1-entry-prompt myp-y1-u1-entry-range"
               onChange={value => { setEntryResponse(value); setEntryReviewed(false); }}
               placeholder={lesson.entryCheck.placeholder}
             />
@@ -367,14 +368,14 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
           </div>
           <p className="proto-unit-readiness-intro">Choose an option or write your response, then check the success indicators. This preview does not mark correctness, retain your work or send it anywhere.</p>
           {lesson.practiceItems.map((item,index)=><article className="proto-pilot-question" key={item.id}>
-            <div className="proto-pilot-question-head"><span>{String(index+1).padStart(2,"0")}</span><div><small>{item.focus}</small><h3>{item.prompt}</h3></div></div>
+            <div className="proto-pilot-question-head"><span>{String(index+1).padStart(2,"0")}</span><div><small>{item.focus}</small><h3 id={`${item.id}-prompt`}>{item.prompt}</h3></div></div>
             {item.options && <div className="proto-pilot-options">
               {item.options.map(option=><button type="button" key={option.id} aria-pressed={selectedOptions[item.id]===option.id} className={"proto-pilot-option-button"+(selectedOptions[item.id]===option.id?" is-selected":"")} onClick={()=>{setSelectedOptions(previous=>({...previous,[item.id]:option.id}));setAttempted(previous=>({...previous,[item.id]:false}));}}>
                 <b>{option.id}</b><span>{option.text}</span>
               </button>)}
             </div>}
             {!item.options && item.expectedResponseLength && <>
-              <p className="proto-unit-readiness-intro proto-response-length">Expected response: {item.expectedResponseLength.minWords}–{item.expectedResponseLength.maxWords} words. This is guidance, not a limit.</p>
+              <p id={`${item.id}-range`} className="proto-unit-readiness-intro proto-response-length">Expected response: {item.expectedResponseLength.minWords}–{item.expectedResponseLength.maxWords} words. This is guidance, not a limit.</p>
               <div className="proto-pilot-response-field">
                 <label className="proto-pilot-response-label" htmlFor={`${item.id}-response`}>Your response</label>
                 <ResponseWordCountTextarea
@@ -382,6 +383,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
                   rows={4}
                   value={responses[item.id] ?? ""}
                   idealWords={item.expectedResponseLength.idealWords}
+                  describedBy={`${item.id}-prompt ${item.id}-range`}
                   onChange={value => updateResponse(item.id, value)}
                   placeholder="Write your explanation here..."
                 />
@@ -404,8 +406,8 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
             <p>{lesson.exitTicket.stimulus.rightsNote}</p>
             <p><b>Word help:</b> {lesson.exitTicket.vocabularySupport.map(item => `${item.term}: ${item.meaning}`).join(" · ")}</p>
           </div>
-          <p>{lesson.exitTicket.prompt}</p>
-          <p className="proto-unit-readiness-intro proto-response-length">Expected response: {lesson.exitTicket.expectedResponseLength.minWords}–{lesson.exitTicket.expectedResponseLength.maxWords} words. This is guidance, not a limit.</p>
+          <p id="myp-y1-u1-exit-prompt">{lesson.exitTicket.prompt}</p>
+          <p id="myp-y1-u1-exit-range" className="proto-unit-readiness-intro proto-response-length">Expected response: {lesson.exitTicket.expectedResponseLength.minWords}–{lesson.exitTicket.expectedResponseLength.maxWords} words. This is guidance, not a limit.</p>
           <div className="proto-pilot-response-field">
             <label className="proto-pilot-response-label" htmlFor="myp-y1-u1-exit-response">Your exit response</label>
             <ResponseWordCountTextarea
@@ -413,6 +415,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
               rows={5}
               value={exitResponse}
               idealWords={lesson.exitTicket.expectedResponseLength.idealWords}
+              describedBy="myp-y1-u1-exit-prompt myp-y1-u1-exit-range"
               onChange={value => { setExitResponse(value); setExitReviewed(false); }}
               placeholder="Use precise evidence, explain what it may suggest, and connect it to the context..."
             />

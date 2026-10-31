@@ -18,6 +18,8 @@ interface ResponseWordCountTextareaProps {
   idealWords: number;
   rows: number;
   placeholder?: string;
+  /** IDs for the task prompt and response-length guidance, in reading order. */
+  describedBy: string;
   onChange: (value: string) => void;
 }
 
@@ -28,6 +30,7 @@ export function ResponseWordCountTextarea({
   idealWords,
   rows,
   placeholder,
+  describedBy,
   onChange,
 }: ResponseWordCountTextareaProps) {
   const countId = id + "-word-count";
@@ -39,7 +42,7 @@ export function ResponseWordCountTextarea({
         rows={rows}
         value={value}
         placeholder={placeholder}
-        aria-describedby={countId}
+        aria-describedby={describedBy + " " + countId}
         onChange={(event: ChangeEvent<HTMLTextAreaElement>) => onChange(event.currentTarget.value)}
       />
       <small
