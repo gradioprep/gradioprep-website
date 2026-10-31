@@ -2,21 +2,20 @@ import type { PilotLearnerLesson } from "./model";
 
 /**
  * Learner-safe content for IB MYP Language and Literature Year 1 Unit 1.
- * Version 4 is a draft editorial-correction candidate; founder approval for v3
- * does not transfer, and fresh human academic review remains pending. It contains no answer keys, model responses,
+ * Version 4 is founder-approved for content, academic quality and age/level suitability (31 October 2026); rights, manual accessibility and release remain separate gates. It contains no answer keys, model responses,
  * hidden rationales or teacher-only scoring guidance.
  */
 export const pilotLearnerLesson: PilotLearnerLesson = {
   id: "pilot-lesson-how-writers-shape-meaning-v4",
   version: 4,
   unitId: "ib-myp-lal-y1-u1",
-  status: "draft-for-founder-review",
+  status: "founder-approved-candidate",
   reviewRecord: {
-    outcome: "pending",
-    reviewedAt: null,
-    reviewerLabel: "Version 3 founder content approval recorded 30 October 2026; version 4 editorial correction candidate awaiting founder and fresh human academic review",
+    outcome: "passed",
+    reviewedAt: "2026-10-31",
+    reviewerLabel: "Founder / project owner",
     scopeNote:
-      "Version 3 was approved by the founder on 30 October 2026. This version 4 candidate makes only the two documented editorial corrections: aligns the Q4 quotation with Dickens's lowercase source wording and replaces the unsupported Q3 shelter reference with details visible in the photograph. Version 4 has not yet received founder approval or fresh human academic review. All other v3 passages, questions, prompts, ranges and counter targets remain unchanged; separate mapping, rights, suitability, accessibility and release decisions remain pending.",
+      "Version 4 was approved by the founder / project owner on 31 October 2026 following review of the full learner and teacher/editor content, including both editorial corrections, questions, answers, models, feedback, age/level and contextual suitability. This approval is for the exact v4 content only and is not a release approval. Both registered passages, all learner questions/prompts, response ranges and counter targets remain unchanged. Official mapping remains unverified; unit-level rights/territory, manual accessibility and release decisions remain separate gates.",
   },
   title: "How writers and creators shape meaning",
   estimatedMinutes: 35,
