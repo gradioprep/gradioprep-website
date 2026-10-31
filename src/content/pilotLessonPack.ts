@@ -10,13 +10,13 @@ export const pilotLessonPack: PilotLessonPack = {
   id: "draft-lesson-how-writers-shape-meaning-v4",
   version: 4,
   unitId: "ib-myp-lal-y1-u1",
-  status: "draft-for-founder-review",
+  status: "founder-approved-candidate",
   reviewRecord: {
-    outcome: "pending",
-    reviewedAt: null,
-    reviewerLabel: "Academic review pending",
+    outcome: "passed",
+    reviewedAt: "2026-10-31",
+    reviewerLabel: "Founder / project owner",
     scopeNote:
-      "Version 4 is a draft editorial-correction candidate. Founder approval for exact v3 remains historical and does not transfer. Fresh human academic review of every question, rationale, model response and feedback item remains pending.",
+      "Version 4 was reviewed and approved by the founder / project owner on 31 October 2026 for academic content, question accuracy, rationales, models, feedback, age/level and contextual suitability. Approval applies only to exact v4. Rights/territory, manual accessibility and release approval remain separate and open.",
   },
   title: "How writers and creators shape meaning",
   audienceNote:
@@ -421,14 +421,13 @@ export const pilotLessonPack: PilotLessonPack = {
     "Review keyboard navigation, focus visibility, screen-reader order, zoom/reflow, visual contrast and mobile layout before release.",
   ],
   remainingReleaseChecks: [
-    "Complete fresh human academic review for version 3, including the item-level answer rationale, every option rationale, model response, response-quality bands and feedback. AI-assisted drafting is not academic validation.",
+    "Complete final unit-level rights/territory review of both text excerpts and the exact photo/poster use.",
     "Keep official IB objective/strand mapping unverified and codes blank until the exact applicable current official guide supports them.",
     "Complete final unit-level rights review of both text excerpts, the photo, poster copy/layout and the exact text incorporated in the public build.",
-    "Complete age/level and contextual suitability review, including vocabulary and syntax scaffolding.",
-    "Complete accessibility review, including screen-reader labels/order, keyboard access, zoom/reflow and mobile layout.",
+    "Complete manual accessibility review, including screen-reader labels/order, keyboard access, zoom/reflow, contrast and mobile layout.",
     "Keep answer keys and model responses out of the client build and verify the separation in production output.",
     "Record explicit founder release approval only after all independent gates are complete.",
   ],
   releaseNote:
-    "Version 3 is an unreleased candidate awaiting fresh founder and human academic review. Version 2 founder approval and version 1 pilot-preview academic approval do not transfer. Official Year 1 mapping remains unverified. Source-level public-domain checks are documented; the separate unit-level rights, accessibility, age/level suitability and release gates remain open.",
+    "Version 4 is a founder-approved content candidate but remains unreleased. The approval covers the exact v4 learner and teacher/editor content and its academic, age/level and contextual suitability review (31 October 2026); earlier version approvals remain historical. Official Year 1 mapping remains unverified. Source-level checks are documented; final unit-level rights/territory, manual accessibility and release gates remain open.",
 };
