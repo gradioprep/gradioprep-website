@@ -1,12 +1,12 @@
 # English Curriculum Guides — Year/Stage Framework and Pathway Implementation Plan
 
-**Status:** Internal guide register v1.4. The original 12 planned year/stage/delivery entries across four curriculum groups remain under versioned development; the separately approved CBSE English Grades 6–12 pathway is recorded in its research brief and the Unit Production Register, with class-wise research/guides still pending. Exact official objective maps remain unverified where current descriptors are not directly available.
+**Status:** Internal guide register v1.5. The guide architecture and curriculum-specific research controls remain unchanged. The current work order is the diagnostic-first register: Grade 9 IB MYP, then Cambridge Grade 6 (exact stage/course to be scope-locked; do not substitute Stage 7). All former cross-track guide/unit rotations are historical and inactive while those cycles run. Existing guides and unit candidates are preserved; no new year/stage curriculum content work is active. Exact official objective maps remain unverified where current descriptors are not directly available.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`, `ENGLISH_STAGE_1_ROADMAP.md`, `ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`, and `ENGLISH_PUBLIC_SOURCE_REGISTER.md`.
 **Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences.
 
 ## 1. Document architecture decision
 
-Use **one independently reviewable guide per curriculum-year/stage track**, plus one shared research/pedagogy standard and a compact register. Finish a guide and implementation structure, record founder approval, then produce and review the relevant unit within the binding Unit 1 rotation. The active second item is Cambridge Stage 7 Unit 1 v1.3 in draft PR #12; its learner-facing content has an isolated controlled UI preview in draft PR #15, and latest build/18-test CI passed. Founder human review is approved and the short-original-text internal originality/provenance screen has passed; full framework/version and mapping, manual accessibility/hosted visual review and release remain pending. This keeps approval, source editions, changes and completion status unambiguous; a single large group document can hide unfinished year-level work.
+Use **one independently reviewable guide per curriculum-year/stage track**, plus one shared research/pedagogy standard and a compact register. This document remains the guide architecture/source register; however, no guide or unit rotation is currently active. The diagnostic-first layer takes precedence and uses the founder-selected order in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`. Existing guides, Stage 7 records and Unit 1 candidates are preserved but deferred until both diagnostic cycles are complete and the founder sets the next content order. This keeps approval, source editions, changes and completion status unambiguous; a single large group document can hide unfinished year-level work.
 
 Use a separate implementation-plan document for each curriculum-year/stage track. Keep shared research methods, evidence standards, source-access limits and the rubric in the central research standard/register.
 
@@ -107,9 +107,9 @@ For each pathway, show:
 
 The pathway's unit order is our recommended learning sequence unless the official source explicitly prescribes one. Never imply that IB or Cambridge endorsed our unit design.
 
-## 5. Rotation rules: guide creation first, then unit content
+## 5. Historical rotation rules: guide creation first, then unit content (superseded 31 October 2026)
 
-**Binding founder instruction:** complete a year/stage curriculum-guide chapter in a cross-track rotation. Only after the guide cycle has been completed should new learner-facing unit content be produced, also in a cross-track rotation. Do not complete an entire curriculum group before starting the others. The sequence below is our production order, not official IB/Cambridge curriculum order.
+**Historical policy only — no longer the active production order.** The cross-track guide and unit rotations recorded below are retained as historical decisions and are not to be followed while the diagnostic-first cycles are active. The binding current sequence is in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`. The founder will set the next curriculum-content order after the selected diagnostic cycles; do not restart these lists automatically.
 
 ### A. Curriculum-guide creation rotation
 
@@ -220,3 +220,13 @@ All curriculum guides and unit production must follow docs/CONTENT_ORIGINALITY_A
 
 Existing MYP v3 content is not changed by this policy update. Founder content approval does not substitute for fresh human academic review, official mapping, rights, suitability, accessibility or release approval.
 
+
+
+## 7. Diagnostic-first sequencing overlay — 31 October 2026
+
+The curriculum-guide architecture and source-verification rules in this document remain in force. The old cross-track guide and unit rotations in Section 5 are historical only. Current active work is restricted to the level-by-level diagnostic readiness cycles in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`:
+
+1. Grade 9 IB MYP Language and Literature — MYP Year 4 is a working assumption; confirm actual school placement.
+2. Cambridge Grade 6 English — confirm the official stage/course and language route; do not substitute Stage 7.
+
+Each level requires a separately researched diagnostic-provider Top Five, a skills-based diagnostic, detailed analytics report and a personalised five-day remedial course before moving to the next level. No curriculum guide, new unit or teacher-pack migration for other levels is to be started during these cycles. The next content order after both cycles is reserved for the founder. Existing guide versions, unit candidates, approvals and release gates are not modified by this overlay.
