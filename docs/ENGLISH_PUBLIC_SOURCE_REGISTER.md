@@ -1,6 +1,6 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.8  
+**Version:** 2.9  
 **Research checked:** 31 October 2026; MYP public-source currency and v3 review checkpoint updated 31 October 2026  
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
@@ -42,9 +42,9 @@ The CBSE pathway is newly approved for product scope. This register entry is a s
 
 **Candidate mapping boundary:** describe the work as an independently designed, public-source-aligned CBSE Grade 6 practice unit. No official class-specific objective code is assigned in the absence of an exact current Grade 6 English descriptor. The exact NCERT edition/reprint should be checked again before any publication decision.
 
-## 2. Core five-source set
+## 2. Shared cross-track source starters — not the route-specific Top Five
 
-These are the five cross-track core website/source families selected for relevance, traceability, currency and transparency—not a popularity ranking or a claim that they are the five best sites for every course. They do not form an exhaustive MYP-specific EdTech review. For MYP Year 1, use the additional dedicated landscape audit in docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.
+This is a shared cross-track discovery/reference set selected for relevance, traceability, currency and transparency. It is **not** the five independent websites required for any individual course or level. Official awarding-body sources do not count toward a route's independent Top Five. Each exact IB, Cambridge and CBSE route must have its own ranked, evidence-based Top Five comparison under `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A. For MYP Year 1, that completed audit is recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1.
 
 ### Source 1 — International Baccalaureate public resources
 **Domains:** ibo.org and ibpublishing.ibo.org.  
@@ -290,3 +290,9 @@ The MYP v3 passages already use registered Dickens and Carroll public-domain sou
 ### Mapping consequence
 
 These public sources support the platform's broad, independently designed learning focus and the need to gather task evidence. They do not expose a verified current detailed Year 1 subject guide/strand map for this candidate. Leave the MYP v3 `mappingStatus` as `unverified` and `officialObjectiveCodes` as an empty array until the applicable school guide is verified through an authorized/current source. Do not map to legacy A–D codes simply because they appear in the 2014/15 reference.
+
+## 9. Route-specific Top Five independent-source audit — 31 October 2026
+
+The MYP Year 1 route-specific Top Five is complete and recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1. It ranks five independent providers after inspecting public MYP-specific content: InThinking/ThinkIB, ASJ Learning, ManageBac+, Hachette Learning and Toddle. The source register's shared five cross-track starters are not a substitute for this audit.
+
+**Outstanding route-specific audits:** Cambridge Lower Secondary English 0861 Stage 7 and CBSE Grade 6 each require their own independently selected Top Five before their guide/implementation research is marked complete. The same rule applies to every additional approved year, stage, grade and applicable IGCSE/DP route. Absence of a detailed official guide does not block this research or an accurately labelled independent implementation design; it leaves only unsupported official mapping unverified.
