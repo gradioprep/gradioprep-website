@@ -520,3 +520,46 @@ The chart calculation and displayed figure must be traceable to the underlying d
 ### 16.4 Responsive and accessible presentation
 
 Charts must remain understandable on narrow screens, at 200%/400% zoom and with keyboard/screen-reader use. Do not use colour as the only indicator of strength, status or priority. Supply readable text summaries/labels; make tooltips optional rather than the sole source of information. Keep the same semantic heading hierarchy and focus order as the existing site.
+
+
+**Version 2.3 change note — 31 October 2026:** Added a feature-specific design specification for the pre-curriculum diagnostic, evaluation report and remedial analytics. The report canvas is predominantly white/cool white, with restrained approved Palette B accents and accessible chart-first presentation. This does not change the global palette, typography, navigation or application architecture and does not claim any diagnostic feature is implemented.
+
+## 16. Diagnostic, evaluation and remedial analytics experience
+
+### 16.1 Visual direction
+
+Use a predominantly **white/cool-white background** for the diagnostic flow, evaluation report and analytics. The experience should feel like a premium, high-end EdTech assessment product: calm, spacious, precise and easy to interpret. Do not use a black or dark dashboard theme.
+
+- Keep large report surfaces white/cool white; use existing cards, borders and semantic surface tokens.
+- Use aubergine for primary headings/actions and dusty blue for secondary navigation, chart series or comparisons.
+- Use soft lilac and pale blue-grey sparingly for grouped learning panels or chart annotations.
+- Reserve muted amber for constructive next steps and areas requiring attention; it must not imply failure or punishment.
+- Use deep blue for strengths/positive findings only with explicit labels; never encode meaning with colour alone.
+- Do not alter fonts, typography sizes, spacing scale, global palette tokens or existing page/navigation architecture.
+
+### 16.2 Analytics layout and visual hierarchy
+
+The evaluation report should prioritise, in order:
+
+1. A concise learning-readiness overview with an explanation of what the result means.
+2. A clear skill-profile visual with direct labels and readable scales.
+3. A small number of skill-level bar/radar or other meaningful charts, accompanied by short explanations.
+4. Evidence-backed strengths and improvement priorities, each linked to the remedial course.
+5. The personalised five-day remedial plan and its daily objectives/time allocations.
+
+Minimise tables and dense data blocks. Avoid repeating the same score in several visual forms. Use a table only where comparison truly requires rows/columns. Provide concise explanatory text beside a chart rather than expecting students to infer meaning from colours or labels alone.
+
+### 16.3 Chart selection and accuracy
+
+- Use horizontal bars for comparable skill or sub-skill results; label the scale, skill and available evidence.
+- Use a radar/spider chart only where a small set of comparable dimensions can be read without overlap or distortion.
+- Use a circle/donut/proportion chart only when the displayed categories form a meaningful whole and denominators are clear.
+- Use line graphs only for at least two valid measurements over time (for example diagnostic baseline and a genuinely comparable post-course check); never invent a trend from one test.
+- Use explicit chart titles, labels, units/scale and explanatory annotations. Include a text equivalent for assistive technology and ensure contrast in actual data marks and labels.
+- Avoid false precision, unvalidated norm comparisons, arbitrary percentages and misleading axis scales. Where evidence is limited, show that limitation visibly.
+
+The chart calculation and displayed figure must be traceable to the underlying diagnostic responses and approved scoring rules. An attractive visual is not a substitute for measurement validity.
+
+### 16.4 Responsive and accessible presentation
+
+Charts must remain understandable on narrow screens, at 200%/400% zoom and with keyboard/screen-reader use. Do not use colour as the only indicator of strength, status or priority. Supply readable text summaries/labels; make tooltips optional rather than the sole source of information. Keep the same semantic heading hierarchy and focus order as the existing site.
