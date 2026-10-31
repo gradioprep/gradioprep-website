@@ -2,7 +2,7 @@ import type { PilotUnitDraft } from "./model";
 
 /**
  * Editorial planning record for the revised IB MYP Language and Literature
- * Year 1 Unit 1 candidate. Official strand mapping remains unverified.
+ * Year 1 Unit 1 v4 editorial-correction candidate. Official strand mapping remains unverified.
  */
 export const pilotUnitDraft: PilotUnitDraft = {
   id: "draft-ib-myp-lal-y1-u1-v4",
@@ -15,7 +15,7 @@ export const pilotUnitDraft: PilotUnitDraft = {
     reviewedAt: null,
     reviewerLabel: "Founder and academic review pending",
     scopeNote:
-      "Version 3 replaces the original platform-written main and transfer passages. All earlier approvals remain attached only to their exact earlier versions.",
+      "Version 4 contains two editorial corrections to the founder-approved v3 candidate. Both registered passages, question/prompt intent, response ranges and counter targets are preserved. Founder approval for v3 does not transfer; fresh v4 founder and academic review are pending.",
   },
   title: "How writers and creators shape meaning",
   proposedFocus: "Language, imagery, atmosphere and visual design choices.",
