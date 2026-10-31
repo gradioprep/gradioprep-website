@@ -6,7 +6,7 @@
 **Learner file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_LEARNER_CONTENT.md`  
 **Teacher/editor file:** `docs/curriculum/CAMBRIDGE_LS_S7_UNIT_1_TEACHER_REVIEW_PACK.md`  
 **Review type:** AI-led curriculum/editorial pass plus founder-confirmed human review of the exact learner-facing v1.3 content. Human review/academic and age/level/cultural suitability was approved on 28 October 2026. No learner pilot is claimed.  
-**Status:** Exact v1.3 human review/verification approvals are founder-confirmed complete (28 October 2026); internal originality/provenance screen passed; historical automated preview verification passed 18/18 tests. This confirmation supersedes earlier wording that described those prior approvals as still outstanding. The unit remains unreleased. The full current Cambridge framework/version and further objective mapping remain unverified; the Stage 7 Top Five, updated teacher pack and live counters remain pending.
+**Status:** Exact v1.3 human review/verification approvals are founder-confirmed complete (28 October 2026); internal originality/provenance screen passed; historical automated preview verification passed 18/18 tests. This confirmation supersedes earlier wording that described those prior approvals as still outstanding. The unit remains unreleased. The full current Cambridge framework/version and further objective mapping remain unverified; the Stage 7 Top Five is complete, while the updated teacher pack and live counters remain pending.
 
 ## 1. Research basis checked
 
@@ -173,12 +173,19 @@ This update supersedes prior current-state summaries in this file that described
 3. **Verification/approval status — FOUNDER-CONFIRMED COMPLETE:** the founder has stated that the verification and approvals previously described as outstanding were already given. Do not ask the founder to repeat them. This record does not claim an independently reproduced full Cambridge framework file/version; the directly documented official objective crosswalk remains limited to 7Ri.03 for explicit-information items, and no additional codes are assigned.
 4. **Automated implementation verification — PASSED:** Build checks #250 and #251 and controlled preview runs #19 and #20 completed successfully. The latest preview branch build passed all 18 Chromium tests. This is not a formal WCAG certification.
 5. **Release state — NOT PUBLISHED BY THIS CHANGE:** PR #12 and interface preview PR #15 remain unmerged; the learner route is still isolated and unreleased. No production deployment or DNS change occurred.
-6. **Next work in the first-cohort sequence:** after the MYP Year 1 review checkpoint is addressed and the next step is authorised, complete the Cambridge Stage 7 route-specific Top Five, then migrate this teacher pack and its typed-response counters. CBSE Grade 6 is third; its candidate already exists in PR #16 and must not be taken ahead of Cambridge. Keep CBSE's content, source/right, accessibility, suitability and mapping decisions separate.
+6. **Next work in the first-cohort sequence:** the Cambridge Stage 7 route-specific Top Five is now complete and linked below. The Stage 7 teacher-pack and typed-response-counter migration remains after closure of the MYP unit-level rights/territory and manual accessibility gates. CBSE Grade 6 is third; its candidate already exists in PR #16 and must not be taken ahead of Cambridge. Keep CBSE's content, source/right, accessibility, suitability and mapping decisions separate.
 
 ## Route-specific research and 250-word status — 31 October 2026
 
-- The Cambridge Stage 7 independent Top Five has **not** yet been completed. The MYP Year 1 Top Five is a separate audit and cannot be reused. Complete Cambridge's own five-source comparison and apply it to the Stage 7 guide/implementation plan after the MYP checkpoint.
+- The Cambridge Stage 7 independent Top Five is **complete** and recorded in `CAMBRIDGE_LS_S7_RESOURCE_LANDSCAPE_REVIEW.md` v1.0; its findings are reflected in the Stage 7 group guide. The MYP and Cambridge source audits remain separate.
 - The current learner-file word counts are 16 for the warm-up, 221 for “The Rain Gauge” and 27 for the exit mini-passage. All three are platform-original and within the approved 250-word limit. No replacement is required solely because of the new rule; recount if the learner text changes.
 - Founder-confirmed verification/review approvals for exact v1.3 remain complete. Do not ask the founder to repeat them. The full current official framework/version is still unverified; only 7Ri.03 for explicit-information items is evidenced. Do not assign other codes or claim complete syllabus mapping.
-- The old v1.3 teacher/editor pack still requires migration to the current teacher-pack standard, and the revised interface must add live counters to every typed response. Automated historical preview tests (18/18) do not test these future changes.
+- The v1.3 teacher/editor pack still requires migration to the current teacher-pack standard, and the revised interface must add live counters to every typed response. These changes remain sequenced after closure of the MYP rights/territory and manual accessibility gates. Automated historical preview tests (18/18) do not test these future changes.
 - The PR #15 preview remains an isolated interface-test branch and is not a release. Keep teacher data separate, and obtain the applicable new-version review after any material content change.
+
+
+## 13. Cambridge Stage 7 Top Five research result — 31 October 2026
+
+The route-specific independent-source audit is complete. The five ranked sources, component scores, weighted totals, inspected evidence, access limitations and design decisions are recorded in `docs/curriculum/CAMBRIDGE_LS_S7_RESOURCE_LANDSCAPE_REVIEW.md` v1.0. The audit is linked to the Stage 7 guide. It does not alter v1.3 learner content or the prior founder-confirmed human review/verification of exact v1.3.
+
+The current framework/version remains unverified beyond the limited public 7Ri.03 explicit-information cross-check. Teacher-pack migration and the live counter retrofit remain pending after the MYP unit-level rights/territory and manual accessibility gates. Do not start CBSE ahead of Cambridge.
