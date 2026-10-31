@@ -1,7 +1,7 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.10  
-**Status:** Approved pathway scope and authorised implementation. **31 October 2026 correction:** the 165-word Grade 6 original remains within the 250-word allowance and does not require replacement solely because of the passage policy. CBSE Grade 6 Unit 1 v1.0 (“The Turning Sign”) has founder approval for the academic-content gate (28 October 2026); its 165-word original passage is within the 250-word allowance. The route-specific Grade 6 Top Five remains pending, and the current teacher pack and preview need the updated question-specific feedback and live-counter standard. Source alignment is partial; the current *Poorvi* reprint and unit-specific official objective code are unverified. Manual accessibility and release decisions remain open.
+**Version:** 1.11  
+**Status:** Approved CBSE pathway scope and preserved Grade 6 Unit 1 v1.0 candidate. The exact learner-facing v1.0 (“The Turning Sign”) has founder approval for the academic-content gate (28 October 2026); its 165-word original remains within the 250-word allowance. The curriculum-content Top Five, teacher-pack upgrade and live-counter work remain pending but are deferred during the diagnostic-first cycles. Source alignment is partial; the current *Poorvi* reprint and unit-specific official objective code are unverified. Manual accessibility and release decisions remain open. The active Grade 6 Cambridge diagnostic cycle is separate and is not this CBSE content pathway.
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
 **Implementation status (28 October 2026):** The learner-facing v1.0 candidate was approved for the academic-content gate by the founder. The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports limited source alignment for narrative reading and event sequencing, but no unique objective code. A direct-only controlled preview is implemented in [draft PR #17](https://github.com/gradioprep/gradioprep-website/pull/17), deployed for accessibility review at [the hosted preview URL](https://pr-17-gradioprep-website.wandering-scene-1822.workers.dev/preview/cbse-grade-6/english/unit-1). No normal navigation or release is added; manual accessibility review and the separate release gate remain outstanding.
@@ -47,7 +47,7 @@ Follow the binding English Curriculum Research Workflow for each grade and appli
 5. Design a distinct grade-specific curriculum guide and unit sequence, with source traceability and explicit confidence/status for each mapping.
 6. Keep official codes/wording only where directly verified. Otherwise use clearly labelled internal skill outcomes and mark the official mapping unresolved.
 7. Keep academic/content review, official mapping/currency, rights/originality, accessibility, age/cultural suitability and release approval separate.
-## 5. Binding Grade 6-equivalent Unit 1 order
+## 5. Historical Grade 6-equivalent Unit 1 production order — superseded 31 October 2026
 
 The first cross-track cohort is fixed as follows:
 
@@ -59,7 +59,7 @@ Finish the student-facing Unit 1 content and record the required academic/conten
 
 After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 → Cambridge Lower Secondary Stage 8 → CBSE Grade 7, subject to verifying actual age/grade alignment and current sources. Continue with Unit 1 across subsequent comparable bands (for example MYP Year 3 → Cambridge Stage 9 → CBSE Grade 8). Do not start Unit 2 for the first three pathways immediately after their Unit 1s finish; Unit 2 begins only after Unit 1 is complete across all approved in-scope levels. The platform's architecture, unit structure, research method and release process do not change. Keep the exact programme/course/stage/grade identity separate for every unit; the cohort is a production order, not a claim that the curricula share objectives or content.
 
-## 6. Current status and limitations
+## 6. Historical status and limitations — see current sequence addendum below
 
 - Pathway family and implementation sequence approved.
 - Grade 6 source context checked against official NCERT/CIET public pages on 28 October 2026.
@@ -78,7 +78,7 @@ After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 �
 - Human academic-content approval for learner-facing v1.0: recorded 28 October 2026. Rights/provenance desk screen passed within its limited scope; current-textbook version, official code, controlled-preview accessibility review and release gates remain distinct.
 - Application/catalogue changes: explicitly not requested and not made.
 
-## 7. Approval interpretation
+## 7. Historical approval interpretation — exact content approval retained
 
 The founder approved the CBSE Grades 6–12 pathway scope and has now instructed implementation of the next logical step after confirming that prior verification and approvals were already given for the preceding Cambridge Stage 7 checkpoint. This authorises development of a CBSE Grade 6 Unit 1 draft candidate, not an official syllabus mapping or automatic release approval for this new unit.
 
@@ -140,3 +140,12 @@ The exact learner-facing v1.0 “The Turning Sign” remains founder-approved fo
 The Grade 6 route-specific Top Five is still pending. Complete it separately for CBSE English Grade 6 and apply its findings to the guide/implementation structure after the Cambridge Stage 7 checkpoint. The existing v1.0 teacher/editor pack is not complete under teacher-pack standard v1.2; it still needs per-alternative reasoning, sequence logic, question-specific typed-response guidance/ideal targets, models and tailored feedback. Add a live current/ideal counter to every typed response when updating the learner preview. PR #17 is the earlier v1.0 interface preview and does not yet satisfy this counter requirement.
 
 The latest *Poorvi* reprint and unit-specific official CBSE objective code remain unverified. Do not reproduce NCERT material or invent objective codes. The absence of a current exact official descriptor does not block the independent Top Five or a clearly labelled internal guide. The cross-route sequence and release boundaries are controlled by `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md`.
+
+
+## 11. Diagnostic-first sequencing addendum — 31 October 2026
+
+The former cross-track Unit 1 rotation in Section 5 is a historical product-production decision and is not the active work order. The founder has approved two pre-curriculum diagnostic-readiness cycles in this order: (1) Grade 9 IB MYP Language and Literature (MYP Year 4 working assumption, school placement to verify); (2) Cambridge Grade 6 English (exact Cambridge stage/course and language route to verify; do not substitute Lower Secondary Stage 7).
+
+CBSE English Grades 6–12 remains an approved product-scope addition. The existing CBSE Grade 6 Unit 1 v1.0 learner content and its exact-version academic-content approval are preserved. All further CBSE curriculum-content research, Top Five audit, teacher-pack/counter migration and release work are deferred while the two diagnostic cycles run. This does not cancel or modify the CBSE pathway, approve any new content or close any existing review gate. After both diagnostic cycles are complete, the founder will specify the next curriculum-content order.
+
+The new diagnostic Top Five is a separate product-landscape audit of diagnostic/evaluation providers for the exact age/level. It must not be confused with the existing curriculum-content Top Five requirement in this brief or copied from another curriculum/grade.
