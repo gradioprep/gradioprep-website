@@ -1,8 +1,16 @@
 # First-cohort Unit 1 — status and reconciliation record
 
-**As of:** 31 October 2026 — MYP v4 approved; Cambridge Top Five complete  
-**Scope:** IB MYP Language and Literature Year 1 Unit 1 → Cambridge Lower Secondary English 0861 Stage 7 Unit 1 → CBSE English Grade 6 Unit 1.  
-**Authority:** This is the current cross-curriculum status record. It supersedes older “current status” summaries in historical notes where they conflict. Keep historic decisions as history; do not treat them as current gates.
+**As of:** 31 October 2026 — preserved Unit 1 candidates; all subsequent work deferred under diagnostic-first order  
+**Scope:** Legacy first-cohort Unit 1 records only: IB MYP Language and Literature Year 1 Unit 1 → Cambridge Lower Secondary English 0861 Stage 7 Unit 1 → CBSE English Grade 6 Unit 1.  
+**Authority:** This document remains authoritative for the status, approvals and outstanding gates of these exact Unit 1 candidates only. It is no longer the global next-work sequence. The active work order is `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`; follow `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.
+
+
+
+## Current priority override — 31 October 2026
+
+The founder has approved a diagnostic-first learning-readiness layer. The active order is Grade 9 IB MYP first (MYP Year 4 working assumption, school placement to verify), then Cambridge Grade 6 (exact stage/course to be verified; Stage 7 is not substituted). Each level requires its own diagnostic-provider Top Five, underlying-skill diagnostic, evaluation report/analytics, personalised five-day remedial course and outcome check. No cycle research begins until the relevant documentation gate is approved.
+
+Accordingly, all Unit 1 tasks listed in this record—including the outstanding MYP rights/accessibility gates, Cambridge Stage 7 pack/counter migration and CBSE work—are preserved but deferred while the two selected diagnostic cycles are completed. Existing approvals and open gates remain exactly as recorded; nothing is cancelled, newly approved or released by this sequencing decision. After both diagnostic cycles, the founder will specify the content-production order. No automatic Unit 1 rotation or Unit 2 progression applies.
 
 ## Binding specification applying to all three units
 
@@ -22,9 +30,9 @@
 
 **Word-count record:** Counts above were computed from the candidate learner files available on 31 October 2026, using the project's lexical convention (letters/digits form words; punctuation-only tokens are ignored; contractions and hyphenated compounds count as one). Recount only if the relevant text changes.
 
-## Required work remaining — nine major steps
+## Deferred Unit 1 queue — nine major steps (not active during diagnostic cycles)
 
-The planning estimate is **9 major steps, with a margin of error of ±2 (approximately 7–11)**. This is a work-package estimate, not a statistical confidence interval or delivery-time promise.
+The planning estimate is **9 major steps, with a margin of error of ±2 (approximately 7–11)**. It is retained only as a record of the legacy Unit 1 queue, not as the current active plan or a delivery-time estimate. Do not resume these tasks until the diagnostic cycles are complete and the founder explicitly specifies the next content order.
 
 1. **Complete the remaining MYP release gates.** Exact v4 founder content approval, human academic review and age/level/context suitability are recorded as passed on 31 October 2026 (reviewer: Founder / project owner). Final unit-level rights/territory and image/context review plus manual accessibility remain open, so MYP is not release-approved. The separately authorized Cambridge Stage 7 independent Top Five may proceed now; its learner-content/teacher-pack/counter migration remains after MYP rights and manual accessibility gates are closed. Keep exact current IB official mapping unverified unless supported by applicable official evidence.
 2. **Cambridge independent-source audit — COMPLETE.** The ranked Stage 7 Top Five is in `docs/curriculum/CAMBRIDGE_LS_S7_RESOURCE_LANDSCAPE_REVIEW.md` v1.0 and its design implications are applied in the Stage 7 group guide v1.2. This does not close content, rights, accessibility, suitability or release gates. Keep unsupported official mapping unverified.
