@@ -3,7 +3,7 @@
 **Version:** 1.0 — draft candidate  
 **Unit ID:** cbse-english-g6-u1  
 **Title:** The Turning Sign  
-**Status:** Founder-approved for the academic-content gate on 28 October 2026; unreleased and not integrated into normal learner navigation  
+**Status:** Founder-approved for the academic-content gate on 28 October 2026; unreleased and not integrated into normal learner navigation. The story body is 165 words and may remain unchanged under the approved 250-word passage rule. The separate teacher pack, live response counters and route-specific Top Five review remain pending.
 **Curriculum alignment:** Partial source alignment to NCERT Grade 6 English Bridge Month Programme for narrative reading/event sequencing; no official CBSE objective code assigned  
 **Rights note:** Short platform-original passage and tasks; no NCERT passage, exercise, image or other third-party stimulus reproduced
 
