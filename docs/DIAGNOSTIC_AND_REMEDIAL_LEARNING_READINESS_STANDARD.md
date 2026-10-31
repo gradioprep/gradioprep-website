@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Approved:** 31 October 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
@@ -49,7 +49,9 @@ Consider diagnostic assessment specialists, literacy/reading/writing assessment 
 | Evidence transparency, currency, access, privacy and practical suitability | 10% |
 | **Total** | **100%** |
 
-For each provider record the exact product, intended ages/levels, skill domains, assessment model, public sample evidence, report fields and visuals, confidence/benchmark claims, remediation features, accessibility, pricing/access limits where verifiable, privacy/data practices, source dates and limitations. Distinguish observed capabilities from marketing claims. Do not infer paywalled functions, unpublished validity, hidden reports or unverified prices. Cite primary product documentation and independent evidence where available. Explain why each provider ranks in the Top Five and what GradiPrep can learn. Do not copy proprietary questions, report wording, visual identity or restricted materials.
+For each provider record the exact product, intended ages/levels, skill domains, assessment model, public sample evidence, report fields and visuals, confidence/benchmark claims, remediation features, accessibility, pricing/access limits where verifiable, privacy/data practices, source dates and limitations. Provider percentile rankings use the separate internal 50/50 method (actual unique test-taker volume and independent research evidence); see docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. The existing six-criterion weighted rubric remains a separate diagnostic-fit audit, not the 50/50 percentile calculation. Distinguish observed capabilities from marketing claims. Do not infer paywalled functions, unpublished validity, hidden reports or unverified prices. Cite primary product documentation and independent evidence where available. Explain why each provider ranks in the Top Five and what GradiPrep can learn. Do not copy proprietary questions, report wording, visual identity or restricted materials.
+
+**Provider-ranking confidentiality:** Provider percentiles, ordinal positions, test-taker counts, source-count basis and ranking methodology are internal-only. They must never appear in student/parent evaluation reports, downloads, dashboards, client bundles or report payloads, including logged-in student/parent views. Do not confuse these internal provider rankings with a learner's own performance percentile. The current prototype has no private administrator area; do not expose internal ranking data in frontend code. A future founder-only retrieval feature requires separate approval and access-control design.
 
 ## 5. Diagnostic blueprint and skill measurement
 
@@ -76,7 +78,7 @@ The report is a central learning product, not a score sheet. It must translate d
 - Exact links from each priority area to the personalised remedial tasks and post-course check.
 - Clear next steps and a post-remediation comparison after valid reassessment.
 
-Use readable horizontal bars for skill comparisons; radar charts only where a small set of comparable dimensions is interpretable; circle/donut charts only where categories form a meaningful whole and denominators are clear; and line graphs only when at least two valid measurements over time exist. Never manufacture a trend from one diagnostic, use decorative charts or overstate precision. Keep tables and dense data blocks to a minimum. Provide short explanations beside charts, accessible text equivalents, direct labels and honest scales. Do not show percentiles, grade predictions or population comparisons without a current, appropriately matched and documented norming basis.
+Use readable horizontal bars for skill comparisons; radar charts only where a small set of comparable dimensions is interpretable; circle/donut charts only where categories form a meaningful whole and denominators are clear; and line graphs only when at least two valid measurements over time exist. Never manufacture a trend from one diagnostic, use decorative charts or overstate precision. Keep tables and dense data blocks to a minimum. Provide short explanations beside charts, accessible text equivalents, direct labels and honest scales. Do not show provider percentiles or rankings in learner-facing reports. Do not show learner performance percentiles, grade predictions or population comparisons without a current, appropriately matched and documented norming basis.
 
 ## 7. Remediation priority levels and learner-facing language
 
@@ -92,7 +94,7 @@ These are instructional routing priorities, not school/examination grades, perma
 
 ## 8. Personalised remedial course
 
-Each learner receives a plan based on their own diagnostic profile. **The default design target is five sessions of 60 minutes each; five sessions is a recommendation, not a fixed limit.** Select the number of sessions needed to address every identified area of improvement comprehensively, with a maximum of **seven sessions of 60 minutes each**. Every identified improvement area must map to one or more specific teaching/practice tasks, with sufficient teaching, guided practice, independent transfer and feedback. Do not compress or omit a significant improvement area merely to force a five-session plan. If all needs cannot reasonably be addressed within seven sessions, state what remains and recommend further support rather than promise mastery.
+Each learner receives a plan based on their own diagnostic profile. Design for **five 60-minute sessions wherever the evaluation analytics show that all identified improvement areas can be comprehensively addressed in that time**. Do not extend the course unnecessarily. Extend to six, then seven 60-minute sessions only when the evidence-based coverage plan shows that five (or six) sessions would leave a material improvement area insufficiently taught or practised. Seven sessions is an absolute maximum. Every identified improvement area must map to one or more specific teaching/practice tasks, with sufficient teaching, guided practice, independent transfer and feedback. Do not compress or omit a significant improvement area merely to force a five-session plan. If all needs cannot reasonably be addressed within seven sessions, state what remains and recommend further support rather than promise mastery.
 
 Follow the same approved unit structure and teacher-pack standards as existing curriculum units. Each day includes clear objectives, the explicit purpose of every task, teaching/explanation, worked model or think-aloud where appropriate, guided practice, independent application/transfer, formative feedback and an exit check/reflection. Include enough meaningful questions and activities to use the full hour without padding.
 
@@ -133,3 +135,6 @@ Drafting or passing automated tests alone does not complete or release a cycle. 
 
 
 **Version 1.2 founder clarification — 31 October 2026:** The Founder clarified that five 60-minute sessions are a suggested default, not a mandatory duration or session count. Use up to seven 60-minute sessions when necessary to address all diagnostic improvement areas comprehensively. Never exceed seven sessions; do not omit or inadequately teach an identified improvement area solely to preserve a five-session plan. This rule applies to all diagnostic cycles and supersedes earlier rigid five-session wording.
+
+
+**Version 1.3 Founder approval — 31 October 2026:** The Grade 9 IB MYP Year 4 Top Five provider research is approved. The provider percentile methodology is 50% actual unique test-taker volume and 50% independent research evidence; its basis, component figures, percentile and ordinal order remain internal-only and must never appear in learner/parent reports, including logged-in views. The weighted six-criterion diagnostic-fit rubric remains separate. Public sample counts are not directly comparable; no percentile is to be fabricated where reliable comparable evidence is missing. The draft taxonomy and blueprint are recorded separately for Founder review; item authoring remains gated. Five 60-minute remedial sessions are preferred; extend to six or seven only where evaluation analytics justify the extra time, with seven as the strict maximum.
