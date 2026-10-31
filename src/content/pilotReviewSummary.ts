@@ -2,10 +2,10 @@ import type { PilotReviewSummary } from "./model";
 
 /** Safe, learner-visible review metadata for the current Unit 1 candidate. */
 export const pilotReviewSummary: PilotReviewSummary = {
-  id: "review-summary-ib-myp-lal-y1-u1-v3",
+  id: "review-summary-ib-myp-lal-y1-u1-v4",
   unitId: "ib-myp-lal-y1-u1",
-  version: 3,
-  status: "founder-approved-candidate",
+  version: 4,
+  status: "draft-for-founder-review",
   title: "How writers and creators shape meaning",
   proposedFocus: "Language, imagery, atmosphere and visual design choices.",
   proposedLearningObjective:
@@ -15,9 +15,9 @@ export const pilotReviewSummary: PilotReviewSummary = {
   reviewRecord: {
     outcome: "pending",
     reviewedAt: null,
-    reviewerLabel: "Founder content approval recorded 30 October 2026; fresh human academic review pending",
+    reviewerLabel: "Version 3 founder content approval recorded 30 October 2026; version 4 editorial correction candidate awaiting founder and fresh human academic review",
     scopeNote:
-      "The founder approved this exact version 3 content candidate on 30 October 2026. Version 1 and version 2 approvals remain historical and do not transfer. This candidate remains unreleased; human academic review and separate mapping, rights, suitability, accessibility and release gates remain pending.",
+      "Version 3 was approved by the founder on 30 October 2026. Version 4 contains two editorial corrections only and awaits fresh founder and human academic review. This candidate remains unreleased; current official mapping, rights/territory, suitability, accessibility and release decisions remain separate and pending.",
   },
   source: {
     title: "IB MYP Language and Literature public programme overview and dated subject brief; current detailed Year 1 guide edition not verified",
@@ -28,7 +28,7 @@ export const pilotReviewSummary: PilotReviewSummary = {
       "Public programme context and the linked subject brief were rechecked on 31 October 2026; the brief is labelled From 2014. The applicable current detailed Year 1 guide and exact objective/strand mapping remain unverified. Official objective codes are intentionally blank.",
   },
   remainingReleaseChecks: [
-    "Fresh human academic review of version 3, including all questions, distractor rationales, model responses and feedback.",
+    "Fresh human academic review of version 4, including all questions, distractor rationales, model responses and feedback.",
     "Verification of the exact current official Year 1 guide and any claimed objective/strand mapping.",
     "Separate final unit-level rights approval for text and visual assets.",
     "Age/level suitability and accessibility review.",
