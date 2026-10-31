@@ -108,13 +108,13 @@ The earlier preview version 1 received an academic content-review pass for pilot
 
 ## 9. Release guardrail
 
-Version 4 is a founder-approved content candidate for the exact learner/teacher materials. It remains unreleased because rights/territory, manual accessibility and release gates remain open. Do not merge, publish to normal learner navigation or treat the preview as an official IB course. Keep teacher/editor answers out of the client bundle. Cambridge research may proceed under the founder's explicit instruction; Cambridge learner-content/teacher-pack/counter migration remains sequenced after MYP rights and manual accessibility gates are closed.
+Version 4 is a founder-approved content candidate for the exact learner/teacher materials. It remains unreleased because rights/territory, manual accessibility and release gates remain open. Do not merge, publish to normal learner navigation or treat the preview as an official IB course. Keep teacher/editor answers out of the client bundle. Historical next-step statement superseded 31 October 2026: the Cambridge Stage 7 Top Five is now complete, but its learner-content/teacher-pack/counter migration is deferred while the diagnostic-first cycles run. The outstanding MYP rights and manual accessibility gates remain open and are not waived by the sequence change.
 
 ## 7. Cross-cohort status update — 31 October 2026
 
 The MYP-specific Top Five independent-source audit is complete and recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1; its findings are already applied in the Year 1 guide and implementation plan. This does not close the separate review gates in Sections 3–6 above. The two v3 editorial flags have been corrected in the separate v4 draft after inspection of the exact photograph. V4 founder/human academic review and age/level/context suitability were approved on 31 October 2026; rights/territory and manual accessibility remain open. V3 remains intact as approved history.
 
-The cross-curriculum sequence, current candidate status, Cambridge/CBSE passage counts and remaining implementation steps are maintained in `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md`. Cambridge Stage 7 is not to begin content migration until the MYP review checkpoint is addressed and the next step is explicitly authorised.
+The cross-curriculum sequence, current candidate status, Cambridge/CBSE passage counts and remaining implementation steps are maintained in `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md`. Cambridge Stage 7 learner-content migration remains deferred during the diagnostic-first cycles. Closing the MYP Year 1 gates does not automatically reactivate the Stage 7 work queue.
 
 
 ## 10. Version 4 editorial-correction record — 31 October 2026
@@ -127,3 +127,10 @@ The cross-curriculum sequence, current candidate status, Cambridge/CBSE passage 
 All other v3 learner content and teacher-pack material is preserved. The two literary extracts remain 95 and 129 words. The six ideal counter targets remain 20/50/75/55/55/50, and the existing response ranges remain 15–25, 40–55, 65–85, 45–65, 45–65 and 45–60. Counters remain unrestricted: no maximum, truncation or `maxLength`. Fresh v4 CI run [#341](https://github.com/gradioprep/gradioprep-website/actions/runs/41212826874) passed the TypeScript/Vite build, teacher-pack separation guard and all 16 Chromium tests for the PR #14 branch snapshot at commit `c157ed2470e9c0e94e6758c075bb71484b767002`. Historical v3 run #295 remains v3-only evidence.
 
 **Still pending for v4:** final unit-level image/text rights and territory review (existing literary-text term checks cover India and the UK only; the US and other territories are not cleared); manual keyboard/focus, screen-reader, contrast, 200%/400% zoom/reflow and cross-browser checks; and explicit release approval. Keep exact current IB Year 1 mapping unverified and official objective codes blank unless applicable official evidence is verified.
+
+
+## 11. Current diagnostic-first work-order overlay — 31 October 2026
+
+This review document governs the exact IB MYP Year 1 Unit 1 v4 candidate and its approval/release gates only. It does not govern the newly selected Grade 9 / MYP Year 4 diagnostic cycle. The active diagnostic order is Grade 9 IB MYP first (MYP Year 4 is a working assumption; verify actual school placement), then Cambridge Grade 6 (exact Cambridge stage/course and language route to be confirmed; do not substitute Lower Secondary Stage 7).
+
+All existing MYP Year 1, Cambridge Stage 7 and CBSE Grade 6 Unit 1 content tasks and migrations are preserved but deferred while the two diagnostic cycles run. For this MYP Year 1 v4 candidate, exact content, human academic review and age/level/context suitability remain approved; unit-level rights/territory, visual-context review, manual accessibility and explicit release approval remain open. The new sequencing decision closes none of these gates and changes no underlying content standards. After both diagnostic cycles, the founder will set the next curriculum-content order.
