@@ -219,9 +219,9 @@ The Stage 7 teacher-pack migration and typed-response counters remain deferred w
 
 ## 23. Diagnostic-first readiness cycles — current binding sequence, 31 October 2026
 
-The diagnostic/report/remedial layer has priority over all remaining Unit 1 content work. The detailed requirements are in `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`; the selected level order and completion gates are in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`.
+The diagnostic/report/remedial layer has priority over all remaining Unit 1 content work. Cycle 1 provider research is complete and awaiting Founder review in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_PROVIDER_REVIEW.md`; the skill taxonomy and diagnostic blueprint remain gated pending that review. The detailed requirements are in `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`; the selected level order and completion gates are in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`.
 
-1. **Cycle 1 — Grade 9 IB MYP Language and Literature.** MYP Year 4 is only a working assumption for a conventional five-year programme; actual school placement and age must be confirmed.
+1. **Cycle 1 — Grade 9 IB MYP Language and Literature.** Grade 9 = MYP Year 4 is confirmed by the Founder for the relevant school/programme context. Do not reopen this as an assumption. Official MYP programme age band is 11–16; individual chronological age is not separately specified.
 2. **Cycle 2 — Cambridge Grade 6 English.** The exact Cambridge stage/course and language route are not yet locked. Cambridge Primary Stage 6 / English 0058 is a candidate only when supported by the cohort context. Do not substitute Cambridge Lower Secondary Stage 7.
 
 For each level, finish the independent diagnostic-provider Top Five, skill taxonomy/blueprint, functioning diagnostic, detailed evaluation report/analytics, personalised five-day 60-minute-per-day remedial course, fresh outcome check, integration and QA, and founder approval before the next level. No research or implementation for Cycle 2 begins before Cycle 1 is approved. No other year/grade or curriculum is researched in advance.
