@@ -1,7 +1,7 @@
 import type { PilotLessonPack } from "./model";
 
 /**
- * Teacher/editor-only source for Unit 1 candidate version 3.
+ * Teacher/editor-only source for Unit 1 candidate version 4.
  * Contains answers, rationales and model responses. Never import this module
  * into the learner-facing application or its public client bundle.
  * AI-assisted drafting is not a human academic review.
@@ -16,7 +16,7 @@ export const pilotLessonPack: PilotLessonPack = {
     reviewedAt: null,
     reviewerLabel: "Academic review pending",
     scopeNote:
-      "Version 3 is a new candidate prepared under the standards approved on 30 October 2026. Version 2 founder approval and version 1 academic-preview approval are historical and do not transfer. Human academic review of every question, rationale, model response and feedback item remains pending.",
+      "Version 4 is a draft editorial-correction candidate. Founder approval for exact v3 remains historical and does not transfer. Fresh human academic review of every question, rationale, model response and feedback item remains pending.",
   },
   title: "How writers and creators shape meaning",
   audienceNote:
