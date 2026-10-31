@@ -1,7 +1,7 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.2  
-**Status:** Approved design system and curriculum-first navigation; reusable live typed-word counter implemented across all six MYP Year 1 Unit 1 v3 typed-response fields in draft PR #14, with accessible descriptions linking each prompt, expected range and live count. Human academic, manual accessibility and release gates remain open; automated build, teacher-pack and 16-test verification passed in run #295.  
+**Version:** 2.3  
+**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. Existing MYP Year 1 live counters remain documented; diagnostic analytics are not yet implemented.  
 **Last updated:** 31 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
@@ -477,3 +477,46 @@ Cloudflare's Preview API confirmed the isolated `pr-15` URL [https://pr-15-gradi
 **Version 2.1 change note — 30 October 2026:** Implemented the typed-response counter interaction on the MYP Year 1 Unit 1 v3 lesson. All six textareas use the shared `ResponseWordCountTextarea` component and one lexical counter helper; each shows the approved current/ideal count, including values above the target. Ideal targets are 20, 50, 75, 55, 55 and 50 words in entry/Q2/Q3/Q4/Q5/exit order. Existing expected ranges, prompts and content remain unchanged. The counter is visually secondary, uses existing design-system typography and colour tokens, is programmatically associated with its textarea and updates through a polite assistive-technology status. There is no cap, `maxLength`, grading, persistence or submission behavior. Automated checks are in `tests/word-counter.spec.ts`; CI verification for the latest commit is pending.
 
 **Version 2.2 change note — 31 October 2026:** The shared MYP response textarea now associates the learner's response field with its task/entry/exit prompt, the expected response-range guidance and the live current/ideal count through `aria-describedby`. The browser test checks all three ID references, the visible prompt/range and the accessible name. This supplements (and does not replace) the polite live counter status. CI run #295 passed 16/16 Chromium tests. Manual screen-reader, keyboard/focus, zoom/reflow, contrast and cross-browser checks remain required before release.
+
+
+**Version 2.3 change note — 31 October 2026:** Added a feature-specific design specification for the pre-curriculum diagnostic, evaluation report and remedial analytics. The report canvas is predominantly white/cool white, with restrained approved Palette B accents and accessible chart-first presentation. This does not change the global palette, typography, navigation or application architecture and does not claim any diagnostic feature is implemented.
+
+## 16. Diagnostic, evaluation and remedial analytics experience
+
+### 16.1 Visual direction
+
+Use a predominantly **white/cool-white background** for the diagnostic flow, evaluation report and analytics. The experience should feel like a premium, high-end EdTech assessment product: calm, spacious, precise and easy to interpret. Do not use a black or dark dashboard theme.
+
+- Keep large report surfaces white/cool white; use existing cards, borders and semantic surface tokens.
+- Use aubergine for primary headings/actions and dusty blue for secondary navigation, chart series or comparisons.
+- Use soft lilac and pale blue-grey sparingly for grouped learning panels or chart annotations.
+- Reserve muted amber for constructive next steps and areas requiring attention; it must not imply failure or punishment.
+- Use deep blue for strengths/positive findings only with explicit labels; never encode meaning with colour alone.
+- Do not alter fonts, typography sizes, spacing scale, global palette tokens or existing page/navigation architecture.
+
+### 16.2 Analytics layout and visual hierarchy
+
+The evaluation report should prioritise, in order:
+
+1. A concise learning-readiness overview with an explanation of what the result means.
+2. A clear skill-profile visual with direct labels and readable scales.
+3. A small number of skill-level bar/radar or other meaningful charts, accompanied by short explanations.
+4. Evidence-backed strengths and improvement priorities, each linked to the remedial course.
+5. The personalised five-day remedial plan and its daily objectives/time allocations.
+
+Minimise tables and dense data blocks. Avoid repeating the same score in several visual forms. Use a table only where comparison truly requires rows/columns. Provide concise explanatory text beside a chart rather than expecting students to infer meaning from colours or labels alone.
+
+### 16.3 Chart selection and accuracy
+
+- Use horizontal bars for comparable skill or sub-skill results; label the scale, skill and available evidence.
+- Use a radar/spider chart only where a small set of comparable dimensions can be read without overlap or distortion.
+- Use a circle/donut/proportion chart only when the displayed categories form a meaningful whole and denominators are clear.
+- Use line graphs only for at least two valid measurements over time (for example diagnostic baseline and a genuinely comparable post-course check); never invent a trend from one test.
+- Use explicit chart titles, labels, units/scale and explanatory annotations. Include a text equivalent for assistive technology and ensure contrast in actual data marks and labels.
+- Avoid false precision, unvalidated norm comparisons, arbitrary percentages and misleading axis scales. Where evidence is limited, show that limitation visibly.
+
+The chart calculation and displayed figure must be traceable to the underlying diagnostic responses and approved scoring rules. An attractive visual is not a substitute for measurement validity.
+
+### 16.4 Responsive and accessible presentation
+
+Charts must remain understandable on narrow screens, at 200%/400% zoom and with keyboard/screen-reader use. Do not use colour as the only indicator of strength, status or priority. Supply readable text summaries/labels; make tooltips optional rather than the sole source of information. Keep the same semantic heading hierarchy and focus order as the existing site.
