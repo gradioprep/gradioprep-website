@@ -1,6 +1,6 @@
 # English Stage 1 — Curriculum Roadmap
 
-**Status:** Current first-cohort status is maintained in `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md` (31 October 2026). Sequence remains MYP Year 1 → Cambridge Stage 7 → CBSE Grade 6. MYP v4 is approved by Founder / project owner for exact content, human academic review and age/level/context suitability; rights/territory and manual accessibility/release gates remain open. Latest v4 CI #366 passed the build, separation and 16/16 Chromium tests. Cambridge v1.3 prior review confirmations are retained and its route-specific Top Five is complete; teacher-pack/counter migration follows MYP rights/manual accessibility closure. CBSE v1.0 remains an approved exact-version content candidate; its Top Five and pack/counter migration are third. Exact current official mapping remains unverified where noted; this does not block independent research. Do not skip a blocked cohort, start Unit 2, merge or deploy.
+**Status:** Current active work is governed by `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md` (31 October 2026): Grade 9 IB MYP first (MYP Year 4 working assumption; verify actual school placement), then Cambridge Grade 6 (exact stage/course to be verified; do not substitute Stage 7). For each level, complete diagnostic-provider Top Five research, the skill-based diagnostic, evaluation/report analytics, five-day personalised remediation and outcome check before the next cycle. All curriculum-unit production and the historical Unit 1 rotation are paused/deferred, not cancelled. Existing candidates and rights/accessibility/mapping/release gates remain unchanged. No research for Cycle 2 begins before Cycle 1 is complete and the founder directs the transition. No merge, deployment or release is authorised.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Purpose:** Turn the approved Stage 1 scope into a trackable production plan without claiming full syllabus coverage or inventing official curriculum mappings.
 
@@ -112,7 +112,7 @@ A material edit to a published question, answer, rubric or syllabus mapping crea
 - [ ] All content states and versions are recorded; unreleased items do not appear as available.
 - [ ] A final academic-lead approval is recorded.
 
-## 8. Implementation status and immediate next action
+## 8. Historical implementation status and immediate next action (superseded 31 October 2026)
 
 **Change control:** Approved/reviewed units, features and documentation remain revisable at any later date. Track a version and rationale, update dependent documents, and repeat affected review gates for material changes.
 
@@ -125,7 +125,7 @@ The detailed official IB guide edition and objective mapping remain unverified. 
 The standalone MYP Year 1 guide (`docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md`) and implementation structure (`docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`) are founder-approved. The founder also approved the content of MYP Unit 1 v2 on 26 October 2026; it remains an unmerged candidate because the separate academic review, official objective/strand mapping, rights, accessibility/suitability and release gates remain open. **Checkpoint rule:** MYP v2 content approval permits the documented production rotation to advance but does not authorize release. The active unit is Cambridge Lower Secondary Stage 7 Unit 1 v1.3 in draft PR #12. AI-led curriculum/content review of v1.2 found three improvements and applied them to v1.3: a worked inference model, optional learner-facing vocabulary help, and item-specific scoring. The founder approved proceeding with further review/release checks on 26 October 2026. The exact-phrase rights screen and content-level accessibility/context preflight are recorded; formal rights/originality, human academic/suitability judgement, current full framework/version, UI accessibility and release checks remain open. Review the existing draft; do not duplicate it. Later-track draft files do not mean those checkpoints are complete.
 
 
-## 9. Curriculum guide and rotating unit-production policy
+## 9. Historical curriculum guide and rotating unit-production policy (superseded 31 October 2026)
 
 The shared research and quality rubric is maintained in `docs/ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`; the verified public source and sample-paper protocol is `docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md`; year/stage guide architecture and rotation are in `docs/ENGLISH_CURRICULUM_GUIDES.md`; the public-framework-aligned MYP Year 1 guide and pathway plan are `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md` and `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md`.
 
@@ -223,7 +223,7 @@ Learner-facing v1.0 “The Turning Sign” is approved for the academic-content 
 
 
 
-## 12. Mandatory migration and feature-integration plan — updated 30 October 2026
+## 12. Historical migration and feature-integration plan — deferred 31 October 2026
 
 The founder-approved 250-word threshold and live-counter rules below supersede the previous blanket instruction that every short passage must be replaced by public-domain literature. The exact founder-approved v3 content remains preserved as historical version content; current v4 contains only the two documented editorial corrections. Any further passage/content changes must be versioned. Qualifying platform-original passages of 250 words or fewer may remain.
 
@@ -266,7 +266,7 @@ The binding method now requires a ranked Top Five independent-website comparison
 
 **Outstanding, in sequence:** CBSE English Grade 6 requires its own India-relevant Top Five after the Cambridge migration/review checkpoint. The Cambridge Stage 7 audit v1.0 is complete and applied to the group guide v1.2; do not copy the MYP or Cambridge lists across tracks. Continue using public evidence when official detail is gated; leave only unsupported official mapping unverified. Research completion is separate from content migration and rights/accessibility/suitability/release gates.
 
-## 14. Current first-cohort reconciliation — 31 October 2026
+## 14. Historical first-cohort Unit 1 reconciliation — 31 October 2026 (deferred)
 
 The authoritative three-route status, exact-version approval boundaries, passage counts, branch controls and nine-step completion queue are in [Unit 1 Cohort Status and Reconciliation](UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md). This section supersedes older “current” summaries in Sections 10–13 where their sequence/status language conflicts.
 
@@ -279,4 +279,20 @@ The authoritative three-route status, exact-version approval boundaries, passage
 
 ## Current MYP Year 1 Unit 1 v4 checkpoint — 31 October 2026
 
-The current candidate is v4 on draft PR #14. The two editorial corrections are complete: Q4 uses the source's lowercase phrase and Q3 describes the photographed open platform rather than an unshown shelter. Founder / project owner approved exact v4 content, human academic review and age/level/context suitability on 31 October 2026. MYP Top Five and six counters remain complete. Unit-level rights/territory, visual-context and manual accessibility plus release approval remain open; official mapping remains unverified. Cambridge Stage 7 independent Top Five research is authorized and may proceed; learner-content/teacher-pack/counter migration remains after closure of the MYP rights and manual accessibility gates.
+The current candidate is v4 on draft PR #14. The two editorial corrections are complete: Q4 uses the source's lowercase phrase and Q3 describes the photographed open platform rather than an unshown shelter. Founder / project owner approved exact v4 content, human academic review and age/level/context suitability on 31 October 2026. MYP Top Five and six counters remain complete. Unit-level rights/territory, visual-context and manual accessibility plus release approval remain open; official mapping remains unverified. Cambridge Stage 7 independent Top Five research is complete, but Stage 7 content/teacher-pack/counter migration is deferred under the diagnostic-first work order. The outstanding MYP rights/territory and manual accessibility gates remain open; this diagnostic-first decision neither closes nor alters them.
+
+
+## 15. Diagnostic-first learning-readiness sequence — 31 October 2026
+
+The new binding work order is set out in `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md` and `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`. It supersedes the immediate work order in the historical rotation and migration sections above.
+
+**Cycle 1:** Grade 9 IB MYP Language and Literature. MYP Year 4 is a working assumption only for a conventional five-year MYP; verify the actual school programme/year and learner age before fixing any Year 4-specific mapping.
+
+**Cycle 2:** Cambridge Grade 6 English. The exact official Cambridge stage/course remains to be scope-locked. Cambridge Primary Stage 6 / English 0058 is a candidate where the learner's actual age and first-language route support it. Do not substitute Lower Secondary Stage 7 for the requested Grade 6 target.
+
+For each cycle, follow this order: (1) rank the five strongest diagnostic/evaluation providers for the exact level; (2) finalise the underlying-skill taxonomy and test blueprint; (3) build and validate the diagnostic; (4) create the detailed, accessible evaluation report and analytics; (5) create the personalised five-day remedial course, five sessions of 60 minutes, with Priority 5→1 learning emphasis; (6) validate a fresh post-course check; (7) integrate, test and obtain founder approval. Only then may the next level be started, and only in the founder-approved order.
+
+No diagnostic provider research has started. The Cambridge Cycle 2 provider audit must not be started while Cycle 1 is underway. All existing curriculum-unit production, old teacher-pack/counter migration and the former Unit 1 rotation are deferred while these cycles are completed. Keep existing content, approvals, branch history and outstanding gates unchanged. After both cycles, wait for the founder to set the next curriculum-content order; do not restart any automatic rotation.
+
+This is a sequencing layer only. Preserve the existing lesson architecture, research/authoring processes, rights controls, teacher-pack rules, academic/human review, accessibility, QA and release approval requirements. The diagnostic/report presentation uses a white/cool-white canvas with accessible, legible charts and minimal tables/data blocks; follow the approved Palette B, typography and component system. Do not alter the global architecture or add authentication, a database, persistent records, AI/API costs or other infrastructure without separate approval.
+
