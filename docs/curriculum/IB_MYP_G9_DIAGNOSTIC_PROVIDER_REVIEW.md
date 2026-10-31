@@ -1,8 +1,8 @@
 # IB MYP Grade 9 / Year 4 — Diagnostic and Evaluation Provider Landscape Review
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Research date:** 31 October 2026  
-**Status:** Top Five research complete; submitted for Founder review. Skill taxonomy, diagnostic blueprint, item authoring and implementation are not approved by this document.  
+**Status:** Top Five research approved by Founder on 31 October 2026. The original weighted diagnostic-fit scores remain a separate internal evidence audit; the final provider percentile method is 50% actual unique test-taker volume and 50% independent research evidence. Percentiles and ordinal positions remain internal-only. Skill taxonomy/blueprint is now submitted separately for Founder review.  
 **Target:** Grade 9 — IB MYP Language and Literature  
 **Placement:** Grade 9 = MYP Year 4, confirmed by the Founder for the relevant school/programme context.  
 **Research method:** Binding weighted rubric in `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`, Section 4. Official IB context is evaluated separately and is not counted among the five independent providers.
@@ -30,7 +30,7 @@ Official context sources:
 - IB, [Middle Years Programme](https://www.ibo.org/programmes/middle-years-programme/) (five-year programme, abbreviated formats, age 11–16).
 - IB, [MYP curriculum](https://www.ibo.org/programmes/middle-years-programme/curriculum/) (eight subject groups; Years 4–5 flexibility).
 
-## 3. Approved weighted rubric and results
+## 3. Approved weighted diagnostic-fit rubric and results (separate from internal percentile ranking)
 
 The rubric weights are reproduced from the binding readiness standard. Scores below are this review's comparative judgement from inspectable public evidence, not provider-issued scores or psychometric measurements.
 
@@ -159,7 +159,7 @@ Sources:
 - Review the full technical documentation and representative public sample reports before relying on any score or category.
 - Do not reuse copyrighted test questions, proprietary report text, brand identity, scoring rubrics or restricted teacher materials.
 
-## 7. Decision gate
+## 7. Founder approval and next gate
 
-**Submitted to the Founder for review.** This research record does not approve a final skill taxonomy, diagnostic blueprint, item count, assessment duration, scoring thresholds, remediation priority algorithm, report layout, vendor purchase or implementation. Those are the next decisions only after the Founder has reviewed and accepted/corrected this Top Five analysis.
+**Founder approval recorded — 31 October 2026.** The five providers, weighted diagnostic-fit analysis, limitations and evidence are accepted for this stage. The six-criterion weighted scores remain a separate fit audit and are not the provider percentile. The internal 50/50 percentile method is documented in docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. No provider ranking data or methodology may appear in learner/parent reports, including logged-in views. The next approval gate is the draft MYP Grade 9 / Year 4 skill taxonomy and diagnostic blueprint in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md. Item authoring, scoring thresholds, diagnostic implementation, report UI, procurement and release remain unapproved.
 
