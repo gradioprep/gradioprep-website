@@ -1,6 +1,6 @@
 # Cambridge Lower Secondary English (0861) — Stages 7–9 Curriculum Guide
 
-**Document status:** Public-framework-aligned group guide v0.9. Stage 7 chapter drafted in detail; Stages 8–9 remain design chapters. Stage 7 Unit 1 is now the active production checkpoint following founder approval of MYP Unit 1 v2. A controlled preview route was added for automated interface accessibility checks, but the unit remains an unreleased draft. Cambridge's public support overview explicitly shows 7Ri.03 for explicit information, which is recorded as a limited crosswalk only. Other objective codes and the currently applicable full framework file remain unverified pending the official support site.
+**Document status:** Public-framework-aligned group guide v1.0. Stage 7 chapter is drafted; Stages 8–9 remain design chapters. The MYP Year 1 checkpoint comes first. Stage 7 Unit 1 v1.3 retains founder-confirmed exact-version review approval; its Top Five independent-source audit, updated teacher-pack migration and typed-response counters remain outstanding. Its 16/221/27-word original stimuli all meet the 250-word allowance. Cambridge's public support overview evidences only 7Ri.03 for explicit information; the full current framework/version and other objective codes remain unverified.
 **Course:** Cambridge Lower Secondary English (0861), Stage 7.
 **Pathway IDs:** cambridge-ls-english-s7, cambridge-ls-english-s8, cambridge-ls-english-s9.
 **Scope:** First-language English pathway, typically for learners aged 11–14 across Stages 7–9. Do not substitute the distinct English as a Second Language (0876) curriculum.
@@ -300,3 +300,9 @@ The table is our planning model, inspired by public Cambridge progression exampl
 
 
 **v0.9 update — 26 October 2026:** The final UI-test iteration associates the exit-check question with its response field, transfers keyboard focus from the skip link to the main content, and tests layout widths of 320, 390, 768 and 1024 CSS pixels. GitHub Actions [Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed the TypeScript/Vite build and all 17 Chromium tests on commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`. This remains automated smoke coverage; manual screen-reader testing and broader accessibility checks are open. The unit stays unreleased pending formal rights/originality, human academic/suitability, full currently applicable framework/version and objective mapping, and explicit release approval. The preview is unmerged and no production deployment occurred.
+
+## Stage 7 Unit 1 status reconciliation — 31 October 2026
+
+The current Stage 7 Unit 1 candidate is v1.3 in draft PR #12. Founder-confirmed human review/verification approvals apply to that exact version; do not ask for them again. The current route-specific Top Five remains pending and must be completed independently before this guide/implementation research is marked complete. Official detail being unavailable does not block the independent audit or a clearly labelled internal structure; it blocks only unsupported official mapping claims.
+
+The current learner passage bodies are 16 (warm-up), 221 (“The Rain Gauge”) and 27 (exit mini-passage) words. They are all original and eligible to remain under the 250-word rule. The separate teacher/editor pack and preview still need the updated per-question feedback standard and live word counters. Do not start this content migration before the MYP checkpoint and explicit sequencing authorisation.
