@@ -1,7 +1,7 @@
 # Logical Data Model — Curriculum, Practice and Assessment
 
 **Status:** Proposed implementation blueprint; no database or real learner records are connected yet.  
-**Revision:** 1.2 — records ideal response targets and implemented transient live word counters for MYP v3 typed responses (30 October 2026).
+**Revision:** 1.3 — records transient live counters and prompt/range accessible relationships for MYP v3 typed responses (31 October 2026).
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Goal:** Define relationships and permission boundaries before connecting the current prototype to a database. This document is provider-independent; the master brief's proposed Supabase approach still requires a current plan/terms review before real student data is stored.
 
@@ -50,7 +50,7 @@ For each typed-response task, store its approved expected range and a separate i
 
 The live `current/ideal` word counter is computed in the client from the current controlled text value by the shared `ResponseWordCountTextarea` component and `countResponseWords` helper. It updates on typing, paste, editing, deletion and clear-all, and it continues counting above target (for example, `59/50`). It must never truncate, reject or block text, and no `maxLength` restriction should be derived from the target. It is implemented for all six MYP v3 typed-response fields and remains the required shared pattern for all future fields.
 
-The counter value itself is transient UI state, not a separate learner record and not a grade/score. It is currently rendered with an accessible description and polite live status. Persisted attempts/responses, if implemented in a future approved phase, store the learner's actual response and the task/content version used—not a separate counter snapshot. The current prototype still does not save learner responses or provide live grading.
+The counter value itself is transient UI state, not a separate learner record and not a grade/score. It is rendered with accessible references to the task prompt, response-range guidance and count, plus a polite live status. Persisted attempts/responses, if implemented in a future approved phase, store the learner's actual response and the task/content version used—not a separate counter snapshot. The current prototype still does not save learner responses or provide live grading.
 
 ### Accounts, relationships and access
 

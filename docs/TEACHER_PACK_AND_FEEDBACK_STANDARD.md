@@ -1,6 +1,6 @@
 # Teacher-Pack, Question Design and Feedback Standard
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Approved:** 30 October 2026  
 **Status:** Binding standard for all English learning tracks and all current/future learner-facing objective and typed-response tasks.  
 **Related source of truth:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md`, `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md`, and `docs/curriculum/UNIT_PRODUCTION_REGISTER.md`.
@@ -100,7 +100,7 @@ For each question, preserve at least:
 - Add a live typed-word counter to every learner-facing typed-response field, showing currentWords/idealWords (for example 38/50 or 59/50). It must update immediately as the learner types, pastes, edits, deletes or clears text.
 - The denominator is the ideal target, not a hard limit. The counter must continue above the target; never cap, truncate, reject, disable or block a response because it exceeds the ideal count. Do not set maxLength to the target or range end.
 - Apply the counter retrospectively to every existing typed-response field, including current MYP v3 fields and any existing question-bank/preview input fields, then make it the default for every future typed-response field. This is a UI-only retrofit: do not rewrite existing passage text, prompts, expected ranges, model responses or teacher answers.
-- Use one shared word-count function and consistent tokenisation: count letter/digit words; ignore punctuation-only tokens; count contractions and hyphenated compounds as one. Update the visible count from the input's current value, not only on submission. Make the counter's status understandable to assistive technology.
+- Use one shared word-count function and consistent tokenisation: count letter/digit words; ignore punctuation-only tokens; count contractions and hyphenated compounds as one. Update the visible count from the input's current value, not only on submission. Make the counter's status understandable to assistive technology. Programmatically associate each typed-response field with its exact question/entry/exit prompt, the expected response-range guidance and its live counter (for example, through a `label`, `aria-describedby` and a polite live-status region). Do not rely on visual proximity alone.
 - For auto-checked objective practice, provide immediate feedback after the response is submitted or checked: identify the correct answer, explain the reasoning and clarify why the alternatives do not fit.
 - For ordering tasks, reveal the correct order with a short explanation of the sequence logic.
 - For typed answers, provide immediate, question-specific formative feedback after submission where the task is configured for AI-assisted marking.
@@ -120,3 +120,5 @@ When genuine marking is implemented:
 5. Add rate limits, basic abuse/probing controls, input validation and error handling before formal assessments. Persist attempts only after an approved database and retention/privacy design exists.
 
 Do not add live AI/API cost, a database, authentication, a production grading endpoint or any other paid/infrastructure dependency without the required founder approval.
+
+**Version 1.2 implementation clarification — 31 October 2026:** The MYP v3 implementation now uses the shared response-field component to associate prompt, expected range and live count with each input. This is the required pattern for all new/current typed-response fields; tests check the accessible name and all referenced descriptions. Automated tests do not replace manual screen-reader and keyboard review.

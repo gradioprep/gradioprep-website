@@ -32,7 +32,7 @@ The learner module contains no model answers, correct-answer IDs or teacher-only
 
 ## 3. AI-assisted editorial desk review — 31 October 2026
 
-<badge>Internal editorial review only</badge>
+**Scope:** AI-assisted editorial desk review only.
 
 An AI-assisted consistency and source-fidelity review compared the current v3 learner content, teacher/editor pack, response targets and the recorded source excerpts. It is not an independent human academic review, a learner pilot, an IB mapping decision, a legal opinion or an accessibility certification.
 
