@@ -3,7 +3,7 @@
 **Version:** 1.0 — draft candidate  
 **Unit ID:** cbse-english-g6-u1  
 **Title:** The Turning Sign  
-**Status:** Internal only; not learner-facing. The founder approval recorded on 28 October 2026 applies to learner-facing Unit 1 v1.0; this answer pack stays separate from learner-facing bundles  
+**Status:** Internal historical v1.0 answer-pack draft; the learner-facing v1.0 received founder approval for the academic-content gate on 28 October 2026. This pack is not yet complete under `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` v1.2 and must be migrated before the revised unit is reviewed for release. Keep separate from all learner-facing bundles.
 **Mapping:** Partial source alignment for story reading/event sequencing; no official CBSE objective code  
 **Separation rule:** Keep this pack out of the client import graph and all learner-facing bundles.
 
@@ -87,3 +87,15 @@ The cap in Part 4 is deliberate: the fifth item is an additional check, not an e
 - [ ] Test instructions and response burden with an actual teacher/learner before release.
 - [ ] Repeat relevant review for any material change to text, tasks, mappings or sourced assets.
 - [ ] Keep this pack out of learner-facing code/assets.
+
+## Current migration requirements — 31 October 2026
+
+This v1.0 pack is a useful historical draft, not a completed pack under the current standard. During the scheduled CBSE migration:
+
+- Task 1 must explain why the correct clue is supported and separately explain why each of the other three options is unsupported or less suitable. Add a question-specific response range, ideal target and model if the learner writes the selected detail in their own words.
+- Task 2 must have a suitable response range and ideal target, a question-specific model response, relevant evidence criteria and tailored feedback/next steps.
+- Task 3 must provide the full event sequence and explain the chronological/evidence link determining each position.
+- Task 4 must provide the correct word for every blank, explain the grammatical/spatial clue, and address the unused word-bank options for each blank.
+- Task 5 must retain its 50–70-word guidance unless academic review changes it, record an ideal target within that range, and provide a question-specific model response and feedback tied to event order, evidence and location prepositions.
+
+The 165-word original story may remain under the 250-word rule; do not replace it solely because the policy changed. Add the live current/ideal counter to every typed-response field when the learner preview is revised. Any material learner-content change must be versioned and receive fresh review.
