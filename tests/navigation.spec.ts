@@ -119,11 +119,13 @@ test.describe("curriculum pathway URLs", () => {
 });
 
 
-test.describe("IB MYP Year 1 Unit 1 version 3 learner guidance", () => {
+test.describe("IB MYP Year 1 Unit 1 version 4 learner guidance", () => {
   test("shows both registered literary extracts and question-specific response ranges", async ({ page }) => {
     await page.goto(pilotLesson);
     await expect(page.getByText(/The city clocks had only just gone three/)).toBeVisible();
     await expect(page.getByText(/The rabbit-hole went straight on like a tunnel/)).toBeVisible();
+    await expect(page.getByText(/orange-lit platform/i)).toBeVisible();
+    await expect(page.getByText(/bright shelter/i)).toHaveCount(0);
     await expect(page.getByText(/Expected response: 15–25 words/)).toBeVisible();
     await expect(page.getByText(/Expected response: 40–55 words/)).toBeVisible();
     await expect(page.getByText(/Expected response: 65–85 words/)).toBeVisible();
