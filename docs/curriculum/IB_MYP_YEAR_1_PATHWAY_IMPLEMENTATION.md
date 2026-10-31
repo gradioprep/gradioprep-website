@@ -1,11 +1,11 @@
 # IB MYP Language and Literature — Year 1 Pathway Implementation Plan
 
-**Version:** 1.3 — six-unit architecture, current IB-source boundary and MYP v3 review checkpoint  
+**Version:** 1.4 — six-unit architecture and route-specific Top Five research implementation  
 **Status:** implementation structure approved; MYP Year 1 Unit 1 v3 candidate is founder-approved, its six-field live counter is implemented, and the 31 October AI-assisted editorial/source desk review is recorded. Human academic review, current objective mapping, unit-level rights, suitability, manual accessibility and release approval remain separate and open.  
 **Pathway ID:** ib-myp-lal-y1.  
 **Linked guide:** docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md.  
 **Research audit:** docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.  
-**Research checked:** 26 October 2026.
+**Research checked:** 31 October 2026.
 
 ## 1. Purpose and controlling decisions
 
@@ -53,6 +53,8 @@ Each curriculum guide, unit, lesson, task and rubric must keep these separate fi
 | Programme/course/year | MYP / Language and Literature / Year 1 |
 | Content ID and version | Stable ID; revision creates a new version |
 | Framework/source baseline | Exact source title, publisher, URL, edition/date and scope |
+| Route-specific independent Top Five audit | Five ranked independent websites for this exact course/year; see the companion resource landscape audit; official sources are separate |
+| Research decision trace | Source ID → inspected evidence → design decision adopted/rejected → affected outcome/unit/task; record confidence and limitations |
 | Source confidence | Current public IB fact; legacy official reference; independent specialist example; research principle; platform design decision; unverified/transition watch |
 | Official map state | not_started, source_pending, legacy_crosswalk_only, mapped_pending_review, verified, or general_unmapped |
 | Official objective references | Blank until current guide and relevant wording are verified; old A–D notes are stored separately as legacy crosswalk, not current official mapping |
@@ -68,7 +70,7 @@ Each curriculum guide, unit, lesson, task and rubric must keep these separate fi
 | Provenance | Exact source URL, relevant section/page, checked date, reviewer, rights notes and rationale |
 | Progression links | Previous/next links and prerequisites only when curriculum logic is reviewed |
 
-A source-review pass does not automatically set official map state to verified. Academic, rights, accessibility and release statuses remain independent.
+A source-review pass does not automatically set official map state to verified. Academic, rights, accessibility and release statuses remain independent. The MYP Year 1 Top Five audit is complete at research level; it does not validate any official objective code.
 
 ## 5. Unit-planner template
 
@@ -201,3 +203,21 @@ The earlier sequence sections that describe the live counter as future work are 
 Current public IB evidence verifies the broad six skill areas, school-based assessment model and 50-hour annual baseline, but not the applicable current detailed Year 1 objective/strand mapping. The dated public 2014/15 material is legacy reference; Enhanced MYP beta is not final current guidance. Keep `officialObjectiveCodes` empty and `mappingStatus` unverified.
 
 AI-assisted editorial review and current source notes are in `docs/PILOT_UNIT_REVIEW.md`. Human academic validation remains pending. The human reviewer must resolve the Q4 source-capitalization and Q3 “shelter”/poster-description notes, assess actual learner-level suitability, and sign the exact v3 material. Unit-level rights/territory approval, visual-asset/context review and manual accessibility remain separate. No release is authorized; keep PR #14 draft/unmerged. Do not begin the Cambridge Stage 7 content migration until the MYP gates are addressed and the founder explicitly authorizes the next step.
+
+## 13. Route-specific Top Five research applied to the implementation structure — 31 October 2026
+
+The MYP Year 1 guide refresh is backed by a completed, ranked Top Five independent-source audit in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1. The implementation implications are:
+
+| Source | Implementation pattern worth benchmarking | GradiPrep application |
+|---|---|---|
+| InThinking / ThinkIB | Year-banded units, visible assessment and resource categories, differentiation and concept-led teaching | Record progression links, text-type balance, taught skill modes and task evidence for each unit; do not copy its topic sequence or paid content |
+| ASJ Learning | Concept progression across MYP years and low-stakes formative-assessment choices | Add a “previous learning / new complexity / future revisit” note and formative practice choice to each unit brief |
+| ManageBac+ | Plan, Inquiry, Action and Reflection; connected curriculum, ATL, learning experiences, assessment and resources | Use these as internal planning zones, with one traceable source/outcome/task/evidence/feedback/next-step chain; keep all fields curriculum-specific |
+| Hachette Learning | Inquiry framing, vocabulary, activities and assessment within a teaching chapter | Check that each lesson/unit includes a purpose, explicit vocabulary, varied activity and evidence of learning; treat the book only as an older publisher example |
+| Toddle | Curriculum overview, unit flow, assessment links and coverage analytics | Keep route/year/unit/task metadata relational and make progress/coverage claims only when supported by actual learner evidence |
+
+**Acceptance condition for each future MYP unit:** a reviewer must be able to follow (1) the official/public or internal source claim, (2) the independent-source comparison, (3) the platform-designed outcome, (4) the learning experience, (5) the assessment evidence, (6) the feedback/revision action and (7) the next-step or transfer check. Do not label internal metadata as an IB code.
+
+**Research gate status:** MYP Year 1 guide/implementation research is complete for the current public evidence and ranked Top Five. No official detailed Year 1 mapping has been inferred. This completed research does not grant release approval or alter the remaining v3 academic, rights, suitability, accessibility and release gates.
+
+This addendum is documentation/implementation-structure work only. It does not authorize a change to the approved v3 learner/teacher content, app code, route data, merge or production deployment.
