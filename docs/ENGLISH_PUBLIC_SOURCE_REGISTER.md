@@ -1,7 +1,7 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.9  
-**Research checked:** 31 October 2026; MYP public-source currency and v3 review checkpoint updated 31 October 2026  
+**Version:** 3.0  
+**Research checked:** 31 October 2026; MYP Year 1 Top Five complete; Cambridge Stage 7 and CBSE Grade 6 audits pending
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
 
@@ -296,3 +296,17 @@ These public sources support the platform's broad, independently designed learni
 The MYP Year 1 route-specific Top Five is complete and recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1. It ranks five independent providers after inspecting public MYP-specific content: InThinking/ThinkIB, ASJ Learning, ManageBac+, Hachette Learning and Toddle. The source register's shared five cross-track starters are not a substitute for this audit.
 
 **Outstanding route-specific audits:** Cambridge Lower Secondary English 0861 Stage 7 and CBSE Grade 6 each require their own independently selected Top Five before their guide/implementation research is marked complete. The same rule applies to every additional approved year, stage, grade and applicable IGCSE/DP route. Absence of a detailed official guide does not block this research or an accurately labelled independent implementation design; it leaves only unsupported official mapping unverified.
+
+## 10. First-cohort route-specific research and passage-status reconciliation — 31 October 2026
+
+| Route | Independent Top Five state | Application to guide/implementation | Passage inventory relevant to current Unit 1 |
+|---|---|---|---|
+| IB MYP Language and Literature Year 1 | **Complete** — five providers individually ranked and evidence-inspected in the dedicated MYP landscape review v1.1 | Applied in Year 1 guide v1.5 and implementation plan v1.4 | Current Dickens/Carroll public-domain extracts are separately registered (95/129 words) |
+| Cambridge Lower Secondary English 0861 Stage 7 | **Pending** — do not reuse MYP sources; inspect five providers for the exact Stage 7 route | Complete after the audit; official source gating must not block independent guide/structure | Current original warm-up/main/exit bodies: 16/221/27 words; all within threshold |
+| CBSE English Grade 6 | **Pending** — conduct a separate India-relevant Grade 6 audit after Cambridge in the cohort sequence | Complete after the audit; keep CBSE outcomes distinct and label unsupported mapping | Current original “The Turning Sign” body: 165 words; within threshold |
+
+The counts follow the project's lexical convention and refer to the exact learner candidates recorded on 31 October 2026. Recount after any text edit. A qualifying short original may remain; the length rule never permits copying a short third-party copyrighted work.
+
+The five cross-track discovery starters elsewhere in this register are not the Top Five for any exact route. Official IB/Cambridge/CBSE/NCERT sources remain in a separate authority register and do not count toward the independent Top Five. Use the weighted rubric and required evidence record in `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A.
+
+**No-source bottleneck:** unavailable/gated official detailed guides do not block the Top Five, a clearly labelled internal curriculum guide or its implementation structure. They block only unsupported official mapping claims. Do not ask the founder again for authorised IB PRC access; no such access is available.
