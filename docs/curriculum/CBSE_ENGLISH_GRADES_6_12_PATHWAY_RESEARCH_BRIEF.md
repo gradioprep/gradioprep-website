@@ -1,7 +1,7 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.5  
-**Status:** Approved pathway scope and authorised implementation; learner-facing Grade 6 Unit 1 v1.0 (“The Turning Sign”) has founder academic-content approval recorded 28 October 2026. Its source alignment is partial; no unit-specific official CBSE objective code is assigned. A controlled, unlinked interface preview is available in draft PR #17; manual accessibility review, current *Poorvi* reprint verification and release approval remain separate gates.  
+**Version:** 1.6  
+**Status:** Approved pathway scope and authorised implementation. CBSE Grade 6 Unit 1 v1.0 (“The Turning Sign”) has founder approval for the academic-content gate (28 October 2026); its 165-word original passage is within the 250-word allowance. The CBSE Grade 6 route-specific Top Five remains pending; its current teacher pack and learner preview need migration to the updated teacher-feedback and live-counter standard. Source alignment remains partial, the current *Poorvi* reprint and unit-specific official objective code are unverified, and manual accessibility/release decisions remain open.
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
 **Implementation status (28 October 2026):** The learner-facing v1.0 candidate was approved for the academic-content gate by the founder. The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports limited source alignment for narrative reading and event sequencing, but no unique objective code. A direct-only controlled preview is implemented in [draft PR #17](https://github.com/gradioprep/gradioprep-website/pull/17), deployed for accessibility review at [the hosted preview URL](https://pr-17-gradioprep-website.wandering-scene-1822.workers.dev/preview/cbse-grade-6/english/unit-1). No normal navigation or release is added; manual accessibility review and the separate release gate remain outstanding.
@@ -114,3 +114,15 @@ The initial “The Red Marker” wording was revised before human review after a
 The founder has reviewed and approved the exact learner-facing “The Turning Sign” v1.0 for the academic-content gate. The source-backed learning-outcome check identified the NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024): the programme names reading stories and identifying main ideas, characters and events as a major learning outcome, and recommends comprehension questions and sequencing. This supports the reading/event-sequencing elements only. CIET's Grade 6 activity list provides context for the location-preposition practice.
 
 No official CBSE objective code is assigned. Current *Poorvi* reprint/version verification, a controlled unlinked preview for accessibility/UI checks, and explicit release decisions remain outstanding. The learner-safe TS data is still not imported into the UI. Do not add the unit to normal navigation or release it from this documentation decision.
+
+## 11. Grade 6 first-cohort reconciliation and route-specific Top Five — 31 October 2026
+
+The three-curriculum first-cohort order remains **IB MYP Year 1 → Cambridge Stage 7 → CBSE Grade 6**. CBSE is third; do not begin its content/teacher-pack migration until the Cambridge checkpoint is complete and authorised.
+
+**Grade 6 independent research:** The ranked Top Five audit for this exact CBSE grade/subject is **pending**. It must evaluate five genuinely relevant independent websites/platforms/educator or publisher resources using the weighted rubric in `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A. CBSE/NCERT/government sources are assessed separately and do not count among the five. Inspect grade-specific publicly available examples and record access limits, update dates, evidence, rights boundaries, and decisions adopted/rejected. Do not fill the list with weak or unrelated providers merely to reach five.
+
+**No-source bottleneck:** the exact current official *Poorvi* reprint and a unit-specific official CBSE objective code remain unverified. This does not block the independent Top Five or a clearly labelled internal guide/implementation structure. It blocks only unsupported claims of official mapping. Do not ask for IB PRC access; that access is not available and is not required for this CBSE research.
+
+**Current Unit 1 candidate:** “The Turning Sign” v1.0 remains founder-approved for the academic-content gate only. Its original story body is 165 words and may remain unchanged under the current short-original rule. The existing teacher/editor pack still needs question-specific reasoning, per-alternative rationales, ordering logic, typed-response ranges and ideal targets, models and tailored feedback. Add live counters to every typed response before the revised learner preview is reviewed. PR #17 is a preview of the earlier v1.0 interface and does not yet satisfy the new counter requirement.
+
+The route-level status, all three passage counts and the nine-step cohort plan are controlled by `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md`.
