@@ -285,7 +285,7 @@ export const pilotLessonPack: PilotLessonPack = {
         "What might Dickens suggest by imagining that Nature “lived hard by” and was “brewing” the fog? Explain how the image fits the scene.",
       expectedResponseLength: { minWords: 45, maxWords: 65 },
       modelAnswer:
-        "By imagining Nature as a neighbour “brewing” something, Dickens makes the fog seem deliberately produced rather than ordinary weather. “on a large scale” exaggerates its size and force. The playful image makes the cloud seem almost alive while showing how completely it hides the street.",
+        "By imagining Nature as a neighbour “brewing” something, Dickens makes the fog seem deliberately produced rather than ordinary weather. The phrase “on a large scale” exaggerates its size and force. The playful image makes the cloud seem almost alive while showing how completely it hides the street.",
       successIndicators: [
         "Uses the words “lived hard by” or “brewing” as evidence.",
         "Explains the personification or exaggeration rather than treating the image literally.",
