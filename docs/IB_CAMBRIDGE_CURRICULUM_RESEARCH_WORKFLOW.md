@@ -1,9 +1,9 @@
-# IB and Cambridge Curriculum Research Workflow
+# English Curriculum Research Workflow — IB, Cambridge and CBSE
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Status:** Binding internal workflow for every level and course in the approved English scope  
 **Owner:** Curriculum director / academic lead  
-**Last reviewed:** 26 October 2026  
+**Last reviewed:** 31 October 2026  
 **Applies to:** IB MYP Language and Literature Years 1–5; IB DP Language A: Language and Literature platform delivery Years 1–2; Cambridge Lower Secondary English (0861) Stages 7–9; Cambridge IGCSE First Language English (0500); and CBSE English Grades 6–12, with platform delivery bands treated as internal sequencing rather than separate qualifications.
 
 ## 1. Standing access decision — do not ask the founder again
@@ -23,7 +23,7 @@ Complete and record these steps independently for each course, stage/year and ap
 1. **Define the exact route.** Record programme, subject/course, year/stage, official syllabus or framework code, applicable exam series/edition, intended learner profile and whether the level label is official or only an internal delivery band.
 2. **Establish the current official baseline.** Search official public programme/course pages, syllabus PDFs, framework pages, assessment pages, specimen papers, mark schemes, examiner instructions/reports, syllabus-change notices and official FAQs. Record URL, displayed publication/update date, edition/session, date checked and the exact claims each source supports.
 3. **Check currency explicitly.** Prefer the source that applies to the learner's target session. Compare older guides and papers with current public material; never call an older resource current merely because it is official. Where the latest detailed IB guide is gated or its status cannot be verified, distinguish current public framework statements from historical descriptors and leave exact official mapping unverified.
-4. **Conduct level-specific specialist-platform research.** Compare relevant EdTech/teaching platforms, reputable publishers and specialist teacher resources for this precise curriculum and level. Examine their publicly visible course structures, skill progression, unit sequence, question/task types, worked examples, feedback model, differentiation, formative/summative assessment, teacher/learner workflow and evidence of syllabus alignment. Use representative public pages, samples, reviews or demonstrations where accessible. Record access/paywall limits and do not infer unseen content.
+4. **Complete the mandatory route-specific Top Five independent-source review.** For this exact curriculum, subject, year/stage and edition, identify and evaluate the five strongest relevant independent websites (specialist teaching sites, EdTech platforms, reputable publishers or educator-resource providers). The five must be independent of the awarding body; official IB, Cambridge, CBSE, NCERT and government pages are assessed separately and do not count toward the five. Inspect publicly accessible subject-specific content, samples or demonstrations—not just marketing claims. Rank and score the five using the rubric in Section 2A. Compare progression, unit/topic breadth, text/resource types, teaching sequence, modelling, practice, assessment, feedback, differentiation/accessibility and teacher/learner workflow. Record what was actually inspected, publication/update dates, access limits, strengths, limitations and the design decisions each source can and cannot support. Do not infer subscription-gated material.
 5. **Triangulate, do not copy.** Compare the specialist approaches against official public requirements and credible research on explicit instruction, modelling, scaffolded practice, retrieval, feedback, metacognition, accessibility and learner development. Explain why each adopted design choice is appropriate for the level. Platform popularity, marketing language or a publisher's endorsement alone is not proof of syllabus alignment.
 6. **Design the implementation structure.** Produce a level-specific curriculum guide and implementation plan that specify intended learning outcomes in plain language; a coherent progression and unit sequence; proposed teaching/learning cycle; text/resource types; modelled, guided and independent practice; assessment and feedback; differentiation/accessibility; estimated learning time; mastery/transfer checks; and traceability to source evidence. Shared platform templates are allowed, but content, sequencing, assessment and mapping must remain curriculum- and level-specific.
 7. **Map only what the evidence supports.** Link official codes, criteria, assessment objectives and syllabus claims only to directly verified sources. If a code/descriptor cannot be verified publicly, use a clearly labelled internal skill statement or provisional crosswalk and mark the official mapping as unverified. Never invent official identifiers or imply the platform's proposed sequence is prescribed by IB/Cambridge.
@@ -90,3 +90,30 @@ Do not ask the founder again for school-account access. Do not wait indefinitely
 ## 7. Current workflow record
 
 As of 26 October 2026, the public-source-first method is approved and binding. The IB MYP Year 1 guide and implementation structure are existing public-framework-aligned drafts; official detailed Year 1 mapping remains unverified. Cambridge Lower Secondary Stage 7 Unit 1 v1.2 is a separate draft with the scoring inconsistency corrected; official mapping, academic suitability, rights, accessibility, contextual suitability and release remain separate gates. These states do not change as a result of this workflow document. No learner-facing content, application code, pull request status or deployment is changed by this document.
+
+## 2A. Binding Top Five independent-source standard — every curriculum and level
+
+This standard applies independently to every route and level in the approved scope: each IB MYP year, each IB DP delivery chapter, each Cambridge Lower Secondary stage, the applicable Cambridge IGCSE 0500 syllabus/session, and each CBSE English grade. A Top Five completed for one course, year, stage or exam session does not transfer to another.
+
+**Selection rules**
+- Identify five genuinely relevant independent websites for the exact route. “Independent” means not the awarding body or official government/curriculum authority. Eligible providers include specialist teacher sites, established education publishers, curriculum/assessment platforms and named educator resource libraries.
+- Keep official sources in a separate authority register. Independent sources may inform implementation and teaching design; they cannot establish official syllabus requirements, codes or endorsement.
+- Inspect the strongest publicly available evidence at item/page level: course-specific scope, sample unit, lesson, assessment explanation, public demonstration or a detailed help document. A logo, popularity claim or product feature list alone is weak evidence.
+- Do not bypass paywalls, subscriptions or school portals. Mark the source as metadata-only where that is all that is publicly visible.
+- If fewer than five sources meet the minimum relevance and evidence threshold, report the smaller defensible set and explain the search gap. Do not fill a quota with low-quality, unrelated or unverifiable websites.
+
+**Internal ranking rubric (0–5 for each dimension)**
+| Dimension | Weight |
+|---|---:|
+| Exact curriculum, subject and learner-level relevance | 30% |
+| Named expertise, authorship and source transparency | 20% |
+| Currency and visible update/version evidence | 15% |
+| Quality of publicly inspectable evidence | 20% |
+| Usefulness for teaching, assessment or implementation design | 15% |
+
+Calculate a weighted score and provide a short evidence-based rationale for each ranking. These are internal comparative judgements, not external accreditations or proof that a provider is objectively “best”.
+
+**Required deliverable**
+For each route, retain a dated Top Five comparison with rank/score, provider and author where available, direct URLs, exact pages/samples inspected, publication/update date, access status, curriculum fit, evidence contribution, limitations, rights/copying boundary, design decisions adopted or rejected, cross-checks and recheck trigger. Link this audit from the curriculum guide and implementation structure.
+
+**No-source bottleneck rule:** an unavailable official guide or unmapped official code does not prevent completion of the public-source audit, a clearly labelled independent curriculum guide, or its implementation structure. It prevents only the unsupported official mapping claim. Keep human academic approval, rights, accessibility, suitability and release as separate gates.
