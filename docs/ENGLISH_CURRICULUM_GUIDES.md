@@ -230,3 +230,13 @@ The curriculum-guide architecture and source-verification rules in this document
 2. Cambridge Grade 6 English — confirm the official stage/course and language route; do not substitute Stage 7.
 
 Each level requires a separately researched diagnostic-provider Top Five, a skills-based diagnostic, detailed analytics report and a personalised five-day remedial course before moving to the next level. No curriculum guide, new unit or teacher-pack migration for other levels is to be started during these cycles. The next content order after both cycles is reserved for the founder. Existing guide versions, unit candidates, approvals and release gates are not modified by this overlay.
+
+
+## 7. Diagnostic-first sequencing overlay — 31 October 2026
+
+The curriculum-guide architecture and source-verification rules in this document remain in force. The old cross-track guide and unit rotations in Section 5 are historical only. Current active work is restricted to the level-by-level diagnostic readiness cycles in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`:
+
+1. Grade 9 IB MYP Language and Literature — MYP Year 4 is a working assumption; confirm actual school placement.
+2. Cambridge Grade 6 English — confirm the official stage/course and language route; do not substitute Stage 7.
+
+Each level requires a separately researched diagnostic-provider Top Five, a skills-based diagnostic, detailed analytics report and a personalised five-day remedial course before moving to the next level. No curriculum guide, new unit or teacher-pack migration for other levels is to be started during these cycles. The next content order after both cycles is reserved for the founder. Existing guide versions, unit candidates, approvals and release gates are not modified by this overlay.
