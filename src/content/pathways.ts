@@ -4,7 +4,7 @@ const unitSequences: readonly UnitSequence[] = [1, 2, 3];
 
 /**
  * Create planned catalogue slots. Most remain empty; the first IB MYP Year 1
- * slot points to the version 3 candidate awaiting fresh review. Neither the
+ * slot points to the version 4 editorial-correction candidate awaiting fresh review. Neither the
  * candidate nor its preview implies official syllabus coverage or release.
  */
 function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
@@ -20,7 +20,7 @@ function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
       mappingStatus: "unverified",
       releaseStatus: "planned",
       reviewNote: isPilotPreview
-        ? "Version 3 is a revised candidate awaiting fresh founder and academic review. Official Year 1 mapping, rights, accessibility, age/level suitability and release gates remain open; this unit is not released."
+        ? "Version 4 is a draft editorial-correction candidate awaiting founder and fresh human academic review. Version 3 founder approval does not transfer. Official Year 1 mapping, rights, accessibility, age/level suitability and release gates remain open; this unit is not released."
         : "Planning slot only. Add a skill focus and official objective references after academic review.",
     };
   });
