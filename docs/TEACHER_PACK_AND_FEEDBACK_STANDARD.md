@@ -126,7 +126,7 @@ Do not add live AI/API cost, a database, authentication, a production grading en
 
 ## 8. Diagnostic and remedial teacher/editor materials — 31 October 2026
 
-For diagnostics and the five-day remedial layer, apply Sections 2–7 above to every relevant objective and typed-response item, with the following additional requirements.
+For diagnostics and the personalised remedial layer (five 60-minute sessions recommended; up to seven maximum), apply Sections 2–7 above to every relevant objective and typed-response item, with the following additional requirements.
 
 ### Diagnostic item records
 
@@ -136,10 +136,10 @@ Record a separate rationale for every selected/distractor option and each sequen
 
 ### Remedial lesson records
 
-The remedial course must use the same structure and quality bar as the existing units. Every day/task needs a learning objective, explicit purpose ("why the learner is doing this task"), time allocation, instruction/explanation, worked model where appropriate, guided and independent practice, enough questions/activities for the allotted time, evidence of success, feedback and an exit check. Each of the five sessions must total 60 minutes. Each identified diagnostic improvement area must map to at least one specific remedial task; map tasks in descending Remediation Priority 5 to 1 order.
+The remedial course must use the same structure and quality bar as the existing units. Every day/task needs a learning objective, explicit purpose ("why the learner is doing this task"), time allocation, instruction/explanation, worked model where appropriate, guided and independent practice, enough questions/activities for the allotted time, evidence of success, feedback and an exit check. Each session must total 60 minutes. Five sessions are the recommended default, not a fixed requirement; use up to seven sessions when needed to address every identified improvement area comprehensively. Never exceed seven sessions. Each identified diagnostic improvement area must map to at least one specific remedial task; map tasks in descending Remediation Priority 5 to 1 order. Do not omit or under-teach an area merely to force a five-session plan.
 
 The teacher/editor pack must also include each diagnostic improvement area's source evidence, priority rationale, target skill, the relevant day/task IDs, expected successful performance, accepted alternatives and next steps. Keep teacher-only scoring keys and private priority logic outside the learner-facing bundle.
 
-The complete five-day course must include the fresh post-course outcome check and a clear item/construct crosswalk to the diagnostic baseline. Avoid exact question repetition where it could create a practice effect. Report outcome differences only when scoring and constructs are comparable.
+The complete remedial course (normally five sessions; no more than seven) must include the fresh post-course outcome check and a clear item/construct crosswalk to the diagnostic baseline. Avoid exact question repetition where it could create a practice effect. Report outcome differences only when scoring and constructs are comparable.
 
 This addition does not relax the existing human-validation, content-rights, accessibility, data/privacy, teacher-pack separation or explicit release requirements. See `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md` for the binding cycle-level requirements.
