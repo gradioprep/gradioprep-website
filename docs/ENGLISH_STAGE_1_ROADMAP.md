@@ -225,7 +225,7 @@ Learner-facing v1.0 “The Turning Sign” is approved for the academic-content 
 
 ## 12. Mandatory migration and feature-integration plan — updated 30 October 2026
 
-The founder-approved 250-word threshold and live-counter rules below supersede the previous blanket instruction that every short passage must be replaced by public-domain literature. The current approved MYP v3 content is unchanged. Passage changes are made only during the relevant scheduled content revision; qualifying platform-original passages of 250 words or fewer may remain.
+The founder-approved 250-word threshold and live-counter rules below supersede the previous blanket instruction that every short passage must be replaced by public-domain literature. The exact founder-approved v3 content remains preserved as historical version content; current v4 contains only the two documented editorial corrections. Any further passage/content changes must be versioned. Qualifying platform-original passages of 250 words or fewer may remain.
 
 **Order and integration gates:**
 
