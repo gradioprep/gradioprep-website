@@ -253,7 +253,7 @@ function Lesson({ go, navigatePath, pathwayId, unitId }: { go: Navigate; navigat
   return <Shell page="lesson" go={go} context={curriculumContext}>
     <InfoNote>
       {lesson.reviewRecord.outcome === "passed"
-        ? <><b>Academic content review passed.</b> This version is approved for pilot preview only. Official Year 1 mapping and release approval remain open.</>
+        ? <><b>Founder and human academic review approved for this exact version 4 (31 October 2026).</b> Age/level and contextual suitability are approved. This remains an unreleased candidate: official Year 1 mapping is unverified, and unit-level rights/territory, manual accessibility and release checks remain open.</>
         : lesson.status === "founder-approved-candidate"
           ? <><b>Draft version 4 editorial-correction candidate — founder and fresh human academic review pending.</b> Founder approval applies only to version 3 and does not transfer to v4. Official Year 1 mapping, rights, suitability, accessibility and release checks remain open.</>
           : <><b>Unit 1 version {lesson.version} is awaiting founder and academic review.</b> Approvals for versions 1, 2 and 3 do not automatically apply to this revision. Official Year 1 mapping and release approval remain open.</>}
