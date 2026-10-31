@@ -5,8 +5,8 @@ import type { PilotUnitDraft } from "./model";
  * Year 1 Unit 1 candidate. Official strand mapping remains unverified.
  */
 export const pilotUnitDraft: PilotUnitDraft = {
-  id: "draft-ib-myp-lal-y1-u1-v3",
-  version: 3,
+  id: "draft-ib-myp-lal-y1-u1-v4",
+  version: 4,
   pathwayId: "ib-myp-lal-y1",
   unitId: "ib-myp-lal-y1-u1",
   status: "draft-for-founder-review",
@@ -75,5 +75,5 @@ export const pilotUnitDraft: PilotUnitDraft = {
   rightsNote:
     "Candidate main excerpt: EXC-IB-MYP-Y1-U1-MAIN / SRC-IB-MYP-Y1-U1-001. Candidate transfer excerpt: EXC-IB-MYP-Y1-U1-TRANSFER / SRC-IB-MYP-Y1-U1-002. Original English texts from historical editions; source-level term checks for India and the United Kingdom recorded 30 October 2026; the United States and other territories are not cleared in this record. Final unit-level rights sign-off remains pending.",
   releaseNote:
-    "Unreleased version 3 candidate. No previous founder or academic approval transfers. Official IB mapping, human academic review, final rights, accessibility, suitability and release gates remain open.",
+    "Unreleased version 4 editorial-correction candidate. Founder approval applies only to version 3 and does not transfer. Fresh human academic review, official IB mapping, final rights/territory, age/level suitability, manual accessibility and release gates remain open.",
 };
