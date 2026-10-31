@@ -1,14 +1,14 @@
 # English Curriculum Research, Quality Rubric and Design Standard
 
-**Status:** Internal working reference v1.7 — research synthesis, 250-word passage threshold, live word-counter integration plan and quality rubric; not an official curriculum mapping.
-**Prepared:** 30 October 2026
+**Status:** Internal working reference v1.8 — research synthesis, 250-word passage threshold, live word-counter integration plan and quality rubric; not an official curriculum mapping.
+**Prepared:** 31 October 2026
 **Owner:** Academic lead / founder
 **Scope:** English-language learning across IB MYP, IB Diploma Programme (DP), Cambridge Lower Secondary, Cambridge IGCSE and CBSE English Grades 6–12. Official syllabus mappings must be verified separately for each course, class/year/stage and edition.
 **Do not publish this document as a claim of IB/Cambridge endorsement.**
 
 ## Binding workflow and access constraint
 
-Follow [`docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md`](IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md) for every IB and Cambridge course/level. The founder has no authorised school-account access; this is a standing constraint, not an open request. Never ask the founder again to obtain gated school resources or pause research for them. The curriculum director must use the best available current public official sources, compare level-specific specialist EdTech/publisher resources, cross-check against credible pedagogy evidence, and record what remains unverified. A public-framework-aligned implementation design may proceed where detailed official material is gated, but official mapping must remain explicitly unverified unless directly supported by traceable current evidence. Academic review, mapping, content-rights evidence, accessibility, suitability and release remain distinct statuses. Binding content-rights rule: project-original reading passage bodies up to and including 250 words are allowed; existing qualifying short originals may remain. Passage bodies over 250 words must come from recognised writers' verified public-domain works. Give every passage an Excerpt ID and the appropriate short-original provenance or long-public-domain Source ID record. This does not permit copying third-party copyrighted text merely because it is short. Visual/photo rights remain separate. Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1, docs/LITERARY_EXCERPT_SOURCE_REGISTER.md v1.1 and docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md v1.1.
+Follow [`docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md`](IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md) for every IB and Cambridge course/level. The founder has no authorised school-account access; this is a standing constraint, not an open request. Never ask the founder again to obtain gated school resources or pause research for them. The curriculum director must use the best available current public official sources and complete a ranked Top Five independent-website review separately for every exact curriculum/subject/year/stage/edition. Official resources do not count toward the five. Compare specialist teaching sites, relevant EdTech platforms, reputable publishers and educator resources using the binding weighted rubric and evidence record in `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A. Cross-check against credible pedagogy evidence and record what remains unverified. A public-framework-aligned guide and implementation structure must proceed where detailed official material is gated; official mapping remains explicitly unverified unless directly supported by traceable current evidence. Academic review, mapping, content-rights evidence, accessibility, suitability and release remain distinct statuses. Binding content-rights rule: project-original reading passage bodies up to and including 250 words are allowed; existing qualifying short originals may remain. Passage bodies over 250 words must come from recognised writers' verified public-domain works. Give every passage an Excerpt ID and the appropriate short-original provenance or long-public-domain Source ID record. This does not permit copying third-party copyrighted text merely because it is short. Visual/photo rights remain separate. Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1, docs/LITERARY_EXCERPT_SOURCE_REGISTER.md v1.1 and docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md v1.1.
 
 ## 1. Executive recommendation
 
@@ -50,6 +50,12 @@ Use sources in this order:
 6. Our own consent-based student/parent research, with method, sample, date and limitations disclosed.
 
 Use the public-source protocol in docs/ENGLISH_PUBLIC_SOURCE_REGISTER.md. A source ranking is not a vote: independent popularity does not make a third-party claim official. If the detailed guide is behind an account, record that limitation and continue with a clearly labelled public-framework-aligned design if useful. Leave exact official objective/strand mapping blocked unless it is directly verifiable; do not use a search snippet, older guide or sample paper as a substitute for missing official descriptors. For every source-driven decision, store title, URL, course, edition/session, access state, what it can support, cross-check, reviewer, date and confidence/status.
+
+### Mandatory route-specific Top Five independent-source review
+
+The Top Five is a separate, mandatory evidence deliverable for each exact route—not a shared list copied across IB, Cambridge and CBSE. The five selected sites must be independent of the awarding body and directly relevant to the selected course and learner level. The current public-source register's cross-track starter set is useful for discovery, but it does not satisfy this requirement. Record direct pages/samples actually inspected, author/provider, dates, access limits, weighted ranking, evidence contribution, limitations, cross-checks and the resulting guide/implementation decisions. See `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A.
+
+The absence of an official detailed guide or objective code is **not** a blocker to the independent-source review, public-framework-aligned curriculum design or implementation structure. It is a blocker only to a claim of verified official mapping. A source audit also does not clear academic, rights, accessibility, suitability or release gates.
 
 ### Official and independent source starting points (checked 26 October 2026)
 
@@ -256,3 +262,9 @@ Every objective/closed-response item needs an AI-drafted, human-validated correc
 5. Inherit both standards for all later curricula, content-bank items and newly created typed-response fields.
 
 This plan does not itself rewrite existing learner content or implement the counter; it is the recorded order for the next code and content steps.
+
+## 12. Route-specific Top Five audit checkpoint — 31 October 2026
+
+The first route-specific Top Five independent-source audit has been completed for **IB MYP Language and Literature Year 1** and is recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1. Five independent websites were ranked and inspected: InThinking/ThinkIB, ASJ Learning, ManageBac+, Hachette Learning and Toddle. Their evidence was used for subject-specific progression, unit/lesson design and implementation metadata—not official IB mapping.
+
+Cambridge Lower Secondary English 0861 Stage 7 and CBSE English Grade 6 still require their own separate Top Five audits in their scheduled sequence. Do not reuse the MYP five-source list as a substitute. The open official-mapping status does not block these research audits or the drafting of public-framework-aligned guides.
