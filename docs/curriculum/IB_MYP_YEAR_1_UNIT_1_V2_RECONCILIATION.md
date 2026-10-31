@@ -2,7 +2,7 @@
 
 **Version:** 1.5  
 **Date:** 31 October 2026  
-**Status:** Version 4 is a draft editorial-correction candidate in PR #14; founder approval remains specific to exact v3 and does not transfer. Fresh human academic review and independent mapping, rights, suitability, accessibility and release gates remain open.  
+**Status:** Version 4 is founder-approved in PR #14 for exact learner/teacher content, human academic review and age/level/context suitability on 31 October 2026; rights/territory, manual accessibility and release gates remain open. Current detailed official mapping remains unverified.  
 **Unit:** IB MYP Language and Literature Year 1, Unit 1.  
 **Content version:** 4 — “How writers and creators shape meaning” (editorial-correction draft).  
 **Guide baseline:** MYP Year 1 guide v1.4 and implementation structure v1.3; current detailed IB Year 1 guide edition and exact official objective/strand mapping remain unverified.  
@@ -202,11 +202,11 @@ PR #14 remains draft and unmerged. The counter/source/desk review do not authori
 
 ## 20. Version 4 editorial corrections and current gate state — 31 October 2026
 
-The current PR #14 candidate is v4. It preserves the v3 lesson structure, both reading passages, all questions/prompts, response ranges, item IDs and teacher-pack architecture. Version 3 founder approval (30 October 2026) remains recorded for v3 only; v4 has not yet been approved by the founder or a human academic reviewer.
+The current PR #14 candidate is v4. It preserves the v3 lesson structure, both reading passages, all questions/prompts, response ranges, item IDs and teacher-pack architecture. Version 3 founder approval (30 October 2026) remains recorded for v3 only. Version 4 was approved by the founder / project owner on 31 October 2026 for exact learner/teacher content, human academic review and age/level/context suitability. This is not release approval.
 
 - Q4 model-answer quotation casing is corrected to the original lowercase “on a large scale”.
 - Q3's unsupported “bright shelter” wording is removed. The exact Commons photograph was visually inspected and shows an open, raised paved platform, sign, orange streetlights, nearby tree and approaching headlights, with no shelter. Learner/teacher comparison language and visual description/alt text now align with the visible evidence.
 - Six live counters remain on entry/Q2/Q3/Q4/Q5/exit with ideal targets 20/50/75/55/55/50 and unchanged ranges 15–25, 40–55, 65–85, 45–65, 45–65 and 45–60. No cap, truncation or `maxLength` is used. Run #295 verifies v3 only; v4 CI final v4 run #352 passed the TypeScript/Vite build, teacher-pack separation and 16/16 Chromium tests for the PR #14 branch snapshot at commit `c157ed2470e9c0e94e6758c075bb71484b767002`.
 - MYP Year 1 independent Top Five remains complete and already applied. No repeat audit is required.
 
-Human academic review of exact v4, founder approval of exact v4, age/level/context suitability, unit-level image/text rights and territory review, manual accessibility, and explicit release approval remain open. Exact current official IB Year 1 mapping is still unverified; do not assign codes. Cambridge Stage 7 remains inactive until the MYP human gates are addressed and the founder explicitly authorizes the next stage.
+Unit-level image/text rights and territory review, manual accessibility, and explicit release approval remain open. Exact current official IB Year 1 mapping remains unverified; do not assign codes. Exact current official IB Year 1 mapping is still unverified; do not assign codes. Cambridge Stage 7 independent Top Five research is authorized and may proceed; learner-content/teacher-pack/counter migration remains after MYP rights/territory and manual accessibility gates are closed.
