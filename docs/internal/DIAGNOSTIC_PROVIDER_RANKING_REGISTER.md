@@ -42,7 +42,7 @@ The internal provider percentile is based on two equally weighted components:
 
 ### 2.2 Independent research evidence rules
 
-Count only genuinely independent sources as independent. Provider-authored technical manuals, marketing pages, product case studies and vendor-funded reports may inform product understanding but do not count as independent research sources for this 50% component.
+Count only genuinely independent sources as independent. Provider-authored technical manuals, marketing pages, product case studies and vendor-funded reports may inform product understanding but do not count as independent research sources for this 50% component. For the internal evidence index, count each unique underlying study/evaluation once and apply a consistent quality factor: 1.00 for a peer-reviewed experimental or quasi-experimental study; 0.85 for a systematic review or independent evidence-clearinghouse assessment with transparent methods; 0.75 for an independent government/university technical or psychometric evaluation; 0.60 for a peer-reviewed observational/correlational study; and 0.30 for other credible independent research with a clear method. A secondary source that merely summarises a study already counted does not add another full study credit; it may be recorded as corroboration. These factors are an internal scoring convention and are not to be disclosed in learner/parent reports.
 
 For every independent source, record publisher, author/evaluator, publication date, study design, sample, grade/age fit, outcome measured, product version and limitations. Distinguish:
 - peer-reviewed experimental or quasi-experimental studies;
@@ -54,7 +54,7 @@ Do not inflate counts by counting mirrors, citations of the same study, derivati
 
 ### 2.3 Percentile calculation and missing evidence
 
-Calculate the percentile rank for each component across the five providers only when the underlying values are sufficiently comparable and documented. Use a consistent ranking convention, disclose ties internally and retain the raw evidence table.
+For each provider, calculate (a) the test-taker volume measure from the best comparable unique-student count and (b) the independent-research index from the sum of qualifying unique-source quality factors. Convert each component to a percentile rank across the five providers using one documented tie-aware percentile convention. The final internal provider percentile is the arithmetic mean of the two component percentiles (50% / 50%). Record the raw values, reporting periods, source quality factors, tie treatment and calculation version. Do not mix incompatible count types or time periods merely to force a score. Calculate the percentile rank for each component across the five providers only when the underlying values are sufficiently comparable and documented. Use a consistent ranking convention, disclose ties internally and retain the raw evidence table.
 
 If one or more providers lack comparable test-taker or independent research evidence:
 - mark the component **provisional / not scoreable** for that provider;
