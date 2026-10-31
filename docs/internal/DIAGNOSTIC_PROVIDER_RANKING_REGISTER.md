@@ -62,7 +62,21 @@ If one or more providers lack comparable test-taker or independent research evid
 - do not publish a final composite percentile until the data coverage and comparability are adequate;
 - preserve the qualitative weighted diagnostic-fit rubric as a separate research aid, not as a substitute for the approved 50/50 formula.
 
-## 3. Grade 9 IB MYP Year 4 — evidence availability snapshot
+## 3. Grade 9 IB MYP Year 4 — approved shortlist order (internal retrieval only)
+
+The Founder accepted the following qualitative shortlist order for this research stage. This is an internal research record, not a learner ranking and not the final 50/50 composite provider percentile. Keep ordinal positions out of all learner/parent reports, including logged-in views.
+
+| Internal position | Provider |
+|---:|---|
+| 1 | IXL LevelUp Diagnostic for ELA |
+| 2 | Edmentum Exact Path Diagnostic Assessment |
+| 3 | NWEA MAP Growth Reading + Language Usage |
+| 4 | Lexia PowerUp Literacy |
+| 5 | GL Assessment Progress Test in English |
+
+**Composite percentile status:** Not yet scoreable. The available published counts use different populations, periods and measures. The evidence inventory below must be made sufficiently comparable before calculating any 50/50 percentile; no unsupported value is to be published or inferred.
+
+## 4. Grade 9 IB MYP Year 4 — evidence availability snapshot
 
 The following is an evidence inventory, not a completed percentile ranking. Different products publish different kinds of counts; the figures must not be treated as directly comparable without further verification.
 
@@ -82,7 +96,7 @@ Sources:
 - GL Assessment PTE: https://www.gl-assessment.co.uk/products/progress-test-in-english/
 - EEF PTE evidence profile: https://educationendowmentfoundation.org.uk/measures-database/progress-test-in-english
 
-## 4. Independent-research evidence inventory
+## 5. Independent-research evidence inventory
 
 | Provider | Independent sources identified in the current review | Evidence caveat |
 |---|---|---|
@@ -94,7 +108,7 @@ Sources:
 
 The independent evidence inventory must be expanded and checked for duplicate studies before calculating the research percentile component.
 
-## 5. Existing weighted diagnostic-fit rubric — separate from the 50/50 rank
+## 6. Existing weighted diagnostic-fit rubric — separate from the 50/50 rank
 
 The earlier six-criterion weighted review remains useful as a qualitative diagnostic-fit audit:
 - diagnostic quality/construct validity/skill granularity — 25%;
@@ -106,7 +120,7 @@ The earlier six-criterion weighted review remains useful as a qualitative diagno
 
 Its 100-point totals in the Grade 9 provider review are **not** the approved provider percentile and must not be substituted for it. Keep both analyses distinct.
 
-## 6. Retrieval and change control
+## 7. Retrieval and change control
 
 The Founder may request the internal provider percentiles, ordinal order, component evidence, source list or calculation audit at any time. Update this register when new reliable data is found, record the date and product/version, and preserve prior snapshots rather than silently overwriting history.
 
