@@ -1,6 +1,6 @@
 # Teacher-Pack, Question Design and Feedback Standard
 
-**Version:** 1.3  
+**Version:** 1.4  
 **Approved:** 31 October 2026  
 **Status:** Binding standard for all English learning tracks and all current/future learner-facing objective and typed-response tasks.  
 **Related source of truth:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md`, `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md`, and `docs/curriculum/UNIT_PRODUCTION_REGISTER.md`.
