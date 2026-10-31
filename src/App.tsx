@@ -4,6 +4,7 @@ import { englishPathways } from "./content/pathways";
 import { pilotReviewSummary } from "./content/pilotReviewSummary";
 import { pilotLearnerLesson } from "./content/pilotLearnerLesson";
 import { getUnitReadinessGates, getUnitReadinessSummary, unitContentPlans } from "./content/unitReadiness";
+import CbseGrade6Unit1Preview from "./CbseGrade6Unit1Preview";
 
 type Page = "home" | "dashboard" | "pathways" | "lesson" | "questions" | "assessment";
 type Navigate = (page: Page) => void;
@@ -19,6 +20,7 @@ type AppRoute =
   | { type: "page"; page: "dashboard" | "questions" | "assessment" }
   | PathwaysLocation
   | { type: "lesson"; pathwayId: string; unitId: string }
+  | { type: "cbse-preview" }
   | { type: "not-found" };
 
 type NavigatePath = (path: string) => void;
@@ -107,6 +109,7 @@ function pathnameForPage(page: Page): string {
 function resolvePathname(pathname: string): AppRoute {
   const segments = pathname.split("/").filter(Boolean);
   if (segments.length === 0) return { type: "home" };
+  if (segments.join("/") === "preview/cbse-grade-6/english/unit-1") return { type: "cbse-preview" };
 
   if (segments.length === 1) {
     const segment = segments[0];
@@ -645,6 +648,7 @@ export default function App() {
   const go: Navigate = next => navigatePath(pathnameForPage(next));
   const route = resolvePathname(pathname);
 
+  if (route.type === "cbse-preview") return <CbseGrade6Unit1Preview />;
   if (route.type === "home") return <Home go={go} />;
   if (route.type === "page") {
     if (route.page === "dashboard") return <Dashboard go={go} />;
