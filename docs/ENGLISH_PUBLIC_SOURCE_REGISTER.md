@@ -1,11 +1,11 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.3  
-**Research checked:** 28 October 2026; Grade 6 source recheck added 28 October 2026  
+**Version:** 3.0  
+**Research checked:** 31 October 2026; MYP Year 1 Top Five complete; Cambridge Stage 7 and CBSE Grade 6 audits pending
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
 
-**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md. Short platform-original passages may proceed after a proportionate internal originality/provenance screen and human review; longer passages and image/poster/document stimuli must use a specific verified public-domain or suitably open-licensed source unless a separate permission/legal basis is recorded. Check exact terms before selection or embedding. The existing stricter photograph rule remains binding: a photograph must have explicit CC0/public-domain evidence on the exact file page before it is selected/embedded.
+**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1. Project-original reading passage bodies up to and including 250 words are allowed and existing qualifying short originals may remain. Reading passages over 250 words must use a recognised writer's verified public-domain work. External third-party copyrighted text is not permitted merely because it is short. Give every passage an Excerpt ID and the appropriate authorship/provenance or public-domain source record in docs/LITERARY_EXCERPT_SOURCE_REGISTER.md. Original instructions, questions, explanations, model responses and feedback remain allowed. The stricter photograph rule remains binding: the exact file page must confirm CC0/public-domain status before a photograph is selected or embedded.
 
 ## 1. Decision in response to access constraints
 
@@ -42,9 +42,9 @@ The CBSE pathway is newly approved for product scope. This register entry is a s
 
 **Candidate mapping boundary:** describe the work as an independently designed, public-source-aligned CBSE Grade 6 practice unit. No official class-specific objective code is assigned in the absence of an exact current Grade 6 English descriptor. The exact NCERT edition/reprint should be checked again before any publication decision.
 
-## 2. Core five-source set
+## 2. Shared cross-track source starters — not the route-specific Top Five
 
-These are the five cross-track core website/source families selected for relevance, traceability, currency and transparency—not a popularity ranking or a claim that they are the five best sites for every course. They do not form an exhaustive MYP-specific EdTech review. For MYP Year 1, use the additional dedicated landscape audit in docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.
+This is a shared cross-track discovery/reference set selected for relevance, traceability, currency and transparency. It is **not** the five independent websites required for any individual course or level. Official awarding-body sources do not count toward a route's independent Top Five. Each exact IB, Cambridge and CBSE route must have its own ranked, evidence-based Top Five comparison under `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A. For MYP Year 1, that completed audit is recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1.
 
 ### Source 1 — International Baccalaureate public resources
 **Domains:** ibo.org and ibpublishing.ibo.org.  
@@ -241,9 +241,72 @@ A second limited search pass queried eight additional distinctive sentence fragm
 
 The content source register governs curriculum/source research; the separate content originality and rights protocol governs rights evidence. These controls are intentionally proportionate:
 
-- Original platform content is limited to short, task-purposeful passages/excerpts and the brief instructional/assessment material around them. Record provenance, proportionate phrase-screen scope/result, and human approval. If no specific concern is identified, the internal originality/provenance screen may be marked passed; formal legal review is not a blanket prerequisite for every unchanged short original passage.
-- Longer passages/excerpts and source artefacts for tasks—including images, posters, notices, adverts, infographics and book/document images—should be drawn from verified public-domain works or licences that permit the exact intended commercial/online use and any edits. Identify the exact work/file, edition/translation where relevant, source URL, licence/version, permitted uses, attribution, modifications and date checked before selection/embedding.
+- Platform-original reading passage bodies may be up to and including 250 words. Record exact word count, authorship/version and proportionate phrase-screen scope/result, plus suitability. Existing qualifying short originals may remain; a material rewrite receives the relevant new review. This internal provenance screen is not a legal opinion.
+- Passage bodies over 250 words must be excerpts from recognised writers' verified public-domain works. Record exact work, edition/transcription, source URL, location, applicable territory term check and date in the literary source register before selection/embedding.
+- Visual/documentary artefacts—including photographs, posters, notices, adverts, infographics and book/document images—remain subject to their own asset-specific rights/licence rules. Their rights do not follow the passage word-count threshold.
 - Public availability, a “copyright free” label, search-result text, attribution alone, or an educational use case is not proof of rights. If terms are ambiguous, select a clearer source. Use permission or an explicitly documented legal basis for copyrighted content outside the reusable-source route.
 - Do not confuse an internal originality/provenance pass with a verified third-party licence or a formal legal opinion. Escalate only when a concrete concern remains unresolved; do not repeat broad searches on unchanged text without a reason.
 
 The Stage 7 Unit 1 v1.3 short original passage has the internal originality/provenance screen status **PASSED** as recorded on 28 October 2026; the founder confirms the exact version received human review approval and now confirms that the required verification/approval decisions previously described as outstanding were already given. This does not add any further official objective code to the documented 7Ri.03 crosswalk, and the interface preview remains unmerged/unreleased until the approved code-release step is performed.
+
+
+### CBSE Grade 6 Unit 1 “The Turning Sign” — provenance and source-screen record (28 October 2026)
+
+The new draft uses a short original animal narrative and original practice tasks. It was written independently for this platform after reviewing public source context; the passage does not reproduce *Poorvi* or any third-party work. Three distinctive phrase queries were checked:
+- “Lali the langur noticed hoofprints near the post”
+- “A fallen branch had knocked the wedge from its slot”
+- “Hoofprints show that a deer passed here”
+
+A supplementary search on the initial draft surfaced one unrelated article with highly similar generic headline wording to “A clue is not the same as proof” and a separate fictional result with a red strand tangled on a thorn. Neither was an exact copy, but we removed that generic line and changed the clue mechanism before finalising the current candidate. Three searches on distinctive phrases from the revised “The Turning Sign” passage did not show an exact passage-level match; one returned a general discussion of hoofprints as natural signs, not the candidate story. Treat this as a **limited internal originality/provenance screen for the revised draft only**, not comprehensive plagiarism detection, proof of authorship or a legal opinion. Repeat it if the passage is materially changed or a concrete concern is identified.
+
+The source-context links are [NCERT's Grade 6 textbook advisory](https://www.ncert.nic.in/pdf/announcement/NCERT-Advisory-for-Schools.pdf), the [CIET Grade 6 activity list](https://www.ciet.ncert.gov.in/activity/grade6?lang=en), the [NCERT textbook portal and copyright terms](https://ncert.nic.in/textbook.php), and the [Ministry of Education/PIB statement dated 10 August 2026](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297094&lang=2&reg=48). They support textbook/task-design context only. The applicable current textbook reprint and exact Grade 6 English learning outcome remain unverified. No official CBSE objective code is assigned. No image or third-party excerpt is embedded; NCERT story text, exercises, illustrations and screenshots are not copied.
+
+### CBSE Grade 6 English outcome source — update (28 October 2026)
+
+**Official source:** [NCERT, Bridge Month Programme for Grade 6, English (R2), Annexure IV, first edition April 2024](https://ncert.nic.in/pdf/Bridge_Month_Program/Grade6/BMP_Grade-6-English%28R2%29.pdf). The NCERT programme page lists it under the Grade 6 Middle Stage resources.
+
+The programme's holistic-assessment section states a major learning outcome: reading a variety of texts, including stories, and identifying main ideas, characters and events. Its suggested assessment methods include comprehension questions, multiple-choice questions, short answers and sequencing. This supports **limited source alignment** for “The Turning Sign”'s narrative-reading and event-sequencing elements.
+
+**Limits:** The PDF is labelled English (R2), first edition April 2024. It does not identify a unique unit-specific CBSE objective code; it is not confirmation of the exact current *Poorvi* reprint used at a given school and does not directly assign this unit's inference or location-preposition tasks to a formal code. Keep `officialObjectiveCodes` empty. The exact applicable *Poorvi* reprint/version remains to be checked before a current-edition or complete official-mapping claim.
+
+
+## Literary excerpt source register — binding companion record (30 October 2026)
+
+This curriculum/source register remains the record for official curriculum references, specialist resources and sample-paper currency. It is not the per-excerpt provenance ledger. Every learner reading passage, short warm-up, mini-extract and transfer passage must have a stable Excerpt ID in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. A platform-original passage ≤250 words receives an authorship/provenance and word-count record; a public-domain passage >250 words receives an exact Source ID, edition, location and territory record. The excerpt register records the work, author, exact edition/transcription, URL, public-domain basis and territory check, precise location, question/unit use and replacement history. Complete it before adopting the passage.
+
+The MYP v3 passages already use registered Dickens and Carroll public-domain sources and remain unchanged. For the existing Cambridge Stage 7 and CBSE Grade 6 originals, audit exact passage-body word counts during each unit's scheduled revision: retain unchanged if 250 words or fewer; use public-domain excerpts for passages over 250 words. Do not mark every short original as replacement-required.
+
+## 7. MYP Year 1 current public-source currency check — 31 October 2026
+
+### Current official public pages
+
+- [MYP Language and Literature](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) — page displays last updated 19 February 2026. It identifies listening, speaking, reading, writing, viewing and presenting as the six skill areas and describes inquiry, literary/non-literary text variety, context, audience, purpose and linguistic/literary choices.
+- [MYP assessment and exams](https://www.ibo.org/programmes/middle-years-programme/assessment-and-exams/) — page displays last updated 19 February 2026. It states school-based assessment uses tasks created and marked by classroom teachers against prescribed subject-group objectives and criteria; optional external eAssessment is distinct.
+- [MYP curriculum](https://www.ibo.org/programmes/middle-years-programme/curriculum/) — page displays last updated 19 February 2026 and states at least 50 hours of teaching time per subject group in each MYP year.
+- [Public MYP Language and Literature subject brief](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) — the publicly linked brief is labelled “From 2014”; use as a broad historical course outline only.
+- [Detailed Language and literature guide reference](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) — indexed as the guide for use from September 2014 or January 2015. It provides legacy A–D/Year 1 reference material; it does not prove that those descriptors are the currently applicable detailed guide.
+- [Enhanced MYP beta unit-planning guidance](https://pds.ibo.org/Prototype10MYPBeta-EN/course/en/assets/6752a5296bbe08d1d82df1c6/file.pdf) — states full release is scheduled for 2027. Treat beta planner guidance as transition information, not finalized subject-objective wording.
+
+### Mapping consequence
+
+These public sources support the platform's broad, independently designed learning focus and the need to gather task evidence. They do not expose a verified current detailed Year 1 subject guide/strand map for this candidate. Leave the MYP v3 `mappingStatus` as `unverified` and `officialObjectiveCodes` as an empty array until the applicable school guide is verified through an authorized/current source. Do not map to legacy A–D codes simply because they appear in the 2014/15 reference.
+
+## 9. Route-specific Top Five independent-source audit — 31 October 2026
+
+The MYP Year 1 route-specific Top Five is complete and recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1. It ranks five independent providers after inspecting public MYP-specific content: InThinking/ThinkIB, ASJ Learning, ManageBac+, Hachette Learning and Toddle. The source register's shared five cross-track starters are not a substitute for this audit.
+
+**Outstanding route-specific audits:** Cambridge Lower Secondary English 0861 Stage 7 and CBSE Grade 6 each require their own independently selected Top Five before their guide/implementation research is marked complete. The same rule applies to every additional approved year, stage, grade and applicable IGCSE/DP route. Absence of a detailed official guide does not block this research or an accurately labelled independent implementation design; it leaves only unsupported official mapping unverified.
+
+## 10. First-cohort route-specific research and passage-status reconciliation — 31 October 2026
+
+| Route | Independent Top Five state | Application to guide/implementation | Passage inventory relevant to current Unit 1 |
+|---|---|---|---|
+| IB MYP Language and Literature Year 1 | **Complete** — five providers individually ranked and evidence-inspected in the dedicated MYP landscape review v1.1 | Applied in Year 1 guide v1.5 and implementation plan v1.4 | Current Dickens/Carroll public-domain extracts are separately registered (95/129 words) |
+| Cambridge Lower Secondary English 0861 Stage 7 | **Pending** — do not reuse MYP sources; inspect five providers for the exact Stage 7 route | Complete after the audit; official source gating must not block independent guide/structure | Current original warm-up/main/exit bodies: 16/221/27 words; all within threshold |
+| CBSE English Grade 6 | **Pending** — conduct a separate India-relevant Grade 6 audit after Cambridge in the cohort sequence | Complete after the audit; keep CBSE outcomes distinct and label unsupported mapping | Current original “The Turning Sign” body: 165 words; within threshold |
+
+The counts follow the project's lexical convention and refer to the exact learner candidates recorded on 31 October 2026. Recount after any text edit. A qualifying short original may remain; the length rule never permits copying a short third-party copyrighted work.
+
+The five cross-track discovery starters elsewhere in this register are not the Top Five for any exact route. Official IB/Cambridge/CBSE/NCERT sources remain in a separate authority register and do not count toward the independent Top Five. Use the weighted rubric and required evidence record in `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A.
+
+**No-source bottleneck:** unavailable/gated official detailed guides do not block the Top Five, a clearly labelled internal curriculum guide or its implementation structure. They block only unsupported official mapping claims. Do not ask the founder again for authorised IB PRC access; no such access is available.
