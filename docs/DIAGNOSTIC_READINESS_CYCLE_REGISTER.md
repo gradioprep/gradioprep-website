@@ -2,7 +2,7 @@
 
 **Version:** 1.4  
 **Last updated:** 31 October 2026  
-**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement is confirmed; its Top Five provider research is complete and awaiting Founder review. Taxonomy/blueprint, item authoring and implementation have not started. Cycle 2 remains blocked.  
+**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement is confirmed; its Top Five provider research is Founder-approved; draft taxonomy/blueprint is submitted for Founder review. Item authoring and implementation remain gated. Cycle 2 remains blocked.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
 **Purpose:** Track the founder-selected order for the diagnostic → evaluation/analytics → remedial-course layer independently of the existing Unit 1/content register.
 
@@ -86,7 +86,7 @@ The former Unit 1 rotation and queued migration plans are historical work queues
 **Confirmed placement:** Grade 9 = MYP Year 4, as explicitly confirmed by the Founder for the relevant school/programme context.
 
 
-**Founder clarification — 31 October 2026:** Five 60-minute sessions are the default suggestion, not a fixed rule. The personalised course may use up to seven 60-minute sessions to address all improvement areas comprehensively. This clarification supersedes earlier wording that required exactly five sessions.
+**Founder clarification — 31 October 2026:** Five 60-minute sessions are preferred wherever evaluation analytics show comprehensive coverage is possible. Extend to six or seven only where the analytics justify additional teaching/practice time; never exceed seven sessions.
 
 
 **Founder decision — 31 October 2026:** The Top Five provider research is approved. Provider percentiles use the internal 50/50 actual test-taker / independent research method; all ranking data and methodology are excluded from learner/parent reports, including logged-in views. The draft MYP Year 4 taxonomy/blueprint is submitted for review. Five remedial sessions are preferred; extend to six or seven only when evaluation analytics justify it.
