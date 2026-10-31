@@ -2,8 +2,8 @@ import type { PilotLearnerLesson } from "./model";
 
 /**
  * Learner-safe content for IB MYP Language and Literature Year 1 Unit 1.
- * Version 3 is a founder-approved content candidate; fresh human academic review
- * remains pending. It contains no answer keys, model responses,
+ * Version 4 is a draft editorial-correction candidate; founder approval for v3
+ * does not transfer, and fresh human academic review remains pending. It contains no answer keys, model responses,
  * hidden rationales or teacher-only scoring guidance.
  */
 export const pilotLearnerLesson: PilotLearnerLesson = {
