@@ -148,7 +148,7 @@ Sources:
 3. **Writing must be observed, not inferred from grammar scores.** Include sentence control and conventions, but also planning, development, evidence, organisation, cohesion, register and revision through actual written work.
 4. **Use response evidence and confidence.** Multiple observations should support a skill judgement. Show insufficient evidence where item coverage is thin or results conflict. Never turn one error into a persistent deficit.
 5. **Separate benchmark norms from curriculum mastery.** US state norms, US national norms and UK norms are not MYP grades, IB criteria or Indian cohort norms. Do not show percentiles or grade predictions without a matched and justified reference population.
-6. **Build explicit remediation links.** Every identified improvement area must map to a concrete teaching/practice task and a fresh post-course check. Provider recommendations are inspiration, not the final five-day lesson plan.
+6. **Build explicit remediation links.** Every identified improvement area must map to a concrete teaching/practice task and a fresh post-course check. Provider recommendations are inspiration, not the final personalised remedial course (five 60-minute sessions recommended; up to seven maximum).
 7. **Protect the human review boundary.** The Founder remains the human academic reviewer. Provider research does not authorise automatic grading, a public diagnostic, real learner-data collection or release.
 
 ## 6. Evidence gaps and due diligence before any procurement or copying of design patterns
