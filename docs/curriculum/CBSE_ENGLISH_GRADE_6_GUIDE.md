@@ -2,7 +2,7 @@
 
 **Version:** 1.1 — learner-content approval and outcome-source update  
 **Prepared:** 28 October 2026  
-**Status:** Internal guide; learner-facing Unit 1 v1.0 received founder academic-content approval on 28 October 2026. This remains a limited source-aligned candidate, not a complete official CBSE syllabus map, NCERT replacement or released course  
+**Status:** Internal public-source-aligned Grade 6 guide, not a complete official CBSE syllabus map. Unit 1 v1.0 is founder-approved for the academic-content gate; its 165-word original story may remain under the 250-word rule. The independent Grade 6 Top Five and application to guide/implementation, updated teacher pack and live counters remain pending. Exact current *Poorvi* reprint and unit-specific official objective code remain unverified.
 **Pathway ID (planned):** cbse-english-g6  
 **First-cohort unit:** cbse-english-g6-u1 — The Turning Sign
 
@@ -72,3 +72,9 @@ The teacher/editor pack has a **12-point internal formative guide** for consiste
 - Complete manual hosted visual, keyboard/focus, screen-reader, 200%/400% zoom/reflow, cross-browser and task/response-burden checks. Automated checks in Build check #256 are supporting evidence, not a usability or WCAG audit.
 - Keep the teacher/editor pack separate from every learner-facing import bundle.
 - Record distinct decisions for interface integration, official mapping, any learner pilot, and release. Content approval alone does not approve UI integration or release.
+
+## Grade 6 Unit 1 specification/research checkpoint — 31 October 2026
+
+The current Unit 1 learner candidate is “The Turning Sign” v1.0 (draft PR #16). Its 165-word original story is within the approved short-original threshold and does not need replacement solely because of the rights-rule update. The old teacher/editor pack and preview still need the updated per-question reasoning/feedback standard and live counters.
+
+The route-specific independent Top Five for CBSE Grade 6 remains outstanding and must be completed separately from the MYP and Cambridge audits. Official source material supports only the limited narrative-reading/event-sequencing context recorded in the QA file; the exact current *Poorvi* edition/reprint and official objective code remain unverified. The Top Five and a clearly labelled internal guide can proceed without waiting for gated official material.
