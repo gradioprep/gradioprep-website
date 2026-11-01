@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 1.3  
+**Version:** 1.4  
 **Approved:** 31 October 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
@@ -112,7 +112,7 @@ Keep diagnostic keys, scoring rules, construct maps, exemplars, misconception in
 
 For every diagnostic item, the pack explains how a response provides evidence of the intended skill. For every remedial activity, it records purpose, success evidence, accepted responses, tailored feedback and next step. AI may assist drafting but is not the academic validator. The Founder / project owner remains the human academic reviewer unless the founder changes this; do not ask redundantly who is reviewing.
 
-Apply `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` v1.3 and the existing source, passage, image, territory, accessibility, academic and release rules.
+Apply `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` v1.5 and the existing source, passage, image, territory, accessibility, academic and release rules. For Cycle 1, use the approved taxonomy/blueprint and the task-level map in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md` as the current draft design reference; do not author actual items until the Founder approves that map.
 
 ## 11. Design, accessibility and architecture guardrails
 
@@ -126,7 +126,7 @@ Use synthetic test records and fictional answers in development/hosted previews.
 
 ## 12. Completion gates for each cycle
 
-A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; skill taxonomy, test blueprint, scoring and priority rules are approved; diagnostic items and teacher/editor rationales are human-validated; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the personalised remedial course contains five 60-minute sessions by default, or the justified number up to the maximum of seven 60-minute sessions, and maps every improvement area comprehensively; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
+A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; the skill taxonomy and high-level blueprint are approved; the detailed task-level item map and assessment/scoring specification are approved; actual diagnostic items, keys, distractor rationales, exemplars and scoring anchors are authored and human-validated; scoring and priority rules are calibrated and approved; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the personalised remedial course contains five 60-minute sessions by default, or the justified number up to the maximum of seven 60-minute sessions, and maps every improvement area comprehensively; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
 
 Drafting or passing automated tests alone does not complete or release a cycle. No next cycle or curriculum-content queue begins automatically. No merge, production deployment or release occurs without separate explicit approval.
 
@@ -138,3 +138,6 @@ Drafting or passing automated tests alone does not complete or release a cycle. 
 
 
 **Version 1.3 Founder approval — 31 October 2026:** The Grade 9 IB MYP Year 4 Top Five provider research is approved. The provider percentile methodology is 50% actual unique test-taker volume and 50% independent research evidence; its basis, component figures, percentile and ordinal order remain internal-only and must never appear in learner/parent reports, including logged-in views. The weighted six-criterion diagnostic-fit rubric remains separate. Public sample counts are not directly comparable; no percentile is to be fabricated where reliable comparable evidence is missing. The draft taxonomy and blueprint are recorded separately for Founder review; item authoring remains gated. Five 60-minute remedial sessions are preferred; extend to six or seven only where evaluation analytics justify the extra time, with seven as the strict maximum.
+
+
+**Version 1.4 cycle-design status update — 1 November 2026:** The Founder approved the Grade 9 IB MYP Year 4 skill taxonomy and high-level 90-minute/two-sitting blueprint on 1 November 2026. The next, separate gate is review of the detailed task-level item map and scoring specification in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md v0.1-draft. The map defines 34 proposed evidence observations across all six MYP skill areas and maps them to the 23 taxonomy subskills; the count is a design inventory, not 34 independent long questions. No actual questions, stimulus scripts, answer keys, final cut scores, calibrated rubrics, code, report UI or remedial lesson authoring has been approved. Item authoring may begin only after that map is approved, and remains distinct from diagnostic implementation and release.
