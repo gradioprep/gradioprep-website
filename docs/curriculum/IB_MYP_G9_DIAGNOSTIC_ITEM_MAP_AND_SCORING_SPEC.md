@@ -18,15 +18,15 @@ This is a GradiPrep learning-readiness diagnostic, not an IB examination, offici
 
 | Sitting / task | Learner time | Evidence mode | Proposed observations |
 |---|---:|---|---:|
-| Sitting 1 — Read and view (RV) | 25 min | Literary and non-literary/multimodal stimuli; selected and short constructed responses | 9 |
+| Sitting 1 — Read and view (RV) | 25 min | Literary and non-literary/multimodal stimuli; selected and short constructed responses | 10 |
 | Sitting 1 — Listen (L) | 10 min | Original/licensed spoken stimulus; selected and short constructed responses | 5 |
 | Sitting 1 — Language in context (LC) | 10 min | Short contextual language decisions and edits | 5 |
 | Sitting 2 — Analytical writing (AW) | 20 min | One focused analytical response, scored by analytic dimensions | 5 |
 | Sitting 2 — Creative/purposeful production (CW) | 15 min | One short, purposeful text with a visible planning/editing trace | 5 |
 | Sitting 2 — Speaking/presenting (SP) | 10 min | Prepared outline card, brief presentation and follow-up interaction | 5 |
-| **Total** | **90 min** | **Two 45-minute sittings** | **34** |
+| **Total** | **90 min** | **Two 45-minute sittings** | **35** |
 
-The 34 entries are scoring/evidence observations, not 34 independent long questions. Several observations are rubric dimensions within one extended response or performance. The proposed count and timing are design targets to validate in a small, age/level-appropriate pilot; do not add items merely to fill the time.
+The 35 entries are scoring/evidence observations, not 35 independent long questions. Several observations are rubric dimensions within one extended response or performance. The proposed count and timing are design targets to validate in a small, age/level-appropriate pilot; do not add items merely to fill the time.
 
 **Sitting 1:** 25 + 10 + 10 = 45 minutes.  
 **Sitting 2:** 20 + 15 + 10 = 45 minutes.  
@@ -46,7 +46,8 @@ Use two contrasting stimuli: (a) an age-appropriate literary text and (b) a non-
 | RV04 | Explain how the non-literary text's context, audience and purpose shape its content or presentation. | A3 | A4 | Short constructed response or structured selection plus brief justification |
 | RV05 | Interpret the visual/multimodal layer: identify relevant visual evidence and explain how a visual choice contributes to meaning or works with the verbal layer. | A1, A2, A4 | A5 | Selected observation plus brief explanation; score visual and verbal evidence separately where possible |
 | RV06 | Evaluate a representation, claim or source for reliability, perspective, possible bias or omission; distinguish what is shown from what is assumed. | A7 | A2, A5 | Short constructed response with evidence and qualification |
-| RV07 | Compare two texts or two clearly defined text features, explaining a meaningful similarity/difference in perspective, idea, form or effect. | A6, A5 | A2, A4 | Short comparative response; reward explained comparison, not a list of differences |
+| RV07a | Compare the perspectives or central ideas in two texts; explain one meaningful similarity or difference using relevant evidence. | A6, A5 | A2 | Short comparative response; reward explained comparison, not a list of differences |
+| RV07b | Compare how the two texts use form, structure or creator choices to shape a related idea or effect. | A6, A4 | A5 | Short comparative response; distinguish comparison of technique/effect from feature-spotting |
 | RV08 | Track sequence, progression or structural development and explain how the order/arrangement affects meaning. | A1, A4 | B2 when the learner's explanation is organised | Selected ordering or short constructed response, chosen to suit the stimulus |
 | RV09 | Select the most relevant evidence for a stated interpretation/claim and explain why it supports that claim better than a weaker or unrelated detail. | A5 | A1, A2 | Keyed evidence selection plus brief justification; distractor rationales required |
 
@@ -129,7 +130,7 @@ The task should assess purposeful oral communication without requiring recording
 | A3 | Context, audience and purpose | RV04, L03 | LC05, SP03 |
 | A4 | Creator's choices | RV03, RV05, L04, AW02 | RV08 |
 | A5 | Evidence-based reasoning | RV02, RV03, RV07, RV09, L02, L05, AW03 | RV01, RV06 |
-| A6 | Comparison and connections | RV07 | — |
+| A6 | Comparison and connections | RV07a, RV07b | — |
 | A7 | Critical perspective | RV06, L05 | — |
 | B1 | Purposeful structure | AW04, SP01 | CW02 |
 | B2 | Logical sequencing | RV08 (supporting), AW04, SP02 | CW02 |
@@ -148,7 +149,7 @@ The task should assess purposeful oral communication without requiring recording
 | D5 | Oral language | SP05 | — |
 | D6 | Non-verbal communication | SP05 | — |
 
-**Coverage check:** All 23 proposed subskills have at least one direct evidence source. All six MYP skill areas have an observable task. A1–A5 are sampled across more than one task/mode where feasible; A6–A7 and B5/C5/D5/D6 have deliberately specific performance evidence. No subskill is considered secure from a single selected-response answer.
+**Coverage check:** All 23 proposed subskills have at least one direct evidence source. All six MYP skill areas have an observable task. A1–A7 are sampled across more than one task/mode where feasible; B5/C5/D5/D6 have deliberately specific performance evidence. No subskill is considered secure from a single selected-response answer.
 
 ## 5. Scoring specification — draft, not calibrated
 
