@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 1.0  
+**Version:** 1.4  
 **Approved:** 31 October 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
@@ -18,7 +18,7 @@ Complete and validate all three features for one selected level before starting 
 
 The current order is defined only in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`:
 
-1. **Grade 9 — IB MYP Language and Literature.** MYP Year 4 is a working assumption; verify the student's actual school MYP year and age.
+1. **Grade 9 — IB MYP Language and Literature.** Grade 9 = MYP Year 4 is confirmed by the Founder for the relevant school/programme context. Do not treat it as a working assumption or ask the Founder to reconfirm it. The official MYP programme age band is 11–16; the individual learner's chronological age has not been separately specified.
 2. **Grade 6 — Cambridge English.** Verify the official Cambridge stage/course and language route. Do not substitute Lower Secondary Stage 7 for the requested Grade 6 target.
 
 There is no automatic rotation or cyclical order. Do not pre-research the other year/stage, create a generic all-years diagnostic, or start a later cycle before the preceding cycle is complete and the founder directs the transition.
@@ -27,7 +27,7 @@ All existing curriculum-unit production and queued unit migrations are paused wh
 
 ## 3. Scope lock for each selected level
 
-Before provider research or item authoring, record the requested school-grade label, actual programme/course, school year/stage, learner age range, language route, applicable official framework and edition/session where identifiable, and any local/abbreviated implementation that affects placement. State what is verified, provisional or unresolved.
+Before provider research or item authoring, record the requested school-grade label, actual programme/course, school year/stage, learner age range, language route, applicable official framework and edition/session where identifiable, and any local/abbreviated implementation that affects placement. State what is verified, provisional or unresolved. For Cycle 1, the Founder has confirmed Grade 9 = MYP Year 4 for the relevant school/programme context; the official programme age band is 11–16. Do not reopen the grade/year mapping. Record the individual learner's exact age only if it becomes necessary for item accessibility, accommodation or interpretation.
 
 A school-grade label is not an official curriculum stage. Do not silently turn uncertain mapping into an official course-code or objective claim. If the exact placement cannot be confirmed, keep the requested grade label and record the limitation; do not silently substitute another stage.
 
@@ -49,7 +49,9 @@ Consider diagnostic assessment specialists, literacy/reading/writing assessment 
 | Evidence transparency, currency, access, privacy and practical suitability | 10% |
 | **Total** | **100%** |
 
-For each provider record the exact product, intended ages/levels, skill domains, assessment model, public sample evidence, report fields and visuals, confidence/benchmark claims, remediation features, accessibility, pricing/access limits where verifiable, privacy/data practices, source dates and limitations. Distinguish observed capabilities from marketing claims. Do not infer paywalled functions, unpublished validity, hidden reports or unverified prices. Cite primary product documentation and independent evidence where available. Explain why each provider ranks in the Top Five and what GradiPrep can learn. Do not copy proprietary questions, report wording, visual identity or restricted materials.
+For each provider record the exact product, intended ages/levels, skill domains, assessment model, public sample evidence, report fields and visuals, confidence/benchmark claims, remediation features, accessibility, pricing/access limits where verifiable, privacy/data practices, source dates and limitations. Provider percentile rankings use the separate internal 50/50 method (actual unique test-taker volume and independent research evidence); see docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. The existing six-criterion weighted rubric remains a separate diagnostic-fit audit, not the 50/50 percentile calculation. Distinguish observed capabilities from marketing claims. Do not infer paywalled functions, unpublished validity, hidden reports or unverified prices. Cite primary product documentation and independent evidence where available. Explain why each provider ranks in the Top Five and what GradiPrep can learn. Do not copy proprietary questions, report wording, visual identity or restricted materials.
+
+**Provider-ranking confidentiality:** Provider percentiles, ordinal positions, test-taker counts, source-count basis and ranking methodology are internal-only. They must never appear in student/parent evaluation reports, downloads, dashboards, client bundles or report payloads, including logged-in student/parent views. Do not confuse these internal provider rankings with a learner's own performance percentile. The current prototype has no private administrator area; do not expose internal ranking data in frontend code. A future founder-only retrieval feature requires separate approval and access-control design.
 
 ## 5. Diagnostic blueprint and skill measurement
 
@@ -73,10 +75,10 @@ The report is a central learning product, not a score sheet. It must translate d
 - Demonstrated strengths and areas for development.
 - A confidence/evidence indicator for each judgement, including insufficient evidence where appropriate.
 - Remediation priority and the reason for it.
-- Exact links from each priority area to five-day remedial tasks.
+- Exact links from each priority area to the personalised remedial tasks and post-course check.
 - Clear next steps and a post-remediation comparison after valid reassessment.
 
-Use readable horizontal bars for skill comparisons; radar charts only where a small set of comparable dimensions is interpretable; circle/donut charts only where categories form a meaningful whole and denominators are clear; and line graphs only when at least two valid measurements over time exist. Never manufacture a trend from one diagnostic, use decorative charts or overstate precision. Keep tables and dense data blocks to a minimum. Provide short explanations beside charts, accessible text equivalents, direct labels and honest scales. Do not show percentiles, grade predictions or population comparisons without a current, appropriately matched and documented norming basis.
+Use readable horizontal bars for skill comparisons; radar charts only where a small set of comparable dimensions is interpretable; circle/donut charts only where categories form a meaningful whole and denominators are clear; and line graphs only when at least two valid measurements over time exist. Never manufacture a trend from one diagnostic, use decorative charts or overstate precision. Keep tables and dense data blocks to a minimum. Provide short explanations beside charts, accessible text equivalents, direct labels and honest scales. Do not show provider percentiles or rankings in learner-facing reports. Do not show learner performance percentiles, grade predictions or population comparisons without a current, appropriately matched and documented norming basis.
 
 ## 7. Remediation priority levels and learner-facing language
 
@@ -90,9 +92,9 @@ Assign each improvement area a **Remediation Priority 5–1**:
 
 These are instructional routing priorities, not school/examination grades, permanent ability labels or judgements of learner worth. Student-facing language must remain respectful and strengths-based: use “focus area”, “next skill to strengthen” and “recommended practice”, not “weak”. Priority is based on evidence and likely effect on future learning, not simply the percentage of incorrect answers. Specify and human-review the assignment method and thresholds for each cycle. Record uncertainty instead of forcing every result into a confident category.
 
-## 8. Five-day personalised remedial course
+## 8. Personalised remedial course
 
-Each learner receives a plan based on their own diagnostic profile. The course is **five sessions of 60 minutes each**. Every identified improvement area must map to at least one specific teaching/practice task. If all needs cannot reasonably be addressed in five hours, state what remains and recommend further support rather than promise mastery.
+Each learner receives a plan based on their own diagnostic profile. Design for **five 60-minute sessions wherever the evaluation analytics show that all identified improvement areas can be comprehensively addressed in that time**. Do not extend the course unnecessarily. Extend to six, then seven 60-minute sessions only when the evidence-based coverage plan shows that five (or six) sessions would leave a material improvement area insufficiently taught or practised. Seven sessions is an absolute maximum. Every identified improvement area must map to one or more specific teaching/practice tasks, with sufficient teaching, guided practice, independent transfer and feedback. Do not compress or omit a significant improvement area merely to force a five-session plan. If all needs cannot reasonably be addressed within seven sessions, state what remains and recommend further support rather than promise mastery.
 
 Follow the same approved unit structure and teacher-pack standards as existing curriculum units. Each day includes clear objectives, the explicit purpose of every task, teaching/explanation, worked model or think-aloud where appropriate, guided practice, independent application/transfer, formative feedback and an exit check/reflection. Include enough meaningful questions and activities to use the full hour without padding.
 
@@ -110,7 +112,7 @@ Keep diagnostic keys, scoring rules, construct maps, exemplars, misconception in
 
 For every diagnostic item, the pack explains how a response provides evidence of the intended skill. For every remedial activity, it records purpose, success evidence, accepted responses, tailored feedback and next step. AI may assist drafting but is not the academic validator. The Founder / project owner remains the human academic reviewer unless the founder changes this; do not ask redundantly who is reviewing.
 
-Apply `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` v1.3 and the existing source, passage, image, territory, accessibility, academic and release rules.
+Apply `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` v1.5 and the existing source, passage, image, territory, accessibility, academic and release rules. For Cycle 1, use the approved taxonomy/blueprint and the task-level map in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md` as the current draft design reference; do not author actual items until the Founder approves that map.
 
 ## 11. Design, accessibility and architecture guardrails
 
@@ -124,6 +126,18 @@ Use synthetic test records and fictional answers in development/hosted previews.
 
 ## 12. Completion gates for each cycle
 
-A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; skill taxonomy, test blueprint, scoring and priority rules are approved; diagnostic items and teacher/editor rationales are human-validated; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the five-day plan contains five 60-minute sessions and maps every improvement area; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
+A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; the skill taxonomy and high-level blueprint are approved; the detailed task-level item map and assessment/scoring specification are approved; actual diagnostic items, keys, distractor rationales, exemplars and scoring anchors are authored and human-validated; scoring and priority rules are calibrated and approved; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the personalised remedial course contains five 60-minute sessions by default, or the justified number up to the maximum of seven 60-minute sessions, and maps every improvement area comprehensively; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
 
 Drafting or passing automated tests alone does not complete or release a cycle. No next cycle or curriculum-content queue begins automatically. No merge, production deployment or release occurs without separate explicit approval.
+
+
+**Version 1.1 scope confirmation — 31 October 2026:** The Founder has explicitly confirmed that Grade 9 corresponds to MYP Year 4 in the relevant school/programme context. This replaces the earlier working-assumption wording for Cycle 1. The official IB MYP age band (11–16) is a programme-level reference, not a substitute for an individual learner's age where age-specific accommodations or interpretation require it. At the later Founder approval gate, Cycle 1 provider research was approved; the draft taxonomy/blueprint is now the active Founder review gate. Item authoring and implementation remain gated.
+
+
+**Version 1.2 founder clarification — 31 October 2026:** The Founder clarified that five 60-minute sessions are preferred wherever evaluation analytics show comprehensive coverage is possible. Extend to six or seven only where the analytics justify additional teaching/practice time. Never extend unnecessarily or exceed seven sessions.
+
+
+**Version 1.3 Founder approval — 31 October 2026:** The Grade 9 IB MYP Year 4 Top Five provider research is approved. The provider percentile methodology is 50% actual unique test-taker volume and 50% independent research evidence; its basis, component figures, percentile and ordinal order remain internal-only and must never appear in learner/parent reports, including logged-in views. The weighted six-criterion diagnostic-fit rubric remains separate. Public sample counts are not directly comparable; no percentile is to be fabricated where reliable comparable evidence is missing. The draft taxonomy and blueprint are recorded separately for Founder review; item authoring remains gated. Five 60-minute remedial sessions are preferred; extend to six or seven only where evaluation analytics justify the extra time, with seven as the strict maximum.
+
+
+**Version 1.4 cycle-design status update — 1 November 2026:** The Founder approved the Grade 9 IB MYP Year 4 skill taxonomy and high-level 90-minute/two-sitting blueprint on 1 November 2026. The next, separate gate is review of the detailed task-level item map and scoring specification in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md v0.1-draft. The map defines 35 proposed evidence observations across all six MYP skill areas and maps them to the 23 taxonomy subskills; the count is a design inventory, not 35 independent long questions. No actual questions, stimulus scripts, answer keys, final cut scores, calibrated rubrics, code, report UI or remedial lesson authoring has been approved. Item authoring may begin only after that map is approved, and remains distinct from diagnostic implementation and release.
