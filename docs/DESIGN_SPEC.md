@@ -1,7 +1,7 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.4  
-**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. Existing MYP Year 1 live counters remain documented; diagnostic analytics are not yet implemented.  
+**Version:** 2.5  
+**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy and high-level diagnostic blueprint are Founder-approved; the detailed task-level item map is under review. Diagnostic analytics and report UI are not implemented.  
 **Last updated:** 31 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
@@ -523,3 +523,6 @@ Charts must remain understandable on narrow screens, at 200%/400% zoom and with 
 
 
 **Version 2.4 Founder decision update — 31 October 2026:** The MYP Grade 9 provider research is approved; the draft taxonomy/blueprint is awaiting Founder review. Provider ranking data and its 50/50 basis are internal-only and must not appear in learner/parent reports or logged-in views. The remedial plan should use five 60-minute sessions where sufficient, extending to six or seven only when evaluation analytics justify it.
+
+
+**Version 2.5 diagnostic design-status update — 1 November 2026:** The Founder approved the Grade 9 IB MYP Year 4 skill taxonomy and high-level 90-minute/two-sitting blueprint. The task-level item map and draft scoring specification in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md is under Founder review. The map contains 34 proposed evidence observations; it is an assessment-design record, not an implemented UI, data model or item bank. No report interface, learner score model, persistent analytics or client bundle fields are authorised by this status update. All provider ranking/percentile data and methodology remain excluded from learner-facing screens, report payloads and client bundles. Palette, typography, navigation and page architecture remain unchanged.
