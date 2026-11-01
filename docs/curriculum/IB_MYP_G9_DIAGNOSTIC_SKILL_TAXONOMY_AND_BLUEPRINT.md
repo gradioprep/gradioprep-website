@@ -1,8 +1,8 @@
 # Grade 9 IB MYP Year 4 — Diagnostic Skill Taxonomy and Blueprint
 
-**Version:** 0.1-draft  
-**Date:** 31 October 2026  
-**Status:** Draft for Founder / human academic review. Not approved for item authoring, implementation, scoring calibration or learner release.  
+**Version:** 0.2-draft  
+**Date:** 1 November 2026  
+**Status:** The Founder approved the taxonomy and high-level 90-minute blueprint on 1 November 2026. The detailed task-level item map and scoring specification is now a separate draft awaiting Founder review. No actual questions, item keys, final scoring thresholds, implementation or learner release are approved.  
 **Target:** Grade 9 — IB MYP Language and Literature (Founder-confirmed MYP Year 4)  
 **Purpose:** Specify the transferable language-and-literature skills to diagnose before curriculum-unit learning, and propose an evidence-balanced assessment blueprint.
 
@@ -77,9 +77,9 @@ Sources:
 
 All six skill areas must receive observable evidence. A written multiple-choice test alone cannot be reported as a complete MYP Language and Literature diagnostic.
 
-## 4. Proposed assessment blueprint
+## 4. Founder-approved assessment blueprint
 
-**Proposed duration:** 90 minutes, split into two 45-minute sittings to reduce fatigue. This is a planning estimate, not a locked test duration. A small pilot and Founder review must confirm timing, accessibility and evidence sufficiency before implementation.
+**Approved planning envelope:** 90 learner-minutes, split into two 45-minute sittings to reduce fatigue. This is the approved blueprint structure; pilot validation must still confirm timing, accessibility and evidence sufficiency before implementation.
 
 | Part | Approx. time | Proposed task / evidence | Main skill and criterion coverage |
 |---|---:|---|---|
@@ -141,13 +141,10 @@ The future teacher/editor pack must include, for each improvement area: diagnost
 - Audio, visual and accessibility support must be designed without paid services, external APIs or new infrastructure unless separately approved.
 - Existing design system, teacher-pack separation, content rights, accessibility, academic review and release gates remain binding.
 
-## 9. Approval gate
+## 9. Approval status and next gate
 
-**Founder review required before item authoring or code implementation.** Please review:
-- the proposed taxonomy and its Year 4 progression;
-- whether all six MYP skill areas and all four criteria are adequately represented;
-- the proposed 90-minute structure and task balance;
-- the evidence coverage targets and scoring/reporting controls;
-- the feasibility boundary for listening and speaking in the current prototype.
+The Founder approved the taxonomy and high-level blueprint on 1 November 2026, including all 23 proposed subskills, the six MYP skill areas, four criterion-aligned profiles and the 90-minute/two-sitting task structure. This approval does not make the GradiPrep taxonomy an official IB Year 4 descriptor set; the Year 4 progression caveat in Section 1 remains binding.
 
-After approval, the next step is a detailed item/task map and teacher/editor scoring pack, followed by item authoring and validation. This draft does not authorise a student-facing diagnostic, final scoring thresholds, report UI, remedial lessons, integration, merge or release.
+The detailed task-level item map and scoring specification is recorded in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md v0.1-draft and is the current Founder review gate. Actual item wording, stimulus authoring, answer keys, distractors, model responses, final rubric anchors, scoring calibration and code implementation remain gated until that map is approved and the subsequent authoring plan is reviewed.
+
+The detailed map must preserve the proposed two 45-minute sittings, all six MYP skill areas and all four criterion profiles. It must not imply official IB grades, create unsupported score thresholds, use provider rankings in learner-facing data, or relax the existing rights, accessibility, human-review or release controls. No student-facing diagnostic, report UI, remedial lessons, integration, merge or release is authorised by approval of the taxonomy/blueprint alone.
