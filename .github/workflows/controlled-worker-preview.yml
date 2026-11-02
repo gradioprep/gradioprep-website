@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - feature/pdf-submission-grading-timers-plan
+      - docs/phase-1-secure-foundation-spec
 
 permissions:
   contents: read
