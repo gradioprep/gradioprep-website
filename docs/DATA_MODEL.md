@@ -1,8 +1,8 @@
 # Logical Data Model — Curriculum, Practice and Assessment
 
-**Status:** Proposed implementation blueprint; no database or real learner records are connected yet.
+**Status:** Provider-independent logical model with an approved first implementation mapping: Supabase Auth, PostgreSQL and private Storage in Mumbai (`ap-south-1`). Phase 0 architecture, timer and retention decisions were approved on 2 November 2026. This remains a planning model; no database, authentication, storage bucket, OCR/AI provider or persistent learner records have been created.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
-**Goal:** Define relationships and permission boundaries before connecting the current prototype to a database. This document is provider-independent; the master brief's proposed Supabase approach still requires a current plan/terms review before real student data is stored.
+**Goal:** Define relationships and permission boundaries before connecting the current prototype to a database. The logical schema remains provider-independent; the approved first implementation mapping is Supabase Auth/Postgres/Storage in Mumbai. Supabase Pro and all third-party service costs/terms must be reconfirmed and separately authorised before real learner data.
 
 **Revision policy:** Any approved or reviewed part of this data model may be amended later. Record the change and reason in version control, update dependent documentation, and re-review changes that affect curriculum alignment, answer-key privacy, learner records or authorization.
 
@@ -36,7 +36,7 @@ This is a logical model, not yet a live SQL schema. Names can be adapted during 
 | `units` | ID, pathway ID, title, sequence, release state, version | A pathway contains ordered units |
 | `lessons` | ID, unit ID, title, learning objective, body metadata, sequence, release state, version | Content belongs to a unit and has a versioned lifecycle |
 | `lesson_blocks` | ID, lesson version ID, block type, sequence, structured content | Allows text, worked example, callout and other reusable blocks |
-| `tasks` | ID, task type, prompt/instructions, response type, difficulty label where justified, estimated time, release state, version | Use for practice, diagnostics and extended-response tasks; do not expose answer keys by default |
+| `tasks` | ID, task type, prompt/instructions, response type, expected minimum/ideal words, approved response range, PDF-enabled flag, optional task time allowance, timer/pause policy version, difficulty label where justified, estimated time, release state, version | Enable typed-or-PDF only for approved written tasks whose expected response is more than 20 words; keep typing available; store task/rubric timing metadata by version; do not expose answer keys by default |
 | `task_skill_mappings` | Task ID, skill ID, mapping role/weight if approved, review status | Use mapping weights only if the academic method is documented and approved |
 | `answer_keys` | Task version ID, expected answer, rationale/explanation, accepted variants as appropriate | Restrict access until the intended reveal state; keep production keys server-side |
 | `rubrics` and `rubric_versions` | Stable rubric ID, version, task family, version date, approval state | Rubric versions are immutable once used for a published assessment |
@@ -95,6 +95,32 @@ The client imports learner-safe `src/content/pilotLearnerLesson.ts` for lesson c
 | `private_qa_records` | Assessment ID/version, checks, status, explanation, uncertainty, reviewer action | Admin/owner only; graders and learners cannot read this record |
 | `admin_audit_log` | Actor, action, target record, reason, timestamp, minimal before/after reference | Privileged actions and role changes must be individually attributable and auditable |
 
+### PDF written responses, OCR, grading feedback and timing
+
+These are proposed logical records to extend the existing human-assessment model. They are not live tables or migrations.
+
+| Record | Purpose and key fields | Relationships / rules |
+|---|---|---|
+| submission_files | Submission ID, private storage object key, original file name for display, verified MIME/signature, byte size, page count, checksum, upload/accept timestamps, retention state | Original PDF only; maximum 10 MB and 10 pages in pilot; no public URLs; non-identifying object keys; assignment-scoped file access |
+| submission_page_extractions | Submission/file ID, page number, extraction method (PDF text layer/OCR), raw text, confidence/status, coordinates, processing timestamp, error metadata | One record per page/method/version; raw extraction is immutable; teacher-corrected transcript is separately versioned |
+| transcript_corrections | Submission/page ID, corrected text, editor, timestamp, change reason, source extraction version | Never overwrite original PDF or raw OCR; teacher correction is an auditable grading aid |
+| feedback_suggestion_sets | Submission ID, task/rubric version, model/prompt version, generation time, quota/cache status, ten proposed suggestions | Private teacher-only draft; not student-visible and never auto-published |
+| feedback_suggestion_items | Suggestion-set ID, item index, suggested text, optional criterion/skill tag | Exactly ten suggestions per successful generation set; selection/editing by the teacher is recorded in the published feedback version |
+| timer_sessions | Attempt/submission ID, task timing-rule version, server start/submit timestamps, elapsed response duration, authorised adjustment/extension and accommodation mode | Advisory countdown; server clock continues in background/after refresh; no learner pause/resume; upload/OCR time excluded; adjustments are authorised and audited |
+| timer_events | Timer session ID, event type (start/save/expire/submit/authorised adjustment), server event time, minimal non-content context | Append-oriented; no keystroke/focus/browsing surveillance; no learner pause/resume events; do not trust client-only elapsed values |
+| submission_sla_events | Submission ID, accepted time, due time, first feedback publication time, actual turnaround, remaining/overdue duration, SLA state | 24-hour target snapshot is fixed at acceptance; later edits do not reset the original SLA clock |
+| feedback_visibility_events | Feedback version ID, published/updated time, learner-visible state | Only human-submitted published feedback is visible to the learner; a successful edit updates the latest visible version and preserves history |
+
+The grading queue is a query/view over accepted submissions and grader assignments, not an independent editable ordering. It sorts by server-recorded accepted timestamp ascending; the priority label is computed from time remaining and does not change chronological order.
+
+### Submission and grading states
+
+Use explicit state transitions such as draft → uploading → accepted/processing → queued → assigned → grading → feedback published → closed, plus failed/withdrawn states where justified. An OCR failure or quota limit must not destroy the accepted original PDF or block the grader from viewing it. A submission is accepted only after the original file is privately stored and its task/learner association is verified.
+
+### Provider and cost decision boundary
+
+**Phase 0 provider decision:** implement the logical model first on a single Supabase project using Auth, PostgreSQL and primary private Storage in Mumbai (`ap-south-1`); do not use D1 or a second database. Use Supabase Pro for real learner records after separate cost approval. Cloudflare R2 is a secondary encrypted file-backup target only; its APAC location hint is best-effort and does not guarantee India residency. PDF.js is the in-app digital-text route; Azure Document Intelligence Read (`prebuilt-read`, intended Central India region) is the selected external handwriting OCR integration; Cloudflare Workers AI is the selected stateless on-demand teacher-draft service. All exact service terms, actual region availability, external processing, cross-border transfer, privacy notices/consent and cost gates must pass before real learner data or paid services are used. No providers are connected today.
+
 ## 3. Important constraints
 
 - Use stable IDs (UUIDs or equivalent) for internal records. Use human-readable codes for programmes, syllabus editions, skills and content IDs where useful.
@@ -105,8 +131,9 @@ The client imports learner-safe `src/content/pilotLearnerLesson.ts` for lesson c
 - Prevent duplicate free human-review entitlement server-side. Changing course/topic must not grant another free assessment.
 - Only a trusted server operation may accept submissions, reserve/release credits, calculate due times, publish assessment versions or change privileged roles.
 - Store timestamps consistently (normally UTC) and render them in the learner's appropriate timezone.
-- Do not keep unnecessary sensitive details. Access, retention, consent and deletion practices must follow owner-approved privacy terms and the chosen provider's actual settings.
-- Avoid permanent deletion of records needed for grading/audit history; design a documented retention/anonymisation policy before production.
+- Do not keep unnecessary sensitive details. Enforce the approved Phase 0 retention matrix: original PDF/raw extraction/corrected transcript during course activity plus 12 months after formal course completion, recorded withdrawal or administrative closure; published feedback/rubric results/version audit for 24 months after that formal end event; event-level timing for 12 months after attempt; verified deletion requests within 30 days subject to legal hold. Open/inactive courses require a restricted owner closure review; do not silently auto-delete or retain indefinitely without review.
+- Delete temporary rendered page images immediately after OCR. Retrieve then delete Azure analysis results promptly using its Delete Analyze Result API. Expire encrypted off-site file backups within 30 days of source deletion.
+- Apply role-scoped deletion, legal-hold exception records and external processor deletion; do not claim instant erasure from immutable backups.
 
 ## 4. Access-control outline
 
@@ -135,11 +162,14 @@ Additional protections:
 1. Approve the content fields, pathway mapping workflow and initial pilot pathway.
 2. Create versioned content fixtures/types using the model; keep current demo content explicitly marked as fictional.
 3. Complete `docs/PILOT_UNIT_REVIEW.md` with the academic lead, confirm the applicable MYP guide and whether candidate strands A(ii), A(iii), both or neither fit, then use the readiness gates to track verified mapping, reviewed lesson/practice content and approvals before release.
-3. Choose and verify the database/auth provider's current terms, limits, backup and restore approach before creating production records.
-4. Create database migrations and enforce least-privilege access policies.
+3. Implement the approved Supabase Auth/Postgres/Storage mapping in Mumbai, after explicit Founder implementation and budget approval; reconfirm current plan/terms and exact region at provisioning.
+4. Create database migrations and enforce least-privilege access policies, PostgreSQL RLS and private storage access. Establish encrypted R2 secondary object backup only after region/transfer review; test database and file restore together.
 5. Add authentication and profiles, then pathway enrolments and published content reads.
 6. Add saved attempts and progress evidence; test that two learners cannot see each other's records.
 7. Add submission/credit/capacity transactions, then versioned grader workflow and admin-only QA.
 8. Before a real learner pilot, test role boundaries, backup/restore, deletion/retention operations and mobile use.
 
 **Not implemented:** These tables are a planning model, not a claim that authentication, a database, row-level security, saved records or real assessment workflows exist today.
+
+
+**Phase 0 approval note — 2 November 2026:** The logical records for PDF submissions, page extraction, feedback drafts/versions, grader SLA and timers remain a design proposal only. Supabase Mumbai Auth/Postgres/Storage, Azure Read OCR (intended Central India), Cloudflare Workers AI stateless drafts, Cloudflare R2 encrypted secondary object backup, 10 MB/10-page file caps, advisory no-pause timer policy and the retention/deletion matrix are Founder-approved. These decisions do not authorise resource creation, paid plans, authentication/database/storage configuration or real learner data processing. Phase 1 implementation requires separate explicit approval.

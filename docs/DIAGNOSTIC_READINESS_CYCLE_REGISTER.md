@@ -1,8 +1,8 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.5  
-**Last updated:** 1 November 2026  
-**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research and skill taxonomy/high-level blueprint are approved. The detailed task-level item map and scoring specification is submitted for Founder review; actual item authoring, scoring calibration and implementation remain gated. Cycle 2 remains blocked.  
+**Version:** 1.7  
+**Last updated:** 2 November 2026  
+**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research, skill taxonomy/high-level blueprint, detailed item map/scoring specification, flagship feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are approved. Phase 0 is complete. Phase 1 secure application foundation is next but requires separate explicit Founder implementation/budget approval; actual MYP diagnostic item authoring follows feature implementation and pilot validation. Cycle 2 remains blocked.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
 **Purpose:** Track the founder-selected order for the diagnostic → evaluation/analytics → remedial-course layer independently of the existing Unit 1/content register.
 
@@ -10,7 +10,7 @@
 
 | Order | Requested school-grade target | Working curriculum alignment | Current status |
 |---:|---|---|---|
-| 1 | Grade 9 — IB MYP Language and Literature | MYP Year 4 is confirmed by the Founder for the relevant school/programme context; do not reopen this as an assumption. Official MYP programme age band: 11–16; individual chronological age not separately supplied | First cycle; provider research approved; draft taxonomy/blueprint submitted for Founder review |
+| 1 | Grade 9 — IB MYP Language and Literature | MYP Year 4 is confirmed by the Founder for the relevant school/programme context; do not reopen this as an assumption. Official MYP programme age band: 11–16; individual chronological age not separately supplied | Provider research, taxonomy/high-level blueprint and detailed item map approved; flagship feature plan, 24-hour grading target and Phase 0 decisions approved; Phase 1 implementation approval gate next |
 | 2 | Grade 6 — Cambridge English | Exact Cambridge stage and English route remain to be verified. Cambridge Primary Stage 6 / English 0058 is a candidate only where the learner age and first-language route support it. Cambridge Lower Secondary Stage 7 is not a substitute for the requested Grade 6 target | Second cycle; blocked until Cycle 1 is complete and the founder directs the transition |
 
 Grade 9 = MYP Year 4 is a Founder-confirmed placement for Cycle 1, not an unresolved mapping. Cambridge Grade 6 remains a requested school-grade label whose exact official stage/course must be established during Cycle 2 scope lock. Never substitute Cambridge Lower Secondary Stage 7 for Grade 6.
@@ -60,8 +60,10 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 | Official grade/year/course scope locked | Complete (Founder-confirmed) | Blocked |
 | Diagnostic Top Five research | Complete; Founder-approved | Blocked |
 | Skill taxonomy and high-level blueprint approved | Complete; Founder-approved 1 Nov 2026 | Blocked |
-| Detailed task-level item map and scoring specification | Draft submitted; Founder review pending | Blocked |
-| Actual diagnostic item authoring and teacher/editor scoring pack | Not started; gated on item-map approval | Blocked |
+| Detailed task-level item map and scoring specification | Complete; Founder-approved 2 Nov 2026 | Blocked |
+| Flagship PDF response, teacher grading and timed analytics plan | Complete; phased plan and 24-hour grading target approved 2 Nov 2026 | Blocked |
+| Flagship feature implementation and pilot QA | Not started; Phase 0 complete. Phase 1 requires separate Founder implementation/budget approval | Blocked |
+| Actual diagnostic item authoring and teacher/editor scoring pack | Paused until the shared response/task metadata and core feature are implemented and validated | Blocked |
 | Diagnostic built and validated | Not started | Blocked |
 | Evaluation report and analytics built/validated | Not started | Blocked |
 | Personalised remedial course (five sessions preferred; six/seven only if analytics justify) and teacher pack complete | Not started | Blocked |
@@ -76,14 +78,14 @@ The diagnostic-first decision changes the immediate work order only. It does not
 - MYP Year 1 Unit 1 v4 on PR #14 remains founder-approved for its exact content, human academic review and age/level/context suitability. Unit-level rights/territory, image/context, manual accessibility and release gates remain open.
 - Cambridge Lower Secondary Stage 7 Unit 1 v1.3, its completed Stage 7 Top Five audit and controlled preview remain existing records. The Stage 7 teacher-pack/counter migration and its outstanding gates are deferred; Stage 7 is not Cycle 2.
 - CBSE Grade 6 Unit 1 v1.0 remains its exact-version academic-content candidate; its planned Top Five, pack/counter work and remaining review gates are deferred.
-- PRs #12, #14, #15, #16 and #17 remain separate draft/unmerged candidates/previews. PR #16's older base is not rebased or altered by this decision.
+- PRs #12, #14, #15, #16 and #17 remain separate draft/unmerged candidates/previews; PR #19 records the approved MYP diagnostic research/blueprint/item map, and PR #20 records the approved flagship feature plan. Both remain draft/unmerged. PR #16's older base is not rebased or altered by this decision.
 
 The former Unit 1 rotation and queued migration plans are historical work queues only. They do not determine the next task while the diagnostic cycles are active. After both diagnostic cycles are approved, the Founder / project owner will specify the next curriculum-content order and scope. This may include completing multiple units for Grade 9 IB MYP or Cambridge Grade 6 before switching to another level, or another explicitly selected order. The former Unit 1 rotation remains inactive unless explicitly reinstated by the founder.
 
 
 ## 5. Cycle 1 — Grade 9 IB MYP Language and Literature
 
-**Status:** The Top Five provider research was approved on 31 October 2026. The skill taxonomy and high-level 90-minute/two-sitting blueprint were approved on 1 November 2026; see `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md`. The detailed task-level item map and scoring specification is now submitted for Founder review in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md`. Do not author actual diagnostic questions, final scoring rubrics or implement the diagnostic until this map is approved and the next authoring plan is reviewed. Provider percentile evidence remains internal in docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. The official IB programme/context sources are separate from the five independent providers.
+**Status:** The Top Five research, taxonomy/high-level blueprint, detailed item map/scoring specification, flagship response/grading/timer plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. Phase 0 is complete; Phase 1 secure foundation is the next platform step, subject to separate explicit implementation/budget approval. Actual implementation and question authoring have not started. Provider percentile evidence remains internal in docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. The official IB programme/context sources are separate from the five independent providers.
 
 **Confirmed placement:** Grade 9 = MYP Year 4, as explicitly confirmed by the Founder for the relevant school/programme context.
 
@@ -94,4 +96,4 @@ The former Unit 1 rotation and queued migration plans are historical work queues
 **Founder decision — 31 October 2026:** The Top Five provider research is approved. Provider percentiles use the internal 50/50 actual test-taker / independent research method; all ranking data and methodology are excluded from learner/parent reports, including logged-in views. The draft MYP Year 4 taxonomy/blueprint is submitted for review. Five remedial sessions are preferred; extend to six or seven only when evaluation analytics justify it.
 
 
-**Founder approval update — 1 November 2026:** The Founder approved the MYP Year 4 taxonomy and high-level diagnostic blueprint. The detailed item map/scoring specification is the active Founder review gate. It contains 35 proposed evidence observations (not 35 independent long questions), maps all 23 subskills and all six MYP skill areas, and keeps all four criterion profiles distinct. Actual item writing, final thresholds, scoring calibration, diagnostic/report implementation and remedial lesson authoring remain unapproved. Cambridge Grade 6 remains blocked; all existing curriculum-unit queues remain deferred.
+**Founder approval update — 2 November 2026:** The Founder approved the detailed MYP Year 4 item map/scoring specification (35 evidence observations, not 35 independent long questions; all 23 subskills, six MYP skill areas and four criterion profiles remain mapped), the flagship response/grading/timed-analytics feature plan and the 24-hour elapsed-time grading target. A subsequent Phase 0 decision approval closed architecture, provider/region, role, file-limit, timer and retention questions; see `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`. Phase 0 is complete. Phase 1 secure foundation requires separate explicit Founder implementation/budget approval. No code, account, database, storage, OCR provider, AI endpoint or deployment has been configured. Cambridge Grade 6 remains blocked; all existing curriculum-unit queues remain deferred.

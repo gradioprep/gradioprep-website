@@ -1,10 +1,10 @@
 # Grade 9 IB MYP Year 4 — Diagnostic Item Map and Scoring Specification
 
-**Version:** 0.1-draft  
-**Date:** 1 November 2026  
-**Status:** Draft for Founder / human academic review. The skill taxonomy and high-level 90-minute blueprint were approved by the Founder on 1 November 2026. This detailed item map is not yet approved for question authoring, rubric calibration, diagnostic implementation or learner release.  
+**Version:** 0.1  
+**Date:** 2 November 2026  
+**Status:** Founder-approved task-level item map and draft scoring specification (2 November 2026). This approval covers the evidence map, 35 observations, task modes/timing and provisional scoring/confidence safeguards; it does not approve actual question wording, final cut scores, calibrated rubrics, code or learner release. Actual item authoring is sequenced after the approved flagship PDF-response/grading/timer feature is implemented and its shared task metadata is validated.  
 **Target:** Grade 9 — IB MYP Language and Literature (Founder-confirmed MYP Year 4)  
-**Parent specification:** IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md v0.2-draft
+**Parent specification:** IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md v0.2 (Founder-approved)
 
 ## 1. Purpose and boundaries
 
@@ -230,8 +230,10 @@ Before fixing scoring rules or implementing:
 5. Check item difficulty, distractor performance, omissions, completion time, response burden and possible stimulus dependence. Do not claim psychometric validity from a small pilot.
 6. Revise the map and blueprint if the pilot shows under-representation, overloading, construct contamination or unreliable scoring.
 
-## 9. Approval gate and next step
+## 9. Founder approval and next step
 
-**Founder review required for this item map and scoring specification.** Review the task coverage, all 23 subskill mappings, 34 proposed evidence observations, the two-sitting timing, oral/presentation feasibility, provisional word guidance, evidence-confidence rules and the draft scoring approach.
+The Founder approved this item map and scoring specification on 2 November 2026, including all 23 subskill mappings, 35 evidence observations, the two-sitting timing, oral/presentation feasibility, provisional response guidance and evidence-confidence safeguards.
 
-After approval, the next step is controlled authoring of the actual stimuli, prompts, keyed answers, distractor rationales, model responses and separate teacher/editor scoring pack. Pilot calibration follows that authoring review. Scoring thresholds, automated scoring, report UI, remedial lesson writing, diagnostic implementation, integration, merge and release remain separate gates.
+The next project prerequisite is the shared PDF-response, teacher-grading and timed-analytics feature recorded in docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md. The phased plan and 24-hour grading target are approved; actual implementation has not started. Actual diagnostic item authoring is paused until the shared task metadata, response modes and timer configuration can be authored against the approved feature design.
+
+After that prerequisite is implemented and pilot-validated, the next content step will be controlled authoring of the actual stimuli, prompts, keyed answers, distractor rationales, model responses and separate teacher/editor scoring pack. Pilot calibration follows that authoring review. Final scoring thresholds, automated scoring, report UI, remedial lesson writing, diagnostic implementation, integration, merge and release remain separate gates.

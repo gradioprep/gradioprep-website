@@ -1,8 +1,8 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.5  
-**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy and high-level diagnostic blueprint are Founder-approved; the detailed task-level item map is under review. Diagnostic analytics and report UI are not implemented.  
-**Last updated:** 31 October 2026  
+**Version:** 2.7  
+**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy, high-level blueprint, detailed task-level item map, flagship response/grading plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. The screens below are design requirements only and have not been implemented; Phase 1 implementation requires separate explicit Founder approval.  
+**Last updated:** 2 November 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
@@ -525,4 +525,24 @@ Charts must remain understandable on narrow screens, at 200%/400% zoom and with 
 **Version 2.4 Founder decision update — 31 October 2026:** The MYP Grade 9 provider research is approved; the draft taxonomy/blueprint is awaiting Founder review. Provider ranking data and its 50/50 basis are internal-only and must not appear in learner/parent reports or logged-in views. The remedial plan should use five 60-minute sessions where sufficient, extending to six or seven only when evaluation analytics justify it.
 
 
-**Version 2.5 diagnostic design-status update — 1 November 2026:** The Founder approved the Grade 9 IB MYP Year 4 skill taxonomy and high-level 90-minute/two-sitting blueprint. The task-level item map and draft scoring specification in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md is under Founder review. The map contains 35 proposed evidence observations; it is an assessment-design record, not an implemented UI, data model or item bank. No report interface, learner score model, persistent analytics or client bundle fields are authorised by this status update. All provider ranking/percentile data and methodology remain excluded from learner-facing screens, report payloads and client bundles. Palette, typography, navigation and page architecture remain unchanged.
+**Version 2.5 diagnostic design-status update — 1 November 2026 (historical checkpoint; superseded by v2.6):** The Founder approved the Grade 9 IB MYP Year 4 skill taxonomy and high-level 90-minute/two-sitting blueprint. At that checkpoint the task-level item map was still under review. The current item-map approval and the flagship PDF-response/grading/timed-analytics design requirements are recorded in v2.6 below. No UI or data model has been implemented by the design approval. All provider ranking/percentile data and methodology remain excluded from learner-facing screens, report payloads and client bundles. Palette, typography, navigation and page architecture remain unchanged.
+
+
+### 16.5 PDF response and teacher/grader workspace — approved plan, not implemented
+
+For a written response with an approved expected response greater than 20 words, the student task panel offers two clearly labelled choices: **Type response** (default) or **Upload PDF**. PDF is optional. The typed response retains its approved response range and live word counter; the file chooser accepts PDF only. Do not display JPG/PNG upload controls. Enforce the approved initial pilot cap of 10 MB and 10 pages per PDF, with clear validation and page-count feedback. The upload screen shows file validation, page count, processing state, and a clear retry/fallback message without discarding a typed draft.
+
+The teacher/grader queue is chronological, oldest submission first. Each entry displays priority and deadline separately, along with elapsed time and time remaining. The question/prompt and the curriculum, programme/course, grade/year/stage, subject and task identifiers appear above the grading workspace. The task-specific rubric is an expandable panel.
+
+For PDF submissions, use a split screen: original PDF viewer on the left and page-aligned extracted text on the right, with page navigation and visible extraction confidence/failure markers. The original PDF remains authoritative. On small screens, use accessible tabs or stacked panels while maintaining page alignment. Typed submissions use the same workspace, with the typed answer shown instead of the PDF viewer.
+
+The feedback authoring panel shows exactly ten AI-drafted suggestions, clearly identified as drafts, plus a custom-feedback text area. Teachers can select/edit suggestions and add their own comments. The only student-visible content is the human-submitted published feedback. On successful teacher edit, refresh the learner-visible feedback immediately; preserve old versions privately in the audit history. Use the approved design system and keep answer keys, private grader notes, AI drafts and internal QA data out of the learner bundle.
+
+### 16.6 Task countdown and grading SLA display — approved timer policy and 24-hour grading SLA
+
+For a timed task, show a task-specific countdown and elapsed duration. Use explicit accessible warning states and do not rely on colour alone. The exact timer allowance comes from task configuration; the interface must not derive an arbitrary time limit from word count.
+
+The teacher queue displays the approved 24-hour grading target with elapsed and remaining time. Priority labels are based on time remaining: Priority 1 (more than 0 and up to 10 hours), Priority 2 (more than 10 and up to 20 hours), Priority 3 (more than 20 hours), and a separate overdue state. Queue order remains oldest accepted submission first. After feedback is published, show actual turnaround and the time remaining before the deadline (or how late it was) immediately before the feedback on both teacher and student views. Editing later feedback does not reset first-publication turnaround.
+
+The approved timer is advisory and server-authoritative; it continues through refresh, disconnection and hidden/background tabs. The first release has no learner pause/resume. At zero, preserve the response and do not auto-submit, truncate, delete, lock or block saving/submission. Authorised teacher/admin extensions or untimed accommodations are permitted only with an audit event; do not store diagnoses. Record minimal start/save/submit/expiry/adjustment events only—no keystroke, focus or browsing surveillance. Label the measure elapsed response time, compare only suitably similar tasks/skills/allowances, interpret alongside accuracy and human rubric results, and never infer ability/mastery from speed alone. Upload/OCR processing time is excluded. The full timer, privacy and retention policy is in `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`.
+
