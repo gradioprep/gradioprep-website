@@ -1,7 +1,7 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.7  
-**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy, high-level blueprint, detailed task-level item map, flagship response/grading plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. The screens below are design requirements only and have not been implemented; Phase 1 implementation requires separate explicit Founder approval.  
+**Version:** 2.10  
+**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy, high-level blueprint, detailed task-level item map, flagship response/grading plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. The screens below are design requirements only and have not been implemented; Phase 1 has a separate implementation specification at `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`; implementation still requires separate explicit Founder approval.  
 **Last updated:** 2 November 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
@@ -546,3 +546,20 @@ The teacher queue displays the approved 24-hour grading target with elapsed and 
 
 The approved timer is advisory and server-authoritative; it continues through refresh, disconnection and hidden/background tabs. The first release has no learner pause/resume. At zero, preserve the response and do not auto-submit, truncate, delete, lock or block saving/submission. Authorised teacher/admin extensions or untimed accommodations are permitted only with an audit event; do not store diagnoses. Record minimal start/save/submit/expiry/adjustment events only—no keystroke, focus or browsing surveillance. Label the measure elapsed response time, compare only suitably similar tasks/skills/allowances, interpret alongside accuracy and human rubric results, and never infer ability/mastery from speed alone. Upload/OCR processing time is excluded. The full timer, privacy and retention policy is in `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`.
 
+
+
+## 13. Secure application foundation — design dependency, 2 November 2026
+
+The interface must treat authorization as a server/database responsibility, not a visual state. Hiding navigation, answer keys, grader controls or learner records in React is never a security boundary. Authenticated screens must render only data returned by the protected API for the current actor. Student views are limited to the learner's own records and published feedback; guardian views require a verified authorised link; grader views are assignment-scoped; admin/owner controls are separately protected and audited. Private PDF access uses short-lived, permission-checked links. Loading, expired-session, forbidden, revoked-access and unavailable-service states must be clear and accessible without exposing record existence or private content. These are design dependencies; no authentication or protected screen has been implemented by this documentation update. See the Phase 1 implementation specification for the binding role matrix and API/RLS controls.
+
+
+## 14. Authentication and protected API design dependency — 2 November 2026
+
+The Phase 1A build-ready plan (`docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`) specifies the minimum initial authenticated journey: React sign-in/sign-out and session states; same-origin Worker API; protected current-user profile/role response; explicit anonymous, expired, forbidden and revoked-session states. The static assets and current route-driven navigation must remain unchanged outside authenticated routes. Role-driven controls are display affordances only; server authorization and PostgreSQL RLS decide access. Do not expose roles as a client-selectable signup field, show a guardian view without a verified link, or show grader tools without an active assignment. These requirements do not imply any screen or authentication is currently implemented.
+
+
+## 15. Public Preview as a design verification requirement — 2 November 2026
+
+The Founder has made public verification a mandatory build-process feature. Every meaningful UI or interaction change should be shown on the current PR's public Cloudflare Worker Preview as soon as CI passes. The Founder reviews the actual running UI before the milestone is accepted; automated screenshots/tests alone do not replace this. Keep the Preview alias current after fixes and preserve the exact immutable deployment URL that was inspected. The PR handoff must state the user-visible change, exact route(s), short click-by-click checks, CI results, current backend limitations and next approval gate. See `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md`.
+
+During Phase 1B the backend remains local Supabase with synthetic data; public previews must never imply a hosted login/database is active. Show clear, accessible unauthenticated, expired-session, forbidden and backend-unavailable states without disclosing private record existence. Public `workers.dev` previews are not production and no-index is not access control. The custom domain is connected later at Launch Candidate / Production Cutover, not for every PR. Do not change the approved palette, typography or curriculum visual hierarchy to implement this workflow.

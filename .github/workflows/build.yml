@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   build:
+    if: github.event_name != 'pull_request' || github.event.pull_request.base.ref != 'docs/phase-1-secure-foundation-spec'
     name: TypeScript and Vite production build
     runs-on: ubuntu-latest
     steps:
