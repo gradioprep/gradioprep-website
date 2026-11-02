@@ -6,6 +6,36 @@ SELECT is(
   (
     SELECT count(*)::integer
     FROM auth.users
+    WHERE email IN (
+      'student.a@example.invalid',
+      'student.b@example.invalid',
+      'guardian.a@example.invalid',
+      'guardian.b@example.invalid',
+      'grader.a@example.invalid',
+      'grader.b@example.invalid',
+      'admin@example.invalid',
+      'owner@example.invalid',
+      'suspended.student@example.invalid'
+    )
+      AND (
+        confirmation_token IS NULL
+        OR recovery_token IS NULL
+        OR email_change_token_current IS NULL
+        OR email_change_token_new IS NULL
+        OR email_change IS NULL
+        OR phone_change_token IS NULL
+        OR phone_change IS NULL
+        OR reauthentication_token IS NULL
+        OR email_change_confirm_status IS NULL
+      )
+  ),
+  0,
+  'GoTrue token and email-change status fields are non-null on every synthetic user'
+);
+SELECT is(
+  (
+    SELECT count(*)::integer
+    FROM auth.users
     WHERE instance_id = '00000000-0000-0000-0000-000000000000'::uuid
       AND email IN (
         'student.a@example.invalid',
