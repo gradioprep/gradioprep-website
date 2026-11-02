@@ -29,6 +29,26 @@ function hasOnlyDisplayNameFields(value: unknown): value is { display_name: stri
   return Object.keys(record).length === 1 && isValidDisplayName(record.display_name);
 }
 
+function createCallerContext(request: Request, env: WorkerEnv) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
+    throw new Error("Local Supabase environment is not configured.");
+  }
+
+  // @supabase/server verifies user JWTs against the project's JWKS.
+  // The URL is derived from the configured project endpoint, so local CI
+  // and a separately approved hosted environment use the matching keys.
+  const jwks = new URL("/auth/v1/.well-known/jwks.json", env.SUPABASE_URL);
+
+  return createSupabaseContext(request, {
+    auth: "user",
+    env: {
+      url: env.SUPABASE_URL,
+      publishableKeys: { default: env.SUPABASE_PUBLISHABLE_KEY },
+      jwks,
+    },
+  });
+}
+
 async function authenticatedMe(request: Request, env: WorkerEnv): Promise<Response> {
   if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
     return jsonResponse({
@@ -37,18 +57,13 @@ async function authenticatedMe(request: Request, env: WorkerEnv): Promise<Respon
     }, 503);
   }
 
-  const { data: context, error } = await createSupabaseContext(request, {
-    auth: "user",
-    env: {
-      url: env.SUPABASE_URL,
-      publishableKeys: { default: env.SUPABASE_PUBLISHABLE_KEY },
-    },
-  });
+  const { data: context, error } = await createCallerContext(request, env);
 
   if (error || !context?.userClaims?.id) {
     const status = error?.status ?? 401;
     return jsonResponse({
       error: "authentication_required",
+      code: error?.code ?? "missing_user_claims",
       message: "A valid signed-in account is required.",
     }, status);
   }
@@ -110,16 +125,13 @@ async function updateProfile(request: Request, env: WorkerEnv): Promise<Response
     }, 400);
   }
 
-  const { data: context, error } = await createSupabaseContext(request, {
-    auth: "user",
-    env: {
-      url: env.SUPABASE_URL,
-      publishableKeys: { default: env.SUPABASE_PUBLISHABLE_KEY },
-    },
-  });
+  const { data: context, error } = await createCallerContext(request, env);
 
   if (error || !context?.userClaims?.id) {
-    return jsonResponse({ error: "authentication_required" }, error?.status ?? 401);
+    return jsonResponse({
+      error: "authentication_required",
+      code: error?.code ?? "missing_user_claims",
+    }, error?.status ?? 401);
   }
 
   const { data: profile, error: updateError } = await context.supabase
