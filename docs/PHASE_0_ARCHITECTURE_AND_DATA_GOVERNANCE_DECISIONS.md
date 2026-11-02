@@ -77,6 +77,7 @@ Use synthetic/fictitious data only until those gates and the separate real-data 
 - Supabase pricing and limits: https://supabase.com/pricing
 - Supabase backups and Storage API exclusion: https://supabase.com/docs/guides/platform/backups
 - Azure Document Intelligence Read model and input limits: https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/concept-read
+- Azure Document Intelligence F0 quota and pricing: https://azure.microsoft.com/en-us/pricing/details/document-intelligence/
 - Azure Document Intelligence v4 encryption, 24-hour analysis-result availability and delete API: https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/authentication/encrypt-data-at-rest?view=doc-intel-4.0.0
 - Azure region list: https://learn.microsoft.com/en-us/azure/reliability/regions-list?tabs=all
 - Cloudflare Workers AI data use: https://developers.cloudflare.com/workers-ai/platform/data-usage/
