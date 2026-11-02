@@ -42,18 +42,17 @@ Do not wait for an entire multi-week phase if a working slice can be safely test
 
 ## 3. Cloudflare Worker Preview operation
 
-The canonical automation is `.github/workflows/controlled-worker-preview.yml`. It:
-- runs on same-repository pull requests targeting `main` or the active stacked integration base `feature/pdf-submission-grading-timers-plan`;
-- is restricted to pull requests created by the repository owner account `gradioprep`;
-- builds the exact PR head revision;
-- uses the existing repository Actions secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, if configured;
-- uses an account-restricted Workers preview token and calls only `npx wrangler preview --name pr-<number>`;
-- posts or updates a clearly labelled Preview URL comment on the PR;
-- removes that PR's Preview when the PR is closed.
+The workflow is split by responsibility so public Preview deployment cannot race ahead of database/security tests:
 
-The workflow must not use `npx wrangler deploy`, modify DNS, create a Custom Domain, change production settings, create new Cloudflare accounts/products or configure any live database. No production permission or DNS/zone permission should be included in the preview token. The separate production deployment workflow remains unchanged and must never be called by preview automation.
+- **Phase 1B PRs targeting `docs/phase-1-secure-foundation-spec`:** `.github/workflows/phase1b-verification.yml` runs the complete local synthetic pipeline in one job: Supabase local stack, environment setup, schema/seed reset, pgTAP RLS tests, browser and Worker type/build checks, Playwright navigation/account/API tests, and local-stack shutdown. It removes `.dev.vars` and `.env.local`, rebuilds a clean public asset bundle with no local Supabase values, and only then runs `npx wrangler preview --name pr-<number>`. The PR receives the Preview URL after all tests pass.
+- **General website PRs:** `.github/workflows/build.yml` continues to run the standard TypeScript/Vite and Playwright regression checks.
+- **Preview cleanup:** `.github/workflows/controlled-worker-preview.yml` is cleanup-only. It deletes a PR's named Preview when that PR closes.
 
-If the PR build passes but Preview deployment does not, record the missing credential, permission or provider failure in the PR/check summary. Continue local tests, but mark public verification as pending and repair the preview path promptly. Do not silently skip the Preview gate.
+The Phase 1B workflow is restricted to same-repository pull requests created by the repository owner account `gradioprep`. It uses the existing repository Actions secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, if configured, with an account-restricted Workers preview token. It does not use `npx wrangler deploy`.
+
+The workflows must not modify DNS, create a Custom Domain, change production settings, create new Cloudflare accounts/products or configure any live database. No production permission or DNS/zone permission should be included in the preview token. The separate production deployment workflow remains unchanged and must never be called by preview automation.
+
+If any local Supabase, SQL/RLS, build or browser test fails, the Phase 1B job stops and does not upload/update a public Preview for that revision. If tests pass but Preview credentials/deployment are unavailable, record the reason and keep public verification pending; never imply Preview deployment succeeded.
 
 ### 3.1 Public-preview safety
 
