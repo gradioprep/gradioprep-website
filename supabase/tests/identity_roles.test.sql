@@ -60,15 +60,9 @@ SELECT is((SELECT count(*)::integer FROM public.profiles), 0, 'suspended user ca
 SELECT is((SELECT count(*)::integer FROM public.role_assignments), 0, 'suspended user cannot read role assignments');
 SELECT is((SELECT count(*)::integer FROM public.guardian_learner_links), 0, 'suspended user cannot read guardian links');
 SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 0, 'suspended user cannot read course enrolments');
-SELECT is(
-  (WITH changed AS (
-    UPDATE public.profiles SET display_name = 'Should Not Be Saved'
-    WHERE user_id = auth.uid()
-    RETURNING 1
-  ) SELECT count(*)::integer FROM changed),
-  0,
-  'suspended user cannot update their profile'
-);
+UPDATE public.profiles
+SET display_name = 'Should Not Be Saved'
+WHERE user_id = auth.uid();
 RESET ROLE;
 
 SET LOCAL ROLE authenticated;
@@ -92,6 +86,7 @@ SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated"}', true);
 SELECT is((SELECT count(*)::integer FROM public.profiles), 9, 'active owner can read all synthetic profiles including suspended accounts');
 SELECT is((SELECT count(*)::integer FROM public.profiles WHERE user_id = '99999999-9999-4999-8999-999999999999'), 1, 'active owner can inspect a suspended account');
+SELECT is((SELECT display_name FROM public.profiles WHERE user_id = '99999999-9999-4999-8999-999999999999'), 'Synthetic Suspended Student', 'suspended profile display name remains unchanged after blocked update');
 SELECT is((SELECT count(*)::integer FROM public.role_assignments WHERE role = 'owner'), 1, 'only the explicitly seeded owner has the owner role');
 RESET ROLE;
 
