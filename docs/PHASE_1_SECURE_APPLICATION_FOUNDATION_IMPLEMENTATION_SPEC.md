@@ -1,6 +1,6 @@
 # Phase 1 — Secure Application Foundation Implementation Specification
 
-**Version:** 0.2-draft  
+**Version:** 0.3-draft  
 **Date:** 2 November 2026  
 **Status:** Founder-approved planning specification; Phase 1A build-ready execution plan is in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`. Implementation is still NOT authorised by this document. No code, accounts, services, paid plans, real learner data, merge or deployment are included.  
 **Parent decision register:** `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`  
@@ -337,3 +337,10 @@ Any change to the approved provider, region, database, backup target, retention,
 ## 17. Build-ready execution path — 2 November 2026
 
 The exact repository starting point, local-first implementation path, API/client integration choices, initial schema/RLS slice, test fixtures, CI plan, proposed RTO/RPO and current cost scenarios are specified in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`. That document is the engineering handoff for the next coding step. The first slice is local-only with Supabase CLI and synthetic data; it requires a Docker-compatible runtime but no hosted Supabase project or paid account. It adds the Cloudflare Worker API entrypoint while retaining Static Assets and React route behavior, browser Auth with `@supabase/supabase-js`, Worker request authentication through the current `@supabase/server` pattern, and the first profile/role/RLS migration and tests. The service-role key is not required. No implementation has started. A separate explicit Founder approval is still required before the first code commit. Proposed production RTO/RPO targets and AWS KMS are not approved decisions; they block real-data backup readiness, not local synthetic coding.
+
+
+## 18. Mandatory public Preview verification
+
+All Phase 1 implementation work must follow `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md`. Each meaningful code PR must pass local/CI checks, deploy a per-PR Cloudflare Worker Preview with `npx wrangler preview`, and provide the Founder with a concise non-coder verification handoff. Public inspection is expected after each useful vertical slice; do not wait until Phase 1 is wholly complete. The workflow `.github/workflows/controlled-worker-preview.yml` is restricted to same-repository owner-authored PRs on the approved base branches, uses the existing Worker Preview capability, posts the PR Preview URL and cleans up when the PR closes. It must never call the production deploy command, change DNS or provision another service.
+
+For Phase 1B, local Supabase Auth/PostgreSQL/Storage with synthetic records is authoritative for backend tests. A public Preview cannot connect to that local stack. Verify UI/routes/Worker routing/safe failure states publicly, and validate actual sign-in, identity, RLS and storage permissions in local CI. A hosted synthetic backend is a separate approval gate. Public Preview URLs are not access-controlled by their no-index header and must contain no sensitive data. Custom domain remains a later, separately approved Production Cutover action.
