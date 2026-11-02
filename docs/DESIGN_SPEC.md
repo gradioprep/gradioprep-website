@@ -1,7 +1,7 @@
 # Criterion Lab — Design Specification
 
 **Version:** 2.11  
-**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy, high-level blueprint, detailed task-level item map, flagship response/grading plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. The screens below are design requirements only and have not been implemented; Phase 1 has a separate implementation specification at `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`; implementation still requires separate explicit Founder approval.  
+**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy, high-level blueprint, detailed task-level item map, flagship response/grading plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. The screens below are design requirements and should not be treated as implemented unless verified in the current Preview. Phase 1B local synthetic-only coding is explicitly approved and underway in draft PR #22; hosted provisioning, paid services, real learner data, merge and production deployment are not authorised.  
 **Last updated:** 2 November 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
@@ -436,7 +436,7 @@ The design can be considered ready for functional implementation when:
 - Automatically checked practice and human assessment are unmistakably distinct.
 - All visible controls have a defined action.
 - Mobile, keyboard and accessibility checks are documented.
-- Demonstration data is clearly labelled and cannot be mistaken for live student data.
+- No invented learner data is shown in learner-facing states. When real records are not available, the screen uses a purposeful, contextual empty state; synthetic sample values remain confined to an isolated internal test view.
 - No unapproved business, syllabus, privacy or pricing decision has been introduced.
 
 
