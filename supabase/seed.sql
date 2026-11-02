@@ -3,7 +3,8 @@
 -- that Auth-owned fixture field explicit rather than relying on its NULL default.
 -- GoTrue scans its token/change string columns and change-status integer as
 -- non-null values. Empty strings/zero represent the unused state for fixtures.
--- Never apply this seed to a hosted or production project.INSERT INTO auth.users (
+-- Never apply this seed to a hosted or production project.
+INSERT INTO auth.users (
   instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
   confirmation_token, recovery_token, email_change_token_current,
   email_change_token_new, email_change, phone_change_token, phone_change,
