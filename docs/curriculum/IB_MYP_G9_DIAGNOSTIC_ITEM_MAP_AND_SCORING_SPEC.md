@@ -4,7 +4,7 @@
 **Date:** 2 November 2026  
 **Status:** Founder-approved task-level item map and draft scoring specification (2 November 2026). This approval covers the evidence map, 35 observations, task modes/timing and provisional scoring/confidence safeguards; it does not approve actual question wording, final cut scores, calibrated rubrics, code or learner release. Actual item authoring is sequenced after the approved flagship PDF-response/grading/timer feature is implemented and its shared task metadata is validated.  
 **Target:** Grade 9 — IB MYP Language and Literature (Founder-confirmed MYP Year 4)  
-**Parent specification:** IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md v0.2-draft
+**Parent specification:** IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md v0.2 (Founder-approved)
 
 ## 1. Purpose and boundaries
 
