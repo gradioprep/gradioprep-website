@@ -1,4 +1,4 @@
-import { createSupabaseContext } from "@supabase/server";
+import { createContextClient, verifyAuth } from "@supabase/server/core";
 
 type WorkerEnv = Env & {
   SUPABASE_URL?: string;
@@ -29,24 +29,39 @@ function hasOnlyDisplayNameFields(value: unknown): value is { display_name: stri
   return Object.keys(record).length === 1 && isValidDisplayName(record.display_name);
 }
 
-function createCallerContext(request: Request, env: WorkerEnv) {
+async function createCallerContext(request: Request, env: WorkerEnv) {
   if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
     throw new Error("Local Supabase environment is not configured.");
   }
 
-  // @supabase/server verifies user JWTs against the project's JWKS.
-  // The URL is derived from the configured project endpoint, so local CI
-  // and a separately approved hosted environment use the matching keys.
-  const jwks = new URL("/auth/v1/.well-known/jwks.json", env.SUPABASE_URL);
-
-  return createSupabaseContext(request, {
+  // Verify the bearer token against this project's signing keys, then create
+  // only the caller-scoped client. createSupabaseContext also constructs an
+  // admin client, which requires a secret key even when this route never uses
+  // it. This API deliberately has no service-role/admin client.
+  const supabaseEnv = {
+    url: env.SUPABASE_URL,
+    publishableKeys: { default: env.SUPABASE_PUBLISHABLE_KEY },
+    jwks: new URL("/auth/v1/.well-known/jwks.json", env.SUPABASE_URL),
+  };
+  const { data: auth, error } = await verifyAuth(request, {
     auth: "user",
-    env: {
-      url: env.SUPABASE_URL,
-      publishableKeys: { default: env.SUPABASE_PUBLISHABLE_KEY },
-      jwks,
-    },
+    env: supabaseEnv,
   });
+
+  if (error) return { data: null, error };
+  if (!auth.token || !auth.userClaims?.id) {
+    return { data: null, error: { status: 401, code: "missing_user_claims" } };
+  }
+
+  const supabase = createContextClient({
+    auth: { token: auth.token },
+    env: supabaseEnv,
+  });
+
+  return {
+    data: { supabase, userId: auth.userClaims.id },
+    error: null,
+  };
 }
 
 async function authenticatedMe(request: Request, env: WorkerEnv): Promise<Response> {
@@ -59,16 +74,15 @@ async function authenticatedMe(request: Request, env: WorkerEnv): Promise<Respon
 
   const { data: context, error } = await createCallerContext(request, env);
 
-  if (error || !context?.userClaims?.id) {
-    const status = error?.status ?? 401;
+  if (error || !context) {
     return jsonResponse({
       error: "authentication_required",
       code: error?.code ?? "missing_user_claims",
       message: "A valid signed-in account is required.",
-    }, status);
+    }, error?.status ?? 401);
   }
 
-  const userId = context.userClaims.id;
+  const userId = context.userId;
   const [{ data: profile, error: profileError }, { data: roleRows, error: roleError }] = await Promise.all([
     context.supabase
       .from("profiles")
@@ -127,7 +141,7 @@ async function updateProfile(request: Request, env: WorkerEnv): Promise<Response
 
   const { data: context, error } = await createCallerContext(request, env);
 
-  if (error || !context?.userClaims?.id) {
+  if (error || !context) {
     return jsonResponse({
       error: "authentication_required",
       code: error?.code ?? "missing_user_claims",
@@ -137,7 +151,7 @@ async function updateProfile(request: Request, env: WorkerEnv): Promise<Response
   const { data: profile, error: updateError } = await context.supabase
     .from("profiles")
     .update({ display_name: body.display_name.trim() })
-    .eq("user_id", context.userClaims.id)
+    .eq("user_id", context.userId)
     .select("user_id, display_name, account_status, created_at")
     .maybeSingle();
 
