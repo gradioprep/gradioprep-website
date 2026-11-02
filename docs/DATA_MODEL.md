@@ -181,3 +181,8 @@ The Phase 1 specification is the implementation-level companion to this provider
 
 
 **Phase 1A implementation handoff — 2 November 2026:** The first migration is intentionally limited to profiles, role assignments, guardian–learner links, course enrolments and restricted security audit events, with local synthetic seed records. The build-ready plan defines browser/Worker auth integration, role boundaries, safe private-schema helper functions, default-deny RLS and SQL tests. Assessment submissions, PDF objects, grader queues, feedback versions and credit transactions remain later implementation slices; do not create speculative unused tables merely to accelerate the first PR.
+
+
+## Phase 1B implementation progress — 2 November 2026
+
+The first local synthetic implementation is underway in draft PR #22. Its first migration implements profiles, role assignments, guardian–learner links, course enrolments and restricted security audit events with default-deny RLS. Local Supabase startup, environment export, migration and synthetic seed have succeeded in CI. The initial pgTAP run exposed four assertion-format issues; the SQLSTATE-only assertions are being corrected and rerun. Do not claim access-control acceptance until the full RLS suite, Worker/API build and browser tests pass. Submission, rubric, feedback, timer and credit records remain planning-only and outside this first code slice. No hosted database or real learner records exist.
