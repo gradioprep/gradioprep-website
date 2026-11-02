@@ -215,3 +215,24 @@ For the first code slice, do not ask the Founder for any password, API key, reco
 After the Founder separately authorises coding, implement only **Phase 1B — Local Auth, Worker API and role foundation** on a new branch based on the approved documentation branch. Deliver a draft PR with migrations, synthetic seed data, API and UI, RLS tests, Worker tests, CI results and an updated implementation status. Do not merge, deploy, provision hosted services or accept real learner data. Continue to Phase 1C–1F only after the prior checkpoint is reviewed and accepted.
 
 This plan does not change the existing diagnostic sequence: MYP Year 4 actual diagnostic item authoring remains gated until the flagship feature is implemented and pilot-validated; Cambridge Grade 6 remains blocked.
+
+
+## 14. Official technical references checked 2 November 2026
+
+- Supabase local development (CLI, container runtime, free local stack): https://supabase.com/docs/guides/local-development
+- Supabase local migration workflow: https://supabase.com/docs/guides/local-development/database-migrations
+- Supabase RLS and database tests: https://supabase.com/docs/guides/database/postgres/row-level-security
+- Supabase server package selection; `@supabase/server` header-based auth and Workers support: https://supabase.com/docs/guides/auth/choosing-a-server-package
+- Supabase project regions: https://supabase.com/docs/guides/platform/regions
+- Supabase data-residency and transfer FAQ: https://supabase.com/legal/privacy-resources/data-residency-and-transfers-faq
+- Supabase daily backups and Storage object exclusion: https://supabase.com/docs/guides/platform/backups
+- Supabase Pro and compute-cost example: https://supabase.com/kb/faqs/platform/database-only-cost
+- Supabase PITR pricing and billing example: https://supabase.com/docs/guides/platform/manage-your-usage/point-in-time-recovery
+- Cloudflare Workers Static Assets binding and selective Worker-first routing: https://developers.cloudflare.com/workers/static-assets/binding/
+- Cloudflare React/Vite application with API Worker: https://developers.cloudflare.com/workers/framework-guides/web-apps/react/
+- Cloudflare current usage-based billing summary: https://developers.cloudflare.com/billing/understand/usage-based-billing/
+- Cloudflare Worker secrets: https://developers.cloudflare.com/workers/configuration/secrets/
+- AWS KMS pricing: https://aws.amazon.com/kms/pricing/
+- AWS KMS regional endpoints: https://docs.aws.amazon.com/general/latest/gr/kms.html
+
+Region selection establishes the location for the Supabase primary project data and backups, but it is not by itself a legal compliance conclusion or a guarantee that all support/telemetry/subprocessor processing stays in India. Review the current DPA and data-residency FAQ before real-data approval.
