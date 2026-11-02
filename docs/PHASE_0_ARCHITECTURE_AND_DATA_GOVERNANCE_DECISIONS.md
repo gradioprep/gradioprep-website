@@ -1,6 +1,6 @@
 # Phase 0 Architecture, Privacy and Data-Governance Decisions
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Decision date:** 2 November 2026  
 **Status:** Phase 0 decisions approved by the Founder. Phase 0 is complete. These are approved design decisions, not authority to create accounts, incur costs, configure services, process real learner data, merge, deploy or release.  
 **Applies to:** Shared Grades 6–12 written-response, PDF submission, human grading, feedback and timed-analytics platform.
