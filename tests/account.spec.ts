@@ -18,6 +18,15 @@ test.describe("Phase 1B account foundation", () => {
     expect(body.error).toBe("authentication_required");
   });
 
+  test("profile updates reject anonymous requests", async ({ request }) => {
+    const response = await request.patch("/api/v1/me", {
+      data: { display_name: "Should Not Be Saved" },
+    });
+    expect(response.status()).toBe(401);
+    const body = await response.json() as { error?: string };
+    expect(body.error).toBe("authentication_required");
+  });
+
   test("synthetic student can sign up, load own profile, edit display name and sign out", async ({ page }) => {
     const pageErrors: string[] = [];
     const apiResponses: string[] = [];
