@@ -1,8 +1,8 @@
 # Public Preview, Verification and Custom-Domain Release Process
 
-**Version:** 1.0-draft  
-**Date:** 2 November 2026  
-**Status:** Founder-requested mandatory engineering/build-process standard. Apply to every implementation milestone and relevant pull request.  
+**Version:** 1.1-draft  
+**Date:** 3 November 2026  
+**Status:** Founder-requested mandatory engineering/build-process standard. Apply to every implementation milestone and relevant pull request. PR #22's latest exact-head CI and Cloudflare Preview status are recorded in Section 3.3; Founder visual review remains pending.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md`  
 **Related:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`, `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`, `docs/CONTROLLED_CLOUDFLARE_PREVIEW.md`, `docs/DESIGN_SPEC.md` and the approved Phase 0 decision register.
 
@@ -74,6 +74,11 @@ The approved first coding slice uses **local Supabase only**. Its Auth, PostgreS
 Do not fake or claim end-to-end hosted Auth/RLS verification on the public Preview. For any later public Preview that needs a working hosted login or database, first obtain separate approval to provision an isolated hosted Supabase project with synthetic data and separately restricted preview credentials. No hosted project is authorised by this document.
 
 This separation is intentional: it allows frequent public website verification without prematurely provisioning services or exposing learner data.
+
+### 3.3 Verified Phase 1B PR #22 checkpoint — 3 November 2026
+
+**Verified Phase 1B checkpoint — 3 November 2026:** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`, at exact head `ad82f0875737e337ea52b2918a04d0d17cd14f36`. The suspended synthetic-user fixture/authentication setup is corrected without weakening RLS or bypassing tests. Exact-head Actions run [#41500536318](https://github.com/gradioprep/gradioprep-website/actions/runs/41500536318) passed the fresh local Supabase reset and synthetic seed, PostgreSQL RLS tests, application/Worker builds, all 16/16 Playwright browser tests, local-stack shutdown, removal of local-only environment files, and the clean public-Preview build. The browser flow verifies successful Auth sign-in, protected `/api/v1/me` denial with `403 account_unavailable`, denied profile update, and sign-out for the suspended application account. No hosted Supabase, real learner data or production service was used. CI now caches npm package downloads and Playwright Chromium binaries; this successful run exercised the cold-cache path. A warm-cache run is still required to confirm cache hits and measure any time saving; the database is deliberately reset and reseeded on every run and is never cached. Cloudflare's linked Workers Builds integration deployed the exact tested revision; the Phase 1B Actions workflow's explicit Preview steps were skipped because this was a branch-push event, not a pull-request event. Stable branch Preview: https://feature-phase-1b-local-auth-api-gradioprep-website.wandering-scene-1822.workers.dev. Immutable deployment for this exact commit: https://4275c88c-gradioprep-website.wandering-scene-1822.workers.dev. The Preview is public, synthetic-only and disconnected from hosted Supabase; do not enter credentials or real learner data. Founder visual review remains pending. No merge, production deployment, DNS/Cloudflare production change, hosted provisioning or paid service is authorised.
+
 
 ## 4. Founder-facing verification handoff
 
