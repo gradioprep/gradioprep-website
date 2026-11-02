@@ -88,9 +88,40 @@ test.describe("Phase 1B account foundation", () => {
 
   test("suspended account cannot read or update protected profile data", async ({ page }) => {
     let authorization = "";
+    const diagnostics: {
+      authStatus: number | null;
+      authError: string | null;
+      meStatus: number | null;
+      meError: string | null;
+      meMessage: string | null;
+      pageErrors: string[];
+    } = {
+      authStatus: null,
+      authError: null,
+      meStatus: null,
+      meError: null,
+      meMessage: null,
+      pageErrors: [],
+    };
+
+    page.on("pageerror", error => diagnostics.pageErrors.push(error.message));
     page.on("request", request => {
       if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
         authorization = request.headers()["authorization"] ?? "";
+      }
+    });
+    page.on("response", async response => {
+      const pathname = new URL(response.url()).pathname;
+      if (pathname === "/auth/v1/token") {
+        diagnostics.authStatus = response.status();
+        const body = await response.json().catch(() => ({})) as { error?: string; error_description?: string; msg?: string };
+        diagnostics.authError = body.error_description ?? body.msg ?? body.error ?? null;
+      }
+      if (pathname === "/api/v1/me" && response.request().method() === "GET") {
+        diagnostics.meStatus = response.status();
+        const body = await response.json().catch(() => ({})) as { error?: string; message?: string };
+        diagnostics.meError = body.error ?? null;
+        diagnostics.meMessage = body.message ?? null;
       }
     });
 
@@ -98,10 +129,22 @@ test.describe("Phase 1B account foundation", () => {
     await page.getByLabel("Email address").fill("suspended.student@example.invalid");
     await page.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
     await page.getByRole("button", { name: "Sign in" }).click();
+    await page.waitForTimeout(1_000);
 
+    const cardText = await page.locator(".proto-account-card").innerText().catch(() => "<account card not found>");
+    const feedback = await page.locator(".proto-account-feedback").allTextContents().catch(() => []);
+    console.log("Suspended-account diagnostic:", JSON.stringify({
+      ...diagnostics,
+      authorizationPresent: Boolean(authorization),
+      cardText,
+      feedback,
+    }));
+
+    expect(authorization).toMatch(/^Bearer\\s+\\S+/);
+    expect(diagnostics.meStatus).toBe(403);
+    expect(diagnostics.meError).toBe("account_unavailable");
     await expect(page.getByRole("heading", { name: "Account access is unavailable." })).toBeVisible();
     await expect(page.getByRole("alert")).toContainText("This account is unavailable.");
-    expect(authorization).toMatch(/^Bearer\s+\S+/);
 
     const update = await page.request.patch("/api/v1/me", {
       headers: { Authorization: authorization },
@@ -112,5 +155,5 @@ test.describe("Phase 1B account foundation", () => {
 
     await page.getByRole("button", { name: "Sign out" }).click();
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
-  });
+  });;
 });
