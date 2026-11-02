@@ -135,14 +135,14 @@ LANGUAGE sql
 STABLE
 SECURITY DEFINER
 SET search_path = ''
-AS $
+AS $$
   SELECT EXISTS (
     SELECT 1
     FROM public.profiles AS profile
     WHERE profile.user_id = (SELECT auth.uid())
       AND profile.account_status = 'active'
   );
-$;
+$$;
 
 CREATE OR REPLACE FUNCTION private.can_view_learner(target_learner_id uuid, required_scope text)
 RETURNS boolean
