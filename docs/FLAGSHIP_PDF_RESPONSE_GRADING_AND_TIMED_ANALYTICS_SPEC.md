@@ -1,8 +1,8 @@
 # Flagship PDF Response, Teacher Grading and Timed Analytics — Implementation Plan
 
-**Version:** 0.2  
+**Version:** 0.3  
 **Date:** 2 November 2026  
-**Status:** Feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions approved by the Founder on 2 November 2026. Phase 0 is complete. Phase 1 implementation remains behind a separate explicit approval and cost gate; no code, account, database, storage bucket, external provider or deployment has been provisioned. See `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md` for binding decisions.  
+**Status:** Feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions approved by the Founder on 2 November 2026. Phase 0 is complete. Phase 1 secure-foundation planning is recorded in `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`; implementation remains behind a separate explicit approval and cost gate. No code, account, database, storage bucket, external provider or deployment has been provisioned. See `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md` for binding decisions.  
 **Applies to:** Shared written-response and human-grading experience for Grades 6–12 across approved curricula.  
 **Owner / academic authority:** Founder / project owner.
 
@@ -183,3 +183,6 @@ The approved 24-hour grading target applies to the shared human-grading workflow
 - Azure Document Intelligence pricing: https://azure.microsoft.com/en-us/pricing/details/document-intelligence/
 - Tesseract.js handwriting FAQ: https://github.com/naptha/tesseract.js/blob/master/docs/faq.md
 - Mozilla PDF.js getting started/API: https://mozilla.github.io/pdf.js/getting_started/ and https://mozilla.github.io/pdf.js/api/index.html
+
+
+**Version 0.3 Phase 1 planning cross-reference — 2 November 2026:** The detailed Phase 1 secure application foundation plan is now recorded separately. It is a documentation-only planning result and does not authorise implementation, provisioning, paid plans, real learner data, external OCR/AI/backup processing, merge or deployment. The later PDF/OCR/grading/timer phases remain dependent on passing Phase 1 security, private-file access, audit, backup/restore and deletion tests. Preserve all Phase 0 provider, file-limit, timer, SLA, role and retention decisions.
