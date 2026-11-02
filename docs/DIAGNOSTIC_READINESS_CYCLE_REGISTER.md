@@ -1,8 +1,8 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.8  
+**Version:** 1.9  
 **Last updated:** 2 November 2026  
-**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research, skill taxonomy/high-level blueprint, detailed item map/scoring specification, flagship feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are approved. Phase 0 is complete. Phase 1 secure application foundation is specified in `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`; this is a planning deliverable only and implementation/provisioning/costs require separate explicit Founder approval. Actual MYP diagnostic item authoring follows flagship feature implementation and pilot validation. Cycle 2 remains blocked.  
+**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research, skill taxonomy/high-level blueprint, detailed item map/scoring specification, flagship feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are approved. Phase 0 is complete. Phase 1 is specified in `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md` with a build-ready local-first plan in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`; the next code slice still requires separate explicit Founder implementation approval. Actual MYP diagnostic item authoring follows flagship feature implementation and pilot validation. Cycle 2 remains blocked.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
 **Purpose:** Track the founder-selected order for the diagnostic → evaluation/analytics → remedial-course layer independently of the existing Unit 1/content register.
 
@@ -100,3 +100,6 @@ The former Unit 1 rotation and queued migration plans are historical work queues
 
 
 **Phase 1 planning update — 2 November 2026:** The detailed secure-foundation specification is complete as a draft documentation deliverable. It sets out Auth and role controls, protected Worker APIs, PostgreSQL/RLS, private Storage, audit, encrypted backup/restore/deletion and synthetic-data security acceptance. No implementation has started. Cycle 1 remains the only active diagnostic cycle; MYP Year 4 item authoring remains gated until the flagship feature is implemented and pilot-validated. Cambridge Grade 6 remains blocked. No account, paid service, database, storage, OCR/AI endpoint, real-data processing, merge or deployment is authorised.
+
+
+**Phase 1A status — 2 November 2026:** Engineering preparation is complete. The proposed Phase 1B code slice is local-only: Supabase CLI/Auth/PostgreSQL/Storage with fictional seed records, React browser Auth, Worker API authentication, initial profile/role migration, RLS and synthetic CI tests. No remote service, billing, real learner data or external OCR/AI/backup processor is used. The next action is implementation only after separate Founder approval. Cycle 1 actual item authoring remains gated until the flagship feature is implemented and pilot-validated; Cycle 2 Cambridge Grade 6 stays blocked.
