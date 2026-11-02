@@ -5,6 +5,26 @@ SELECT no_plan();
 SELECT is(
   (
     SELECT count(*)::integer
+    FROM auth.users
+    WHERE instance_id = '00000000-0000-0000-0000-000000000000'::uuid
+      AND email IN (
+        'student.a@example.invalid',
+        'student.b@example.invalid',
+        'guardian.a@example.invalid',
+        'guardian.b@example.invalid',
+        'grader.a@example.invalid',
+        'grader.b@example.invalid',
+        'admin@example.invalid',
+        'owner@example.invalid',
+        'suspended.student@example.invalid'
+      )
+  ),
+  9,
+  'all seeded synthetic users belong to GoTrue local instance zero UUID'
+);
+SELECT is(
+  (
+    SELECT count(*)::integer
     FROM auth.identities AS identity
     JOIN auth.users AS auth_user ON auth_user.id = identity.user_id
     WHERE identity.provider = 'email'
