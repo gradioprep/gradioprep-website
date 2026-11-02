@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 1.6  
+**Version:** 1.7  
 **Approved:** 31 October 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
@@ -154,3 +154,6 @@ Drafting or passing automated tests alone does not complete or release a cycle. 
 
 
 **Version 1.6 Founder approval update — 2 November 2026:** The Founder approved the flagship feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decision register. Phase 0 is complete; Phase 1 secure foundation is next, subject to separate explicit implementation/budget approval. The advisory timer and no-pause/no-hard-stop rule, retention/deletion matrix, Supabase Mumbai architecture, Azure OCR intended Central India region, Workers AI stateless draft processing and R2 secondary-backup controls are defined in `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`. No implementation or real learner processing is authorised by documentation approval.
+
+
+**Version 1.7 Phase 1 foundation gate — 2 November 2026:** The Phase 1 secure application foundation has a detailed planning specification at `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`. The shared diagnostic cycle may not proceed to real diagnostic item authoring, learner records or live assessment until the applicable foundation, access-control, privacy and pilot gates pass. The Phase 1 plan requires synthetic identities and answers only, default-deny RLS, role/guardian/grader isolation, private object access, audit integrity, database-plus-object restore and retention/deletion tests. Founder approval of this planning document does not authorise implementation, account provisioning, paid services, real learner data, external OCR/AI processing, merge or deployment. The existing MYP Year 4 item-authoring gate and Cambridge Grade 6 block remain unchanged.
