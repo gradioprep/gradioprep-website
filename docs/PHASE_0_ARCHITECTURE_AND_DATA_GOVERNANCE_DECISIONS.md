@@ -30,14 +30,14 @@
 
 | Data class | Retention from course completion / task completion | End-of-period action |
 |---|---|---|
-| Original PDF, raw extraction and teacher-corrected transcript | While the learner is enrolled/active in the relevant course, then 12 months after course completion | Securely delete content and object copies; keep only a minimal non-content deletion audit where necessary |
-| Published feedback, rubric outcomes and feedback-version/edit audit history | 24 months after course completion | Delete or irreversibly anonymise, subject to a documented legal hold |
+| Original PDF, raw extraction and teacher-corrected transcript | While the learner is enrolled/active; then 12 months after formal course completion, recorded withdrawal or administrative course closure (whichever ends participation) | Securely delete content and object copies; keep only a minimal non-content deletion audit where necessary |
+| Published feedback, rubric outcomes and feedback-version/edit audit history | 24 months after formal course completion, recorded withdrawal or administrative course closure | Delete or irreversibly anonymise, subject to a documented legal hold |
 | Event-level task timer records | 12 months after the task attempt | Delete or retain only irreversibly de-identified aggregates |
 | Internally rendered page images/raster files | Temporary processing only | Delete immediately after the OCR request has completed/returned; never treat as a learner submission or long-term record |
 | Azure Document Intelligence analysis result | Retrieve, then call the Delete Analyze Result API as soon as the result has been safely ingested | Do not rely on the service's 24-hour availability window as GradiPrep retention; confirm deletion in synthetic tests |
 | Encrypted off-site file backups | Maximum 30 days | Expire backup copies within 30 days of the source record's scheduled deletion |
 
-A verified deletion request is actioned within **30 days**, subject to a valid legal hold or other mandatory retention obligation. Propagate deletion to application storage, derived OCR/transcript content and external processors where applicable. Backup copies expire within the stated maximum backup window; do not promise immediate physical erasure from immutable backups. Record the request, scope, completion and any exception without retaining deleted content. Audit/legal-hold exceptions require restricted access, reason and review date.
+A verified deletion request is actioned within **30 days**, subject to a valid legal hold or other mandatory retention obligation. For this policy, the course's formal end event is recorded completion, recorded withdrawal or administrative course closure; the post-course retention clock starts from that recorded event. An open/inactive course does not silently reset or suspend a deletion clock forever: prolonged inactivity must create a restricted owner review task to confirm continued enrolment or formally close the course, not an automatic deletion. Propagate deletion to application storage, derived OCR/transcript content and external processors where applicable. Backup copies expire within the stated maximum backup window; do not promise immediate physical erasure from immutable backups. Record the request, scope, completion and any exception without retaining deleted content. Audit/legal-hold exceptions require restricted access, reason and review date.
 
 ## 4. Roles and access boundaries
 
