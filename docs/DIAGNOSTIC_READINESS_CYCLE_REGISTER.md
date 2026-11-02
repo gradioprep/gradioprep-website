@@ -78,7 +78,7 @@ The diagnostic-first decision changes the immediate work order only. It does not
 - MYP Year 1 Unit 1 v4 on PR #14 remains founder-approved for its exact content, human academic review and age/level/context suitability. Unit-level rights/territory, image/context, manual accessibility and release gates remain open.
 - Cambridge Lower Secondary Stage 7 Unit 1 v1.3, its completed Stage 7 Top Five audit and controlled preview remain existing records. The Stage 7 teacher-pack/counter migration and its outstanding gates are deferred; Stage 7 is not Cycle 2.
 - CBSE Grade 6 Unit 1 v1.0 remains its exact-version academic-content candidate; its planned Top Five, pack/counter work and remaining review gates are deferred.
-- PRs #12, #14, #15, #16 and #17 remain separate draft/unmerged candidates/previews. PR #16's older base is not rebased or altered by this decision.
+- PRs #12, #14, #15, #16 and #17 remain separate draft/unmerged candidates/previews; PR #19 records the approved MYP diagnostic research/blueprint/item map, and PR #20 records the approved flagship feature plan. Both remain draft/unmerged. PR #16's older base is not rebased or altered by this decision.
 
 The former Unit 1 rotation and queued migration plans are historical work queues only. They do not determine the next task while the diagnostic cycles are active. After both diagnostic cycles are approved, the Founder / project owner will specify the next curriculum-content order and scope. This may include completing multiple units for Grade 9 IB MYP or Cambridge Grade 6 before switching to another level, or another explicitly selected order. The former Unit 1 rotation remains inactive unless explicitly reinstated by the founder.
 
