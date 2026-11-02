@@ -1,8 +1,8 @@
 # Flagship PDF Response, Teacher Grading and Timed Analytics — Implementation Plan
 
-**Version:** 0.1-draft  
+**Version:** 0.2  
 **Date:** 2 November 2026  
-**Status:** Phased plan approved by the Founder on 2 November 2026. The 24-hour grading target and priority bands are approved. This is a planning/specification record only: no code, database, authentication, storage bucket, external OCR account, AI endpoint, DNS, Cloudflare configuration or deployment has been changed.  
+**Status:** Feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions approved by the Founder on 2 November 2026. Phase 0 is complete. Phase 1 implementation remains behind a separate explicit approval and cost gate; no code, account, database, storage bucket, external provider or deployment has been provisioned. See `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md` for binding decisions.  
 **Applies to:** Shared written-response and human-grading experience for Grades 6–12 across approved curricula.  
 **Owner / academic authority:** Founder / project owner.
 
@@ -22,7 +22,7 @@
    - **Priority 3 — Normal:** more than 20 hours remaining.
    - **Overdue:** the deadline has passed. Display separately; do not hide overdue submissions.
 10. On successful grading, show both the actual turnaround and the time remaining before the 24-hour deadline (or the amount overdue). Show this immediately before the published feedback on both the teacher/grader and learner views.
-11. A student task countdown is required and its time data will feed analytics alongside task accuracy and rubric results. The detailed pause/resume, expiry and accommodation rules remain a separate policy decision.
+11. A student task countdown is required and feeds accuracy/rubric-linked analytics under the approved advisory timer policy in the Phase 0 decision register. No learner pause/resume, hard stop, auto-submit or response deletion is permitted.
 
 ## 2. Task configuration and response selection
 
@@ -42,7 +42,7 @@ The PDF option is a second response route, not a compulsory route and not a way 
 
 - Accept application/pdf only. Check file signature/magic bytes as well as extension and MIME type; do not trust browser-supplied content type.
 - Reject corrupt, password-locked, empty or unsupported PDFs with a clear learner-facing explanation and preserve any existing typed draft.
-- Establish a safe pilot file-size/page-count cap before implementation. Do not silently adopt an unlimited PDF size or page count.
+- Enforce the approved pilot cap of 10 MB and 10 pages per PDF. Validate page count and file size before acceptance; never silently expand either limit.
 - Use a random, non-identifying object key. Never use a learner's name or email in the object path.
 - Upload to a private storage bucket. Generate short-lived, submission-scoped access for authorised student/assigned grader/owner only. Do not publish public bucket URLs or expose permanent storage credentials.
 - Record upload start, completion and accepted submission separately. The 24-hour grading clock starts only at the server-confirmed accepted submission timestamp, not when an upload begins or OCR finishes.
@@ -55,7 +55,7 @@ Use Mozilla PDF.js in the application to render the original PDF and read its ex
 
 For scanned pages without a useful text layer, render each PDF page internally and send only the page raster needed for OCR to the approved OCR processor. The page raster is temporary processing data and must not be accepted or stored as a separate learner upload. Preserve page number/order and any returned word/line positions and confidence data.
 
-**Preferred pilot OCR candidate:** Microsoft Azure AI Document Intelligence Read (prebuilt-read), subject to a handwriting-quality pilot, regional availability, security/privacy review and explicit provider approval. Its current documentation describes printed and handwritten text extraction, page/word positions and language support including English. The F0 tier is limited: only the first two pages of a PDF are processed per request, the request/document limit is 4 MB, and the free analysis quota is 500 pages per month with a 1 request/second F0 limit. If used, design a one-page-at-a-time processing path for PDFs beyond two pages, with each temporary page image under the applicable 4 MB input limit; the overall free quota still remains 500 pages/month. Do not represent this as unlimited free OCR. Confirm the exact endpoint, page accounting, supported input and region in a live test before selecting it.
+**Selected pilot OCR integration:** Microsoft Azure AI Document Intelligence Read (`prebuilt-read`, v4 API), with Central India (`centralindia`) as the intended resource region. Confirm service availability for the exact resource at provisioning; do not silently fail over to another region. This is external processing, not in-house OCR. Complete the synthetic handwriting/print quality benchmark and privacy/terms/region review before any real learner content is sent. The F0 route is limited to the first two PDF pages per request, 4 MB input, 1 request/second and 500 pages/month. Process one internally rendered page image per request, each below 4 MB, and enforce the monthly quota. Quota exhaustion or OCR failure must never reject or destroy an accepted original PDF; the teacher grades from the original.
 
 Tesseract.js is not the default for handwriting: its project FAQ states that its models are built for printed text and generally perform poorly on handwriting. It may be evaluated for printed text only, but it must not silently replace handwriting-capable OCR.
 
@@ -93,7 +93,7 @@ The rubric must be available without navigating away from the submission. Grader
 - After a successful submit/edit, update the learner dashboard from the committed latest version and show a saved confirmation. Do not claim success before the save is confirmed.
 - Store the feedback version, author, timestamp, selected AI suggestion references, final teacher text, rubric version and edit reason in the protected audit trail. The learner sees only the current published feedback and the approved turnaround information, not internal drafts or private grader notes.
 
-**Initial AI candidate:** Cloudflare Workers AI, on-demand and quota-aware, with response caching and a non-AI fallback. Current Cloudflare documentation states a free allocation of 10,000 Neurons/day; above that, the Free plan does not continue processing, while the Paid plan charges for overage. Do not call a paid service or enable automatic overage without explicit approval.
+**Selected AI provider:** Cloudflare Workers AI for on-demand generation of exactly ten teacher-only draft suggestions, after synthetic evaluation/model selection. Use standard stateless inference only; do not enable AI Gateway logging/caching, batch/file uploads or other stateful content-retaining features, and do not write prompts/outputs to application logs. Its currently documented free allocation is 10,000 Neurons/day. Do not enable paid overage; when quota is exhausted or the service is unavailable, use manual teacher feedback. External-processing privacy/terms/consent gates apply before real learner content is sent.
 
 ## 6. Grading deadline and priority calculations
 
@@ -120,7 +120,7 @@ The analytics should link:
 
 Speed must not be treated as inherently better. Report accuracy and duration together; compare only sufficiently similar tasks/skills and do not infer ability, mastery or a learner rank from speed alone. Exclude upload/OCR processing time from the learner's writing duration.
 
-**Still awaiting Founder policy decision:** whether the countdown is advisory or hard-stop; whether time continues when the browser is in the background; whether pause/resume is permitted; how accommodations or connectivity interruptions affect the clock; and whether any timed task may auto-submit at zero. The safe proposed default is advisory warnings, preserve the response at zero, and do not auto-submit or delete work. This is a recommendation, not an approved rule.
+**Approved Phase 0 timer policy:** countdown is advisory, not a hard stop. The server starts and owns the clock; it continues through refresh, disconnection and hidden/background tabs. The first release has no learner pause/resume. At zero, preserve the saved response and never auto-submit, truncate, delete, lock or block saving/submission solely due to expiry. An authorised teacher/admin may grant a logged extension or untimed accommodation; record only the setting/reason category, authoriser and timestamp, never a diagnosis. A verified platform outage may receive an audited allowance adjustment or untimed attempt. Record only minimal start/save/submit/expiry/adjustment events—no keystrokes, screenshots, focus or browsing surveillance. Label the metric “elapsed response time”, not active attention; compare only comparable tasks/skills/rubrics/allowances and interpret alongside accuracy and human rubric evidence. Speed alone must not imply ability/mastery/rank. Upload/OCR duration is excluded.
 
 ## 8. Security, privacy and retention
 
@@ -131,11 +131,11 @@ Speed must not be treated as inherently better. Report accuracy and duration tog
 - Before sending any PDF page or answer to an external OCR/AI provider, review provider terms, processing region, retention, subprocessors, security, data-use policy and the required student/parent privacy notice/consent. Minimise submitted fields; do not send student name/email unless strictly necessary.
 - Define retention/deletion/anonymisation for original PDFs, raw OCR output, corrected transcripts, feedback versions and timing events before accepting real student records.
 
-**Still awaiting Founder policy decision:** retention period for submissions and audit history, deletion/anonymisation rules, OCR provider/region and whether an external service may process real student writing. No real-student OCR processing is approved by approval of this plan alone.
+**Approved Phase 0 retention policy:** original PDFs, raw extraction and corrected transcripts are retained while the learner remains active in the course and for 12 months after course completion; published feedback, rubric outcomes and version/edit audit history for 24 months after completion; event-level timer records for 12 months after the attempt. Delete internally rendered page images immediately after OCR processing. After retrieving an Azure result, call its Delete Analyze Result API promptly rather than relying on the 24-hour service retrieval window. Verified deletion requests are actioned within 30 days, subject to a documented legal hold. Encrypted off-site object backups expire within 30 days of source deletion. See the Phase 0 decision register for the data-class matrix and deletion controls.
 
 ## 9. Architecture and cost approach
 
-The current frontend is deployed using Cloudflare Workers, but the existing docs/DATA_MODEL.md already records Supabase as the proposed Auth/database direction, subject to vendor and plan review. Preserve that proposal as the baseline for evaluation; do not silently replace it with Cloudflare D1 or introduce a second database. Compare a consolidated Supabase Auth/Postgres/Storage pilot against Cloudflare storage options using the same security, backup, residency, retention and cost criteria.
+**Approved Phase 0 architecture:** keep Cloudflare Workers as the current application host and lightweight API/orchestration layer. Use a single Supabase project for Auth, PostgreSQL and primary private Storage in the specific Mumbai region (`ap-south-1`); do not use Cloudflare D1 or add another application database. Use Supabase Pro before real learner records, subject to fresh cost approval; Free is synthetic/development only. Because Supabase database backups do not include Storage objects, use encrypted Cloudflare R2 only as a secondary off-site PDF-object backup target. R2's APAC location hint is best-effort, not a data-residency guarantee; no real learner content may be replicated there until transfer/residency/privacy approval and key-management controls pass. Use PDF.js for digital text; Azure Document Intelligence Read (`prebuilt-read`, intended Central India region) is the selected scanned-page OCR integration, subject to live resource/region validation and synthetic quality/privacy gates. Cloudflare Workers AI is the selected on-demand teacher-draft service; use stateless standard inference without logging/caching/stateful features. Do not process real learner text with external services until the privacy, legal, contract, region and consent gates are passed. The complete choices are in `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`.
 
 Current published free-tier references checked on 2 November 2026 (verify again before actual provider selection):
 - **Supabase Free:** 500 MB database, 1 GB file storage, 50 MB max upload, 50,000 monthly active users and 5 GB cached + 5 GB uncached egress; free projects pause after one week of inactivity and automatic backups are not included. Suitable for a limited pilot only if storage and recovery controls are acceptable.
@@ -151,11 +151,11 @@ The project should remain within free tiers for the initial fictional/synthetic 
 
 | Phase | Scope | Completion gate |
 |---|---|---|
-| 0. Specification and architecture decision | Finalise data flow, provider comparison, security/privacy review, role matrix, file limits, timer policy and retention policy. Keep the schema provider-independent. | Founder approves the technical decision record and unresolved policies. |
-| 1. Secure application foundation | Implement approved authentication, student/grader/admin roles, protected API, database records, private object storage, assignment permissions and audit events. | Role-isolation, private-file access, backup/restore and deletion tests pass. |
+| 0. Specification and architecture decision | **Complete:** Founder-approved architecture, region/provider choices, role matrix, 10 MB/10-page file cap, advisory timer rules, retention/deletion matrix and external-processing gates are recorded in `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`. | Phase 0 decision register is approved; no resources or services are provisioned. |
+| 1. Secure application foundation | After separate Founder implementation approval, implement Supabase Auth, role assignments, protected API, PostgreSQL schema/RLS, private primary storage, assignment permissions, audit events and encrypted backup/restore/deletion controls using synthetic data. | Role-isolation, private-file access, database-plus-object restore and deletion/retention tests pass before OCR/AI or real-data work. |
 | 2. PDF submission and extraction | Implement PDF-only validation/upload, digital-text extraction, scanned-page OCR, page mapping, confidence/error states and original-vs-extracted teacher split-screen. | Synthetic PDF test set (digital, scanned, handwriting, rotated, faint, skewed, mixed blank pages, corrupt/password PDF) passes agreed quality and accessibility thresholds. |
 | 3. Teacher queue and grading | Implement chronological queue, 24-hour grading clock, approved priority bands, task/question metadata, expandable rubric, assigned grader workspace and status. | Due-time boundaries, oldest-first ordering, role permissions and overdue cases pass tests. |
-| 4. Feedback and learner dashboard | Add ten cached/on-demand AI drafts, human editing/custom comments, submit/edit, version audit and expandable learner feedback. | No AI auto-publication; edits become visible only after save confirmation; audit history works. |
+| 4. Feedback and learner dashboard | Add ten on-demand teacher-only AI drafts, human editing/custom comments, submit/edit, version audit and expandable learner feedback. | No AI auto-publication; no prompt/output content logging or stateful AI retention; edits become visible only after save confirmation; audit history works. |
 | 5. Countdown and analytics | Add task-specific countdown, elapsed-time events, timer policy, accuracy/score linkage and comparable accuracy-speed analytics. | Timer boundaries, pause/accommodation decisions, duration validity and analytics labels are human-validated. |
 | 6. MYP Year 4 controlled pilot | Test the full student → submission → OCR → grader → feedback → learner journey using synthetic data first and a separately approved limited pilot later. | Founder approval of exact flow, OCR quality, accessibility, privacy, workload and cost. |
 | 7. Grades 6–12 rollout | Reuse shared components and task metadata across approved curricula/grades, adapting rubrics and timing per task. | Each curriculum/grade receives its own content/assessment validation; no generic rubric or timing assumption is copied across tracks. |
@@ -164,10 +164,10 @@ The approved 24-hour grading target applies to the shared human-grading workflow
 
 ## 11. Immediate work order and gates
 
-1. The MYP Year 4 taxonomy, high-level blueprint and detailed task-level item map/scoring specification are Founder-approved. The map approval is recorded separately from this new feature.
-2. This flagship feature's phased plan and 24-hour grading target are approved. The feature is the next platform prerequisite before actual MYP diagnostic item authoring and before the later report/analytics experience is built around submitted responses.
-3. Complete Phase 0 provider comparison, technical architecture and privacy/retention/timer decision record. Do not create accounts, enable paid services, create buckets/databases, deploy or change DNS as part of this documentation approval.
-4. Actual coding/infrastructure execution requires the relevant Phase 0 decision and explicit implementation authorisation. Existing curriculum queues remain deferred; Cambridge Grade 6 research remains blocked until Cycle 1 is complete and the Founder directs the transition.
+1. The MYP Year 4 taxonomy, high-level blueprint and detailed task-level item map/scoring specification are Founder-approved.
+2. This flagship feature's phased plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are Founder-approved; Phase 0 is complete. See `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`.
+3. **Next: Phase 1 — secure application foundation.** This may begin only after separate explicit Founder implementation authorisation, including any Supabase Pro/R2/Azure/AI service costs. Use synthetic data only; no OCR/AI real-student processing, limited live pilot, merge, deployment or release is authorised by Phase 0 approval.
+4. After Phase 1 security, access, backup/restore and deletion tests pass, continue Phases 2–6 in order. Actual MYP diagnostic item authoring remains paused until the shared feature is implemented and pilot-validated. Existing curriculum queues remain deferred; Cambridge Grade 6 research remains blocked until Cycle 1 is complete and the Founder directs the transition.
 
 ## 12. Official technical references checked 2 November 2026
 
