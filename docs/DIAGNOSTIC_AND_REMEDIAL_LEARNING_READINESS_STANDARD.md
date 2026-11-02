@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 1.4  
+**Version:** 1.5  
 **Approved:** 31 October 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
@@ -124,9 +124,17 @@ Reuse the current React/TypeScript application structure, existing components, t
 
 Use synthetic test records and fictional answers in development/hosted previews. Do not place real student data in a public or unauthorised preview. Follow privacy/security controls before collecting or storing learner data.
 
+## 11A. Shared written-response, PDF grading and timed-analytics prerequisite
+
+The Founder approved the phased flagship feature plan on 2 November 2026. It is a shared platform capability for Grades 6–12, not a curriculum-specific assessment rule. For written tasks with an approved expected response greater than 20 words, the learner must be able to type or optionally submit a PDF. The original PDF remains authoritative; digital text is extracted in-house where possible, scanned handwriting uses an OCR provider only after privacy/quality approval, and teachers compare the source PDF with page-aligned extracted text. PDF is never a replacement for the original evidence.
+
+Human-graded submissions enter a chronological earliest-first queue with task/curriculum/grade context, expandable task rubric, original PDF/extracted-text split view, ten AI-drafted feedback suggestions and teacher-written/editable final feedback. Only human-submitted feedback is published to the learner dashboard. The approved grading target is 24 elapsed hours from server-accepted submission to first publication of final feedback. Priority 1 is more than 0 and up to 10 hours remaining; Priority 2 is more than 10 and up to 20 hours remaining; Priority 3 is more than 20 hours remaining; overdue items are separately identified. Feedback edits do not reset the original SLA.
+
+Task countdown and duration/accuracy analytics are required. The exact timer pause, expiry, background-tab and accommodation policy remains pending Founder decision. Refer to `docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md` for the binding feature plan. Actual code, authentication, storage/database provisioning and external OCR/AI account configuration have not been implemented or authorised by this documentation checkpoint. The feature is the next platform prerequisite before actual MYP Year 4 diagnostic item authoring. Cambridge Grade 6 remains blocked.
+
 ## 12. Completion gates for each cycle
 
-A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; the skill taxonomy and high-level blueprint are approved; the detailed task-level item map and assessment/scoring specification are approved; actual diagnostic items, keys, distractor rationales, exemplars and scoring anchors are authored and human-validated; scoring and priority rules are calibrated and approved; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the personalised remedial course contains five 60-minute sessions by default, or the justified number up to the maximum of seven 60-minute sessions, and maps every improvement area comprehensively; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
+A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; the skill taxonomy and high-level blueprint are approved; the detailed task-level item map and assessment/scoring specification are approved; actual diagnostic items, keys, distractor rationales, exemplars and scoring anchors are authored and human-validated; scoring and priority rules are calibrated and approved; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the response/assessment workflow supports the approved written-response modes, PDF/OCR comparison and teacher feedback where applicable, and captures task timing safely; the personalised remedial course contains five 60-minute sessions by default, or the justified number up to the maximum of seven 60-minute sessions, and maps every improvement area comprehensively; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
 
 Drafting or passing automated tests alone does not complete or release a cycle. No next cycle or curriculum-content queue begins automatically. No merge, production deployment or release occurs without separate explicit approval.
 
@@ -141,3 +149,6 @@ Drafting or passing automated tests alone does not complete or release a cycle. 
 
 
 **Version 1.4 cycle-design status update — 1 November 2026:** The Founder approved the Grade 9 IB MYP Year 4 skill taxonomy and high-level 90-minute/two-sitting blueprint on 1 November 2026. The next, separate gate is review of the detailed task-level item map and scoring specification in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md v0.1-draft. The map defines 35 proposed evidence observations across all six MYP skill areas and maps them to the 23 taxonomy subskills; the count is a design inventory, not 35 independent long questions. No actual questions, stimulus scripts, answer keys, final cut scores, calibrated rubrics, code, report UI or remedial lesson authoring has been approved. Item authoring may begin only after that map is approved, and remains distinct from diagnostic implementation and release.
+
+
+**Version 1.5 Founder decision update — 2 November 2026:** The Founder approved the flagship PDF-response, teacher-grading and timed-analytics phased plan and 24-hour grading target. The shared feature is the next platform prerequisite before actual MYP Year 4 diagnostic item authoring. Its timer expiry/pause and accommodation rules, data-retention policy, OCR provider/region and technical provider decision remain pending. No implementation has occurred.
