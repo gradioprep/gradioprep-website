@@ -1,8 +1,8 @@
 # Logical Data Model — Curriculum, Practice and Assessment
 
-**Status:** Proposed provider-independent implementation blueprint; no database or real learner records are connected yet. The Founder approved the PDF-response/grading/timer feature plan on 2 November 2026. The schema below is planning only; no database, authentication, storage bucket, OCR provider or persistent records have been created.
+**Status:** Provider-independent logical model with an approved first implementation mapping: Supabase Auth, PostgreSQL and private Storage in Mumbai (`ap-south-1`). Phase 0 architecture, timer and retention decisions were approved on 2 November 2026. This remains a planning model; no database, authentication, storage bucket, OCR/AI provider or persistent learner records have been created.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
-**Goal:** Define relationships and permission boundaries before connecting the current prototype to a database. This document is provider-independent; the master brief's proposed Supabase approach still requires a current plan/terms review before real student data is stored.
+**Goal:** Define relationships and permission boundaries before connecting the current prototype to a database. The logical schema remains provider-independent; the approved first implementation mapping is Supabase Auth/Postgres/Storage in Mumbai. Supabase Pro and all third-party service costs/terms must be reconfirmed and separately authorised before real learner data.
 
 **Revision policy:** Any approved or reviewed part of this data model may be amended later. Record the change and reason in version control, update dependent documentation, and re-review changes that affect curriculum alignment, answer-key privacy, learner records or authorization.
 
@@ -101,13 +101,13 @@ These are proposed logical records to extend the existing human-assessment model
 
 | Record | Purpose and key fields | Relationships / rules |
 |---|---|---|
-| submission_files | Submission ID, private storage object key, original file name for display, verified MIME/signature, byte size, page count, checksum, upload/accept timestamps, retention state | Original PDF only; no public URLs; object keys contain no student identity; file access is assignment-scoped |
+| submission_files | Submission ID, private storage object key, original file name for display, verified MIME/signature, byte size, page count, checksum, upload/accept timestamps, retention state | Original PDF only; maximum 10 MB and 10 pages in pilot; no public URLs; non-identifying object keys; assignment-scoped file access |
 | submission_page_extractions | Submission/file ID, page number, extraction method (PDF text layer/OCR), raw text, confidence/status, coordinates, processing timestamp, error metadata | One record per page/method/version; raw extraction is immutable; teacher-corrected transcript is separately versioned |
 | transcript_corrections | Submission/page ID, corrected text, editor, timestamp, change reason, source extraction version | Never overwrite original PDF or raw OCR; teacher correction is an auditable grading aid |
 | feedback_suggestion_sets | Submission ID, task/rubric version, model/prompt version, generation time, quota/cache status, ten proposed suggestions | Private teacher-only draft; not student-visible and never auto-published |
 | feedback_suggestion_items | Suggestion-set ID, item index, suggested text, optional criterion/skill tag | Exactly ten suggestions per successful generation set; selection/editing by the teacher is recorded in the published feedback version |
-| timer_sessions | Attempt/submission ID, task timing-rule version, started time, submitted time, elapsed duration, pause duration where approved, accommodation mode | Server timestamps are authoritative; upload/OCR time is excluded from writing duration; timer behaviour follows the approved policy version |
-| timer_events | Timer session ID, event type (start/pause/resume/expire/submit), server event time, minimal client context | Append-oriented; supports audit/recomputation; do not trust client-only elapsed values |
+| timer_sessions | Attempt/submission ID, task timing-rule version, server start/submit timestamps, elapsed response duration, authorised adjustment/extension and accommodation mode | Advisory countdown; server clock continues in background/after refresh; no learner pause/resume; upload/OCR time excluded; adjustments are authorised and audited |
+| timer_events | Timer session ID, event type (start/save/expire/submit/authorised adjustment), server event time, minimal non-content context | Append-oriented; no keystroke/focus/browsing surveillance; no learner pause/resume events; do not trust client-only elapsed values |
 | submission_sla_events | Submission ID, accepted time, due time, first feedback publication time, actual turnaround, remaining/overdue duration, SLA state | 24-hour target snapshot is fixed at acceptance; later edits do not reset the original SLA clock |
 | feedback_visibility_events | Feedback version ID, published/updated time, learner-visible state | Only human-submitted published feedback is visible to the learner; a successful edit updates the latest visible version and preserves history |
 
@@ -119,7 +119,7 @@ Use explicit state transitions such as draft → uploading → accepted/processi
 
 ### Provider and cost decision boundary
 
-The existing logical model keeps data provider-independent and records Supabase as the current proposed Auth/database direction. Compare Supabase Auth/Postgres/Storage with Cloudflare object storage before choosing. Do not add Cloudflare D1 as a second database or migrate the proposed provider without an explicit architecture decision. External OCR and AI providers require separate privacy, region, retention and free-tier verification before real learner data is sent.
+**Phase 0 provider decision:** implement the logical model first on a single Supabase project using Auth, PostgreSQL and primary private Storage in Mumbai (`ap-south-1`); do not use D1 or a second database. Use Supabase Pro for real learner records after separate cost approval. Cloudflare R2 is a secondary encrypted file-backup target only; its APAC location hint is best-effort and does not guarantee India residency. PDF.js is the in-app digital-text route; Azure Document Intelligence Read (`prebuilt-read`, intended Central India region) is the selected external handwriting OCR integration; Cloudflare Workers AI is the selected stateless on-demand teacher-draft service. All exact service terms, actual region availability, external processing, cross-border transfer, privacy notices/consent and cost gates must pass before real learner data or paid services are used. No providers are connected today.
 
 ## 3. Important constraints
 
@@ -131,8 +131,9 @@ The existing logical model keeps data provider-independent and records Supabase 
 - Prevent duplicate free human-review entitlement server-side. Changing course/topic must not grant another free assessment.
 - Only a trusted server operation may accept submissions, reserve/release credits, calculate due times, publish assessment versions or change privileged roles.
 - Store timestamps consistently (normally UTC) and render them in the learner's appropriate timezone.
-- Do not keep unnecessary sensitive details. Access, retention, consent and deletion practices must follow owner-approved privacy terms and the chosen provider's actual settings.
-- Avoid permanent deletion of records needed for grading/audit history; design a documented retention/anonymisation policy before production.
+- Do not keep unnecessary sensitive details. Enforce the approved Phase 0 retention matrix: original PDF/raw extraction/corrected transcript during course activity plus 12 months; published feedback/rubric results/version audit 24 months after course completion; event-level timing 12 months after attempt; verified deletion requests within 30 days subject to legal hold.
+- Delete temporary rendered page images immediately after OCR. Retrieve then delete Azure analysis results promptly using its Delete Analyze Result API. Expire encrypted off-site file backups within 30 days of source deletion.
+- Apply role-scoped deletion, legal-hold exception records and external processor deletion; do not claim instant erasure from immutable backups.
 
 ## 4. Access-control outline
 
@@ -161,8 +162,8 @@ Additional protections:
 1. Approve the content fields, pathway mapping workflow and initial pilot pathway.
 2. Create versioned content fixtures/types using the model; keep current demo content explicitly marked as fictional.
 3. Complete `docs/PILOT_UNIT_REVIEW.md` with the academic lead, confirm the applicable MYP guide and whether candidate strands A(ii), A(iii), both or neither fit, then use the readiness gates to track verified mapping, reviewed lesson/practice content and approvals before release.
-3. Choose and verify the database/auth provider's current terms, limits, backup and restore approach before creating production records.
-4. Create database migrations and enforce least-privilege access policies.
+3. Implement the approved Supabase Auth/Postgres/Storage mapping in Mumbai, after explicit Founder implementation and budget approval; reconfirm current plan/terms and exact region at provisioning.
+4. Create database migrations and enforce least-privilege access policies, PostgreSQL RLS and private storage access. Establish encrypted R2 secondary object backup only after region/transfer review; test database and file restore together.
 5. Add authentication and profiles, then pathway enrolments and published content reads.
 6. Add saved attempts and progress evidence; test that two learners cannot see each other's records.
 7. Add submission/credit/capacity transactions, then versioned grader workflow and admin-only QA.
@@ -171,4 +172,4 @@ Additional protections:
 **Not implemented:** These tables are a planning model, not a claim that authentication, a database, row-level security, saved records or real assessment workflows exist today.
 
 
-**2 November 2026 feature-plan note:** The logical records for PDF submissions, page extraction, feedback drafts/versions, grader SLA and timers have been added as a design proposal only. They do not authorise database creation, authentication, storage configuration or real learner data processing. The 24-hour grading target and priority bands are approved; timer expiry/pause rules and retention remain open decisions.
+**Phase 0 approval note — 2 November 2026:** The logical records for PDF submissions, page extraction, feedback drafts/versions, grader SLA and timers remain a design proposal only. Supabase Mumbai Auth/Postgres/Storage, Azure Read OCR (intended Central India), Cloudflare Workers AI stateless drafts, Cloudflare R2 encrypted secondary object backup, 10 MB/10-page file caps, advisory no-pause timer policy and the retention/deletion matrix are Founder-approved. These decisions do not authorise resource creation, paid plans, authentication/database/storage configuration or real learner data processing. Phase 1 implementation requires separate explicit approval.
