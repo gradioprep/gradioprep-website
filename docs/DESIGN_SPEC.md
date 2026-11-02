@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.8  
+**Version:** 2.9  
 **Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy, high-level blueprint, detailed task-level item map, flagship response/grading plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. The screens below are design requirements only and have not been implemented; Phase 1 has a separate implementation specification at `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`; implementation still requires separate explicit Founder approval.  
 **Last updated:** 2 November 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -551,3 +551,8 @@ The approved timer is advisory and server-authoritative; it continues through re
 ## 13. Secure application foundation — design dependency, 2 November 2026
 
 The interface must treat authorization as a server/database responsibility, not a visual state. Hiding navigation, answer keys, grader controls or learner records in React is never a security boundary. Authenticated screens must render only data returned by the protected API for the current actor. Student views are limited to the learner's own records and published feedback; guardian views require a verified authorised link; grader views are assignment-scoped; admin/owner controls are separately protected and audited. Private PDF access uses short-lived, permission-checked links. Loading, expired-session, forbidden, revoked-access and unavailable-service states must be clear and accessible without exposing record existence or private content. These are design dependencies; no authentication or protected screen has been implemented by this documentation update. See the Phase 1 implementation specification for the binding role matrix and API/RLS controls.
+
+
+## 14. Authentication and protected API design dependency — 2 November 2026
+
+The Phase 1A build-ready plan (`docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`) specifies the minimum initial authenticated journey: React sign-in/sign-out and session states; same-origin Worker API; protected current-user profile/role response; explicit anonymous, expired, forbidden and revoked-session states. The static assets and current route-driven navigation must remain unchanged outside authenticated routes. Role-driven controls are display affordances only; server authorization and PostgreSQL RLS decide access. Do not expose roles as a client-selectable signup field, show a guardian view without a verified link, or show grader tools without an active assignment. These requirements do not imply any screen or authentication is currently implemented.
