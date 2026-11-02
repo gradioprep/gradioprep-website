@@ -13,7 +13,8 @@ VALUES
   ('55555555-5555-4555-8555-555555555555', 'authenticated', 'authenticated', 'grader.a@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Grader A"}'::jsonb, now(), now(), false, false),
   ('66666666-6666-4666-8666-666666666666', 'authenticated', 'authenticated', 'grader.b@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Grader B"}'::jsonb, now(), now(), false, false),
   ('77777777-7777-4777-8777-777777777777', 'authenticated', 'authenticated', 'admin@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Admin"}'::jsonb, now(), now(), false, false),
-  ('88888888-8888-4888-8888-888888888888', 'authenticated', 'authenticated', 'owner@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Owner"}'::jsonb, now(), now(), false, false)
+  ('88888888-8888-4888-8888-888888888888', 'authenticated', 'authenticated', 'owner@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Owner"}'::jsonb, now(), now(), false, false),
+  ('99999999-9999-4999-8999-999999999999', 'authenticated', 'authenticated', 'suspended.student@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Suspended Student"}'::jsonb, now(), now(), false, false)
 ON CONFLICT (id) DO NOTHING;
 
 -- Seed is run as the local database owner. Remove default student role from synthetic staff.
@@ -63,3 +64,8 @@ VALUES
   ('11111111-1111-4111-8111-111111111111', 'synthetic-ib-myp-year-4', 'active'),
   ('22222222-2222-4222-8222-222222222222', 'synthetic-cambridge-grade-6', 'active')
 ON CONFLICT (learner_id, pathway_id) DO NOTHING;
+
+-- An otherwise valid Auth identity with a suspended application profile.
+UPDATE public.profiles
+SET account_status = 'suspended'
+WHERE user_id = '99999999-9999-4999-8999-999999999999';

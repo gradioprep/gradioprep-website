@@ -85,4 +85,32 @@ test.describe("Phase 1B account foundation", () => {
     await expect(page.getByRole("heading", { name: /create a student account/i })).toBeVisible();
     expect(pageErrors).toEqual([]);
   });
+
+  test("suspended account cannot read or update protected profile data", async ({ page }) => {
+    let authorization = "";
+    page.on("request", request => {
+      if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
+        authorization = request.headers()["authorization"] ?? "";
+      }
+    });
+
+    await page.goto("/account");
+    await page.getByLabel("Email address").fill("suspended.student@example.invalid");
+    await page.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
+    await page.getByRole("button", { name: "Sign in" }).click();
+
+    await expect(page.getByRole("heading", { name: "Account access is unavailable." })).toBeVisible();
+    await expect(page.getByRole("alert")).toContainText("This account is unavailable.");
+    expect(authorization).toMatch(/^Bearer\s+\S+/);
+
+    const update = await page.request.patch("/api/v1/me", {
+      headers: { Authorization: authorization },
+      data: { display_name: "Suspended Profile Tampering" },
+    });
+    expect(update.status()).toBe(403);
+    await expect(update.json()).resolves.toMatchObject({ error: "account_unavailable" });
+
+    await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
+  });
 });

@@ -4,11 +4,14 @@ SELECT no_plan();
 
 SET LOCAL ROLE anon;
 SELECT throws_ok(
-  $$SELECT * FROM public.profiles$$,
+  $SELECT * FROM public.profiles$,
   '42501',
   NULL,
   'anonymous users cannot read profiles'
 );
+SELECT throws_ok($SELECT * FROM public.role_assignments$, '42501', NULL, 'anonymous users cannot read role assignments');
+SELECT throws_ok($SELECT * FROM public.guardian_learner_links$, '42501', NULL, 'anonymous users cannot read guardian links');
+SELECT throws_ok($SELECT * FROM public.course_enrolments$, '42501', NULL, 'anonymous users cannot read course enrolments');
 RESET ROLE;
 
 SET LOCAL ROLE authenticated;
@@ -49,6 +52,25 @@ SELECT is((SELECT count(*)::integer FROM public.profiles), 1, 'revoked guardian 
 SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 0, 'revoked guardian cannot see learner enrolments');
 RESET ROLE;
 
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '99999999-9999-4999-8999-999999999999', true);
+SELECT set_config('request.jwt.claims', '{"sub":"99999999-9999-4999-8999-999999999999","role":"authenticated"}', true);
+SELECT is((SELECT count(*)::integer FROM public.profiles), 0, 'suspended user cannot read their own profile');
+SELECT is((SELECT count(*)::integer FROM public.role_assignments), 0, 'suspended user cannot read role assignments');
+SELECT is((SELECT count(*)::integer FROM public.guardian_learner_links), 0, 'suspended user cannot read guardian links');
+SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 0, 'suspended user cannot read course enrolments');
+SELECT is(
+  (WITH changed AS (
+    UPDATE public.profiles SET display_name = 'Should Not Be Saved'
+    WHERE user_id = auth.uid()
+    RETURNING 1
+  ) SELECT count(*)::integer FROM changed),
+  0,
+  'suspended user cannot update their profile'
+);
+RESET ROLE;
+
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);
 SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated"}', true);
@@ -68,7 +90,8 @@ RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated"}', true);
-SELECT is((SELECT count(*)::integer FROM public.profiles), 8, 'owner can read all synthetic profiles');
+SELECT is((SELECT count(*)::integer FROM public.profiles), 9, 'active owner can read all synthetic profiles including suspended accounts');
+SELECT is((SELECT count(*)::integer FROM public.profiles WHERE user_id = '99999999-9999-4999-8999-999999999999'), 1, 'active owner can inspect a suspended account');
 SELECT is((SELECT count(*)::integer FROM public.role_assignments WHERE role = 'owner'), 1, 'only the explicitly seeded owner has the owner role');
 RESET ROLE;
 

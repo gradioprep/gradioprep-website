@@ -129,6 +129,21 @@ AS $$
   );
 $$;
 
+CREATE OR REPLACE FUNCTION private.current_account_is_active()
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.profiles AS profile
+    WHERE profile.user_id = (SELECT auth.uid())
+      AND profile.account_status = 'active'
+  );
+$;
+
 CREATE OR REPLACE FUNCTION private.can_view_learner(target_learner_id uuid, required_scope text)
 RETURNS boolean
 LANGUAGE sql
@@ -153,9 +168,11 @@ AS $$
 $$;
 
 REVOKE ALL ON FUNCTION private.current_user_has_role(public.app_role) FROM PUBLIC;
+REVOKE ALL ON FUNCTION private.current_account_is_active() FROM PUBLIC;
 REVOKE ALL ON FUNCTION private.can_view_learner(uuid, text) FROM PUBLIC;
 GRANT USAGE ON SCHEMA private TO authenticated;
 GRANT EXECUTE ON FUNCTION private.current_user_has_role(public.app_role) TO authenticated;
+GRANT EXECUTE ON FUNCTION private.current_account_is_active() TO authenticated;
 GRANT EXECUTE ON FUNCTION private.can_view_learner(uuid, text) TO authenticated;
 
 CREATE OR REPLACE FUNCTION private.set_updated_at()
@@ -268,6 +285,7 @@ REVOKE ALL ON ALL TABLES IN SCHEMA private FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON ALL FUNCTIONS IN SCHEMA private FROM PUBLIC, anon, authenticated;
 GRANT USAGE ON SCHEMA private TO authenticated;
 GRANT EXECUTE ON FUNCTION private.current_user_has_role(public.app_role) TO authenticated;
+GRANT EXECUTE ON FUNCTION private.current_account_is_active() TO authenticated;
 GRANT EXECUTE ON FUNCTION private.can_view_learner(uuid, text) TO authenticated;
 
 -- Public tables: reset privileges and then grant only the columns/operations needed.
@@ -290,37 +308,49 @@ ALTER TABLE public.course_enrolments ENABLE ROW LEVEL SECURITY;
 CREATE POLICY profiles_select_scoped
   ON public.profiles FOR SELECT TO authenticated
   USING (
-    user_id = (SELECT auth.uid())
-    OR private.current_user_has_role('owner')
-    OR private.can_view_learner(user_id, 'profile')
+    private.current_account_is_active()
+    AND (
+      user_id = (SELECT auth.uid())
+      OR private.current_user_has_role('owner')
+      OR private.can_view_learner(user_id, 'profile')
+    )
   );
 
 CREATE POLICY profiles_update_own_display_name
   ON public.profiles FOR UPDATE TO authenticated
-  USING (user_id = (SELECT auth.uid()))
-  WITH CHECK (user_id = (SELECT auth.uid()));
+  USING (private.current_account_is_active() AND user_id = (SELECT auth.uid()))
+  WITH CHECK (private.current_account_is_active() AND user_id = (SELECT auth.uid()));
 
 CREATE POLICY role_assignments_select_own_or_owner
   ON public.role_assignments FOR SELECT TO authenticated
   USING (
-    user_id = (SELECT auth.uid())
-    OR private.current_user_has_role('owner')
+    private.current_account_is_active()
+    AND (
+      user_id = (SELECT auth.uid())
+      OR private.current_user_has_role('owner')
+    )
   );
 
 CREATE POLICY guardian_links_select_participant_or_owner
   ON public.guardian_learner_links FOR SELECT TO authenticated
   USING (
-    guardian_id = (SELECT auth.uid())
-    OR learner_id = (SELECT auth.uid())
-    OR private.current_user_has_role('owner')
+    private.current_account_is_active()
+    AND (
+      guardian_id = (SELECT auth.uid())
+      OR learner_id = (SELECT auth.uid())
+      OR private.current_user_has_role('owner')
+    )
   );
 
 CREATE POLICY course_enrolments_select_scoped
   ON public.course_enrolments FOR SELECT TO authenticated
   USING (
-    learner_id = (SELECT auth.uid())
-    OR private.current_user_has_role('owner')
-    OR private.can_view_learner(learner_id, 'progress')
+    private.current_account_is_active()
+    AND (
+      learner_id = (SELECT auth.uid())
+      OR private.current_user_has_role('owner')
+      OR private.can_view_learner(learner_id, 'progress')
+    )
   );
 
 -- Do not grant INSERT/DELETE or role/link/enrolment writes to browser identities.

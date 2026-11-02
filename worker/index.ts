@@ -103,6 +103,13 @@ async function authenticatedMe(request: Request, env: WorkerEnv): Promise<Respon
     }, 500);
   }
 
+  if (!profile || profile.account_status !== "active") {
+    return jsonResponse({
+      error: "account_unavailable",
+      message: "This account is unavailable. Sign out or contact the project administrator.",
+    }, 403);
+  }
+
   return jsonResponse({
     user: { id: userId },
     profile,
@@ -156,7 +163,10 @@ async function updateProfile(request: Request, env: WorkerEnv): Promise<Response
     .maybeSingle();
 
   if (updateError || !profile) {
-    return jsonResponse({ error: "profile_update_failed" }, 403);
+    return jsonResponse({
+      error: "account_unavailable",
+      message: "This account is unavailable for profile changes.",
+    }, 403);
   }
 
   return jsonResponse({ profile });

@@ -21,6 +21,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
   const [password, setPassword] = useState("");
   const [newDisplayName, setNewDisplayName] = useState("");
   const [account, setAccount] = useState<CurrentAccount | null>(null);
+  const [accountUnavailable, setAccountUnavailable] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -28,6 +29,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
   useEffect(() => {
     let active = true;
     setAccount(null);
+    setAccountUnavailable(false);
     setError("");
     setMessage("");
 
@@ -37,8 +39,11 @@ export default function AccountPage({ go }: { go: Navigate }) {
       headers: { Authorization: `Bearer ${auth.session.access_token}` },
       cache: "no-store",
     }).then(async (response) => {
-      const result = await response.json() as CurrentAccount | { message?: string };
+      const result = await response.json() as CurrentAccount | { error?: string; message?: string };
       if (!response.ok) {
+        if (response.status === 403 && "error" in result && result.error === "account_unavailable") {
+          setAccountUnavailable(true);
+        }
         throw new Error("message" in result && result.message
           ? result.message
           : "The account profile could not be loaded.");
@@ -99,8 +104,9 @@ export default function AccountPage({ go }: { go: Navigate }) {
         },
         body: JSON.stringify({ display_name: newDisplayName }),
       });
-      const result = await response.json() as { profile?: CurrentAccount["profile"]; message?: string };
+      const result = await response.json() as { error?: string; profile?: CurrentAccount["profile"]; message?: string };
       if (!response.ok || !result.profile) {
+        if (response.status === 403 && result.error === "account_unavailable") setAccountUnavailable(true);
         throw new Error(result.message ?? "Your display name could not be saved.");
       }
       setAccount((current) => current ? { ...current, profile: result.profile ?? null } : current);
@@ -119,6 +125,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
     try {
       await auth.signOut();
       setAccount(null);
+      setAccountUnavailable(false);
       setMessage("You are signed out.");
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "We could not sign you out.");
@@ -140,7 +147,12 @@ export default function AccountPage({ go }: { go: Navigate }) {
       <p>This is an intentional safety state. The public preview can show the real website interface, while account authentication and permission tests run against the local synthetic database in the development environment.</p>
       <p>No password or account details should be entered here.</p>
       <button className="proto-action secondary" type="button" onClick={() => go("home")}>← Back to homepage</button>
-    </section> : auth.loading ? <section className="proto-panel proto-account-card" role="status">Checking your sign-in status…</section> : auth.session ? <section className="proto-panel proto-account-card">
+    </section> : auth.loading ? <section className="proto-panel proto-account-card" role="status">Checking your sign-in status…</section> : auth.session && accountUnavailable ? <section className="proto-panel proto-account-card">
+      <span className="proto-account-icon">i</span>
+      <h2>Account access is unavailable.</h2>
+      <p>This account cannot access protected GradiPrep records. Sign out to leave this session.</p>
+      <button className="proto-account-signout" type="button" onClick={signOut} disabled={submitting}>Sign out</button>
+    </section> : auth.session ? <section className="proto-panel proto-account-card">
       <div className="proto-account-card-heading">
         <div><p className="proto-eyebrow"><span />SIGNED-IN ACCOUNT</p><h2>{account?.profile?.display_name ?? "Your account"}</h2></div>
         <span className="proto-account-status">{account?.profile?.account_status ?? "Loading"}</span>
