@@ -1,6 +1,6 @@
 # Logical Data Model — Curriculum, Practice and Assessment
 
-**Status:** Provider-independent logical model with an approved first implementation mapping: Supabase Auth, PostgreSQL and private Storage in Mumbai (`ap-south-1`). Phase 0 architecture, timer and retention decisions were approved on 2 November 2026. This remains a planning model; no database, authentication, storage bucket, OCR/AI provider or persistent learner records have been created.
+**Status:** Provider-independent logical model with an approved first implementation mapping: Supabase Auth, PostgreSQL and private Storage in Mumbai (`ap-south-1`). Phase 0 architecture, timer and retention decisions were approved on 2 November 2026. This remains a planning model; no database, authentication, storage bucket, OCR/AI provider or persistent learner records have been created. The detailed Phase 1 security implementation blueprint is `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`; it maps this logical model to Supabase/PostgreSQL and does not replace the logical domain definitions.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Goal:** Define relationships and permission boundaries before connecting the current prototype to a database. The logical schema remains provider-independent; the approved first implementation mapping is Supabase Auth/Postgres/Storage in Mumbai. Supabase Pro and all third-party service costs/terms must be reconfirmed and separately authorised before real learner data.
 
@@ -173,3 +173,8 @@ Additional protections:
 
 
 **Phase 0 approval note — 2 November 2026:** The logical records for PDF submissions, page extraction, feedback drafts/versions, grader SLA and timers remain a design proposal only. Supabase Mumbai Auth/Postgres/Storage, Azure Read OCR (intended Central India), Cloudflare Workers AI stateless drafts, Cloudflare R2 encrypted secondary object backup, 10 MB/10-page file caps, advisory no-pause timer policy and the retention/deletion matrix are Founder-approved. These decisions do not authorise resource creation, paid plans, authentication/database/storage configuration or real learner data processing. Phase 1 implementation requires separate explicit approval.
+
+
+## Phase 1 security implementation cross-reference — 2 November 2026
+
+The Phase 1 specification is the implementation-level companion to this provider-independent model. It requires database-backed role assignments, guardian-link verification, assignment-scoped grader access, immutable task/rubric/submission version references, UTC timestamps, transactional state changes, default-deny RLS and private Storage policies. It also specifies API actor derivation from verified identity, server-owned fields, audit records, deletion controls and synthetic cross-role tests. The Phase 1 specification does not authorise provisioning or real learner data and must not be used to bypass the separate Founder implementation/budget gate. Preserve this document's logical relationships and data definitions if physical table names or migrations are refined.
