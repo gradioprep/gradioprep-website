@@ -12,8 +12,9 @@ permissions:
 
 jobs:
   build:
-    name: TypeScript and Vite production build
+    name: Local Supabase security, TypeScript and browser tests
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -22,15 +23,32 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: "22"
+          cache: npm
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Build application
+      - name: Start isolated local Supabase services
+        run: npx supabase start --exclude studio,mail,analytics,realtime,functions
+
+      - name: Write ignored local-only environment files
+        run: node scripts/write-local-supabase-env.mjs
+
+      - name: Reset local database and load synthetic fixtures
+        run: npx supabase db reset --local
+
+      - name: Run PostgreSQL Row Level Security tests
+        run: npx supabase test db --local
+
+      - name: Build and type-check browser and Worker
         run: npm run build
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run browser navigation tests
+      - name: Run browser navigation, account and API tests
         run: npm run test:e2e
+
+      - name: Stop local Supabase
+        if: always()
+        run: npx supabase stop --no-backup || true
