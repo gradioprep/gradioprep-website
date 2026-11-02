@@ -1,8 +1,8 @@
 # Grade 9 IB MYP Year 4 — Diagnostic Skill Taxonomy and Blueprint
 
-**Version:** 0.2-draft  
-**Date:** 1 November 2026  
-**Status:** The Founder approved the taxonomy and high-level 90-minute blueprint on 1 November 2026. The detailed task-level item map and scoring specification is now a separate draft awaiting Founder review. No actual questions, item keys, final scoring thresholds, implementation or learner release are approved.  
+**Version:** 0.2  
+**Date:** 2 November 2026  
+**Status:** Founder-approved taxonomy and high-level 90-minute blueprint (1 November 2026); the detailed task-level item map and scoring specification was approved on 2 November 2026. Actual question/stimulus authoring is sequenced after the approved flagship PDF-response/grading/timer feature is implemented and its task metadata is validated. No actual questions, item keys, final scoring thresholds, diagnostic code or learner release are approved.  
 **Target:** Grade 9 — IB MYP Language and Literature (Founder-confirmed MYP Year 4)  
 **Purpose:** Specify the transferable language-and-literature skills to diagnose before curriculum-unit learning, and propose an evidence-balanced assessment blueprint.
 
@@ -145,6 +145,9 @@ The future teacher/editor pack must include, for each improvement area: diagnost
 
 The Founder approved the taxonomy and high-level blueprint on 1 November 2026, including all 23 proposed subskills, the six MYP skill areas, four criterion-aligned profiles and the 90-minute/two-sitting task structure. This approval does not make the GradiPrep taxonomy an official IB Year 4 descriptor set; the Year 4 progression caveat in Section 1 remains binding.
 
-The detailed task-level item map and scoring specification is recorded in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md v0.1-draft and is the current Founder review gate. Actual item wording, stimulus authoring, answer keys, distractors, model responses, final rubric anchors, scoring calibration and code implementation remain gated until that map is approved and the subsequent authoring plan is reviewed.
+The detailed task-level item map and scoring specification is recorded in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md v0.1 and was approved by the Founder on 2 November 2026. Actual item wording, stimulus authoring, answer keys, distractors, model responses, final rubric anchors and scoring calibration are sequenced after the approved flagship PDF-response/grading/timer feature is implemented and pilot-validated. Code implementation and learner release remain separate approval gates.
 
 The detailed map must preserve the proposed two 45-minute sittings, all six MYP skill areas and all four criterion profiles. It must not imply official IB grades, create unsupported score thresholds, use provider rankings in learner-facing data, or relax the existing rights, accessibility, human-review or release controls. No student-facing diagnostic, report UI, remedial lessons, integration, merge or release is authorised by approval of the taxonomy/blueprint alone.
+
+
+**Founder decision update — 2 November 2026:** The detailed MYP Year 4 item map/scoring specification is approved. The flagship PDF-response, teacher-grading and timed-analytics plan is now the active platform prerequisite before actual diagnostic item authoring. No existing task content or application code was changed by this approval.
