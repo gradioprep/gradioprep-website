@@ -17,6 +17,40 @@ VALUES
   ('99999999-9999-4999-8999-999999999999', 'authenticated', 'authenticated', 'suspended.student@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Suspended Student"}'::jsonb, now(), now(), false, false)
 ON CONFLICT (id) DO NOTHING;
 
+-- Supabase runs auth-schema migrations before this seed file. The built-in
+-- email-identity backfill has therefore already run before these synthetic
+-- auth.users rows are inserted. Create the matching GoTrue identities here so
+-- the seeded email/password accounts can authenticate in local tests.
+INSERT INTO auth.identities (
+  id, provider_id, user_id, identity_data, provider, created_at, updated_at
+)
+SELECT
+  gen_random_uuid(),
+  users.id::text,
+  users.id,
+  jsonb_build_object(
+    'sub', users.id::text,
+    'email', users.email,
+    'email_verified', true
+  ),
+  'email',
+  now(),
+  now()
+FROM auth.users AS users
+WHERE users.email IN (
+  'student.a@example.invalid',
+  'student.b@example.invalid',
+  'guardian.a@example.invalid',
+  'guardian.b@example.invalid',
+  'grader.a@example.invalid',
+  'grader.b@example.invalid',
+  'admin@example.invalid',
+  'owner@example.invalid',
+  'suspended.student@example.invalid'
+)
+AND users.encrypted_password <> ''
+ON CONFLICT (provider_id, provider) DO NOTHING;
+
 -- Seed is run as the local database owner. Remove default student role from synthetic staff.
 DELETE FROM public.role_assignments
 WHERE user_id IN (
