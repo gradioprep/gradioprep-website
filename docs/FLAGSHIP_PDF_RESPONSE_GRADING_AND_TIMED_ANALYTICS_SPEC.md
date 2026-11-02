@@ -1,6 +1,6 @@
 # Flagship PDF Response, Teacher Grading and Timed Analytics — Implementation Plan
 
-**Version:** 0.3  
+**Version:** 0.4  
 **Date:** 2 November 2026  
 **Status:** Feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions approved by the Founder on 2 November 2026. Phase 0 is complete. Phase 1 secure-foundation planning is recorded in `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`; implementation remains behind a separate explicit approval and cost gate. No code, account, database, storage bucket, external provider or deployment has been provisioned. See `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md` for binding decisions.  
 **Applies to:** Shared written-response and human-grading experience for Grades 6–12 across approved curricula.  
@@ -186,3 +186,6 @@ The approved 24-hour grading target applies to the shared human-grading workflow
 
 
 **Version 0.3 Phase 1 planning cross-reference — 2 November 2026:** The detailed Phase 1 secure application foundation plan is now recorded separately. It is a documentation-only planning result and does not authorise implementation, provisioning, paid plans, real learner data, external OCR/AI/backup processing, merge or deployment. The later PDF/OCR/grading/timer phases remain dependent on passing Phase 1 security, private-file access, audit, backup/restore and deletion tests. Preserve all Phase 0 provider, file-limit, timer, SLA, role and retention decisions.
+
+
+**Version 0.4 Phase 1A engineering handoff — 2 November 2026:** The build-ready preparation for Phase 1 is in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`. The first coding slice is local synthetic-only Auth, protected Worker API, profiles/roles and RLS. It does not implement PDF submission, OCR, grading, AI suggestions, timer analytics or remote backups. The flagship feature phases remain downstream of the secure foundation and their separate privacy, regional, quality and cost gates. Actual MYP Year 4 diagnostic item authoring remains gated until the flagship feature is implemented and pilot-validated; Cambridge Grade 6 remains blocked.
