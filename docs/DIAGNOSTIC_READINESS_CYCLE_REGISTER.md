@@ -1,8 +1,8 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.5  
-**Last updated:** 1 November 2026  
-**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research and skill taxonomy/high-level blueprint are approved. The detailed task-level item map and scoring specification is submitted for Founder review; actual item authoring, scoring calibration and implementation remain gated. Cycle 2 remains blocked.  
+**Version:** 1.6  
+**Last updated:** 2 November 2026  
+**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research, skill taxonomy/high-level blueprint and detailed task-level item map/scoring specification are approved. The phased flagship PDF-response, teacher-grading and timed-analytics plan and 24-hour grading target are also approved. This shared feature is the next platform prerequisite before actual MYP diagnostic item authoring; no implementation has started. Timer policy, retention and technical provider decision remain open. Cycle 2 remains blocked.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
 **Purpose:** Track the founder-selected order for the diagnostic → evaluation/analytics → remedial-course layer independently of the existing Unit 1/content register.
 
@@ -60,8 +60,10 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 | Official grade/year/course scope locked | Complete (Founder-confirmed) | Blocked |
 | Diagnostic Top Five research | Complete; Founder-approved | Blocked |
 | Skill taxonomy and high-level blueprint approved | Complete; Founder-approved 1 Nov 2026 | Blocked |
-| Detailed task-level item map and scoring specification | Draft submitted; Founder review pending | Blocked |
-| Actual diagnostic item authoring and teacher/editor scoring pack | Not started; gated on item-map approval | Blocked |
+| Detailed task-level item map and scoring specification | Complete; Founder-approved 2 Nov 2026 | Blocked |
+| Flagship PDF response, teacher grading and timed analytics plan | Complete; phased plan and 24-hour grading target approved 2 Nov 2026 | Blocked |
+| Flagship feature implementation and pilot QA | Not started; Phase 0 architecture/privacy decisions and implementation gate pending | Blocked |
+| Actual diagnostic item authoring and teacher/editor scoring pack | Paused until the shared response/task metadata and core feature are implemented and validated | Blocked |
 | Diagnostic built and validated | Not started | Blocked |
 | Evaluation report and analytics built/validated | Not started | Blocked |
 | Personalised remedial course (five sessions preferred; six/seven only if analytics justify) and teacher pack complete | Not started | Blocked |
@@ -83,7 +85,7 @@ The former Unit 1 rotation and queued migration plans are historical work queues
 
 ## 5. Cycle 1 — Grade 9 IB MYP Language and Literature
 
-**Status:** The Top Five provider research was approved on 31 October 2026. The skill taxonomy and high-level 90-minute/two-sitting blueprint were approved on 1 November 2026; see `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md`. The detailed task-level item map and scoring specification is now submitted for Founder review in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md`. Do not author actual diagnostic questions, final scoring rubrics or implement the diagnostic until this map is approved and the next authoring plan is reviewed. Provider percentile evidence remains internal in docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. The official IB programme/context sources are separate from the five independent providers.
+**Status:** The Top Five provider research was approved on 31 October 2026. The skill taxonomy and high-level 90-minute/two-sitting blueprint were approved on 1 November 2026; see `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md`. The detailed task-level item map and scoring specification was approved on 2 November 2026; see `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md`. The shared PDF-response, teacher-grading and timed-analytics phased plan is the next platform prerequisite before actual item authoring; see `docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md`. The 24-hour grading target and priority bands are approved. Actual implementation and question authoring have not started. Provider percentile evidence remains internal in docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. The official IB programme/context sources are separate from the five independent providers.
 
 **Confirmed placement:** Grade 9 = MYP Year 4, as explicitly confirmed by the Founder for the relevant school/programme context.
 
@@ -94,4 +96,4 @@ The former Unit 1 rotation and queued migration plans are historical work queues
 **Founder decision — 31 October 2026:** The Top Five provider research is approved. Provider percentiles use the internal 50/50 actual test-taker / independent research method; all ranking data and methodology are excluded from learner/parent reports, including logged-in views. The draft MYP Year 4 taxonomy/blueprint is submitted for review. Five remedial sessions are preferred; extend to six or seven only when evaluation analytics justify it.
 
 
-**Founder approval update — 1 November 2026:** The Founder approved the MYP Year 4 taxonomy and high-level diagnostic blueprint. The detailed item map/scoring specification is the active Founder review gate. It contains 35 proposed evidence observations (not 35 independent long questions), maps all 23 subskills and all six MYP skill areas, and keeps all four criterion profiles distinct. Actual item writing, final thresholds, scoring calibration, diagnostic/report implementation and remedial lesson authoring remain unapproved. Cambridge Grade 6 remains blocked; all existing curriculum-unit queues remain deferred.
+**Founder approval update — 2 November 2026:** The Founder approved the detailed MYP Year 4 item map/scoring specification (35 evidence observations, not 35 independent long questions; all 23 subskills, six MYP skill areas and four criterion profiles remain mapped). The Founder also approved the phased PDF-response, teacher-grading and timed-analytics feature plan and a 24-hour elapsed-time grading target with Priority 1 (more than 0 and up to 10 hours remaining), Priority 2 (more than 10 and up to 20 hours remaining), Priority 3 (more than 20 hours remaining) and overdue state. The shared feature is the immediate platform prerequisite before actual diagnostic item authoring. No code, accounts, database, storage, OCR provider or deployment has been configured. Timer expiry/pause rules, retention and technical provider decision remain open. Cambridge Grade 6 remains blocked; all existing curriculum-unit queues remain deferred.
