@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.9  
+**Version:** 2.10  
 **Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy, high-level blueprint, detailed task-level item map, flagship response/grading plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. The screens below are design requirements only and have not been implemented; Phase 1 has a separate implementation specification at `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`; implementation still requires separate explicit Founder approval.  
 **Last updated:** 2 November 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -556,3 +556,10 @@ The interface must treat authorization as a server/database responsibility, not 
 ## 14. Authentication and protected API design dependency — 2 November 2026
 
 The Phase 1A build-ready plan (`docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`) specifies the minimum initial authenticated journey: React sign-in/sign-out and session states; same-origin Worker API; protected current-user profile/role response; explicit anonymous, expired, forbidden and revoked-session states. The static assets and current route-driven navigation must remain unchanged outside authenticated routes. Role-driven controls are display affordances only; server authorization and PostgreSQL RLS decide access. Do not expose roles as a client-selectable signup field, show a guardian view without a verified link, or show grader tools without an active assignment. These requirements do not imply any screen or authentication is currently implemented.
+
+
+## 15. Public Preview as a design verification requirement — 2 November 2026
+
+The Founder has made public verification a mandatory build-process feature. Every meaningful UI or interaction change should be shown on the current PR's public Cloudflare Worker Preview as soon as CI passes. The Founder reviews the actual running UI before the milestone is accepted; automated screenshots/tests alone do not replace this. Keep the Preview alias current after fixes and preserve the exact immutable deployment URL that was inspected. The PR handoff must state the user-visible change, exact route(s), short click-by-click checks, CI results, current backend limitations and next approval gate. See `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md`.
+
+During Phase 1B the backend remains local Supabase with synthetic data; public previews must never imply a hosted login/database is active. Show clear, accessible unauthenticated, expired-session, forbidden and backend-unavailable states without disclosing private record existence. Public `workers.dev` previews are not production and no-index is not access control. The custom domain is connected later at Launch Candidate / Production Cutover, not for every PR. Do not change the approved palette, typography or curriculum visual hierarchy to implement this workflow.
