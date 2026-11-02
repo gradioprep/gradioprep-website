@@ -1,12 +1,13 @@
 import { useEffect, useState, type ReactNode } from "react";
+import AccountPage from "./auth/AccountPage";
 import { demoQuestionItems } from "./content/demoCatalog";
 import { englishPathways } from "./content/pathways";
 import { pilotReviewSummary } from "./content/pilotReviewSummary";
 import { pilotLearnerLesson } from "./content/pilotLearnerLesson";
 import { getUnitReadinessGates, getUnitReadinessSummary, unitContentPlans } from "./content/unitReadiness";
 
-type Page = "home" | "dashboard" | "pathways" | "lesson" | "questions" | "assessment";
-type Navigate = (page: Page) => void;
+export type Page = "home" | "dashboard" | "pathways" | "lesson" | "questions" | "assessment" | "account";
+export type Navigate = (page: Page) => void;
 
 type PathwaysLocation =
   | { type: "pathways"; view: "catalogue" }
@@ -16,7 +17,7 @@ type PathwaysLocation =
 
 type AppRoute =
   | { type: "home" }
-  | { type: "page"; page: "dashboard" | "questions" | "assessment" }
+  | { type: "page"; page: "dashboard" | "questions" | "assessment" | "account" }
   | PathwaysLocation
   | { type: "lesson"; pathwayId: string; unitId: string }
   | { type: "not-found" };
@@ -29,6 +30,7 @@ const sections: { page: Page; label: string; icon: string }[] = [
   { page: "questions", label: "Question bank", icon: "▤" },
   { page: "lesson", label: "Lessons & practice", icon: "↗" },
   { page: "assessment", label: "Assessment feedback", icon: "◎" },
+  { page: "account", label: "Account", icon: "◉" },
 ];
 
 
@@ -112,7 +114,7 @@ function resolvePathname(pathname: string): AppRoute {
     const segment = segments[0];
     if (segment === "pathways") return { type: "pathways", view: "catalogue" };
     if (segment === "lesson") return pilotLessonRoute();
-    if (segment === "dashboard" || segment === "questions" || segment === "assessment") {
+    if (segment === "dashboard" || segment === "questions" || segment === "assessment" || segment === "account") {
       return { type: "page", page: segment };
     }
     return { type: "not-found" };
@@ -160,7 +162,7 @@ function Label({ children }: { children: ReactNode }) { return <p className="pro
 function Home({ go }: { go: Navigate }) {
   return <div className="proto-public">
     <Notice />
-    <header className="proto-header"><div className="proto-container proto-header-inner"><Logo onClick={() => go("home")} /><nav><a href="#proto-pathways">Pathways</a><a href="#proto-approach">Our approach</a><a href="#proto-first">What's coming</a></nav><Action secondary onClick={() => go("dashboard")}>Student preview ↗</Action></div></header>
+    <header className="proto-header"><div className="proto-container proto-header-inner"><Logo onClick={() => go("home")} /><nav><a href="#proto-pathways">Pathways</a><a href="#proto-approach">Our approach</a><a href="#proto-first">What's coming</a></nav><Action secondary onClick={() => go("account")}>Sign in / account ↗</Action></div></header>
     <main>
       <section className="proto-hero"><div className="proto-container proto-hero-grid"><div><Label>LEARNING, WITH DIRECTION</Label><h1>Make your next step a <em>smarter one.</em></h1><p className="proto-lead">A more considered way to learn English across IB MYP and Cambridge pathways. Practise with purpose, understand your gaps and build on what you know.</p><div className="proto-actions"><Action onClick={() => go("questions")}>Explore the question bank <span>→</span></Action><button className="proto-inline" type="button" onClick={() => document.getElementById("proto-approach")?.scrollIntoView({ behavior: "smooth" })}>Our approach ↘</button></div><div className="proto-proof"><span>✳</span><div><b>Learning that moves you forward.</b><small>Clear objectives. Useful practice. Feedback with a purpose.</small></div></div></div>
         <div className="proto-hero-art"><div className="proto-orbit one" /><div className="proto-orbit two" /><section className="proto-journey"><div className="proto-overline"><span>YOUR LEARNING JOURNEY</span><span>01 — 03</span></div><div className="proto-journey-title"><span>↗</span><div><small>A ROUTE THAT MAKES SENSE</small><h2>Progress, in practice.</h2></div></div><div className="proto-journey-row"><span>01</span><div><b>Understand the skill</b><small>Know what you're learning and why.</small></div><i className="done">✓</i></div><div className="proto-journey-row"><span>02</span><div><b>Practise with purpose</b><small>Try questions connected to that skill.</small></div><i>02</i></div><div className="proto-journey-row"><span>03</span><div><b>Choose your next step</b><small>Use evidence and feedback to improve.</small></div><i>03</i></div><div className="proto-journey-footer">✳ &nbsp; Designed for progress, not guesswork.</div></section><div className="proto-floating-note"><span>↗</span><div><b>Small steps.</b><small>Meaningful progress.</small></div></div></div></div><div className="proto-ribbon"><span>LEARN WITH PURPOSE</span><i /><span>GROW WITH EVIDENCE</span><i /><span>KEEP MOVING FORWARD</span></div></section>
@@ -648,6 +650,7 @@ export default function App() {
   if (route.type === "home") return <Home go={go} />;
   if (route.type === "page") {
     if (route.page === "dashboard") return <Dashboard go={go} />;
+    if (route.page === "account") return <Shell page="account" go={go}><AccountPage go={go} /></Shell>;
     if (route.page === "questions") return <Questions go={go} />;
     return <Assessment go={go} />;
   }
