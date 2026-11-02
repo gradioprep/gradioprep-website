@@ -2,6 +2,7 @@
 
 **Version:** 1.9  
 **Approved:** 31 October 2026  
+**Last updated:** 2 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md`, `docs/ENGLISH_CURRICULUM_GUIDES.md`, `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/DESIGN_SPEC.md`.
@@ -172,3 +173,6 @@ Remove visible internal planning instructions, development commentary, editor no
 
 Use standard searchable TODO: comments and a central TEMP_COPY_ content registry only to make temporary copy traceable during development; neither marker may appear in rendered UI. Search and clear every registry entry/reference during the sweep. The gate is not complete until full-route automated content checks and browser review pass, the reviewed-route inventory and corrections are recorded, and the Founder has checked the refreshed Preview. No remedial content authoring may start while this gate remains open.
 
+
+
+**Version 1.9 update — 2 November 2026:** The Founder has directed a mandatory whole-website learner-facing copy cleanup after Cycle 1 diagnostic/report validation and before remedial authoring. This is now a binding gate in Section 13 and the Cycle 1 register. Phase 1B local synthetic-only coding is separately approved and underway in draft PR #22; the approval does not authorise hosted provisioning, paid services, real learner data, merge or production deployment.
