@@ -2,6 +2,40 @@ BEGIN;
 CREATE EXTENSION IF NOT EXISTS pgtap WITH SCHEMA extensions;
 SELECT no_plan();
 
+SELECT is(
+  (
+    SELECT count(*)::integer
+    FROM auth.identities AS identity
+    JOIN auth.users AS auth_user ON auth_user.id = identity.user_id
+    WHERE identity.provider = 'email'
+      AND identity.provider_id = auth_user.id::text
+      AND auth_user.email IN (
+        'student.a@example.invalid',
+        'student.b@example.invalid',
+        'guardian.a@example.invalid',
+        'guardian.b@example.invalid',
+        'grader.a@example.invalid',
+        'grader.b@example.invalid',
+        'admin@example.invalid',
+        'owner@example.invalid',
+        'suspended.student@example.invalid'
+      )
+  ),
+  9,
+  'all seeded synthetic email/password users have matching GoTrue email identities'
+);
+SELECT is(
+  (
+    SELECT count(*)::integer
+    FROM auth.identities
+    WHERE provider = 'email'
+      AND user_id = '99999999-9999-4999-8999-999999999999'::uuid
+      AND provider_id = '99999999-9999-4999-8999-999999999999'
+  ),
+  1,
+  'suspended synthetic user has a valid email identity for password authentication'
+);
+
 SET LOCAL ROLE anon;
 SELECT throws_ok(
   $$SELECT * FROM public.profiles$$,
