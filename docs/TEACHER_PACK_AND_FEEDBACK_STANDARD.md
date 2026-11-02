@@ -1,7 +1,7 @@
 # Teacher-Pack, Question Design and Feedback Standard
 
-**Version:** 1.5  
-**Approved:** 31 October 2026  
+**Version:** 1.6  
+**Approved:** 2 November 2026 (feature-spec addition; implementation and policy gates remain separate)  
 **Status:** Binding standard for all English learning tracks and all current/future learner-facing objective and typed-response tasks.  
 **Related source of truth:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md`, `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md`, and `docs/curriculum/UNIT_PRODUCTION_REGISTER.md`.
 
@@ -146,3 +146,18 @@ This addition does not relax the existing human-validation, content-rights, acce
 
 
 **Version 1.5 Founder decision update — 31 October 2026:** Provider ranking data and the 50/50 ranking basis are internal-only; never disclose them in learner/parent reports, including logged-in views. Five 60-minute remedial sessions are preferred; six or seven only where evaluation analytics justify the additional time.
+
+
+## 9. PDF response, human grading, feedback and timer metadata — approved feature specification, 2 November 2026
+
+For every new or materially revised written-response task, the task specification must record the approved expected minimum/ideal word count and whether PDF is enabled. Where the expected response is more than 20 words, the learner must have the choice to type or optionally upload a PDF. Typing remains available; PDF is not compulsory. PDF eligibility is task metadata, not a decision inferred from a learner's current typed word count. JPG/JPEG/PNG and other image uploads are not accepted. The original PDF is the authoritative submitted work; any internally rendered page images used for OCR are transient processing artefacts, not separate learner uploads.
+
+For PDF-enabled tasks, the teacher/editor pack and task record must identify the PDF route, original-file reference, page count, extraction status, per-page OCR/text-extraction confidence and any low-confidence/failed pages. The teacher grading experience must keep the original PDF and page-aligned extracted text visible together so omissions or OCR errors can be identified. The raw OCR output must not be silently overwritten; any corrected transcript is a separate, attributable version. A low-confidence or failed OCR result must not invalidate the accepted original submission.
+
+Every written task must record whether it is human-graded, the exact rubric version, response-mode allowance, and—where timed—the task-specific countdown allowance and timer-policy version. Do not infer a time allowance from word count or copy a single timing rule across task families/curricula. Exclude upload/OCR processing duration from the learner's writing time. Pause, expiry, background-tab and accommodation behaviour remains subject to the separate Founder timer-policy decision.
+
+Human-graded tasks use the approved 24-hour elapsed-time target, measured from the server-confirmed accepted submission timestamp to first publication of final teacher feedback. The grading queue is earliest-submission-first. Show Priority 1 when more than 0 and up to 10 hours remain; Priority 2 when more than 10 and up to 20 hours remain; Priority 3 when more than 20 hours remain; and a separate overdue state after the deadline. Feedback edits do not reset the original deadline or first-publication turnaround.
+
+The teacher/grader workspace must show the task question and curriculum/grade context before the response and provide an expandable task-specific rubric. AI may draft ten task-specific suggestions, but the pack must make clear that suggestions are private drafts only; the teacher selects/edits them, adds custom feedback and submits the final human-authored feedback. The student sees only published feedback in an expandable task-level dashboard section. Successful teacher edits update the current learner-visible version while retaining prior versions and audit metadata privately.
+
+This section records the approved feature plan and task metadata requirements. It does not authorise automatic AI grading, AI auto-publication, code implementation, OCR/provider configuration, authentication, database/storage provisioning, real-student processing or release. Refer to docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md for the phased sequence and unresolved decisions.
