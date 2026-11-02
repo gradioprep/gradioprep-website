@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 1.8  
+**Version:** 1.9  
 **Approved:** 31 October 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
@@ -12,7 +12,7 @@ The diagnostic, evaluation report with analytics, and remedial course form one *
 
 This is not a curriculum-unit test, mock examination, official board assessment or replacement for the existing curriculum. It assesses transferable and prerequisite skills that help students learn, interpret, reason, communicate and perform successfully within the selected course.
 
-Complete and validate all three features for one selected level before starting the next diagnostic cycle or any further curriculum content.
+Complete and validate the diagnostic and evaluation stages for one selected level, then complete the mandatory whole-website learner-facing copy cleanup before authoring its remedial content. Complete and validate the full three-stage cycle before starting the next diagnostic cycle or any further curriculum content.
 
 ## 2. Binding order and content pause
 
@@ -23,7 +23,7 @@ The current order is defined only in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.m
 
 There is no automatic rotation or cyclical order. Do not pre-research the other year/stage, create a generic all-years diagnostic, or start a later cycle before the preceding cycle is complete and the founder directs the transition.
 
-All existing curriculum-unit production and queued unit migrations are paused while the two selected diagnostic cycles are completed. Existing content, teacher packs, research, approvals, open PRs and outstanding rights/accessibility/release gates are preserved exactly as recorded. They are deferred, not cancelled, approved by implication or released. After these cycles, resume curriculum content only in the order the founder specifies, using the existing research, authoring, teacher-pack, rights, academic, accessibility, QA and release processes.
+All existing curriculum-unit production and queued unit migrations are paused while the two selected diagnostic cycles are completed. Existing content, teacher packs, research, approvals, open PRs and outstanding rights/accessibility/release gates are preserved exactly as recorded. They are deferred, not cancelled, approved by implication or released. After these cycles, resume curriculum content only in the order the founder specifies, using the existing research, authoring, teacher-pack, rights, academic, accessibility, QA and release processes. For each selected cycle, the mandatory whole-website learner-facing copy cleanup occurs after diagnostic/report completion and before remedial content authoring; it is specified in Section 13.
 
 ## 3. Scope lock for each selected level
 
@@ -136,7 +136,7 @@ Phase 0 provider architecture, file limits, role boundaries and retention/deleti
 
 ## 12. Completion gates for each cycle
 
-A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; the skill taxonomy and high-level blueprint are approved; the detailed task-level item map and assessment/scoring specification are approved; actual diagnostic items, keys, distractor rationales, exemplars and scoring anchors are authored and human-validated; scoring and priority rules are calibrated and approved; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the response/assessment workflow supports the approved written-response modes, PDF/OCR comparison and teacher feedback where applicable, and captures task timing safely; the personalised remedial course contains five 60-minute sessions by default, or the justified number up to the maximum of seven 60-minute sessions, and maps every improvement area comprehensively; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; and the Founder / project owner explicitly approves the exact cycle.
+A cycle is complete only when scope/official context are checked; its independent Top Five is ranked and cited; the skill taxonomy and high-level blueprint are approved; the detailed task-level item map and assessment/scoring specification are approved; actual diagnostic items, keys, distractor rationales, exemplars and scoring anchors are authored and human-validated; scoring and priority rules are calibrated and approved; the diagnostic works and scoring/accessibility are tested; report calculations, confidence, priorities and chart labels are verified; the response/assessment workflow supports the approved written-response modes, PDF/OCR comparison and teacher feedback where applicable, and captures task timing safely; the personalised remedial course contains five 60-minute sessions by default, or the justified number up to the maximum of seven 60-minute sessions, and maps every improvement area comprehensively; the fresh outcome check is validated; integration, privacy, responsive, keyboard/screen-reader, manual accessibility and browser QA pass; existing rights/originality and age/cultural suitability checks pass; the full student journey is demonstrated; the mandatory whole-website learner-facing copy cleanup in Section 13 is complete before remedial authoring; and the Founder / project owner explicitly approves the exact cycle.
 
 Drafting or passing automated tests alone does not complete or release a cycle. No next cycle or curriculum-content queue begins automatically. No merge, production deployment or release occurs without separate explicit approval.
 
@@ -160,3 +160,15 @@ Drafting or passing automated tests alone does not complete or release a cycle. 
 
 
 **Version 1.8 Phase 1A implementation handoff — 2 November 2026:** The detailed build-ready engineering path is recorded in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`. The next code slice, after separate explicit Founder implementation approval, is local synthetic-only Auth, Worker API, profiles/roles, default-deny RLS and test automation. No hosted services, paid plans, real learner data or external processor calls are part of this slice. Phase 1 completion and the later flagship phases remain prerequisites to actual MYP Year 4 diagnostic item authoring; Cambridge Grade 6 remains blocked.
+
+
+## 13. Mandatory whole-website learner-facing copy cleanup before remedial authoring
+
+For Cycle 1, this gate is completed immediately after the diagnostic test and evaluation report/analytics are ready and checked, and before any personalised remedial lesson, activity or remedial teacher/editor content is authored. It applies to the **entire website**, not merely the diagnostic feature.
+
+Follow docs/DESIGN_SPEC.md Section 17 for the full inventory, examples, copy direction, code-traceability convention and acceptance checks. Review every public and learner-facing route and every state, including shared navigation/footer, dashboard, pathway/course/level/unit/lesson/practice, diagnostic, report/analytics, sign-in, feedback/profile, preview/status, empty/loading/error/locked and responsive states.
+
+Remove visible internal planning instructions, development commentary, editor notes, temporary placeholder statements and fictional-data disclaimers. Replace them with accurate, context-specific learner-facing copy or a purposeful empty state. Do not delete the bands, cards, panels or visual hierarchy carrying the copy. Do not present synthetic metrics as live learner activity or infer a unit/syllabus focus that has not been verified.
+
+Use standard searchable TODO: comments and a central TEMP_COPY_ content registry only to make temporary copy traceable during development; neither marker may appear in rendered UI. Search and clear every registry entry/reference during the sweep. The gate is not complete until full-route automated content checks and browser review pass, the reviewed-route inventory and corrections are recorded, and the Founder has checked the refreshed Preview. No remedial content authoring may start while this gate remains open.
+
