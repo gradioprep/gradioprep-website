@@ -57,11 +57,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session,
     async signIn(email, password) {
       if (!supabase) throw new Error("Authentication is not configured in this environment.");
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim().toLowerCase(),
         password,
       });
       if (error) throw error;
+      // Keep the React session state in sync immediately; do not depend only
+      // on the auth-state callback arriving after the form submission.
+      setSession(data.session);
+      setLoading(false);
     },
     async signUp(displayName, email, password) {
       if (!supabase) throw new Error("Authentication is not configured in this environment.");
@@ -74,12 +78,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         },
       });
       if (error) throw error;
+      if (data.session) {
+        setSession(data.session);
+        setLoading(false);
+      }
       return !data.session;
     },
     async signOut() {
       if (!supabase) throw new Error("Authentication is not configured in this environment.");
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+      setSession(null);
+      setLoading(false);
     },
   }), [loading, session]);
 
