@@ -42,7 +42,13 @@ export default function AccountPage({ go }: { go: Navigate }) {
       const result = await response.json() as CurrentAccount | { error?: string; message?: string };
       if (!response.ok) {
         if (response.status === 403 && "error" in result && result.error === "account_unavailable") {
-          setAccountUnavailable(true);
+          if (active) {
+            setAccount(null);
+            setAccountUnavailable(true);
+            setError("");
+            setMessage("");
+          }
+          return;
         }
         throw new Error("message" in result && result.message
           ? result.message
