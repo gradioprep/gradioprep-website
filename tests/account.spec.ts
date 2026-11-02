@@ -140,7 +140,7 @@ test.describe("Phase 1B account foundation", () => {
       feedback,
     }));
 
-    expect(authorization).toMatch(/^Bearer\\s+\\S+/);
+    expect(authorization).toMatch(/^Bearer\s+\S+/);
     expect(diagnostics.meStatus).toBe(403);
     expect(diagnostics.meError).toBe("account_unavailable");
     await expect(page.getByRole("heading", { name: "Account access is unavailable." })).toBeVisible();
@@ -155,5 +155,5 @@ test.describe("Phase 1B account foundation", () => {
 
     await page.getByRole("button", { name: "Sign out" }).click();
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
-  });;
+  });
 });
