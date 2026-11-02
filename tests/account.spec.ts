@@ -23,9 +23,9 @@ test.describe("Phase 1B account foundation", () => {
     page.on("pageerror", (error) => pageErrors.push(error.message));
 
     await page.goto("/account");
-    await expect(page.getByRole("heading", { name: /create a student account/i })).toBeVisible();
-
+    await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
     await page.getByRole("button", { name: /create a synthetic student account/i }).click();
+    await expect(page.getByRole("heading", { name: /create a student account/i })).toBeVisible();
 
     const uniqueEmail = `phase1b-${crypto.randomUUID()}@example.invalid`;
     await page.getByLabel("Display name").fill("Synthetic Phase One Learner");
