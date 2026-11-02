@@ -1,6 +1,6 @@
 # Logical Data Model — Curriculum, Practice and Assessment
 
-**Status:** Proposed implementation blueprint; no database or real learner records are connected yet.
+**Status:** Proposed provider-independent implementation blueprint; no database or real learner records are connected yet. The Founder approved the PDF-response/grading/timer feature plan on 2 November 2026. The schema below is planning only; no database, authentication, storage bucket, OCR provider or persistent records have been created.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Goal:** Define relationships and permission boundaries before connecting the current prototype to a database. This document is provider-independent; the master brief's proposed Supabase approach still requires a current plan/terms review before real student data is stored.
 
@@ -36,7 +36,7 @@ This is a logical model, not yet a live SQL schema. Names can be adapted during 
 | `units` | ID, pathway ID, title, sequence, release state, version | A pathway contains ordered units |
 | `lessons` | ID, unit ID, title, learning objective, body metadata, sequence, release state, version | Content belongs to a unit and has a versioned lifecycle |
 | `lesson_blocks` | ID, lesson version ID, block type, sequence, structured content | Allows text, worked example, callout and other reusable blocks |
-| `tasks` | ID, task type, prompt/instructions, response type, difficulty label where justified, estimated time, release state, version | Use for practice, diagnostics and extended-response tasks; do not expose answer keys by default |
+| `tasks` | ID, task type, prompt/instructions, response type, expected minimum/ideal words, approved response range, PDF-enabled flag, optional task time allowance, timer/pause policy version, difficulty label where justified, estimated time, release state, version | Enable typed-or-PDF only for approved written tasks whose expected response is more than 20 words; keep typing available; store task/rubric timing metadata by version; do not expose answer keys by default |
 | `task_skill_mappings` | Task ID, skill ID, mapping role/weight if approved, review status | Use mapping weights only if the academic method is documented and approved |
 | `answer_keys` | Task version ID, expected answer, rationale/explanation, accepted variants as appropriate | Restrict access until the intended reveal state; keep production keys server-side |
 | `rubrics` and `rubric_versions` | Stable rubric ID, version, task family, version date, approval state | Rubric versions are immutable once used for a published assessment |
@@ -95,6 +95,32 @@ The client imports learner-safe `src/content/pilotLearnerLesson.ts` for lesson c
 | `private_qa_records` | Assessment ID/version, checks, status, explanation, uncertainty, reviewer action | Admin/owner only; graders and learners cannot read this record |
 | `admin_audit_log` | Actor, action, target record, reason, timestamp, minimal before/after reference | Privileged actions and role changes must be individually attributable and auditable |
 
+### PDF written responses, OCR, grading feedback and timing
+
+These are proposed logical records to extend the existing human-assessment model. They are not live tables or migrations.
+
+| Record | Purpose and key fields | Relationships / rules |
+|---|---|---|
+| submission_files | Submission ID, private storage object key, original file name for display, verified MIME/signature, byte size, page count, checksum, upload/accept timestamps, retention state | Original PDF only; no public URLs; object keys contain no student identity; file access is assignment-scoped |
+| submission_page_extractions | Submission/file ID, page number, extraction method (PDF text layer/OCR), raw text, confidence/status, coordinates, processing timestamp, error metadata | One record per page/method/version; raw extraction is immutable; teacher-corrected transcript is separately versioned |
+| transcript_corrections | Submission/page ID, corrected text, editor, timestamp, change reason, source extraction version | Never overwrite original PDF or raw OCR; teacher correction is an auditable grading aid |
+| feedback_suggestion_sets | Submission ID, task/rubric version, model/prompt version, generation time, quota/cache status, ten proposed suggestions | Private teacher-only draft; not student-visible and never auto-published |
+| feedback_suggestion_items | Suggestion-set ID, item index, suggested text, optional criterion/skill tag | Exactly ten suggestions per successful generation set; selection/editing by the teacher is recorded in the published feedback version |
+| timer_sessions | Attempt/submission ID, task timing-rule version, started time, submitted time, elapsed duration, pause duration where approved, accommodation mode | Server timestamps are authoritative; upload/OCR time is excluded from writing duration; timer behaviour follows the approved policy version |
+| timer_events | Timer session ID, event type (start/pause/resume/expire/submit), server event time, minimal client context | Append-oriented; supports audit/recomputation; do not trust client-only elapsed values |
+| submission_sla_events | Submission ID, accepted time, due time, first feedback publication time, actual turnaround, remaining/overdue duration, SLA state | 24-hour target snapshot is fixed at acceptance; later edits do not reset the original SLA clock |
+| feedback_visibility_events | Feedback version ID, published/updated time, learner-visible state | Only human-submitted published feedback is visible to the learner; a successful edit updates the latest visible version and preserves history |
+
+The grading queue is a query/view over accepted submissions and grader assignments, not an independent editable ordering. It sorts by server-recorded accepted timestamp ascending; the priority label is computed from time remaining and does not change chronological order.
+
+### Submission and grading states
+
+Use explicit state transitions such as draft → uploading → accepted/processing → queued → assigned → grading → feedback published → closed, plus failed/withdrawn states where justified. An OCR failure or quota limit must not destroy the accepted original PDF or block the grader from viewing it. A submission is accepted only after the original file is privately stored and its task/learner association is verified.
+
+### Provider and cost decision boundary
+
+The existing logical model keeps data provider-independent and records Supabase as the current proposed Auth/database direction. Compare Supabase Auth/Postgres/Storage with Cloudflare object storage before choosing. Do not add Cloudflare D1 as a second database or migrate the proposed provider without an explicit architecture decision. External OCR and AI providers require separate privacy, region, retention and free-tier verification before real learner data is sent.
+
 ## 3. Important constraints
 
 - Use stable IDs (UUIDs or equivalent) for internal records. Use human-readable codes for programmes, syllabus editions, skills and content IDs where useful.
@@ -143,3 +169,6 @@ Additional protections:
 8. Before a real learner pilot, test role boundaries, backup/restore, deletion/retention operations and mobile use.
 
 **Not implemented:** These tables are a planning model, not a claim that authentication, a database, row-level security, saved records or real assessment workflows exist today.
+
+
+**2 November 2026 feature-plan note:** The logical records for PDF submissions, page extraction, feedback drafts/versions, grader SLA and timers have been added as a design proposal only. They do not authorise database creation, authentication, storage configuration or real learner data processing. The 24-hour grading target and priority bands are approved; timer expiry/pause rules and retention remain open decisions.
