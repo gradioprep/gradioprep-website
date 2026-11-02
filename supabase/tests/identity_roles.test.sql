@@ -50,11 +50,13 @@ SELECT is(
 SELECT throws_ok(
   $$UPDATE public.profiles SET account_status = 'suspended' WHERE user_id = auth.uid()$$,
   '42501',
+  NULL,
   'student cannot change account status'
 );
 SELECT throws_ok(
   $$INSERT INTO public.role_assignments (user_id, role) VALUES (auth.uid(), 'owner')$$,
   '42501',
+  NULL,
   'student cannot grant themselves an owner role'
 );
 RESET ROLE;
@@ -134,6 +136,7 @@ SELECT is(
 SELECT throws_ok(
   $$INSERT INTO public.role_assignments (user_id, role) VALUES (auth.uid(), 'owner')$$,
   '42501',
+  NULL,
   'admin cannot promote themselves to owner'
 );
 RESET ROLE;
