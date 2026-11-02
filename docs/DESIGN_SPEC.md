@@ -1,6 +1,6 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.10  
+**Version:** 2.11  
 **Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy, high-level blueprint, detailed task-level item map, flagship response/grading plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. The screens below are design requirements only and have not been implemented; Phase 1 has a separate implementation specification at `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`; implementation still requires separate explicit Founder approval.  
 **Last updated:** 2 November 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
@@ -180,7 +180,7 @@ Maintain accessible contrast: target WCAG 2.2 AA contrast of at least 4.5:1 for 
 
 ### Public website navigation
 
-Desktop: brand at left; Pathways and Our approach in the centre/right; one clear primary action at the far right. Mobile: preserve the brand and a compact, accessible menu.
+Desktop: brand at left; Pathways and Our approach in the centre/right; one clear primary action at the far right. When authentication is available, label the entry simply **Sign in** (not “Sign in / account”). Mobile: preserve the brand and a compact, accessible menu.
 
 Footer: concise navigation, working-name disclaimer until the brand is approved, and only legal/contact links that actually exist and have been reviewed.
 
@@ -261,7 +261,7 @@ On login, let a student or guardian understand current learning activity, progre
 - Every number must come from an identified data source and have a stable definition.
 - Use dates and comparison periods explicitly. Do not show “improved” unless the underlying comparable attempts support it.
 - Do not invent grade predictions, official-equivalent grades or unsupported mastery percentages.
-- Do not use fake sample numbers in a real student account. During development, sample data must be unmistakably labelled as demonstration data and kept separate from production.
+- Do not expose invented learner metrics in learner-facing states or present synthetic data as live activity. If no real learner records exist, retain the dashboard cards and show truthful, contextual empty states. Sample metrics may be used only in an isolated internal test view that is not presented as a learner account.
 - Charts need readable labels, a concise takeaway and an accessible textual/table alternative.
 - Empty state: explain how to create the first meaningful record (for example, complete a diagnostic or attempt a question).
 - Differentiate learning activity, automatically checked practice and published human assessment visually and in wording.
@@ -563,3 +563,28 @@ The Phase 1A build-ready plan (`docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`) sp
 The Founder has made public verification a mandatory build-process feature. Every meaningful UI or interaction change should be shown on the current PR's public Cloudflare Worker Preview as soon as CI passes. The Founder reviews the actual running UI before the milestone is accepted; automated screenshots/tests alone do not replace this. Keep the Preview alias current after fixes and preserve the exact immutable deployment URL that was inspected. The PR handoff must state the user-visible change, exact route(s), short click-by-click checks, CI results, current backend limitations and next approval gate. See `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md`.
 
 During Phase 1B the backend remains local Supabase with synthetic data; public previews must never imply a hosted login/database is active. Show clear, accessible unauthenticated, expired-session, forbidden and backend-unavailable states without disclosing private record existence. Public `workers.dev` previews are not production and no-index is not access control. The custom domain is connected later at Launch Candidate / Production Cutover, not for every PR. Do not change the approved palette, typography or curriculum visual hierarchy to implement this workflow.
+
+
+## 17. Whole-site learner-facing copy and temporary-content cleanup
+
+**Mandatory timing:** For Cycle 1, complete this sweep immediately after the Grade 9 / IB MYP Year 4 diagnostic and its evaluation report/analytics have been completed and checked, and before authoring any remedial lesson, practice activity or remedial teacher/editor material. It applies to the entire website, not only the diagnostic or dashboard pages.
+
+**Coverage:** Inspect every route, component and visible state, including the public homepage, header/navigation/footer, pathways, curriculum/course and level views, unit and lesson pages, practice/question-bank screens, dashboard, diagnostic, evaluation report and analytics, sign-in states, feedback/profile areas, preview/status surfaces, and populated, empty, loading, error, disabled/locked and responsive variants. Search source content as well as browser-visible text; shared components and repeated copy count across every page where they appear.
+
+**Remove internal notes from the interface:** Development explanations, planning instructions, editor notes, QA warnings, TODOs and messages intended for the project team must live in source comments or internal documentation, never as learner-facing copy. This includes instructions such as “Do not infer syllabus coverage from the placeholder.” State curriculum limitations in clear learner language only where a learner genuinely needs to know them.
+
+**Preserve the design:** Do not remove a band, card, heading, panel, taxonomy strip, visual group, navigation element, spacing tier or designed empty-state container just because its current text is temporary. Replace the copy inside the existing structure or show an appropriate, purposeful empty state in the same component. Preserve Palette B, locked typography, hierarchy and spacing. Replacements must be specific to the page, curriculum context and actual state, not generic filler.
+
+**Known examples and intended direction:**
+
+| Current visible text / issue | Required user-facing treatment |
+|---|---|
+| “Demonstration dashboard. All learner activity and numbers below are fictional examples to show the intended experience.” | Do not show this internal disclaimer to learners. Keep the dashboard overview band and metric cards; use actual data when available. Until then, show a useful empty-state message such as “Complete your first diagnostic or practice activity to start building your learning record.” Do not leave fictional counts looking like real learner progress. |
+| “This planning slot has no confirmed unit focus yet. Do not infer syllabus coverage from the placeholder.” | Replace the note with the heading “Your next learning focus” and the contextual explanation “Once your course plan is set, this space will show the selected unit, the skills you will practise and your next activities.” Keep the planning band/card and its visual placement. Keep the syllabus-verification warning internal. |
+| “Unit focus to be confirmed.” | Replace with “Your next unit is being prepared” and the explanation “Your course plan will show the unit’s key skills and the activities that help you practise them.” Do not imply a unit or official syllabus mapping has already been confirmed. |
+| “Sign in / account” | Use “Sign in” only. |
+
+**Code traceability:** Use the conventional searchable TODO: comment marker for development follow-up. Centralise temporary UI copy in a single content module (for example, src/content/temporaryCopy.ts) and export named TEMP_COPY_ constants; reference these constants from components rather than duplicating literal temporary strings. Never render a TODO or TEMP_COPY marker to users. Do not introduce an ad-hoc visible marker such as #TT. During the sweep, search for TEMP_COPY_ and TODO:, check every occurrence and value, replace or remove each one, and delete the temporary registry/references when no temporary UI copy remains.
+
+**Acceptance checks:** Maintain an inventory of all website routes and states; test every item in that inventory at desktop and mobile widths. Add automated browser/content checks for the known phrases and other internal-note patterns, and verify that no temporary marker or team-facing instruction appears in rendered pages. Confirm that empty states explain the relevant next action, every displayed metric is backed by real or explicitly isolated test data, no syllabus coverage is inferred from an unconfirmed placeholder, and all existing visual bands/cards remain intact. Record the routes reviewed, tests, corrected copy and any genuine remaining limitations. The Founder then verifies the refreshed public Preview before the Cycle 1 remedial content work proceeds.
+
