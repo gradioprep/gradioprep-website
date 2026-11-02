@@ -1,8 +1,8 @@
 # Phase 1 — Secure Application Foundation Implementation Specification
 
-**Version:** 0.1-draft  
+**Version:** 0.2-draft  
 **Date:** 2 November 2026  
-**Status:** Founder-approved planning deliverable; implementation is NOT authorised by this document. No code, accounts, services, paid plans, real learner data, merge or deployment are included.  
+**Status:** Founder-approved planning specification; Phase 1A build-ready execution plan is in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`. Implementation is still NOT authorised by this document. No code, accounts, services, paid plans, real learner data, merge or deployment are included.  
 **Parent decision register:** `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DATA_MODEL.md`, `docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md`, `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md` and `docs/DESIGN_SPEC.md`.
 
@@ -332,3 +332,8 @@ Before any implementation begins, the Founder must separately approve:
 Before real learner data, external OCR/AI processing, R2 replication, live pilot, merge or deployment, obtain the separate approvals and legal/privacy/quality evidence defined by the Phase 0 register and flagship specification.
 
 Any change to the approved provider, region, database, backup target, retention, role boundary or data-processing scope requires a documented decision and reconciliation of every dependent source-of-truth record.
+
+
+## 17. Build-ready execution path — 2 November 2026
+
+The exact repository starting point, local-first implementation path, API/client integration choices, initial schema/RLS slice, test fixtures, CI plan, proposed RTO/RPO and current cost scenarios are specified in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`. That document is the engineering handoff for the next coding step. The first slice is local-only with Supabase CLI and synthetic data; it requires a Docker-compatible runtime but no hosted Supabase project or paid account. It adds the Cloudflare Worker API entrypoint while retaining Static Assets and React route behavior, browser Auth with `@supabase/supabase-js`, Worker request authentication through the current `@supabase/server` pattern, and the first profile/role/RLS migration and tests. The service-role key is not required. No implementation has started. A separate explicit Founder approval is still required before the first code commit. Proposed production RTO/RPO targets and AWS KMS are not approved decisions; they block real-data backup readiness, not local synthetic coding.
