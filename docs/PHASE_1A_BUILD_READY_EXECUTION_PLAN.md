@@ -1,8 +1,8 @@
 # Phase 1A — Build-Ready Execution Plan
 
-**Version:** 0.1-draft  
+**Version:** 0.2-draft  
 **Date:** 2 November 2026  
-**Status:** Founder-approved preparation step. This is an execution-ready engineering plan, not code or service provisioning. The next coding step still requires explicit implementation authorisation.  
+**Status:** Founder-approved preparation step; Founder has separately authorised Phase 1B local synthetic-only coding. This is an execution-ready engineering plan, not proof of completed implementation or service provisioning. Production, DNS, hosted services and real data remain unauthorised.  
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and the approved Phase 0 decision register.
 
@@ -236,3 +236,12 @@ This plan does not change the existing diagnostic sequence: MYP Year 4 actual di
 - AWS KMS regional endpoints: https://docs.aws.amazon.com/general/latest/gr/kms.html
 
 Region selection establishes the location for the Supabase primary project data and backups, but it is not by itself a legal compliance conclusion or a guarantee that all support/telemetry/subprocessor processing stays in India. Review the current DPA and data-residency FAQ before real-data approval.
+
+
+## 15. Mandatory public verification loop
+
+The Founder has directed that public website verification must occur throughout implementation, not be postponed until the end of a phase. Follow `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md` for the mandatory GitHub → automated checks → Cloudflare Worker Preview → Founder verification → correction/re-preview cycle. The PR must provide an updated public `workers.dev` Preview URL and an immutable deployment URL for each reviewed revision, a plain-language visible-change summary, exact routes and short click-by-click checks, CI results, connected-backend status and any limitations. Do not close a coherent implementation milestone as verified until the Founder has inspected the deployed Preview.
+
+The controlled preview workflow `.github/workflows/controlled-worker-preview.yml` is included in this source branch and supports PRs targeting `main` and the active stacked integration branch. It uses the existing Cloudflare Worker Preview capability and `npx wrangler preview`, never `npx wrangler deploy`; it posts the Preview URL and removes the Preview when the PR closes. Previews are public unless Access is enabled and must contain synthetic data only. During Phase 1B, authentication/RLS tests run against local Supabase in CI; the public Preview cannot reach the private local database, so the handoff must state this honestly. Do not provision hosted Supabase merely to make a preview login work; that needs separate approval.
+
+**Current approval:** Founder has approved Phase 1B coding with local Supabase and synthetic data only. No hosted project, paid plan, real data, merge, production deployment, DNS or custom-domain connection is approved. The custom domain connects at the Launch Candidate / Production Cutover checkpoint after feature, security, accessibility, content, privacy and recovery gates; it is not needed for per-PR public verification.
