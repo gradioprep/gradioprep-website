@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 1.9  
+**Version:** 2.0  
 **Approved:** 31 October 2026  
 **Last updated:** 2 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
@@ -121,7 +121,7 @@ Use the approved design system. Reports and analytics use a predominantly white/
 
 Charts must be understandable at narrow widths and at 200%/400% zoom, with keyboard/screen-reader access and a text equivalent. Do not rely on colour alone.
 
-Reuse the current React/TypeScript application structure, existing components, teacher-pack separation, navigation and QA patterns. Complete an architecture-feasibility check before implementation. The current prototype lacks authentication, a database and persistent learner records. Do not claim saved cross-session reports or longitudinal analytics unless implemented and verified. Do not add a database, authentication, AI/API endpoint, paid service, new platform or architecture redesign without separate explicit approval. Report limitations rather than silently adding infrastructure.
+Reuse the current React/TypeScript application structure, existing components, teacher-pack separation, navigation and QA patterns. The pre-Phase-1B prototype lacked authentication, a database and persistent learner records. Phase 1B has now added the first local-only Supabase Auth/PostgreSQL and caller-authenticated Worker API slice in draft PR #22, using synthetic fixtures only; this is not a hosted project or live learner persistence. Do not claim saved cross-session diagnostic reports or longitudinal analytics unless those capabilities are separately implemented and verified. Any hosted service, paid service, real-data processing, new platform or expansion beyond the approved Phase 1B scope still requires separate explicit approval. Report limitations rather than silently adding infrastructure.
 
 Use synthetic test records and fictional answers in development/hosted previews. Do not place real student data in a public or unauthorised preview. Follow privacy/security controls before collecting or storing learner data.
 
@@ -133,7 +133,7 @@ Human-graded submissions enter a chronological earliest-first queue with task/cu
 
 Task countdown and duration/accuracy analytics are required under the Founder-approved Phase 0 timer policy: advisory countdown; server-authoritative clock continues through background tabs, refresh and disconnection; no learner pause/resume; no auto-submit, truncation, deletion or save/submit block at zero. Authorised teacher/admin extensions and untimed accommodations are logged without collecting diagnoses. Collect only minimal timing events, not keystrokes, focus or browsing surveillance; label the measure elapsed response time and interpret it with accuracy and rubric evidence. See `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`.
 
-Phase 0 provider architecture, file limits, role boundaries and retention/deletion policy are approved. Phase 1B local synthetic-only coding is Founder-approved and underway in draft PR #22; hosted provisioning, paid services, real learner data, merge and production deployment remain separately gated. Supabase Mumbai is the approved Auth/Postgres/private Storage mapping; PDF.js, Azure Document Intelligence Read (intended Central India) and Cloudflare Workers AI stateless drafts are selected in the decision register. No resource has been provisioned and no real learner data may be sent to an external provider until the relevant privacy/contract/region/legal/guardian-consent/quality gates and a separate live-pilot approval pass. The feature remains a prerequisite before actual MYP Year 4 diagnostic item authoring. Cambridge Grade 6 remains blocked.
+Phase 0 provider architecture, file limits, role boundaries and retention/deletion policy are approved. Phase 1B local synthetic-only coding is Founder-approved and underway in draft PR #22. Its first Auth/Worker API/role slice passed exact-head CI run #41473237444 on code-bearing commit `50f4bb3`, including the PostgreSQL RLS test file, builds and 15/15 Chromium tests. A Cloudflare branch Preview for that revision is deployed and awaiting Founder review; the Phase 1B job's own Preview steps were skipped on its push event. Hosted provisioning, paid services, real learner data, merge, production deployment and DNS remain separately gated. Supabase Mumbai is the approved Auth/Postgres/private Storage mapping; PDF.js, Azure Document Intelligence Read (intended Central India) and Cloudflare Workers AI stateless drafts are selected in the decision register. No resource has been provisioned and no real learner data may be sent to an external provider until the relevant privacy/contract/region/legal/guardian-consent/quality gates and a separate live-pilot approval pass. The feature remains a prerequisite before actual MYP Year 4 diagnostic item authoring. Cambridge Grade 6 remains blocked.
 
 ## 12. Completion gates for each cycle
 
@@ -176,3 +176,6 @@ Use standard searchable TODO: comments and a central TEMP_COPY_ content registry
 
 
 **Version 1.9 update — 2 November 2026:** The Founder has directed a mandatory whole-website learner-facing copy cleanup after Cycle 1 diagnostic/report validation and before remedial authoring. This is now a binding gate in Section 13 and the Cycle 1 register. Phase 1B local synthetic-only coding is separately approved and underway in draft PR #22; the approval does not authorise hosted provisioning, paid services, real learner data, merge or production deployment.
+
+
+**Version 2.0 implementation-status reconciliation — 2 November 2026:** The initial Phase 1B local identity/account slice is implemented in draft PR #22 and verified with synthetic data only. The exact-head Actions run #41473237444 passed the PostgreSQL RLS test file, Worker/client builds and 15/15 Chromium tests on code-bearing commit `50f4bb3`. Cloudflare's branch Preview for that code revision is deployed, but manual Founder review remains pending and the public backend is intentionally unconfigured. This platform work does not author or implement Cycle 1 diagnostic items. Actual MYP Year 4 item authoring remains gated on flagship implementation and pilot validation; the whole-site copy-cleanup gate remains not started and is not to be brought forward; Cambridge Grade 6 remains blocked.

@@ -1,8 +1,8 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.10  
+**Version:** 1.11  
 **Last updated:** 2 November 2026  
-**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research, skill taxonomy/high-level blueprint, detailed item map/scoring specification, flagship feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are approved. Phase 0 is complete. Phase 1 is specified in `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md` with a build-ready local-first plan in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`; Phase 1B local synthetic-only coding is Founder-approved and underway in draft PR #22. Hosted provisioning, paid services, real learner data, merge and production deployment are not authorised. Actual MYP diagnostic item authoring follows flagship feature implementation and pilot validation. A mandatory whole-website learner-facing copy cleanup is scheduled after Cycle 1 diagnostic/report validation and before remedial authoring. Cycle 2 remains blocked.  
+**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research, skill taxonomy/high-level blueprint, detailed item map/scoring specification, flagship feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are approved. Phase 0 is complete. Phase 1 is specified in `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md` with a build-ready local-first plan in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`; Phase 1B local synthetic-only coding is Founder-approved and underway in draft PR #22. Its initial Auth/Worker API/RLS slice passed exact-head CI run #41473237444 on code-bearing commit `50f4bb3` (15/15 Chromium tests); a Cloudflare branch Preview for that revision is deployed and awaiting Founder review. Hosted provisioning, paid services, real learner data, merge and production deployment are not authorised. Actual MYP diagnostic item authoring follows flagship feature implementation and pilot validation. A mandatory whole-website learner-facing copy cleanup is scheduled after Cycle 1 diagnostic/report validation and before remedial authoring. Cycle 2 remains blocked.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
 **Purpose:** Track the founder-selected order for the diagnostic → evaluation/analytics → remedial-course layer independently of the existing Unit 1/content register.
 
@@ -63,7 +63,7 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 | Skill taxonomy and high-level blueprint approved | Complete; Founder-approved 1 Nov 2026 | Blocked |
 | Detailed task-level item map and scoring specification | Complete; Founder-approved 2 Nov 2026 | Blocked |
 | Flagship PDF response, teacher grading and timed analytics plan | Complete; phased plan and 24-hour grading target approved 2 Nov 2026 | Blocked |
-| Flagship feature implementation and pilot QA | Not started; Phase 0 complete and Phase 1B secure foundation underway locally in draft PR #22. Later flagship phases remain separately gated | Blocked |
+| Flagship feature implementation and pilot QA | Not started; Phase 1B local secure foundation is a prerequisite platform slice in draft PR #22, not implementation of the flagship PDF/grading feature. Local RLS/build/browser CI passed; later flagship phases remain separately gated | Blocked |
 | Actual diagnostic item authoring and teacher/editor scoring pack | Paused until the shared response/task metadata and core feature are implemented and validated | Blocked |
 | Diagnostic built and validated | Not started | Blocked |
 | Evaluation report and analytics built/validated | Not started | Blocked |
@@ -87,7 +87,7 @@ The former Unit 1 rotation and queued migration plans are historical work queues
 
 ## 5. Cycle 1 — Grade 9 IB MYP Language and Literature
 
-**Status:** The Top Five research, taxonomy/high-level blueprint, detailed item map/scoring specification, flagship response/grading/timer plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. Phase 0 is complete; Phase 1B local synthetic-only platform implementation is approved and underway in draft PR #22. Hosted provisioning, paid services, real learner data, merge and production deployment remain unauthorised; actual MYP diagnostic implementation and question authoring have not started. Provider percentile evidence remains internal in docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. The official IB programme/context sources are separate from the five independent providers.
+**Status:** The Top Five research, taxonomy/high-level blueprint, detailed item map/scoring specification, flagship response/grading/timer plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. Phase 0 is complete; Phase 1B local synthetic-only platform implementation is approved and underway in draft PR #22. The initial account/Auth/Worker API/RLS slice passed exact-head CI run #41473237444 on code-bearing commit `50f4bb3`; Cloudflare's branch Preview for that code revision is deployed and awaits Founder review. Hosted provisioning, paid services, real learner data, merge, production deployment and DNS remain unauthorised; actual MYP diagnostic implementation and question authoring have not started. Provider percentile evidence remains internal in docs/internal/DIAGNOSTIC_PROVIDER_RANKING_REGISTER.md. The official IB programme/context sources are separate from the five independent providers.
 
 **Confirmed placement:** Grade 9 = MYP Year 4, as explicitly confirmed by the Founder for the relevant school/programme context.
 
@@ -115,3 +115,10 @@ The former Unit 1 rotation and queued migration plans are historical work queues
 
 **Acceptance:** All internal planning/editor/development notes and temporary placeholder wording are removed from rendered UI and replaced with accurate context-specific copy or useful empty states; no fabricated metrics are presented as live; no unverified unit/syllabus focus is implied; the current visual hierarchy and all bands/cards remain intact; automated content checks and desktop/mobile browser review pass; corrections and reviewed routes are recorded; and the Founder verifies the refreshed Preview. Remedial authoring stays blocked until this row is marked complete.
 
+
+
+### Phase 1B platform checkpoint — 2 November 2026
+
+PR #22 remains draft/open/unmerged. Run #41473170539 passed on the preceding revision `97d2bb4`; the latest exact-head run #41473237444 passed on code-bearing revision `50f4bb3`. It verifies local Supabase synthetic fixtures, `identity_roles.test.sql` RLS assertions, the browser/Worker builds and 15/15 Chromium tests. Cloudflare's branch Preview is current for that revision and is not connected to hosted Supabase; manual Founder review is pending. The Phase 1B workflow's own Preview steps were skipped on the push event. Use the exact URLs recorded in Master Brief v4.35, not the older `pr-22` alias.
+
+The diagnostic cycle remains at the pre-authoring stage. MYP Year 4 actual diagnostic authoring is still gated by flagship implementation and pilot validation. The whole-site copy cleanup remains not started and must stay after Cycle 1 diagnostic/report QA and before remedial authoring. Cambridge Grade 6 remains blocked.

@@ -1,6 +1,6 @@
 # Phase 1A — Build-Ready Execution Plan
 
-**Version:** 0.2-draft  
+**Version:** 0.3-draft  
 **Date:** 2 November 2026  
 **Status:** Founder-approved preparation step; Founder has separately authorised Phase 1B local synthetic-only coding. This is an execution-ready engineering plan, not proof of completed implementation or service provisioning. Production, DNS, hosted services and real data remain unauthorised.  
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
@@ -212,7 +212,7 @@ For the first code slice, do not ask the Founder for any password, API key, reco
 
 ## 13. Exact next step
 
-After the Founder separately authorises coding, implement only **Phase 1B — Local Auth, Worker API and role foundation** on a new branch based on the approved documentation branch. Deliver a draft PR with migrations, synthetic seed data, API and UI, RLS tests, Worker tests, CI results and an updated implementation status. Do not merge, deploy, provision hosted services or accept real learner data. Continue to Phase 1C–1F only after the prior checkpoint is reviewed and accepted.
+The Founder has separately authorised **Phase 1B — Local Auth, Worker API and role foundation**. The first local synthetic-only implementation is underway in draft PR #22 on `feature/phase-1b-local-auth-api`; do not create a duplicate branch or PR. The initial migration/seed, account UI, caller-authenticated Worker API and RLS/browser tests are implemented. Exact-head CI run #41473237444 passed on code-bearing commit `50f4bb3`, including the PostgreSQL RLS test file, browser/Worker builds and 15/15 Chromium tests. The current Cloudflare branch Preview is deployed for that same commit; its Preview link and the fact that the Phase 1B workflow's own Preview step was skipped are recorded in Master Brief v4.35. The Founder must complete the manual Preview review before this first vertical slice is accepted. Do not merge, provision hosted services, use real learner data, or make production/DNS changes. Later Phase 1 checkpoints remain separate review and approval gates.
 
 This plan does not change the existing diagnostic sequence: MYP Year 4 actual diagnostic item authoring remains gated until the flagship feature is implemented and pilot-validated; Cambridge Grade 6 remains blocked.
 
