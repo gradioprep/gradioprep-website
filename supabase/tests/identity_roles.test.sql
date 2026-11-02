@@ -4,14 +4,14 @@ SELECT no_plan();
 
 SET LOCAL ROLE anon;
 SELECT throws_ok(
-  $SELECT * FROM public.profiles$,
+  $$SELECT * FROM public.profiles$$,
   '42501',
   NULL,
   'anonymous users cannot read profiles'
 );
-SELECT throws_ok($SELECT * FROM public.role_assignments$, '42501', NULL, 'anonymous users cannot read role assignments');
-SELECT throws_ok($SELECT * FROM public.guardian_learner_links$, '42501', NULL, 'anonymous users cannot read guardian links');
-SELECT throws_ok($SELECT * FROM public.course_enrolments$, '42501', NULL, 'anonymous users cannot read course enrolments');
+SELECT throws_ok($$SELECT * FROM public.role_assignments$$, '42501', NULL, 'anonymous users cannot read role assignments');
+SELECT throws_ok($$SELECT * FROM public.guardian_learner_links$$, '42501', NULL, 'anonymous users cannot read guardian links');
+SELECT throws_ok($$SELECT * FROM public.course_enrolments$$, '42501', NULL, 'anonymous users cannot read course enrolments');
 RESET ROLE;
 
 SET LOCAL ROLE authenticated;
