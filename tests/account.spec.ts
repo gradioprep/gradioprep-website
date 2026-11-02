@@ -144,7 +144,7 @@ test.describe("Phase 1B account foundation", () => {
     expect(diagnostics.meStatus).toBe(403);
     expect(diagnostics.meError).toBe("account_unavailable");
     await expect(page.getByRole("heading", { name: "Account access is unavailable." })).toBeVisible();
-    await expect(page.getByRole("alert")).toContainText("This account is unavailable.");
+    await expect(page.getByText("This account cannot access protected GradiPrep records.")).toBeVisible();
 
     const update = await page.request.patch("/api/v1/me", {
       headers: { Authorization: authorization },
