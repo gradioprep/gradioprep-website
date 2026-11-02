@@ -1,8 +1,8 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.9  
+**Version:** 1.10  
 **Last updated:** 2 November 2026  
-**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research, skill taxonomy/high-level blueprint, detailed item map/scoring specification, flagship feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are approved. Phase 0 is complete. Phase 1 is specified in `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md` with a build-ready local-first plan in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`; the next code slice still requires separate explicit Founder implementation approval. Actual MYP diagnostic item authoring follows flagship feature implementation and pilot validation. Cycle 2 remains blocked.  
+**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 placement, Top Five provider research, skill taxonomy/high-level blueprint, detailed item map/scoring specification, flagship feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are approved. Phase 0 is complete. Phase 1 is specified in `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md` with a build-ready local-first plan in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`; the next code slice still requires separate explicit Founder implementation approval. Actual MYP diagnostic item authoring follows flagship feature implementation and pilot validation. A mandatory whole-website learner-facing copy cleanup is scheduled after Cycle 1 diagnostic/report validation and before remedial authoring. Cycle 2 remains blocked.  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
 **Purpose:** Track the founder-selected order for the diagnostic → evaluation/analytics → remedial-course layer independently of the existing Unit 1/content register.
 
@@ -50,10 +50,11 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 3. Skill taxonomy, diagnostic blueprint and item plan.
 4. Validated diagnostic and separate teacher/editor pack.
 5. Evaluation report and analytics.
-6. Personalised remedial course (five × 60-minute sessions recommended; up to seven sessions maximum, as needed to address every improvement area).
-7. Post-course outcome check.
-8. Complete student-journey integration and QA.
-9. Founder approval; only then consider the next cycle when explicitly directed.
+6. Mandatory whole-website learner-facing copy cleanup after diagnostic/report validation and before remedial authoring.
+7. Personalised remedial course (five × 60-minute sessions recommended; up to seven sessions maximum, as needed to address every improvement area).
+8. Post-course outcome check.
+9. Complete student-journey integration and QA.
+10. Founder approval; only then consider the next cycle when explicitly directed.
 
 | Feature / gate | Cycle 1: Grade 9 IB MYP | Cycle 2: Grade 6 Cambridge |
 |---|---|---|
@@ -66,6 +67,7 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 | Actual diagnostic item authoring and teacher/editor scoring pack | Paused until the shared response/task metadata and core feature are implemented and validated | Blocked |
 | Diagnostic built and validated | Not started | Blocked |
 | Evaluation report and analytics built/validated | Not started | Blocked |
+| Whole-site learner-facing copy cleanup after diagnostic/report QA and before remedial authoring | Not started; mandatory before remedial work | Blocked |
 | Personalised remedial course (five sessions preferred; six/seven only if analytics justify) and teacher pack complete | Not started | Blocked |
 | Post-course check validated | Not started | Blocked |
 | Integration and full QA passed | Not started | Blocked |
@@ -103,3 +105,13 @@ The former Unit 1 rotation and queued migration plans are historical work queues
 
 
 **Phase 1A status — 2 November 2026:** Engineering preparation is complete. The proposed Phase 1B code slice is local-only: Supabase CLI/Auth/PostgreSQL/Storage with fictional seed records, React browser Auth, Worker API authentication, initial profile/role migration, RLS and synthetic CI tests. No remote service, billing, real learner data or external OCR/AI/backup processor is used. The next action is implementation only after separate Founder approval. Cycle 1 actual item authoring remains gated until the flagship feature is implemented and pilot-validated; Cycle 2 Cambridge Grade 6 stays blocked.
+
+
+## 6. Mandatory whole-site learner-facing copy cleanup
+
+**Cycle 1 position:** Immediately after the Grade 9 / IB MYP Year 4 diagnostic and evaluation report/analytics have been completed and checked, and before any remedial lesson, practice activity or remedial teacher/editor content is authored.
+
+**Scope:** The entire website, every route and every visible state—not only the dashboard or diagnostic journey. Follow docs/DESIGN_SPEC.md Section 17 for the route/state inventory, known text examples, learner-facing replacement direction, preservation of layout bands/cards, searchable TODO:/TEMP_COPY_ convention and acceptance checks.
+
+**Acceptance:** All internal planning/editor/development notes and temporary placeholder wording are removed from rendered UI and replaced with accurate context-specific copy or useful empty states; no fabricated metrics are presented as live; no unverified unit/syllabus focus is implied; the current visual hierarchy and all bands/cards remain intact; automated content checks and desktop/mobile browser review pass; corrections and reviewed routes are recorded; and the Founder verifies the refreshed Preview. Remedial authoring stays blocked until this row is marked complete.
+
