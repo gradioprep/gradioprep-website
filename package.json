@@ -8,21 +8,31 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "dev:worker": "wrangler dev --ip 127.0.0.1 --port 8787",
+    "build": "wrangler types worker-configuration.d.ts && tsc --noEmit && tsc --project tsconfig.worker.json --noEmit && vite build",
     "preview": "vite preview",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
+    "supabase:test": "supabase test db",
+    "supabase:env": "node scripts/write-local-supabase-env.mjs"
   },
   "dependencies": {
+    "@supabase/server": "1.9.2",
+    "@supabase/supabase-js": "2.118.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.1",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
+    "supabase": "2.121.0",
     "typescript": "^5.9.3",
     "vite": "^7.1.10",
     "wrangler": "4.152.0",
-    "@playwright/test": "1.64.1"
+    "@cloudflare/workers-types": "5.20261101.1"
   }
 }
