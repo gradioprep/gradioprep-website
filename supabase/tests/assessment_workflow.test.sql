@@ -229,7 +229,7 @@ SELECT is((SELECT max_points FROM public.assessment_versions), 8::numeric, 'vers
 SELECT ok((SELECT first_turnaround_seconds >= 0 FROM public.assessment_versions), 'first publication records actual elapsed turnaround');
 SELECT ok((SELECT seconds_to_due_at_first_publish > 0 FROM public.assessment_versions), 'first publication preserves time remaining before the 24-hour deadline');
 SELECT is((SELECT sla_met FROM public.assessment_versions), true, 'first publication within 24 hours records SLA met');
-SELECT is((SELECT count(*)::integer FROM private.assessment_drafts), 0, 'publishing consumes and removes the private draft');
+SELECT is((SELECT count(*)::integer FROM public.get_assessment_draft((SELECT id FROM public.assessment_submissions LIMIT 1))), 0, 'publishing consumes the private draft and the assigned grader can no longer resume it');
 RESET ROLE;
 
 -- Only the latest published version is learner-visible; guardians require
