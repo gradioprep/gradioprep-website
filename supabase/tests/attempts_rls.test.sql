@@ -160,7 +160,7 @@ SELECT throws_ok(
   'P0001', 'mfa_required', 'owner at AAL1 cannot assign submitted attempts'
 );
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
-SELECT is((SELECT count(*)::integer FROM public.attempts), 3, 'owner at AAL2 can inspect the seeded submitted attempts');
+SELECT is((SELECT count(*)::integer FROM public.attempts), 4, 'owner at AAL2 can inspect the seeded and newly submitted attempts');
 SELECT lives_ok(
   $$SELECT * FROM public.assign_attempt_to_grader('c3333333-3333-4333-8333-333333333333', '55555555-5555-4555-8555-555555555555', 'Synthetic assignment test')$$,
   'owner at AAL2 can assign a submitted attempt to an active grader'

@@ -133,7 +133,7 @@ BEGIN
     VALUES (
       p_attempt_id, selected_task_version_id, p_prompt_id, p_response_text
     )
-    ON CONFLICT (attempt_id, prompt_id)
+    ON CONFLICT ON CONSTRAINT attempt_responses_attempt_id_prompt_id_key
     DO UPDATE SET response_text = EXCLUDED.response_text
     RETURNING
       saved_response.id,
