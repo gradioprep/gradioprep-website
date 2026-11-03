@@ -356,6 +356,12 @@ test.describe("Phase 1B account foundation", () => {
     expect(ownerAal1Assignment.status()).toBe(403);
     await expect(ownerAal1Assignment.json()).resolves.toMatchObject({ error: "mfa_required" });
 
+    const ownerAal1SubmissionQueue = await page.request.get("/api/v1/admin/submissions/queue", {
+      headers: { Authorization: firstFactorToken },
+    });
+    expect(ownerAal1SubmissionQueue.status()).toBe(403);
+    await expect(ownerAal1SubmissionQueue.json()).resolves.toMatchObject({ error: "mfa_required" });
+
     await page.getByRole("button", { name: "Set up authenticator app" }).click();
     await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
     const secret = await page.getByTestId("totp-secret").innerText();
@@ -391,6 +397,17 @@ test.describe("Phase 1B account foundation", () => {
         grader_user_id: "55555555-5555-4555-8555-555555555555",
       },
     });
+
+    const ownerAal2SubmissionQueue = await page.request.get("/api/v1/admin/submissions/queue", {
+      headers: { Authorization: ownerToken },
+    });
+    const ownerQueueBody = await ownerAal2SubmissionQueue.json() as {
+      submissions: Array<{ accepted_at: string; status: string }>;
+    };
+    expect(ownerAal2SubmissionQueue.status(), JSON.stringify(ownerQueueBody)).toBe(200);
+    const acceptedTimes = ownerQueueBody.submissions.map(item => Date.parse(item.accepted_at));
+    expect(acceptedTimes).toEqual([...acceptedTimes].sort((first, second) => first - second));
+
 
     const duplicateAttemptAssignment = await page.request.post(
       "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign",
