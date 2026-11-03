@@ -898,6 +898,26 @@ async function getLearnerSubmission(
   return jsonResponse({ submission: data });
 }
 
+async function listAssessmentSubmissionQueue(request: Request, env: WorkerEnv): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase
+    .from("assessment_submissions")
+    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version)")
+    .in("status", ["queued", "assigned", "grading"])
+    .order("accepted_at", { ascending: true })
+    .order("id", { ascending: true })
+    .limit(100);
+
+  if (error) return jsonResponse({ error: "assessment_submission_queue_unavailable" }, 500);
+  return jsonResponse({ submissions: data ?? [] });
+}
+
 async function listGraderQueue(request: Request, env: WorkerEnv): Promise<Response> {
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
@@ -1038,6 +1058,10 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const learnerSubmissionMatch = url.pathname.match(/^\/api\/v1\/learner\/submissions\/([0-9a-f-]{36})$/i);
   if (learnerSubmissionMatch && request.method === "GET") {
     return getLearnerSubmission(request, env, learnerSubmissionMatch[1]);
+  }
+
+  if (url.pathname === "/api/v1/admin/submissions/queue" && request.method === "GET") {
+    return listAssessmentSubmissionQueue(request, env);
   }
 
   if (url.pathname === "/api/v1/grader/queue" && request.method === "GET") {
