@@ -92,6 +92,21 @@ SELECT is((SELECT count(*)::integer FROM public.attempt_responses), 1, 'grader B
 SELECT is((SELECT count(*)::integer FROM public.grader_assignments), 1, 'grader B sees only their own assignment');
 RESET ROLE;
 
+-- Revoking an assignment removes both task metadata and attempt visibility.
+UPDATE public.grader_assignments
+SET revoked_by = '88888888-8888-4888-8888-888888888888',
+    revoked_at = now()
+WHERE id = 'd1111111-1111-4111-8111-111111111111'
+  AND revoked_at IS NULL;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);
+SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}', true);
+SELECT is((SELECT count(*)::integer FROM public.task_versions), 0, 'grader whose assignment is revoked loses task metadata access');
+SELECT is((SELECT count(*)::integer FROM public.task_version_prompts), 0, 'grader whose assignment is revoked loses prompt access');
+SELECT is((SELECT count(*)::integer FROM public.attempts), 0, 'grader whose assignment is revoked loses attempt access');
+SELECT is((SELECT count(*)::integer FROM public.grader_assignments), 0, 'grader whose assignment is revoked loses assignment access');
+RESET ROLE;
+
 -- Admin permissions are not promoted to grader/owner by the admin role or AAL2.
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '77777777-7777-4777-8777-777777777777', true);
@@ -116,6 +131,7 @@ SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 0, 'owner at
 SELECT is((SELECT count(*)::integer FROM public.task_versions), 0, 'owner at AAL1 cannot inspect task versions');
 SELECT is((SELECT count(*)::integer FROM public.task_version_prompts), 0, 'owner at AAL1 cannot inspect task prompts');
 SELECT is((SELECT count(*)::integer FROM public.attempts), 0, 'owner at AAL1 cannot inspect learner attempts');
+SELECT is((SELECT count(*)::integer FROM public.attempt_responses), 0, 'owner at AAL1 cannot inspect learner responses');
 SELECT is((SELECT count(*)::integer FROM public.grader_assignments), 0, 'owner at AAL1 cannot inspect grader assignments');
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT is((SELECT count(*)::integer FROM public.profiles), 9, 'owner at AAL2 can inspect all synthetic profiles');
