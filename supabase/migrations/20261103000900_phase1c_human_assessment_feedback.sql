@@ -476,9 +476,13 @@ BEGIN
 
   IF p_submission_id IS NULL OR p_overall_feedback IS NULL
     OR char_length(btrim(p_overall_feedback)) NOT BETWEEN 5 AND 8000
-    OR p_criterion_results IS NULL OR jsonb_typeof(p_criterion_results) <> 'array'
-    OR jsonb_array_length(p_criterion_results) = 0
+    OR p_criterion_results IS NULL
     OR (p_change_reason IS NOT NULL AND char_length(btrim(p_change_reason)) NOT BETWEEN 3 AND 240) THEN
+    RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'invalid_assessment_draft';
+  END IF;
+
+  IF jsonb_typeof(p_criterion_results) <> 'array'
+    OR jsonb_array_length(p_criterion_results) = 0 THEN
     RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'invalid_assessment_draft';
   END IF;
 
@@ -519,8 +523,11 @@ BEGIN
 
   FOR result_item IN SELECT value FROM jsonb_array_elements(p_criterion_results)
   LOOP
-    IF jsonb_typeof(result_item) <> 'object'
-      OR jsonb_object_length(result_item) <> 3
+    IF jsonb_typeof(result_item) <> 'object' THEN
+      RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'invalid_assessment_criteria';
+    END IF;
+
+    IF jsonb_object_length(result_item) <> 3
       OR NOT (result_item ?& ARRAY['criterion_id', 'points_awarded', 'feedback'])
       OR jsonb_typeof(result_item -> 'criterion_id') <> 'string'
       OR (result_item ->> 'criterion_id') !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
@@ -754,6 +761,50 @@ BEGIN
     created_version.seconds_to_due_at_first_publish, created_version.sla_met;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION public.get_assessment_draft(p_submission_id uuid)
+RETURNS TABLE (
+  submission_id uuid,
+  grader_user_id uuid,
+  rubric_version_id uuid,
+  overall_feedback text,
+  change_reason text,
+  criterion_results jsonb,
+  draft_revision integer,
+  updated_at timestamptz
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $
+DECLARE
+  actor_id uuid := auth.uid();
+BEGIN
+  IF actor_id IS NULL OR NOT private.current_account_is_active()
+    OR NOT private.current_user_has_role('grader'::public.app_role)
+    OR coalesce(auth.jwt() ->> 'aal', 'aal1') <> 'aal2'
+    OR NOT EXISTS (
+      SELECT 1
+      FROM public.submission_grader_assignments AS assignment
+      WHERE assignment.submission_id = p_submission_id
+        AND assignment.grader_user_id = actor_id
+        AND assignment.revoked_at IS NULL
+    ) THEN
+    RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'grader_assessment_forbidden';
+  END IF;
+
+  RETURN QUERY
+    SELECT draft.submission_id, draft.grader_user_id, draft.rubric_version_id,
+      draft.overall_feedback, draft.change_reason, draft.criterion_results,
+      draft.draft_revision, draft.updated_at
+    FROM private.assessment_drafts AS draft
+    WHERE draft.submission_id = p_submission_id
+      AND draft.grader_user_id = actor_id;
+END;
+$;
+
+REVOKE ALL ON FUNCTION public.get_assessment_draft(uuid) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.get_assessment_draft(uuid) TO authenticated;
 
 REVOKE ALL ON FUNCTION public.assign_submission_to_grader(uuid, uuid, text) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.save_assessment_draft(uuid, text, text, jsonb) FROM PUBLIC, anon, authenticated;
