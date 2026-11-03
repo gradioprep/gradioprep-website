@@ -18,7 +18,7 @@ interface AuthContextValue {
   signUp: (displayName: string, email: string, password: string) => Promise<boolean>;
   requestPasswordReset: (email: string) => Promise<void>;
   updatePassword: (password: string) => Promise<void>;
-  signOut: () => Promise<void>;
+  signOut: (scope?: "global" | "local") => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -106,9 +106,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
       setPasswordRecovery(false);
     },
-    async signOut() {
+    async signOut(scope: "global" | "local" = "global") {
       if (!supabase) throw new Error("Authentication is not configured in this environment.");
-      const { error } = await supabase.auth.signOut();
+      // Global sign-out revokes refresh tokens on every device/session. Local
+      // sign-out is used only to clear a browser after the Worker detects that
+      // its remote session was already revoked.
+      const { error } = await supabase.auth.signOut({ scope });
       if (error) throw error;
       setPasswordRecovery(false);
       setSession(null);

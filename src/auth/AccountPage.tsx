@@ -44,6 +44,12 @@ export default function AccountPage({ go }: { go: Navigate }) {
     }).then(async (response) => {
       const result = await response.json() as CurrentAccount | { error?: string; message?: string };
       if (!response.ok) {
+        if (response.status === 401 && "error" in result && result.code === "session_revoked") {
+          // A different device may have globally signed out this account. Clear
+          // this browser's stale local session so the learner can sign in again.
+          await auth.signOut("local").catch(() => undefined);
+          return;
+        }
         if (response.status === 403 && "error" in result && result.error === "account_unavailable") {
           if (active) {
             setAccount(null);
