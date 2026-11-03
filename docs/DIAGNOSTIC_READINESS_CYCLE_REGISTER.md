@@ -1,8 +1,8 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.13  
+**Version:** 1.14  
 **Last updated:** 3 November 2026  
-**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 research, taxonomy, item map, flagship feature plan, 24-hour SLA and Phase 0 decisions are approved. The phased implementation plan is approved and continues in its recorded order without repeated approval for included steps. Phase 1B local synthetic-only coding is underway in draft PR #22; suspended-account Auth/Worker/RLS/UI checks passed PostgreSQL RLS CI and 16/16 Chromium tests in run #41500536318 on application-code commit `ad82f0875737e337ea52b2918a04d0d17cd14f36`. The free-first policy targets US$0 recurring infrastructure subscriptions and paid API use for 3 November 2026–2 November 2027; 100+ active subscribers triggers a review, not automatic upgrading. See `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`. Hosted provisioning, paid spend, real learner data/external processing, merge, production deployment and DNS remain separate gates; Founder visual review of the Preview remains pending. Actual MYP diagnostic item authoring follows flagship implementation and pilot validation. Whole-website learner-facing copy cleanup remains scheduled after Cycle 1 diagnostic/report validation and before remedial authoring. Cycle 2 remains blocked.
+**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 research, taxonomy, item map, flagship feature plan, 24-hour SLA and Phase 0 decisions are approved. Phase 1B and the Phase 1C-A/B/C local synthetic-only backend slices have implementation and exact-head CI evidence; latest verified head is `d2e825746aa814de1f100ef2d8daa2e841d91c80`, run [#41668857175](https://github.com/gradioprep/gradioprep-website/actions/runs/41668857175) passed 361 PostgreSQL/pgTAP assertions across eight SQL files and 27/27 Playwright tests. PR #22 remains open, draft and unmerged. The full Phase 1C exit gate and Phase 1D PDF/private-file layer remain incomplete. Actual MYP diagnostic item authoring remains gated until the shared response/grading feature is implemented and pilot-validated. Whole-website learner-facing copy cleanup remains scheduled after Cycle 1 diagnostic/report validation and before remedial authoring. Hosted provisioning, paid spend, real learner data/external processing, merge, production deployment and DNS remain separate approval gates. Cycle 2 remains blocked.
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
 **Purpose:** Track the founder-selected order for the diagnostic → evaluation/analytics → remedial-course layer independently of the existing Unit 1/content register.
 
@@ -10,7 +10,7 @@
 
 | Order | Requested school-grade target | Working curriculum alignment | Current status |
 |---:|---|---|---|
-| 1 | Grade 9 — IB MYP Language and Literature | MYP Year 4 is confirmed by the Founder for the relevant school/programme context; do not reopen this as an assumption. Official MYP programme age band: 11–16; individual chronological age not separately supplied | Provider research, taxonomy/high-level blueprint and detailed item map approved; flagship feature plan, 24-hour grading target and Phase 0 decisions approved; Approved phased implementation sequence; Phase 1B local synthetic-only coding underway |
+| 1 | Grade 9 — IB MYP Language and Literature | MYP Year 4 is confirmed by the Founder for the relevant school/programme context; do not reopen this as an assumption. Official MYP programme age band: 11–16; individual chronological age not separately supplied | Provider research, taxonomy/high-level blueprint and detailed item map approved; flagship feature plan, 24-hour grading target and Phase 0 decisions approved; Phase 1B and Phase 1C-A/B/C backend slices locally implemented and CI-verified; remaining Phase 1C-D/E/F, Phase 1D file layer and flagship feature implementation still required |
 | 2 | Grade 6 — Cambridge English | Exact Cambridge stage and English route remain to be verified. Cambridge Primary Stage 6 / English 0058 is a candidate only where the learner age and first-language route support it. Cambridge Lower Secondary Stage 7 is not a substitute for the requested Grade 6 target | Second cycle; blocked until Cycle 1 is complete and the founder directs the transition |
 
 Grade 9 = MYP Year 4 is a Founder-confirmed placement for Cycle 1, not an unresolved mapping. Cambridge Grade 6 remains a requested school-grade label whose exact official stage/course must be established during Cycle 2 scope lock. Never substitute Cambridge Lower Secondary Stage 7 for Grade 6.
@@ -63,7 +63,7 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 | Skill taxonomy and high-level blueprint approved | Complete; Founder-approved 1 Nov 2026 | Blocked |
 | Detailed task-level item map and scoring specification | Complete; Founder-approved 2 Nov 2026 | Blocked |
 | Flagship PDF response, teacher grading and timed analytics plan | Complete; phased plan and 24-hour grading target approved 2 Nov 2026 | Blocked |
-| Flagship feature implementation and pilot QA | Not started; Phase 1B local secure foundation is a prerequisite platform slice in draft PR #22, not implementation of the flagship PDF/grading feature. Local RLS/build/browser CI passed; later flagship phases remain separately gated | Blocked |
+| Flagship feature implementation and pilot QA | In progress, not complete: Phase 1B and Phase 1C-A/B/C local backend slices are CI-verified, including typed attempts, accepted submissions and human draft/publication records; Phase 1C-D/E/F, Phase 1D private PDF/file controls and flagship PDF/extraction, teacher workspace, timed analytics and pilot QA remain outstanding | Blocked |
 | Actual diagnostic item authoring and teacher/editor scoring pack | Paused until the shared response/task metadata and core feature are implemented and validated | Blocked |
 | Diagnostic built and validated | Not started | Blocked |
 | Evaluation report and analytics built/validated | Not started | Blocked |
@@ -72,6 +72,8 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 | Post-course check validated | Not started | Blocked |
 | Integration and full QA passed | Not started | Blocked |
 | Founder approval for complete cycle | Not started | Blocked |
+
+**Verified platform prerequisite checkpoint — 3 November 2026:** Phase 1C-B accepted human-assessment submissions and Phase 1C-C human assessment/feedback are implemented and verified on `d2e825746aa814de1f100ef2d8daa2e841d91c80`, exact-head run [#41668857175](https://github.com/gradioprep/gradioprep-website/actions/runs/41668857175) passed 361 PostgreSQL/pgTAP assertions across eight SQL files and 27/27 Playwright tests, plus reset/seed, TypeScript/Worker/Vite builds and cleanup. This is backend infrastructure progress, not a learner-facing Diagnostic or Evaluation Report implementation. The approved Grade 9/MYP Year 4 provider research, skill blueprint and item map remain complete; actual item authoring and the Diagnostic/report build are still gated by completion and validation of the shared flagship feature.
 
 ## 4. Existing curriculum-content work — preserved and deferred
 
