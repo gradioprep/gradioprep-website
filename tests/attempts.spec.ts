@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { createHmac } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
 
 const localPassword = "Local-only-GradiPrep-2026!";
 const taskVersionA = "a1111111-1111-4111-8111-111111111111";
@@ -136,6 +136,128 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     const graderRoute = await page.request.get("/api/v1/grader/queue", { headers });
     expect(graderRoute.status()).toBe(403);
     await expect(graderRoute.json()).resolves.toMatchObject({ error: "role_required" });
+  });
+
+  test("learner accepts a separate human-assessment submission with immutable SLA and idempotency", async ({ page, request }) => {
+    expect((await request.get("/api/v1/learner/submissions")).status()).toBe(401);
+
+    const token = await signIn(page, "student.a@example.invalid", "Synthetic Student A");
+    const headers = { Authorization: token };
+    const payload = {
+      task_version_id: taskVersionA,
+      idempotency_key: randomUUID(),
+      response_text: "This synthetic assessment response explains how a selected textual detail shapes a reader response and supports the interpretation with precise evidence.",
+    };
+
+    const acceptedResponse = await page.request.post("/api/v1/learner/submissions", {
+      headers,
+      data: payload,
+    });
+    const acceptedBody = await acceptedResponse.json() as {
+      submission: {
+        submission_id: string;
+        learner_id: string;
+        task_version_id: string;
+        rubric_version_id: string;
+        status: string;
+        accepted_at: string;
+        grading_due_at: string;
+        sla_target_seconds: number;
+        capacity_limit_snapshot: number;
+        open_submissions_before_acceptance: number;
+        is_replay: boolean;
+      };
+    };
+    expect(acceptedResponse.status(), JSON.stringify(acceptedBody)).toBe(201);
+    expect(acceptedBody.submission.learner_id).toBe("11111111-1111-4111-8111-111111111111");
+    expect(acceptedBody.submission.task_version_id).toBe(taskVersionA);
+    expect(acceptedBody.submission.rubric_version_id).toBe("f1111111-1111-4111-8111-111111111111");
+    expect(acceptedBody.submission.status).toBe("queued");
+    expect(acceptedBody.submission.sla_target_seconds).toBe(86_400);
+    expect(new Date(acceptedBody.submission.grading_due_at).getTime() -
+      new Date(acceptedBody.submission.accepted_at).getTime()).toBe(86_400_000);
+    expect(acceptedBody.submission.capacity_limit_snapshot).toBe(3);
+    expect(acceptedBody.submission.open_submissions_before_acceptance).toBe(0);
+    expect(acceptedBody.submission.is_replay).toBe(false);
+
+    const replayResponse = await page.request.post("/api/v1/learner/submissions", {
+      headers,
+      data: payload,
+    });
+    const replayBody = await replayResponse.json() as {
+      submission: { submission_id: string; is_replay: boolean };
+    };
+    expect(replayResponse.status()).toBe(200);
+    expect(replayBody.submission.submission_id).toBe(acceptedBody.submission.submission_id);
+    expect(replayBody.submission.is_replay).toBe(true);
+
+    const conflictingReplay = await page.request.post("/api/v1/learner/submissions", {
+      headers,
+      data: { ...payload, response_text: "This changed content cannot replace the original accepted assessment response." },
+    });
+    expect(conflictingReplay.status()).toBe(409);
+    await expect(conflictingReplay.json()).resolves.toMatchObject({
+      error: "submission_idempotency_conflict",
+    });
+
+    const listResponse = await page.request.get("/api/v1/learner/submissions", { headers });
+    expect(listResponse.status()).toBe(200);
+    const listBody = await listResponse.json() as {
+      submissions: Array<{ id: string; status: string; accepted_at: string; grading_due_at: string }>;
+    };
+    expect(listBody.submissions.some(item =>
+      item.id === acceptedBody.submission.submission_id && item.status === "queued"
+    )).toBe(true);
+
+    const detailResponse = await page.request.get(
+      "/api/v1/learner/submissions/" + acceptedBody.submission.submission_id,
+      { headers },
+    );
+    expect(detailResponse.status()).toBe(200);
+    const detailBody = await detailResponse.json() as {
+      submission: {
+        submission_versions: Array<{ version_number: number; response_text: string; word_count: number }>;
+      };
+    };
+    expect(detailBody.submission.submission_versions).toHaveLength(1);
+    expect(detailBody.submission.submission_versions[0].version_number).toBe(1);
+    expect(detailBody.submission.submission_versions[0].response_text).toBe(payload.response_text);
+    expect(detailBody.submission.submission_versions[0].word_count).toBeGreaterThan(0);
+
+    const forgedFields = await page.request.post("/api/v1/learner/submissions", {
+      headers,
+      data: { ...payload, learner_id: "22222222-2222-4222-8222-222222222222" },
+    });
+    expect(forgedFields.status()).toBe(400);
+
+    const taskOutsideEnrolment = await page.request.post("/api/v1/learner/submissions", {
+      headers,
+      data: {
+        task_version_id: "a2222222-2222-4222-8222-222222222222",
+        idempotency_key: randomUUID(),
+        response_text: "This should not be accepted for a learner enrolled in another pathway.",
+      },
+    });
+    expect(taskOutsideEnrolment.status()).toBe(404);
+  });
+
+  test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {
+    const token = await signIn(page, "guardian.a@example.invalid", "Synthetic Guardian A");
+    const headers = { Authorization: token };
+    const attemptRoute = await page.request.get("/api/v1/learner/submissions", { headers });
+    expect(attemptRoute.status()).toBe(403);
+    await expect(attemptRoute.json()).resolves.toMatchObject({ error: "role_required" });
+
+    const submitRoute = await page.request.post("/api/v1/learner/submissions", {
+      headers,
+      data: {
+        task_version_id: taskVersionA,
+        idempotency_key: randomUUID(),
+        response_text: "A guardian must not submit work on behalf of the linked learner.",
+      },
+    });
+    expect(submitRoute.status()).toBe(403);
+    await expect(submitRoute.json()).resolves.toMatchObject({ error: "role_required" });
   });
 
   test("guardian cannot use learner or grader APIs without a matching role", async ({ page }) => {
