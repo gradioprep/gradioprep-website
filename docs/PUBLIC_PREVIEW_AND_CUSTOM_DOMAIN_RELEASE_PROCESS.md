@@ -1,59 +1,55 @@
 # Public Preview, Verification and Custom-Domain Release Process
 
-**Version:** 1.2-draft
+**Version:** 1.3-draft
 **Date:** 3 November 2026  
-**Status:** Founder-requested mandatory engineering/build-process standard. Apply to every implementation milestone and relevant pull request. PR #22's latest exact-head CI and Cloudflare Preview status are recorded in Section 3.3; Founder visual review remains pending.  
+**Status:** Conditional Preview/review standard updated by Founder on 3 November 2026. Founder-facing Preview requests are reserved for new, concrete and substantial learner/staff-visible features. Routine, unchanged, backend-only and documentation-only previews must not be repeatedly surfaced. PR #22's security and CI records remain in the engineering history.
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md`; free-first cost decisions: `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`
 **Related:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`, `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`, `docs/CONTROLLED_CLOUDFLARE_PREVIEW.md`, `docs/DESIGN_SPEC.md` and the approved Phase 0 decision register.
 
 ## 1. Founder-approved working model
 
-GradiPrep will use a disciplined **GitHub implementation → automated verification → public Cloudflare Preview → Founder visual/functional verification → correction → refreshed Preview** loop.
+GradiPrep uses GitHub implementation and automated verification continuously. A public Cloudflare Worker Preview is an occasional Founder-review aid, **not a required announcement or manual review for every PR, commit, fix or milestone**.
 
-This is a core feature of the build process, not an optional final QA activity. Do not defer public verification until an entire phase or feature is complete when a useful, safe vertical slice can be previewed earlier.
+The Founder has directed that a Preview be brought to them only when a **new, concrete and substantial learner- or staff-visible feature** has been added and is ready for a useful visual/functional review. Do not repeatedly mention, resend or ask the Founder to inspect an unchanged, superseded or routine Preview. Do not ask for Preview review of documentation-only changes, internal security/database/RLS/API work without a visible workflow, refactors, tests/CI, maintenance or ordinary bug fixes. These changes still receive all appropriate automated/local checks and remain documented in GitHub; their build/deployment noise should not be promoted as a Founder task.
 
-The Founder is not expected to inspect source code. Each implementation PR must therefore provide a human-readable view of the actual running website, a clear summary of what changed, what to check, what has passed, what remains incomplete, and the next approval required.
+### Conditional Preview handoff
 
-### Mandatory cycle
+1. Implement the feature and complete its relevant automated checks first.
+2. Decide whether the change adds a concrete, substantial learner/staff-visible capability. Internal-only changes do not qualify.
+3. For a qualifying feature, add the hidden PR-body marker `<!-- founder-preview-required -->`. This is an internal engineering signal; the Founder does not need to edit labels or workflow settings.
+4. The workflow may then deploy/update the PR's synthetic-data Worker Preview and provide one handoff.
+5. Give the Founder a concise summary of the new capability, exact route(s), up to five focused user-action checks, the Preview URL for that feature revision, backend/data limitations and any decision required.
+6. Do not request another review just because the same feature is redeployed or receives a minor correction. Ask again only for another substantial new visible feature.
+7. Keep CI, code review, security and release gates in force regardless of whether a Preview is requested.
 
-1. **Agree the small implementation slice.** State the learner/staff-visible change and acceptance criteria before coding.
-2. **Implement on a dedicated GitHub branch.** Keep changes focused; do not make unrelated redesigns or architecture changes.
-3. **Run automated checks first.** TypeScript/build, relevant unit/API/database/RLS tests, existing Playwright regression tests and security checks must pass before public preview deployment.
-4. **Deploy the branch to its Cloudflare Worker Preview.** Use `npx wrangler preview`, never `npx wrangler deploy` for PR verification. Each PR receives its own `pr-<number>` Preview and an immutable deployment URL for the exact revision.
-5. **Post the Preview URL on the PR automatically.** If credentials or deployment are unavailable, explicitly record why; never imply that public verification happened.
-6. **Founder verifies the actual page.** Open the Preview URL and test the relevant page/flow. Verify the visual design, navigation, direct URLs, responsive layout and relevant interactions—not only screenshots or CI.
-7. **Correct and re-preview promptly.** Address findings in the same PR, rerun checks, update the same Preview alias and preserve the immutable URL/checkpoint for comparison.
-8. **Record acceptance.** Update the PR and source-of-truth status with CI results, preview URL/revision, Founder verification outcome, known gaps and next gate.
-
-A completed milestone is not considered publicly verified until the Founder has inspected the deployed Preview and the result is recorded. Automated tests and public visual review are complementary, not interchangeable.
+The Founder is not expected to inspect source code or review routine engineering deployments. A Preview is useful only when it exposes a meaningful new capability that can actually be checked.
 
 ## 2. When public preview is expected
 
-| Work type | Required public verification |
+| Work type | Founder Preview request |
 |---|---|
-| Layout, design, navigation, copy, static page or responsive UI | Preview every coherent UI slice before closing its implementation PR |
-| Authentication screens/session states | Preview the UI; real sign-in and token/session behavior are verified against local Supabase in CI first |
-| Protected API or database behavior | Test Auth/API/RLS with local synthetic Supabase in CI; deploy the public Worker Preview to verify the public app shell, routing and safe failure states |
-| A feature requiring real hosted Auth or database connectivity | Use a dedicated hosted synthetic-only test project only after separate explicit provisioning approval; then include end-to-end Preview verification |
-| PDF upload, OCR, AI, grading or analytics | Verify UI and simulated/synthetic flows early; live external service integration remains separately gated by region, privacy, legal, quality and cost approval |
-| Documentation-only change | Build checks as appropriate; public preview only if the PR also changes rendered website content or behavior |
+| New, concrete and substantial learner/staff-visible feature or material new workflow | Yes, once the feature is implemented and relevant CI passes |
+| New major page/route, learner interaction or staff workflow | Yes, when it adds a genuinely new capability, not for routine layout corrections |
+| Documentation-only, internal security/RLS/database changes, backend/API work without new visible workflow | No |
+| Refactoring, dependency/build/test/CI changes, ordinary bug fixes or maintenance | No |
+| Redeployment or minor correction of a feature already reviewed | No; keep the deployment evidence in the PR without repeating the Founder request |
+| Feature requiring hosted Auth/database connectivity | Separate hosted-resource approval still required; a Preview must never imply approval to provision |
 
-Do not wait for an entire multi-week phase if a working slice can be safely tested. Prefer short vertical slices that result in a useful public Preview.
 
 ## 3. Cloudflare Worker Preview operation
 
-The canonical automation is `.github/workflows/controlled-worker-preview.yml`. It:
+The Founder-review upload/comment gate is in `.github/workflows/phase1b-verification.yml` and runs only when the hidden PR-body marker `<!-- founder-preview-required -->` is present. The separate `.github/workflows/controlled-worker-preview.yml` cleanup remains responsible for deleting a PR preview on close. The automation:
 - runs on same-repository pull requests targeting `main` or the active stacked integration base `feature/pdf-submission-grading-timers-plan`;
 - is restricted to pull requests created by the repository owner account `gradioprep`;
 - builds the exact PR head revision;
 - uses the existing repository Actions secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, if configured;
 - uses an account-restricted Workers preview token and calls only `npx wrangler preview --name pr-<number>`;
-- posts or updates a clearly labelled Preview URL comment on the PR;
+- posts or updates a clearly labelled Preview URL comment only for a qualifying feature-review request;
 - removes that PR's Preview when the PR is closed.
 
 The workflow must not use `npx wrangler deploy`, modify DNS, create a Custom Domain, change production settings, create new Cloudflare accounts/products or configure any live database. No production permission or DNS/zone permission should be included in the preview token. The separate production deployment workflow remains unchanged and must never be called by preview automation.
 
-If the PR build passes but Preview deployment does not, record the missing credential, permission or provider failure in the PR/check summary. Continue local tests, but mark public verification as pending and repair the preview path promptly. Do not silently skip the Preview gate.
+If a qualifying feature-review request is made and deployment fails, record the provider/permission failure and continue local tests. If no qualifying feature marker is present, no Preview failure or pending Founder review should be reported; this is an intentional skip, not a failed gate.
 
 ### 3.1 Public-preview safety
 
@@ -82,7 +78,7 @@ This separation is intentional: it allows frequent public website verification w
 
 ## 4. Founder-facing verification handoff
 
-Every implementation PR must include a concise **Public verification handoff** with:
+Only a qualifying new visible-feature PR needs a concise **Founder Preview handoff** with:
 
 1. **What changed on the website:** visible, plain-language description.
 2. **Where to verify:** clickable Preview URL and exact route(s) to open.
@@ -147,7 +143,7 @@ If a persistent branded verification address is genuinely useful before launch, 
 
 | Stage | Work | Approval / verification |
 |---|---|---|
-| Every implementation PR | Build, tests, public branch Preview, Founder visual/functional verification | Founder verifies the actual Preview before milestone acceptance |
+| Every implementation PR | Relevant build, database/RLS, API, security and browser checks | CI evidence; no routine Founder Preview request |\n| New substantial learner/staff-visible feature | One public synthetic-data Preview after checks pass | One focused Founder review of the new capability |
 | Phase 1B–1F | In-scope implementation of the approved secure foundation, with local synthetic services first and public Preview verification | Proceed through the approved sequence with draft PR/CI evidence; hosted provisioning, paid spend, real data, merge and production release remain separate gates |
 | Later hosted synthetic integration | Isolated hosted Supabase + Preview end-to-end auth/API using the Free tier where suitable | Separate hosted-resource provisioning approval; any paid plan or usage requires a documented unavoidable need and explicit cost approval; synthetic data only |
 | Flagship phases 2–5 | PDF, extraction/OCR, grader workflow, feedback, timer/analytics | Public preview each coherent slice; external services only after separate approvals |
