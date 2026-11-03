@@ -622,7 +622,7 @@ BEGIN
     btrim(p_overall_feedback), nullif(btrim(coalesce(p_change_reason, '')), ''),
     p_criterion_results, next_revision, saved_at, saved_at
   )
-  ON CONFLICT (submission_id) DO UPDATE
+  ON CONFLICT ON CONSTRAINT assessment_drafts_pkey DO UPDATE
   SET grader_user_id = EXCLUDED.grader_user_id,
       rubric_version_id = EXCLUDED.rubric_version_id,
       overall_feedback = EXCLUDED.overall_feedback,
