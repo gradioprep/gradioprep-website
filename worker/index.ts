@@ -555,6 +555,24 @@ function hasOnlyAttemptAssignmentFields(value: unknown): value is { grader_user_
     record.reason.trim().length <= 240;
 }
 
+function hasOnlyAssessmentSubmissionFields(value: unknown): value is {
+  task_version_id: string;
+  idempotency_key: string;
+  response_text: string;
+} {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 3 &&
+    Object.keys(record).every((key) =>
+      ["task_version_id", "idempotency_key", "response_text"].includes(key)
+    ) &&
+    isUuid(record.task_version_id) &&
+    isUuid(record.idempotency_key) &&
+    typeof record.response_text === "string" &&
+    record.response_text.trim().length > 0 &&
+    record.response_text.length <= 12_000;
+}
+
 function hasOnlyEmptyObject(value: unknown): boolean {
   return typeof value === "object" && value !== null && !Array.isArray(value) &&
     Object.keys(value as Record<string, unknown>).length === 0;
@@ -794,6 +812,92 @@ async function submitLearnerAttempt(request: Request, env: WorkerEnv, attemptId:
   return jsonResponse({ attempt: submitted });
 }
 
+async function listLearnerSubmissions(request: Request, env: WorkerEnv): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) return roleDenied;
+
+  const { data, error } = await auth.context.supabase
+    .from("assessment_submissions")
+    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version), submission_versions(id, version_number, word_count, created_at)")
+    .eq("learner_id", auth.context.userId)
+    .order("accepted_at", { ascending: false });
+
+  if (error) return jsonResponse({ error: "assessment_submissions_unavailable" }, 500);
+  return jsonResponse({ submissions: data ?? [] });
+}
+
+async function acceptLearnerSubmission(request: Request, env: WorkerEnv): Promise<Response> {
+  const parsed = await readBoundedJson(request, 24_576);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlyAssessmentSubmissionFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_assessment_submission" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) return roleDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("accept_assessment_submission", {
+    p_task_version_id: parsed.body.task_version_id,
+    p_idempotency_key: parsed.body.idempotency_key,
+    p_response_text: parsed.body.response_text,
+  });
+
+  if (error) {
+    if (error.message === "assessment_submission_forbidden") {
+      return jsonResponse({ error: "assessment_submission_forbidden" }, 403);
+    }
+    if (error.message === "invalid_assessment_submission") {
+      return jsonResponse({ error: "invalid_assessment_submission" }, 400);
+    }
+    if (error.message === "assessment_task_not_available") {
+      return jsonResponse({ error: "assessment_task_not_available" }, 404);
+    }
+    if (error.message === "submission_capacity_unavailable") {
+      return jsonResponse({ error: "submission_capacity_unavailable" }, 503);
+    }
+    if (error.message === "submission_capacity_full") {
+      return jsonResponse({ error: "submission_capacity_full" }, 409);
+    }
+    if (error.message === "submission_idempotency_conflict") {
+      return jsonResponse({ error: "submission_idempotency_conflict" }, 409);
+    }
+    return jsonResponse({ error: "assessment_submission_failed" }, 500);
+  }
+
+  const accepted = asRows(data)[0];
+  if (!accepted) return jsonResponse({ error: "assessment_submission_failed" }, 500);
+  return jsonResponse(
+    { submission: accepted },
+    accepted.is_replay === true ? 200 : 201,
+  );
+}
+
+async function getLearnerSubmission(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) return roleDenied;
+
+  const { data, error } = await auth.context.supabase
+    .from("assessment_submissions")
+    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, expected_min_words, ideal_words), submission_versions(id, version_number, response_text, word_count, created_at)")
+    .eq("id", submissionId)
+    .eq("learner_id", auth.context.userId)
+    .maybeSingle();
+
+  if (error) return jsonResponse({ error: "assessment_submission_unavailable" }, 500);
+  if (!data) return jsonResponse({ error: "assessment_submission_not_found" }, 404);
+  return jsonResponse({ submission: data });
+}
+
 async function listGraderQueue(request: Request, env: WorkerEnv): Promise<Response> {
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
@@ -921,6 +1025,19 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const learnerAttemptMatch = url.pathname.match(/^\/api\/v1\/learner\/attempts\/([0-9a-f-]{36})$/i);
   if (learnerAttemptMatch && request.method === "GET") {
     return getLearnerAttempt(request, env, learnerAttemptMatch[1]);
+  }
+
+  if (url.pathname === "/api/v1/learner/submissions" && request.method === "GET") {
+    return listLearnerSubmissions(request, env);
+  }
+
+  if (url.pathname === "/api/v1/learner/submissions" && request.method === "POST") {
+    return acceptLearnerSubmission(request, env);
+  }
+
+  const learnerSubmissionMatch = url.pathname.match(/^\\/api\\/v1\\/learner\\/submissions\\/([0-9a-f-]{36})$/i);
+  if (learnerSubmissionMatch && request.method === "GET") {
+    return getLearnerSubmission(request, env, learnerSubmissionMatch[1]);
   }
 
   if (url.pathname === "/api/v1/grader/queue" && request.method === "GET") {
