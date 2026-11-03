@@ -198,12 +198,52 @@ SELECT throws_ok(
   'student cannot bypass save_attempt_response with a direct response insert'
 );
 SELECT throws_ok(
-  $$UPDATE public.grader_assignments SET grader_user_id = auth.uid()$$,
+  $UPDATE public.grader_assignments SET grader_user_id = auth.uid()$,
   '42501', NULL,
   'student cannot directly alter grader assignments'
 );
 SELECT throws_ok(
-  $$INSERT INTO private.security_audit_events (action, target_type) VALUES ('forged', 'test')$$,
+  $UPDATE public.attempts SET learner_id = auth.uid() WHERE id = 'c1111111-1111-4111-8111-111111111111'$,
+  '42501', NULL,
+  'student cannot transfer an attempt by changing its learner ownership'
+);
+SELECT throws_ok(
+  $UPDATE public.attempts SET status = 'withdrawn', submitted_at = now() WHERE id = 'c1111111-1111-4111-8111-111111111111'$,
+  '42501', NULL,
+  'student cannot manipulate server-controlled attempt state or timestamps'
+);
+SELECT throws_ok(
+  $UPDATE public.attempt_responses SET attempt_id = 'c2222222-2222-4222-8222-222222222222' WHERE id = (SELECT id FROM public.attempt_responses LIMIT 1)$,
+  '42501', NULL,
+  'student cannot move a response between learners or attempts'
+);
+SELECT throws_ok(
+  $UPDATE public.attempt_responses SET version = 99, updated_at = now() WHERE id = (SELECT id FROM public.attempt_responses LIMIT 1)$,
+  '42501', NULL,
+  'student cannot manipulate response version or timestamps'
+);
+SELECT throws_ok(
+  $UPDATE public.guardian_learner_links SET status = 'verified' WHERE guardian_id = auth.uid()$,
+  '42501', NULL,
+  'student cannot forge or update guardian verification links'
+);
+SELECT throws_ok(
+  $UPDATE public.course_enrolments SET learner_id = auth.uid() WHERE learner_id <> auth.uid()$,
+  '42501', NULL,
+  'student cannot transfer or forge enrolment ownership'
+);
+SELECT throws_ok(
+  $UPDATE public.task_versions SET release_state = 'published' WHERE id = 'a1111111-1111-4111-8111-111111111111'$,
+  '42501', NULL,
+  'student cannot publish or change task versions'
+);
+SELECT throws_ok(
+  $UPDATE public.task_version_prompts SET prompt_text = 'forged prompt' WHERE id = 'b1111111-1111-4111-8111-111111111111'$,
+  '42501', NULL,
+  'student cannot change published task prompts'
+);
+SELECT throws_ok(
+  $INSERT INTO private.security_audit_events (action, target_type) VALUES ('forged', 'test')$,
   '42501', NULL,
   'student cannot forge private audit events'
 );
