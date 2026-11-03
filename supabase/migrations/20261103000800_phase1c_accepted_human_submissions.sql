@@ -87,6 +87,50 @@ CREATE INDEX assessment_submissions_queue_idx
 CREATE INDEX assessment_submissions_learner_idx
   ON public.assessment_submissions (learner_id, accepted_at DESC);
 
+-- Future grader workflow may change status/assignment state, but it must never
+-- rewrite the accepted learner/task/rubric, accepted/due clocks, SLA target,
+-- capacity snapshot or idempotency identity.
+CREATE OR REPLACE FUNCTION private.prevent_assessment_submission_snapshot_mutation()
+RETURNS trigger
+LANGUAGE plpgsql
+SET search_path = ''
+AS $
+BEGIN
+  IF ROW(
+    NEW.learner_id,
+    NEW.task_version_id,
+    NEW.rubric_version_id,
+    NEW.accepted_at,
+    NEW.grading_due_at,
+    NEW.sla_target_seconds,
+    NEW.capacity_config_version,
+    NEW.capacity_limit_snapshot,
+    NEW.open_submissions_before_acceptance,
+    NEW.idempotency_key,
+    NEW.created_at
+  ) IS DISTINCT FROM ROW(
+    OLD.learner_id,
+    OLD.task_version_id,
+    OLD.rubric_version_id,
+    OLD.accepted_at,
+    OLD.grading_due_at,
+    OLD.sla_target_seconds,
+    OLD.capacity_config_version,
+    OLD.capacity_limit_snapshot,
+    OLD.open_submissions_before_acceptance,
+    OLD.idempotency_key,
+    OLD.created_at
+  ) THEN
+    RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'assessment_submission_snapshot_immutable';
+  END IF;
+  RETURN NEW;
+END;
+$;
+
+CREATE TRIGGER assessment_submission_snapshot_immutable
+  BEFORE UPDATE ON public.assessment_submissions
+  FOR EACH ROW EXECUTE FUNCTION private.prevent_assessment_submission_snapshot_mutation();
+
 CREATE TABLE public.submission_versions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   submission_id uuid NOT NULL
