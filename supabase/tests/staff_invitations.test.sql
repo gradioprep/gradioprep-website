@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(22);
+SELECT plan(24);
 
 CREATE TEMP TABLE staff_invitation_fixtures (
   invitation_id uuid,
@@ -7,6 +7,7 @@ CREATE TEMP TABLE staff_invitation_fixtures (
   invited_email text,
   invited_role public.app_role
 ) ON COMMIT DROP;
+GRANT ALL ON TABLE pg_temp.staff_invitation_fixtures TO authenticated;
 
 SET LOCAL ROLE anon;
 SELECT throws_ok(
@@ -212,6 +213,7 @@ SELECT is(
   'revoked'::text,
   'revocation appears in the owner list'
 );
+RESET ROLE;
 UPDATE private.staff_invitations
 SET created_at = now() - interval '8 days',
     expires_at = now() - interval '1 day'
@@ -219,7 +221,6 @@ WHERE id = (
   SELECT invitation_id FROM pg_temp.staff_invitation_fixtures
   WHERE invited_role = 'admin' AND invited_email = 'student.a@example.invalid' LIMIT 1
 );
-RESET ROLE;
 
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
