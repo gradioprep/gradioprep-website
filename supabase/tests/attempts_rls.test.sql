@@ -22,16 +22,16 @@ SELECT throws_ok(
   '42501', NULL, 'student cannot create an attempt for another learner'
 );
 SELECT throws_ok(
-  $SELECT * FROM public.create_attempt('a2222222-2222-4222-8222-222222222222')$,
+  $$SELECT * FROM public.create_attempt('a2222222-2222-4222-8222-222222222222')$$,
   'P0002', 'attempt_task_not_available',
   'student cannot create an attempt without an active enrolment in the task pathway'
 );
 SELECT lives_ok(
-  $SELECT * FROM public.create_attempt('a1111111-1111-4111-8111-111111111111')$,
+  $$SELECT * FROM public.create_attempt('a1111111-1111-4111-8111-111111111111')$$,
   'student can start an in-progress attempt for an enrolled published typed task through the narrow RPC'
 );
 SELECT throws_ok(
-  $INSERT INTO public.attempts (learner_id, task_version_id) VALUES (auth.uid(), 'a1111111-1111-4111-8111-111111111111')$,
+  $$INSERT INTO public.attempts (learner_id, task_version_id) VALUES (auth.uid(), 'a1111111-1111-4111-8111-111111111111')$$,
   '42501', NULL, 'student cannot bypass the attempt-creation RPC'
 );
 SELECT is(
