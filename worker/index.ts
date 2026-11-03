@@ -1035,7 +1035,7 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
     return acceptLearnerSubmission(request, env);
   }
 
-  const learnerSubmissionMatch = url.pathname.match(/^\\/api\\/v1\\/learner\\/submissions\\/([0-9a-f-]{36})$/i);
+  const learnerSubmissionMatch = url.pathname.match(/^\/api\/v1\/learner\/submissions\/([0-9a-f-]{36})$/i);
   if (learnerSubmissionMatch && request.method === "GET") {
     return getLearnerSubmission(request, env, learnerSubmissionMatch[1]);
   }
