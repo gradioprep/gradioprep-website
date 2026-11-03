@@ -573,6 +573,57 @@ function hasOnlyAssessmentSubmissionFields(value: unknown): value is {
     record.response_text.length <= 12_000;
 }
 
+function hasOnlySubmissionAssignmentFields(value: unknown): value is { grader_user_id: string; reason: string } {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 2 &&
+    Object.keys(record).every((key) => ["grader_user_id", "reason"].includes(key)) &&
+    isUuid(record.grader_user_id) &&
+    typeof record.reason === "string" &&
+    record.reason.trim().length >= 3 &&
+    record.reason.trim().length <= 240;
+}
+
+function hasOnlyAssessmentDraftFields(value: unknown): value is {
+  overall_feedback: string;
+  change_reason?: string;
+  criterion_results: Array<{ criterion_id: string; points_awarded: number; feedback: string }>;
+} {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  const keys = Object.keys(record);
+  if (!keys.includes("overall_feedback") || !keys.includes("criterion_results") ||
+      keys.some((key) => !["overall_feedback", "change_reason", "criterion_results"].includes(key))) {
+    return false;
+  }
+  if (typeof record.overall_feedback !== "string" ||
+      record.overall_feedback.trim().length < 5 ||
+      record.overall_feedback.length > 8000 ||
+      !Array.isArray(record.criterion_results) ||
+      record.criterion_results.length < 1 ||
+      record.criterion_results.length > 30) return false;
+  if (record.change_reason !== undefined &&
+      (typeof record.change_reason !== "string" ||
+       record.change_reason.trim().length < 3 ||
+       record.change_reason.trim().length > 240)) return false;
+
+  return record.criterion_results.every((item: unknown) => {
+    if (typeof item !== "object" || item === null || Array.isArray(item)) return false;
+    const result = item as Record<string, unknown>;
+    return Object.keys(result).length === 3 &&
+      ["criterion_id", "points_awarded", "feedback"].every((key) => key in result) &&
+      isUuid(result.criterion_id) &&
+      typeof result.points_awarded === "number" &&
+      Number.isFinite(result.points_awarded) &&
+      result.points_awarded >= 0 &&
+      result.points_awarded <= 1000 &&
+      Math.round(result.points_awarded * 100) === result.points_awarded * 100 &&
+      typeof result.feedback === "string" &&
+      result.feedback.trim().length >= 5 &&
+      result.feedback.length <= 3000;
+  });
+}
+
 function hasOnlyEmptyObject(value: unknown): boolean {
   return typeof value === "object" && value !== null && !Array.isArray(value) &&
     Object.keys(value as Record<string, unknown>).length === 0;
@@ -888,7 +939,7 @@ async function getLearnerSubmission(
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
-    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, expected_min_words, ideal_words), submission_versions(id, version_number, response_text, word_count, created_at)")
+    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, expected_min_words, ideal_words), submission_versions(id, version_number, response_text, word_count, created_at), assessment_versions(id, version_number, total_points, max_points, overall_feedback, published_at, first_published_at, first_turnaround_seconds, seconds_to_due_at_first_publish, sla_met, criterion_results(id, criterion_code_snapshot, criterion_title_snapshot, descriptor_snapshot, points_awarded, max_points_snapshot, feedback))")
     .eq("id", submissionId)
     .eq("learner_id", auth.context.userId)
     .maybeSingle();
@@ -896,6 +947,209 @@ async function getLearnerSubmission(
   if (error) return jsonResponse({ error: "assessment_submission_unavailable" }, 500);
   if (!data) return jsonResponse({ error: "assessment_submission_not_found" }, 404);
   return jsonResponse({ submission: data });
+}
+
+async function assignAssessmentSubmissionToGrader(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 2_048);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlySubmissionAssignmentFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_assessment_assignment" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("assign_submission_to_grader", {
+    p_submission_id: submissionId,
+    p_grader_user_id: parsed.body.grader_user_id,
+    p_reason: parsed.body.reason.trim(),
+  });
+  if (error) {
+    if (error.message === "assessment_assignment_forbidden") return jsonResponse({ error: "assessment_assignment_forbidden" }, 403);
+    if (error.message === "assessment_submission_not_found") return jsonResponse({ error: "assessment_submission_not_found" }, 404);
+    if (error.message === "assessment_submission_not_assignable") return jsonResponse({ error: "assessment_submission_not_assignable" }, 409);
+    if (error.message === "grader_not_available") return jsonResponse({ error: "grader_not_available" }, 400);
+    if (error.message === "invalid_assessment_assignment") return jsonResponse({ error: "invalid_assessment_assignment" }, 400);
+    return jsonResponse({ error: "assessment_assignment_failed" }, 500);
+  }
+  const assignment = asRows(data)[0];
+  if (!assignment) return jsonResponse({ error: "assessment_assignment_failed" }, 500);
+  return jsonResponse({ assignment }, 201);
+}
+
+async function listAssignedAssessmentSubmissions(request: Request, env: WorkerEnv): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "grader");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase
+    .from("assessment_submissions")
+    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, task_versions(task_code, title, version)")
+    .in("status", ["assigned", "grading", "feedback_published"])
+    .order("accepted_at", { ascending: true })
+    .order("id", { ascending: true })
+    .limit(100);
+  if (error) return jsonResponse({ error: "grader_assessment_queue_unavailable" }, 500);
+  return jsonResponse({ submissions: data ?? [] });
+}
+
+async function getAssignedAssessmentSubmission(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "grader");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data: submission, error: submissionError } = await auth.context.supabase
+    .from("assessment_submissions")
+    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, task_versions(task_code, title, version, expected_min_words, ideal_words)")
+    .eq("id", submissionId)
+    .maybeSingle();
+  if (submissionError) return jsonResponse({ error: "assessment_submission_unavailable" }, 500);
+  if (!submission) return jsonResponse({ error: "assessment_submission_not_found" }, 404);
+
+  const [
+    responseResult,
+    promptResult,
+    rubricResult,
+    criteriaResult,
+    assignmentResult,
+    versionsResult,
+    draftResult,
+  ] = await Promise.all([
+    auth.context.supabase
+      .from("submission_versions")
+      .select("id, version_number, response_text, word_count, created_at")
+      .eq("submission_id", submissionId)
+      .order("version_number", { ascending: true }),
+    auth.context.supabase
+      .from("task_version_prompts")
+      .select("id, sequence, prompt_text")
+      .eq("task_version_id", submission.task_version_id)
+      .order("sequence", { ascending: true }),
+    auth.context.supabase
+      .from("rubric_versions")
+      .select("id, rubric_id, version, title")
+      .eq("id", submission.rubric_version_id)
+      .maybeSingle(),
+    auth.context.supabase
+      .from("rubric_criteria")
+      .select("id, criterion_code, sequence, title, descriptor, max_points")
+      .eq("rubric_version_id", submission.rubric_version_id)
+      .order("sequence", { ascending: true }),
+    auth.context.supabase
+      .from("submission_grader_assignments")
+      .select("id, grader_user_id, assigned_at, reason")
+      .eq("submission_id", submissionId)
+      .eq("grader_user_id", auth.context.userId)
+      .is("revoked_at", null)
+      .maybeSingle(),
+    auth.context.supabase
+      .from("assessment_versions")
+      .select("id, version_number, total_points, max_points, overall_feedback, published_at, first_published_at, first_turnaround_seconds, seconds_to_due_at_first_publish, sla_met, criterion_results(id, rubric_criterion_id, criterion_code_snapshot, criterion_title_snapshot, descriptor_snapshot, points_awarded, max_points_snapshot, feedback)")
+      .eq("submission_id", submissionId)
+      .order("version_number", { ascending: true }),
+    auth.context.supabase.rpc("get_assessment_draft", { p_submission_id: submissionId }),
+  ]);
+
+  if (responseResult.error || promptResult.error || rubricResult.error ||
+      criteriaResult.error || assignmentResult.error || versionsResult.error || draftResult.error) {
+    return jsonResponse({ error: "grader_assessment_detail_unavailable" }, 500);
+  }
+  if (!assignmentResult.data) return jsonResponse({ error: "assessment_submission_not_found" }, 404);
+
+  return jsonResponse({
+    submission,
+    response_versions: responseResult.data ?? [],
+    prompts: promptResult.data ?? [],
+    rubric: rubricResult.data,
+    criteria: criteriaResult.data ?? [],
+    assignment: assignmentResult.data,
+    published_versions: versionsResult.data ?? [],
+    draft: asRows(draftResult.data)[0] ?? null,
+  });
+}
+
+async function saveAssignedAssessmentDraft(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 24_576);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlyAssessmentDraftFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_assessment_draft" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "grader");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("save_assessment_draft", {
+    p_submission_id: submissionId,
+    p_overall_feedback: parsed.body.overall_feedback.trim(),
+    p_change_reason: parsed.body.change_reason?.trim() ?? null,
+    p_criterion_results: parsed.body.criterion_results,
+  });
+  if (error) {
+    if (error.message === "grader_assessment_forbidden") return jsonResponse({ error: "grader_assessment_forbidden" }, 403);
+    if (error.message === "assessment_submission_not_found") return jsonResponse({ error: "assessment_submission_not_found" }, 404);
+    if (error.message === "assessment_change_reason_required") return jsonResponse({ error: "assessment_change_reason_required" }, 400);
+    if (error.message === "invalid_assessment_draft" || error.message === "invalid_assessment_criteria") {
+      return jsonResponse({ error: "invalid_assessment_draft" }, 400);
+    }
+    return jsonResponse({ error: "assessment_draft_save_failed" }, 500);
+  }
+  const draft = asRows(data)[0];
+  if (!draft) return jsonResponse({ error: "assessment_draft_save_failed" }, 500);
+  return jsonResponse({ draft });
+}
+
+async function publishAssignedAssessmentFeedback(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 128);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlyEmptyObject(parsed.body)) return jsonResponse({ error: "invalid_assessment_publication" }, 400);
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "grader");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("publish_assessment_feedback", {
+    p_submission_id: submissionId,
+  });
+  if (error) {
+    if (error.message === "grader_assessment_forbidden") return jsonResponse({ error: "grader_assessment_forbidden" }, 403);
+    if (error.message === "assessment_submission_not_found") return jsonResponse({ error: "assessment_submission_not_found" }, 404);
+    if (error.message === "assessment_draft_required") return jsonResponse({ error: "assessment_draft_required" }, 409);
+    return jsonResponse({ error: "assessment_publication_failed" }, 500);
+  }
+  const published = asRows(data)[0];
+  if (!published) return jsonResponse({ error: "assessment_publication_failed" }, 500);
+  return jsonResponse({ assessment: published }, 201);
 }
 
 async function listAssessmentSubmissionQueue(request: Request, env: WorkerEnv): Promise<Response> {
@@ -1058,6 +1312,30 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const learnerSubmissionMatch = url.pathname.match(/^\/api\/v1\/learner\/submissions\/([0-9a-f-]{36})$/i);
   if (learnerSubmissionMatch && request.method === "GET") {
     return getLearnerSubmission(request, env, learnerSubmissionMatch[1]);
+  }
+
+  const assignSubmissionMatch = url.pathname.match(/^\/api\/v1\/admin\/submissions\/([0-9a-f-]{36})\/assign$/i);
+  if (assignSubmissionMatch && request.method === "POST") {
+    return assignAssessmentSubmissionToGrader(request, env, assignSubmissionMatch[1]);
+  }
+
+  if (url.pathname === "/api/v1/grader/submissions" && request.method === "GET") {
+    return listAssignedAssessmentSubmissions(request, env);
+  }
+
+  const graderSubmissionMatch = url.pathname.match(/^\/api\/v1\/grader\/submissions\/([0-9a-f-]{36})$/i);
+  if (graderSubmissionMatch && request.method === "GET") {
+    return getAssignedAssessmentSubmission(request, env, graderSubmissionMatch[1]);
+  }
+
+  const graderDraftMatch = url.pathname.match(/^\/api\/v1\/grader\/submissions\/([0-9a-f-]{36})\/draft$/i);
+  if (graderDraftMatch && request.method === "PUT") {
+    return saveAssignedAssessmentDraft(request, env, graderDraftMatch[1]);
+  }
+
+  const graderPublishMatch = url.pathname.match(/^\/api\/v1\/grader\/submissions\/([0-9a-f-]{36})\/publish$/i);
+  if (graderPublishMatch && request.method === "POST") {
+    return publishAssignedAssessmentFeedback(request, env, graderPublishMatch[1]);
   }
 
   if (url.pathname === "/api/v1/admin/submissions/queue" && request.method === "GET") {
