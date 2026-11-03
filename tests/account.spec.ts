@@ -381,7 +381,18 @@ test.describe("Phase 1B account foundation", () => {
       invited_role: "grader",
     });
     const invitationLinkField = page.getByTestId("staff-invite-url");
-    await expect(invitationLinkField).toBeVisible();
+    const invitationFieldVisible = await invitationLinkField.isVisible().catch(() => false);
+    if (!invitationFieldVisible) {
+      const alerts = await page.getByRole("alert").allTextContents().catch(() => []);
+      const statuses = await page.getByRole("status").allTextContents().catch(() => []);
+      throw new Error(
+        "Invitation UI did not render the returned link. " +
+        "Client errors: " + JSON.stringify(accountPageErrors) +
+        "; alerts: " + JSON.stringify(alerts) +
+        "; statuses: " + JSON.stringify(statuses) +
+        "; owner panel visible: " + await page.getByRole("heading", { name: "Staff invitations" }).isVisible().catch(() => false)
+      );
+    }
     expect(accountPageErrors).toEqual([]);
     const invitationLink = await invitationLinkField.inputValue();
     const invitationToken = new URLSearchParams(new URL(invitationLink).hash.slice(1)).get("staff-invite");
