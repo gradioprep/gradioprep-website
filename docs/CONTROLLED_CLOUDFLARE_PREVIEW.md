@@ -1,7 +1,7 @@
 # Controlled Cloudflare Worker Preview
 
-**Version:** 1.1-draft  
-**Last reviewed:** 2 November 2026  
+**Version:** 1.2-draft  
+**Last reviewed:** 3 November 2026  
 **Status:** Mandatory public verification workflow. The source workflow is .github/workflows/controlled-worker-preview.yml; the governing standard is docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md.
 
 ## Purpose
@@ -29,7 +29,7 @@ A current Preview alias always serves the latest uploaded revision for that PR. 
 5. Report any mismatch in the PR conversation. The preview is updated automatically after the next PR commit.
 6. Do not treat a passing build or automated browser test as Founder visual/functional verification.
 
-The PR must state what backend is connected. During Phase 1B the Supabase Auth/DB/Storage stack is local and CI-only; the public Preview cannot connect to the developer's local Supabase instance. Publicly verify the app shell, Worker API route wiring, UI and safe failure states only. Real hosted sign-in/RLS end-to-end on a public Preview requires a separate, isolated hosted Supabase project populated with synthetic data and explicit provisioning/cost approval.
+The PR must state what backend is connected. During Phase 1B the Supabase Auth/DB/Storage stack is local and CI-only; the public Preview cannot connect to the developer's local Supabase instance. Publicly verify the app shell, Worker API route wiring, UI and safe failure states only. Real hosted sign-in/RLS end-to-end on a public Preview requires a separate, isolated hosted Supabase project populated with synthetic data and explicit provisioning approval. Use a suitable Free tier by default; any paid plan or usage requires a documented unavoidable need, a current cost breakdown and separate explicit Founder approval. See `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`.
 
 ## Public preview safety
 
