@@ -118,7 +118,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setMfaNextLevel("aal1");
           setMfaLoading(false);
         }
-        if (nextSession) setMfaLoading(true);
+        // Auth profile updates (including password recovery) do not always
+        // change the access token. Do not leave the security gate loading when
+        // the token-dependent assurance refresh will not run.
+        if (nextSession && event !== "USER_UPDATED") setMfaLoading(true);
         setSession(nextSession);
         setLoading(false);
       }
@@ -177,7 +180,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error: verifyError } = await supabase.auth.mfa.verify({
         factorId,
         challengeId: challenge.id,
-        code: code.replace(/\\s/g, ""),
+        code: code.replace(/\s/g, ""),
       });
       if (verifyError) throw verifyError;
 
