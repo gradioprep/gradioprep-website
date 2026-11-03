@@ -295,7 +295,7 @@ The controlled preview workflow `.github/workflows/controlled-worker-preview.yml
 
 ### 16.1 Phase 1C physical inventory and execution slices — 3 November 2026
 
-The first Phase 1C slice adds five public tables: `task_versions`, `task_version_prompts`, `attempts`, `attempt_responses` and `grader_assignments;` plus the private `attempt_response_versions` archive. The current protected inventory is 12 tables total: nine public and three private; `profiles`, `role_assignments`, `guardian_learner_links`, `course_enrolments`, `security_audit_events` and `staff_invitations` are Phase 1B records. The actual implementation inventory, grants, policies and per-role access expectations are specified in Section 20.1/20.2 of the implementation specification and Section 6 of `DATA_MODEL.md`.
+The first Phase 1C slice adds five public tables: `task_versions`, `task_version_prompts`, `attempts`, `attempt_responses` and `grader_assignments`; plus the private `attempt_response_versions` archive. The current protected inventory is 12 tables total: nine public and three private; `profiles`, `role_assignments`, `guardian_learner_links`, `course_enrolments`, `security_audit_events` and `staff_invitations` are Phase 1B records. The actual implementation inventory, grants, policies and per-role access expectations are specified in Section 20.1/20.2 of the implementation specification and Section 6 of `DATA_MODEL.md`.
 
 The remaining slices are deliberately separated:
 - **1C-A — table inventory and default-deny enforcement:** verify every existing protected table, role, operation and AAL boundary; add actual PostgreSQL and Worker allow/deny tests. Do not infer safety from RLS being enabled alone.
