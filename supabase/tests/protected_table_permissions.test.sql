@@ -24,11 +24,18 @@ SELECT is(
         'grader_assignments',
         'security_audit_events',
         'staff_invitations',
-        'attempt_response_versions'
+        'attempt_response_versions',
+        'grading_capacity_config',
+        'rubrics',
+        'rubric_versions',
+        'rubric_criteria',
+        'task_rubric_mappings',
+        'assessment_submissions',
+        'submission_versions'
       )
   ),
-  12,
-  'all twelve currently protected application tables are present'
+  19,
+  'all nineteen currently protected application tables are present'
 );
 
 SELECT is(
@@ -50,11 +57,18 @@ SELECT is(
         'grader_assignments',
         'security_audit_events',
         'staff_invitations',
-        'attempt_response_versions'
+        'attempt_response_versions',
+        'grading_capacity_config',
+        'rubrics',
+        'rubric_versions',
+        'rubric_criteria',
+        'task_rubric_mappings',
+        'assessment_submissions',
+        'submission_versions'
       )
       AND relation.relrowsecurity
   ),
-  12,
+  19,
   'RLS is enabled on every protected application table'
 );
 
@@ -98,7 +112,14 @@ SELECT ok(
         'grader_assignments',
         'security_audit_events',
         'staff_invitations',
-        'attempt_response_versions'
+        'attempt_response_versions',
+        'grading_capacity_config',
+        'rubrics',
+        'rubric_versions',
+        'rubric_criteria',
+        'task_rubric_mappings',
+        'assessment_submissions',
+        'submission_versions'
       )
   ),
   'anonymous has no direct read or write privilege on any protected table'
@@ -135,10 +156,17 @@ SELECT ok(
       AND relation.relname IN (
         'security_audit_events',
         'staff_invitations',
-        'attempt_response_versions'
+        'attempt_response_versions',
+        'grading_capacity_config',
+        'rubrics',
+        'rubric_versions',
+        'rubric_criteria',
+        'task_rubric_mappings',
+        'assessment_submissions',
+        'submission_versions'
       )
   ),
-  'authenticated has no direct table privilege on private audit, invitation or response-history records'
+  'authenticated has no direct table privilege on private audit, invitation, response-history or capacity configuration records'
 );
 
 SELECT ok(
@@ -162,6 +190,24 @@ SELECT ok(
       AND NOT has_table_privilege('authenticated', 'public.attempt_responses', 'INSERT')
       AND NOT has_table_privilege('authenticated', 'public.attempt_responses', 'UPDATE')
       AND NOT has_table_privilege('authenticated', 'public.attempt_responses', 'DELETE')
+      AND NOT has_table_privilege('authenticated', 'public.assessment_submissions', 'INSERT')
+      AND NOT has_table_privilege('authenticated', 'public.assessment_submissions', 'UPDATE')
+      AND NOT has_table_privilege('authenticated', 'public.assessment_submissions', 'DELETE')
+      AND NOT has_table_privilege('authenticated', 'public.submission_versions', 'INSERT')
+      AND NOT has_table_privilege('authenticated', 'public.submission_versions', 'UPDATE')
+      AND NOT has_table_privilege('authenticated', 'public.submission_versions', 'DELETE')
+      AND NOT has_table_privilege('authenticated', 'public.rubrics', 'INSERT')
+      AND NOT has_table_privilege('authenticated', 'public.rubrics', 'UPDATE')
+      AND NOT has_table_privilege('authenticated', 'public.rubrics', 'DELETE')
+      AND NOT has_table_privilege('authenticated', 'public.rubric_versions', 'INSERT')
+      AND NOT has_table_privilege('authenticated', 'public.rubric_versions', 'UPDATE')
+      AND NOT has_table_privilege('authenticated', 'public.rubric_versions', 'DELETE')
+      AND NOT has_table_privilege('authenticated', 'public.rubric_criteria', 'INSERT')
+      AND NOT has_table_privilege('authenticated', 'public.rubric_criteria', 'UPDATE')
+      AND NOT has_table_privilege('authenticated', 'public.rubric_criteria', 'DELETE')
+      AND NOT has_table_privilege('authenticated', 'public.task_rubric_mappings', 'INSERT')
+      AND NOT has_table_privilege('authenticated', 'public.task_rubric_mappings', 'UPDATE')
+      AND NOT has_table_privilege('authenticated', 'public.task_rubric_mappings', 'DELETE')
     )
   ),
   'authenticated users cannot directly mutate roles, links, enrolments, assignments, attempts or responses'
@@ -176,7 +222,13 @@ SELECT ok(
   AND has_table_privilege('authenticated', 'public.task_version_prompts', 'SELECT')
   AND has_table_privilege('authenticated', 'public.attempts', 'SELECT')
   AND has_table_privilege('authenticated', 'public.attempt_responses', 'SELECT')
-  AND has_table_privilege('authenticated', 'public.grader_assignments', 'SELECT'),
+  AND has_table_privilege('authenticated', 'public.grader_assignments', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.assessment_submissions', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.submission_versions', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.rubrics', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.rubric_versions', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.rubric_criteria', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.task_rubric_mappings', 'SELECT'),
   'authenticated SELECT grants exist only as the starting point for row-scoped RLS reads'
 );
 
