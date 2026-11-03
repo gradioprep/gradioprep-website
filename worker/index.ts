@@ -718,20 +718,24 @@ async function saveAttemptResponse(
   if (promptError) return jsonResponse({ error: "prompt_unavailable" }, 500);
   if (!prompt) return jsonResponse({ error: "prompt_not_found" }, 400);
 
-  const { data: response, error: saveError } = await auth.context.supabase
-    .from("attempt_responses")
-    .upsert({
-      attempt_id: attemptId,
-      task_version_id: attempt.task_version_id,
-      prompt_id: promptId,
-      response_text: parsed.body.response_text,
-    }, { onConflict: "attempt_id,prompt_id" })
-    .select("id, attempt_id, prompt_id, response_text, word_count, version, updated_at")
-    .single();
+  const { data, error: saveError } = await auth.context.supabase.rpc("save_attempt_response", {
+    p_attempt_id: attemptId,
+    p_prompt_id: promptId,
+    p_response_text: parsed.body.response_text,
+  });
 
-  if (saveError || !response) {
-    return jsonResponse({ error: "attempt_response_save_failed" }, 403);
+  if (saveError) {
+    if (saveError.message === "attempt_not_found") return jsonResponse({ error: "attempt_not_found" }, 404);
+    if (saveError.message === "attempt_not_editable") return jsonResponse({ error: "attempt_not_editable" }, 409);
+    if (saveError.message === "attempt_response_forbidden") return jsonResponse({ error: "attempt_response_forbidden" }, 403);
+    if (saveError.message === "invalid_attempt_response" || saveError.message === "invalid_attempt_prompt") {
+      return jsonResponse({ error: "invalid_attempt_response" }, 400);
+    }
+    return jsonResponse({ error: "attempt_response_save_failed" }, 500);
   }
+
+  const response = asRows(data)[0];
+  if (!response) return jsonResponse({ error: "attempt_response_save_failed" }, 500);
   return jsonResponse({ response });
 }
 

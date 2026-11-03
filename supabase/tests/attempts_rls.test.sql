@@ -35,15 +35,14 @@ SELECT is(
   'new student attempt starts in progress'
 );
 SELECT lives_ok(
-  $$
-    INSERT INTO public.attempt_responses (attempt_id, task_version_id, prompt_id, response_text)
-    SELECT attempt.id, attempt.task_version_id,
+  $
+    SELECT * FROM public.save_attempt_response(
+      (SELECT id FROM public.attempts WHERE learner_id = auth.uid() AND status = 'in_progress'),
       'b1111111-1111-4111-8111-111111111111',
       'A first synthetic response with enough words to test versioning.'
-    FROM public.attempts AS attempt
-    WHERE attempt.learner_id = auth.uid() AND attempt.status = 'in_progress'
-  $$,
-  'student can save a response to their own in-progress attempt'
+    )
+  $,
+  'student can save a response to their own in-progress attempt through the narrow RPC'
 );
 SELECT is(
   (SELECT word_count FROM public.attempt_responses
@@ -52,12 +51,14 @@ SELECT is(
   'response word count is calculated by the database'
 );
 SELECT lives_ok(
-  $$
-    UPDATE public.attempt_responses
-    SET response_text = 'A revised synthetic response increments the version without accepting a client version.'
-    WHERE attempt_id = (SELECT id FROM public.attempts WHERE learner_id = auth.uid() AND status = 'in_progress')
-  $$,
-  'student can revise their own response while the attempt is in progress'
+  $
+    SELECT * FROM public.save_attempt_response(
+      (SELECT id FROM public.attempts WHERE learner_id = auth.uid() AND status = 'in_progress'),
+      'b1111111-1111-4111-8111-111111111111',
+      'A revised synthetic response increments the version without accepting a client version.'
+    )
+  $,
+  'student can revise their own response through the narrow RPC while the attempt is in progress'
 );
 SELECT is(
   (SELECT version FROM public.attempt_responses
@@ -70,7 +71,15 @@ SELECT throws_ok(
   '42501', NULL, 'student cannot directly set submission status or timestamp'
 );
 SELECT throws_ok(
-  $$INSERT INTO public.grader_assignments (attempt_id, grader_user_id, assigned_by, reason) VALUES ('c3333333-3333-4333-8333-333333333333', '55555555-5555-4555-8555-555555555555', auth.uid(), 'Direct assignment attempt')$$,
+  $INSERT INTO public.attempt_responses (attempt_id, task_version_id, prompt_id, response_text) VALUES ('c1111111-1111-4111-8111-111111111111', 'a1111111-1111-4111-8111-111111111111', 'b1111111-1111-4111-8111-111111111111', 'Direct response write')$,
+  '42501', NULL, 'student cannot bypass the response-save RPC'
+);
+SELECT throws_ok(
+  $SELECT * FROM private.attempt_response_versions$,
+  '42501', NULL, 'student cannot read private response version snapshots'
+);
+SELECT throws_ok(
+  $INSERT INTO public.grader_assignments (attempt_id, grader_user_id, assigned_by, reason) VALUES ('c3333333-3333-4333-8333-333333333333', '55555555-5555-4555-8555-555555555555', auth.uid(), 'Direct assignment attempt')$,
   '42501', NULL, 'student cannot create grader assignments directly'
 );
 SELECT lives_ok(
@@ -166,6 +175,19 @@ SELECT is(
   'exactly one active assignment is retained for the attempt'
 );
 RESET ROLE;
+
+SELECT is(
+  (SELECT count(*)::integer
+   FROM private.attempt_response_versions AS saved_version
+   JOIN public.attempt_responses AS response ON response.id = saved_version.response_id
+   JOIN public.attempts AS attempt ON attempt.id = response.attempt_id
+   WHERE attempt.learner_id = '11111111-1111-4111-8111-111111111111'
+     AND attempt.status = 'submitted'
+     AND response.version = 2
+     AND saved_version.attempt_id = attempt.id),
+  2,
+  'both meaningful versions of the new attempt response are preserved privately'
+);
 
 SELECT * FROM finish();
 ROLLBACK;

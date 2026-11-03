@@ -147,6 +147,13 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     expect(firstFactorQueue.status()).toBe(403);
     await expect(firstFactorQueue.json()).resolves.toMatchObject({ error: "mfa_required" });
 
+    let aal2Token = firstFactorToken;
+    page.on("request", request => {
+      if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
+        aal2Token = request.headers()["authorization"] ?? aal2Token;
+      }
+    });
+
     await expect(page.getByRole("button", { name: "Set up authenticator app" })).toBeVisible();
     await page.getByRole("button", { name: "Set up authenticator app" }).click();
     await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
@@ -155,13 +162,6 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     await page.getByLabel("Authenticator code").fill(createTotpCode(secret));
     await page.getByRole("button", { name: "Verify and enable" }).click();
     await expect(page.getByText("Verified authenticator", { exact: true })).toBeVisible();
-
-    let aal2Token = firstFactorToken;
-    page.on("request", request => {
-      if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
-        aal2Token = request.headers()["authorization"] ?? aal2Token;
-      }
-    });
     await expect.poll(() => aal2Token !== firstFactorToken, { timeout: 10_000 }).toBe(true);
 
     const headers = { Authorization: aal2Token };
