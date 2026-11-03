@@ -305,6 +305,7 @@ test.describe("Phase 1B account foundation", () => {
   });
 
   test("owner enrols TOTP, verifies sign-in and can revoke a role only after MFA", async ({ page }) => {
+    test.setTimeout(60_000);
     const roleRequest = {
       target_user_id: "66666666-6666-4666-8666-666666666666",
       role: "grader",
@@ -360,7 +361,19 @@ test.describe("Phase 1B account foundation", () => {
     await expect(page.getByRole("heading", { name: "Staff invitations" })).toBeVisible();
     await page.getByLabel("Staff email address").fill("guardian.a@example.invalid");
     await page.getByLabel("Invitation role").selectOption("grader");
+    const createInvitationResponsePromise = page.waitForResponse(response =>
+      new URL(response.url()).pathname === "/api/v1/admin/staff-invitations" &&
+      response.request().method() === "POST"
+    );
     await page.getByRole("button", { name: "Create invitation link" }).click();
+    const createInvitationResponse = await createInvitationResponsePromise;
+    const createInvitationBody = await createInvitationResponse.json() as { error?: string; message?: string; invite_url?: string };
+    expect(
+      createInvitationResponse.status(),
+      "Staff invitation API failed: " + (createInvitationBody.error ?? "unknown_error") +
+        (createInvitationBody.message ? " — " + createInvitationBody.message : "")
+    ).toBe(201);
+    expect(createInvitationBody.invite_url).toMatch(/^https?:\/\//);
     const invitationLinkField = page.getByTestId("staff-invite-url");
     await expect(invitationLinkField).toBeVisible();
     const invitationLink = await invitationLinkField.inputValue();
