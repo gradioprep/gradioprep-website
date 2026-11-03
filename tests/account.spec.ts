@@ -358,7 +358,7 @@ test.describe("Phase 1B account foundation", () => {
     await expect(verifiedAttempt.json()).resolves.toMatchObject({ revoked: true });
 
     await expect(page.getByRole("heading", { name: "Staff invitations" })).toBeVisible();
-    await page.getByLabel("Staff email address").fill("student.b@example.invalid");
+    await page.getByLabel("Staff email address").fill("guardian.a@example.invalid");
     await page.getByLabel("Invitation role").selectOption("grader");
     await page.getByRole("button", { name: "Create invitation link" }).click();
     const invitationLinkField = page.getByTestId("staff-invite-url");
@@ -376,7 +376,7 @@ test.describe("Phase 1B account foundation", () => {
     };
     expect(listBody.invitations).toEqual(expect.arrayContaining([
       expect.objectContaining({
-        invited_email: "student.b@example.invalid",
+        invited_email: "guardian.a@example.invalid",
         invited_role: "grader",
         status: "pending",
       }),
@@ -385,7 +385,7 @@ test.describe("Phase 1B account foundation", () => {
 
     const duplicateInvite = await page.request.post("/api/v1/admin/staff-invitations", {
       headers: { Authorization: ownerToken },
-      data: { email: "student.b@example.invalid", role: "grader" },
+      data: { email: "guardian.a@example.invalid", role: "grader" },
     });
     expect(duplicateInvite.status()).toBe(409);
     await expect(duplicateInvite.json()).resolves.toMatchObject({ error: "invitation_already_pending" });
@@ -411,7 +411,7 @@ test.describe("Phase 1B account foundation", () => {
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
 
     // Follow the one-time link as the invited synthetic account. It remains a
-    // Student until the email-matched account verifies an authenticator (AAL2).
+    // Existing Guardian access stays in place until the invited Grader role is accepted.
     let inviteeToken = "";
     page.on("request", request => {
       if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
@@ -420,10 +420,10 @@ test.describe("Phase 1B account foundation", () => {
     });
     await page.goto(invitationLink);
     await expect(page).toHaveURL(/\/account$/);
-    await page.getByLabel("Email address").fill("student.b@example.invalid");
+    await page.getByLabel("Email address").fill("guardian.a@example.invalid");
     await page.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
     await page.getByRole("button", { name: "Sign in" }).click();
-    await expect(page.getByRole("heading", { name: "Synthetic Student B" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Synthetic Guardian A" })).toBeVisible();
     await expect(page.getByText("Staff invitation pending")).toBeVisible();
     await expect(page.getByRole("button", { name: "Set up authenticator app" })).toBeVisible();
 
