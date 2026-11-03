@@ -1774,3 +1774,108 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
 .proto-account-security-factor strong { color: var(--text-primary); font-size: 13px; }
 .proto-account-security-factor small { color: var(--text-secondary); font-size: 12px; }
 .proto-account-security-factor .proto-account-toggle { margin-top: 0; }
+
+/* Phase 1B secure owner-managed staff invitations */
+.proto-account-invitations {
+  margin: 24px 0 22px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.proto-account-invitations-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.proto-account-invitations-heading h3,
+.proto-account-invitation-list h4 {
+  margin: 4px 0 0;
+  color: var(--text-primary);
+  font: 600 20px/1.25 var(--font-display);
+}
+.proto-account-invitations > p,
+.proto-account-invitation-list > p,
+.proto-account-invite-link small,
+.proto-account-invitation-note p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.proto-account-invite-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(140px, .6fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+.proto-account-invite-form label,
+.proto-account-invite-link label {
+  display: grid;
+  gap: 7px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+.proto-account-invite-form input,
+.proto-account-invite-form select,
+.proto-account-invite-link input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-primary);
+  font: inherit;
+}
+.proto-account-invite-form button {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+.proto-account-invite-link {
+  display: grid;
+  gap: 9px;
+  margin-top: 18px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+.proto-account-invite-link input { font-size: 12px; }
+.proto-account-invite-link .proto-account-toggle { justify-self: start; margin-top: 0; }
+.proto-account-invitation-list { margin-top: 22px; }
+.proto-account-invitation-list h4 { font-size: 17px; }
+.proto-account-invitation-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.proto-account-invitation-row > div { display: grid; gap: 5px; min-width: 0; }
+.proto-account-invitation-row strong { color: var(--text-primary); font-size: 13px; overflow-wrap: anywhere; }
+.proto-account-invitation-row small { color: var(--text-secondary); font-size: 12px; }
+.proto-account-invitation-status { color: var(--text-secondary); font-size: 11px; text-transform: capitalize; }
+.proto-account-invitation-status.pending { color: var(--blue-dark); }
+.proto-account-invitation-status.accepted { color: #39705e; }
+.proto-account-invitation-status.revoked,
+.proto-account-invitation-status.expired { color: #8c5c4e; }
+.proto-account-invitation-row .proto-account-toggle { margin-top: 0; flex: 0 0 auto; }
+.proto-account-invitation-note {
+  margin: 14px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+.proto-account-invitation-note strong { font-size: 13px; }
+.proto-account-invitation-note p { margin: 5px 0 0; }
+@media (max-width: 620px) {
+  .proto-account-invite-form { grid-template-columns: 1fr; }
+  .proto-account-invite-form button { grid-column: auto; width: 100%; }
+  .proto-account-invitation-row { align-items: flex-start; }
+}

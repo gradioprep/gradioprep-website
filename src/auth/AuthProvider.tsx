@@ -39,7 +39,7 @@ interface AuthContextValue {
   verifyTotp: (factorId: string, code: string) => Promise<void>;
   unenrollMfaFactor: (factorId: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (displayName: string, email: string, password: string) => Promise<boolean>;
+  signUp: (displayName: string, email: string, password: string, staffInviteToken?: string) => Promise<boolean>;
   requestPasswordReset: (email: string) => Promise<void>;
   updatePassword: (password: string) => Promise<void>;
   signOut: (scope?: "global" | "local") => Promise<void>;
@@ -220,14 +220,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(data.session);
       setLoading(false);
     },
-    async signUp(displayName, email, password) {
+    async signUp(displayName, email, password, staffInviteToken) {
       if (!supabase) throw new Error("Authentication is not configured in this environment.");
+      const emailRedirect = new URL("/account", window.location.origin);
+      if (staffInviteToken && /^[A-Za-z0-9_-]{43}$/.test(staffInviteToken)) {
+        emailRedirect.hash = "staff-invite=" + staffInviteToken;
+      }
       const { data, error } = await supabase.auth.signUp({
         email: email.trim().toLowerCase(),
         password,
         options: {
           data: { display_name: displayName.trim() },
-          emailRedirectTo: new URL("/account", window.location.origin).toString(),
+          emailRedirectTo: emailRedirect.toString(),
         },
       });
       if (error) throw error;

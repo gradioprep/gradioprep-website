@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { Navigate } from "../App";
 import { useAuth } from "./AuthProvider";
 
@@ -13,6 +13,17 @@ interface CurrentAccount {
     created_at: string;
   } | null;
   roles: string[];
+}
+
+interface StaffInvitation {
+  invitation_id: string;
+  invited_email: string;
+  invited_role: "grader" | "admin";
+  created_at: string;
+  expires_at: string;
+  accepted_at: string | null;
+  revoked_at: string | null;
+  status: "pending" | "accepted" | "revoked" | "expired";
 }
 
 export default function AccountPage({ go }: { go: Navigate }) {
@@ -34,6 +45,25 @@ export default function AccountPage({ go }: { go: Navigate }) {
     qrCode: string;
     secret: string;
   } | null>(null);
+  const [staffInviteToken, setStaffInviteToken] = useState("");
+  const [acceptingStaffInvite, setAcceptingStaffInvite] = useState(false);
+  const [staffInvitations, setStaffInvitations] = useState<StaffInvitation[]>([]);
+  const [staffInvitationsLoading, setStaffInvitationsLoading] = useState(false);
+  const [staffInviteEmail, setStaffInviteEmail] = useState("");
+  const [staffInviteRole, setStaffInviteRole] = useState<"grader" | "admin">("grader");
+  const [newStaffInviteUrl, setNewStaffInviteUrl] = useState("");
+  const invitationClaimStarted = useRef(false);
+
+  useEffect(() => {
+    const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const token = fragment.get("staff-invite") ?? "";
+    if (token) {
+      // Remove the one-time bearer token from the visible URL and browser history.
+      window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
+      if (/^[A-Za-z0-9_-]{43}$/.test(token)) setStaffInviteToken(token);
+      else setError("This staff invitation link is invalid.");
+    }
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -81,6 +111,70 @@ export default function AccountPage({ go }: { go: Navigate }) {
     return () => { active = false; };
   }, [auth.session?.access_token, auth.passwordRecovery, auth.mfaLoading, auth.mfaChallengeRequired, auth.mfaStatusError]);
 
+  const ownerRole = account?.roles.includes("owner") ?? false;
+
+  useEffect(() => {
+    const accessToken = auth.session?.access_token;
+    if (!ownerRole || !accessToken || auth.mfaLoading || auth.mfaCurrentLevel !== "aal2" || auth.mfaChallengeRequired) {
+      setStaffInvitations([]);
+      setStaffInvitationsLoading(false);
+      return;
+    }
+    let active = true;
+    setStaffInvitationsLoading(true);
+    void fetch("/api/v1/admin/staff-invitations", {
+      headers: { Authorization: "Bearer " + accessToken },
+      cache: "no-store",
+    }).then(async response => {
+      const result = await response.json() as { invitations?: StaffInvitation[]; message?: string };
+      if (!response.ok) throw new Error(result.message ?? "Staff invitations could not be loaded.");
+      if (active) setStaffInvitations(result.invitations ?? []);
+    }).catch(requestError => {
+      if (active) setError(requestError instanceof Error ? requestError.message : "Staff invitations could not be loaded.");
+    }).finally(() => {
+      if (active) setStaffInvitationsLoading(false);
+    });
+    return () => { active = false; };
+  }, [ownerRole, auth.session?.access_token, auth.mfaLoading, auth.mfaCurrentLevel, auth.mfaChallengeRequired]);
+
+  useEffect(() => {
+    const accessToken = auth.session?.access_token;
+    if (!staffInviteToken || !accessToken || !account || auth.mfaLoading ||
+      auth.mfaChallengeRequired || auth.mfaCurrentLevel !== "aal2" || invitationClaimStarted.current) return;
+    invitationClaimStarted.current = true;
+    setAcceptingStaffInvite(true);
+    void fetch("/api/v1/staff-invitations/accept", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + accessToken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token: staffInviteToken }),
+    }).then(async response => {
+      const result = await response.json() as { accepted?: boolean; role?: string; message?: string };
+      if (!response.ok || !result.accepted || !result.role) {
+        throw new Error(result.message ?? "The staff invitation could not be accepted.");
+      }
+      setAccount(current => current
+        ? { ...current, roles: Array.from(new Set([...current.roles, result.role!])) }
+        : current);
+      setStaffInviteToken("");
+      setMessage("Staff invitation accepted. Your " + result.role + " role is active.");
+    }).catch(requestError => {
+      setError(requestError instanceof Error ? requestError.message : "The staff invitation could not be accepted.");
+      invitationClaimStarted.current = false;
+    }).finally(() => {
+      setAcceptingStaffInvite(false);
+    });
+  }, [
+    staffInviteToken,
+    auth.session?.access_token,
+    account?.user.id,
+    auth.mfaLoading,
+    auth.mfaChallengeRequired,
+    auth.mfaCurrentLevel,
+  ]);
+
   async function submitAuth(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitting(true);
@@ -95,7 +189,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
         if (password.length < 12) {
           throw new Error("Use a password with at least 12 characters.");
         }
-        const confirmationRequired = await auth.signUp(displayName, email, password);
+        const confirmationRequired = await auth.signUp(displayName, email, password, staffInviteToken || undefined);
         setMessage(confirmationRequired
           ? "Account created. Check the local test inbox for the confirmation message, then return here to sign in."
           : "Account created. Your default Student access is ready.");
@@ -239,6 +333,76 @@ export default function AccountPage({ go }: { go: Navigate }) {
     }
   }
 
+  async function createStaffInvitation(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!auth.session?.access_token) return;
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    setNewStaffInviteUrl("");
+    try {
+      const response = await fetch("/api/v1/admin/staff-invitations", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + auth.session.access_token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: staffInviteEmail.trim(), role: staffInviteRole }),
+      });
+      const result = await response.json() as { invitation?: StaffInvitation; invite_url?: string; message?: string };
+      if (!response.ok || !result.invitation || !result.invite_url) {
+        throw new Error(result.message ?? "The staff invitation could not be created.");
+      }
+      setNewStaffInviteUrl(result.invite_url);
+      setStaffInviteEmail("");
+      setStaffInvitations(current => [result.invitation!, ...current.filter(item => item.invitation_id !== result.invitation!.invitation_id)]);
+      setMessage("Invitation link created. Copy it now; it will not be shown again after you leave this page.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "The staff invitation could not be created.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function copyStaffInvitationLink() {
+    if (!newStaffInviteUrl) return;
+    try {
+      await navigator.clipboard.writeText(newStaffInviteUrl);
+      setMessage("Invitation link copied.");
+    } catch {
+      setMessage("Clipboard access is unavailable. Select the invitation link field and copy it manually.");
+    }
+  }
+
+  async function revokeStaffInvitation(invitationId: string, invitedEmail: string) {
+    if (!auth.session?.access_token) return;
+    if (!window.confirm("Revoke the staff invitation for " + invitedEmail + "?")) return;
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      const response = await fetch("/api/v1/admin/staff-invitations/" + encodeURIComponent(invitationId) + "/revoke", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + auth.session.access_token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reason: "Owner revoked pending invitation" }),
+      });
+      const result = await response.json() as { message?: string };
+      if (!response.ok) throw new Error(result.message ?? "The staff invitation could not be revoked.");
+      setStaffInvitations(current => current.map(invitation => invitation.invitation_id === invitationId
+        ? { ...invitation, status: "revoked", revoked_at: new Date().toISOString() }
+        : invitation));
+      setMessage("Staff invitation revoked.");
+      setNewStaffInviteUrl("");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "The staff invitation could not be revoked.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function saveDisplayName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!auth.session?.access_token) return;
@@ -276,6 +440,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
       await auth.signOut();
       setAccount(null);
       setAccountUnavailable(false);
+      setNewStaffInviteUrl("");
       setMessage("You are signed out.");
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "We could not sign you out.");
@@ -287,6 +452,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
   const verifiedTotpFactors = auth.mfaFactors.filter(factor => factor.status === "verified");
   const pendingTotpFactors = auth.mfaFactors.filter(factor => factor.status !== "verified");
   const staffRole = account?.roles.some(role => ["grader", "admin", "owner"].includes(role)) ?? false;
+  const invitationNeedsMfa = Boolean(staffInviteToken && auth.mfaCurrentLevel !== "aal2");
 
   return <div className="proto-account-page">
     <div className="proto-account-intro">
@@ -311,6 +477,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
         <span className="proto-account-status">Second factor</span>
       </div>
       <p className="proto-account-description">Enter the six-digit code from your authenticator app to complete sign-in.</p>
+      {staffInviteToken && <p className="proto-account-invitation-note">After secure sign-in is complete, the invitation will be checked against this account's verified email address.</p>}
       <form className="proto-account-form" onSubmit={verifyMfaChallenge}>
         <label>Authenticator code<input type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={mfaCode} onChange={event => setMfaCode(event.target.value.replace(/\D/g, "").slice(0, 6))} required /></label>
         <button className="proto-action" type="submit" disabled={submitting || mfaCode.length !== 6 || !auth.mfaFactors.some(factor => factor.status === "verified")}>{submitting ? "Please wait…" : "Verify code"}</button>
@@ -339,6 +506,14 @@ export default function AccountPage({ go }: { go: Navigate }) {
         <span className="proto-account-status">{account?.profile?.account_status ?? "Loading"}</span>
       </div>
       <p className="proto-account-email">{auth.session.user.email}</p>
+      {staffInviteToken && <section className="proto-account-invitation-note" aria-live="polite">
+        <strong>Staff invitation pending</strong>
+        <p>{acceptingStaffInvite
+          ? "Checking your invitation…"
+          : invitationNeedsMfa
+            ? "Verify your email and complete authenticator verification to accept this invitation. No staff role is active yet."
+            : "Your verified account is being checked against the invitation."}</p>
+      </section>}
       <div className="proto-account-roles">
         <small>ACTIVE ROLE(S)</small>
         {account?.roles.length ? account.roles.map(role => <span key={role}>{role.replaceAll("_", " ")}</span>) : <em>Loading role assignment…</em>}
@@ -371,6 +546,56 @@ export default function AccountPage({ go }: { go: Navigate }) {
           <button className="proto-account-toggle" type="button" onClick={cancelPendingTotpEnrollment} disabled={submitting}>Cancel pending setup</button>
         </div> : <button className="proto-action" type="button" onClick={startTotpEnrollment} disabled={submitting}>{submitting ? "Please wait…" : "Set up authenticator app"}</button>}
       </section>
+      {ownerRole && <section className="proto-account-invitations" aria-labelledby="proto-account-invitations-heading">
+        <div className="proto-account-invitations-heading">
+          <div>
+            <p className="proto-eyebrow"><span />OWNER CONTROLS</p>
+            <h3 id="proto-account-invitations-heading">Staff invitations</h3>
+          </div>
+          <span className="proto-account-status">{auth.mfaCurrentLevel === "aal2" ? "MFA verified" : "MFA required"}</span>
+        </div>
+        {auth.mfaCurrentLevel !== "aal2"
+          ? <p>Verify your authenticator app before creating, viewing or revoking staff invitations.</p>
+          : <>
+            <p>Invite an existing team member as a Grader or Admin. Each link is single-use, expires after seven days and must be accepted with the matching verified email and authenticator check. This local build does not send email.</p>
+            <form className="proto-account-invite-form" onSubmit={createStaffInvitation}>
+              <label>Staff email address
+                <input type="email" autoComplete="off" value={staffInviteEmail} onChange={event => setStaffInviteEmail(event.target.value)} maxLength={320} required />
+              </label>
+              <label>Invitation role
+                <select value={staffInviteRole} onChange={event => setStaffInviteRole(event.target.value as "grader" | "admin")}>
+                  <option value="grader">Grader</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </label>
+              <button className="proto-action" type="submit" disabled={submitting || !staffInviteEmail.trim()}>
+                {submitting ? "Please wait…" : "Create invitation link"}
+              </button>
+            </form>
+            {newStaffInviteUrl && <div className="proto-account-invite-link">
+              <label htmlFor="proto-staff-invite-url">One-time invitation link</label>
+              <input id="proto-staff-invite-url" data-testid="staff-invite-url" type="url" value={newStaffInviteUrl} readOnly onFocus={event => event.currentTarget.select()} />
+              <button className="proto-account-toggle" type="button" onClick={() => void copyStaffInvitationLink()}>Copy link</button>
+              <small>Copy and share only with the intended synthetic test account. The token is shown once and is not stored in the database.</small>
+            </div>}
+            <div className="proto-account-invitation-list" aria-label="Staff invitation list">
+              <h4>Recent invitations</h4>
+              {staffInvitationsLoading ? <p role="status">Loading invitations…</p> : staffInvitations.length === 0
+                ? <p>No invitations yet.</p>
+                : staffInvitations.map(invitation => <article className="proto-account-invitation-row" key={invitation.invitation_id}>
+                  <div>
+                    <strong>{invitation.invited_email}</strong>
+                    <small>{invitation.invited_role === "grader" ? "Grader" : "Admin"} · Expires {new Date(invitation.expires_at).toLocaleString()}</small>
+                    <span className={"proto-account-invitation-status " + invitation.status}>{invitation.status.charAt(0).toUpperCase() + invitation.status.slice(1)}</span>
+                  </div>
+                  {invitation.status === "pending" && <button className="proto-account-toggle" type="button"
+                    aria-label={"Revoke invitation for " + invitation.invited_email}
+                    onClick={() => void revokeStaffInvitation(invitation.invitation_id, invitation.invited_email)}
+                    disabled={submitting}>Revoke</button>}
+                </article>)}
+            </div>
+          </>}
+      </section>}
       <form className="proto-account-form" onSubmit={saveDisplayName}>
         <label>Display name<input value={newDisplayName} onChange={event => setNewDisplayName(event.target.value)} maxLength={80} required minLength={1} /></label>
         <button className="proto-action" type="submit" disabled={submitting || !account}>Save display name</button>
@@ -393,6 +618,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
         <span className="proto-account-status">Synthetic data</span>
       </div>
       <p className="proto-account-description">New sign-ups receive Student access only. Guardian, Grader, Admin and Owner roles cannot be selected here.</p>
+      {staffInviteToken && <p className="proto-account-invitation-note">This is a staff invitation. Sign in or create an account using the invited email address, verify that email, then set up an authenticator app. No staff role is assigned until the server confirms every check.</p>}
       <form className="proto-account-form" onSubmit={submitAuth}>
         {mode === "sign-up" && <label>Display name<input autoComplete="name" value={displayName} onChange={event => setDisplayName(event.target.value)} maxLength={80} required minLength={2} /></label>}
         <label>Email address<input type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} required /></label>
