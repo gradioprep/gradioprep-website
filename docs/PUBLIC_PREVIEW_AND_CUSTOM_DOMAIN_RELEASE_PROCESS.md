@@ -1,6 +1,6 @@
 # Public Preview, Verification and Custom-Domain Release Process
 
-**Version:** 1.3-draft
+**Version:** 1.4-draft
 **Date:** 3 November 2026  
 **Status:** Conditional Preview/review standard updated by Founder on 3 November 2026. Founder-facing Preview requests are reserved for new, concrete and substantial learner/staff-visible features. Routine, unchanged, backend-only and documentation-only previews must not be repeatedly surfaced. PR #22's security and CI records remain in the engineering history.
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md`; free-first cost decisions: `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`
@@ -90,7 +90,7 @@ Only a qualifying new visible-feature PR needs a concise **Founder Preview hando
 
 For major flows, provide a short click-by-click verification sequence suitable for a non-coder. Keep the wording concise and avoid asking the Founder to read code or infer what has changed.
 
-The PR should be refreshed and its Preview URL updated after each correction. Use immutable deployment URLs when recording which exact revision the Founder reviewed. Do not mark a verification outcome from a Preview that has since been superseded without identifying the older revision.
+For a qualifying feature review, update the engineering record with the exact immutable deployment URL and commit that were built and tested. A correction, redeployment or retest of the same feature updates engineering traceability only; it does not trigger a new Founder Preview request by itself. Ask for another review only when the correction materially changes the learner/staff-visible behaviour or adds another concrete, substantial capability. Do not repeatedly resend an unchanged or superseded Preview URL.
 
 ## 5. Public website verification is not production release
 
@@ -146,7 +146,7 @@ If a persistent branded verification address is genuinely useful before launch, 
 | Every implementation PR | Relevant build, database/RLS, API, security and browser checks | CI evidence; no routine Founder Preview request |\n| New substantial learner/staff-visible feature | One public synthetic-data Preview after checks pass | One focused Founder review of the new capability |
 | Phase 1B–1F | In-scope implementation of the approved secure foundation, with local synthetic services first and public Preview verification | Proceed through the approved sequence with draft PR/CI evidence; hosted provisioning, paid spend, real data, merge and production release remain separate gates |
 | Later hosted synthetic integration | Isolated hosted Supabase + Preview end-to-end auth/API using the Free tier where suitable | Separate hosted-resource provisioning approval; any paid plan or usage requires a documented unavoidable need and explicit cost approval; synthetic data only |
-| Flagship phases 2–5 | PDF, extraction/OCR, grader workflow, feedback, timer/analytics | Public preview each coherent slice; external services only after separate approvals |
+| Flagship phases 2–5 | PDF, extraction/OCR, grader workflow, feedback, timer/analytics | One Founder Preview when a phase adds a concrete, substantial learner/staff-visible capability that is ready for review; backend-only increments and routine sub-slices remain CI/local verification only; external services require separate approvals |
 | Controlled pilot / diagnostic cycle | Full MYP Year 4 synthetic journey then separately authorised limited live pilot | Founder/privacy/security/academic/accessibility/cost approvals |
 | Launch Candidate / Production Cutover | Connect confirmed custom domain; final production smoke test | Separate explicit production/domain/DNS approval |
 | Official launch | Open the approved public site and learner access | Founder release approval |
