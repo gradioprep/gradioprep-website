@@ -93,8 +93,9 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       headers,
       data: { task_version_id: taskVersionA },
     });
-    expect(createResponse.status()).toBe(201);
-    const created = await createResponse.json() as { attempt: { id: string; status: string } };
+    const createBody = await createResponse.json() as Record<string, unknown>;
+    expect(createResponse.status(), JSON.stringify(createBody)).toBe(201);
+    const created = createBody as { attempt: { id: string; status: string } };
     expect(created.attempt.status).toBe("in_progress");
 
     const responseText = "This synthetic typed response explains how a carefully chosen detail shapes the reader's interpretation.";
@@ -166,8 +167,9 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
 
     const headers = { Authorization: aal2Token };
     const queueResponse = await page.request.get("/api/v1/grader/queue", { headers });
-    expect(queueResponse.status()).toBe(200);
-    const queueBody = await queueResponse.json() as { attempts: Array<{ id: string }> };
+    const queuePayload = await queueResponse.json() as Record<string, unknown>;
+    expect(queueResponse.status(), JSON.stringify(queuePayload)).toBe(200);
+    const queueBody = queuePayload as { attempts: Array<{ id: string }> };
     const queueIds = queueBody.attempts.map(attempt => attempt.id);
     expect(queueIds).toContain(attemptA);
     expect(queueIds).not.toContain(attemptB);

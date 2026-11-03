@@ -383,8 +383,9 @@ test.describe("Phase 1B account foundation", () => {
         },
       },
     );
-    expect(ownerAal2Assignment.status()).toBe(201);
-    await expect(ownerAal2Assignment.json()).resolves.toMatchObject({
+    const ownerAal2AssignmentBody = await ownerAal2Assignment.json() as Record<string, unknown>;
+    expect(ownerAal2Assignment.status(), JSON.stringify(ownerAal2AssignmentBody)).toBe(201);
+    expect(ownerAal2AssignmentBody).toMatchObject({
       assignment: {
         attempt_id: "c3333333-3333-4333-8333-333333333333",
         grader_user_id: "55555555-5555-4555-8555-555555555555",

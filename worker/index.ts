@@ -110,12 +110,29 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
     };
   }
 
-  const claims = auth.userClaims as unknown as Record<string, unknown>;
+  // verifyAuth validates the JWT signature, issuer, audience and expiry.
+  // Its normalized userClaims type omits the AAL field in some package versions,
+  // so read assurance from the payload of that already-verified token.
+  let assuranceLevel: "aal1" | "aal2" = "aal1";
+  try {
+    const encodedPayload = auth.token.split(".")[1];
+    if (encodedPayload) {
+      const base64 = encodedPayload.replace(/-/g, "+").replace(/_/g, "/");
+      const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, "=");
+      const binary = atob(padded);
+      const bytes = Uint8Array.from(binary, character => character.charCodeAt(0));
+      const verifiedClaims = JSON.parse(new TextDecoder().decode(bytes)) as Record<string, unknown>;
+      assuranceLevel = verifiedClaims.aal === "aal2" ? "aal2" : "aal1";
+    }
+  } catch {
+    // Fail closed: malformed or absent assurance claims remain AAL1.
+  }
+
   return {
     data: {
       supabase,
       userId: auth.userClaims.id,
-      assuranceLevel: claims.aal === "aal2" ? "aal2" : "aal1",
+      assuranceLevel,
     },
     error: null,
   };
