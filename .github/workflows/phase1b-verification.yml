@@ -116,7 +116,9 @@ jobs:
       - name: Create or update public Cloudflare Preview after all tests pass
         id: preview
         if: >-
-          github.event_name == 'pull_request' &&\n          contains(github.event.pull_request.body, '<!-- founder-preview-required -->') &&\n          steps.credentials.outputs.available == 'true'
+          github.event_name == 'pull_request' &&
+          contains(github.event.pull_request.body, '<!-- founder-preview-required -->') &&
+          steps.credentials.outputs.available == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -174,7 +176,9 @@ jobs:
 
       - name: Record why the public Preview was not deployed
         if: >-
-          github.event_name == 'pull_request' &&\n          contains(github.event.pull_request.body, '<!-- founder-preview-required -->') &&\n          steps.credentials.outputs.available != 'true'
+          github.event_name == 'pull_request' &&
+          contains(github.event.pull_request.body, '<!-- founder-preview-required -->') &&
+          steps.credentials.outputs.available != 'true'
         run: |
           {
             echo "### Public Preview not deployed"
