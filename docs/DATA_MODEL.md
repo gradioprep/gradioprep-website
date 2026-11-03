@@ -188,3 +188,21 @@ The Phase 1 specification is the implementation-level companion to this provider
 
 
 **Historical Phase 1A/1B implementation handoff — 3 November 2026 (superseded by the Phase 1C checkpoint above):** The original identity migration and Phase 1B staff-invitation migration remain implemented as described in the historical record. Phase 1C has since added typed attempts/responses, response-version archiving and assignment-scoped grader reads in the local synthetic stack. The broader accepted assessment submission, PDF object, human grading/feedback version, timer and credit workflows remain later incomplete slices; do not create speculative unused tables merely to accelerate PR #22.
+
+
+## 6. Phase 1C physical implementation inventory and planned records — 3 November 2026
+
+The physical local-Supabase inventory is limited to the tables explicitly listed below. All other submission, rubric, assessment, criterion, feedback, capacity, SLA, QA and file records in this document remain logical design until a migration and passing tests are recorded.
+
+| Physical table | Status |
+|---|---|
+| `public.profiles`, `public.role_assignments`, `public.guardian_learner_links`, `public.course_enrolments` | Phase 1B implemented |
+| `private.security_audit_events`, `private.staff_invitations` | Phase 1B implemented; security audit is append-only; invitations use narrow RPCs |
+| `public.task_versions`, `public.task_version_prompts`, `public.attempts`, `public.attempt_responses`, `public.grader_assignments` | Phase 1C first slice implemented |
+| `private.attempt_response_versions` | Phase 1C first slice implemented; append-only archive |
+
+The first Phase 1C exact-head checkpoint is commit `05544d1a394e2e480b7cd2dd9f55100b6998ee71`, run [#41613490244](https://github.com/gradioprep/gradioprep-website/actions/runs/41613490244): 116 PostgreSQL/pgTAP assertions and 24/24 Playwright tests passed, with local Supabase reset/seed, TypeScript/Vite/Worker builds, cleanup and a clean public-Preview build. The immutable public Preview is https://b4391d8e-gradioprep-website.wandering-scene-1822.workers.dev and is not connected to hosted Supabase.
+
+**Planned but not yet physical:** `assessment_submissions`, `submission_versions`, submission acceptance/idempotency/capacity/SLA records, `rubrics`, `rubric_versions`, `rubric_criteria`, `task_rubric_mappings`, `assessments`, `assessment_versions`, `criterion_results`, published-feedback visibility records, delegated admin-operation records, `private_qa_records`, expanded assessment/admin audit records and PDF/OCR/file metadata. Do not treat logical tables or proposed names as migrations that already exist.
+
+Access remains default-deny. The student, guardian, grader, admin and owner boundaries are enforced by a combination of grants, RLS, protected RPCs and Worker checks; the remaining Phase 1C work must complete and test the full matrix for every table and operation. Admin does not inherit owner or private QA access. AAL2 is required independently at Worker and database boundaries for every privileged grader/owner/admin operation. The public Preview only demonstrates the safe disconnected shell; authenticated operations remain local synthetic-Supabase tests.
