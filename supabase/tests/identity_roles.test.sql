@@ -167,11 +167,19 @@ RESET ROLE;
 
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
-SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated"}', true);
-SELECT is((SELECT count(*)::integer FROM public.profiles), 9, 'active owner can read all synthetic profiles including suspended accounts');
-SELECT is((SELECT count(*)::integer FROM public.profiles WHERE user_id = '99999999-9999-4999-8999-999999999999'), 1, 'active owner can inspect a suspended account');
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}', true);
+SELECT is((SELECT count(*)::integer FROM public.profiles), 1, 'owner at AAL1 can read only their own profile');
+SELECT is((SELECT count(*)::integer FROM public.profiles WHERE user_id = '99999999-9999-4999-8999-999999999999'), 0, 'owner at AAL1 cannot inspect another or suspended profile');
+SELECT is((SELECT count(*)::integer FROM public.role_assignments), 1, 'owner at AAL1 can read only their own role assignment');
+SELECT is((SELECT count(*)::integer FROM public.guardian_learner_links), 0, 'owner at AAL1 cannot inspect guardian links');
+SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 0, 'owner at AAL1 cannot inspect learner enrolments');
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
+SELECT is((SELECT count(*)::integer FROM public.profiles), 9, 'active owner at AAL2 can read all synthetic profiles including suspended accounts');
+SELECT is((SELECT count(*)::integer FROM public.profiles WHERE user_id = '99999999-9999-4999-8999-999999999999'), 1, 'active owner at AAL2 can inspect a suspended account');
 SELECT is((SELECT display_name FROM public.profiles WHERE user_id = '99999999-9999-4999-8999-999999999999'), 'Synthetic Suspended Student', 'suspended profile display name remains unchanged after blocked update');
 SELECT is((SELECT count(*)::integer FROM public.role_assignments WHERE role = 'owner'), 1, 'only the explicitly seeded owner has the owner role');
+SELECT is((SELECT count(*)::integer FROM public.guardian_learner_links), 2, 'owner at AAL2 can inspect all guardian links');
+SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 2, 'owner at AAL2 can inspect all enrolments');
 RESET ROLE;
 
 SELECT * FROM finish();
