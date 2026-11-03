@@ -1,9 +1,9 @@
 # Public Preview, Verification and Custom-Domain Release Process
 
-**Version:** 1.1-draft  
+**Version:** 1.2-draft
 **Date:** 3 November 2026  
 **Status:** Founder-requested mandatory engineering/build-process standard. Apply to every implementation milestone and relevant pull request. PR #22's latest exact-head CI and Cloudflare Preview status are recorded in Section 3.3; Founder visual review remains pending.  
-**Authority:** `docs/PROJECT_MASTER_BRIEF.md`  
+**Authority:** `docs/PROJECT_MASTER_BRIEF.md`; free-first cost decisions: `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`
 **Related:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`, `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`, `docs/CONTROLLED_CLOUDFLARE_PREVIEW.md`, `docs/DESIGN_SPEC.md` and the approved Phase 0 decision register.
 
 ## 1. Founder-approved working model
@@ -148,8 +148,8 @@ If a persistent branded verification address is genuinely useful before launch, 
 | Stage | Work | Approval / verification |
 |---|---|---|
 | Every implementation PR | Build, tests, public branch Preview, Founder visual/functional verification | Founder verifies the actual Preview before milestone acceptance |
-| Phase 1B–1F | Local synthetic Auth/RLS/API/storage/audit/backup/restore/security foundation | Separate approvals for each implementation checkpoint; no public hosted learner data |
-| Later hosted synthetic integration | Isolated hosted Supabase + Preview end-to-end auth/API | Separate provisioning and cost approval; synthetic data only |
+| Phase 1B–1F | In-scope implementation of the approved secure foundation, with local synthetic services first and public Preview verification | Proceed through the approved sequence with draft PR/CI evidence; hosted provisioning, paid spend, real data, merge and production release remain separate gates |
+| Later hosted synthetic integration | Isolated hosted Supabase + Preview end-to-end auth/API using the Free tier where suitable | Separate hosted-resource provisioning approval; any paid plan or usage requires a documented unavoidable need and explicit cost approval; synthetic data only |
 | Flagship phases 2–5 | PDF, extraction/OCR, grader workflow, feedback, timer/analytics | Public preview each coherent slice; external services only after separate approvals |
 | Controlled pilot / diagnostic cycle | Full MYP Year 4 synthetic journey then separately authorised limited live pilot | Founder/privacy/security/academic/accessibility/cost approvals |
 | Launch Candidate / Production Cutover | Connect confirmed custom domain; final production smoke test | Separate explicit production/domain/DNS approval |

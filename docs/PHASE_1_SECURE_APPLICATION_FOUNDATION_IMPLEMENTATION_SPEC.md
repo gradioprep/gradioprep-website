@@ -1,8 +1,8 @@
 # Phase 1 — Secure Application Foundation Implementation Specification
 
-**Version:** 0.6-draft  
+**Version:** 0.7-draft
 **Date:** 3 November 2026  
-**Status:** Founder-approved implementation specification. Phase 1A preparation is complete; Phase 1B local synthetic-only coding is separately approved and underway in draft PR #22 (open, unmerged). The initial Auth/Worker API/role slice and suspended-account security increment have passed exact-head CI, including PostgreSQL RLS and 16/16 Chromium tests. Current commit, Preview, cache status and remaining review gates are recorded in Section 17. No hosted service, paid plan, real learner data, PR merge, production deployment or DNS change is authorised.
+**Status:** Founder-approved implementation specification and phased work sequence. Phase 1A preparation is complete; Phase 1B local synthetic-only coding is explicitly approved and underway in draft PR #22 (open, unmerged). The initial Auth/Worker API/role slice and suspended-account security increment have passed exact-head CI, including PostgreSQL RLS and 16/16 Chromium tests. Current commit, Preview, cache status and remaining review gates are recorded in Section 17. Work within the approved implementation scope does not require repeated re-approval; hosted resource provisioning, paid spend, real learner data, external processing, PR merge, production deployment and DNS changes remain separate gates. Apply `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`.
 **Parent decision register:** `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DATA_MODEL.md`, `docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md`, `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md` and `docs/DESIGN_SPEC.md`.
 
@@ -12,15 +12,15 @@ Phase 1 establishes the security and persistence foundation required before PDF 
 
 This is an implementation blueprint, not a claim that any component exists. The approved Phase 0 choices remain binding. Do not substitute providers or regions, add a second application database, or widen the approved scope without a recorded Founder decision.
 
-**Current authorisation:** planning, documentation and review only. This approval does not authorise:
-- application, SQL, migration, Worker or infrastructure code;
-- creating/configuring Supabase, R2, Azure or other service resources;
-- purchasing/upgrading a plan, enabling paid usage or changing spend limits;
+**Current authorisation:** implementation within the Founder-approved phased plan is authorised to proceed through reviewable code changes, draft PRs, automated tests and synthetic-data public Previews. Phase 1B is explicitly limited to local Supabase and fictional/synthetic records. Do not repeatedly seek approval for an implementation step already included in the approved plan. This authorisation does **not** include:
+- creating/configuring hosted Supabase, R2, Azure or other hosted resources;
+- purchasing/upgrading a plan, enabling paid usage, allowing overages or changing spend limits;
 - connecting real learner accounts or processing real learner data;
 - sending learner content to OCR, AI or backup processors;
-- merging any PR, deploying, changing DNS or changing Cloudflare production configuration.
+- merging any PR, deploying to production, changing DNS or changing Cloudflare production configuration.
 
-Use fictional/synthetic data only for all future development and hosted previews until separate privacy, security and live-pilot approvals are recorded.
+Use fictional/synthetic data only for development and hosted previews until the separate provisioning, privacy, security and live-pilot gates are satisfied. Apply `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`.
+
 
 ## 2. Approved architecture and system boundaries
 
@@ -31,7 +31,7 @@ Use fictional/synthetic data only for all future development and hosted previews
 | Supabase Auth | Identity, sessions, password recovery and MFA support | Application roles must not be self-selected at signup |
 | Supabase PostgreSQL, Mumbai `ap-south-1` | Single application database; constraints, transactions, RLS, audit records and versioned learning records | No Cloudflare D1 or parallel application database |
 | Supabase private Storage, same project | Primary private source-PDF and response-object storage | No public learner buckets or permanent public object URLs |
-| Supabase Pro | Required before real learner records; fresh plan/compute/usage quote and explicit budget approval first | Free plan is synthetic/development only |
+| Supabase Free / Pro | Free is the default starting plan if tested availability, capacity, backup/restore and privacy requirements can be met. Pro is an optional paid fallback only where an essential requirement cannot be met on a suitable free arrangement; recheck current price/compute/usage and obtain explicit approval first. | Free projects may pause after inactivity and lack automatic downloadable DB backups; do not accept real data until these risks are controlled and tested. |
 | Cloudflare R2 | Secondary encrypted PDF-object backup only, subject to regional-transfer and privacy approval | Not primary app storage, not a database, not approved for real learner objects until transfer gates pass |
 | PDF.js | In-app rendering and digital text extraction | Does not replace original PDF |
 | Azure Document Intelligence Read | Later Phase 2 scanned-page OCR, intended Central India, subject to exact region/service validation | Not part of Phase 1 provisioning or real-data testing |
@@ -182,7 +182,7 @@ Make application-level audit writes transactionally coupled to the action where 
 
 ### 8.1 Database
 
-- Supabase Pro is required before real learner records; reconfirm current plan, compute, backup retention, restore options and price at provisioning.
+- Supabase Free is the first plan to evaluate. Pro is an optional fallback only if no suitable free arrangement can meet an essential requirement; its current starting price, compute, backups, egress, storage, tax and overage must be rechecked and explicitly approved before activation.
 - Confirm the actual daily backup schedule, seven-day retention and restore mechanism for the selected project/plan.
 - Backups must include schema, data, constraints, policies, functions and migration history needed for a usable restore.
 - Restrict backup/restore access to owner-authorised operators; record every restore.
@@ -248,25 +248,30 @@ Automate RLS and API tests in CI where feasible. Add a manual security review fo
 
 | Checkpoint | Deliverable | Required evidence / exit gate |
 |---|---|---|
-| 1A — Technical design lock | Reviewed schema map, endpoint contract, RLS matrix, threat model, secret inventory, migration/rollback and cost plan | Founder approves implementation scope, RTO/RPO proposal and any paid plan/account action separately |
+| 1A — Technical design lock | Reviewed schema map, endpoint contract, RLS matrix, threat model, secret inventory, migration/rollback and cost plan | Implementation scope is already Founder-approved. RTO/RPO targets remain proposals to resolve before real-data readiness; any hosted resource or paid account action is separately reviewed under the free-first policy. |
 | 1B — Auth and roles | Supabase Auth integration, account lifecycle, role assignments, MFA/staff invitation controls | Synthetic login, recovery, revocation and role-escalation tests pass |
 | 1C — Protected API and database | Worker request validation, PostgreSQL schema, constraints, RLS, protected operations | Complete table-by-table RLS matrix and cross-role API tests pass |
 | 1D — Private storage and audit | Private bucket policy, short-lived signed access, upload metadata/validation, append-only audit | Cross-account object denial and audit-integrity tests pass |
 | 1E — Backup and recovery | Supabase database backup verification, R2 encrypted PDF backup design/implementation only after regional gate, deletion workflow | Isolated DB + object restore, checksum and deletion/expiry evidence pass |
 | 1F — Security acceptance | Synthetic-data security regression, threat-model review, remediation and runbooks | No unresolved critical/high findings; Founder accepts evidence and authorises next phase separately |
 
-A checkpoint can be held for review without starting the next. Each code checkpoint requires a separate draft PR and reviewable CI. Keep PRs draft and unmerged until the Founder separately approves the relevant merge. No production deployment is included in Phase 1 approval.
+Proceed through the approved checkpoints in sequence. Each code checkpoint requires a separate draft PR and reviewable CI so evidence can be inspected and corrections can be made. A checkpoint review does not re-authorise the plan or require repeated permission to begin the next in-scope implementation step. Keep PRs draft and unmerged until the Founder separately approves the relevant merge. No production deployment is included in Phase 1 approval.
 
 ## 12. Costs, account ownership and permissions
 
+**Cost authority:** `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md` supersedes any earlier implication in this specification that Supabase Pro or another paid service is an assumed prerequisite. The architecture/provider selection remains approved; the paid plan is not.
+
 ### 12.1 Known and unknown costs
 
-- Supabase Pro is the approved live-data prerequisite, advertised in Phase 0 from USD 25/month. Reconfirm current subscription, selected compute, backups, egress, storage, tax and overage before provisioning. No plan has been purchased.
-- R2 charges depend on stored object volume and operation counts; the APAC hint does not guarantee India residency. No real-data replication is authorised.
-- Cloudflare Workers may incur usage charges depending on current plan/traffic; existing hosting is not approval for new paid features or spend-limit changes.
-- MFA/email delivery, independent key management, security monitoring and external review may add costs. Confirm exact provider and quote before selection.
-- Azure OCR and Workers AI are later phases and are not to be provisioned or enabled as part of Phase 1.
-- Do not enable auto-upgrades, paid overage or automatic spend-cap increases.
+The binding budget rule is the free-first policy in `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`: target US$0 recurring infrastructure subscriptions and paid API usage for the first 12 months from 3 November 2026, and review upgrades at 100+ subscribers without automatically purchasing them. Current service-by-service quotas, dated indicative prices and approval requirements are recorded in that policy.
+
+- Supabase Free is the first plan to evaluate. Supabase Pro is an optional fallback, currently advertised from USD 25/month before additional compute/usage, only if no suitable free arrangement can meet an essential requirement. It is not an approved mandatory spend.
+- Supabase Free inactivity pausing and missing automatic downloadable DB backups must be addressed with tested controls before real learner records. Database exports do not back up Storage API file objects.
+- R2 Free may cover an early secondary backup volume, but regional-transfer and residency controls still apply; no real-data replication is authorised until they pass.
+- Cloudflare Workers Free is the default while measured usage/CPU stays within its limits. Workers Paid currently starts at USD 5/month but is not an automatic upgrade.
+- Azure OCR and Workers AI remain later features; use free quotas and manual fallback where feasible. S0 OCR, paid AI usage, PITR, KMS, paid email and other upgrades require a current price/usage estimate and explicit approval.
+- Do not enable auto-upgrades, paid overage, spend-cap removal or automatic spend-limit increases. Do not infer spending approval from this architecture.
+
 
 ### 12.2 Account permissions
 
@@ -298,19 +303,20 @@ Before Phase 1 acceptance, document concise runbooks for:
 
 Incident response must preserve relevant non-content evidence, restrict access, assess notification obligations with qualified counsel and avoid placing learner content in incident tickets or chat.
 
-## 14. Decisions still required before implementation
+## 14. Decisions required before hosted or real-data readiness
 
-These are genuine unresolved operational choices, not permission to change the approved architecture:
+These are later operational decisions; they do not block local synthetic implementation already authorised within the approved plan:
 
-1. Founder approval of numeric RTO/RPO targets and restore-test cadence.
-2. Confirm Supabase Pro price/compute/backup details for the chosen Mumbai project at the time of provisioning.
+1. Propose and agree numeric RTO/RPO targets and restore-test cadence before accepting real learner submissions. The current Phase 1A values are proposals, not approved commitments.
+2. Test Supabase Free inactivity handling, manual database exports, file-object backups, full restore and capacity in the intended Mumbai configuration. Compare any failed requirement with the exact current Pro/backup quote only if no suitable free arrangement meets it.
 3. Confirm the exact Worker-to-Supabase server access pattern and whether any privileged operation truly requires a server-only bypass credential.
-4. Select and approve the envelope-encryption key-management/recovery method for R2 object backups; verify India transfer/residency implications before real-data use.
-5. Confirm account invitation, email verification and recovery delivery settings and any associated provider cost.
-6. Confirm whether a separate independent security reviewer is required and approve the budget if so.
+4. Select and approve the envelope-encryption key-management/recovery method for any R2 object backups; evaluate suitable free options first and verify India transfer/residency implications before real-data use. AWS KMS remains an unselected candidate, not an approved provider.
+5. Confirm account invitation, email verification and recovery delivery settings; use included/free delivery where suitable and disclose any unavoidable cost first.
+6. Confirm whether a separate independent security reviewer is required; any external budget must be quoted and separately approved.
 7. Complete qualified privacy/legal review of applicable India DPDP commencement/rules and learner/guardian notices before any real learner data or external processor use.
 
-No item above permits provisioning by default. The Founder must separately approve implementation and any chargeable account action.
+No item above authorises paid spend, hosted resource provisioning or real-data use by default. Apply `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`.
+
 
 ## 15. Explicit out-of-scope items
 
@@ -320,18 +326,19 @@ Phase 1 does not implement PDF extraction/OCR, AI feedback drafts, the grading q
 
 ## 16. Approval and change control
 
-This specification is a planning deliverable prepared after the Founder approved the Phase 1 plan in principle. It does not grant implementation, provisioning, spending, data-processing, merge or deployment authority.
+This specification records the Founder-approved implementation plan and its technical boundaries. The approved sequence authorises in-scope implementation through draft PRs, CI and synthetic Preview verification; Phase 1B local synthetic-only coding is explicitly approved. Do not ask again for approval of steps already included in that plan.
 
-Before any implementation begins, the Founder must separately approve:
-- the reviewed technical design and unresolved operational decisions;
-- the named implementation checkpoint(s);
-- the exact services/accounts and any costs;
-- the synthetic-data test scope;
-- the repository/PR branch scope.
+Separate approval is still required before:
+- creating/configuring hosted service resources, even on a free tier where the current project record requires provisioning approval;
+- purchasing/upgrading a plan, enabling chargeable use, permitting overages or changing spend limits;
+- processing real learner data or sending learner content to external processors;
+- changing the approved provider, region, database, backup target, retention, role boundary or data-processing scope;
+- merging a PR, deploying to production, changing DNS or launching publicly.
 
-Before real learner data, external OCR/AI processing, R2 replication, live pilot, merge or deployment, obtain the separate approvals and legal/privacy/quality evidence defined by the Phase 0 register and flagship specification.
+The free-first policy in `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md` governs every proposed service cost. No item in this specification implies spending authority.
 
 Any change to the approved provider, region, database, backup target, retention, role boundary or data-processing scope requires a documented decision and reconciliation of every dependent source-of-truth record.
+
 
 
 ## 17. Build-ready execution path — 2 November 2026

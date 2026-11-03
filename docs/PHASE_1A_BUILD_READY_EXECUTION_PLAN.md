@@ -1,8 +1,8 @@
 # Phase 1A — Build-Ready Execution Plan
 
-**Version:** 0.5-draft  
+**Version:** 0.6-draft
 **Date:** 3 November 2026  
-**Status:** Founder-approved preparation step; Phase 1B local synthetic-only implementation is underway in draft PR #22. The latest exact-head verification and remaining handoff gates are recorded in Section 13. This is an execution plan, not proof of hosted provisioning or production readiness. Production, DNS, hosted services and real data remain unauthorised.
+**Status:** Founder-approved preparation step under the approved phased implementation plan; Phase 1B local synthetic-only implementation is underway in draft PR #22. In-scope implementation proceeds without repeated approval of the same plan steps. The latest exact-head verification and remaining handoff gates are recorded in Section 13. This is an execution plan, not proof of hosted provisioning or production readiness. Paid services, hosted provisioning, production, DNS and real data remain separately gated.
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and the approved Phase 0 decision register.
 
@@ -154,6 +154,8 @@ The first PR remains draft/unmerged for review. No hosted preview is enabled for
 
 ## 9. Backup and recovery decisions — proposal, not approval
 
+**Cost-policy cross-reference:** The free-first rule and 12-month US$0 recurring-spend target are binding in `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`. The RTO/RPO figures below are engineering proposals only, not a commitment to buy PITR, R2, KMS or any other paid service.
+
 For planning the eventual real-learner pilot, the recommended targets are:
 
 | Measure | Proposed target | Conditions |
@@ -168,36 +170,54 @@ Supabase Pro daily backups alone are daily and cover the database, not Storage A
 
 ### 9.1 Recommended encryption design for secondary objects
 
-Recommended candidate for Founder review: **AWS KMS customer-managed symmetric key in Mumbai (`ap-south-1`)**, with client-side envelope encryption before writing each backup object to R2. Use a fresh random data-encryption key per object; encrypt the object using authenticated encryption (AES-256-GCM); wrap the data key with the KMS key; store only the wrapped key, algorithm/version and required non-sensitive metadata beside the encrypted object. Keep KMS permissions separate from R2 read/write credentials and restrict decryption to the recovery operator. Test key rotation and full restore before enabling real-data replication.
+No key-management provider has been selected or approved. Evaluate a secure free option or suitable existing platform-supported key management first. AWS KMS is only an unselected candidate for comparison, not a recommended purchase or implementation default. If a later threat/recovery design proves a paid key manager unavoidable, present the exact cost and alternatives before seeking approval. The envelope-encryption design, if adopted, must use a customer-managed symmetric key with client-side envelope encryption before writing each backup object to R2.
 
-AWS publishes a base KMS customer-managed key price of USD 1/month per key and a free tier of 20,000 eligible requests/month; request pricing depends on operation type. This is a candidate estimate only. AWS lists a Mumbai KMS regional endpoint, but account availability, identity federation/credential handling from Workers, DPA, legal transfer, recovery and exact bill must be validated before selection or provisioning. Do not use a long-lived unrestricted AWS administrator key in Worker secrets. If a narrowly scoped, safely rotated credential or supported short-lived identity flow cannot be implemented, choose another reviewed KMS integration instead.
+AWS KMS has been listed at approximately USD 1/month per customer-managed key, plus applicable requests, but this is a dated comparison figure only. It is not in the approved architecture baseline, does not authorise account creation, and must not be included as a committed monthly expense. Any key provider must pass identity, key-custody, recovery, region and privacy review.
 
 R2 remains the secondary file-backup destination only. Its APAC location hint is not an India residency guarantee. A decision to use AWS KMS does not by itself authorise sending real PDFs to R2 or any cross-border processing.
 
-## 10. Current cost picture and no-cost development path
+## 10. Current cost picture and free-first 12-month operating target
 
 ### Local synthetic development
 
-- Supabase local CLI stack: no Supabase subscription or hosted usage charge; local machine/container resources are required.
-- Cloudflare Worker local development and GitHub Actions checks: no new account or remote service required. Do not enable remote bindings.
-- No paid Supabase plan, R2 bucket, KMS key, Azure resource or Workers AI endpoint is required for the first code slice.
+- Supabase local CLI stack: no Supabase subscription or hosted usage charge; local computer/container resources are required.
+- Current Cloudflare Worker local development, static Preview assets and GitHub Actions use the included free allowances; monitor the actual account usage.
+- GitHub Free currently includes 2,000 Actions minutes/month for a private repository. Do not permit unbudgeted usage after the included allowance.
+- No hosted Supabase project, paid plan, R2 bucket, KMS key, Azure resource or Workers AI paid endpoint is required for the current Phase 1B local synthetic slice.
 
-### Future hosted / real-data costs to reconfirm before provisioning
+### Future hosted services — dated cost snapshot, not an approved spend
 
-- Supabase Pro: official current documentation describes USD 25/month before extra usage, with USD 10 monthly compute credits covering a Micro project, 8 GB database disk, 250 GB egress and seven days of daily backups. Larger compute and overages change the invoice.
-- Supabase 7-day PITR: approximately USD 100/month at the published hourly rate; it requires at least Small compute. The official example totals USD 130/month for one Pro project with Small compute and 7-day PITR after the USD 10 compute credit (Pro USD 25 + Small USD 15 + PITR USD 100 − credit USD 10). PITR add-on charges are not covered by the Spend Cap.
-- Cloudflare Workers current usage-based free allocation: 10 million requests and 30 million CPU-ms/month; current overage rates must be checked against the account plan before going live.
-- Cloudflare R2 current free monthly usage: 10 GB storage, 1 million Class A and 10 million Class B operations; additional usage is charged. Actual backup storage/operation volume must be modelled.
-- AWS KMS candidate: USD 1/month for one customer-managed key; published free usage is 20,000 eligible requests/month, with exclusions for certain APIs.
+The binding rule is in `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`: target US$0 recurring infrastructure subscriptions and paid API use from 3 November 2026 through 2 November 2027; review actual needs at 100+ subscribers but do not automatically upgrade. The figures below were checked 3 November 2026 and must be rechecked before any activation.
 
-These figures are current published USD examples checked 2 November 2026, not an approved budget, invoice estimate or promise. Tax, currency conversion, email delivery, monitoring, recovery and other services may add costs. No auto-upgrade or paid overage is authorised. Recheck official pricing before any provisioning.
+| Service | Free-first allowance | Paid exposure if proven unavoidable |
+|---|---|---|
+| Supabase | Free: 500 MB database, 1 GB Storage, 50,000 MAU, 5 GB egress + 5 GB cached egress; may pause after 7 days of low activity; manual CLI DB exports, no automatic downloadable DB backups | Pro starts at $25/month, plus possible compute/usage. PITR 7-day option is about $100/month and requires at least Small compute; a previous published sample total is about $130/month after the compute credit. PITR is not approved or required by default. |
+| Cloudflare Workers | Free: 100,000 Worker requests/day and 10 ms CPU per HTTP request; static assets free/unlimited | Paid minimum $5/month/account; 10 million requests and 30 million CPU-ms included, with usage charges beyond. |
+| Cloudflare R2 | Free: 10 GB-month, 1 million Class A and 10 million Class B operations, free egress | Standard storage above allowance $0.015/GB-month; operation overages apply. APAC placement hint is not India-residency assurance. |
+| Azure Document Intelligence Read | F0: 500 pages/month, 4 MB/document, 2 pages per analysis and 1 request/second | S0 is metered per page. Confirm exact Central India rate before use. |
+| Cloudflare Workers AI | 10,000 Neurons/day free | Usage above the allocation requires Workers Paid (minimum $5/month) and is $0.011/1,000 Neurons above the free allocation. |
+| GitHub Actions | GitHub Free: 2,000 minutes/month for a private repository | Additional usage may be billed; set a stop-usage budget and monitor caches/artifacts. |
+| AWS KMS / other key manager | No provider selected; assess suitable free options first | AWS KMS candidate reference is about $1/customer-managed key/month plus requests; not an approved default. |
+
+These base prices are not an additive stack. Supabase Pro, Workers Paid, PITR, AWS KMS, Azure S0, paid email and other paid APIs are **not** planned subscriptions. The only cost target is zero recurring infrastructure cost unless an evidence-backed exception is approved.
+
+### Decision rules before a paid exception
+
+- Demonstrate the exact essential requirement the free option fails, with measured test evidence.
+- Compare free/open-source/local alternatives and the operational consequence of staying free.
+- Present current fixed monthly cost, variable usage formula, minimum compute/add-ons, tax and currency caveats, and likely monthly total for a realistic volume.
+- Obtain the Founder's explicit approval before enabling billing, paid usage, overages or a paid resource.
+- Keep auto-upgrades, spend-cap removal and paid fallbacks disabled.
+- At 100+ active subscribers, review actual usage; this is not an automatic upgrade event.
+- If a free service cannot meet security, recovery, availability, residency or capacity requirements and no safe free arrangement exists, keep real-data acceptance blocked until a decision is made. Do not weaken requirements simply to reach the $0 target.
+
 
 ## 11. Account access required by stage
 
 | Stage | Required access | Not required |
 |---|---|---|
 | First coding slice, local only | GitHub repository write for a draft branch/PR; GitHub Actions CI; local Docker-compatible runtime | Supabase hosted account/project, Cloudflare account changes, AWS/Azure account, billing owner, production credentials |
-| Later isolated hosted synthetic test | Supabase project owner only for creating the isolated project/plan; restricted developer access for migrations; separate review of Cloudflare preview access | Production learner records or production credentials |
+| Later isolated hosted synthetic test | Explicitly approved isolated synthetic project; use the free tier if suitable; restricted developer access for migrations; separate review of Preview access | Production learner records or production credentials; any paid plan/usage without a separately approved cost exception |
 | Real learner pilot | Founder-owned Supabase billing/ownership and recovery; least-privilege project developer/operator; Cloudflare Worker deployment authority; separately reviewed backup/KMS rights; legal/privacy reviewer | Shared accounts or general admin credentials for all developers |
 
 For the first code slice, do not ask the Founder for any password, API key, recovery code, billing details or remote credentials. The local CLI and Docker-compatible runtime are sufficient.
@@ -206,9 +226,9 @@ For the first code slice, do not ask the Founder for any password, API key, reco
 
 **Can be coded locally in the next step:** Worker API entrypoint, browser auth client, Supabase local config/migrations, profiles and role assignments, safe helper functions, first RLS policies, synthetic fixtures, tests, CI and no-data API responses.
 
-**Must remain blocked until later explicit approval:** hosted Supabase Pro project, Cloudflare production Worker changes, R2 bucket/object replication, AWS KMS or any external key-management service, paid PITR, real learner records, real PDFs, Azure OCR, Workers AI and live pilot.
+**Must remain blocked until their specific gates pass:** hosted Supabase or other hosted resource provisioning, Cloudflare production Worker changes, R2 bucket/object replication, any key-management service, paid PITR, real learner records, real PDFs, Azure OCR, Workers AI and live pilot. Use free tiers by default where suitable; any paid plan/usage requires a documented unavoidable need and explicit cost approval.
 
-**Requires Founder decision before real-data readiness:** whether to accept the proposed RTO/RPO targets and their cost; whether AWS KMS is approved as the secondary-backup key manager; current service quotes and legal/privacy approval. These decisions do not prevent local synthetic coding of the Auth/API/RLS foundation.
+**Requires Founder decision before real-data readiness:** final tested RTO/RPO commitment; backup/key-management method and regional-transfer controls; any hosted plan or unavoidable paid service (with exact quote); and legal/privacy approval. The proposed RTO/RPO targets and AWS KMS are not approved purchases. These decisions do not prevent local synthetic coding or other in-scope implementation already authorised by the plan.
 
 ## 13. Exact next step
 
@@ -217,7 +237,7 @@ For the first code slice, do not ask the Founder for any password, API key, reco
 This plan does not change the existing diagnostic sequence: MYP Year 4 actual diagnostic item authoring remains gated until the flagship feature is implemented and pilot-validated; Cambridge Grade 6 remains blocked.
 
 
-## 14. Official technical references checked 2 November 2026
+## 14. Official technical references checked 3 November 2026
 
 - Supabase local development (CLI, container runtime, free local stack): https://supabase.com/docs/guides/local-development
 - Supabase local migration workflow: https://supabase.com/docs/guides/local-development/database-migrations
