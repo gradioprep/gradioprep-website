@@ -179,7 +179,7 @@ SELECT set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-2222222
 SELECT throws_ok(
   $SELECT * FROM public.accept_staff_invitation(
       (SELECT token_hash FROM pg_temp.staff_invitation_fixtures LIMIT 1)
-    )$,
+    )$$,
   'P0001', 'invitation_already_used',
   'the same invitation token cannot be replayed'
 );
