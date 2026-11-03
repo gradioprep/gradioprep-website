@@ -65,7 +65,14 @@ test.describe("Phase 1B account foundation", () => {
 
   test("synthetic student can sign up, load own profile, edit display name and sign out", async ({ page }) => {
     const pageErrors: string[] = [];
+    const apiResponses: string[] = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
+    page.on("response", async (response) => {
+      if (new URL(response.url()).pathname === "/api/v1/me") {
+        const body = await response.text().catch(() => "<response body unavailable>");
+        apiResponses.push(`${response.status()} ${body}`);
+      }
+    });
 
     await page.goto("/account");
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
@@ -92,7 +99,70 @@ test.describe("Phase 1B account foundation", () => {
       );
     }, { timeout: 10_000 }).toBe(true);
 
+    const cardText = await page.locator(".proto-account-card").innerText();
+    const feedback = await page.locator(".proto-account-feedback").allTextContents();
 
+    await expect(page.getByRole("heading", { name: "Synthetic Phase One Learner" })).toBeVisible();
+    await expect(page.getByText("student", { exact: true })).toBeVisible();
+
+    const displayName = page.getByLabel("Display name");
+    await displayName.fill("Synthetic Learner Updated");
+    await page.getByRole("button", { name: "Save display name" }).click();
+    await expect(page.getByRole("heading", { name: "Synthetic Learner Updated" })).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: "Display name saved." })).toBeVisible();
+
+    await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page.getByRole("heading", { name: /create a student account/i })).toBeVisible();
+    expect(pageErrors).toEqual([]);
+  });
+
+  test("suspended account cannot read or update protected profile data", async ({ page }) => {
+    let authorization = "";
+    const diagnostics: {
+      authStatus: number | null;
+      authError: string | null;
+      meStatus: number | null;
+      meError: string | null;
+      meMessage: string | null;
+      pageErrors: string[];
+    } = {
+      authStatus: null,
+      authError: null,
+      meStatus: null,
+      meError: null,
+      meMessage: null,
+      pageErrors: [],
+    };
+
+    page.on("pageerror", error => diagnostics.pageErrors.push(error.message));
+    page.on("request", request => {
+      if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
+        authorization = request.headers()["authorization"] ?? "";
+      }
+    });
+    page.on("response", async response => {
+      const pathname = new URL(response.url()).pathname;
+      if (pathname === "/auth/v1/token") {
+        diagnostics.authStatus = response.status();
+        const body = await response.json().catch(() => ({})) as { error?: string; error_description?: string; msg?: string };
+        diagnostics.authError = body.error_description ?? body.msg ?? body.error ?? null;
+      }
+      if (pathname === "/api/v1/me" && response.request().method() === "GET") {
+        diagnostics.meStatus = response.status();
+        const body = await response.json().catch(() => ({})) as { error?: string; message?: string };
+        diagnostics.meError = body.error ?? null;
+        diagnostics.meMessage = body.message ?? null;
+      }
+    });
+
+    await page.goto("/account");
+    await page.getByLabel("Email address").fill("suspended.student@example.invalid");
+    await page.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await page.waitForTimeout(1_000);
+
+    const cardText = await page.locator(".proto-account-card").innerText().catch(() => "<account card not found>");
+    const feedback = await page.locator(".proto-account-feedback").allTextContents().catch(() => []);
 
     expect(authorization).toMatch(/^Bearer\s+\S+/);
     expect(diagnostics.meStatus).toBe(403);
