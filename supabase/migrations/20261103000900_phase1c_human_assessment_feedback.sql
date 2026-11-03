@@ -252,7 +252,7 @@ LANGUAGE sql
 STABLE
 SECURITY DEFINER
 SET search_path = ''
-AS $
+AS $assessment_version_reader$
   SELECT EXISTS (
     SELECT 1
     FROM public.assessment_versions AS version
@@ -279,7 +279,7 @@ AS $
         )
       )
   );
-$;
+$assessment_version_reader$;
 
 REVOKE ALL ON FUNCTION private.can_read_assessment_submission(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION private.can_read_assessment_version(uuid) FROM PUBLIC, anon, authenticated;
@@ -813,7 +813,7 @@ RETURNS TABLE (
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = ''
-AS $$
+AS $assessment_draft_reader$
 DECLARE
   actor_id uuid := auth.uid();
 BEGIN
@@ -838,7 +838,7 @@ BEGIN
     WHERE draft.submission_id = p_submission_id
       AND draft.grader_user_id = actor_id;
 END;
-$;
+$assessment_draft_reader$;
 
 REVOKE ALL ON FUNCTION public.get_assessment_draft(uuid) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.get_assessment_draft(uuid) TO authenticated;
