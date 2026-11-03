@@ -1,0 +1,256 @@
+BEGIN;
+SELECT plan(22);
+
+CREATE TEMP TABLE staff_invitation_fixtures (
+  invitation_id uuid,
+  token_hash text,
+  invited_email text,
+  invited_role public.app_role
+) ON COMMIT DROP;
+
+SET LOCAL ROLE anon;
+SELECT throws_ok(
+  $$SELECT * FROM public.list_staff_invitations()$$,
+  '42501',
+  NULL,
+  'anonymous users cannot list staff invitations'
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal2"}', true);
+SELECT throws_ok(
+  $$SELECT * FROM public.create_staff_invitation('grader.new@example.invalid', 'grader', repeat('a', 64))$$,
+  '42501', 'staff_invitation_forbidden',
+  'students cannot create staff invitations'
+);
+SELECT throws_ok(
+  $$SELECT * FROM public.list_staff_invitations()$$,
+  '42501', 'staff_invitation_forbidden',
+  'students cannot list staff invitations'
+);
+SELECT set_config('request.jwt.claim.sub', '77777777-7777-4777-8777-777777777777', true);
+SELECT set_config('request.jwt.claims', '{"sub":"77777777-7777-4777-8777-777777777777","role":"authenticated","aal":"aal2"}', true);
+SELECT throws_ok(
+  $$SELECT * FROM public.create_staff_invitation('grader.new@example.invalid', 'grader', repeat('a', 64))$$,
+  '42501', 'staff_invitation_forbidden',
+  'admins cannot create staff invitations'
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}', true);
+SELECT throws_ok(
+  $$SELECT * FROM public.create_staff_invitation('grader.new@example.invalid', 'grader', repeat('a', 64))$$,
+  'P0001', 'mfa_required',
+  'owner cannot create invitations at AAL1'
+);
+SELECT throws_ok(
+  $$SELECT * FROM public.revoke_staff_invitation(gen_random_uuid(), 'Synthetic test reason')$$,
+  'P0001', 'mfa_required',
+  'owner cannot revoke invitations at AAL1'
+);
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
+SELECT throws_ok(
+  $$SELECT * FROM public.create_staff_invitation('grader.new@example.invalid', 'owner', repeat('a', 64))$$,
+  '22023', 'invalid_invitation_role',
+  'owner role cannot be offered through an invitation'
+);
+SELECT throws_ok(
+  $$SELECT * FROM public.create_staff_invitation('grader.new@example.invalid', 'grader', 'not-a-hash')$$,
+  '22023', 'invalid_invitation_token_hash',
+  'only a SHA-256 token hash can be stored'
+);
+
+INSERT INTO pg_temp.staff_invitation_fixtures
+SELECT invitation_id,
+       encode(extensions.digest('student-b-grader-invitation', 'sha256'), 'hex'),
+       invited_email,
+       invited_role
+FROM public.create_staff_invitation(
+  'student.b@example.invalid',
+  'grader',
+  encode(extensions.digest('student-b-grader-invitation', 'sha256'), 'hex')
+);
+SELECT is(
+  (SELECT invited_role FROM pg_temp.staff_invitation_fixtures LIMIT 1),
+  'grader'::public.app_role,
+  'owner can create a grader invitation'
+);
+SELECT is(
+  (SELECT expires_at <= created_at + interval '7 days'
+   FROM public.list_staff_invitations()
+   WHERE invitation_id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures LIMIT 1)),
+  true,
+  'invitation expiry cannot exceed seven days'
+);
+SELECT is(
+  (SELECT status FROM public.list_staff_invitations()
+   WHERE invitation_id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures LIMIT 1)),
+  'pending'::text,
+  'owner can list safe invitation status'
+);
+SELECT throws_ok(
+  $$SELECT * FROM public.create_staff_invitation(
+      'student.b@example.invalid', 'grader',
+      encode(extensions.digest('second-student-b-invitation', 'sha256'), 'hex')
+    )$$,
+  '23505', 'invitation_already_pending',
+  'duplicate pending invitation for the same email and role is denied'
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal2"}', true);
+SELECT throws_ok(
+  $$SELECT * FROM public.accept_staff_invitation(
+      (SELECT token_hash FROM pg_temp.staff_invitation_fixtures LIMIT 1)
+    )$$,
+  '42501', 'invitation_email_mismatch',
+  'invitation cannot be redeemed by an account with a different email'
+);
+SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
+SELECT set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal1"}', true);
+SELECT throws_ok(
+  $$SELECT * FROM public.accept_staff_invitation(
+      (SELECT token_hash FROM pg_temp.staff_invitation_fixtures LIMIT 1)
+    )$$,
+  'P0001', 'mfa_required',
+  'invitee cannot accept without AAL2'
+);
+RESET ROLE;
+
+UPDATE auth.users
+SET email_confirmed_at = NULL
+WHERE id = '22222222-2222-4222-8222-222222222222';
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
+SELECT set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal2"}', true);
+SELECT throws_ok(
+  $$SELECT * FROM public.accept_staff_invitation(
+      (SELECT token_hash FROM pg_temp.staff_invitation_fixtures LIMIT 1)
+    )$$,
+  '42501', 'invitation_email_unverified',
+  'invitee must verify the matching email first'
+);
+RESET ROLE;
+
+UPDATE auth.users
+SET email_confirmed_at = now()
+WHERE id = '22222222-2222-4222-8222-222222222222';
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
+SELECT set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal2"}', true);
+SELECT lives_ok(
+  $$SELECT * FROM public.accept_staff_invitation(
+      (SELECT token_hash FROM pg_temp.staff_invitation_fixtures LIMIT 1)
+    )$$,
+  'verified invitee with AAL2 can accept the invitation'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM public.role_assignments
+   WHERE user_id = '22222222-2222-4222-8222-222222222222'
+     AND role = 'grader' AND revoked_at IS NULL),
+  1,
+  'acceptance grants only the invited grader role'
+);
+SELECT is(
+  (SELECT status FROM public.list_staff_invitations()
+   WHERE invitation_id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures LIMIT 1)),
+  'accepted'::text,
+  'accepted invitation is marked as consumed'
+);
+SELECT throws_ok(
+  $$SELECT * FROM public.accept_staff_invitation(
+      (SELECT token_hash FROM pg_temp.staff_invitation_fixtures LIMIT 1)
+    )$$,
+  'P0001', 'invitation_already_used',
+  'the same invitation token cannot be replayed'
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
+INSERT INTO pg_temp.staff_invitation_fixtures
+SELECT invitation_id,
+       encode(extensions.digest('expired-student-a-invitation', 'sha256'), 'hex'),
+       invited_email,
+       invited_role
+FROM public.create_staff_invitation(
+  'student.a@example.invalid',
+  'admin',
+  encode(extensions.digest('expired-student-a-invitation', 'sha256'), 'hex')
+);
+INSERT INTO pg_temp.staff_invitation_fixtures
+SELECT invitation_id,
+       encode(extensions.digest('revoked-student-a-invitation', 'sha256'), 'hex'),
+       invited_email,
+       invited_role
+FROM public.create_staff_invitation(
+  'student.a@example.invalid',
+  'grader',
+  encode(extensions.digest('revoked-student-a-invitation', 'sha256'), 'hex')
+);
+SELECT lives_ok(
+  $$SELECT public.revoke_staff_invitation(
+      (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures
+       WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1),
+      'Synthetic owner revocation'
+    )$$,
+  'owner can revoke a pending invitation'
+);
+SELECT is(
+  (SELECT status FROM public.list_staff_invitations()
+   WHERE invitation_id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures
+     WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1)),
+  'revoked'::text,
+  'revocation appears in the owner list'
+);
+UPDATE private.staff_invitations
+SET created_at = now() - interval '8 days',
+    expires_at = now() - interval '1 day'
+WHERE id = (
+  SELECT invitation_id FROM pg_temp.staff_invitation_fixtures
+  WHERE invited_role = 'admin' AND invited_email = 'student.a@example.invalid' LIMIT 1
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal2"}', true);
+SELECT throws_ok(
+  $$SELECT * FROM public.accept_staff_invitation(
+      (SELECT token_hash FROM pg_temp.staff_invitation_fixtures
+       WHERE invited_role = 'admin' AND invited_email = 'student.a@example.invalid' LIMIT 1)
+    )$$,
+  'P0001', 'invitation_expired',
+  'expired invitations cannot be accepted'
+);
+SELECT throws_ok(
+  $$SELECT * FROM public.accept_staff_invitation(
+      (SELECT token_hash FROM pg_temp.staff_invitation_fixtures
+       WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1)
+    )$$,
+  'P0001', 'invitation_revoked',
+  'revoked invitations cannot be accepted'
+);
+RESET ROLE;
+
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE action = 'staff_invitation_accepted'
+     AND actor_id = '22222222-2222-4222-8222-222222222222'
+     AND target_id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures
+       WHERE invited_email = 'student.b@example.invalid' LIMIT 1)),
+  1,
+  'the invitation acceptance is attributed to the accepting user in the audit log'
+);
+
+SELECT * FROM finish();
+ROLLBACK;
