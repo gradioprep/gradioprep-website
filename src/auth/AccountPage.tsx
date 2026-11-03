@@ -26,6 +26,14 @@ interface StaffInvitation {
   status: "pending" | "accepted" | "revoked" | "expired";
 }
 
+interface CreatedStaffInvitation {
+  invitation_id: string;
+  invited_email: string;
+  invited_role: "grader" | "admin";
+  created_at: string;
+  expires_at: string;
+}
+
 export default function AccountPage({ go }: { go: Navigate }) {
   const auth = useAuth();
   const [mode, setMode] = useState<AccountMode>("sign-in");
@@ -349,17 +357,23 @@ export default function AccountPage({ go }: { go: Navigate }) {
         },
         body: JSON.stringify({ email: staffInviteEmail.trim(), role: staffInviteRole }),
       });
-      const result = await response.json() as { invitation?: StaffInvitation; invite_url?: string; message?: string };
+      const result = await response.json() as { invitation?: CreatedStaffInvitation; invite_url?: string; message?: string };
       if (!response.ok || !result.invitation || !result.invite_url) {
         throw new Error(result.message ?? "The staff invitation could not be created.");
       }
       setNewStaffInviteUrl(result.invite_url);
       setStaffInviteEmail("");
+      const createdInvitation: StaffInvitation = {
+        ...result.invitation,
+        accepted_at: null,
+        revoked_at: null,
+        status: "pending",
+      };
       setStaffInvitations(current => {
         const existing = Array.isArray(current)
-          ? current.filter(item => item.invitation_id !== result.invitation!.invitation_id)
+          ? current.filter(item => item.invitation_id !== createdInvitation.invitation_id)
           : [];
-        return [result.invitation!, ...existing];
+        return [createdInvitation, ...existing];
       });
       setMessage("Invitation link created. Copy it now; it will not be shown again after you leave this page.");
     } catch (requestError) {
