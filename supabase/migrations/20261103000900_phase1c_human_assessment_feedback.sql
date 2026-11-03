@@ -776,7 +776,7 @@ RETURNS TABLE (
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = ''
-AS $
+AS $$
 DECLARE
   actor_id uuid := auth.uid();
 BEGIN
