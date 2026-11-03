@@ -254,16 +254,16 @@ RESET ROLE;
 -- immutable after the acceptance transaction. Test the trigger as table owner.
 SET LOCAL ROLE postgres;
 SELECT throws_ok(
-  $UPDATE public.assessment_submissions
+  $q$UPDATE public.assessment_submissions
     SET grading_due_at = grading_due_at + interval '1 hour'
-    WHERE idempotency_key = '10111111-1111-4111-8111-111111111111'$,
+    WHERE idempotency_key = '10111111-1111-4111-8111-111111111111'$q$,
   '42501', 'assessment_submission_snapshot_immutable',
   'accepted 24-hour due time cannot be extended or rewritten by a privileged workflow'
 );
 SELECT throws_ok(
-  $UPDATE public.assessment_submissions
+  $q$UPDATE public.assessment_submissions
     SET rubric_version_id = 'f2222222-2222-4222-8222-222222222222'
-    WHERE idempotency_key = '10111111-1111-4111-8111-111111111111'$,
+    WHERE idempotency_key = '10111111-1111-4111-8111-111111111111'$q$,
   '42501', 'assessment_submission_snapshot_immutable',
   'accepted task/rubric version relationship cannot be rewritten'
 );
