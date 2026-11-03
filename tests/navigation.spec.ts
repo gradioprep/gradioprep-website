@@ -30,8 +30,8 @@ test.describe("curriculum pathway URLs", () => {
     await expect(page.getByText("Sign in / account", { exact: true })).toHaveCount(0);
 
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
-    await expect(page).toHaveURL(/\\/account$/);
-    await expect(page.getByRole("heading", { name: /Your account, with care\\./i })).toBeVisible();
+    await expect(page).toHaveURL(url => new URL(url.toString()).pathname === "/account");
+    await expect(page.getByRole("heading", { name: "Your account, with care.", exact: true })).toBeVisible();
   });
 
   for (const route of directRouteChecks) {
