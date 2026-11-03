@@ -246,10 +246,47 @@ AS $$
   );
 $$;
 
+CREATE OR REPLACE FUNCTION private.can_read_assessment_version(target_assessment_version_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.assessment_versions AS version
+    WHERE version.id = target_assessment_version_id
+      AND private.can_read_assessment_submission(version.submission_id)
+      AND (
+        (
+          (
+            private.current_user_has_role('student'::public.app_role)
+            OR private.current_user_has_role('guardian'::public.app_role)
+          )
+          AND version.version_number = (
+            SELECT max(latest.version_number)
+            FROM public.assessment_versions AS latest
+            WHERE latest.submission_id = version.submission_id
+          )
+        )
+        OR (
+          (
+            private.current_user_has_role('grader'::public.app_role)
+            OR private.current_user_has_role('owner'::public.app_role)
+          )
+          AND coalesce(auth.jwt() ->> 'aal', 'aal1') = 'aal2'
+        )
+      )
+  );
+$;
+
 REVOKE ALL ON FUNCTION private.can_read_assessment_submission(uuid) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION private.can_read_assessment_version(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION private.can_read_rubric_version(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION private.can_read_task_version(uuid) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION private.can_read_assessment_submission(uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION private.can_read_assessment_version(uuid) TO authenticated;
 GRANT EXECUTE ON FUNCTION private.can_read_rubric_version(uuid) TO authenticated;
 GRANT EXECUTE ON FUNCTION private.can_read_task_version(uuid) TO authenticated;
 
@@ -273,7 +310,7 @@ CREATE POLICY submission_grader_assignments_select_scoped
 
 CREATE POLICY assessment_versions_select_authorized_scope
   ON public.assessment_versions FOR SELECT TO authenticated
-  USING (private.can_read_assessment_submission(submission_id));
+  USING (private.can_read_assessment_version(id));
 
 CREATE POLICY criterion_results_select_authorized_scope
   ON public.criterion_results FOR SELECT TO authenticated
@@ -282,7 +319,7 @@ CREATE POLICY criterion_results_select_authorized_scope
       SELECT 1
       FROM public.assessment_versions AS version
       WHERE version.id = assessment_version_id
-        AND private.can_read_assessment_submission(version.submission_id)
+        AND private.can_read_assessment_version(version.id)
     )
   );
 
