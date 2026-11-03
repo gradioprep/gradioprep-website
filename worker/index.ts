@@ -95,7 +95,7 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
   // Signature/expiry verification alone cannot detect a globally revoked
   // session until its JWT expires. Introspect the live session with GoTrue
   // before authorising protected Worker operations.
-  const { data: currentUser, error: currentUserError } = await supabase.auth.getUser();
+  const { data: currentUser, error: currentUserError } = await supabase.auth.getUser(auth.token);
   if (currentUserError || !currentUser.user || currentUser.user.id !== auth.userClaims.id) {
     const authUnavailable = Boolean(
       currentUserError &&

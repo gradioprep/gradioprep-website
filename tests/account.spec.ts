@@ -225,7 +225,7 @@ test.describe("Phase 1B account foundation", () => {
         publishableKey = request.headers()["apikey"] ?? publishableKey;
       }
       if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
-        secondAccessToken = request.headers()["authorization"]?.replace(/^Bearer\\s+/i, "") ?? secondAccessToken;
+        secondAccessToken = request.headers()["authorization"]?.replace(/^Bearer\s+/i, "") ?? secondAccessToken;
       }
     });
     secondPage.on("response", async response => {

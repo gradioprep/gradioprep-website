@@ -42,7 +42,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
       headers: { Authorization: `Bearer ${auth.session.access_token}` },
       cache: "no-store",
     }).then(async (response) => {
-      const result = await response.json() as CurrentAccount | { error?: string; message?: string };
+      const result = await response.json() as CurrentAccount | { error?: string; code?: string; message?: string };
       if (!response.ok) {
         if (response.status === 401 && "error" in result && result.code === "session_revoked") {
           // A different device may have globally signed out this account. Clear
