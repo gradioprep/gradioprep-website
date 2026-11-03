@@ -13,15 +13,16 @@ INSERT INTO auth.users (
   is_sso_user, is_anonymous
 )
 VALUES
-  ('00000000-0000-0000-0000-000000000000', '11111111-1111-4111-8111-111111111111', 'authenticated', 'authenticated', 'student.a@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Student A","role":"owner"}'::jsonb, now(), now(), false, false),
-  ('00000000-0000-0000-0000-000000000000', '22222222-2222-4222-8222-222222222222', 'authenticated', 'authenticated', 'student.b@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Student B"}'::jsonb, now(), now(), false, false),
-  ('00000000-0000-0000-0000-000000000000', '33333333-3333-4333-8333-333333333333', 'authenticated', 'authenticated', 'guardian.a@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Guardian A","role":"owner"}'::jsonb, now(), now(), false, false),
-  ('00000000-0000-0000-0000-000000000000', '44444444-4444-4444-8444-444444444444', 'authenticated', 'authenticated', 'guardian.b@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Guardian B"}'::jsonb, now(), now(), false, false),
-  ('00000000-0000-0000-0000-000000000000', '55555555-5555-4555-8555-555555555555', 'authenticated', 'authenticated', 'grader.a@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Grader A"}'::jsonb, now(), now(), false, false),
-  ('00000000-0000-0000-0000-000000000000', '66666666-6666-4666-8666-666666666666', 'authenticated', 'authenticated', 'grader.b@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Grader B"}'::jsonb, now(), now(), false, false),
-  ('00000000-0000-0000-0000-000000000000', '77777777-7777-4777-8777-777777777777', 'authenticated', 'authenticated', 'admin@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Admin"}'::jsonb, now(), now(), false, false),
-  ('00000000-0000-0000-0000-000000000000', '88888888-8888-4888-8888-888888888888', 'authenticated', 'authenticated', 'owner@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Owner"}'::jsonb, now(), now(), false, false),
-  ('00000000-0000-0000-0000-000000000000', '99999999-9999-4999-8999-999999999999', 'authenticated', 'authenticated', 'suspended.student@example.invalid', extensions.crypt('Local-only-GradiPrep-2026!', extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Suspended Student"}'::jsonb, now(), now(), false, false)
+  ('00000000-0000-0000-0000-000000000000', '11111111-1111-4111-8111-111111111111', 'authenticated', 'authenticated', 'student.a@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Student A","role":"owner"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', '22222222-2222-4222-8222-222222222222', 'authenticated', 'authenticated', 'student.b@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Student B"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', '33333333-3333-4333-8333-333333333333', 'authenticated', 'authenticated', 'guardian.a@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Guardian A","role":"owner"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', '44444444-4444-4444-8444-444444444444', 'authenticated', 'authenticated', 'guardian.b@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Guardian B"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'authenticated', 'authenticated', 'guardian.c@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Guardian C"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', '55555555-5555-4555-8555-555555555555', 'authenticated', 'authenticated', 'grader.a@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Grader A"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', '66666666-6666-4666-8666-666666666666', 'authenticated', 'authenticated', 'grader.b@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Grader B"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', '77777777-7777-4777-8777-777777777777', 'authenticated', 'authenticated', 'admin@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Admin"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', '88888888-8888-4888-8888-888888888888', 'authenticated', 'authenticated', 'owner@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Owner"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', '99999999-9999-4999-8999-999999999999', 'authenticated', 'authenticated', 'suspended.student@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Suspended Student"}'::jsonb, now(), now(), false, false)
 ON CONFLICT (id) DO NOTHING;
 
 -- Supabase runs auth-schema migrations before this seed file. The built-in
@@ -49,6 +50,7 @@ WHERE users.email IN (
   'student.b@example.invalid',
   'guardian.a@example.invalid',
   'guardian.b@example.invalid',
+  'guardian.c@example.invalid',
   'grader.a@example.invalid',
   'grader.b@example.invalid',
   'admin@example.invalid',
@@ -63,6 +65,7 @@ DELETE FROM public.role_assignments
 WHERE user_id IN (
   '33333333-3333-4333-8333-333333333333',
   '44444444-4444-4444-8444-444444444444',
+  'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
   '55555555-5555-4555-8555-555555555555',
   '66666666-6666-4666-8666-666666666666',
   '77777777-7777-4777-8777-777777777777',
@@ -74,6 +77,7 @@ INSERT INTO public.role_assignments (user_id, role, granted_by, reason)
 VALUES
   ('33333333-3333-4333-8333-333333333333', 'guardian', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
   ('44444444-4444-4444-8444-444444444444', 'guardian', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
+  ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'guardian', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
   ('55555555-5555-4555-8555-555555555555', 'grader', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
   ('66666666-6666-4666-8666-666666666666', 'grader', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
   ('77777777-7777-4777-8777-777777777777', 'admin', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
