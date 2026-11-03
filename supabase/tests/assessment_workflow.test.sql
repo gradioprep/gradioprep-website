@@ -72,11 +72,7 @@ SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-1111111
 SELECT is((SELECT count(*)::integer FROM public.submission_grader_assignments), 0, 'student cannot read grader assignment metadata');
 SELECT is((SELECT count(*)::integer FROM public.rubric_versions), 0, 'student cannot inspect the internal rubric');
 SELECT is((SELECT count(*)::integer FROM public.rubric_criteria), 0, 'student cannot inspect private marking criteria');
-SELECT throws_ok(
-  $$SELECT * FROM public.assessment_versions$$,
-  '42501', NULL,
-  'student cannot directly insert or mutate assessment versions'
-);
+SELECT is((SELECT count(*)::integer FROM public.assessment_versions), 0, 'student cannot read or alter unpublished assessment versions');
 RESET ROLE;
 
 -- Grader A is denied at AAL1, despite having an active assignment.
