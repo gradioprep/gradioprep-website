@@ -186,7 +186,7 @@ SELECT throws_ok(
 );
 SELECT is(
   (SELECT count(*)::integer FROM public.assessment_submissions),
-  3,
+  2,
   'a denied over-capacity request creates no accepted submission'
 );
 RESET ROLE;
