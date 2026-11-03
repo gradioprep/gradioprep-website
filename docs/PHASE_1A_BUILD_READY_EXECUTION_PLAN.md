@@ -1,8 +1,8 @@
 # Phase 1A — Build-Ready Execution Plan
 
-**Version:** 0.14-draft
+**Version:** 0.15-draft
 **Date:** 3 November 2026  
-**Status:** Phase 1A preparation is complete. Phase 1B local Auth/MFA/staff-invitation implementation and its public-shell visual review are complete. The first Phase 1C typed-attempt and assignment-scoped grader-access slice is implemented and verified on code commit `05544d1a394e2e480b7cd2dd9f55100b6998ee71` by exact-head Actions run [#41613490244](https://github.com/gradioprep/gradioprep-website/actions/runs/41613490244), with 116 PostgreSQL/pgTAP assertions across four SQL files and 24/24 Playwright tests, local Supabase reset/seed, builds, cleanup and clean Preview build. The immutable public Preview is https://b4391d8e-gradioprep-website.wandering-scene-1822.workers.dev and has no hosted Supabase backend. Phase 1C is still in progress; the remaining work and exit gate before Phase 1D are recorded in Section 16. PR #22 remains open, draft and unmerged. No hosted provisioning, paid usage, real learner data, merge, production deployment or DNS change is authorised.
+**Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff-invitation work are complete; the Phase 1B public-shell visual review is approved. The Phase 1C typed-attempt first slice and current Phase 1C-A protected-table hardening are implemented and verified at commit `ee275ca714c9bfb6bb44f580c2b1e827106975d4` by exact-head run [#41646515558](https://github.com/gradioprep/gradioprep-website/actions/runs/41646515558): 215/215 PostgreSQL assertions across six SQL files and 24/24 Playwright tests, plus local reset/seed, TypeScript/Vite/Worker builds, cleanup and clean public-Preview asset build. Cloudflare Preview for this head: https://f26a4358-gradioprep-website.wandering-scene-1822.workers.dev (no hosted Supabase backend). Phase 1C remains in progress; the remaining implementation slices and Phase 1D exit gate are below. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, merge, production deployment or DNS change is authorised.
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and the approved Phase 0 decision register.
 
@@ -306,3 +306,14 @@ The remaining slices are deliberately separated:
 - **1C-F — adversarial acceptance:** anonymous/student/guardian/grader/admin/owner tests at AAL1/AAL2, including suspension, revocation, cross-learner isolation, forged actor/owner/role/assignment/state/timestamps, RPC/table bypass and concurrent duplicate acceptance.
 
 The Phase 1C exit gate remains all six slices implemented and verified, exact-head CI passing, public Preview deployed and Founder-verified, and all four source-of-truth documents reconciled. Phase 1D remains blocked.
+
+
+### 16.2 Verified Phase 1C-A protected-table security baseline — 3 November 2026
+
+**Completed and verified:** migrations `20261103000600_phase1c_role_scope_hardening.sql` and `20261103000700_phase1c_private_audit_and_revoked_assignment_rls.sql` enforce enrolment/consent/active-assignment-scoped task metadata, owner-wide identity reads at AAL2 in PostgreSQL, RLS on private security audit with no browser policy, and active-only grader assignment-row reads. New/updated pgTAP files cover the 12 currently protected tables, default-deny grants, direct-write denial, student/guardian/grader/admin/owner row scope, AAL1/AAL2, suspension, consent/revocation and cross-learner isolation.
+
+Exact-head run [#41646515558](https://github.com/gradioprep/gradioprep-website/actions/runs/41646515558) passed on `ee275ca714c9bfb6bb44f580c2b1e827106975d4`: **215/215 PostgreSQL assertions across six SQL files; 24/24 Playwright tests**; local Supabase reset/seed, TypeScript/Vite/Worker builds, shutdown/credential cleanup and clean public-Preview asset build. The Cloudflare branch Preview independently deployed the same commit to https://f26a4358-gradioprep-website.wandering-scene-1822.workers.dev. It remains disconnected from hosted Supabase, so protected API/RLS verification is the local synthetic-CI evidence, not the public Preview.
+
+**Next implementation slice:** continue any remaining operation-specific RLS/Worker matrix gaps as new records are introduced, then implement **1C-B — accepted human-assessment submission lifecycle** (immutable accepted task/rubric/submission versions, server-controlled acceptance, capacity, idempotency, fixed 24-hour due-time snapshot and oldest-accepted-first queue). Do not repeat the completed invitation feature or replace the typed practice-attempt model with a human-assessment submission.
+
+**Open Phase 1C exit gates:** human-assessment/grading/feedback lifecycle, criterion-level rubric results, grader reassignment/state transitions, delegated admin/private academic-QA separation, broader append-oriented audit coverage, capacity/idempotency and fixed 24-hour SLA, replay/concurrency/adversarial tests and their source-of-truth/Preview evidence. Phase 1D remains blocked; PR #22 remains draft and unmerged.
