@@ -274,21 +274,21 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}', true);
 SELECT throws_ok(
-  $SELECT * FROM public.transition_assessment_submission(
+  $q$SELECT * FROM public.transition_assessment_submission(
     (SELECT id FROM public.assessment_submissions
      WHERE idempotency_key = '20222222-2222-4222-8222-222222222222'),
     'withdrawn', 'Owner AAL1 cannot withdraw accepted work'
-  )$,
+  )$q$,
   '42501', 'assessment_transition_forbidden',
   'owner AAL1 cannot withdraw an accepted submission'
 );
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
-  $SELECT * FROM public.transition_assessment_submission(
+  $q$SELECT * FROM public.transition_assessment_submission(
     (SELECT id FROM public.assessment_submissions
      WHERE idempotency_key = '20222222-2222-4222-8222-222222222222'),
     'withdrawn', 'Synthetic learner request to withdraw this queued assessment'
-  )$,
+  )$q$,
   'owner AAL2 can withdraw a queued accepted submission'
 );
 SELECT is(
@@ -304,11 +304,11 @@ SELECT is(
   'withdrawal releases exactly one open capacity slot'
 );
 SELECT throws_ok(
-  $SELECT * FROM public.transition_assessment_submission(
+  $q$SELECT * FROM public.transition_assessment_submission(
     (SELECT id FROM public.assessment_submissions
      WHERE idempotency_key = '20222222-2222-4222-8222-222222222222'),
     'closed', 'Withdrawn records cannot be closed'
-  )$,
+  )$q$,
   'P0001', 'invalid_assessment_transition',
   'withdrawn submissions are terminal and cannot be closed'
 );

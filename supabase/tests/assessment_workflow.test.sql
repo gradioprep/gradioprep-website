@@ -6,8 +6,8 @@ SET LOCAL ROLE anon;
 SELECT throws_ok($$SELECT * FROM public.submission_grader_assignments$$, '42501', NULL, 'anonymous cannot read submission grader assignments');
 SELECT throws_ok($$SELECT * FROM public.assessment_versions$$, '42501', NULL, 'anonymous cannot read assessment versions');
 SELECT throws_ok($$SELECT * FROM public.criterion_results$$, '42501', NULL, 'anonymous cannot read criterion results');
-SELECT throws_ok($SELECT * FROM private.assessment_drafts$, '42501', NULL, 'anonymous cannot read private grading drafts');
-SELECT throws_ok($SELECT * FROM private.assessment_draft_history$, '42501', NULL, 'anonymous cannot read archived private grading drafts');
+SELECT throws_ok($q$SELECT * FROM private.assessment_drafts$q$, '42501', NULL, 'anonymous cannot read private grading drafts');
+SELECT throws_ok($q$SELECT * FROM private.assessment_draft_history$q$, '42501', NULL, 'anonymous cannot read archived private grading drafts');
 RESET ROLE;
 
 -- Create one accepted synthetic assessment and test owner AAL2 assignment.
@@ -199,19 +199,19 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}', true);
 SELECT throws_ok(
-  $SELECT * FROM public.reassign_submission_grader(
+  $q$SELECT * FROM public.reassign_submission_grader(
     (SELECT id FROM public.assessment_submissions LIMIT 1),
     '66666666-6666-4666-8666-666666666666',
     'AAL1 reassignment denial'
-  )$,
+  )$q$,
   '42501', 'assessment_assignment_forbidden',
   'owner AAL1 cannot reassign a submission'
 );
 SELECT throws_ok(
-  $SELECT * FROM public.transition_assessment_submission(
+  $q$SELECT * FROM public.transition_assessment_submission(
     (SELECT id FROM public.assessment_submissions LIMIT 1),
     'queued', 'AAL1 queue transition denial'
-  )$,
+  )$q$,
   '42501', 'assessment_transition_forbidden',
   'owner AAL1 cannot change submission workflow state'
 );
@@ -221,19 +221,19 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '77777777-7777-4777-8777-777777777777', true);
 SELECT set_config('request.jwt.claims', '{"sub":"77777777-7777-4777-8777-777777777777","role":"authenticated","aal":"aal2"}', true);
 SELECT throws_ok(
-  $SELECT * FROM public.reassign_submission_grader(
+  $q$SELECT * FROM public.reassign_submission_grader(
     (SELECT id FROM public.assessment_submissions LIMIT 1),
     '66666666-6666-4666-8666-666666666666',
     'Admin must not inherit grader management'
-  )$,
+  )$q$,
   '42501', 'assessment_assignment_forbidden',
   'admin cannot reassign grader work even at AAL2'
 );
 SELECT throws_ok(
-  $SELECT * FROM public.transition_assessment_submission(
+  $q$SELECT * FROM public.transition_assessment_submission(
     (SELECT id FROM public.assessment_submissions LIMIT 1),
     'queued', 'Admin must not inherit workflow control'
-  )$,
+  )$q$,
   '42501', 'assessment_transition_forbidden',
   'admin cannot change submission state even at AAL2'
 );
@@ -243,11 +243,11 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
-  $SELECT * FROM public.reassign_submission_grader(
+  $q$SELECT * FROM public.reassign_submission_grader(
     (SELECT id FROM public.assessment_submissions LIMIT 1),
     '66666666-6666-4666-8666-666666666666',
     'Reassigned during the synthetic operational lifecycle test'
-  )$,
+  )$q$,
   'owner AAL2 can atomically reassign grading work to another active grader'
 );
 SELECT is((SELECT status FROM public.assessment_submissions), 'assigned', 'reassignment returns the submission to assigned state');
@@ -271,7 +271,7 @@ SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555
 SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}', true);
 SELECT is((SELECT count(*)::integer FROM public.assessment_submissions), 0, 'the previous grader immediately loses submission visibility after reassignment');
 SELECT throws_ok(
-  $SELECT * FROM public.get_assessment_draft((SELECT id FROM public.assessment_submissions LIMIT 1))$,
+  $q$SELECT * FROM public.get_assessment_draft((SELECT id FROM public.assessment_submissions LIMIT 1))$q$,
   '42501', 'grader_assessment_forbidden',
   'the previous grader cannot retrieve the archived private draft'
 );
@@ -283,12 +283,12 @@ SELECT set_config('request.jwt.claims', '{"sub":"66666666-6666-4666-8666-6666666
 SELECT is((SELECT count(*)::integer FROM public.assessment_submissions), 1, 'the newly assigned grader can read the submission');
 SELECT is((SELECT count(*)::integer FROM public.get_assessment_draft((SELECT id FROM public.assessment_submissions LIMIT 1))), 0, 'the newly assigned grader cannot see the previous grader draft');
 SELECT lives_ok(
-  $SELECT * FROM public.save_assessment_draft(
+  $q$SELECT * FROM public.save_assessment_draft(
     (SELECT id FROM public.assessment_submissions LIMIT 1),
     'The replacement grader records an independent private assessment draft.',
     NULL,
     '[{"criterion_id":"f3333333-3333-4333-8333-333333333333","points_awarded":3,"feedback":"The response identifies relevant evidence and begins to explain its effect."},{"criterion_id":"f4444444-4444-4444-8444-444444444444","points_awarded":3,"feedback":"The explanation connects the language choice to a reader response."}]'::jsonb
-  )$,
+  )$q$,
   'the newly assigned grader can create an independent private draft'
 );
 RESET ROLE;
@@ -297,10 +297,10 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
-  $SELECT * FROM public.transition_assessment_submission(
+  $q$SELECT * FROM public.transition_assessment_submission(
     (SELECT id FROM public.assessment_submissions LIMIT 1),
     'queued', 'Requeue after the replacement grader became unavailable'
-  )$,
+  )$q$,
   'owner AAL2 can revoke the active grader and return in-progress work to the queue'
 );
 SELECT is((SELECT status FROM public.assessment_submissions), 'queued', 'requeue changes only the workflow state');
@@ -317,11 +317,11 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
-  $SELECT * FROM public.assign_submission_to_grader(
+  $q$SELECT * FROM public.assign_submission_to_grader(
     (SELECT id FROM public.assessment_submissions LIMIT 1),
     '55555555-5555-4555-8555-555555555555',
     'Reassigned back after safe requeue'
-  )$,
+  )$q$,
   'owner AAL2 can assign requeued work through the original narrow assignment RPC'
 );
 RESET ROLE;
@@ -337,12 +337,12 @@ SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555
 SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}', true);
 SELECT is((SELECT count(*)::integer FROM public.get_assessment_draft((SELECT id FROM public.assessment_submissions LIMIT 1))), 0, 'the returning grader cannot resume the archived earlier draft');
 SELECT lives_ok(
-  $SELECT * FROM public.save_assessment_draft(
+  $q$SELECT * FROM public.save_assessment_draft(
     (SELECT id FROM public.assessment_submissions LIMIT 1),
     'The returning grader begins a fresh draft after reassignment.',
     NULL,
     '[{"criterion_id":"f3333333-3333-4333-8333-333333333333","points_awarded":3,"feedback":"The response identifies a relevant detail and explains its value."},{"criterion_id":"f4444444-4444-4444-8444-444444444444","points_awarded":3,"feedback":"The language explanation is supported by the chosen evidence."}]'::jsonb
-  )$,
+  )$q$,
   'the returning grader can start a new independent draft'
 );
 RESET ROLE;
@@ -550,11 +550,11 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
-  $SELECT public.revoke_role_assignment(
+  $q$SELECT public.revoke_role_assignment(
     '55555555-5555-4555-8555-555555555555',
     'grader'::public.app_role,
     'Synthetic grader role revoked after publication'
-  )$,
+  )$q$,
   'owner AAL2 can revoke the grader role and automatically invalidate every active submission assignment'
 );
 RESET ROLE;
@@ -596,19 +596,19 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}', true);
 SELECT throws_ok(
-  $SELECT * FROM public.transition_assessment_submission(
+  $q$SELECT * FROM public.transition_assessment_submission(
     current_setting('test.assessment_submission_id')::uuid,
     'closed', 'Owner AAL1 cannot close published work'
-  )$,
+  )$q$,
   '42501', 'assessment_transition_forbidden',
   'owner AAL1 cannot close a published assessment'
 );
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
-  $SELECT * FROM public.transition_assessment_submission(
+  $q$SELECT * FROM public.transition_assessment_submission(
     current_setting('test.assessment_submission_id')::uuid,
     'closed', 'Human feedback review is complete; close this synthetic assessment'
-  )$,
+  )$q$,
   'owner AAL2 can close a submission after feedback publication'
 );
 RESET ROLE;
@@ -619,10 +619,10 @@ SELECT is(
   'a closed assessment enters its terminal state'
 );
 SELECT throws_ok(
-  $SELECT * FROM public.transition_assessment_submission(
+  $q$SELECT * FROM public.transition_assessment_submission(
     current_setting('test.assessment_submission_id')::uuid,
     'withdrawn', 'A terminal assessment cannot be withdrawn'
-  )$,
+  )$q$,
   'P0001', 'invalid_assessment_transition',
   'closed submissions cannot be transitioned again'
 );
