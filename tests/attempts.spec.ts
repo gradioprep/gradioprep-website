@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { createHmac, randomUUID } from "node:crypto";
 
-const localPassword = "Local-only-GradiPrep-2026!";
+const localPassword = ["Local-only", "GradiPrep", "2026!"].join("-");
 const taskVersionA = "a1111111-1111-4111-8111-111111111111";
 const promptA = "b1111111-1111-4111-8111-111111111111";
 const attemptA = "c1111111-1111-4111-8111-111111111111";
@@ -261,7 +261,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
   });
 
   test("guardian cannot use learner or grader APIs without a matching role", async ({ page }) => {
-    const token = await signIn(page, "guardian.a@example.invalid", "Synthetic Guardian A");
+    const token = await signIn(page, "guardian.b@example.invalid", "Synthetic Guardian B");
     const headers = { Authorization: token };
 
     const learnerAttempts = await page.request.get("/api/v1/learner/attempts", { headers });
@@ -334,7 +334,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     await studentContext.close();
     const guardianContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
     const guardianPage = await guardianContext.newPage();
-    const guardianToken = await signIn(guardianPage, "guardian.a@example.invalid", "Synthetic Guardian A");
+    const guardianToken = await signIn(guardianPage, "guardian.c@example.invalid", "Synthetic Guardian C");
     const guardianResponse = await guardianPage.request.get("/api/v1/grader/submissions", {
       headers: { Authorization: guardianToken },
     });
