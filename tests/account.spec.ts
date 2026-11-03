@@ -306,6 +306,8 @@ test.describe("Phase 1B account foundation", () => {
 
   test("owner enrols TOTP, verifies sign-in and can revoke a role only after MFA", async ({ page }) => {
     test.setTimeout(60_000);
+    const accountPageErrors: string[] = [];
+    page.on("pageerror", error => accountPageErrors.push(error.message));
     const roleRequest = {
       target_user_id: "66666666-6666-4666-8666-666666666666",
       role: "grader",
@@ -374,8 +376,13 @@ test.describe("Phase 1B account foundation", () => {
         (createInvitationBody.message ? " — " + createInvitationBody.message : "")
     ).toBe(201);
     expect(createInvitationBody.invite_url).toMatch(/^https?:\/\//);
+    expect(createInvitationBody.invitation).toMatchObject({
+      invited_email: "guardian.a@example.invalid",
+      invited_role: "grader",
+    });
     const invitationLinkField = page.getByTestId("staff-invite-url");
     await expect(invitationLinkField).toBeVisible();
+    expect(accountPageErrors).toEqual([]);
     const invitationLink = await invitationLinkField.inputValue();
     const invitationToken = new URLSearchParams(new URL(invitationLink).hash.slice(1)).get("staff-invite");
     expect(invitationToken).toMatch(/^[A-Za-z0-9_-]{43}$/);

@@ -128,7 +128,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
     }).then(async response => {
       const result = await response.json() as { invitations?: StaffInvitation[]; message?: string };
       if (!response.ok) throw new Error(result.message ?? "Staff invitations could not be loaded.");
-      if (active) setStaffInvitations(result.invitations ?? []);
+      if (active) setStaffInvitations(Array.isArray(result.invitations) ? result.invitations : []);
     }).catch(requestError => {
       if (active) setError(requestError instanceof Error ? requestError.message : "Staff invitations could not be loaded.");
     }).finally(() => {
@@ -355,7 +355,12 @@ export default function AccountPage({ go }: { go: Navigate }) {
       }
       setNewStaffInviteUrl(result.invite_url);
       setStaffInviteEmail("");
-      setStaffInvitations(current => [result.invitation!, ...current.filter(item => item.invitation_id !== result.invitation!.invitation_id)]);
+      setStaffInvitations(current => {
+        const existing = Array.isArray(current)
+          ? current.filter(item => item.invitation_id !== result.invitation!.invitation_id)
+          : [];
+        return [result.invitation!, ...existing];
+      });
       setMessage("Invitation link created. Copy it now; it will not be shown again after you leave this page.");
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The staff invitation could not be created.");

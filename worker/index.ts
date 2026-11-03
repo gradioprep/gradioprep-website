@@ -314,6 +314,18 @@ interface StaffInvitationCreateRequest {
   role: "grader" | "admin";
 }
 
+function asRows(value: unknown): Record<string, unknown>[] {
+  if (Array.isArray(value)) {
+    return value.filter((row): row is Record<string, unknown> =>
+      typeof row === "object" && row !== null && !Array.isArray(row)
+    );
+  }
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    return [value as Record<string, unknown>];
+  }
+  return [];
+}
+
 async function readBoundedJson(
   request: Request,
   maxBytes = 2_048,
@@ -417,7 +429,7 @@ async function listStaffInvitations(request: Request, env: WorkerEnv): Promise<R
   }
   const { data, error: listError } = await context.supabase.rpc("list_staff_invitations");
   if (listError) return staffInvitationRpcError(listError);
-  return jsonResponse({ invitations: data ?? [] });
+  return jsonResponse({ invitations: asRows(data) });
 }
 
 async function createStaffInvitation(request: Request, env: WorkerEnv): Promise<Response> {
@@ -440,7 +452,7 @@ async function createStaffInvitation(request: Request, env: WorkerEnv): Promise<
   });
   if (createError) return staffInvitationRpcError(createError);
 
-  const invitation = Array.isArray(data) ? data[0] as Record<string, unknown> | undefined : undefined;
+  const invitation = asRows(data)[0];
   if (!invitation) return jsonResponse({ error: "staff_invitation_failed" }, 500);
 
   // Return the bearer token once in the URL fragment; fragments are not sent
@@ -483,7 +495,7 @@ async function acceptStaffInvitation(request: Request, env: WorkerEnv): Promise<
     p_token_hash: tokenHash,
   });
   if (acceptError) return staffInvitationRpcError(acceptError);
-  const accepted = Array.isArray(data) ? data[0] as Record<string, unknown> | undefined : undefined;
+  const accepted = asRows(data)[0];
   if (!accepted || !["grader", "admin"].includes(String(accepted.accepted_role))) {
     return jsonResponse({ error: "staff_invitation_failed" }, 500);
   }
