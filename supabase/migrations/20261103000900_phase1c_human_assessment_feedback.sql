@@ -518,8 +518,11 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'invalid_assessment_draft';
   END IF;
 
-  IF jsonb_typeof(p_criterion_results) <> 'array'
-    OR jsonb_array_length(p_criterion_results) = 0 THEN
+  IF jsonb_typeof(p_criterion_results) <> 'array' THEN
+    RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'invalid_assessment_draft';
+  END IF;
+
+  IF jsonb_array_length(p_criterion_results) = 0 THEN
     RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'invalid_assessment_draft';
   END IF;
 
