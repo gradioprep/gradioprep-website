@@ -410,8 +410,8 @@ test.describe("Phase 1B account foundation", () => {
     await page.getByRole("button", { name: "Sign out" }).click();
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
 
-    // Follow the one-time link as the invited synthetic account. It remains a
-    // Existing Guardian access stays in place until the invited Grader role is accepted.
+    // Follow the link as the invited synthetic account. Existing Guardian access
+    // remains until the invited Grader role is accepted after the MFA check.
     let inviteeToken = "";
     page.on("request", request => {
       if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
@@ -426,7 +426,22 @@ test.describe("Phase 1B account foundation", () => {
     await expect(page.getByRole("heading", { name: "Synthetic Guardian A" })).toBeVisible();
     await expect(page.getByText("Staff invitation pending")).toBeVisible();
     await expect(page.getByRole("button", { name: "Set up authenticator app" })).toBeVisible();
+    await expect.poll(() => Boolean(inviteeToken)).toBe(true);
 
+    const firstFactorInviteeToken = inviteeToken;
+    const firstFactorInviteAcceptance = await page.request.post("/api/v1/staff-invitations/accept", {
+      headers: { Authorization: firstFactorInviteeToken },
+      data: { token: invitationToken },
+    });
+    expect(firstFactorInviteAcceptance.status()).toBe(403);
+    await expect(firstFactorInviteAcceptance.json()).resolves.toMatchObject({ error: "mfa_required" });
+
+    let acceptedWithToken = "";
+    page.on("request", request => {
+      if (new URL(request.url()).pathname === "/api/v1/staff-invitations/accept" && request.method() === "POST") {
+        acceptedWithToken = request.headers()["authorization"] ?? acceptedWithToken;
+      }
+    });
     await page.getByRole("button", { name: "Set up authenticator app" }).click();
     await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
     const inviteeSecret = await page.getByTestId("totp-secret").innerText();
@@ -435,17 +450,17 @@ test.describe("Phase 1B account foundation", () => {
     await page.getByRole("button", { name: "Verify and enable" }).click();
     await expect(page.getByText("Staff invitation accepted. Your grader role is active.")).toBeVisible();
     await expect(page.getByText("grader", { exact: true })).toBeVisible();
-    await expect.poll(() => Boolean(inviteeToken), { timeout: 10_000 }).toBe(true);
+    await expect.poll(() => Boolean(acceptedWithToken), { timeout: 10_000 }).toBe(true);
 
     const revokedAcceptance = await page.request.post("/api/v1/staff-invitations/accept", {
-      headers: { Authorization: inviteeToken },
+      headers: { Authorization: acceptedWithToken },
       data: { token: revokedInvitationToken },
     });
     expect(revokedAcceptance.status()).toBe(410);
     await expect(revokedAcceptance.json()).resolves.toMatchObject({ error: "invitation_revoked" });
 
     const replayAttempt = await page.request.post("/api/v1/staff-invitations/accept", {
-      headers: { Authorization: inviteeToken },
+      headers: { Authorization: acceptedWithToken },
       data: { token: invitationToken },
     });
     expect(replayAttempt.status()).toBe(410);
