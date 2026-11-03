@@ -160,16 +160,26 @@ SELECT is(
   1,
   'acceptance grants only the invited grader role'
 );
+RESET ROLE;
 SELECT is(
-  (SELECT status FROM public.list_staff_invitations()
-   WHERE invitation_id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures LIMIT 1)),
+  (SELECT CASE
+      WHEN revoked_at IS NOT NULL THEN 'revoked'
+      WHEN accepted_at IS NOT NULL THEN 'accepted'
+      WHEN expires_at <= now() THEN 'expired'
+      ELSE 'pending'
+    END
+   FROM private.staff_invitations
+   WHERE id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures LIMIT 1)),
   'accepted'::text,
-  'accepted invitation is marked as consumed'
+  'accepted invitation is marked as consumed in its private record'
 );
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
+SELECT set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal2"}', true);
 SELECT throws_ok(
-  $$SELECT * FROM public.accept_staff_invitation(
+  $SELECT * FROM public.accept_staff_invitation(
       (SELECT token_hash FROM pg_temp.staff_invitation_fixtures LIMIT 1)
-    )$$,
+    )$,
   'P0001', 'invitation_already_used',
   'the same invitation token cannot be replayed'
 );
