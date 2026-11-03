@@ -71,15 +71,15 @@ SELECT throws_ok(
   '42501', NULL, 'student cannot directly set submission status or timestamp'
 );
 SELECT throws_ok(
-  $INSERT INTO public.attempt_responses (attempt_id, task_version_id, prompt_id, response_text) VALUES ('c1111111-1111-4111-8111-111111111111', 'a1111111-1111-4111-8111-111111111111', 'b1111111-1111-4111-8111-111111111111', 'Direct response write')$,
+  $$INSERT INTO public.attempt_responses (attempt_id, task_version_id, prompt_id, response_text) VALUES ('c1111111-1111-4111-8111-111111111111', 'a1111111-1111-4111-8111-111111111111', 'b1111111-1111-4111-8111-111111111111', 'Direct response write')$$,
   '42501', NULL, 'student cannot bypass the response-save RPC'
 );
 SELECT throws_ok(
-  $SELECT * FROM private.attempt_response_versions$,
+  $$SELECT * FROM private.attempt_response_versions$$,
   '42501', NULL, 'student cannot read private response version snapshots'
 );
 SELECT throws_ok(
-  $INSERT INTO public.grader_assignments (attempt_id, grader_user_id, assigned_by, reason) VALUES ('c3333333-3333-4333-8333-333333333333', '55555555-5555-4555-8555-555555555555', auth.uid(), 'Direct assignment attempt')$,
+  $$INSERT INTO public.grader_assignments (attempt_id, grader_user_id, assigned_by, reason) VALUES ('c3333333-3333-4333-8333-333333333333', '55555555-5555-4555-8555-555555555555', auth.uid(), 'Direct assignment attempt')$$,
   '42501', NULL, 'student cannot create grader assignments directly'
 );
 SELECT lives_ok(
