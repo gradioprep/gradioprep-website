@@ -650,19 +650,32 @@ async function createLearnerAttempt(request: Request, env: WorkerEnv): Promise<R
   if (enrolmentError) return jsonResponse({ error: "enrolment_unavailable" }, 500);
   if (!enrolment) return jsonResponse({ error: "task_not_available" }, 404);
 
-  const { data: attempt, error: insertError } = await auth.context.supabase
-    .from("attempts")
-    .insert({
-      learner_id: auth.context.userId,
-      task_version_id: taskVersion.id,
-    })
-    .select("id, learner_id, task_version_id, status, started_at, submitted_at")
-    .single();
+  const { data, error: createError } = await auth.context.supabase.rpc("create_attempt", {
+    p_task_version_id: taskVersion.id,
+  });
 
-  if (insertError || !attempt) {
+  if (createError) {
+    if (createError.message === "attempt_creation_forbidden") {
+      return jsonResponse({ error: "attempt_creation_forbidden" }, 403);
+    }
+    if (createError.message === "attempt_task_not_available") {
+      return jsonResponse({ error: "task_not_available" }, 404);
+    }
     return jsonResponse({ error: "attempt_creation_failed" }, 500);
   }
-  return jsonResponse({ attempt }, 201);
+
+  const created = asRows(data)[0];
+  if (!created) return jsonResponse({ error: "attempt_creation_failed" }, 500);
+  return jsonResponse({
+    attempt: {
+      id: created.attempt_id,
+      learner_id: created.learner_id,
+      task_version_id: created.task_version_id,
+      status: created.status,
+      started_at: created.started_at,
+      submitted_at: created.submitted_at,
+    },
+  }, 201);
 }
 
 async function readAttemptDetails(context: CallerContext, attemptId: string) {
