@@ -236,6 +236,17 @@ SELECT is((SELECT count(*)::integer FROM public.assessment_submissions), 3, 'own
 SELECT is((SELECT count(*)::integer FROM public.submission_versions), 3, 'owner at AAL2 can inspect all immutable submission versions');
 SELECT is((SELECT count(*)::integer FROM public.rubric_versions), 2, 'owner at AAL2 can inspect published rubric versions');
 SELECT is((SELECT count(*)::integer FROM public.rubric_criteria), 4, 'owner at AAL2 can inspect rubric criteria');
+SELECT ok(
+  (
+    SELECT array_agg(submission.id ORDER BY submission.accepted_at ASC, submission.id ASC)
+    FROM public.assessment_submissions AS submission
+  ) = ARRAY[
+    (SELECT id FROM public.assessment_submissions WHERE idempotency_key = '10111111-1111-4111-8111-111111111111'),
+    (SELECT id FROM public.assessment_submissions WHERE idempotency_key = '20222222-2222-4222-8222-222222222222'),
+    (SELECT id FROM public.assessment_submissions WHERE idempotency_key = '30333333-3333-4333-8333-333333333333')
+  ],
+  'owner assessment queue is ordered by accepted timestamp ascending with deterministic ID tie-break'
+);
 RESET ROLE;
 
 -- Suspension revokes acceptance and read access. Capacity is also fail-closed
