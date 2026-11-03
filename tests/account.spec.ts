@@ -199,8 +199,8 @@ test.describe("Phase 1B account foundation", () => {
 
     await page.goto(recoveryLink!);
     await expect(page.getByRole("heading", { name: "Choose a new password." })).toBeVisible();
-    await page.getByLabel("New password").fill(resetPassword);
-    await page.getByLabel("Confirm new password").fill(resetPassword);
+    await page.getByLabel("New password", { exact: true }).fill(resetPassword);
+    await page.getByLabel("Confirm new password", { exact: true }).fill(resetPassword);
     await page.getByRole("button", { name: "Update password" }).click();
     await expect(page.getByRole("status").filter({ hasText: "Password updated." })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Synthetic Student B" })).toBeVisible();
