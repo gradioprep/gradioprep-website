@@ -239,6 +239,12 @@ test.describe("Phase 1B account foundation", () => {
     await page.getByLabel("Confirm new password", { exact: true }).fill(resetPassword);
     await page.getByRole("button", { name: "Update password" }).click();
     await expect(page.getByRole("status").filter({ hasText: "Password updated." })).toBeVisible();
+    console.log("Password recovery post-update diagnostic:", JSON.stringify({
+      card: await page.locator(".proto-account-card").innerText().catch(() => ""),
+      alerts: await page.locator('[role="alert"]').allTextContents(),
+      statuses: await page.locator('[role="status"]').allTextContents(),
+      meRequests: meRequests,
+    }));
     await expect(page.getByRole("heading", { name: "Synthetic Student B" })).toBeVisible();
 
     await page.getByRole("button", { name: "Sign out" }).click();
@@ -352,6 +358,12 @@ test.describe("Phase 1B account foundation", () => {
     await waitForTotpWindow();
     await page.getByLabel("Authenticator code").fill(createTotpCode(secret));
     await page.getByRole("button", { name: "Verify and enable" }).click();
+    await page.waitForTimeout(750);
+    console.log("TOTP enrolment verification diagnostic:", JSON.stringify({
+      card: await page.locator(".proto-account-card").innerText().catch(() => ""),
+      alerts: await page.locator('[role="alert"]').allTextContents(),
+      statuses: await page.locator('[role="status"]').allTextContents(),
+    }));
     await expect(page.getByText("Verified authenticator", { exact: true })).toBeVisible();
     await expect.poll(() => ownerToken !== firstFactorToken, { timeout: 10_000 }).toBe(true);
 
