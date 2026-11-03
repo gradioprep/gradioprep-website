@@ -110,8 +110,13 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
     };
   }
 
+  const claims = auth.userClaims as unknown as Record<string, unknown>;
   return {
-    data: { supabase, userId: auth.userClaims.id },
+    data: {
+      supabase,
+      userId: auth.userClaims.id,
+      assuranceLevel: claims.aal === "aal2" ? "aal2" : "aal1",
+    },
     error: null,
   };
 }
@@ -502,6 +507,330 @@ async function acceptStaffInvitation(request: Request, env: WorkerEnv): Promise<
   return jsonResponse({ accepted: true, role: accepted.accepted_role });
 }
 
+
+type CallerContext = NonNullable<Awaited<ReturnType<typeof createCallerContext>>["data"]>;
+
+function hasOnlyAttemptStartFields(value: unknown): value is { task_version_id: string } {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 1 &&
+    Object.keys(record)[0] === "task_version_id" &&
+    isUuid(record.task_version_id);
+}
+
+function hasOnlyAttemptResponseFields(value: unknown): value is { response_text: string } {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 1 &&
+    Object.keys(record)[0] === "response_text" &&
+    typeof record.response_text === "string" &&
+    record.response_text.length <= 12_000;
+}
+
+function hasOnlyAttemptAssignmentFields(value: unknown): value is { grader_user_id: string; reason: string } {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 2 &&
+    Object.keys(record).every((key) => ["grader_user_id", "reason"].includes(key)) &&
+    isUuid(record.grader_user_id) &&
+    typeof record.reason === "string" &&
+    record.reason.trim().length >= 3 &&
+    record.reason.trim().length <= 240;
+}
+
+function hasOnlyEmptyObject(value: unknown): boolean {
+  return typeof value === "object" && value !== null && !Array.isArray(value) &&
+    Object.keys(value as Record<string, unknown>).length === 0;
+}
+
+async function authenticatedCaller(request: Request, env: WorkerEnv) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
+    return {
+      context: null,
+      response: jsonResponse({ error: "backend_not_configured" }, 503),
+    };
+  }
+  const { data: context, error } = await createCallerContext(request, env);
+  if (error || !context) {
+    return {
+      context: null,
+      response: jsonResponse({
+        error: "authentication_required",
+        code: error?.code ?? "missing_user_claims",
+      }, error?.status ?? 401),
+    };
+  }
+  return { context, response: null };
+}
+
+async function requireActiveRole(context: CallerContext, role: AppRole): Promise<Response | null> {
+  const { data, error } = await context.supabase
+    .from("role_assignments")
+    .select("id")
+    .eq("user_id", context.userId)
+    .eq("role", role)
+    .is("revoked_at", null)
+    .maybeSingle();
+  if (error) return jsonResponse({ error: "authorization_unavailable" }, 503);
+  if (!data) return jsonResponse({ error: "role_required" }, 403);
+  return null;
+}
+
+function requireAal2(context: CallerContext): Response | null {
+  return context.assuranceLevel === "aal2"
+    ? null
+    : jsonResponse({
+        error: "mfa_required",
+        message: "Verify a second factor before accessing protected staff operations.",
+      }, 403);
+}
+
+async function listLearnerAttempts(request: Request, env: WorkerEnv): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) return roleDenied;
+
+  const { data, error } = await auth.context.supabase
+    .from("attempts")
+    .select("id, learner_id, task_version_id, status, started_at, submitted_at, task_versions(task_code, title, version, expected_min_words, ideal_words)")
+    .eq("learner_id", auth.context.userId)
+    .order("created_at", { ascending: false });
+
+  if (error) return jsonResponse({ error: "attempts_unavailable" }, 500);
+  return jsonResponse({ attempts: data ?? [] });
+}
+
+async function createLearnerAttempt(request: Request, env: WorkerEnv): Promise<Response> {
+  const parsed = await readBoundedJson(request, 512);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlyAttemptStartFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_attempt_request" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) return roleDenied;
+
+  const { data: taskVersion, error: taskError } = await auth.context.supabase
+    .from("task_versions")
+    .select("id, pathway_id")
+    .eq("id", parsed.body.task_version_id)
+    .eq("release_state", "published")
+    .eq("response_mode", "typed")
+    .maybeSingle();
+  if (taskError) return jsonResponse({ error: "task_unavailable" }, 500);
+  if (!taskVersion) return jsonResponse({ error: "task_not_available" }, 404);
+
+  const { data: enrolment, error: enrolmentError } = await auth.context.supabase
+    .from("course_enrolments")
+    .select("id")
+    .eq("learner_id", auth.context.userId)
+    .eq("pathway_id", taskVersion.pathway_id)
+    .eq("status", "active")
+    .maybeSingle();
+  if (enrolmentError) return jsonResponse({ error: "enrolment_unavailable" }, 500);
+  if (!enrolment) return jsonResponse({ error: "task_not_available" }, 404);
+
+  const { data: attempt, error: insertError } = await auth.context.supabase
+    .from("attempts")
+    .insert({
+      learner_id: auth.context.userId,
+      task_version_id: taskVersion.id,
+    })
+    .select("id, learner_id, task_version_id, status, started_at, submitted_at")
+    .single();
+
+  if (insertError || !attempt) {
+    return jsonResponse({ error: "attempt_creation_failed" }, 500);
+  }
+  return jsonResponse({ attempt }, 201);
+}
+
+async function readAttemptDetails(context: CallerContext, attemptId: string) {
+  const { data: attempt, error: attemptError } = await context.supabase
+    .from("attempts")
+    .select("id, learner_id, task_version_id, status, started_at, submitted_at, task_versions(task_code, title, version, expected_min_words, ideal_words), attempt_responses(id, prompt_id, response_text, word_count, version, updated_at)")
+    .eq("id", attemptId)
+    .maybeSingle();
+
+  if (attemptError || !attempt) {
+    return { attempt: null, prompts: null, error: attemptError };
+  }
+
+  const { data: prompts, error: promptsError } = await context.supabase
+    .from("task_version_prompts")
+    .select("id, sequence, prompt_text")
+    .eq("task_version_id", attempt.task_version_id)
+    .order("sequence", { ascending: true });
+
+  if (promptsError) {
+    return { attempt: null, prompts: null, error: promptsError };
+  }
+  return { attempt, prompts: prompts ?? [], error: null };
+}
+
+async function getLearnerAttempt(request: Request, env: WorkerEnv, attemptId: string): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) return roleDenied;
+
+  const result = await readAttemptDetails(auth.context, attemptId);
+  if (result.error) return jsonResponse({ error: "attempt_unavailable" }, 500);
+  if (!result.attempt) return jsonResponse({ error: "attempt_not_found" }, 404);
+  return jsonResponse({ attempt: result.attempt, prompts: result.prompts });
+}
+
+async function saveAttemptResponse(
+  request: Request,
+  env: WorkerEnv,
+  attemptId: string,
+  promptId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 24_576);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlyAttemptResponseFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_attempt_response" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) return roleDenied;
+
+  const { data: attempt, error: attemptError } = await auth.context.supabase
+    .from("attempts")
+    .select("id, task_version_id, status")
+    .eq("id", attemptId)
+    .maybeSingle();
+  if (attemptError) return jsonResponse({ error: "attempt_unavailable" }, 500);
+  if (!attempt) return jsonResponse({ error: "attempt_not_found" }, 404);
+  if (attempt.status !== "in_progress") return jsonResponse({ error: "attempt_not_editable" }, 409);
+
+  const { data: prompt, error: promptError } = await auth.context.supabase
+    .from("task_version_prompts")
+    .select("id")
+    .eq("id", promptId)
+    .eq("task_version_id", attempt.task_version_id)
+    .maybeSingle();
+  if (promptError) return jsonResponse({ error: "prompt_unavailable" }, 500);
+  if (!prompt) return jsonResponse({ error: "prompt_not_found" }, 400);
+
+  const { data: response, error: saveError } = await auth.context.supabase
+    .from("attempt_responses")
+    .upsert({
+      attempt_id: attemptId,
+      task_version_id: attempt.task_version_id,
+      prompt_id: promptId,
+      response_text: parsed.body.response_text,
+    }, { onConflict: "attempt_id,prompt_id" })
+    .select("id, attempt_id, prompt_id, response_text, word_count, version, updated_at")
+    .single();
+
+  if (saveError || !response) {
+    return jsonResponse({ error: "attempt_response_save_failed" }, 403);
+  }
+  return jsonResponse({ response });
+}
+
+async function submitLearnerAttempt(request: Request, env: WorkerEnv, attemptId: string): Promise<Response> {
+  const parsed = await readBoundedJson(request, 128);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlyEmptyObject(parsed.body)) return jsonResponse({ error: "invalid_attempt_submission" }, 400);
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) return roleDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("submit_attempt", {
+    p_attempt_id: attemptId,
+  });
+  if (error) {
+    if (error.message === "attempt_not_found") return jsonResponse({ error: "attempt_not_found" }, 404);
+    if (error.message === "attempt_not_in_progress") return jsonResponse({ error: "attempt_not_editable" }, 409);
+    if (error.message === "attempt_response_required") return jsonResponse({ error: "attempt_response_required" }, 409);
+    if (error.message === "attempt_submission_forbidden") return jsonResponse({ error: "attempt_submission_forbidden" }, 403);
+    return jsonResponse({ error: "attempt_submission_failed" }, 500);
+  }
+  const submitted = asRows(data)[0];
+  if (!submitted) return jsonResponse({ error: "attempt_submission_failed" }, 500);
+  return jsonResponse({ attempt: submitted });
+}
+
+async function listGraderQueue(request: Request, env: WorkerEnv): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "grader");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase
+    .from("attempts")
+    .select("id, learner_id, task_version_id, status, submitted_at, task_versions(task_code, title, version)")
+    .eq("status", "submitted")
+    .order("submitted_at", { ascending: true });
+
+  if (error) return jsonResponse({ error: "grader_queue_unavailable" }, 500);
+  return jsonResponse({ attempts: data ?? [] });
+}
+
+async function getGraderAttempt(request: Request, env: WorkerEnv, attemptId: string): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "grader");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const result = await readAttemptDetails(auth.context, attemptId);
+  if (result.error) return jsonResponse({ error: "attempt_unavailable" }, 500);
+  if (!result.attempt) return jsonResponse({ error: "attempt_not_found" }, 404);
+  if (result.attempt.status !== "submitted") return jsonResponse({ error: "attempt_not_found" }, 404);
+  return jsonResponse({ attempt: result.attempt, prompts: result.prompts });
+}
+
+async function assignAttemptToGrader(
+  request: Request,
+  env: WorkerEnv,
+  attemptId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlyAttemptAssignmentFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_attempt_assignment" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("assign_attempt_to_grader", {
+    p_attempt_id: attemptId,
+    p_grader_user_id: parsed.body.grader_user_id,
+    p_reason: parsed.body.reason.trim(),
+  });
+  if (error) {
+    if (error.message === "mfa_required") return jsonResponse({ error: "mfa_required" }, 403);
+    if (error.message === "attempt_assignment_forbidden") return jsonResponse({ error: "attempt_assignment_forbidden" }, 403);
+    if (error.message === "attempt_not_found") return jsonResponse({ error: "attempt_not_found" }, 404);
+    if (error.message === "attempt_already_assigned") return jsonResponse({ error: "attempt_already_assigned" }, 409);
+    if (error.message === "attempt_not_submitted") return jsonResponse({ error: "attempt_not_submitted" }, 409);
+    if (error.message === "grader_not_available") return jsonResponse({ error: "grader_not_available" }, 400);
+    if (error.message === "invalid_assignment_reason") return jsonResponse({ error: "invalid_assignment_reason" }, 400);
+    return jsonResponse({ error: "attempt_assignment_failed" }, 500);
+  }
+  const assignment = asRows(data)[0];
+  if (!assignment) return jsonResponse({ error: "attempt_assignment_failed" }, 500);
+  return jsonResponse({ assignment }, 201);
+}
+
 async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const url = new URL(request.url);
   if (url.pathname === "/api/health" && request.method === "GET") {
@@ -535,6 +864,43 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
 
   if (url.pathname === "/api/v1/staff-invitations/accept" && request.method === "POST") {
     return acceptStaffInvitation(request, env);
+  }
+
+  if (url.pathname === "/api/v1/learner/attempts" && request.method === "GET") {
+    return listLearnerAttempts(request, env);
+  }
+
+  if (url.pathname === "/api/v1/learner/attempts" && request.method === "POST") {
+    return createLearnerAttempt(request, env);
+  }
+
+  const attemptResponseMatch = url.pathname.match(/^\/api\/v1\/learner\/attempts\/([0-9a-f-]{36})\/responses\/([0-9a-f-]{36})$/i);
+  if (attemptResponseMatch && request.method === "PUT") {
+    return saveAttemptResponse(request, env, attemptResponseMatch[1], attemptResponseMatch[2]);
+  }
+
+  const attemptSubmitMatch = url.pathname.match(/^\/api\/v1\/learner\/attempts\/([0-9a-f-]{36})\/submit$/i);
+  if (attemptSubmitMatch && request.method === "POST") {
+    return submitLearnerAttempt(request, env, attemptSubmitMatch[1]);
+  }
+
+  const learnerAttemptMatch = url.pathname.match(/^\/api\/v1\/learner\/attempts\/([0-9a-f-]{36})$/i);
+  if (learnerAttemptMatch && request.method === "GET") {
+    return getLearnerAttempt(request, env, learnerAttemptMatch[1]);
+  }
+
+  if (url.pathname === "/api/v1/grader/queue" && request.method === "GET") {
+    return listGraderQueue(request, env);
+  }
+
+  const graderAttemptMatch = url.pathname.match(/^\/api\/v1\/grader\/attempts\/([0-9a-f-]{36})$/i);
+  if (graderAttemptMatch && request.method === "GET") {
+    return getGraderAttempt(request, env, graderAttemptMatch[1]);
+  }
+
+  const assignAttemptMatch = url.pathname.match(/^\/api\/v1\/admin\/attempts\/([0-9a-f-]{36})\/assign$/i);
+  if (assignAttemptMatch && request.method === "POST") {
+    return assignAttemptToGrader(request, env, assignAttemptMatch[1]);
   }
 
   if (url.pathname.startsWith("/api/")) {

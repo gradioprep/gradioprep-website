@@ -106,6 +106,64 @@ VALUES
   ('22222222-2222-4222-8222-222222222222', 'synthetic-cambridge-grade-6', 'active')
 ON CONFLICT (learner_id, pathway_id) DO NOTHING;
 
+-- Phase 1C synthetic typed-task and attempt fixtures. These are not learner records
+-- or released curriculum content. All IDs and response text are fictional test data.
+INSERT INTO public.task_versions (
+  id, task_code, pathway_id, title, version, response_mode,
+  expected_min_words, ideal_words, release_state
+)
+VALUES
+  ('a1111111-1111-4111-8111-111111111111', 'synthetic-phase1c-ib', 'synthetic-ib-myp-year-4',
+   'Synthetic Phase 1C response task A', 1, 'typed', 15, 80, 'published'),
+  ('a2222222-2222-4222-8222-222222222222', 'synthetic-phase1c-cambridge', 'synthetic-cambridge-grade-6',
+   'Synthetic Phase 1C response task B', 1, 'typed', 15, 80, 'published')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.task_version_prompts (id, task_version_id, sequence, prompt_text)
+VALUES
+  ('b1111111-1111-4111-8111-111111111111', 'a1111111-1111-4111-8111-111111111111', 1,
+   'Synthetic test prompt: explain how one selected detail shapes a reader''s understanding.'),
+  ('b2222222-2222-4222-8222-222222222222', 'a2222222-2222-4222-8222-222222222222', 1,
+   'Synthetic test prompt: explain the effect of one word choice in a short passage.')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.attempts (
+  id, learner_id, task_version_id, status, started_at, submitted_at, created_at, updated_at
+)
+VALUES
+  ('c1111111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111',
+   'a1111111-1111-4111-8111-111111111111', 'submitted', now() - interval '3 hours',
+   now() - interval '2 hours 55 minutes', now() - interval '3 hours', now() - interval '2 hours 55 minutes'),
+  ('c2222222-2222-4222-8222-222222222222', '22222222-2222-4222-8222-222222222222',
+   'a2222222-2222-4222-8222-222222222222', 'submitted', now() - interval '2 hours',
+   now() - interval '1 hour 55 minutes', now() - interval '2 hours', now() - interval '1 hour 55 minutes'),
+  ('c3333333-3333-4333-8333-333333333333', '11111111-1111-4111-8111-111111111111',
+   'a1111111-1111-4111-8111-111111111111', 'submitted', now() - interval '1 hour',
+   now() - interval '55 minutes', now() - interval '1 hour', now() - interval '55 minutes')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.attempt_responses (attempt_id, task_version_id, prompt_id, response_text)
+VALUES
+  ('c1111111-1111-4111-8111-111111111111', 'a1111111-1111-4111-8111-111111111111',
+   'b1111111-1111-4111-8111-111111111111',
+   'This synthetic response uses a detail to explain how a reader understands the passage.'),
+  ('c2222222-2222-4222-8222-222222222222', 'a2222222-2222-4222-8222-222222222222',
+   'b2222222-2222-4222-8222-222222222222',
+   'This separate synthetic response belongs only to synthetic student B.')
+ON CONFLICT (attempt_id, prompt_id) DO NOTHING;
+
+INSERT INTO public.grader_assignments (
+  id, attempt_id, grader_user_id, assigned_by, assigned_at, reason
+)
+VALUES
+  ('d1111111-1111-4111-8111-111111111111', 'c1111111-1111-4111-8111-111111111111',
+   '55555555-5555-4555-8555-555555555555', '88888888-8888-4888-8888-888888888888',
+   now() - interval '2 hours 50 minutes', 'Synthetic seeded grader assignment A'),
+  ('d2222222-2222-4222-8222-222222222222', 'c2222222-2222-4222-8222-222222222222',
+   '66666666-6666-4666-8666-666666666666', '88888888-8888-4888-8888-888888888888',
+   now() - interval '1 hour 50 minutes', 'Synthetic seeded grader assignment B')
+ON CONFLICT (id) DO NOTHING;
+
 -- An otherwise valid Auth identity with a suspended application profile.
 UPDATE public.profiles
 SET account_status = 'suspended'

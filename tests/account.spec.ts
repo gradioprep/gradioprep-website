@@ -343,6 +343,19 @@ test.describe("Phase 1B account foundation", () => {
     expect(ownerAal1InvitationList.status()).toBe(403);
     await expect(ownerAal1InvitationList.json()).resolves.toMatchObject({ error: "mfa_required" });
 
+    const ownerAal1Assignment = await page.request.post(
+      "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign",
+      {
+        headers: { Authorization: firstFactorToken },
+        data: {
+          grader_user_id: "55555555-5555-4555-8555-555555555555",
+          reason: "Synthetic AAL1 assignment denial",
+        },
+      },
+    );
+    expect(ownerAal1Assignment.status()).toBe(403);
+    await expect(ownerAal1Assignment.json()).resolves.toMatchObject({ error: "mfa_required" });
+
     await page.getByRole("button", { name: "Set up authenticator app" }).click();
     await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
     const secret = await page.getByTestId("totp-secret").innerText();
@@ -359,6 +372,37 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(verifiedAttempt.status()).toBe(200);
     await expect(verifiedAttempt.json()).resolves.toMatchObject({ revoked: true });
+
+    const ownerAal2Assignment = await page.request.post(
+      "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign",
+      {
+        headers: { Authorization: ownerToken },
+        data: {
+          grader_user_id: "55555555-5555-4555-8555-555555555555",
+          reason: "Synthetic AAL2 grader assignment",
+        },
+      },
+    );
+    expect(ownerAal2Assignment.status()).toBe(201);
+    await expect(ownerAal2Assignment.json()).resolves.toMatchObject({
+      assignment: {
+        attempt_id: "c3333333-3333-4333-8333-333333333333",
+        grader_user_id: "55555555-5555-4555-8555-555555555555",
+      },
+    });
+
+    const duplicateAttemptAssignment = await page.request.post(
+      "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign",
+      {
+        headers: { Authorization: ownerToken },
+        data: {
+          grader_user_id: "55555555-5555-4555-8555-555555555555",
+          reason: "Synthetic duplicate assignment",
+        },
+      },
+    );
+    expect(duplicateAttemptAssignment.status()).toBe(409);
+    await expect(duplicateAttemptAssignment.json()).resolves.toMatchObject({ error: "attempt_already_assigned" });
 
     await expect(page.getByRole("heading", { name: "Staff invitations" })).toBeVisible();
     await page.getByLabel("Staff email address").fill("guardian.a@example.invalid");
@@ -538,6 +582,12 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(adminInvitationList.status()).toBe(403);
     await expect(adminInvitationList.json()).resolves.toMatchObject({ error: "staff_invitation_forbidden" });
+
+    const adminGraderQueue = await page.request.get("/api/v1/grader/queue", {
+      headers: { Authorization: adminToken },
+    });
+    expect(adminGraderQueue.status()).toBe(403);
+    await expect(adminGraderQueue.json()).resolves.toMatchObject({ error: "role_required" });
   });
 
   test("role revocation and staff invitation endpoints reject anonymous and malformed requests", async ({ request }) => {
