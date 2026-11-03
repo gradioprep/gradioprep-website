@@ -1,8 +1,8 @@
 # Phase 1A — Build-Ready Execution Plan
 
-**Version:** 0.16-draft
+**Version:** 0.17-draft
 **Date:** 3 November 2026  
-**Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff-invitation work are complete; the Phase 1B public-shell visual review is approved. The Phase 1C typed-attempt first slice and current Phase 1C-A protected-table hardening are implemented and verified at commit `ee275ca714c9bfb6bb44f580c2b1e827106975d4` by exact-head run [#41646515558](https://github.com/gradioprep/gradioprep-website/actions/runs/41646515558): 215/215 PostgreSQL assertions across six SQL files and 24/24 Playwright tests, plus local reset/seed, TypeScript/Vite/Worker builds, cleanup and clean public-Preview asset build. Cloudflare Preview for this head: https://f26a4358-gradioprep-website.wandering-scene-1822.workers.dev (no hosted Supabase backend). Phase 1C remains in progress; the remaining implementation slices and Phase 1D exit gate are below. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, merge, production deployment or DNS change is authorised.
+**Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff-invitation work are complete; the Phase 1B public-shell visual review is approved. The Phase 1C typed-attempt first slice and current Phase 1C-A protected-table hardening are implemented and verified at commit `ee275ca714c9bfb6bb44f580c2b1e827106975d4` by exact-head run [#41646515558](https://github.com/gradioprep/gradioprep-website/actions/runs/41646515558): 215/215 PostgreSQL assertions across six SQL files and 24/24 Playwright tests, plus local reset/seed, TypeScript/Vite/Worker builds, cleanup and clean public-Preview asset build. The matching Preview deployment is retained in the internal engineering history and has no hosted Supabase backend. Phase 1C remains in progress; the remaining implementation slices and Phase 1D exit gate are below. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, merge, production deployment or DNS change is authorised.
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and the approved Phase 0 decision register.
 
@@ -309,7 +309,7 @@ The remaining slices are deliberately separated:
 - **1C-E — audit and workflow integrity:** append-oriented audit coverage, replay-safe operations, deterministic queue ordering and server-authoritative state transitions.
 - **1C-F — adversarial acceptance:** anonymous/student/guardian/grader/admin/owner tests at AAL1/AAL2, including suspension, revocation, cross-learner isolation, forged actor/owner/role/assignment/state/timestamps, RPC/table bypass and concurrent duplicate acceptance.
 
-The Phase 1C exit gate remains all six slices implemented and verified, exact-head CI passing, public Preview deployed and Founder-verified, and all four source-of-truth documents reconciled. Phase 1D remains blocked.
+The Phase 1C exit gate remains all six slices implemented and verified, exact-head CI passing, all four source-of-truth documents reconciled, and a Founder Preview review only where a substantial new learner/staff-visible feature was added. Phase 1D remains blocked.
 
 
 ### 16.2 Verified Phase 1C-A protected-table security baseline — 3 November 2026
