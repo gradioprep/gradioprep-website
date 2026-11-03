@@ -370,10 +370,23 @@ SELECT ok(
 
 -- Revocation removes grader read/save/publish access; student keeps only the
 -- latest already-published feedback.
+-- Preserve the real submission identifier before revocation changes grader RLS visibility.
+SELECT set_config(
+  'test.assessment_submission_id',
+  (SELECT id::text FROM public.assessment_submissions LIMIT 1),
+  true
+);
+SELECT is(
+  (SELECT count(*)::integer FROM public.assessment_submissions
+   WHERE id = current_setting('test.assessment_submission_id')::uuid),
+  1,
+  'revocation checks retain the identifier of the existing synthetic submission'
+);
+
 UPDATE public.submission_grader_assignments
 SET revoked_by = '88888888-8888-4888-8888-888888888888',
     revoked_at = now()
-WHERE submission_id = (SELECT id FROM public.assessment_submissions LIMIT 1)
+WHERE submission_id = current_setting('test.assessment_submission_id')::uuid
   AND revoked_at IS NULL;
 
 SET LOCAL ROLE authenticated;
@@ -383,12 +396,12 @@ SELECT is((SELECT count(*)::integer FROM public.assessment_submissions), 0, 'rev
 SELECT is((SELECT count(*)::integer FROM public.submission_grader_assignments), 0, 'revoked grader loses assignment metadata access');
 SELECT is((SELECT count(*)::integer FROM public.rubric_versions), 0, 'revoked grader loses rubric and criterion access');
 SELECT throws_ok(
-  $$SELECT * FROM public.get_assessment_draft((SELECT id FROM public.assessment_submissions LIMIT 1))$$,
+  $$SELECT * FROM public.get_assessment_draft(current_setting('test.assessment_submission_id')::uuid)$$,
   '42501', 'grader_assessment_forbidden',
   'revoked grader cannot retrieve a draft'
 );
 SELECT throws_ok(
-  $$SELECT * FROM public.publish_assessment_feedback((SELECT id FROM public.assessment_submissions LIMIT 1))$$,
+  $$SELECT * FROM public.publish_assessment_feedback(current_setting('test.assessment_submission_id')::uuid)$$,
   '42501', 'grader_assessment_forbidden',
   'revoked grader cannot publish feedback'
 );
