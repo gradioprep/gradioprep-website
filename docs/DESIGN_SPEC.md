@@ -1,8 +1,10 @@
 # Criterion Lab — Design Specification
 
-**Version:** 2.15  
+**Version:** 2.16  
 **Status:** Approved design system and curriculum-first navigation; the free-first cost policy targets US$0 recurring infrastructure subscriptions and paid API use for 3 November 2026–2 November 2027, with a non-automatic review at 100+ subscribers; see `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`. The phased implementation plan remains approved; Phase 1B local synthetic-only coding is underway in draft PR #22. the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. The MYP Grade 9 taxonomy, high-level blueprint, detailed task-level item map, flagship response/grading plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are Founder-approved. The screens below are design requirements and should not be treated as implemented unless verified in the current Preview. Phase 1B local synthetic-only coding is underway in draft PR #22. The Auth/Worker API/role foundation and suspended-account denial/sign-out flow have passed exact-head CI (RLS, builds and 16/16 Chromium tests); the tested application-code revision and current Preview are recorded in the Master Brief v4.38. Founder visual review remains pending. Hosted provisioning, paid services, real learner data, merge and production deployment are not authorised.  
-**Last updated:** 3 November 2026  
+**Last updated:** 3 November 2026
+
+**Founder Preview review rule — 3 November 2026:** Request a public Preview review only when a concrete, substantial learner/staff-visible feature is ready. Do not repeatedly mention unchanged previews or ask the Founder to inspect documentation-only, internal backend/security, test, refactor, maintenance or minor-fix revisions. See `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md`.  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
