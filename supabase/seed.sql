@@ -127,6 +127,48 @@ VALUES
    'Synthetic test prompt: explain the effect of one word choice in a short passage.')
 ON CONFLICT (id) DO NOTHING;
 
+-- Phase 1C-B synthetic rubric snapshots and local-only grading capacity.
+-- The migration leaves capacity disabled in a fresh/hosted database. This
+-- explicit fixture enables only the local synthetic CI workflow.
+INSERT INTO public.rubrics (id, rubric_code, title)
+VALUES
+  ('e1111111-1111-4111-8111-111111111111', 'synthetic-analysis-a', 'Synthetic Analytical Response Rubric A'),
+  ('e2222222-2222-4222-8222-222222222222', 'synthetic-analysis-b', 'Synthetic Analytical Response Rubric B')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.rubric_versions (id, rubric_id, version, title, release_state)
+VALUES
+  ('f1111111-1111-4111-8111-111111111111', 'e1111111-1111-4111-8111-111111111111', 1, 'Synthetic Rubric A — Version 1', 'published'),
+  ('f2222222-2222-4222-8222-222222222222', 'e2222222-2222-4222-8222-222222222222', 1, 'Synthetic Rubric B — Version 1', 'published')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.rubric_criteria (
+  id, rubric_version_id, criterion_code, sequence, title, descriptor, max_points
+)
+VALUES
+  ('f3333333-3333-4333-8333-333333333333', 'f1111111-1111-4111-8111-111111111111',
+   'evidence', 1, 'Use of evidence', 'Selects relevant details and integrates them accurately.', 4),
+  ('f4444444-4444-4444-8444-444444444444', 'f1111111-1111-4111-8111-111111111111',
+   'analysis', 2, 'Analysis of effect', 'Explains how language or structure shapes meaning.', 4),
+  ('f5555555-5555-4555-8555-555555555555', 'f2222222-2222-4222-8222-222222222222',
+   'interpretation', 1, 'Interpretation', 'Explains a supported interpretation of the selected detail.', 4),
+  ('f6666666-6666-4666-8666-666666666666', 'f2222222-2222-4222-8222-222222222222',
+   'clarity', 2, 'Clarity', 'Communicates the explanation clearly and coherently.', 4)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.task_rubric_mappings (id, task_version_id, rubric_version_id)
+VALUES
+  ('f7777777-7777-4777-8777-777777777777', 'a1111111-1111-4111-8111-111111111111', 'f1111111-1111-4111-8111-111111111111'),
+  ('f8888888-8888-4888-8888-888888888888', 'a2222222-2222-4222-8222-222222222222', 'f2222222-2222-4222-8222-222222222222')
+ON CONFLICT (task_version_id) DO NOTHING;
+
+UPDATE private.grading_capacity_config
+SET enabled = true,
+    max_open_submissions = 3,
+    config_version = 1,
+    updated_at = now()
+WHERE singleton = true;
+
 INSERT INTO public.attempts (
   id, learner_id, task_version_id, status, started_at, submitted_at, created_at, updated_at
 )
