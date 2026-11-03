@@ -158,12 +158,8 @@ test.describe("Phase 1B account foundation", () => {
   });
 
   test("synthetic student can recover a password through the local test inbox", async ({ page }) => {
-    const mailboxUrl = "http://127.0.0.1:54324/api/v1/mailbox/student.b";
+    const mailpitUrl = "http://127.0.0.1:54324/api/v1";
     const resetPassword = "Recovered-local-only-GradiPrep-2026!";
-
-    // Keep the test deterministic and entirely within the disposable local inbox.
-    const clearMailbox = await page.request.delete(mailboxUrl);
-    expect(clearMailbox.ok()).toBeTruthy();
 
     await page.goto("/account");
     await page.getByRole("button", { name: "Forgot password?" }).click();
@@ -174,20 +170,26 @@ test.describe("Phase 1B account foundation", () => {
       hasText: "If an account matches that email address",
     })).toBeVisible();
 
-    let messages: Array<{ id: string }> = [];
+    let matchingMessage: { ID: string } | undefined;
     await expect.poll(async () => {
-      const response = await page.request.get(mailboxUrl);
+      const response = await page.request.get(`${mailpitUrl}/messages?limit=50`);
       if (!response.ok()) return 0;
-      messages = await response.json() as Array<{ id: string }>;
-      return messages.length;
-    }, { timeout: 10_000 }).toBeGreaterThan(0);
+      const inbox = await response.json() as {
+        messages?: Array<{ ID: string; To?: Array<{ Address?: string }> }>;
+      };
+      matchingMessage = inbox.messages?.find(message =>
+        message.To?.some(recipient => recipient.Address?.toLowerCase() === "student.b@example.invalid")
+      );
+      return matchingMessage ? 1 : 0;
+    }, { timeout: 10_000 }).toBe(1);
 
-    const messageResponse = await page.request.get(`${mailboxUrl}/${messages[messages.length - 1].id}`);
+    const messageResponse = await page.request.get(`${mailpitUrl}/message/${matchingMessage!.ID}`);
     expect(messageResponse.ok()).toBeTruthy();
     const message = await messageResponse.json() as {
-      body?: { html?: string; text?: string };
+      HTML?: string;
+      Text?: string;
     };
-    const emailBody = [message.body?.html, message.body?.text]
+    const emailBody = [message.HTML, message.Text]
       .filter((part): part is string => Boolean(part))
       .join("\n")
       .replace(/&amp;/g, "&");
