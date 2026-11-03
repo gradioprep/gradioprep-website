@@ -299,7 +299,8 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     ]);
     for (const response of anonymousChecks) expect(response.status()).toBe(401);
 
-    const studentPage = await browser.newPage();
+    const studentContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
+    const studentPage = await studentContext.newPage();
     const studentToken = await signIn(studentPage, "student.a@example.invalid", "Synthetic Student A");
     const studentHeaders = { Authorization: studentToken };
     const studentChecks = await Promise.all([
@@ -330,8 +331,9 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       await expect(response.json()).resolves.toMatchObject({ error: "role_required" });
     }
 
-    await studentPage.close();
-    const guardianPage = await browser.newPage();
+    await studentContext.close();
+    const guardianContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
+    const guardianPage = await guardianContext.newPage();
     const guardianToken = await signIn(guardianPage, "guardian.a@example.invalid", "Synthetic Guardian A");
     const guardianResponse = await guardianPage.request.get("/api/v1/grader/submissions", {
       headers: { Authorization: guardianToken },
@@ -339,15 +341,16 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     expect(guardianResponse.status()).toBe(403);
     await expect(guardianResponse.json()).resolves.toMatchObject({ error: "role_required" });
 
-    await guardianPage.close();
-    const graderPage = await browser.newPage();
+    await guardianContext.close();
+    const graderContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
+    const graderPage = await graderContext.newPage();
     const graderAal1 = await signIn(graderPage, "grader.a@example.invalid", "Synthetic Grader A");
     const graderResponse = await graderPage.request.get("/api/v1/grader/submissions", {
       headers: { Authorization: graderAal1 },
     });
     expect(graderResponse.status()).toBe(403);
     await expect(graderResponse.json()).resolves.toMatchObject({ error: "mfa_required" });
-    await graderPage.close();
+    await graderContext.close();
   });
 
   test("grader AAL2 session sees only the active assigned queue and response", async ({ page }) => {
