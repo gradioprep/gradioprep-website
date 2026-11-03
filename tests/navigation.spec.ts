@@ -24,6 +24,16 @@ const directRouteChecks: Array<{ path: string; heading: RegExp }> = [
 ];
 
 test.describe("curriculum pathway URLs", () => {
+  test("homepage provides a concise Sign in entry to the account route", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible();
+    await expect(page.getByText("Sign in / account", { exact: true })).toHaveCount(0);
+
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(page).toHaveURL(/\\/account$/);
+    await expect(page.getByRole("heading", { name: /Your account, with care\\./i })).toBeVisible();
+  });
+
   for (const route of directRouteChecks) {
     test(`direct link opens the correct screen: ${route.path}`, async ({ page }) => {
       const pageErrors: string[] = [];
