@@ -382,6 +382,14 @@ SELECT is(
   1,
   'revocation checks retain the identifier of the existing synthetic submission'
 );
+SELECT is(
+  (SELECT count(*)::integer FROM public.submission_grader_assignments
+   WHERE submission_id = current_setting('test.assessment_submission_id')::uuid
+     AND grader_user_id = '55555555-5555-4555-8555-555555555555'
+     AND revoked_at IS NULL),
+  1,
+  'revocation checks target the active assignment of the grader being revoked'
+);
 
 UPDATE public.submission_grader_assignments
 SET revoked_by = '88888888-8888-4888-8888-888888888888',
