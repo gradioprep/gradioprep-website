@@ -334,6 +334,12 @@ test.describe("Phase 1B account foundation", () => {
     expect(firstFactorAttempt.status()).toBe(403);
     await expect(firstFactorAttempt.json()).resolves.toMatchObject({ error: "mfa_required" });
 
+    const ownerAal1InvitationList = await page.request.get("/api/v1/admin/staff-invitations", {
+      headers: { Authorization: firstFactorToken },
+    });
+    expect(ownerAal1InvitationList.status()).toBe(403);
+    await expect(ownerAal1InvitationList.json()).resolves.toMatchObject({ error: "mfa_required" });
+
     await page.getByRole("button", { name: "Set up authenticator app" }).click();
     await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
     const secret = await page.getByTestId("totp-secret").innerText();
@@ -351,7 +357,102 @@ test.describe("Phase 1B account foundation", () => {
     expect(verifiedAttempt.status()).toBe(200);
     await expect(verifiedAttempt.json()).resolves.toMatchObject({ revoked: true });
 
+    await expect(page.getByRole("heading", { name: "Staff invitations" })).toBeVisible();
+    await page.getByLabel("Staff email address").fill("student.b@example.invalid");
+    await page.getByLabel("Invitation role").selectOption("grader");
+    await page.getByRole("button", { name: "Create invitation link" }).click();
+    const invitationLinkField = page.getByTestId("staff-invite-url");
+    await expect(invitationLinkField).toBeVisible();
+    const invitationLink = await invitationLinkField.inputValue();
+    const invitationToken = new URLSearchParams(new URL(invitationLink).hash.slice(1)).get("staff-invite");
+    expect(invitationToken).toMatch(/^[A-Za-z0-9_-]{43}$/);
+
+    const ownerInvitationList = await page.request.get("/api/v1/admin/staff-invitations", {
+      headers: { Authorization: ownerToken },
+    });
+    expect(ownerInvitationList.status()).toBe(200);
+    const listBody = await ownerInvitationList.json() as {
+      invitations: Array<{ invited_email: string; invited_role: string; status: string }>;
+    };
+    expect(listBody.invitations).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        invited_email: "student.b@example.invalid",
+        invited_role: "grader",
+        status: "pending",
+      }),
+    ]));
+    expect(JSON.stringify(listBody)).not.toMatch(/token_hash|invite_url|staff-invite=/i);
+
+    const duplicateInvite = await page.request.post("/api/v1/admin/staff-invitations", {
+      headers: { Authorization: ownerToken },
+      data: { email: "student.b@example.invalid", role: "grader" },
+    });
+    expect(duplicateInvite.status()).toBe(409);
+    await expect(duplicateInvite.json()).resolves.toMatchObject({ error: "invitation_already_pending" });
+
+    const mismatchAcceptance = await page.request.post("/api/v1/staff-invitations/accept", {
+      headers: { Authorization: ownerToken },
+      data: { token: invitationToken },
+    });
+    expect(mismatchAcceptance.status()).toBe(403);
+    await expect(mismatchAcceptance.json()).resolves.toMatchObject({ error: "invitation_email_mismatch" });
+
+    await page.getByLabel("Staff email address").fill("invited.grader@example.invalid");
+    await page.getByLabel("Invitation role").selectOption("admin");
+    await page.getByRole("button", { name: "Create invitation link" }).click();
+    const revokedInvitationUrl = await page.getByTestId("staff-invite-url").inputValue();
+    const revokedInvitationToken = new URLSearchParams(new URL(revokedInvitationUrl).hash.slice(1)).get("staff-invite");
+    expect(revokedInvitationToken).toMatch(/^[A-Za-z0-9_-]{43}$/);
+    page.on("dialog", dialog => dialog.accept());
+    await page.getByRole("button", { name: "Revoke invitation for invited.grader@example.invalid" }).click();
+    await expect(page.getByText("Revoked", { exact: true })).toBeVisible();
+
     await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
+
+    // Follow the one-time link as the invited synthetic account. It remains a
+    // Student until the email-matched account verifies an authenticator (AAL2).
+    let inviteeToken = "";
+    page.on("request", request => {
+      if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
+        inviteeToken = request.headers()["authorization"] ?? inviteeToken;
+      }
+    });
+    await page.goto(invitationLink);
+    await expect(page).toHaveURL(/\/account$/);
+    await page.getByLabel("Email address").fill("student.b@example.invalid");
+    await page.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await expect(page.getByRole("heading", { name: "Synthetic Student B" })).toBeVisible();
+    await expect(page.getByText("Staff invitation pending")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Set up authenticator app" })).toBeVisible();
+
+    await page.getByRole("button", { name: "Set up authenticator app" }).click();
+    await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
+    const inviteeSecret = await page.getByTestId("totp-secret").innerText();
+    await waitForTotpWindow();
+    await page.getByLabel("Authenticator code").fill(createTotpCode(inviteeSecret));
+    await page.getByRole("button", { name: "Verify and enable" }).click();
+    await expect(page.getByText("Staff invitation accepted. Your grader role is active.")).toBeVisible();
+    await expect(page.getByText("grader", { exact: true })).toBeVisible();
+    await expect.poll(() => Boolean(inviteeToken), { timeout: 10_000 }).toBe(true);
+
+    const revokedAcceptance = await page.request.post("/api/v1/staff-invitations/accept", {
+      headers: { Authorization: inviteeToken },
+      data: { token: revokedInvitationToken },
+    });
+    expect(revokedAcceptance.status()).toBe(410);
+    await expect(revokedAcceptance.json()).resolves.toMatchObject({ error: "invitation_revoked" });
+
+    const replayAttempt = await page.request.post("/api/v1/staff-invitations/accept", {
+      headers: { Authorization: inviteeToken },
+      data: { token: invitationToken },
+    });
+    expect(replayAttempt.status()).toBe(410);
+    await expect(replayAttempt.json()).resolves.toMatchObject({ error: "invitation_already_used" });
+
+    await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
 
     await waitForTotpWindow();
@@ -385,9 +486,28 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(adminAttempt.status()).toBe(403);
     await expect(adminAttempt.json()).resolves.toMatchObject({ error: "role_management_forbidden" });
+
+    const adminInvitationList = await page.request.get("/api/v1/admin/staff-invitations", {
+      headers: { Authorization: adminToken },
+    });
+    expect(adminInvitationList.status()).toBe(403);
+    await expect(adminInvitationList.json()).resolves.toMatchObject({ error: "staff_invitation_forbidden" });
   });
 
-  test("role revocation endpoint rejects anonymous and malformed requests", async ({ request }) => {
+  test("role revocation and staff invitation endpoints reject anonymous and malformed requests", async ({ request }) => {
+    const anonymousInvitationList = await request.get("/api/v1/admin/staff-invitations");
+    expect(anonymousInvitationList.status()).toBe(401);
+
+    const invalidInvitation = await request.post("/api/v1/admin/staff-invitations", {
+      data: { email: "invite@example.invalid", role: "owner" },
+    });
+    expect(invalidInvitation.status()).toBe(400);
+
+    const malformedAccept = await request.post("/api/v1/staff-invitations/accept", {
+      data: { token: "short-token" },
+    });
+    expect(malformedAccept.status()).toBe(400);
+
     const anonymous = await request.post("/api/v1/admin/roles/revoke", {
       data: {
         target_user_id: "66666666-6666-4666-8666-666666666666",
