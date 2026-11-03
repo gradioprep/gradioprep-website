@@ -1,11 +1,11 @@
-name: Phase 1B local security and public Preview
+name: Phase 1B/1C local security and feature verification
 
 on:
   push:
     branches:
       - feature/phase-1b-local-auth-api
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, edited]
     branches:
       - docs/phase-1-secure-foundation-spec
 
@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   verify-and-preview:
-    name: Local Supabase security, build, browser tests and public Preview
+    name: Local Supabase security, build and browser tests
     if: >-
       github.event_name == 'push' ||
       (
@@ -115,7 +115,7 @@ jobs:
 
       - name: Create or update public Cloudflare Preview after all tests pass
         id: preview
-        if: github.event_name == 'pull_request' && steps.credentials.outputs.available == 'true'
+        if: >-\n          github.event_name == 'pull_request' &&\n          contains(github.event.pull_request.body, '<!-- founder-preview-required -->') &&\n          steps.credentials.outputs.available == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -172,7 +172,7 @@ jobs:
             }
 
       - name: Record why the public Preview was not deployed
-        if: github.event_name == 'pull_request' && steps.credentials.outputs.available != 'true'
+        if: >-\n          github.event_name == 'pull_request' &&\n          contains(github.event.pull_request.body, '<!-- founder-preview-required -->') &&\n          steps.credentials.outputs.available != 'true'
         run: |
           {
             echo "### Public Preview not deployed"
