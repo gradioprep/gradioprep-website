@@ -782,8 +782,8 @@ BEGIN
   SET status = 'feedback_published'
   WHERE id = p_submission_id;
 
-  DELETE FROM private.assessment_drafts
-  WHERE submission_id = p_submission_id;
+  DELETE FROM private.assessment_drafts AS draft
+  WHERE draft.submission_id = p_submission_id;
 
   INSERT INTO private.security_audit_events (
     actor_id, action, target_type, target_id, outcome, reason_category
