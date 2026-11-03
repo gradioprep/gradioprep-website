@@ -35,13 +35,13 @@ SELECT is(
   'new student attempt starts in progress'
 );
 SELECT lives_ok(
-  $
+  $query$
     SELECT * FROM public.save_attempt_response(
       (SELECT id FROM public.attempts WHERE learner_id = auth.uid() AND status = 'in_progress'),
       'b1111111-1111-4111-8111-111111111111',
       'A first synthetic response with enough words to test versioning.'
     )
-  $,
+  $query$,
   'student can save a response to their own in-progress attempt through the narrow RPC'
 );
 SELECT is(
@@ -51,13 +51,13 @@ SELECT is(
   'response word count is calculated by the database'
 );
 SELECT lives_ok(
-  $
+  $query$
     SELECT * FROM public.save_attempt_response(
       (SELECT id FROM public.attempts WHERE learner_id = auth.uid() AND status = 'in_progress'),
       'b1111111-1111-4111-8111-111111111111',
       'A revised synthetic response increments the version without accepting a client version.'
     )
-  $,
+  $query$,
   'student can revise their own response through the narrow RPC while the attempt is in progress'
 );
 SELECT is(
