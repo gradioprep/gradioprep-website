@@ -94,7 +94,7 @@ CREATE OR REPLACE FUNCTION private.prevent_assessment_submission_snapshot_mutati
 RETURNS trigger
 LANGUAGE plpgsql
 SET search_path = ''
-AS $
+AS $trigger$
 BEGIN
   IF ROW(
     NEW.learner_id,
@@ -125,7 +125,7 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$;
+$trigger$;
 
 CREATE TRIGGER assessment_submission_snapshot_immutable
   BEFORE UPDATE ON public.assessment_submissions
