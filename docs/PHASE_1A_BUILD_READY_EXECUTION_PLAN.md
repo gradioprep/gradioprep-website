@@ -291,3 +291,18 @@ The controlled preview workflow `.github/workflows/controlled-worker-preview.yml
 **Phase 1C exit criteria:** full protected-table RLS/permissions matrix; complete non-file submission/grading/feedback lifecycle; restricted admin/private-QA separation; audit and 24-hour SLA/capacity evidence; cross-role and adversarial tests passing; current source-of-truth records reconciled; latest CI and Preview evidence recorded. Do not mark Phase 1C complete until all are satisfied.
 
 **Phase 1D boundary:** begin private file/storage and audit/file controls only after Phase 1C exits. The 10 MB/10-page PDF limits, file-signature/MIME checks, private non-identifying object keys, assignment-scoped access, immutable original/correction history, short-lived signed access, deletion/retention and backup/recovery controls belong to that later phase. Any hosted Storage/R2 provisioning, paid resource, external processing or real learner data remains separately gated and is not authorised by this plan.
+
+
+### 16.1 Phase 1C physical inventory and execution slices — 3 November 2026
+
+The first slice is limited to the six public tables `task_versions`, `task_version_prompts`, `attempts`, `attempt_responses`, `grader_assignments` and the private tables `security_audit_events`, `staff_invitations`, `attempt_response_versions` (the first two are Phase 1B records). The actual implementation inventory, grants, policies and per-role access expectations are specified in Section 20.1 of the implementation specification and the Phase 1C status section of `DATA_MODEL.md`.
+
+The remaining slices are deliberately separated:
+- **1C-A — table inventory and default-deny enforcement:** verify every existing protected table, role, operation and AAL boundary; add actual PostgreSQL and Worker allow/deny tests. Do not infer safety from RLS being enabled alone.
+- **1C-B — accepted submission lifecycle:** separate typed practice attempts from human assessment submissions; immutable task/rubric/submission snapshots; server-only acceptance, capacity, idempotency and fixed 24-hour due-time snapshot; oldest-accepted-first queue.
+- **1C-C — human assessment and feedback:** criterion-level rubric results; immutable assessment/feedback versions; grader draft/save/final transitions; explicit human publication; learner reads only published versions.
+- **1C-D — operational role separation:** authorised grader reassignment/revocation and state transitions; minimal delegated admin operations; private academic-QA access restricted to owner/explicit QA grant. Admin never inherits owner/QA rights.
+- **1C-E — audit and workflow integrity:** append-oriented audit coverage, replay-safe operations, deterministic queue ordering and server-authoritative state transitions.
+- **1C-F — adversarial acceptance:** anonymous/student/guardian/grader/admin/owner tests at AAL1/AAL2, including suspension, revocation, cross-learner isolation, forged actor/owner/role/assignment/state/timestamps, RPC/table bypass and concurrent duplicate acceptance.
+
+The Phase 1C exit gate remains all six slices implemented and verified, exact-head CI passing, public Preview deployed and Founder-verified, and all four source-of-truth documents reconciled. Phase 1D remains blocked.
