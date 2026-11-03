@@ -1,6 +1,6 @@
 # Phase 1A — Build-Ready Execution Plan
 
-**Version:** 0.15-draft
+**Version:** 0.16-draft
 **Date:** 3 November 2026  
 **Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff-invitation work are complete; the Phase 1B public-shell visual review is approved. The Phase 1C typed-attempt first slice and current Phase 1C-A protected-table hardening are implemented and verified at commit `ee275ca714c9bfb6bb44f580c2b1e827106975d4` by exact-head run [#41646515558](https://github.com/gradioprep/gradioprep-website/actions/runs/41646515558): 215/215 PostgreSQL assertions across six SQL files and 24/24 Playwright tests, plus local reset/seed, TypeScript/Vite/Worker builds, cleanup and clean public-Preview asset build. Cloudflare Preview for this head: https://f26a4358-gradioprep-website.wandering-scene-1822.workers.dev (no hosted Supabase backend). Phase 1C remains in progress; the remaining implementation slices and Phase 1D exit gate are below. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, merge, production deployment or DNS change is authorised.
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
@@ -264,11 +264,15 @@ This plan does not change the existing diagnostic sequence: MYP Year 4 actual di
 Region selection establishes the location for the Supabase primary project data and backups, but it is not by itself a legal compliance conclusion or a guarantee that all support/telemetry/subprocessor processing stays in India. Review the current DPA and data-residency FAQ before real-data approval.
 
 
-## 15. Mandatory public verification loop
+## 15. Conditional Founder Preview review
 
-The Founder has directed that public website verification must occur throughout implementation, not be postponed until the end of a phase. Follow `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md` for the mandatory GitHub → automated checks → Cloudflare Worker Preview → Founder verification → correction/re-preview cycle. The PR must provide an updated public `workers.dev` Preview URL and an immutable deployment URL for each reviewed revision, a plain-language visible-change summary, exact routes and short click-by-click checks, CI results, connected-backend status and any limitations. Do not close a coherent implementation milestone as verified until the Founder has inspected the deployed Preview.
+The Founder has clarified that public Preview links should not be repeatedly surfaced for routine engineering changes. Follow `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md`: all affected code still receives appropriate local/CI verification, but ask the Founder to inspect a public Preview **only when a new, concrete and substantial learner/staff-visible feature is ready**.
 
-The controlled preview workflow `.github/workflows/controlled-worker-preview.yml` is included in this source branch and supports PRs targeting `main` and the active stacked integration branch. It uses the existing Cloudflare Worker Preview capability and `npx wrangler preview`, never `npx wrangler deploy`; it posts the Preview URL and removes the Preview when the PR closes. Previews are public unless Access is enabled and must contain synthetic data only. During Phase 1B, authentication/RLS tests run against local Supabase in CI; the public Preview cannot reach the private local database, so the handoff must state this honestly. Do not provision hosted Supabase merely to make a preview login work; that needs separate approval.
+Do not request Founder Preview review for documentation-only changes, internal security/RLS/database changes, backend/API changes without a visible user workflow, refactors, test/CI updates, ordinary bug fixes, maintenance, or redeployments that add no substantial visible feature. Keep automated build/deployment results in engineering records without repeatedly telling the Founder about unchanged previews. A correction/redeploy of the same feature does not by itself trigger another Preview request.
+
+The Phase 1B verification workflow uses the hidden PR-body marker `<!-- founder-preview-required -->` to gate its public Preview upload/comment. Add this marker internally only when a qualifying visible feature is ready for Founder review. The Founder does not need to manage labels or workflow settings. Never use `npx wrangler deploy`, change DNS or provision another service for this review. Previews remain synthetic-only and are not production.
+
+For internal Phase 1B/1C backend and authorization work, local Supabase CI is authoritative. The public Worker cannot reach that private database. Do not provision hosted Supabase just to make a Preview login work; that needs separate approval.
 
 **Current approval:** Founder has approved Phase 1B coding with local Supabase and synthetic data only. No hosted project, paid plan, real data, merge, production deployment, DNS or custom-domain connection is approved. The custom domain connects at the Launch Candidate / Production Cutover checkpoint after feature, security, accessibility, content, privacy and recovery gates; it is not needed for per-PR public verification.
 
@@ -286,7 +290,7 @@ The controlled preview workflow `.github/workflows/controlled-worker-preview.yml
 3. Complete assessment/submission metadata and immutable task/rubric/submission version relationships; implement the full grader workflow, criterion-level results, immutable assessment/feedback versions and explicit human-only publication. Keep drafts/QA private; admins must not inherit owner, grader or QA rights.
 4. Complete append-only audit coverage for privileged access and changes, and server-authoritative capacity/idempotency plus the fixed 24-hour SLA. Acceptance and due-time snapshots are server-controlled and immutable; queue order is oldest accepted first; do not accept work beyond tested capacity.
 5. Add negative tests for forged actor/owner/role/assignment/state/timestamps, replay, concurrency, direct table writes and RPC misuse. Verify the Worker and database enforce each privileged AAL2 boundary independently.
-6. Run the full local synthetic CI after each coherent slice; deploy/verify the public Worker Preview and record its backend limitation. Update the master brief, implementation specification, plan and data model on every verified milestone.
+6. Run the full local synthetic CI after each coherent slice; request a Founder Preview only when a substantial new learner/staff-visible feature has been added; routine backend/security work is verified locally and kept in the engineering record. Update the master brief, implementation specification, plan and data model on every verified milestone.
 
 **Phase 1C exit criteria:** full protected-table RLS/permissions matrix; complete non-file submission/grading/feedback lifecycle; restricted admin/private-QA separation; audit and 24-hour SLA/capacity evidence; cross-role and adversarial tests passing; current source-of-truth records reconciled; latest CI and Preview evidence recorded. Do not mark Phase 1C complete until all are satisfied.
 
