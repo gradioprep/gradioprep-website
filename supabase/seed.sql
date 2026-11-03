@@ -138,8 +138,8 @@ ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO public.rubric_versions (id, rubric_id, version, title, release_state)
 VALUES
-  ('f1111111-1111-4111-8111-111111111111', 'e1111111-1111-4111-8111-111111111111', 1, 'Synthetic Rubric A — Version 1', 'published'),
-  ('f2222222-2222-4222-8222-222222222222', 'e2222222-2222-4222-8222-222222222222', 1, 'Synthetic Rubric B — Version 1', 'published')
+  ('f1111111-1111-4111-8111-111111111111', 'e1111111-1111-4111-8111-111111111111', 1, 'Synthetic Rubric A — Version 1', 'draft'),
+  ('f2222222-2222-4222-8222-222222222222', 'e2222222-2222-4222-8222-222222222222', 1, 'Synthetic Rubric B — Version 1', 'draft')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO public.rubric_criteria (
@@ -155,6 +155,14 @@ VALUES
   ('f6666666-6666-4666-8666-666666666666', 'f2222222-2222-4222-8222-222222222222',
    'clarity', 2, 'Clarity', 'Communicates the explanation clearly and coherently.', 4)
 ON CONFLICT (id) DO NOTHING;
+
+-- Publish only after the immutable criterion rows exist for each version.
+UPDATE public.rubric_versions
+SET release_state = 'published'
+WHERE id IN (
+  'f1111111-1111-4111-8111-111111111111',
+  'f2222222-2222-4222-8222-222222222222'
+);
 
 INSERT INTO public.task_rubric_mappings (id, task_version_id, rubric_version_id)
 VALUES
