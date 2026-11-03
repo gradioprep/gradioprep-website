@@ -37,3 +37,9 @@ enable_refresh_token_rotation = true
 enable_signup = true
 double_confirm_changes = false
 enable_confirmations = false
+
+# Explicitly enable local-only authenticator MFA for synthetic CI/browser tests.
+# This does not provision or change any hosted Supabase project.
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
