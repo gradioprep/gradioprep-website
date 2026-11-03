@@ -243,7 +243,6 @@ test.describe("Phase 1B account foundation", () => {
       card: await page.locator(".proto-account-card").innerText().catch(() => ""),
       alerts: await page.locator('[role="alert"]').allTextContents(),
       statuses: await page.locator('[role="status"]').allTextContents(),
-      meRequests: meRequests,
     }));
     await expect(page.getByRole("heading", { name: "Synthetic Student B" })).toBeVisible();
 
