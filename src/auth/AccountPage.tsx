@@ -39,10 +39,8 @@ export default function AccountPage({ go }: { go: Navigate }) {
     let active = true;
     setAccount(null);
     setAccountUnavailable(false);
-    setError("");
-    setMessage("");
 
-    if (!auth.session?.access_token || auth.mfaLoading || auth.mfaChallengeRequired) {
+    if (!auth.session?.access_token || auth.mfaLoading || auth.mfaChallengeRequired || auth.mfaStatusError) {
       return () => { active = false; };
     }
 
@@ -81,7 +79,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
     });
 
     return () => { active = false; };
-  }, [auth.session?.access_token, auth.mfaLoading, auth.mfaChallengeRequired]);
+  }, [auth.session?.access_token, auth.mfaLoading, auth.mfaChallengeRequired, auth.mfaStatusError]);
 
   async function submitAuth(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -303,7 +301,11 @@ export default function AccountPage({ go }: { go: Navigate }) {
       <p>This is an intentional safety state. The public preview can show the real website interface, while account authentication and permission tests run against the local synthetic database in the development environment.</p>
       <p>No password or account details should be entered here.</p>
       <button className="proto-action secondary" type="button" onClick={() => go("home")}>← Back to homepage</button>
-    </section> : auth.loading ? <section className="proto-panel proto-account-card" role="status">Checking your sign-in status…</section> : auth.session && auth.mfaLoading ? <section className="proto-panel proto-account-card" role="status">Checking account security…</section> : auth.session && auth.mfaChallengeRequired ? <section className="proto-panel proto-account-card">
+    </section> : auth.loading ? <section className="proto-panel proto-account-card" role="status">Checking your sign-in status…</section> : auth.session && auth.mfaLoading ? <section className="proto-panel proto-account-card" role="status">Checking account security…</section> : auth.session && auth.mfaStatusError ? <section className="proto-panel proto-account-card">
+      <h2>Account security is unavailable.</h2>
+      <p>{auth.mfaStatusError}</p>
+      <button className="proto-account-signout" type="button" onClick={signOut} disabled={submitting}>Sign out</button>
+    </section> : auth.session && auth.mfaChallengeRequired ? <section className="proto-panel proto-account-card">
       <div className="proto-account-card-heading">
         <div><p className="proto-eyebrow"><span />SECURE SIGN-IN</p><h2>Verify your sign-in.</h2></div>
         <span className="proto-account-status">Second factor</span>
@@ -313,10 +315,6 @@ export default function AccountPage({ go }: { go: Navigate }) {
         <label>Authenticator code<input type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={mfaCode} onChange={event => setMfaCode(event.target.value.replace(/\\D/g, "").slice(0, 6))} required /></label>
         <button className="proto-action" type="submit" disabled={submitting || mfaCode.length !== 6 || !auth.mfaFactors.some(factor => factor.status === "verified")}>{submitting ? "Please wait…" : "Verify code"}</button>
       </form>
-      <button className="proto-account-signout" type="button" onClick={signOut} disabled={submitting}>Sign out</button>
-    </section> : auth.session && auth.mfaStatusError ? <section className="proto-panel proto-account-card">
-      <h2>Account security is unavailable.</h2>
-      <p>{auth.mfaStatusError}</p>
       <button className="proto-account-signout" type="button" onClick={signOut} disabled={submitting}>Sign out</button>
     </section> : auth.session && accountUnavailable ? <section className="proto-panel proto-account-card">
       <span className="proto-account-icon">i</span>
