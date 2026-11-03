@@ -1712,3 +1712,65 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   .proto-account-card { border-radius: 12px; }
   .proto-account-card-heading { flex-direction: column; }
 }
+
+
+/* Phase 1B authenticator setup and verification */
+.proto-account-security {
+  margin: 24px 0 22px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.proto-account-security-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.proto-account-security-heading h3 {
+  margin: 4px 0 0;
+  color: var(--text-primary);
+  font: 600 20px/1.25 var(--font-display);
+}
+.proto-account-security > p,
+.proto-account-security-setup > p,
+.proto-account-security-factors > p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.proto-account-security-qr {
+  display: block;
+  width: min(100%, 220px);
+  height: auto;
+  margin: 16px auto;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+.proto-account-security-key-label { margin-bottom: 6px; font-weight: 600; }
+.proto-account-security-key {
+  display: block;
+  overflow-wrap: anywhere;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-primary);
+  font: 13px/1.6 var(--mono);
+  user-select: all;
+}
+.proto-account-security-factor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+.proto-account-security-factor span { display: grid; gap: 4px; }
+.proto-account-security-factor strong { color: var(--text-primary); font-size: 13px; }
+.proto-account-security-factor small { color: var(--text-secondary); font-size: 12px; }
+.proto-account-security-factor .proto-account-toggle { margin-top: 0; }

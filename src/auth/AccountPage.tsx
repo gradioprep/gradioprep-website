@@ -28,6 +28,12 @@ export default function AccountPage({ go }: { go: Navigate }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [mfaCode, setMfaCode] = useState("");
+  const [totpEnrollment, setTotpEnrollment] = useState<{
+    factorId: string;
+    qrCode: string;
+    secret: string;
+  } | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -36,7 +42,9 @@ export default function AccountPage({ go }: { go: Navigate }) {
     setError("");
     setMessage("");
 
-    if (!auth.session?.access_token) return () => { active = false; };
+    if (!auth.session?.access_token || auth.mfaLoading || auth.mfaChallengeRequired) {
+      return () => { active = false; };
+    }
 
     void fetch("/api/v1/me", {
       headers: { Authorization: `Bearer ${auth.session.access_token}` },
@@ -73,7 +81,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
     });
 
     return () => { active = false; };
-  }, [auth.session?.access_token]);
+  }, [auth.session?.access_token, auth.mfaLoading, auth.mfaChallengeRequired]);
 
   async function submitAuth(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -139,6 +147,99 @@ export default function AccountPage({ go }: { go: Navigate }) {
     }
   }
 
+  async function verifyMfaChallenge(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const factor = auth.mfaFactors.find(item => item.status === "verified");
+    if (!factor) {
+      setError("No verified authenticator was found for this account. Contact the project administrator.");
+      return;
+    }
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      await auth.verifyTotp(factor.id, mfaCode);
+      setMfaCode("");
+      setMessage("Sign-in verified.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "The authenticator code could not be verified.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function startTotpEnrollment() {
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      const enrollment = await auth.enrollTotp("GradiPrep authenticator");
+      setTotpEnrollment(enrollment);
+      setMfaCode("");
+      setMessage("Scan the QR code with your authenticator app, or enter the setup key manually.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "Authenticator setup could not be started.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function completeTotpEnrollment(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!totpEnrollment) return;
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      if (!/^\\d{6}$/.test(mfaCode.trim())) throw new Error("Enter the six-digit code from your authenticator app.");
+      await auth.verifyTotp(totpEnrollment.factorId, mfaCode.trim());
+      setTotpEnrollment(null);
+      setMfaCode("");
+      setMessage("Authenticator app enabled and verified.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "The authenticator could not be verified.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function cancelPendingTotpEnrollment() {
+    const pendingFactor = totpEnrollment ?? auth.mfaFactors.find(factor => factor.status !== "verified");
+    if (!pendingFactor) return;
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      await auth.unenrollMfaFactor(pendingFactor.id);
+      setTotpEnrollment(null);
+      setMfaCode("");
+      setMessage("Authenticator setup cancelled.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "The unfinished authenticator setup could not be cancelled.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function removeTotpFactor(factorId: string) {
+    if (staffRole && verifiedTotpFactors.length <= 1) {
+      setError("Add and verify a second authenticator before removing this factor from a staff account.");
+      return;
+    }
+    if (!window.confirm("Remove this authenticator from your account?")) return;
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      await auth.unenrollMfaFactor(factorId);
+      setMessage("Authenticator removed.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "The authenticator could not be removed.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function saveDisplayName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!auth.session?.access_token) return;
@@ -184,6 +285,10 @@ export default function AccountPage({ go }: { go: Navigate }) {
     }
   }
 
+  const verifiedTotpFactors = auth.mfaFactors.filter(factor => factor.status === "verified");
+  const pendingTotpFactors = auth.mfaFactors.filter(factor => factor.status !== "verified");
+  const staffRole = account?.roles.some(role => ["grader", "admin", "owner"].includes(role)) ?? false;
+
   return <div className="proto-account-page">
     <div className="proto-account-intro">
       <p className="proto-eyebrow"><span />SECURE ACCOUNT FOUNDATION · PHASE 1B</p>
@@ -197,7 +302,22 @@ export default function AccountPage({ go }: { go: Navigate }) {
       <p>This is an intentional safety state. The public preview can show the real website interface, while account authentication and permission tests run against the local synthetic database in the development environment.</p>
       <p>No password or account details should be entered here.</p>
       <button className="proto-action secondary" type="button" onClick={() => go("home")}>← Back to homepage</button>
-    </section> : auth.loading ? <section className="proto-panel proto-account-card" role="status">Checking your sign-in status…</section> : auth.session && accountUnavailable ? <section className="proto-panel proto-account-card">
+    </section> : auth.loading ? <section className="proto-panel proto-account-card" role="status">Checking your sign-in status…</section> : auth.session && auth.mfaLoading ? <section className="proto-panel proto-account-card" role="status">Checking account security…</section> : auth.session && auth.mfaChallengeRequired ? <section className="proto-panel proto-account-card">
+      <div className="proto-account-card-heading">
+        <div><p className="proto-eyebrow"><span />SECURE SIGN-IN</p><h2>Verify your sign-in.</h2></div>
+        <span className="proto-account-status">Second factor</span>
+      </div>
+      <p className="proto-account-description">Enter the six-digit code from your authenticator app to complete sign-in.</p>
+      <form className="proto-account-form" onSubmit={verifyMfaChallenge}>
+        <label>Authenticator code<input type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={mfaCode} onChange={event => setMfaCode(event.target.value.replace(/\\D/g, "").slice(0, 6))} required /></label>
+        <button className="proto-action" type="submit" disabled={submitting || mfaCode.length !== 6 || !auth.mfaFactors.some(factor => factor.status === "verified")}>{submitting ? "Please wait…" : "Verify code"}</button>
+      </form>
+      <button className="proto-account-signout" type="button" onClick={signOut} disabled={submitting}>Sign out</button>
+    </section> : auth.session && auth.mfaStatusError ? <section className="proto-panel proto-account-card">
+      <h2>Account security is unavailable.</h2>
+      <p>{auth.mfaStatusError}</p>
+      <button className="proto-account-signout" type="button" onClick={signOut} disabled={submitting}>Sign out</button>
+    </section> : auth.session && accountUnavailable ? <section className="proto-panel proto-account-card">
       <span className="proto-account-icon">i</span>
       <h2>Account access is unavailable.</h2>
       <p>This account cannot access protected GradiPrep records. Sign out to leave this session.</p>
@@ -224,6 +344,34 @@ export default function AccountPage({ go }: { go: Navigate }) {
         <small>ACTIVE ROLE(S)</small>
         {account?.roles.length ? account.roles.map(role => <span key={role}>{role.replaceAll("_", " ")}</span>) : <em>Loading role assignment…</em>}
       </div>
+      <section className="proto-account-security" aria-labelledby="proto-account-security-heading">
+        <div className="proto-account-security-heading">
+          <div><p className="proto-eyebrow"><span />ACCOUNT SECURITY</p><h3 id="proto-account-security-heading">Authenticator app</h3></div>
+          <span className="proto-account-status">{verifiedTotpFactors.length ? "Verified" : staffRole ? "Required for staff" : "Optional"}</span>
+        </div>
+        {staffRole && !verifiedTotpFactors.length && <p>An authenticator app must be verified before this account can use protected staff actions.</p>}
+        {!staffRole && !verifiedTotpFactors.length && <p>Add a time-based code from an authenticator app for an extra sign-in check.</p>}
+        {totpEnrollment ? <div className="proto-account-security-setup">
+          <p>Scan this code using an authenticator app. Keep the setup key private and do not share it with anyone.</p>
+          <img className="proto-account-security-qr" src={totpEnrollment.qrCode} alt="Authenticator app setup QR code" />
+          <p className="proto-account-security-key-label">Manual setup key</p>
+          <code className="proto-account-security-key" data-testid="totp-secret">{totpEnrollment.secret}</code>
+          <form className="proto-account-form" onSubmit={completeTotpEnrollment}>
+            <label>Authenticator code<input type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={mfaCode} onChange={event => setMfaCode(event.target.value.replace(/\\D/g, "").slice(0, 6))} required /></label>
+            <button className="proto-action" type="submit" disabled={submitting || mfaCode.length !== 6}>{submitting ? "Please wait…" : "Verify and enable"}</button>
+          </form>
+          <button className="proto-account-toggle" type="button" onClick={cancelPendingTotpEnrollment} disabled={submitting}>Cancel setup</button>
+        </div> : verifiedTotpFactors.length ? <div className="proto-account-security-factors">
+          {verifiedTotpFactors.map(factor => <div className="proto-account-security-factor" key={factor.id}>
+            <span><strong>{factor.friendlyName}</strong><small>Verified authenticator</small></span>
+            <button className="proto-account-toggle" type="button" onClick={() => removeTotpFactor(factor.id)} disabled={submitting || auth.mfaCurrentLevel !== "aal2" || (staffRole && verifiedTotpFactors.length <= 1)}>Remove</button>
+          </div>)}
+          <p>Removing a factor refreshes the session assurance level. Protected staff actions remain blocked until a verified factor is available.</p>
+        </div> : pendingTotpFactors.length ? <div className="proto-account-security-setup">
+          <p>An authenticator setup is unfinished. Cancel it before starting a new setup.</p>
+          <button className="proto-account-toggle" type="button" onClick={cancelPendingTotpEnrollment} disabled={submitting}>Cancel pending setup</button>
+        </div> : <button className="proto-action" type="button" onClick={startTotpEnrollment} disabled={submitting}>{submitting ? "Please wait…" : "Set up authenticator app"}</button>}
+      </section>
       <form className="proto-account-form" onSubmit={saveDisplayName}>
         <label>Display name<input value={newDisplayName} onChange={event => setNewDisplayName(event.target.value)} maxLength={80} required minLength={1} /></label>
         <button className="proto-action" type="submit" disabled={submitting || !account}>Save display name</button>

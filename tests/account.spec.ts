@@ -1,4 +1,40 @@
+import { createHmac } from "node:crypto";
 import { expect, test } from "@playwright/test";
+
+function createTotpCode(secret: string, timestamp = Date.now()): string {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  const decoded: number[] = [];
+  let buffer = 0;
+  let bits = 0;
+  for (const character of secret.toUpperCase().replace(/=+$/g, "")) {
+    const value = alphabet.indexOf(character);
+    if (value < 0) throw new Error("The test authenticator secret is not valid Base32.");
+    buffer = (buffer << 5) | value;
+    bits += 5;
+    if (bits >= 8) {
+      decoded.push((buffer >>> (bits - 8)) & 0xff);
+      bits -= 8;
+      buffer &= (1 << bits) - 1;
+    }
+  }
+
+  const counter = Buffer.alloc(8);
+  counter.writeBigUInt64BE(BigInt(Math.floor(timestamp / 30_000)));
+  const digest = createHmac("sha1", Buffer.from(decoded)).update(counter).digest();
+  const offset = digest[digest.length - 1] & 0x0f;
+  const binary = ((digest[offset] & 0x7f) << 24) |
+    ((digest[offset + 1] & 0xff) << 16) |
+    ((digest[offset + 2] & 0xff) << 8) |
+    (digest[offset + 3] & 0xff);
+  return String(binary % 1_000_000).padStart(6, "0");
+}
+
+async function waitForTotpWindow(): Promise<void> {
+  const remaining = 30_000 - (Date.now() % 30_000);
+  if (remaining < 5_000) {
+    await new Promise(resolve => setTimeout(resolve, remaining + 500));
+  }
+}
 
 test.describe("Phase 1B account foundation", () => {
   test("public health endpoint responds without exposing configuration", async ({ request }) => {
@@ -280,7 +316,7 @@ test.describe("Phase 1B account foundation", () => {
     }
   });
 
-  test("role revocation API is MFA-gated and unavailable to non-owners", async ({ page }) => {
+  test("owner enrols TOTP, verifies sign-in and can revoke a role only after MFA", async ({ page }) => {
     const roleRequest = {
       target_user_id: "66666666-6666-4666-8666-666666666666",
       role: "grader",
@@ -299,14 +335,45 @@ test.describe("Phase 1B account foundation", () => {
     await page.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
     await page.getByRole("button", { name: "Sign in" }).click();
     await expect(page.getByRole("heading", { name: "Synthetic Owner" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Set up authenticator app" })).toBeVisible();
     await expect.poll(() => Boolean(ownerToken)).toBe(true);
 
-    const ownerAttempt = await page.request.post("/api/v1/admin/roles/revoke", {
+    const firstFactorToken = ownerToken;
+    const firstFactorAttempt = await page.request.post("/api/v1/admin/roles/revoke", {
+      headers: { Authorization: firstFactorToken },
+      data: roleRequest,
+    });
+    expect(firstFactorAttempt.status()).toBe(403);
+    await expect(firstFactorAttempt.json()).resolves.toMatchObject({ error: "mfa_required" });
+
+    await page.getByRole("button", { name: "Set up authenticator app" }).click();
+    await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
+    const secret = await page.getByTestId("totp-secret").innerText();
+    await waitForTotpWindow();
+    await page.getByLabel("Authenticator code").fill(createTotpCode(secret));
+    await page.getByRole("button", { name: "Verify and enable" }).click();
+    await expect(page.getByText("Verified authenticator", { exact: true })).toBeVisible();
+    await expect.poll(() => ownerToken !== firstFactorToken, { timeout: 10_000 }).toBe(true);
+
+    const verifiedAttempt = await page.request.post("/api/v1/admin/roles/revoke", {
       headers: { Authorization: ownerToken },
       data: roleRequest,
     });
-    expect(ownerAttempt.status()).toBe(403);
-    await expect(ownerAttempt.json()).resolves.toMatchObject({ error: "mfa_required" });
+    expect(verifiedAttempt.status()).toBe(200);
+    await expect(verifiedAttempt.json()).resolves.toMatchObject({ revoked: true });
+
+    await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
+
+    await waitForTotpWindow();
+    await page.getByLabel("Email address").fill("owner@example.invalid");
+    await page.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await expect(page.getByRole("heading", { name: "Verify your sign-in." })).toBeVisible();
+    await waitForTotpWindow();
+    await page.getByLabel("Authenticator code").fill(createTotpCode(secret));
+    await page.getByRole("button", { name: "Verify code" }).click();
+    await expect(page.getByRole("heading", { name: "Synthetic Owner" })).toBeVisible();
 
     await page.getByRole("button", { name: "Sign out" }).click();
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();

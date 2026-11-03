@@ -9,11 +9,35 @@ import {
 import type { Session } from "@supabase/supabase-js";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
+export interface AuthMfaFactor {
+  id: string;
+  friendlyName: string;
+  status: string;
+}
+
+export interface TotpEnrollment {
+  factorId: string;
+  qrCode: string;
+  secret: string;
+}
+
+type AuthenticatorLevel = "aal1" | "aal2";
+
 interface AuthContextValue {
   configured: boolean;
   loading: boolean;
   session: Session | null;
   passwordRecovery: boolean;
+  mfaFactors: AuthMfaFactor[];
+  mfaCurrentLevel: AuthenticatorLevel;
+  mfaNextLevel: AuthenticatorLevel;
+  mfaLoading: boolean;
+  mfaStatusError: string;
+  mfaChallengeRequired: boolean;
+  refreshMfaStatus: () => Promise<void>;
+  enrollTotp: (friendlyName: string) => Promise<TotpEnrollment>;
+  verifyTotp: (factorId: string, code: string) => Promise<void>;
+  unenrollMfaFactor: (factorId: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (displayName: string, email: string, password: string) => Promise<boolean>;
   requestPasswordReset: (email: string) => Promise<void>;
@@ -27,11 +51,58 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [passwordRecovery, setPasswordRecovery] = useState(false);
+  const [mfaFactors, setMfaFactors] = useState<AuthMfaFactor[]>([]);
+  const [mfaCurrentLevel, setMfaCurrentLevel] = useState<AuthenticatorLevel>("aal1");
+  const [mfaNextLevel, setMfaNextLevel] = useState<AuthenticatorLevel>("aal1");
+  const [mfaLoading, setMfaLoading] = useState(true);
+  const [mfaStatusError, setMfaStatusError] = useState("");
+
+  async function refreshMfaStatus() {
+    if (!supabase || !session?.access_token) {
+      setMfaFactors([]);
+      setMfaCurrentLevel("aal1");
+      setMfaNextLevel("aal1");
+      setMfaStatusError("");
+      setMfaLoading(false);
+      return;
+    }
+
+    setMfaLoading(true);
+    setMfaStatusError("");
+    try {
+      const [factorResult, assuranceResult] = await Promise.all([
+        supabase.auth.mfa.listFactors(),
+        supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
+      ]);
+      if (factorResult.error) throw factorResult.error;
+      if (assuranceResult.error) throw assuranceResult.error;
+
+      setMfaFactors(factorResult.data.totp.map((factor) => ({
+        id: factor.id,
+        friendlyName: factor.friendly_name || "Authenticator app",
+        status: factor.status,
+      })));
+      setMfaCurrentLevel(assuranceResult.data.currentLevel === "aal2" ? "aal2" : "aal1");
+      setMfaNextLevel(assuranceResult.data.nextLevel === "aal2" ? "aal2" : "aal1");
+    } catch {
+      setMfaFactors([]);
+      setMfaCurrentLevel("aal1");
+      setMfaNextLevel("aal2");
+      setMfaStatusError("Account security settings could not be checked. Sign out and try again; protected staff actions remain blocked.");
+    } finally {
+      setMfaLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (!supabase) {
       setSession(null);
       setPasswordRecovery(false);
+      setMfaFactors([]);
+      setMfaCurrentLevel("aal1");
+      setMfaNextLevel("aal1");
+      setMfaStatusError("");
+      setMfaLoading(false);
       setLoading(false);
       return;
     }
@@ -40,7 +111,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, nextSession) => {
       if (active) {
         if (event === "PASSWORD_RECOVERY") setPasswordRecovery(true);
-        if (event === "SIGNED_OUT") setPasswordRecovery(false);
+        if (event === "SIGNED_OUT") {
+          setPasswordRecovery(false);
+          setMfaFactors([]);
+          setMfaCurrentLevel("aal1");
+          setMfaNextLevel("aal1");
+          setMfaLoading(false);
+        }
+        if (nextSession) setMfaLoading(true);
         setSession(nextSession);
         setLoading(false);
       }
@@ -48,7 +126,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     void supabase.auth.getSession().then(({ data, error }) => {
       if (!active) return;
-      setSession(error ? null : data.session);
+      const nextSession = error ? null : data.session;
+      setSession(nextSession);
+      setMfaLoading(Boolean(nextSession));
       setLoading(false);
     });
 
@@ -58,20 +138,82 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  useEffect(() => {
+    void refreshMfaStatus();
+  }, [session?.access_token]);
+
+  const mfaChallengeRequired = mfaNextLevel === "aal2" && mfaCurrentLevel !== "aal2";
+
   const value = useMemo<AuthContextValue>(() => ({
     configured: isSupabaseConfigured,
     loading,
     session,
     passwordRecovery,
+    mfaFactors,
+    mfaCurrentLevel,
+    mfaNextLevel,
+    mfaLoading,
+    mfaStatusError,
+    mfaChallengeRequired,
+    refreshMfaStatus,
+    async enrollTotp(friendlyName) {
+      if (!supabase) throw new Error("Authentication is not configured in this environment.");
+      const { data, error } = await supabase.auth.mfa.enroll({
+        factorType: "totp",
+        friendlyName: friendlyName.trim() || "GradiPrep authenticator",
+      });
+      if (error) throw error;
+      return {
+        factorId: data.id,
+        qrCode: data.totp.qr_code,
+        secret: data.totp.secret,
+      };
+    },
+    async verifyTotp(factorId, code) {
+      if (!supabase) throw new Error("Authentication is not configured in this environment.");
+      const { data: challenge, error: challengeError } = await supabase.auth.mfa.challenge({ factorId });
+      if (challengeError) throw challengeError;
+
+      const { error: verifyError } = await supabase.auth.mfa.verify({
+        factorId,
+        challengeId: challenge.id,
+        code: code.replace(/\\s/g, ""),
+      });
+      if (verifyError) throw verifyError;
+
+      // Supabase refreshes the active session after verification. Read it back
+      // before recalculating the authenticator-assurance level.
+      const { data, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) throw sessionError;
+      if (data.session) {
+        setSession(data.session);
+        setLoading(false);
+      }
+      await refreshMfaStatus();
+    },
+    async unenrollMfaFactor(factorId) {
+      if (!supabase) throw new Error("Authentication is not configured in this environment.");
+      const { error } = await supabase.auth.mfa.unenroll({ factorId });
+      if (error) throw error;
+
+      // Removing a factor can leave an AAL2 token in the browser. Refresh the
+      // session so the assurance level drops before any protected operation.
+      const { data, error: refreshError } = await supabase.auth.refreshSession();
+      if (refreshError) throw refreshError;
+      if (data.session) {
+        setSession(data.session);
+        setLoading(false);
+      }
+      await refreshMfaStatus();
+    },
     async signIn(email, password) {
       if (!supabase) throw new Error("Authentication is not configured in this environment.");
+      setMfaLoading(true);
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim().toLowerCase(),
         password,
       });
       if (error) throw error;
-      // Keep the React session state in sync immediately; do not depend only
-      // on the auth-state callback arriving after the form submission.
       setSession(data.session);
       setLoading(false);
     },
@@ -88,6 +230,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
       if (data.session) {
         setPasswordRecovery(false);
+        setMfaLoading(true);
         setSession(data.session);
         setLoading(false);
       }
@@ -108,16 +251,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     async signOut(scope: "global" | "local" = "global") {
       if (!supabase) throw new Error("Authentication is not configured in this environment.");
-      // Global sign-out revokes refresh tokens on every device/session. Local
-      // sign-out is used only to clear a browser after the Worker detects that
-      // its remote session was already revoked.
       const { error } = await supabase.auth.signOut({ scope });
       if (error) throw error;
       setPasswordRecovery(false);
       setSession(null);
+      setMfaFactors([]);
+      setMfaCurrentLevel("aal1");
+      setMfaNextLevel("aal1");
+      setMfaLoading(false);
       setLoading(false);
     },
-  }), [loading, passwordRecovery, session]);
+  }), [
+    loading,
+    session,
+    passwordRecovery,
+    mfaFactors,
+    mfaCurrentLevel,
+    mfaNextLevel,
+    mfaLoading,
+    mfaStatusError,
+    mfaChallengeRequired,
+  ]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
