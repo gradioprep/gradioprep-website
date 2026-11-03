@@ -121,6 +121,20 @@ SELECT set_config('request.jwt.claims', '{"sub":"44444444-4444-4444-8444-4444444
 SELECT is((SELECT count(*)::integer FROM public.attempts), 0, 'guardian with a revoked learner link cannot read attempts');
 RESET ROLE;
 
+-- A verified guardian with explicit submission consent sees only that learner's work.
+UPDATE public.guardian_learner_links
+SET can_view_submissions = true
+WHERE guardian_id = '33333333-3333-4333-8333-333333333333'
+  AND learner_id = '11111111-1111-4111-8111-111111111111';
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '33333333-3333-4333-8333-333333333333', true);
+SELECT set_config('request.jwt.claims', '{"sub":"33333333-3333-4333-8333-333333333333","role":"authenticated","aal":"aal1"}', true);
+SELECT is((SELECT count(*)::integer FROM public.attempts), 3, 'guardian with verified submission consent sees only the linked learner attempts');
+SELECT is((SELECT count(*)::integer FROM public.attempts WHERE learner_id = '22222222-2222-4222-8222-222222222222'), 0, 'guardian with consent cannot see an unrelated learner attempt');
+SELECT is((SELECT count(*)::integer FROM public.attempt_responses), 2, 'guardian with verified submission consent sees only the linked learner responses');
+RESET ROLE;
+
 -- Grader A receives only their assigned attempt, and only with AAL2.
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);

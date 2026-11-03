@@ -138,6 +138,23 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     await expect(graderRoute.json()).resolves.toMatchObject({ error: "role_required" });
   });
 
+  test("guardian cannot use learner or grader APIs without a matching role", async ({ page }) => {
+    const token = await signIn(page, "guardian.a@example.invalid", "Synthetic Guardian A");
+    const headers = { Authorization: token };
+
+    const learnerAttempts = await page.request.get("/api/v1/learner/attempts", { headers });
+    expect(learnerAttempts.status()).toBe(403);
+    await expect(learnerAttempts.json()).resolves.toMatchObject({ error: "role_required" });
+
+    const graderQueue = await page.request.get("/api/v1/grader/queue", { headers });
+    expect(graderQueue.status()).toBe(403);
+    await expect(graderQueue.json()).resolves.toMatchObject({ error: "role_required" });
+
+    const graderDetail = await page.request.get("/api/v1/grader/attempts/" + attemptA, { headers });
+    expect(graderDetail.status()).toBe(403);
+    await expect(graderDetail.json()).resolves.toMatchObject({ error: "role_required" });
+  });
+
   test("grader AAL2 session sees only the active assigned queue and response", async ({ page }) => {
     test.setTimeout(60_000);
     const firstFactorToken = await signIn(page, "grader.a@example.invalid", "Synthetic Grader A");
