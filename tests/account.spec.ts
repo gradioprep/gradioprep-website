@@ -156,4 +156,58 @@ test.describe("Phase 1B account foundation", () => {
     await page.getByRole("button", { name: "Sign out" }).click();
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
   });
+
+  test("synthetic student can recover a password through the local test inbox", async ({ page }) => {
+    const mailboxUrl = "http://127.0.0.1:54324/api/v1/mailbox/student.b";
+    const resetPassword = "Recovered-local-only-GradiPrep-2026!";
+
+    // Keep the test deterministic and entirely within the disposable local inbox.
+    const clearMailbox = await page.request.delete(mailboxUrl);
+    expect(clearMailbox.ok()).toBeTruthy();
+
+    await page.goto("/account");
+    await page.getByRole("button", { name: "Forgot password?" }).click();
+    await expect(page.getByRole("heading", { name: "Reset your password." })).toBeVisible();
+    await page.getByLabel("Email address").fill("student.b@example.invalid");
+    await page.getByRole("button", { name: "Send recovery link" }).click();
+    await expect(page.getByRole("status").filter({
+      hasText: "If an account matches that email address",
+    })).toBeVisible();
+
+    let messages: Array<{ id: string }> = [];
+    await expect.poll(async () => {
+      const response = await page.request.get(mailboxUrl);
+      if (!response.ok()) return 0;
+      messages = await response.json() as Array<{ id: string }>;
+      return messages.length;
+    }, { timeout: 10_000 }).toBeGreaterThan(0);
+
+    const messageResponse = await page.request.get(`${mailboxUrl}/${messages[messages.length - 1].id}`);
+    expect(messageResponse.ok()).toBeTruthy();
+    const message = await messageResponse.json() as {
+      body?: { html?: string; text?: string };
+    };
+    const emailBody = [message.body?.html, message.body?.text]
+      .filter((part): part is string => Boolean(part))
+      .join("\n")
+      .replace(/&amp;/g, "&");
+    const recoveryLink = emailBody.match(/https?:\/\/[^\s"'<>]+/g)
+      ?.find((link) => link.includes("/auth/v1/verify"));
+    expect(recoveryLink, "the local recovery email must contain a Supabase verification link").toBeTruthy();
+
+    await page.goto(recoveryLink!);
+    await expect(page.getByRole("heading", { name: "Choose a new password." })).toBeVisible();
+    await page.getByLabel("New password").fill(resetPassword);
+    await page.getByLabel("Confirm new password").fill(resetPassword);
+    await page.getByRole("button", { name: "Update password" }).click();
+    await expect(page.getByRole("status").filter({ hasText: "Password updated." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Synthetic Student B" })).toBeVisible();
+
+    await page.getByRole("button", { name: "Sign out" }).click();
+    await page.getByLabel("Email address").fill("student.b@example.invalid");
+    await page.getByLabel("Password").fill(resetPassword);
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await expect(page.getByRole("heading", { name: "Synthetic Student B" })).toBeVisible();
+  });
+
 });

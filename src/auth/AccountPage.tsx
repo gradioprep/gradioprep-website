@@ -2,6 +2,8 @@ import { useEffect, useState, type FormEvent } from "react";
 import type { Navigate } from "../App";
 import { useAuth } from "./AuthProvider";
 
+type AccountMode = "sign-in" | "sign-up" | "recovery-request";
+
 interface CurrentAccount {
   user: { id: string };
   profile: {
@@ -15,10 +17,11 @@ interface CurrentAccount {
 
 export default function AccountPage({ go }: { go: Navigate }) {
   const auth = useAuth();
-  const [mode, setMode] = useState<"sign-in" | "sign-up">("sign-in");
+  const [mode, setMode] = useState<AccountMode>("sign-in");
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [newDisplayName, setNewDisplayName] = useState("");
   const [account, setAccount] = useState<CurrentAccount | null>(null);
   const [accountUnavailable, setAccountUnavailable] = useState(false);
@@ -95,6 +98,41 @@ export default function AccountPage({ go }: { go: Navigate }) {
     }
   }
 
+  async function requestPasswordReset(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      await auth.requestPasswordReset(email);
+      // Keep the response identical for known and unknown addresses.
+      setMessage("If an account matches that email address, a recovery link has been sent to the local test inbox.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "We could not request a password reset.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function completePasswordReset(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      if (password.length < 12) throw new Error("Use a password with at least 12 characters.");
+      if (password !== confirmPassword) throw new Error("The passwords do not match.");
+      await auth.updatePassword(password);
+      setPassword("");
+      setConfirmPassword("");
+      setMessage("Password updated. You are signed in with your new password.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "Your password could not be updated.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function saveDisplayName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!auth.session?.access_token) return;
@@ -158,6 +196,18 @@ export default function AccountPage({ go }: { go: Navigate }) {
       <h2>Account access is unavailable.</h2>
       <p>This account cannot access protected GradiPrep records. Sign out to leave this session.</p>
       <button className="proto-account-signout" type="button" onClick={signOut} disabled={submitting}>Sign out</button>
+    </section> : auth.session && auth.passwordRecovery ? <section className="proto-panel proto-account-card">
+      <div className="proto-account-card-heading">
+        <div><p className="proto-eyebrow"><span />ACCOUNT RECOVERY</p><h2>Choose a new password.</h2></div>
+        <span className="proto-account-status">Secure reset</span>
+      </div>
+      <p className="proto-account-description">Use at least 12 characters. Your password is managed by the secure sign-in service.</p>
+      <form className="proto-account-form" onSubmit={completePasswordReset}>
+        <label>New password<input type="password" autoComplete="new-password" value={password} onChange={event => setPassword(event.target.value)} minLength={12} required /></label>
+        <label>Confirm new password<input type="password" autoComplete="new-password" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} minLength={12} required /></label>
+        <button className="proto-action" type="submit" disabled={submitting}>{submitting ? "Please wait…" : "Update password"}</button>
+      </form>
+      <button className="proto-account-toggle" type="button" onClick={signOut} disabled={submitting}>Cancel and sign out</button>
     </section> : auth.session ? <section className="proto-panel proto-account-card">
       <div className="proto-account-card-heading">
         <div><p className="proto-eyebrow"><span />SIGNED-IN ACCOUNT</p><h2>{account?.profile?.display_name ?? "Your account"}</h2></div>
@@ -173,6 +223,17 @@ export default function AccountPage({ go }: { go: Navigate }) {
         <button className="proto-action" type="submit" disabled={submitting || !account}>Save display name</button>
       </form>
       <button className="proto-account-signout" type="button" onClick={signOut} disabled={submitting}>Sign out</button>
+    </section> : mode === "recovery-request" ? <section className="proto-panel proto-account-card">
+      <div className="proto-account-card-heading">
+        <div><p className="proto-eyebrow"><span />ACCOUNT RECOVERY</p><h2>Reset your password.</h2></div>
+        <span className="proto-account-status">Private link</span>
+      </div>
+      <p className="proto-account-description">Enter your account email address. We will show the same confirmation whether or not an account matches it.</p>
+      <form className="proto-account-form" onSubmit={requestPasswordReset}>
+        <label>Email address<input type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} required /></label>
+        <button className="proto-action" type="submit" disabled={submitting}>{submitting ? "Please wait…" : "Send recovery link"}</button>
+      </form>
+      <button className="proto-account-toggle" type="button" onClick={() => { setMode("sign-in"); setError(""); setMessage(""); }}>Back to sign in</button>
     </section> : <section className="proto-panel proto-account-card">
       <div className="proto-account-card-heading">
         <div><p className="proto-eyebrow"><span />LOCAL AUTHENTICATION</p><h2>{mode === "sign-in" ? "Welcome back." : "Create a student account."}</h2></div>
@@ -186,7 +247,8 @@ export default function AccountPage({ go }: { go: Navigate }) {
         {mode === "sign-up" && <small className="proto-account-hint">Use at least 12 characters. This local-only test setup does not send real email.</small>}
         <button className="proto-action" type="submit" disabled={submitting}>{submitting ? "Please wait…" : mode === "sign-in" ? "Sign in" : "Create account"}</button>
       </form>
-      <button className="proto-account-toggle" type="button" onClick={() => { setMode(mode === "sign-in" ? "sign-up" : "sign-in"); setError(""); setMessage(""); }}>
+      {mode === "sign-in" && <button className="proto-account-toggle" type="button" onClick={() => { setMode("recovery-request"); setError(""); setMessage(""); }}>Forgot password?</button>}
+      <button className="proto-account-toggle" type="button" onClick={() => { setMode(mode === "sign-in" ? "sign-up" : "sign-in"); setError(""); setMessage(""); setPassword(""); }}>
         {mode === "sign-in" ? "New to the local test? Create a synthetic student account." : "Already have a local test account? Sign in."}
       </button>
     </section>}
