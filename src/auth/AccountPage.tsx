@@ -204,13 +204,14 @@ export default function AccountPage({ go }: { go: Navigate }) {
   }
 
   async function cancelPendingTotpEnrollment() {
-    const pendingFactor = totpEnrollment ?? auth.mfaFactors.find(factor => factor.status !== "verified");
-    if (!pendingFactor) return;
+    const pendingFactorId = totpEnrollment?.factorId ??
+      auth.mfaFactors.find(factor => factor.status !== "verified")?.id;
+    if (!pendingFactorId) return;
     setSubmitting(true);
     setError("");
     setMessage("");
     try {
-      await auth.unenrollMfaFactor(pendingFactor.id);
+      await auth.unenrollMfaFactor(pendingFactorId);
       setTotpEnrollment(null);
       setMfaCode("");
       setMessage("Authenticator setup cancelled.");
