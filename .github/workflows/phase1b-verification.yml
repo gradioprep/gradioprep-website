@@ -50,8 +50,10 @@ jobs:
       - name: Install dependencies
         run: npm install --prefer-offline --no-audit --no-fund
 
+      # Keep PostgreSQL, Auth, Kong, PostgREST, Storage and Mailpit. Exclude
+      # optional dashboard/telemetry/runtime services to reduce cold image pulls.
       - name: Start isolated local Supabase services
-        run: npx supabase start --exclude studio,mail,analytics,realtime,functions
+        run: npx supabase start --exclude studio,logflare,vector,edge-runtime,postgres-meta,realtime,supavisor
 
       - name: Write ignored local-only environment files
         run: node scripts/write-local-supabase-env.mjs
