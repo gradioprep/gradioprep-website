@@ -399,3 +399,44 @@ No hosted service/resource, paid usage, real learner data, external email/AI/OCR
 8. After each coherent slice, run the complete local Supabase reset/seed and SQL/API/browser/build/cleanup checks, deploy the public Worker Preview, and provide the Founder with the exact commit, immutable URL, backend limitation and concise review instructions. Update all dependent source-of-truth records after verified changes.
 
 **Phase 1C exit gate:** Phase 1C is not complete merely because the current first-slice run passed. Do not begin Phase 1D until every Phase 1C item above is implemented, cross-role/security-tested, documented and reviewed against this specification. Phase 1D private file/storage controls, PDF validation (10 MB/10 pages), private object access, backup/recovery and file-retention work remain subsequent work. Any hosted Storage/R2/resource provisioning, paid usage, external processing or real learner data requires its separate explicit approval; no such provisioning is authorised here.
+
+
+### 20.1 Phase 1C physical inventory, default-deny matrix and remaining scope — 3 November 2026
+
+This inventory is grounded in migrations present on the current PR #22 branch. It is a security inventory, not a declaration that every logical record in `DATA_MODEL.md` has been created.
+
+**Physically implemented protected records**
+
+| Schema/table | Implemented purpose | Current access boundary |
+|---|---|---|
+| `public.profiles` | Account profile/status | Authenticated self-read and own display-name update; owner-scoped operational access as policy permits |
+| `public.role_assignments` | Application role grants/revocations | Self/owner-scoped read; no direct browser mutation; protected owner AAL2 RPC for revocation |
+| `public.guardian_learner_links` | Verified guardian relationship and consent scopes | Participant/owner-scoped read; no direct browser mutation |
+| `public.course_enrolments` | Learner pathway enrolment | Learner/guardian/owner-scoped read; no direct browser mutation |
+| `private.security_audit_events` | Append-only security/role/attempt events | No direct browser table access; trigger/RPC append only |
+| `private.staff_invitations` | Single-use staff invitation lifecycle | No direct browser table access; narrow owner AAL2/verified-invitee RPCs |
+| `public.task_versions` | Immutable typed task version metadata | Published task read for eligible active roles; owner inspection requires AAL2 |
+| `public.task_version_prompts` | Version-bound typed prompts | Published task prompt read; owner inspection requires AAL2 |
+| `public.attempts` | Learner-owned typed practice attempts | Learner own, guardian consent/link scope, assigned grader AAL2, owner AAL2; narrow creation/submission RPCs |
+| `public.attempt_responses` | Current typed response per prompt | Same attempt scope; response mutation only through learner-owned save RPC |
+| `public.grader_assignments` | Active/revoked attempt-to-grader assignment | Assigned grader AAL2 and owner AAL2 read; assignment only through owner AAL2 RPC |
+| `private.attempt_response_versions` | Append-only prior response snapshots | RLS enabled, no browser grants; database trigger appends versions |
+
+**Default-deny role matrix for the implemented records**
+
+| Record group | Anonymous | Student | Guardian | Grader | Admin | Owner AAL1 | Owner AAL2 |
+|---|---|---|---|---|---|---|---|
+| Own profile | Deny | Own only | Own only | Own only | Own only | Deny privileged view | Authorised owner scope |
+| Role assignments | Deny | Own read | Own read | Own read | Own read | Deny privileged view | Owner-scoped read/revoke |
+| Guardian links | Deny | Participant scope | Participant scope | Deny | Deny | Deny privileged view | Owner scope |
+| Enrolments | Deny | Own only | Linked learner + consent scope | Deny | Deny | Deny privileged view | Owner scope |
+| Published task versions/prompts | Deny | Eligible published tasks | Published task metadata only where link scope permits | Published task metadata needed for assigned work | Deny | Deny owner-only draft view | Owner inspection |
+| Attempts/responses | Deny | Own only | Active verified link + explicit submission consent | Active assigned submitted work only, AAL2 | Deny | Deny | Owner inspection, AAL2 |
+| Grader assignments | Deny | Deny | Deny | Own active assignment only, AAL2 | Deny | Deny | Owner inspection, AAL2 |
+| Private audit/invitation/version archives | Deny | Deny | Deny | Deny | Deny by default | Deny | Narrow owner RPCs only where explicitly defined; no general table grants |
+
+This matrix records intended minimum access and must be verified against PostgreSQL grants, RLS policies, RPC execution grants and Worker route checks. Any unlisted operation is denied. Admin does not inherit grader, owner or private academic-QA rights. Owner AAL2 is required independently at Worker and database boundaries for privileged operations; a UI check or Worker-only check is insufficient.
+
+**Not yet physical / not yet complete in Phase 1C:** accepted human-assessment submissions; immutable accepted submission versions; capacity slots/ledger reservations; server-fixed accepted/due timestamps and 24-hour SLA events; rubric/rubric-version and task-rubric mapping; grader assignment lifecycle for submissions; assessment/assessment-version and criterion-result records; versioned human feedback with draft/publish states; learner-visible published-feedback reads; scoped admin workflow; private academic-QA records; expanded append-oriented audit events; idempotency keys; oldest-accepted-first submission queue; and comprehensive cross-role/AAL1/AAL2 adversarial tests. These remain implementation work, not live schema. PDF objects, OCR, private file access and file-retention processing remain Phase 1D or later.
+
+The first slice's six physical public tables and two private tables are the complete Phase 1C physical inventory at this checkpoint; no other assessment/submission/feedback tables are implied by the logical model. Reconcile this inventory after each migration and test milestone.
