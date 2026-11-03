@@ -63,14 +63,22 @@ export default function AccountPage({ go }: { go: Navigate }) {
   const invitationClaimStarted = useRef(false);
 
   useEffect(() => {
-    const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-    const token = fragment.get("staff-invite") ?? "";
-    if (token) {
+    const consumeStaffInvitationFragment = () => {
+      const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+      const token = fragment.get("staff-invite") ?? "";
+      if (!token) return;
+
       // Remove the one-time bearer token from the visible URL and browser history.
       window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
       if (/^[A-Za-z0-9_-]{43}$/.test(token)) setStaffInviteToken(token);
       else setError("This staff invitation link is invalid.");
-    }
+    };
+
+    // Handle both an invitation link on initial page load and a link opened
+    // while this account route is already mounted (a same-document hash change).
+    consumeStaffInvitationFragment();
+    window.addEventListener("hashchange", consumeStaffInvitationFragment);
+    return () => window.removeEventListener("hashchange", consumeStaffInvitationFragment);
   }, []);
 
   useEffect(() => {
