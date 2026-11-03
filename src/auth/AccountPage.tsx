@@ -40,7 +40,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
     setAccount(null);
     setAccountUnavailable(false);
 
-    if (!auth.session?.access_token || auth.mfaLoading || auth.mfaChallengeRequired || auth.mfaStatusError) {
+    if (!auth.session?.access_token || auth.passwordRecovery || auth.mfaLoading || auth.mfaChallengeRequired || auth.mfaStatusError) {
       return () => { active = false; };
     }
 
@@ -79,7 +79,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
     });
 
     return () => { active = false; };
-  }, [auth.session?.access_token, auth.mfaLoading, auth.mfaChallengeRequired, auth.mfaStatusError]);
+  }, [auth.session?.access_token, auth.passwordRecovery, auth.mfaLoading, auth.mfaChallengeRequired, auth.mfaStatusError]);
 
   async function submitAuth(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -189,7 +189,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
     setError("");
     setMessage("");
     try {
-      if (!/^\\d{6}$/.test(mfaCode.trim())) throw new Error("Enter the six-digit code from your authenticator app.");
+      if (!/^\d{6}$/.test(mfaCode.trim())) throw new Error("Enter the six-digit code from your authenticator app.");
       await auth.verifyTotp(totpEnrollment.factorId, mfaCode.trim());
       setTotpEnrollment(null);
       setMfaCode("");
@@ -312,7 +312,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
       </div>
       <p className="proto-account-description">Enter the six-digit code from your authenticator app to complete sign-in.</p>
       <form className="proto-account-form" onSubmit={verifyMfaChallenge}>
-        <label>Authenticator code<input type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={mfaCode} onChange={event => setMfaCode(event.target.value.replace(/\\D/g, "").slice(0, 6))} required /></label>
+        <label>Authenticator code<input type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={mfaCode} onChange={event => setMfaCode(event.target.value.replace(/\D/g, "").slice(0, 6))} required /></label>
         <button className="proto-action" type="submit" disabled={submitting || mfaCode.length !== 6 || !auth.mfaFactors.some(factor => factor.status === "verified")}>{submitting ? "Please wait…" : "Verify code"}</button>
       </form>
       <button className="proto-account-signout" type="button" onClick={signOut} disabled={submitting}>Sign out</button>
@@ -356,7 +356,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
           <p className="proto-account-security-key-label">Manual setup key</p>
           <code className="proto-account-security-key" data-testid="totp-secret">{totpEnrollment.secret}</code>
           <form className="proto-account-form" onSubmit={completeTotpEnrollment}>
-            <label>Authenticator code<input type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={mfaCode} onChange={event => setMfaCode(event.target.value.replace(/\\D/g, "").slice(0, 6))} required /></label>
+            <label>Authenticator code<input type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={mfaCode} onChange={event => setMfaCode(event.target.value.replace(/\D/g, "").slice(0, 6))} required /></label>
             <button className="proto-action" type="submit" disabled={submitting || mfaCode.length !== 6}>{submitting ? "Please wait…" : "Verify and enable"}</button>
           </form>
           <button className="proto-account-toggle" type="button" onClick={cancelPendingTotpEnrollment} disabled={submitting}>Cancel setup</button>
