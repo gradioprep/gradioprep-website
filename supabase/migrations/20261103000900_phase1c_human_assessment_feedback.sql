@@ -567,7 +567,7 @@ BEGIN
       RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'invalid_assessment_criteria';
     END IF;
 
-    IF jsonb_object_length(result_item) <> 3
+    IF (SELECT count(*)::integer FROM jsonb_object_keys(result_item)) <> 3
       OR NOT (result_item ?& ARRAY['criterion_id', 'points_awarded', 'feedback'])
       OR jsonb_typeof(result_item -> 'criterion_id') <> 'string'
       OR (result_item ->> 'criterion_id') !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
@@ -845,6 +845,13 @@ $assessment_draft_reader$;
 
 REVOKE ALL ON FUNCTION public.get_assessment_draft(uuid) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.get_assessment_draft(uuid) TO authenticated;
+
+-- Keep table access in database-only definer routines; the browser never
+-- receives direct read/write grants on the private draft table.
+ALTER FUNCTION public.assign_submission_to_grader(uuid, uuid, text) OWNER TO postgres;
+ALTER FUNCTION public.save_assessment_draft(uuid, text, text, jsonb) OWNER TO postgres;
+ALTER FUNCTION public.publish_assessment_feedback(uuid) OWNER TO postgres;
+ALTER FUNCTION public.get_assessment_draft(uuid) OWNER TO postgres;
 
 REVOKE ALL ON FUNCTION public.assign_submission_to_grader(uuid, uuid, text) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.save_assessment_draft(uuid, text, text, jsonb) FROM PUBLIC, anon, authenticated;
