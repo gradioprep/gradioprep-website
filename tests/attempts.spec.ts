@@ -277,9 +277,8 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     await expect(graderDetail.json()).resolves.toMatchObject({ error: "role_required" });
   });
 
-  test("human assessment APIs deny anonymous, student, guardian and AAL1 grader access", async ({ page, request }) => {
+  test("human assessment APIs deny anonymous, student, guardian and AAL1 grader access", async ({ browser, request }) => {
     const submissionId = "d3333333-3333-4333-8333-333333333333";
-    const anonymousHeaders = undefined;
     const anonymousChecks = await Promise.all([
       request.get("/api/v1/grader/submissions"),
       request.get("/api/v1/grader/submissions/" + submissionId),
@@ -300,16 +299,17 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     ]);
     for (const response of anonymousChecks) expect(response.status()).toBe(401);
 
-    const studentToken = await signIn(page, "student.a@example.invalid", "Synthetic Student A");
+    const studentPage = await browser.newPage();
+    const studentToken = await signIn(studentPage, "student.a@example.invalid", "Synthetic Student A");
     const studentHeaders = { Authorization: studentToken };
     const studentChecks = await Promise.all([
-      page.request.get("/api/v1/grader/submissions", { headers: studentHeaders }),
-      page.request.get("/api/v1/grader/submissions/" + submissionId, { headers: studentHeaders }),
-      page.request.post("/api/v1/admin/submissions/" + submissionId + "/assign", {
+      studentPage.request.get("/api/v1/grader/submissions", { headers: studentHeaders }),
+      studentPage.request.get("/api/v1/grader/submissions/" + submissionId, { headers: studentHeaders }),
+      studentPage.request.post("/api/v1/admin/submissions/" + submissionId + "/assign", {
         headers: studentHeaders,
         data: { grader_user_id: "55555555-5555-4555-8555-555555555555", reason: "Synthetic denial check" },
       }),
-      page.request.put("/api/v1/grader/submissions/" + submissionId + "/draft", {
+      studentPage.request.put("/api/v1/grader/submissions/" + submissionId + "/draft", {
         headers: studentHeaders,
         data: {
           overall_feedback: "A valid-length synthetic draft feedback.",
@@ -320,7 +320,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
           }],
         },
       }),
-      page.request.post("/api/v1/grader/submissions/" + submissionId + "/publish", {
+      studentPage.request.post("/api/v1/grader/submissions/" + submissionId + "/publish", {
         headers: studentHeaders,
         data: {},
       }),
@@ -330,19 +330,24 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       await expect(response.json()).resolves.toMatchObject({ error: "role_required" });
     }
 
-    const guardianToken = await signIn(page, "guardian.a@example.invalid", "Synthetic Guardian A");
-    const guardianResponse = await page.request.get("/api/v1/grader/submissions", {
+    await studentPage.close();
+    const guardianPage = await browser.newPage();
+    const guardianToken = await signIn(guardianPage, "guardian.a@example.invalid", "Synthetic Guardian A");
+    const guardianResponse = await guardianPage.request.get("/api/v1/grader/submissions", {
       headers: { Authorization: guardianToken },
     });
     expect(guardianResponse.status()).toBe(403);
     await expect(guardianResponse.json()).resolves.toMatchObject({ error: "role_required" });
 
-    const graderAal1 = await signIn(page, "grader.a@example.invalid", "Synthetic Grader A");
-    const graderResponse = await page.request.get("/api/v1/grader/submissions", {
+    await guardianPage.close();
+    const graderPage = await browser.newPage();
+    const graderAal1 = await signIn(graderPage, "grader.a@example.invalid", "Synthetic Grader A");
+    const graderResponse = await graderPage.request.get("/api/v1/grader/submissions", {
       headers: { Authorization: graderAal1 },
     });
     expect(graderResponse.status()).toBe(403);
     await expect(graderResponse.json()).resolves.toMatchObject({ error: "mfa_required" });
+    await graderPage.close();
   });
 
   test("grader AAL2 session sees only the active assigned queue and response", async ({ page }) => {
