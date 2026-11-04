@@ -1,8 +1,8 @@
 # IB/IGCSE Learning Platform — Master Project Brief
 
-**Version:** 4.50
-**Last updated:** 3 November 2026  
-**Status:** The current work order is diagnostic-first, not the former cross-track Unit 1 rotation. Cycle 1 is Grade 9 IB MYP Language and Literature, with Grade 9 = MYP Year 4 confirmed by the Founder. Its Top Five research, taxonomy/high-level blueprint and detailed task-level item map/scoring specification are approved. The flagship PDF-response/grading/timed-analytics plan, 24-hour SLA and Phase 0 architecture/timer/retention/provider decisions are also approved; Phase 0 is complete. Phase 1 secure application foundation is specified in `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`, with the build-ready execution path in `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`. The Founder has explicitly approved Phase 1B local synthetic-only coding. A mandatory whole-website learner-facing copy cleanup is scheduled immediately after Cycle 1 diagnostic/report validation and before any Cycle 1 remedial content authoring; see Section 16.9 and docs/DESIGN_SPEC.md Section 17. The mandatory build loop is GitHub implementation → automated checks → verification of concrete outcomes. Founder-facing Preview requests are reserved for a newly added, concrete and substantial learner/staff-visible feature. Do not repeatedly mention, link or request review of routine, unchanged or superseded Previews, documentation-only changes, internal security/database/API work, refactors, test changes or maintenance fixes. Ask the Founder to inspect a Preview only when a substantial new visible feature is ready; bundle its exact routes and focused checks into one handoff. Public Previews remain synthetic-only and are not production; no production deploy, DNS or custom domain is included. No hosted Supabase/service provisioning, paid cost, real-data processing, merge or production deployment is authorised; PR-specific synthetic-data Previews remain permitted. The binding free-first budget policy targets US$0 recurring infrastructure subscriptions and paid API usage for 3 November 2026–2 November 2027, with an upgrade review at 100+ subscribers (not automatic); see `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`. Approved mapping: Supabase Auth/PostgreSQL/private Storage in Mumbai (`ap-south-1`); PDF.js for digital text; Azure Document Intelligence Read (intended Central India) for scanned-page OCR; Cloudflare Workers AI for stateless teacher-only draft feedback; Cloudflare R2 solely as encrypted secondary file backup subject to region/transfer approval. The timer is advisory/no learner pause; the response remains saveable/submittable at zero. Retention/deletion periods and 10 MB/10-page pilot PDF caps are in `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`. Phase 1B local Auth/MFA/staff-invitation implementation is verified, and the Founder approved the Phase 1B public-shell visual/functional review on 3 November 2026. The Phase 1C typed-attempt/access foundation, accepted human-assessment submission lifecycle (1C-B) and human assessment/feedback lifecycle (1C-C) are implemented and verified on commit `d2e825746aa814de1f100ef2d8daa2e841d91c80` in PR #22: Exact-head GitHub Actions run [#41668857175](https://github.com/gradioprep/gradioprep-website/actions/runs/41668857175) passed **361 PostgreSQL/pgTAP assertions across eight SQL files and 27/27 Playwright tests**, plus fresh local Supabase reset/seed, TypeScript/Worker/Vite builds, cleanup and clean public-Preview asset build. The submission workflow checks published task/rubric linkage, serialised capacity, idempotent replay and an immutable 24-hour due-time snapshot. Human grading supports criterion-level drafts, immutable feedback versions and explicit human publication; revoked-grader denial tests preserve and verify the existing submission and active assignment before checking both RPC denials. The backend-only workflow intentionally skipped public Preview creation; no new Preview review is requested. Phase 1C remains incomplete: 1C-D operational role separation, 1C-E comprehensive audit/workflow integrity, 1C-F adversarial acceptance and any remaining operation-specific authorization gaps remain before Phase 1D. PR #22 remains open, draft and unmerged. No hosted Supabase/resource provisioning, paid service, real learner data, external processing or production deployment has been authorised. Cycle 2 is Cambridge Grade 6 (exact stage/course to verify; do not substitute Stage 7) and remains blocked until Cycle 1 is completed and approved. Each cycle requires its own Top Five diagnostic-provider research, skill-based diagnostic, evaluation report/analytics, personalised remedial course and outcome check before the next cycle. All existing curriculum content queues and their approval/release gates are preserved but deferred. MYP Year 1 Unit 1 v4 remains exact-version approved but unreleased with rights/territory and manual accessibility gates open; Cambridge Stage 7 Top Five is complete but its pack/counter migration is deferred; CBSE Grade 6 content remains an exact-version candidate. PRs #12/#14/#15/#16/#17/#19/#20 remain draft/unmerged; PR #16's older PR #12 base is not changed. No merge, production deployment, DNS or Cloudflare configuration change is included; an unreleased `workers.dev` Preview is separately permitted.
+**Version:** 4.51
+**Last updated:** 4 November 2026  
+**Status:** The current work order remains diagnostic-first. Cycle 1 is Grade 9 IB MYP Language and Literature (Founder-confirmed MYP Year 4); its Top Five research, taxonomy/high-level blueprint and task-level item map are approved. The flagship PDF-response/grading/timed-analytics plan and 24-hour SLA, Phase 0 architecture and free-first infrastructure policy are approved. Phase 1B and Phase 1C-A/B/C/D are locally verified using synthetic data; exact latest code head c1647c7c7048b1d791c3d24f59ed51168f219d51 passed exact-head CI run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786). Next: Phase 1C-E audit/workflow integrity, then 1C-F adversarial acceptance and any remaining authorization gaps; Phase 1D remains blocked until the complete 1C exit gate passes. PR #22 remains open, draft and unmerged. The approved free-first infrastructure target remains US$0 recurring subscriptions/paid API usage through 2 November 2027, with a review at 100+ active subscribers (not an automatic upgrade). Cycle 1 diagnostic item authoring remains gated on shared flagship feature implementation and pilot validation. After free diagnostic/report validation, complete the mandatory whole-website learner-facing copy cleanup before remedial authoring. The approved credit and remedial-access model is specified in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md; its payment, ledger, Admin dashboard, public email delivery and paid-entitlement features are future work, not current implementation. No hosted resource provisioning, paid usage, real learner data/external processing, merge, production deployment or DNS/custom-domain change is authorised. Founder-facing Previews are requested only for a new, concrete and substantial learner/staff-visible capability; documentation-only/backend maintenance does not trigger review.
 
 **Historical v4.46 Phase 1C first vertical slice (baseline superseded for current security status by v4.47) — 3 November 2026:** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. The verified Phase 1C code commit is `05544d1a394e2e480b7cd2dd9f55100b6998ee71`; GitHub Actions run [#41613490244](https://github.com/gradioprep/gradioprep-website/actions/runs/41613490244) passed on that exact code head. The initial physical schema adds `task_versions`, `task_version_prompts`, `attempts`, `attempt_responses` and `grader_assignments`, plus private append-only `private.attempt_response_versions`. Worker routes support learner attempt list/create/read, typed-response save and submit, grader queue/detail, and owner assignment. Narrow database RPCs create, save, submit and assign attempts; server/database checks derive identity and ownership from verified authentication, check task/enrolment eligibility and state, and keep submission timestamps and response version/word-count metadata server-generated. Previous response versions are retained in the private append-only archive. Active verified guardian links with explicit submission-view consent can read only the linked learner's permitted attempt data. Graders read only active assignments and require AAL2; owner inspection/assignment requires AAL2 at the Worker and database boundaries; admin does not inherit grader or learner access. Direct client writes are restricted to the narrow approved paths; no service-role client was introduced.
 
@@ -231,26 +231,24 @@ The passage, question, teacher-pack and response-counter standards remain bindin
 ### Free Explorer — ₹0
 
 - Curriculum/course discovery and syllabus map.
-- Initial diagnostic and selected sample lesson(s).
-- Selected questions and explanations that demonstrate quality.
-- Partial access to the question bank and learning pathways.
-- **One free human-graded task per student account**, selected from a syllabus-mapped task library.
-- Free grading SLA: within 72 elapsed hours after the submission is accepted.
-- One free assessment is total, not one per topic/course/grade. Changing a selected topic or pathway does not create another free review.
+- The complete initial diagnostic and complete evaluation report, including skill evidence, confidence, priorities and recommended next steps.
+- Selected sample lessons, questions, explanations and partial access to the question bank/pathways.
+- At least one meaningful free starter remedial lesson/activity after the report.
+- Designated free resources and practice remain available regardless of subscription or grading-credit balance.
+- **One free human-graded Standard task (one-credit equivalent) per student account**, selected from an eligible syllabus-mapped task library. This is one entitlement total, not one per topic/course/grade.
+- The free human-graded task shares the approved 24-hour elapsed-time target with other accepted human-graded submissions, subject to capacity.
 
 ### Study Lab — proposed ₹199/month
 
-- Access to released Stage 1 study materials.
-- Structured curriculum aids, skill explanations, annotated examples and common errors.
-- Searchable/filterable question bank.
-- Answer explanations and marking guidance appropriate to each task.
+- Access to the full personalised remedial programme after the free starter activity.
+- Released Stage 1 study materials, structured curriculum aids, skill explanations, annotated examples and common errors.
+- Searchable/filterable question bank and appropriate answer explanations/marking guidance.
 - Diagnostic-led targeted practice and rule-based next-step recommendations.
 - Timed practice/mini-mocks where available.
-- Saved attempts, skill/error log and real-time progress dashboard.
-- Monthly report generated automatically from existing analytics.
-- No human grading included; grading credits are purchased separately.
+- Saved attempts, skill/error log, progress dashboard and monthly report.
+- No human grading included; human grading credits remain a separate purchase.
 
-₹199/month is a price hypothesis to validate with Indian families, not a proven willingness-to-pay figure.
+₹199/month remains a price hypothesis to validate with Indian families, not proven willingness-to-pay evidence. The complete diagnostic and evaluation report are not subscription-gated. The full personalised remedial course is protected by a separate course entitlement; paid purchase activates automatically after trusted payment confirmation, while an authorised Admin may grant complimentary pilot access.
 
 ### Future subject/product expansion
 1. English first.
@@ -259,19 +257,26 @@ The passage, question, teacher-pack and response-counter standards remain bindin
 
 ## 5. Grading-credit commercial model
 
-A grading credit represents **one clearly defined, syllabus-mapped assessment task**, not a universal word-count allowance. The task specification determines expected response format, response length, rubric, likely complexity and estimated grading effort.
+A grading credit represents one clearly defined, syllabus-mapped human-assessment task and a defined unit of grading effort—not a universal word-count allowance. The approved detail, tier rules, research benchmarks and curriculum-frequency calculation are in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md.
 
-Normal standard task target: about 15–20 minutes of grader time. Do not impose a generic word limit across all tasks.
+### Standard, Premium and Elite task tiers
 
-Before a student submits, the platform must state:
+| Tier | Default expected response guidance | Default grader-time band | Credits | Value at the ₹399 unit-credit hypothesis |
+|---|---:|---:|---:|---:|
+| Standard | Up to 50 words | Up to 20 minutes | 1 | ₹399 |
+| Premium | 51–150 words | 21–40 minutes | 2 | ₹798 |
+| Elite | 151–350 words | 41–60 minutes | 3 | ₹1,197 |
+| Custom / multi-task | More than 350 words, more than 60 minutes, or a multi-task paper | Individually estimated | 4+ | ₹1,596+ |
 
-- Task and curriculum mapping.
-- What is included in the grading credit.
-- The grading criteria/rubric family.
-- The expected turnaround time.
-- Whether the task requires more than one credit due to scope/complexity.
+Word bands are indicative task-classification guidance, not input caps. Predicted grader time and task complexity determine the requirement. Default formula: required credits = max(1, ceiling(predicted grader minutes / 20)). The server calculates and snapshots the task's tier/credits before submission acceptance. Actual submitted words or PDF page count must not produce an automatic surprise debit.
 
-A full examination paper or complex multi-part task can require multiple credits. This must be explicit before submission, not decided after the student has submitted.
+### Curriculum-frequency calculation
+
+For every curriculum/grade/course, measure written-response task frequency and mark share separately using recent official past/sample papers or validated school assessments. Count independently gradable prompts, not rubric criteria or evidence observations. Use the expected task-tier proportions to forecast credit demand:
+
+**Expected credits for tier i = number of tasks × tier frequency × tier credits.**
+
+The resulting Standard/Premium/Elite credit mix informs pack forecasting and sales messaging; it does not override the individual task's predicted grading effort. The approximately 50-word CBSE response example must be verified for the exact grade/subject/exam series before use as a fact. Do not transfer distributions between CBSE, IB and Cambridge.
 
 ### Credit pack prices
 
@@ -279,30 +284,27 @@ A full examination paper or complex multi-part task can require multiple credits
 - 5 credits: ₹1,995 (₹399 per credit).
 - 10 credits: ₹3,990 (₹399 per credit).
 - 20 credits: ₹7,980 (₹399 per credit).
-- No bulk discount at launch; reviewer time per standard task is similar regardless of pack size.
-- Credits valid for 6 months.
+- No bulk discount at launch; reviewer time per task is driven by its validated effort tier.
+- Credits valid for 6 months under the proposed commercial terms.
+- At initial launch, 2- and 5-credit packs may be purchasable. 10- and 20-credit packs can be displayed as planned options but must remain unavailable until actual capacity supports their fulfilment.
 - Content subscription and grading credits are separate purchases.
-- Regrading a revised response by a human consumes another credit.
+- A human regrade of a revised response consumes another credit only when the learner explicitly requests the regrade.
 
-At initial launch, 2- and 5-credit packs may be purchasable. 10- and 20-credit packs can be displayed as planned options but must remain unavailable until actual capacity supports their fulfilment.
+₹399 per credit and the pack prices remain price hypotheses until grader-time, task-mix, payment-fee, tax, refund and conversion evidence is collected. Do not silently change prices or any already accepted task's credit requirement.
 
-### Turnaround SLAs
+### Turnaround SLA and initial solo-grader capacity
 
-- Free human-graded task: within 72 elapsed hours after accepted submission.
-- Paid standard task: within 48 elapsed hours after accepted submission.
-- Urgent grading: within 24 elapsed hours, only by an eligible Master Grader and only when an urgent slot is available.
-- Proposed urgent surcharge: ₹199 per urgent task, on top of the normal credit consumed.
-- Turnaround hours include weekends. The system must not accept work under an SLA it cannot meet.
+One shared target applies to **all accepted human-graded submissions**: 24 elapsed hours from server-accepted submission to first publication of final human feedback. This supersedes the earlier separate 72-hour free / 48-hour paid Standard / 24-hour urgent proposal. There is no separate ₹199 urgent-grading add-on at initial launch.
 
-### Initial solo-grader capacity
-Founder is the sole grader initially. Start with a conservative control limit:
-
+Founder is the sole grader initially. Start with:
 - Up to 30 paid grading submissions per month.
 - Target no more than 2 newly accepted paid submissions per day.
-- Up to 4 free graded tasks per week.
-- Up to 2 urgent tasks per week, counted inside the paid-review capacity rather than added on top.
+- Up to 4 complimentary Standard graded tasks per week.
+- No accepted work unless the 24-hour target can be met. If no slot is available, preserve the student's draft and unspent entitlement/credit without accepting the submission.
 
-These are initial capacity ceilings, not mandatory sales targets. Review actual grading duration and submission patterns after the pilot. Do not sell prepaid credit obligations that exceed the available fulfilment capacity. Show the capacity/queue status before submission. If no slot can meet the SLA, preserve the student's draft and credit without accepting the job.
+### Market evidence and access policy
+
+The five benchmark products, current public price/usage snapshots and lessons for GradiPrep are recorded in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. Most are AI-assisted educator tools or institutional systems, not direct human-grading price comparables; do not copy their prices as the unit rate for human assessment.
 
 ## 6. Grader ratings, quality review and Master Grader status
 
@@ -334,7 +336,7 @@ Master Grader eligibility (proposed guardrails):
 - At least 4.75/5 across the latest 10 audited assessments.
 - No unresolved serious quality complaints.
 
-Admin can suspend/revoke Master Grader status if quality declines. At launch, the founder is labelled “Founding Academic Lead”; do not invent a performance rating before adequate assessment data exists. Urgent grading stays disabled until eligible capacity exists.
+Admin can suspend/revoke Master Grader status if quality declines. At launch, the founder is labelled “Founding Academic Lead”; do not invent a performance rating before adequate assessment data exists. No separate paid urgent-grading product is offered at launch; all accepted human-grading work uses the shared 24-hour target and capacity gate.
 
 ## 7. Private AI-assisted quality assurance
 
@@ -360,17 +362,11 @@ Send the API only the minimum information required. Remove names, school/guardia
 
 ## 8. Autosave, versioning and administrator access
 
-Every grader response autosaves while editing, with a visible save state. Preserve:
+Every grader response autosaves while editing, with a visible save state. Preserve the original student submission, all grader drafts/final versions, rubric/version used, scores/comments, publication timestamps, edit reasons and attributable administrative actions.
 
-- Original student submission.
-- Grader draft(s) and final assessment.
-- All subsequent revised versions.
-- Rubric/version used, scores and comments.
-- Created/submitted/finalised/published timestamps.
-- Changes to marks or comments, who made them and why.
-- Admin QA reports and administrative actions.
+A future internal Admin dashboard must provide only approved operational functions: review course entitlements and payment/credit exceptions; grant/revoke complimentary pilot access with a reason and expiry; resolve account/course access issues; issue approved ledger corrections/refunds; view capacity and audit history. Routine confirmed paid purchases activate entitlements automatically; Admin approval is not required for every paying student. The dashboard is not the existing Owner staff-invitation page.
 
-The founder and authorised administrators must be able to retrieve assessment records even after publication or grader deactivation. Use role-based access with at least student/guardian, grader, admin and owner/super-admin roles. Admin roles should be individually assigned, auditable and revocable.
+Admin access remains least-privilege, individually granted, auditable and revocable. It must not inherit Owner/super-admin, grader or private academic-QA permissions. Strong authentication and server/database authorization apply to privileged actions. The dashboard is a future learner/staff-visible feature and is not yet implemented.
 
 ## 9. Real-time analytics and monthly report
 
@@ -384,7 +380,8 @@ Students/guardians should see on login:
 - Error log and recommended next objectives.
 - Published human assessments and feedback.
 - Pending submissions and due times.
-- Remaining grading credits and credit-expiry dates.
+- Remaining grading credits, tier-specific usage, ledger activity and credit-expiry dates.
+- Current course entitlements (including complimentary/pilot grants and expiry where applicable).
 
 Distinguish automatically checked practice from human-assessed work. Do not imply an AI score is an official IB/Cambridge grade or manufacture a grade prediction without validation. Monthly report is generated automatically from existing event/assessment data; no extra human grading is required.
 
@@ -395,8 +392,8 @@ Preferred maintainable architecture:
 - Frontend: React + TypeScript.
 - Source control: GitHub private repository.
 - Database/auth/primary private storage (approved mapping, not provisioned): Supabase Auth + PostgreSQL + Storage in Mumbai (`ap-south-1`), with server-side roles and PostgreSQL RLS. Use Pro for real learner records after separate cost approval; Free is synthetic/development only. See the Phase 0 decision register.
-- Transactional email: Resend, added only as needed.
-- Payments initially: manually verified UPI for a small pilot; later payment gateway + verified webhooks.
+- Transactional email: provider not selected. Compare included/free delivery options first; ordinary learner email verification must be enforced before real learner records or paid entitlements are enabled.
+- Payments: provider and checkout architecture not selected. Compare auditable low/no-cost options first; any live payment integration, merchant account or paid fee requires the applicable separate approval.
 - AI QA: OpenAI API from server-side function only, feature-flagged until budget and privacy settings are reviewed.
 - Domain: founder purchases and controls domain registration and DNS.
 
@@ -410,13 +407,17 @@ Supabase Pro's current published seven-day daily database backups do not include
 
 ## 11. Payments, plans and customer controls
 
-- Study Lab subscription and review credits are separate entitlements.
-- Track credit purchases/uses/refunds/expiry in an immutable or auditable ledger.
-- Reserve a credit and fulfilment slot on acceptance; release/refund according to a clearly stated cancellation/failure policy.
-- Exhausted credits block new human-reviewed submissions, but do not block free practice or access already included in Study Lab.
-- Show price, credit requirement, estimated turnaround and SLA before submission.
-- Do not accept additional work beyond the grading capacity limits.
-- Do not let a student bypass the one-free-review rule by selecting another grade/topic or creating duplicate pathways; implement reasonable abuse safeguards without intrusive data collection.
+- Study Lab course access and human-grading credits are separate entitlements. Diagnostic/report access and designated free starter resources remain free.
+- The complete diagnostic and evaluation report must be available without payment. At least one meaningful starter remedial activity remains free; the full personalised remedial programme requires an active Study Lab or explicitly granted course entitlement.
+- Routine valid paid course purchases activate automatically only after trusted provider confirmation. The future Admin dashboard handles complimentary grants, disputes and exceptions; it is not a manual approval queue for every purchase.
+- Record course access in a server-authoritative entitlement model with source, scope, course/pathway, status, grantor/provider, effective dates, expiry and audit history.
+- Record grading-credit purchases/uses/reservations/releases/refunds/adjustments/expiry in an append-only ledger. Never trust a browser-supplied balance or let a client directly mutate credits.
+- Reserve the required credit and grading-capacity slot on accepted submission; consume the credit only under the defined successful acceptance/fulfilment rule; release/refund on documented cancellation/failure. Preserve the original submission and audit all changes.
+- Show the task tier, required credits, price, rubric/scope and shared 24-hour target before acceptance. No post-submission surprise debit based on actual word count, OCR or PDF page count.
+- Exhausted grading credits block new paid human-graded submissions only; they do not block free practice, diagnostic/report access, an active Study Lab course entitlement or published feedback already earned.
+- The one-time free human-grading entitlement is one Standard task per student account. Topic, grade, pathway or course changes must not create additional free reviews. Apply reasonable abuse safeguards without intrusive data collection.
+- Normal public learner accounts must verify their email before real learner-record access and paid entitlements. Staff invitation verified-email acceptance remains a separate existing control.
+- Payment provider, email provider, refunds/tax implementation and checkout design are not yet selected. No account, live payment or paid service is activated by this specification.
 
 ## 12. First 30-day launch plan
 
@@ -471,17 +472,17 @@ Do not scale marketing, prepaid credit sales or reviewer recruitment until servi
 
 ## 15. Decisions still owned by the founder
 
-The founder will finalise before bulk content creation:
-1. The order for subsequent curriculum-content production after the diagnostic cycles, and any later change to the selected diagnostic-cycle order.
-2. The rubric(s) for each task family and the criteria for multi-credit tasks.
-3. Final brand/domain and public description.
-4. The exact privacy, consent, refund, credit-expiry and service terms after appropriate review.
-5. Whether to retain Cloudflare Workers for the commercial launch or adopt another hosting platform, after reviewing current vendor terms, pricing, data handling, security and operational requirements.
-6. How academic-lead/reviewer calibration will be arranged before offering broad human-graded service.
+The following require evidence or a later specific decision before commercial release; they do not reopen the approved tier/access design:
 
-The assistant must not invent these decisions or silently replace them with a generic curriculum.
+1. Final calibrated grader-minute estimates and task-family rubrics/complexity overrides, after representative synthetic/pilot time studies.
+2. Confirmed curriculum-frequency datasets for each selected curriculum/grade/exam series; do not treat the illustrative CBSE ~50-word response mix as universal.
+3. Final go-live validation of the ₹199/month Study Lab and ₹399/credit price hypotheses after observed costs, fees, taxes, grader effort and family willingness-to-pay evidence.
+4. Payment provider, checkout/webhook or approved manual reconciliation design; transactional email provider and delivery settings.
+5. Exact privacy, consent, refund, credit-expiry and service terms after appropriate review.
+6. Commercial hosting choice after reviewing current vendor terms, pricing, data handling, security and operations.
+7. Academic-lead/reviewer calibration, future grader capacity and any differentiated SLA proposal (not part of the initial single 24-hour target).
 
----
+No provider, payment or paid email choice is implied by this list. The free-first infrastructure policy remains controlling.
 
 ## 16. Diagnostic-first learning-readiness layer — approved 31 October 2026
 
@@ -596,7 +597,23 @@ For a qualifying feature, provide one concise handoff: what new capability was a
 
 This rule supersedes older blanket statements elsewhere that required a public Preview or Founder inspection for every PR, every coherent slice, every correction or every implementation milestone. Security, privacy, accessibility, automated testing, release and separate hosted/production approval gates remain unchanged.
 
+## 16.12 Grading-credit, curriculum-frequency and remedial-access approval — 4 November 2026
+
+The Founder approved the Standard/Premium/Elite credit and free-first remedial-access model on 4 November 2026. The authoritative detail is docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md.
+
+Approved baseline: Standard 1 credit (up to 50 expected words / up to 20 predicted grader minutes); Premium 2 credits (51–150 words / 21–40 minutes); Elite 3 credits (151–350 words / 41–60 minutes); custom tasks 4+ credits where predicted effort exceeds 60 minutes or the task is broader. Default server-side calculation is max(1, ceiling(predicted_grader_minutes / 20)); actual task complexity/predicted grader time overrides indicative word bands. Word counters remain non-blocking guidance. PDF 10 MB/10-page limits are file safeguards, not prices; no extra charge by page count, PDF mode, OCR use or actual words beyond the ideal target. No surprise post-submission debits.
+
+Retain ₹399 per credit, existing 2/5/10/20-credit pack prices, six-month proposed validity and no launch bulk discount. Only 2- and 5-credit packs may initially be purchasable. ₹199/month Study Lab remains a price hypothesis. One complimentary Standard human-graded task per learner account. Full diagnostic and complete report remain free; provide a meaningful free starter remedial activity; full personalised remedial course is unlocked by Study Lab or an approved complimentary course entitlement. Human grading credits remain separate from course access. A future Admin dashboard manages exceptions/grants/refunds; routine confirmed paid purchases activate automatically.
+
+One shared 24-hour elapsed-time target applies to all accepted human-grading submissions, including the free Standard task. This supersedes old 72-hour free / 48-hour paid Standard / separate urgent 24-hour pricing proposals; no urgent surcharge at launch. Curriculum-frequency analysis calculates task frequency and marks share separately for every curriculum/grade; it uses actual independently gradable prompts and forecasts expected credit mix, without treating the user's CBSE ~50-word example as a universal fact.
+
+Ordinary learner email verification is required before real learner-data access/paid entitlements, but no email provider or delivery integration is selected. Payment provider, checkout, physical credit ledger, course-entitlement service, future Admin dashboard and normal public email-verification delivery are specified for later implementation and are not yet live. No live billing or hosted service is approved by these docs.
+
+**Current platform checkpoint:** PR #22 remains open, draft and unmerged on feature/phase-1b-local-auth-api. Phase 1C-D passed exact-head run #41828382786 on commit c1647c7c7048b1d791c3d24f59ed51168f219d51; next implement 1C-E, then 1C-F. Phase 1D remains blocked pending the full 1C exit gate. Local Supabase/synthetic fixtures only; do not redo verified D work. After 1C exit proceed to private PDF/file work, recovery/security acceptance, shared flagship learner/grader experience, Cycle 1 free diagnostic/report, mandatory whole-site copy cleanup, remedial content, then the commercial entitlement/payment layer before any paid course/grading launch. Preserve Cambridge Grade 6 as Cycle 2 and blocked until Cycle 1 is approved. Founder Preview requests remain reserved for new substantial visible features. No merge, production deploy, DNS, paid usage or real learner data without the applicable separate approval.
+
 ## New-chat kickoff prompt
+
+> Continue GradiPrep from the latest verified repository state. Repository: gradioprep/gradioprep-website. PR #22 remains open, draft and unmerged on feature/phase-1b-local-auth-api. Read Master Brief Sections 1, 3–5, 8–11 and 16; Phase 1A Build-Ready Plan Section 16; Phase 1 Secure Application Specification Sections 3, 11, 15, 20–21; Data Model Sections 2–6; docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md; the diagnostic standard/register; and the flagship PDF/grading plan. Latest verified Phase 1C-D head: c1647c7c7048b1d791c3d24f59ed51168f219d51, exact-head CI run #41828382786 passed. Do not redo 1C-D. Implement the next logical Phase 1C-E slice (audit/workflow integrity), followed by 1C-F adversarial acceptance and any remaining authorization gaps. Keep Phase 1D blocked until the full 1C exit gate is satisfied. Use local Supabase and synthetic data only. After 1C exits, proceed in order through private PDF/file controls, backup/recovery, security acceptance, shared flagship learner/grader experience, Cycle 1 free diagnostic and full report, mandatory whole-site copy cleanup, remedial course/outcome check, then commercial entitlements/payments before paid launch. The full diagnostic/report and meaningful starter remedial activity remain free; the full remedial programme uses the proposed ₹199/month Study Lab entitlement; human grading uses separate Standard/Premium/Elite credits and the single 24-hour target. Do not implement payments, hosted resources, normal email delivery, real learner data, paid services, merge, production deployment or DNS changes without their separate gates. Do not request a Preview for documentation-only or backend-only changes; ask only when a concrete, substantial learner/staff-visible feature is ready. Use effective bundled fixes rather than micro-corrections, run exact-head CI, reconcile source-of-truth docs after verified slices and state the next logical step clearly. The Founder is not a coder: explain any required action in plain, click-by-click terms. Start by verifying the exact current branch head and CI; then implement only the next logical step.
 
 > We are continuing the GradiPrep project. Read `docs/PROJECT_MASTER_BRIEF.md` Sections 1, 3 and 12–16, `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`, `docs/DATA_MODEL.md`, `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, the relevant roadmap/guide sections, and the linked Teacher-Pack, Literary Excerpt Rights and Source Register documents as the source of truth. The current priority is Cycle 1: Grade 9 IB MYP (Grade 9 = MYP Year 4 is confirmed by the Founder for the relevant school/programme context). The MYP Grade 9 provider Top Five research, taxonomy, high-level blueprint and detailed task-level item map/scoring specification are Founder-approved. The flagship PDF-response, teacher-grading and timed-analytics plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions are approved; Phase 0 is complete. The phased implementation plan is approved and work within its scope/sequence should proceed without repeated implementation re-approval. Phase 1B local synthetic-only coding is Founder-approved and underway in draft PR #22. The free-first budget policy targets US$0 recurring infrastructure subscriptions and paid API usage for 3 November 2026–2 November 2027, with a non-automatic review at 100+ subscribers. Hosted provisioning, paid spend, real learner data/external processing, merge, production deployment and DNS changes remain separate gates. Actual diagnostic item authoring follows full flagship-feature implementation and pilot validation. After the diagnostic and evaluation report/analytics are checked, complete the mandatory full-website learner-facing copy sweep (Section 16.9) before any remedial content is authored. Provider percentiles and ranking methodology are internal-only and must never appear in learner/parent reports, including logged-in views. Prefer five 60-minute remedial sessions; extend to six or seven only when evaluation analytics justify it. Complete the full cycle before Cambridge Grade 6. Do not substitute Cambridge Stage 7 for the requested Grade 6 target or follow the historical Unit 1 rotation. Do not silently change approved pricing, review-credit rules, SLAs, grader rating formula, curriculum scope, access-control requirements or the 15-day build/15-day validation plan. The founder has 18 years of IB, IGCSE and SAT tutoring experience and will initially be the sole grader and academic lead. The founder will finalise the curriculum roadmap. Start by summarising the current approved specification and identifying the immediate next action only; then proceed step by step, updating the master brief whenever a decision is explicitly approved. Keep all code, credentials and student data secure. Before choosing a vendor or relying on free-tier terms, verify current official documentation. The working name is a placeholder, not final. For content work, follow `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. For frontend work, follow the locked typography and text-colour tokens in Section 1 and `docs/DESIGN_SPEC.md`; do not add ad-hoc font families, sizes or grey text colours, or change tokens without explicit approval.
 
