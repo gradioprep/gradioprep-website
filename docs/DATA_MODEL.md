@@ -1,6 +1,6 @@
 # Logical Data Model — Curriculum, Practice and Assessment
 
-**Status:** Provider-independent logical model with the approved first implementation mapping: Supabase Auth, PostgreSQL and private Storage in Mumbai (`ap-south-1`). Phase 0 architecture, timer and retention decisions are approved. The local synthetic-only Phase 1B/1C implementation now includes identity/roles, protected typed attempts, accepted human-assessment submissions, versioned task/rubric snapshots, grader assignments, criterion-level drafts, immutable published assessment/criterion results and private append-only records. The current protected physical inventory is 23 tables (18 public, five private). Exact head `d2e825746aa814de1f100ef2d8daa2e841d91c80` passed run [#41668857175](https://github.com/gradioprep/gradioprep-website/actions/runs/41668857175): **361 PostgreSQL/pgTAP assertions across eight SQL files and 27/27 Playwright tests**, plus local reset/seed, TypeScript/Worker/Vite builds and cleanup. The backend-only workflow did not create a public Preview. This is local synthetic infrastructure only, not hosted provisioning, a production account service or a real learner record store. Phase 1C remains incomplete; see Master Brief v4.50 and Phase 1 specification Section 20.
+**Status:** Provider-independent logical model with the approved first implementation mapping: Supabase Auth, PostgreSQL and private Storage in Mumbai (ap-south-1). Phase 0 architecture, timer and retention decisions are approved. Phase 1B and Phase 1C-A/B/C/D are locally verified with synthetic data; latest verified code head c1647c7c7048b1d791c3d24f59ed51168f219d51 passed exact-head CI run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786). Current protected physical inventory remains 23 tables (18 public, five private). Phase 1C-E/F remain; do not start Phase 1D before the full Phase 1C exit gate. Credit purchasing, physical credit ledger, course entitlements, payment workflow and commercial Admin dashboard below are logical future records, not live tables. See docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`
 **Goal:** Define the provider-independent relationships and permission boundaries for the platform. The approved first implementation mapping is Supabase Auth/Postgres/Storage in Mumbai; a defined identity/security subset is now implemented in the local synthetic stack described above. This model is not a claim that all planned learning, submission, grading or storage records are live. Supabase Pro and all third-party service costs/terms must be reconfirmed and separately authorised before real learner data.
 
@@ -46,7 +46,7 @@ This is a provider-independent logical model, not a complete live SQL schema. Th
 | `answer_keys` | Task version ID, expected answer, rationale/explanation, accepted variants as appropriate | Restrict access until the intended reveal state; keep production keys server-side |
 | `rubrics` and `rubric_versions` | Stable rubric ID, version, task family, version date, approval state | Rubric versions are immutable once used for a published assessment |
 | `rubric_criteria` | Rubric version ID, criterion ID, label, descriptor/levels, scoring rules | Task-specific rubric scope and score rules are explicit |
-| `task_rubric_mappings` | Task version ID, rubric version ID, required credits, expected response format/scope | Define what one credit covers before the learner submits |
+| `task_rubric_mappings` | Task version ID, rubric version ID, required credits, grading tier, credit-policy version, expected response format/range, ideal word target, predicted grader minutes, complexity metadata | Server-calculated tier and credit requirement are visible before submission; word bands are guidance, not learner input caps; task/rubric scope is versioned |
 
 ### Accounts, relationships and access
 
@@ -89,15 +89,18 @@ The client imports learner-safe `src/content/pilotLearnerLesson.ts` for lesson c
 
 | Record | Purpose and key fields | Relationships / rules |
 |---|---|---|
-| `assessment_submissions` | ID, learner ID, task version ID, status, accepted time, due time/SLA, credit requirement | Acceptance is a server-side operation that checks capacity and entitlement before committing |
+| `assessment_submissions` | ID, learner ID, task version ID, status, accepted time, due time/SLA, grading tier, required credits, credit-policy version, entitlement/credit-reservation reference | Acceptance is server-side; snapshot the task/rubric/tier/credit/SLA requirement and check capacity, course/task eligibility and entitlement before committing |
 | `submission_versions` | Submission ID, version number, response snapshot/protected storage reference, created by/time | Preserve the original accepted response and every later revision; do not overwrite history |
 | `grader_assignments` | Submission ID, grader user ID, assigned by/time, status | Graders may access only assignments they are authorized to grade |
 | `assessments` | Submission ID, grader ID, rubric version ID, draft/final/published state, timestamps | A draft is not visible as published feedback |
 | `assessment_versions` | Assessment ID, version number, score summary where valid, comments, author, timestamp, change reason | Preserve drafts/final versions and record reasons for changes; never replace a published version silently |
 | `criterion_results` | Assessment version ID, criterion ID, mark where applicable, evidence excerpt/reference, comment | Score, comment and evidence must align with the selected rubric |
 | `assessment_audit_events` | Assessment/criterion ID, actor, change, reason, timestamp | Append-oriented audit trail for mark/comment edits and administrative decisions |
-| `credit_ledger` | Learner ID, transaction type, credit delta, purchase/use/refund/expiry reference, task/submission reference, actor, timestamp | Auditable source of truth; never trust a client-supplied balance or let the browser directly modify credits |
-| `capacity_slots` or equivalent server-side controls | Date/window, accepted workload, available capacity, applicable SLA | Acceptance must be blocked when it cannot meet the promised SLA; preserve draft and entitlement safely |
+| `credit_ledger` | Learner ID, transaction type (purchase/reserve/consume/release/refund/expiry/adjustment), credit delta, purchase/use/refund/expiry reference, task/submission reference, policy version, actor, timestamp, reason | Append-only audit source of truth; server-derived entries only; never trust a client-supplied balance or let the browser modify credits |
+| `capacity_slots` or equivalent server-side controls | Date/window, accepted workload, available capacity, applicable SLA | Acceptance must be blocked when it cannot meet the promised 24-hour SLA; preserve draft and entitlement safely |
+| `course_entitlements` | Learner ID, course/pathway, entitlement source/type, status, grantor/provider transaction, effective start/end/expiry, reason, created/revoked timestamps | Separate from grading credits; supports Study Lab, complimentary cohort grants and paid course access; purchase activation follows trusted payment confirmation |
+| `payment_transactions` | Learner ID, provider/reference, product/purchase type, amount/currency, status, trusted confirmation/webhook reference, refund/chargeback metadata, timestamps | Future logical record; idempotent, server-verified and auditable; do not activate credits/course entitlement from client claims |
+| `credit_policy_versions` | Version, tier bands, credit unit, predicted-time formula, effective dates, approval reference | Freeze the applicable pricing/credit policy version on every accepted submission; never retroactively reprice it |
 | `private_qa_records` | Assessment ID/version, checks, status, explanation, uncertainty, reviewer action | Admin/owner only; graders and learners cannot read this record |
 | `admin_audit_log` | Actor, action, target record, reason, timestamp, minimal before/after reference | Privileged actions and role changes must be individually attributable and auditable |
 
@@ -126,6 +129,16 @@ Use explicit state transitions such as draft → uploading → accepted/processi
 ### Provider and cost decision boundary
 
 **Phase 0 provider decision:** implement the logical model first on a single Supabase project using Auth, PostgreSQL and primary private Storage in Mumbai (`ap-south-1`); do not use D1 or a second database. Use Supabase Free first if tested availability, capacity, security and full backup/restore controls meet the agreed requirements; do not accept real learner records until those controls are demonstrated. Supabase Pro is an optional paid fallback only where no suitable free arrangement meets an essential requirement, with exact cost and separate approval. Cloudflare R2 is a secondary encrypted file-backup target only; its APAC location hint is best-effort and does not guarantee India residency. PDF.js is the in-app digital-text route; Azure Document Intelligence Read (`prebuilt-read`, intended Central India region) is the selected external handwriting OCR integration; Cloudflare Workers AI is the selected stateless on-demand teacher-draft service. All exact service terms, actual region availability, external processing, cross-border transfer, privacy notices/consent and cost gates must pass before real learner data or paid services are used. No providers are connected today.
+
+### 2A. Commercial access and grading-credit invariants
+
+The commercial access and tier definitions are governed by docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. The full diagnostic/report and designated free resources remain free; a meaningful starter remedial activity is free; the full personalised remedial course requires a Study Lab or expressly granted course entitlement. Human grading credits are independent of course entitlements.
+
+Use the approved default tier bands (Standard 1 credit, Premium 2, Elite 3, Custom 4+) and server-side time formula max(1, ceiling(predicted_grader_minutes / 20)). Task word ranges are indicative guidance only. The 10 MB/10-page PDF cap is not a pricing unit. No extra debit may be based only on actual word count, PDF page count or OCR use. The required tier/credits and policy version must be visible before acceptance and snapshotted at acceptance.
+
+The one complimentary human-grade entitlement is one Standard task per learner account. The shared 24-hour elapsed-time SLA applies to every accepted human-graded task, including the complimentary task. Purchases, reservations, use, releases, refunds, expiry, course-entitlement changes and Admin grants are server-authoritative, versioned and auditable. Ordinary learner email verification is required before real learner-record access/paid entitlements; provider delivery is a later implementation decision.
+
+These are logical future records/rules, not a claim that the physical credit, payment, entitlement or commercial Admin tables/routes are already implemented.
 
 ## 3. Important constraints
 
@@ -243,3 +256,12 @@ The corrected revoked-grader test preserves the actual submission ID before revo
 Exact-head CI: [run #41668857175](https://github.com/gradioprep/gradioprep-website/actions/runs/41668857175) on `d2e825746aa814de1f100ef2d8daa2e841d91c80` passed **361 PostgreSQL/pgTAP assertions across eight SQL files and 27/27 Playwright tests**, fresh local synthetic Supabase reset/seed, TypeScript/Worker/Vite builds and cleanup. No Preview was requested for this backend-only change, and no hosted Supabase, paid service or real learner record was used.
 
 Phase 1C remains in progress. Operational role separation/reassignment, broader audit/workflow integrity, complete adversarial/concurrency and direct-bypass acceptance, and any remaining full Worker/database matrix gaps must pass before Phase 1D. PDF storage/OCR, timers, private QA and real-data readiness remain later/incomplete scope.
+
+
+### 6.3 Verified Phase 1C-D operational role separation — 4 November 2026
+
+**Latest verified code head:** c1647c7c7048b1d791c3d24f59ed51168f219d51 in PR #22. Exact-head GitHub Actions run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786) passed the local synthetic Supabase reset/seed, PostgreSQL/RLS checks, TypeScript/Worker/Vite builds, 27/27 Playwright tests and clean public-Preview asset build.
+
+Phase 1C-D operational role separation is verified. Phase 1C-E audit/workflow integrity, 1C-F adversarial acceptance and any residual operation-specific authorization gaps remain. Phase 1D is blocked until the complete Phase 1C exit gate passes. PR #22 remains open, draft and unmerged.
+
+The commercial Admin dashboard, course entitlement and credit-ledger records above are logical design only. They must be implemented after the secure foundation and in the sequence in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md; do not mistake Phase 1C's delegated backend role controls for a learner-facing Admin console.
