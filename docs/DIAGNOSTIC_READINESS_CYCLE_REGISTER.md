@@ -63,7 +63,7 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 | Skill taxonomy and high-level blueprint approved | Complete; Founder-approved 1 Nov 2026 | Blocked |
 | Detailed task-level item map and scoring specification | Complete; Founder-approved 2 Nov 2026 | Blocked |
 | Flagship PDF response, teacher grading and timed analytics plan | Complete; phased plan and 24-hour grading target approved 2 Nov 2026 | Blocked |
-| Flagship feature implementation and pilot QA | In progress, not complete: Phase 1B and Phase 1C-A/B/C local backend slices are CI-verified, including typed attempts, accepted submissions and human draft/publication records; Phase 1C-D/E/F, Phase 1D private PDF/file controls and flagship PDF/extraction, teacher workspace, timed analytics and pilot QA remain outstanding | Blocked |
+| Flagship feature implementation and pilot QA | In progress, not complete: Phase 1B and Phase 1C-A/B/C/D are locally implemented and CI-verified with synthetic data (latest exact-head run #41828382786, 27/27 Playwright); Phase 1C-E/F and Phase 1D private PDF/file controls remain; learner-facing PDF/extraction, teacher workspace, timer/analytics and pilot QA remain outstanding | Blocked |
 | Actual diagnostic item authoring and teacher/editor scoring pack | Paused until the shared response/task metadata and core feature are implemented and validated | Blocked |
 | Diagnostic built and validated | Not started | Blocked |
 | Evaluation report and analytics built/validated | Not started | Blocked |
