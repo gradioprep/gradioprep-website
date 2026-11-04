@@ -1,8 +1,8 @@
 # Diagnostic Readiness Cycle Register
 
-**Version:** 1.14  
-**Last updated:** 3 November 2026  
-**Status:** Founder-approved work order. Cycle 1 Grade 9 / MYP Year 4 research, taxonomy, item map, flagship feature plan, 24-hour SLA and Phase 0 decisions are approved. Phase 1B and the Phase 1C-A/B/C local synthetic-only backend slices have implementation and exact-head CI evidence; latest verified head is `d2e825746aa814de1f100ef2d8daa2e841d91c80`, run [#41668857175](https://github.com/gradioprep/gradioprep-website/actions/runs/41668857175) passed 361 PostgreSQL/pgTAP assertions across eight SQL files and 27/27 Playwright tests. PR #22 remains open, draft and unmerged. The full Phase 1C exit gate and Phase 1D PDF/private-file layer remain incomplete. Actual MYP diagnostic item authoring remains gated until the shared response/grading feature is implemented and pilot-validated. Whole-website learner-facing copy cleanup remains scheduled after Cycle 1 diagnostic/report validation and before remedial authoring. Hosted provisioning, paid spend, real learner data/external processing, merge, production deployment and DNS remain separate approval gates. Cycle 2 remains blocked.
+**Version:** 1.15  
+**Last updated:** 4 November 2026  
+**Status:** Cycle 1 Grade 9 / IB MYP Year 4 provider research, taxonomy, item map, flagship task/PDF/grading/timing plan, 24-hour SLA and Phase 0 decisions are approved. Phase 1B and Phase 1C-A/B/C/D are locally verified using synthetic data; latest exact code head c1647c7c7048b1d791c3d24f59ed51168f219d51 passed run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786), including 27/27 Playwright tests and PostgreSQL/RLS, build and cleanup checks. PR #22 remains open, draft and unmerged. Next: 1C-E and 1C-F; Phase 1D remains blocked until the full 1C exit gate. The full diagnostic/report remains unbuilt; item authoring remains gated by flagship-feature implementation and pilot validation. The complete diagnostic/report will be free; a meaningful starter remedial activity will be free; full remedial course access uses a separate Study Lab/complimentary entitlement; human grading uses separate credits. Whole-site learner-facing copy cleanup remains after report validation and before remedial authoring. Hosted provisioning, paid spend, real learner data/external processing, merge, production deployment and DNS remain separate gates. Cycle 2 remains blocked.
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`.  
 **Purpose:** Track the founder-selected order for the diagnostic → evaluation/analytics → remedial-course layer independently of the existing Unit 1/content register.
 
@@ -10,7 +10,7 @@
 
 | Order | Requested school-grade target | Working curriculum alignment | Current status |
 |---:|---|---|---|
-| 1 | Grade 9 — IB MYP Language and Literature | MYP Year 4 is confirmed by the Founder for the relevant school/programme context; do not reopen this as an assumption. Official MYP programme age band: 11–16; individual chronological age not separately supplied | Provider research, taxonomy/high-level blueprint and detailed item map approved; flagship feature plan, 24-hour grading target and Phase 0 decisions approved; Phase 1B and Phase 1C-A/B/C backend slices locally implemented and CI-verified; remaining Phase 1C-D/E/F, Phase 1D file layer and flagship feature implementation still required |
+| 1 | Grade 9 — IB MYP Language and Literature | MYP Year 4 is confirmed by the Founder for the relevant school/programme context; do not reopen this as an assumption. Official MYP programme age band: 11–16; individual chronological age not separately supplied | Provider research, taxonomy/high-level blueprint and detailed item map approved; flagship feature plan, 24-hour grading target and Phase 0 decisions approved; Phase 1B and Phase 1C-A/B/C/D locally implemented and CI-verified with synthetic data; 1C-E/F and Phase 1D file layer remain; flagship learner/grader experience and Cycle 1 diagnostic/report still not implemented |
 | 2 | Grade 6 — Cambridge English | Exact Cambridge stage and English route remain to be verified. Cambridge Primary Stage 6 / English 0058 is a candidate only where the learner age and first-language route support it. Cambridge Lower Secondary Stage 7 is not a substitute for the requested Grade 6 target | Second cycle; blocked until Cycle 1 is complete and the founder directs the transition |
 
 Grade 9 = MYP Year 4 is a Founder-confirmed placement for Cycle 1, not an unresolved mapping. Cambridge Grade 6 remains a requested school-grade label whose exact official stage/course must be established during Cycle 2 scope lock. Never substitute Cambridge Lower Secondary Stage 7 for Grade 6.
@@ -128,3 +128,14 @@ The diagnostic cycle remains at the pre-authoring stage. MYP Year 4 actual diagn
 ### Phase 1B suspended-account security increment — 2 November 2026
 
 A local synthetic suspended-account fixture and fail-closed access rules are being added to PR #22, with Worker/API and browser regression tests. Verification is pending. This remains platform security work only: Cycle 1 diagnostic authoring has not started; the whole-site copy-cleanup gate remains not started and stays after Cycle 1 diagnostic/report validation but before remedial authoring; Cambridge Grade 6 remains blocked.
+
+
+## 7. Approved free-first course access and grading-credit model — 4 November 2026
+
+The detailed binding rules are in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. Apply them to each cycle only with its own verified task inventory:
+- The initial diagnostic and complete evaluation report are free; provide at least one meaningful free starter remedial activity.
+- The full personalised remedial programme uses the proposed ₹199/month Study Lab entitlement or an approved complimentary grant. Study Lab remains a price hypothesis until validated.
+- Human grading is separate: one free Standard task per learner account; Standard 1 credit, Premium 2, Elite 3, Custom 4+; ₹399 per credit remains a price hypothesis.
+- Determine each task's price from the approved task scope and predicted grader minutes, with word bands as guidance. Build a separate task-frequency/marks dataset for every grade/curriculum; do not transfer CBSE proportions into IB or Cambridge or treat the approximate CBSE 50-word example as universal.
+- A single 24-hour elapsed-time target applies to all accepted human grading, including the free Standard task; it supersedes older 72/48-hour differentiated proposals. No urgent surcharge at initial launch.
+- The payment/credit/entitlement system, learner email verification delivery and commercial Admin dashboard are approved specifications but not implemented. Do not block the free diagnostic/report on those features; complete them before any paid sales or course lock is enabled.
