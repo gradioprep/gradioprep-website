@@ -86,6 +86,7 @@ SELECT is(
   1,
   'an identical typed-response retry returns the same version'
 );
+RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM private.attempt_response_versions
    WHERE attempt_id = current_setting('test.workflow_attempt_id')::uuid),
