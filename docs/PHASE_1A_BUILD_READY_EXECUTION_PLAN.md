@@ -277,7 +277,7 @@ For internal Phase 1B/1C backend and authorization work, local Supabase CI is au
 **Current approval:** Founder has approved Phase 1B coding with local Supabase and synthetic data only. No hosted project, paid plan, real data, merge, production deployment, DNS or custom-domain connection is approved. The custom domain connects at the Launch Candidate / Production Cutover checkpoint after feature, security, accessibility, content, privacy and recovery gates; it is not needed for per-PR public verification.
 
 
-## 16. Current Phase 1C checkpoint and next-session execution order — 3 November 2026
+## 16. Current Phase 1C checkpoint and next-session execution order — 4 November 2026
 
 **Verified state:** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`; Phase 1C code commit `05544d1a394e2e480b7cd2dd9f55100b6998ee71` passed exact-head GitHub Actions run [#41613490244](https://github.com/gradioprep/gradioprep-website/actions/runs/41613490244). Evidence: 116 PostgreSQL/pgTAP assertions across four SQL files, 24/24 Playwright tests, local Supabase reset/seed, TypeScript/Vite/Worker builds, clean stack shutdown/credential cleanup and clean public-Preview build. Cloudflare Workers Builds deployed the same application revision to immutable Preview https://b4391d8e-gradioprep-website.wandering-scene-1822.workers.dev; it has no hosted Supabase connection. The Phase 1B public-shell visual/functional review has already been approved. Do not repeat staff-invitation work.
 
@@ -334,3 +334,24 @@ Exact-head run [#41646515558](https://github.com/gradioprep/gradioprep-website/a
 **Revocation regression fix:** Before revoking the synthetic grader, the SQL test saves the existing submission ID and asserts that the target grader has an active assignment. Both revoked-grader denial RPC calls use that preserved ID and pass with `42501 / grader_assessment_forbidden`.
 
 **Current next steps:** complete 1C-D operational role separation, 1C-E expanded audit/workflow integrity, 1C-F full adversarial acceptance, and any remaining table-by-table Worker/database permission gaps. Keep Phase 1D blocked until the entire Phase 1C exit gate passes. Use local Supabase and synthetic records only; do not request a Founder Preview for routine backend/security work.
+
+
+### 16.4 Verified Phase 1C-D completion and integrated commercial/diagnostic roadmap — 4 November 2026
+
+**Latest verified state:** PR #22 remains open, draft and unmerged on feature/phase-1b-local-auth-api. Phase 1C-D operational role separation passed exact-head GitHub Actions run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786) on commit c1647c7c7048b1d791c3d24f59ed51168f219d51. The run passed local synthetic Supabase reset/seed, PostgreSQL/RLS tests, TypeScript/Worker/Vite builds, 27/27 Playwright tests, cleanup and clean public-Preview asset build. Do not redo verified 1C-D work. The next logical slice is 1C-E audit/workflow integrity; follow with 1C-F adversarial acceptance and close any remaining operation-specific authorization gaps. Phase 1D remains blocked until the full Phase 1C exit gate passes.
+
+**Commercial and learning-readiness decisions approved for future integration:** See docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. The full diagnostic and evaluation report remain free, followed by a meaningful free starter remedial activity. Full remedial-course access uses the proposed Study Lab entitlement or an approved complimentary grant. Human grading uses separate 1/2/3/4+ Standard/Premium/Elite/Custom credits with a 20-minute unit of predicted grader effort and the curriculum-frequency calculation. One Standard task is free per learner account. One 24-hour SLA applies to all accepted human grading. Task word bands do not become input caps; PDF file limits are not pricing units; no surprise credit deductions are permitted. Normal learner email verification is required before live learner-record/paid entitlement access.
+
+**Integrated work order after Phase 1C:**
+
+1. Finish 1C-E, 1C-F and the complete 1C exit matrix; maintain local synthetic-only tests.
+2. Complete 1D private PDF/file controls and original-file preservation, PDF.js extraction and transcript controls.
+3. Complete 1E database/object backup, restore, retention/deletion and 1F security acceptance/runbooks.
+4. Complete the shared learner submission, grader workspace, human feedback publication and timer/analytics experience; validate task metadata for response range, rubric scope, predicted grader minutes, tier and required credits.
+5. Build and validate Cycle 1 Grade 9 / IB MYP Year 4 free diagnostic and complete report only after the flagship feature is implemented and pilot-validated.
+6. Complete the existing mandatory whole-website learner-facing copy cleanup immediately after report validation and before remedial content authoring.
+7. Author the evidence-based remedial course (five sessions by default, six/seven only where justified), free starter activity and outcome check.
+8. Before any paid course/grading launch, implement ordinary learner email verification, course-entitlement service, append-only credit ledger, trusted payment confirmation/checkout, controlled 2/5-credit pack availability, commercial Admin dashboard, access grants/refunds and capacity safeguards.
+9. Keep Cambridge Grade 6 blocked until Cycle 1 is complete and the Founder directs the transition.
+
+The commercial layer must not delay the free diagnostic/report. The Admin dashboard and payment/credit UI are distinct future product work, not part of the present 1C security slice. No provider, live payment, hosted resource, external processor or paid usage is selected or authorised by these roadmap entries. Founder-facing Preview review remains reserved for new substantial visible features; routine backend/doc/CI changes do not trigger a Preview request.
