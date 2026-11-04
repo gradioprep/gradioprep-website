@@ -74,13 +74,13 @@ Guardian links require verification, documented consent/authority state, active 
 - Supabase Auth owns password storage and authentication lifecycle; GradiPrep never stores plaintext passwords.
 - Support secure sign-in, sign-out, verified account recovery and session revocation.
 - Require MFA for graders, admins and owner accounts before access to protected staff operations; prefer phishing-resistant MFA where supported and practical.
-- Apply verified email/account invitation for staff; public signup can create only the least-privileged student state, subject to approved enrolment policy.
+- Apply verified email/account invitation for staff; public learner signup can create only the least-privileged student state. Before public real-learner use, require the learner's email to be verified before allowing access to real learner records or paid course/grading entitlements. Local synthetic CI may use preconfirmed test identities without sending email. The delivery provider/configuration is a later decision; no provider or paid email service is approved by this specification.
 - Rate-limit sign-in, recovery, invitation and verification endpoints; use provider protections and abuse monitoring.
 - Use secure browser session handling and avoid storing privileged tokens in application logs or analytics.
 - Define account suspension, role revocation, compromised-account response and owner recovery procedures.
 - Test stale sessions after role revocation, account suspension and guardian-link revocation.
 
-MFA, recovery and email delivery configuration must be checked against current Supabase capabilities and cost/quotas before implementation. No paid email provider is implicitly approved.
+MFA, recovery and email delivery configuration must be checked against current Supabase capabilities and cost/quotas before implementation. No paid email provider is implicitly approved. Normal learner email verification is a required pre-public access gate, but the local synthetic account configuration is not evidence that real delivery/confirmation is implemented.
 
 ## 4. PostgreSQL schema, constraints and RLS
 
@@ -322,7 +322,7 @@ No item above authorises paid spend, hosted resource provisioning or real-data u
 
 ## 15. Explicit out-of-scope items
 
-Phase 1 does not implement PDF extraction/OCR, AI feedback drafts, the grading queue UI, the timer UI/analytics, curriculum diagnostics, report charts, remedial courses, payment/credit purchasing, commercial launch, public signup at scale or production rollout. It prepares the security foundation those later phases depend on.
+Phase 1 does not implement PDF extraction/OCR, AI feedback drafts, the grading queue UI, the timer UI/analytics, curriculum diagnostics, report charts, remedial courses, payment/credit purchasing, the learner-facing commercial Admin dashboard, course-entitlement/paywall UI, payment checkout, physical credit ledger or public learner email-delivery integration. It prepares the security foundation those later phases depend on. Normal learner email verification is required before real public learner-record access and paid entitlements, but provider/delivery implementation remains a later pre-launch task. The detailed future commercial product rules are in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md.
 
 **Diagnostic sequencing remains unchanged:** MYP Year 4 actual item authoring stays gated until the flagship feature is implemented and pilot-validated. Cambridge Grade 6 remains blocked until Cycle 1 is complete and the Founder directs transition.
 
@@ -474,3 +474,17 @@ Migration `20261103000700_phase1c_private_audit_and_revoked_assignment_rls.sql` 
 **Current physical inventory:** 23 protected tables total — 18 public and five private. The original 12-table Phase 1B/1C-A baseline is retained in Sections 20.1/20.2 as historical scope. The 11 additions in 1C-B/C are the nine public and two private tables listed above.
 
 **Remaining Phase 1C exit work:** 1C-D operational role separation and full authorised reassignment/revocation/state transitions; 1C-E comprehensive audit/workflow integrity, including privileged-read evidence where feasible; 1C-F adversarial cross-role/AAL1/AAL2, replay/concurrency and direct table/RPC-bypass acceptance; and any remaining operation-specific Worker/database matrix gaps. Do not begin Phase 1D until all Phase 1C exit criteria are implemented, tested, documented and reconciled. PDF files/storage, OCR, timer UI/analytics and real learner-data readiness remain later gated work.
+
+
+## 21. Founder-approved commercial and remedial-access boundary — 4 November 2026
+
+The grading tier, curriculum-frequency, learner free/paid access and commercial implementation rules are defined in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. They are approved product specifications, not Phase 1 implementation authorisation.
+
+- The full diagnostic and evaluation report and a meaningful starter remedial activity remain free. The full personalised remedial programme is accessed by a separate Study Lab/course entitlement or an explicit complimentary grant.
+- Human grading credits are independent of course entitlements. The approved task tiers are Standard (1), Premium (2), Elite (3) and Custom (4+), with task complexity/predicted grader time determining the final server-side value. The one free grading entitlement is one Standard task per learner account.
+- All accepted human-grading work, including free Standard work, shares the approved 24-hour elapsed-time target. This supersedes older differentiated free/paid/urgent SLA proposals.
+- Normal public learner accounts must verify email before real learner-record access or paid entitlement access. The current local synthetic setup, staff invitation flow and absence of a configured email provider do not establish that public learner email verification delivery is already implemented.
+- The future commercial Admin dashboard handles delegated entitlement/credit/payment exceptions and complimentary grants. It must not inherit Owner, grader or private academic-QA rights. Phase 1C operational admin role separation is a backend security boundary, not this future dashboard.
+- The physical credit ledger, course entitlement/payment records, checkout/payment provider, email-delivery provider and customer-facing Admin UI are outside Phase 1. Keep local synthetic implementation progressing through 1C-D/E/F and the later 1D/1E/1F security sequence. Do not delay free diagnostic/report work on a payment provider; do not sell or unlock paid access before entitlements and trusted payment/ledger controls are implemented.
+
+Latest Phase 1C-D exact-head verification: commit c1647c7c7048b1d791c3d24f59ed51168f219d51, run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786), passed. Phase 1C-E and 1C-F remain before Phase 1D. PR #22 stays open, draft and unmerged. No hosted provisioning, paid service, real learner data, external processing, merge or production deployment is authorised.
