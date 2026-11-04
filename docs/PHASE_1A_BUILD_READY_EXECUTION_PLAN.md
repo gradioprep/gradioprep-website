@@ -1,8 +1,8 @@
 # Phase 1A — Build-Ready Execution Plan
 
-**Version:** 0.18-draft
-**Date:** 3 November 2026  
-**Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff-invitation work are complete; the Phase 1B public-shell visual review is approved. Phase 1C-A initial security hardening, 1C-B accepted human-assessment submissions and 1C-C criterion-level human assessment/feedback are implemented and verified on `d2e825746aa814de1f100ef2d8daa2e841d91c80` by Exact-head GitHub Actions run [#41668857175](https://github.com/gradioprep/gradioprep-website/actions/runs/41668857175) passed **361 PostgreSQL/pgTAP assertions across eight SQL files and 27/27 Playwright tests**, plus fresh local Supabase reset/seed, TypeScript/Worker/Vite builds, cleanup and clean public-Preview asset build. The backend-only workflow intentionally skipped Founder Preview creation. Phase 1C remains in progress; 1C-D/E/F and the Phase 1D gate remain open. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, merge, production deployment or DNS change is authorised.
+**Version:** 0.19-draft
+**Date:** 4 November 2026  
+**Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff-invitation work are complete; the Phase 1B public-shell visual review is approved. Phase 1C-A/B/C/D are implemented and verified on local Supabase with synthetic data. Latest exact code head c1647c7c7048b1d791c3d24f59ed51168f219d51 passed GitHub Actions run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786): PostgreSQL/RLS tests, TypeScript/Worker/Vite builds, 27/27 Playwright tests, fresh reset/seed, cleanup and clean public-Preview asset build. Phase 1C-E audit/workflow integrity and 1C-F adversarial acceptance, plus any residual authorization gaps, remain. Phase 1D is blocked until the full Phase 1C exit gate passes. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, merge, production deployment or DNS change is authorised.
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and the approved Phase 0 decision register.
 
