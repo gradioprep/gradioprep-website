@@ -1,7 +1,7 @@
 # Public Preview, Verification and Custom-Domain Release Process
 
-**Version:** 1.4-draft
-**Date:** 3 November 2026  
+**Version:** 1.5-draft
+**Date:** 4 November 2026  
 **Status:** Conditional Preview/review standard updated by Founder on 3 November 2026. Founder-facing Preview requests are reserved for new, concrete and substantial learner/staff-visible features. Routine, unchanged, backend-only and documentation-only previews must not be repeatedly surfaced. PR #22's security and CI records remain in the engineering history.
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md`; free-first cost decisions: `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`
 **Related:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`, `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`, `docs/CONTROLLED_CLOUDFLARE_PREVIEW.md`, `docs/DESIGN_SPEC.md` and the approved Phase 0 decision register.
@@ -162,3 +162,27 @@ MYP Year 4 actual diagnostic item authoring remains gated until the flagship fea
 - Cloudflare Workers Routes versus Custom Domains: https://developers.cloudflare.com/workers/configuration/routing/routes/
 - Supabase Auth redirect URLs and exact production Site URL: https://supabase.com/docs/guides/auth/redirect-urls
 - Controlled preview workflow in this repository: `.github/workflows/controlled-worker-preview.yml`
+
+
+## 9. Pre-launch branded staging-domain verification (added 4 November 2026)
+
+The Founder has clarified that the public website experience—including authentication, navigation, the Diagnostic and Evaluation Report—must be verified on a branded custom-domain host before final acceptance/launch. Therefore, domain readiness and branded staging verification are now explicit pre-launch roadmap gates; they are not deferred entirely until production cutover.
+
+### 9.1 Staging host, not premature production cutover
+
+- Confirm the exact purchased domain and canonical hostname with the Founder before creating DNS records. The previously discussed domain spelling is not sufficient authority to change DNS.
+- After separate explicit approval, configure a dedicated staging subdomain (for example, `staging.<confirmed-domain>`) to an isolated staging Worker and isolated hosted test backend. Use synthetic accounts and records only.
+- Do not connect staging to production Auth, database, storage, email credentials or learner records. Configure the staging Auth Site URL and narrow confirmation/recovery callback allow-list for the staging host only.
+- Verify TLS/HTTPS, canonical redirects, API and SPA routes, navigation, direct/deep links, refresh and browser Back/Forward.
+- Execute the complete synthetic public journey: registration, email confirmation, sign-in, sign-out, password recovery, Diagnostic start/submission, Evaluation Report generation, learner-dashboard access, persistence and role/access restrictions.
+- Record the exact host, Worker revision, backend identity (without secrets), test account/data scope, results and any defects. No real learner data or live customer registration is permitted in staging.
+
+### 9.2 Approval and production boundaries
+
+Staging-host provisioning, hosted test-backend provisioning and any DNS/custom-domain mapping each require explicit Founder approval before execution; paid resources/usage require separate cost approval. This section does not authorise any of them. If staging cannot be safely isolated, leave the check as a launch blocker; do not route the production apex/canonical host to an unfinished build as a workaround.
+
+Production Custom Domain attachment, production Auth redirects, production DNS/nameserver changes, production deployment, opening public registration and official launch remain separate explicit approval gates under Section 6. A successful staging test is necessary pre-launch evidence but is not production release approval.
+
+### 9.3 Revised acceptance order
+
+Complete Phase 1 security/file foundations and shared flagship workflows; obtain approvals and provision isolated staging; pass the full branded-domain synthetic journey; then accept the Grade 9 Diagnostic and Evaluation Report and complete the remaining release gates. The Diagnostic/Report remain free. Do not treat per-PR workers.dev Preview as evidence of working hosted authentication or end-to-end persistence.

@@ -355,3 +355,19 @@ Exact-head run [#41646515558](https://github.com/gradioprep/gradioprep-website/a
 9. Keep Cambridge Grade 6 blocked until Cycle 1 is complete and the Founder directs the transition.
 
 The commercial layer must not delay the free diagnostic/report. The Admin dashboard and payment/credit UI are distinct future product work, not part of the present 1C security slice. No provider, live payment, hosted resource, external processor or paid usage is selected or authorised by these roadmap entries. Founder-facing Preview review remains reserved for new substantial visible features; routine backend/doc/CI changes do not trigger a Preview request.
+
+
+### 16.5 Custom-domain staging verification added to the pre-launch critical path — 4 November 2026
+
+**Documentation decision:** The custom domain must no longer be left solely to the final production cutover if the Founder needs the complete public experience checked before the planned launch. Add a branded, isolated staging-host verification checkpoint before final Diagnostic/Evaluation Report acceptance. The exact purchased domain and canonical hostname must first be reconfirmed with the Founder; use a dedicated staging subdomain on that domain (or another explicitly approved staging mapping) and a separate staging Worker/backend. This is not a production-domain cutover and must not point staging at production data or credentials.
+
+**Updated next-step order:**
+1. Finish exact-head CI for the private academic-QA slice and complete Phase 1C-E/F plus all remaining Phase 1C exit criteria. Do not advance to 1D until the exit gate passes.
+2. Complete Phase 1D private PDF/file controls, Phase 1E backup/recovery/retention, and Phase 1F security acceptance/runbooks.
+3. Implement and validate the shared learner submission, PDF handling, grader workspace, human-only feedback publication and timer/analytics workflows.
+4. Obtain separate approval for an isolated hosted synthetic test environment and custom-domain staging/DNS configuration. Confirm registrar/Cloudflare zone ownership, canonical host, TLS, redirects, Supabase Auth Site URL and exact confirmation/recovery callback allow-list. No hosted provisioning, paid usage or DNS changes are authorised by this roadmap entry itself.
+5. On the branded staging host, run the complete public journey with synthetic accounts and data: sign-up, email confirmation, sign-in/out, password recovery, navigation, direct/deep links, refresh, Back/Forward, Diagnostic start/submit, Evaluation Report generation, learner-dashboard access, persistence and role/access restrictions. Record results and resolve failures.
+6. Only after shared flagship workflows are pilot-validated and the branded public journey passes, complete final acceptance of the free Grade 9 IB MYP Year 4 Diagnostic and Evaluation Report. Then perform the mandatory whole-website learner-facing copy cleanup before remedial authoring.
+7. Keep production Worker/custom-domain cutover, production Auth redirect configuration, opening public registration and official launch as distinct later gates requiring explicit Founder approval.
+
+**No premature production changes:** Continue ordinary development/CI on local synthetic Supabase and per-PR workers.dev Previews. Do not connect the apex/canonical production host to an unfinished application merely to test it. A staging subdomain may be used only after explicit approval and with isolated hosted resources; if a safe staging mapping is not available, keep the domain check as a documented launch blocker rather than silently changing production DNS. See `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md`.

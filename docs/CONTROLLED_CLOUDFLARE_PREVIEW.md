@@ -1,7 +1,7 @@
 # Controlled Cloudflare Worker Preview
 
-**Version:** 1.3-draft  
-**Last reviewed:** 3 November 2026  
+**Version:** 1.4-draft  
+**Last reviewed:** 4 November 2026  
 **Status:** Conditional public Preview upload for a newly added, substantial learner/staff-visible feature only. Routine/no-change previews are not Founder tasks. The governing standard is docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md.
 
 ## Purpose
@@ -46,7 +46,7 @@ Cloudflare workers.dev Preview URLs are public by default. They include a no-ind
 
 ## Custom domain
 
-Do not connect the custom domain to each PR Preview. Keep per-PR verification on workers.dev. Connect the exact Founder-confirmed custom domain only at Launch Candidate / Production Cutover after all launch gates and separate DNS/production approval. See docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md. Because the Worker is the application origin, Cloudflare Workers Custom Domain is the intended production method; do not create a generic Worker Route without a separately reviewed reason.
+Do not connect the custom domain to each PR Preview. Keep per-PR verification on workers.dev. The roadmap now includes a separately approved branded staging-host check before final Diagnostic/Evaluation Report acceptance; this must use a confirmed staging subdomain, isolated staging Worker/backend, synthetic data and explicit DNS/hosted-resource approval. Do not attach an unfinished build to the production apex/canonical host as a shortcut. Production Custom Domain attachment remains a later Launch Candidate / Production Cutover gate after all release checks and separate DNS/production approval. Because the Worker is the application origin, Cloudflare Workers Custom Domain is the intended method; do not create a generic Worker Route without a separately reviewed reason. See docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md Section 9.
 
 ## Historical verification
 
