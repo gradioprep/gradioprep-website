@@ -177,7 +177,12 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     expect(new Date(acceptedBody.submission.grading_due_at).getTime() -
       new Date(acceptedBody.submission.accepted_at).getTime()).toBe(86_400_000);
     expect(acceptedBody.submission.capacity_limit_snapshot).toBe(3);
-    expect(acceptedBody.submission.open_submissions_before_acceptance).toBe(0);
+    // Other synthetic learner/owner flows run in parallel. The database must
+    // snapshot the real queue load, which can be non-zero, but must accept only
+    // while at least one capacity slot remains.
+    expect(acceptedBody.submission.open_submissions_before_acceptance).toBeGreaterThanOrEqual(0);
+    expect(acceptedBody.submission.open_submissions_before_acceptance)
+      .toBeLessThan(acceptedBody.submission.capacity_limit_snapshot);
     expect(acceptedBody.submission.is_replay).toBe(false);
 
     const replayResponse = await page.request.post("/api/v1/learner/submissions", {
