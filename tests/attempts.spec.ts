@@ -200,6 +200,22 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       error: "submission_idempotency_conflict",
     });
 
+    const concurrentPayload = {
+      ...payload,
+      idempotency_key: randomUUID(),
+      response_text: "This concurrent synthetic retry must produce only one accepted queue item.",
+    };
+    const concurrentResponses = await Promise.all([
+      page.request.post("/api/v1/learner/submissions", { headers, data: concurrentPayload }),
+      page.request.post("/api/v1/learner/submissions", { headers, data: concurrentPayload }),
+    ]);
+    const concurrentBodies = await Promise.all(
+      concurrentResponses.map(response => response.json()),
+    ) as Array<{ submission: { submission_id: string; is_replay: boolean } }>;
+    expect(concurrentResponses.map(response => response.status()).sort()).toEqual([200, 201]);
+    expect(concurrentBodies[0].submission.submission_id).toBe(concurrentBodies[1].submission.submission_id);
+    expect(concurrentBodies.filter(body => body.submission.is_replay)).toHaveLength(1);
+
     const listResponse = await page.request.get("/api/v1/learner/submissions", { headers });
     expect(listResponse.status()).toBe(200);
     const listBody = await listResponse.json() as {
@@ -296,6 +312,12 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
         },
       }),
       request.post("/api/v1/grader/submissions/" + submissionId + "/publish", { data: {} }),
+      request.post("/api/v1/owner/submissions/" + submissionId + "/reassign", {
+        data: { grader_user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", reason: "Anonymous route denial" },
+      }),
+      request.post("/api/v1/owner/submissions/" + submissionId + "/transition", {
+        data: { target_status: "withdrawn", reason: "Anonymous route denial" },
+      }),
     ]);
     for (const response of anonymousChecks) expect(response.status()).toBe(401);
 
@@ -325,6 +347,14 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
         headers: studentHeaders,
         data: {},
       }),
+      studentPage.request.post("/api/v1/owner/submissions/" + submissionId + "/reassign", {
+        headers: studentHeaders,
+        data: { grader_user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", reason: "Student route denial" },
+      }),
+      studentPage.request.post("/api/v1/owner/submissions/" + submissionId + "/transition", {
+        headers: studentHeaders,
+        data: { target_status: "withdrawn", reason: "Student route denial" },
+      }),
     ]);
     for (const response of studentChecks) {
       expect(response.status()).toBe(403);
@@ -353,6 +383,15 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     });
     expect(graderResponse.status()).toBe(403);
     await expect(graderResponse.json()).resolves.toMatchObject({ error: "mfa_required" });
+    const graderLifecycleRoute = await graderPage.request.post(
+      "/api/v1/owner/submissions/" + submissionId + "/reassign",
+      {
+        headers: { Authorization: graderAal1 },
+        data: { grader_user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", reason: "Grader route denial" },
+      },
+    );
+    expect(graderLifecycleRoute.status()).toBe(403);
+    await expect(graderLifecycleRoute.json()).resolves.toMatchObject({ error: "role_required" });
     await graderContext.close();
   });
 

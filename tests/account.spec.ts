@@ -1,4 +1,4 @@
-import { createHmac } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
 import { expect, test } from "@playwright/test";
 
 function createTotpCode(secret: string, timestamp = Date.now()): string {
@@ -304,8 +304,37 @@ test.describe("Phase 1B account foundation", () => {
     }
   });
 
-  test("owner enrols TOTP, verifies sign-in and can revoke a role only after MFA", async ({ page }) => {
+  test("owner enrols TOTP, verifies sign-in and can revoke a role only after MFA", async ({ page, browser }) => {
     test.setTimeout(60_000);
+
+    const learnerContext = await browser.newContext();
+    const learnerPage = await learnerContext.newPage();
+    let learnerToken = "";
+    learnerPage.on("request", request => {
+      if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
+        learnerToken = request.headers()["authorization"] ?? learnerToken;
+      }
+    });
+    await learnerPage.goto("/account");
+    await learnerPage.getByLabel("Email address").fill("student.a@example.invalid");
+    await learnerPage.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
+    await learnerPage.getByRole("button", { name: "Sign in" }).click();
+    await expect(learnerPage.getByRole("heading", { name: "Synthetic Student A" })).toBeVisible();
+    await expect.poll(() => Boolean(learnerToken)).toBe(true);
+    const learnerAcceptance = await learnerPage.request.post("/api/v1/learner/submissions", {
+      headers: { Authorization: learnerToken },
+      data: {
+        task_version_id: "a1111111-1111-4111-8111-111111111111",
+        idempotency_key: randomUUID(),
+        response_text: "A synthetic assessment submission created to verify owner-controlled grader lifecycle routes and audit integrity.",
+      },
+    });
+    const learnerAcceptanceBody = await learnerAcceptance.json() as {
+      submission: { submission_id: string };
+    };
+    expect(learnerAcceptance.status(), JSON.stringify(learnerAcceptanceBody)).toBe(201);
+    const lifecycleSubmissionId = learnerAcceptanceBody.submission.submission_id;
+    await learnerContext.close();
     const accountPageErrors: string[] = [];
     page.on("pageerror", error => accountPageErrors.push(error.message));
     const roleRequest = {
@@ -356,6 +385,29 @@ test.describe("Phase 1B account foundation", () => {
     expect(ownerAal1Assignment.status()).toBe(403);
     await expect(ownerAal1Assignment.json()).resolves.toMatchObject({ error: "mfa_required" });
 
+    const ownerAal1Reassignment = await page.request.post(
+      "/api/v1/owner/submissions/" + lifecycleSubmissionId + "/reassign",
+      {
+        headers: { Authorization: firstFactorToken },
+        data: {
+          grader_user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+          reason: "Synthetic AAL1 reassignment denial",
+        },
+      },
+    );
+    expect(ownerAal1Reassignment.status()).toBe(403);
+    await expect(ownerAal1Reassignment.json()).resolves.toMatchObject({ error: "mfa_required" });
+
+    const ownerAal1Transition = await page.request.post(
+      "/api/v1/owner/submissions/" + lifecycleSubmissionId + "/transition",
+      {
+        headers: { Authorization: firstFactorToken },
+        data: { target_status: "withdrawn", reason: "Synthetic AAL1 transition denial" },
+      },
+    );
+    expect(ownerAal1Transition.status()).toBe(403);
+    await expect(ownerAal1Transition.json()).resolves.toMatchObject({ error: "mfa_required" });
+
     const ownerAal1SubmissionQueue = await page.request.get("/api/v1/admin/submissions/queue", {
       headers: { Authorization: firstFactorToken },
     });
@@ -395,6 +447,60 @@ test.describe("Phase 1B account foundation", () => {
       assignment: {
         attempt_id: "c3333333-3333-4333-8333-333333333333",
         grader_user_id: "55555555-5555-4555-8555-555555555555",
+      },
+    });
+
+    const ownerAal2InitialSubmissionAssignment = await page.request.post(
+      "/api/v1/admin/submissions/" + lifecycleSubmissionId + "/assign",
+      {
+        headers: { Authorization: ownerToken },
+        data: {
+          grader_user_id: "55555555-5555-4555-8555-555555555555",
+          reason: "Synthetic initial assessment assignment",
+        },
+      },
+    );
+    expect(ownerAal2InitialSubmissionAssignment.status()).toBe(201);
+
+    const ownerAal2Reassignment = await page.request.post(
+      "/api/v1/owner/submissions/" + lifecycleSubmissionId + "/reassign",
+      {
+        headers: { Authorization: ownerToken },
+        data: {
+          grader_user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+          reason: "Synthetic owner reassignment",
+        },
+      },
+    );
+    const reassignmentBody = await ownerAal2Reassignment.json() as Record<string, unknown>;
+    expect(ownerAal2Reassignment.status(), JSON.stringify(reassignmentBody)).toBe(200);
+    expect(reassignmentBody).toMatchObject({
+      reassignment: {
+        submission_id: lifecycleSubmissionId,
+        previous_grader_user_id: "55555555-5555-4555-8555-555555555555",
+        new_grader_user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        submission_status: "assigned",
+      },
+    });
+
+    const ownerAal2Transition = await page.request.post(
+      "/api/v1/owner/submissions/" + lifecycleSubmissionId + "/transition",
+      {
+        headers: { Authorization: ownerToken },
+        data: {
+          target_status: "queued",
+          reason: "Synthetic owner queue transition",
+        },
+      },
+    );
+    const transitionBody = await ownerAal2Transition.json() as Record<string, unknown>;
+    expect(ownerAal2Transition.status(), JSON.stringify(transitionBody)).toBe(200);
+    expect(transitionBody).toMatchObject({
+      transition: {
+        submission_id: lifecycleSubmissionId,
+        previous_status: "assigned",
+        status: "queued",
+        active_assignment_revoked: true,
       },
     });
 

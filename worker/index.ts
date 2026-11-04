@@ -595,6 +595,20 @@ function hasOnlySubmissionAssignmentFields(value: unknown): value is { grader_us
     record.reason.trim().length <= 240;
 }
 
+function hasOnlySubmissionTransitionFields(value: unknown): value is {
+  target_status: "queued" | "withdrawn" | "closed";
+  reason: string;
+} {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 2 &&
+    Object.keys(record).every(key => ["target_status", "reason"].includes(key)) &&
+    ["queued", "withdrawn", "closed"].includes(String(record.target_status)) &&
+    typeof record.reason === "string" &&
+    record.reason.trim().length >= 3 &&
+    record.reason.trim().length <= 240;
+}
+
 function hasOnlyAssessmentDraftFields(value: unknown): value is {
   overall_feedback: string;
   change_reason?: string;
@@ -1030,6 +1044,102 @@ async function assignAssessmentSubmissionToGrader(
   return jsonResponse({ assignment }, 201);
 }
 
+async function reassignAssessmentSubmissionGrader(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 2_048);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlySubmissionAssignmentFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_assessment_assignment" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("reassign_submission_grader", {
+    p_submission_id: submissionId,
+    p_new_grader_user_id: parsed.body.grader_user_id,
+    p_reason: parsed.body.reason.trim(),
+  });
+  if (error) {
+    if (error.message === "assessment_assignment_forbidden") {
+      return jsonResponse({ error: "assessment_assignment_forbidden" }, 403);
+    }
+    if (error.message === "assessment_submission_not_found") {
+      return jsonResponse({ error: "assessment_submission_not_found" }, 404);
+    }
+    if ([
+      "assessment_submission_not_reassignable",
+      "assessment_assignment_not_found",
+      "grader_already_assigned",
+    ].includes(error.message)) {
+      return jsonResponse({ error: error.message }, 409);
+    }
+    if ([
+      "invalid_assessment_assignment",
+      "grader_not_available",
+      "invalid_assessment_draft_archive",
+    ].includes(error.message)) {
+      return jsonResponse({ error: error.message }, 400);
+    }
+    return jsonResponse({ error: "assessment_reassignment_failed" }, 500);
+  }
+
+  const reassignment = asRows(data)[0];
+  if (!reassignment) return jsonResponse({ error: "assessment_reassignment_failed" }, 500);
+  return jsonResponse({ reassignment });
+}
+
+async function transitionAssessmentSubmission(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 2_048);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlySubmissionTransitionFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_assessment_transition" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("transition_assessment_submission", {
+    p_submission_id: submissionId,
+    p_target_status: parsed.body.target_status,
+    p_reason: parsed.body.reason.trim(),
+  });
+  if (error) {
+    if (error.message === "assessment_transition_forbidden") {
+      return jsonResponse({ error: "assessment_transition_forbidden" }, 403);
+    }
+    if (error.message === "assessment_submission_not_found") {
+      return jsonResponse({ error: "assessment_submission_not_found" }, 404);
+    }
+    if (error.message === "invalid_assessment_transition") {
+      return jsonResponse({ error: "invalid_assessment_transition" }, 409);
+    }
+    if (error.message === "invalid_assessment_draft_archive") {
+      return jsonResponse({ error: "invalid_assessment_transition" }, 400);
+    }
+    return jsonResponse({ error: "assessment_transition_failed" }, 500);
+  }
+
+  const transition = asRows(data)[0];
+  if (!transition) return jsonResponse({ error: "assessment_transition_failed" }, 500);
+  return jsonResponse({ transition });
+}
+
 async function listAssignedAssessmentSubmissions(request: Request, env: WorkerEnv): Promise<Response> {
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
@@ -1378,6 +1488,16 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const assignSubmissionMatch = url.pathname.match(/^\/api\/v1\/admin\/submissions\/([0-9a-f-]{36})\/assign$/i);
   if (assignSubmissionMatch && request.method === "POST") {
     return assignAssessmentSubmissionToGrader(request, env, assignSubmissionMatch[1]);
+  }
+
+  const ownerSubmissionReassignMatch = url.pathname.match(/^\/api\/v1\/owner\/submissions\/([0-9a-f-]{36})\/reassign$/i);
+  if (ownerSubmissionReassignMatch && request.method === "POST") {
+    return reassignAssessmentSubmissionGrader(request, env, ownerSubmissionReassignMatch[1]);
+  }
+
+  const ownerSubmissionTransitionMatch = url.pathname.match(/^\/api\/v1\/owner\/submissions\/([0-9a-f-]{36})\/transition$/i);
+  if (ownerSubmissionTransitionMatch && request.method === "POST") {
+    return transitionAssessmentSubmission(request, env, ownerSubmissionTransitionMatch[1]);
   }
 
   if (url.pathname === "/api/v1/grader/submissions" && request.method === "GET") {

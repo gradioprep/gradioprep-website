@@ -31,11 +31,16 @@ SELECT is(
         'rubric_criteria',
         'task_rubric_mappings',
         'assessment_submissions',
-        'submission_versions'
+        'submission_versions',
+        'submission_grader_assignments',
+        'assessment_versions',
+        'criterion_results',
+        'assessment_drafts',
+        'assessment_draft_history'
       )
   ),
-  19,
-  'all nineteen currently protected application tables are present'
+  24,
+  'all twenty-four currently protected application tables are present'
 );
 
 SELECT is(
@@ -64,11 +69,16 @@ SELECT is(
         'rubric_criteria',
         'task_rubric_mappings',
         'assessment_submissions',
-        'submission_versions'
+        'submission_versions',
+        'submission_grader_assignments',
+        'assessment_versions',
+        'criterion_results',
+        'assessment_drafts',
+        'assessment_draft_history'
       )
       AND relation.relrowsecurity
   ),
-  19,
+  24,
   'RLS is enabled on every protected application table'
 );
 
@@ -119,7 +129,12 @@ SELECT ok(
         'rubric_criteria',
         'task_rubric_mappings',
         'assessment_submissions',
-        'submission_versions'
+        'submission_versions',
+        'submission_grader_assignments',
+        'assessment_versions',
+        'criterion_results',
+        'assessment_drafts',
+        'assessment_draft_history'
       )
   ),
   'anonymous has no direct read or write privilege on any protected table'
@@ -163,10 +178,12 @@ SELECT ok(
         'rubric_criteria',
         'task_rubric_mappings',
         'assessment_submissions',
-        'submission_versions'
+        'submission_versions',
+        'assessment_drafts',
+        'assessment_draft_history'
       )
   ),
-  'authenticated has no direct table privilege on private audit, invitation, response-history or capacity configuration records'
+  'authenticated has no direct table privilege on private audit, invitation, response-history, capacity and draft records'
 );
 
 SELECT ok(
@@ -208,6 +225,15 @@ SELECT ok(
       AND NOT has_table_privilege('authenticated', 'public.task_rubric_mappings', 'INSERT')
       AND NOT has_table_privilege('authenticated', 'public.task_rubric_mappings', 'UPDATE')
       AND NOT has_table_privilege('authenticated', 'public.task_rubric_mappings', 'DELETE')
+       AND NOT has_table_privilege('authenticated', 'public.submission_grader_assignments', 'INSERT')
+       AND NOT has_table_privilege('authenticated', 'public.submission_grader_assignments', 'UPDATE')
+       AND NOT has_table_privilege('authenticated', 'public.submission_grader_assignments', 'DELETE')
+       AND NOT has_table_privilege('authenticated', 'public.assessment_versions', 'INSERT')
+       AND NOT has_table_privilege('authenticated', 'public.assessment_versions', 'UPDATE')
+       AND NOT has_table_privilege('authenticated', 'public.assessment_versions', 'DELETE')
+       AND NOT has_table_privilege('authenticated', 'public.criterion_results', 'INSERT')
+       AND NOT has_table_privilege('authenticated', 'public.criterion_results', 'UPDATE')
+       AND NOT has_table_privilege('authenticated', 'public.criterion_results', 'DELETE')
     )
   ),
   'authenticated users cannot directly mutate roles, links, enrolments, assignments, attempts or responses'
@@ -228,7 +254,10 @@ SELECT ok(
   AND has_table_privilege('authenticated', 'public.rubrics', 'SELECT')
   AND has_table_privilege('authenticated', 'public.rubric_versions', 'SELECT')
   AND has_table_privilege('authenticated', 'public.rubric_criteria', 'SELECT')
-  AND has_table_privilege('authenticated', 'public.task_rubric_mappings', 'SELECT'),
+  AND has_table_privilege('authenticated', 'public.task_rubric_mappings', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.submission_grader_assignments', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.assessment_versions', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.criterion_results', 'SELECT'),
   'authenticated SELECT grants exist only as the starting point for row-scoped RLS reads'
 );
 
