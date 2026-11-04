@@ -476,7 +476,15 @@ Migration `20261103000700_phase1c_private_audit_and_revoked_assignment_rls.sql` 
 **Remaining Phase 1C exit work — updated 4 November 2026:** 1C-D operational role separation is complete and verified in Section 20.4. Remaining items are 1C-E comprehensive audit/workflow integrity, including privileged-read evidence where feasible; 1C-F adversarial cross-role/AAL1/AAL2, replay/concurrency and direct table/RPC-bypass acceptance; and any remaining operation-specific Worker/database matrix gaps. Do not begin Phase 1D until all Phase 1C exit criteria are implemented, tested, documented and reconciled. PDF files/storage, OCR, timer UI/analytics and real learner-data readiness remain later gated work.
 
 
-## 21. Founder-approved commercial and remedial-access boundary — 4 November 2026
+## 20.4 Verified Phase 1C-D operational role separation — 4 November 2026
+
+**Exact verified code head:** c1647c7c7048b1d791c3d24f59ed51168f219d51 in PR #22. Exact-head GitHub Actions run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786) passed local Supabase reset/seed with synthetic fixtures, PostgreSQL/RLS tests, TypeScript/Worker/Vite builds, 27/27 Playwright tests, cleanup and the clean public-Preview asset build.
+
+Phase 1C-D operational role separation is complete and verified. The remaining Phase 1C work is 1C-E audit/workflow integrity, 1C-F adversarial acceptance and any residual operation-specific authorization gaps. Do not begin Phase 1D until every Phase 1C exit criterion is implemented, cross-role/security-tested, reconciled across source-of-truth records and verified at the exact PR head.
+
+This completion concerns backend/API role separation and its tests. It does not create the future learner-facing commercial Admin dashboard for course grants, payment/credit exceptions or refunds. That dashboard, course entitlement/payment system, physical credit ledger and ordinary public learner-email delivery remain future product implementation; see docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. PR #22 remains open, draft and unmerged, and no hosted resources, paid usage, real learner data, merge or production deployment are authorised.
+
+## 22. Founder-approved commercial and remedial-access boundary — 4 November 2026
 
 The grading tier, curriculum-frequency, learner free/paid access and commercial implementation rules are defined in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. They are approved product specifications, not Phase 1 implementation authorisation.
 
@@ -488,12 +496,3 @@ The grading tier, curriculum-frequency, learner free/paid access and commercial 
 - The physical credit ledger, course entitlement/payment records, checkout/payment provider, email-delivery provider and customer-facing Admin UI are outside Phase 1. Keep local synthetic implementation progressing through 1C-D/E/F and the later 1D/1E/1F security sequence. Do not delay free diagnostic/report work on a payment provider; do not sell or unlock paid access before entitlements and trusted payment/ledger controls are implemented.
 
 Latest Phase 1C-D exact-head verification: commit c1647c7c7048b1d791c3d24f59ed51168f219d51, run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786), passed. Phase 1C-E and 1C-F remain before Phase 1D. PR #22 stays open, draft and unmerged. No hosted provisioning, paid service, real learner data, external processing, merge or production deployment is authorised.
-
-
-## 20.4 Verified Phase 1C-D operational role separation — 4 November 2026
-
-**Exact verified code head:** c1647c7c7048b1d791c3d24f59ed51168f219d51 in PR #22. Exact-head GitHub Actions run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786) passed local Supabase reset/seed with synthetic fixtures, PostgreSQL/RLS tests, TypeScript/Worker/Vite builds, 27/27 Playwright tests, cleanup and the clean public-Preview asset build.
-
-Phase 1C-D operational role separation is complete and verified. The remaining Phase 1C work is 1C-E audit/workflow integrity, 1C-F adversarial acceptance and any residual operation-specific authorization gaps. Do not begin Phase 1D until every Phase 1C exit criterion is implemented, cross-role/security-tested, reconciled across source-of-truth records and verified at the exact PR head.
-
-This completion concerns backend/API role separation and its tests. It does not create the future learner-facing commercial Admin dashboard for course grants, payment/credit exceptions or refunds. That dashboard, course entitlement/payment system, physical credit ledger and ordinary public learner-email delivery remain future product implementation; see docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. PR #22 remains open, draft and unmerged, and no hosted resources, paid usage, real learner data, merge or production deployment are authorised.
