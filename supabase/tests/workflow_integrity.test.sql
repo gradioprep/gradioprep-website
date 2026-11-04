@@ -32,6 +32,7 @@ SELECT is(
   1,
   'an identical acceptance retry does not create a second submission'
 );
+RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM private.security_audit_events
    WHERE action = 'assessment_submission_accepted'
@@ -39,6 +40,7 @@ SELECT is(
   1,
   'replayed acceptance does not duplicate the original acceptance audit event'
 );
+SET LOCAL ROLE authenticated;
 SELECT ok(
   public.audit_authorized_protected_read('student_submission_list_authorized', NULL),
   'student can record an authorised own-submission list read'
@@ -90,6 +92,7 @@ SELECT is(
   0,
   'an identical typed-response retry creates no redundant archive snapshot'
 );
+RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM private.security_audit_events
    WHERE action = 'attempt_response_saved'
@@ -97,6 +100,7 @@ SELECT is(
   1,
   'an identical typed-response retry creates no duplicate save audit event'
 );
+SET LOCAL ROLE authenticated;
 SELECT ok(
   public.audit_authorized_protected_read(
     'student_attempt_read_authorized',
@@ -111,6 +115,7 @@ SELECT ok(
   ),
   'student cannot record an authorised read of another learner attempt'
 );
+RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM private.security_audit_events
    WHERE action = 'student_attempt_read_authorized'
@@ -118,6 +123,7 @@ SELECT is(
   1,
   'the authorised attempt read creates an append-only audit event'
 );
+SET LOCAL ROLE authenticated;
 
 -- Owner queue inspection and assignment require AAL2 inside PostgreSQL.
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
@@ -194,6 +200,7 @@ SELECT is(
   1,
   'an identical grader draft retry returns the existing revision'
 );
+RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM private.security_audit_events
    WHERE action = 'assessment_draft_saved'
@@ -208,6 +215,9 @@ SELECT is(
   1,
   'identical grader draft retry is separately recorded as a replay'
 );
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);
+SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}', true);
 SELECT ok(
   NOT public.audit_authorized_protected_read(
     'grader_submission_read_authorized',
@@ -229,6 +239,7 @@ SELECT ok(
 );
 
 -- The audit schema contains no learner answer or feedback payload columns.
+RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM information_schema.columns
    WHERE table_schema = 'private'
