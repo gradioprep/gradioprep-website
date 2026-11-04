@@ -1,10 +1,11 @@
 # Flagship PDF Response, Teacher Grading and Timed Analytics — Implementation Plan
 
-**Version:** 0.6
-**Date:** 2 November 2026  
+**Version:** 0.7
+**Date:** 4 November 2026  
 **Status:** Feature plan, 24-hour grading target and Phase 0 architecture/timer/retention/provider decisions approved by the Founder on 2 November 2026. Phase 0 is complete. The phased implementation sequence is approved; Phase 1B local synthetic-only coding is expressly approved and underway in draft PR #22. Work within the approved plan proceeds without repeated implementation re-approval. Hosted provisioning, paid costs, real learner data, external processor use, PR merge and production deployment remain separate gates. The free-first rule is in `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`. No hosted service, paid plan, real learner data or production release has been provisioned.
 **Applies to:** Shared written-response and human-grading experience for Grades 6–12 across approved curricula.  
 **Owner / academic authority:** Founder / project owner.
+**Commercial and access cross-reference:** docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md governs task credits, pricing, frequency modelling and the free/paid course access boundary; docs/PROJECT_MASTER_BRIEF.md records the approved decisions.
 
 ## 1. Approved product decisions
 
@@ -23,6 +24,8 @@
    - **Overdue:** the deadline has passed. Display separately; do not hide overdue submissions.
 10. On successful grading, show both the actual turnaround and the time remaining before the 24-hour deadline (or the amount overdue). Show this immediately before the published feedback on both the teacher/grader and learner views.
 11. A student task countdown is required and feeds accuracy/rubric-linked analytics under the approved advisory timer policy in the Phase 0 decision register. No learner pause/resume, hard stop, auto-submit or response deletion is permitted.
+12. All accepted human-grading submissions, including the one-time free Standard task, use one 24-hour elapsed-time target from server acceptance to first publication of human feedback. This supersedes the older differentiated free/paid/urgent SLA proposal; no urgent surcharge is part of the initial commercial model.
+13. Each eligible task has an approved server-calculated grading tier and required credits before acceptance. The default unit is 20 predicted grader minutes: Standard 1, Premium 2, Elite 3, Custom 4+. The ₹399 unit-credit and pack prices remain commercial hypotheses. Curriculum-frequency modelling informs expected credit mix but does not override task-level effort. See the commercial/access policy.
 
 ## 2. Task configuration and response selection
 
@@ -32,9 +35,10 @@ Each authored written task must specify:
 - accepted response mode: typed only or typed plus PDF;
 - whether the task is timed, its task-specific approved time allowance and timer-policy version; learner pause/resume is disabled in the first release under the approved Phase 0 policy;
 - the exact rubric version and criteria used for human grading;
-- the skill/subskill and curriculum/course/level metadata needed for analytics.
+- the skill/subskill and curriculum/course/level metadata needed for analytics;
+- expected grader minutes, task complexity/parts, Standard/Premium/Elite/Custom tier, required credits and credit-policy version, all approved and calculated server-side before submission acceptance.
 
-The PDF option is a second response route, not a compulsory route and not a way to bypass the task's instructions, response range, deadline or academic criteria. Do not infer PDF eligibility solely from the number of words a learner has already typed; use the approved task configuration.
+The PDF option is a second response route, not a compulsory route and not a way to bypass the task's instructions, response range, deadline or academic criteria. Do not infer PDF eligibility solely from the number of words a learner has already typed; use the approved task configuration. The typed ideal-word counter is guidance, not a cap. Expected words inform effort but do not trigger a post-submission debit. The PDF 10 MB/10-page cap is a file safeguard, not a price unit. Do not charge more solely for PDF mode, page count within the cap, OCR use or actual words above the ideal target. Set and show credits before acceptance; additional independent tasks require explicit pre-acceptance confirmation.
 
 ## 3. PDF submission and extraction workflow
 
@@ -70,6 +74,10 @@ For every page, record digital_text, ocr_complete, low_confidence, no_text_detec
 
 The original PDF remains authoritative. A teacher may correct the transcript for grading convenience, but the original OCR output and correction history remain preserved. Low-confidence or failed extraction must not block the learner's accepted submission or prevent the teacher from grading directly from the PDF.
 
+### 3.5 Credit and pricing safeguards for PDF submissions
+
+The original PDF remains authoritative, but the PDF route does not create a separate per-page tariff. Do not multiply credits by PDF pages or file size. Use the approved task/rubric scope and predicted grader minutes to calculate required credits before acceptance. Digital extraction and scanned-page OCR are processing methods, not learner-billable tier changes. If the request is for an additional independent assessment or a broader paper than the selected task, disclose the revised scope and price and obtain learner confirmation before acceptance. Never apply a surprise post-submission debit.
+
 ## 4. Teacher/grader queue and grading workspace
 
 The queue is ordered by accepted_at ascending (oldest first). Each submission card displays:
@@ -98,7 +106,7 @@ The rubric must be available without navigating away from the submission. Grader
 ## 6. Grading deadline and priority calculations
 
 - accepted_at is a trusted server UTC timestamp.
-- grading_due_at = accepted_at + 24 hours.
+- grading_due_at = accepted_at + 24 hours. This is the sole launch target for all accepted human-grading submissions, including complimentary Standard work; it supersedes the older proposed 72-hour free / 48-hour paid Standard / separate urgent 24-hour SLA tiers.
 - remaining = grading_due_at - current_server_time.
 - Queue display sort: accepted_at ASC; do not sort by priority.
 - Priority 3 applies while remaining is greater than 20 hours; Priority 2 applies after 20 hours and until more than 10 hours remain; Priority 1 applies from 10 hours remaining through the deadline; Overdue applies after the deadline.
@@ -170,6 +178,17 @@ The approved 24-hour grading target applies to the shared human-grading workflow
 4. After Phase 1 security, access, backup/restore and deletion tests pass, continue Phases 2–6 in order. Actual MYP diagnostic item authoring remains paused until the shared feature is implemented and pilot-validated. Existing curriculum queues remain deferred; Cambridge Grade 6 research remains blocked until Cycle 1 is complete and the Founder directs the transition.
 
 ## 12. Official technical references checked 2 November 2026
+
+The product pricing/credit policy does not alter the approved infrastructure provider choices or budget gates. See docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md for infrastructure spend and docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md for customer pricing, credit packs, curriculum-frequency calculation, PDF safeguards and the future entitlement/payment roadmap.
+
+## 13. Credit-tier and curriculum-frequency integration — 4 November 2026
+
+Each authored human-graded task must carry expected response range/ideal words, task parts, rubric criteria, predicted grader minutes, response mode, tier, required credits and credit-policy version. The server derives the requirement from approved metadata before acceptance using max(1, ceiling(predicted_grader_minutes / 20)). The approved default mapping is Standard 1 credit (up to 20 predicted minutes), Premium 2 (21–40), Elite 3 (41–60), and Custom 4+ (over 60 minutes or broader task). Word bands (up to 50, 51–150, 151–350) are indicative task defaults, not caps.
+
+For each curriculum/grade/course, calculate independently gradable response-task frequency and marks share from representative assessment materials. Use frequency and tier credit weights to forecast expected credit mix; use marks as an academic cross-check, not as a substitute for grading effort. The CBSE ~50-word example must be verified for the selected grade/subject/exam series. Do not copy proportions across IB, Cambridge and CBSE.
+
+Credit policy does not price PDF pages or OCR. The pilot PDF cap remains 10 MB/10 pages. PDF or scanned response grading uses the same task-tier rule and teacher effort estimate. The learner sees tier/credits/price before acceptance; actual word count beyond the ideal target does not create a retrospective debit. Refer to docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md for the complete algorithm, competitor research, packs and access sequence.
+
 
 - Supabase pricing and limits: https://supabase.com/pricing
 - Supabase upload limits: https://supabase.com/docs/guides/storage/uploads/file-limits
