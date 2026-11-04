@@ -5,6 +5,17 @@ type WorkerEnv = Env & {
   SUPABASE_PUBLISHABLE_KEY?: string;
 };
 
+type ProtectedReadAuditAction =
+  | "student_attempt_list_authorized"
+  | "student_attempt_read_authorized"
+  | "grader_attempt_queue_authorized"
+  | "grader_attempt_read_authorized"
+  | "student_submission_list_authorized"
+  | "student_submission_read_authorized"
+  | "grader_submission_queue_authorized"
+  | "grader_submission_read_authorized"
+  | "owner_submission_queue_authorized";
+
 type AppRole = "student" | "guardian" | "grader" | "admin" | "owner";
 
 const APP_ROLES: readonly AppRole[] = [
@@ -671,17 +682,41 @@ function requireAal2(context: CallerContext): Response | null {
       }, 403);
 }
 
+async function auditAuthorizedProtectedRead(
+  context: CallerContext,
+  action: ProtectedReadAuditAction,
+  targetId?: string,
+): Promise<Response | null> {
+  const { data, error } = await context.supabase.rpc("audit_authorized_protected_read", {
+    p_action: action,
+    p_target_id: targetId ?? null,
+  });
+  if (error) {
+    return jsonResponse({
+      error: "protected_read_audit_unavailable",
+      message: "The protected read could not be audited. Please retry.",
+    }, 503);
+  }
+  if (data !== true) {
+    return jsonResponse({ error: "record_not_found_or_forbidden" }, 404);
+  }
+  return null;
+}
+
 async function listLearnerAttempts(request: Request, env: WorkerEnv): Promise<Response> {
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "student");
   if (roleDenied) return roleDenied;
+  const auditDenied = await auditAuthorizedProtectedRead(auth.context, "student_attempt_list_authorized");
+  if (auditDenied) return auditDenied;
 
   const { data, error } = await auth.context.supabase
     .from("attempts")
     .select("id, learner_id, task_version_id, status, started_at, submitted_at, task_versions(task_code, title, version, expected_min_words, ideal_words)")
     .eq("learner_id", auth.context.userId)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .order("id", { ascending: false });
 
   if (error) return jsonResponse({ error: "attempts_unavailable" }, 500);
   return jsonResponse({ attempts: data ?? [] });
@@ -775,6 +810,10 @@ async function getLearnerAttempt(request: Request, env: WorkerEnv, attemptId: st
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "student");
   if (roleDenied) return roleDenied;
+  const auditDenied = await auditAuthorizedProtectedRead(
+    auth.context, "student_attempt_read_authorized", attemptId,
+  );
+  if (auditDenied) return auditDenied;
 
   const result = await readAttemptDetails(auth.context, attemptId);
   if (result.error) return jsonResponse({ error: "attempt_unavailable" }, 500);
@@ -868,12 +907,15 @@ async function listLearnerSubmissions(request: Request, env: WorkerEnv): Promise
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "student");
   if (roleDenied) return roleDenied;
+  const auditDenied = await auditAuthorizedProtectedRead(auth.context, "student_submission_list_authorized");
+  if (auditDenied) return auditDenied;
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
     .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version), submission_versions(id, version_number, word_count, created_at)")
     .eq("learner_id", auth.context.userId)
-    .order("accepted_at", { ascending: false });
+    .order("accepted_at", { ascending: false })
+    .order("id", { ascending: false });
 
   if (error) return jsonResponse({ error: "assessment_submissions_unavailable" }, 500);
   return jsonResponse({ submissions: data ?? [] });
@@ -936,6 +978,10 @@ async function getLearnerSubmission(
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "student");
   if (roleDenied) return roleDenied;
+  const auditDenied = await auditAuthorizedProtectedRead(
+    auth.context, "student_submission_read_authorized", submissionId,
+  );
+  if (auditDenied) return auditDenied;
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
@@ -991,6 +1037,8 @@ async function listAssignedAssessmentSubmissions(request: Request, env: WorkerEn
   if (roleDenied) return roleDenied;
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) return mfaDenied;
+  const auditDenied = await auditAuthorizedProtectedRead(auth.context, "grader_submission_queue_authorized");
+  if (auditDenied) return auditDenied;
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
@@ -1014,6 +1062,10 @@ async function getAssignedAssessmentSubmission(
   if (roleDenied) return roleDenied;
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) return mfaDenied;
+  const auditDenied = await auditAuthorizedProtectedRead(
+    auth.context, "grader_submission_read_authorized", submissionId,
+  );
+  if (auditDenied) return auditDenied;
 
   const { data: submission, error: submissionError } = await auth.context.supabase
     .from("assessment_submissions")
@@ -1159,6 +1211,8 @@ async function listAssessmentSubmissionQueue(request: Request, env: WorkerEnv): 
   if (roleDenied) return roleDenied;
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) return mfaDenied;
+  const auditDenied = await auditAuthorizedProtectedRead(auth.context, "owner_submission_queue_authorized");
+  if (auditDenied) return auditDenied;
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
@@ -1179,12 +1233,15 @@ async function listGraderQueue(request: Request, env: WorkerEnv): Promise<Respon
   if (roleDenied) return roleDenied;
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) return mfaDenied;
+  const auditDenied = await auditAuthorizedProtectedRead(auth.context, "grader_attempt_queue_authorized");
+  if (auditDenied) return auditDenied;
 
   const { data, error } = await auth.context.supabase
     .from("attempts")
     .select("id, learner_id, task_version_id, status, submitted_at, task_versions(task_code, title, version)")
     .eq("status", "submitted")
-    .order("submitted_at", { ascending: true });
+    .order("submitted_at", { ascending: true })
+    .order("id", { ascending: true });
 
   if (error) return jsonResponse({ error: "grader_queue_unavailable" }, 500);
   return jsonResponse({ attempts: data ?? [] });
@@ -1197,6 +1254,10 @@ async function getGraderAttempt(request: Request, env: WorkerEnv, attemptId: str
   if (roleDenied) return roleDenied;
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) return mfaDenied;
+  const auditDenied = await auditAuthorizedProtectedRead(
+    auth.context, "grader_attempt_read_authorized", attemptId,
+  );
+  if (auditDenied) return auditDenied;
 
   const result = await readAttemptDetails(auth.context, attemptId);
   if (result.error) return jsonResponse({ error: "attempt_unavailable" }, 500);

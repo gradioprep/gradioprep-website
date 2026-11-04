@@ -1,0 +1,242 @@
+BEGIN;
+SELECT no_plan();
+
+-- Student-owned submission reads are audited, and cross-learner targets fail closed.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}', true);
+
+SELECT set_config(
+  'test.workflow_submission_id',
+  (SELECT submission_id::text
+   FROM public.accept_assessment_submission(
+     'a1111111-1111-4111-8111-111111111111',
+     '81818181-8181-4181-8181-818181818181',
+     'Synthetic workflow integrity response with enough detail to validate audit and replay protection.'
+   )),
+  true
+);
+
+SELECT is(
+  (SELECT is_replay FROM public.accept_assessment_submission(
+    'a1111111-1111-4111-8111-111111111111',
+    '81818181-8181-4181-8181-818181818181',
+    'Synthetic workflow integrity response with enough detail to validate audit and replay protection.'
+  )),
+  true,
+  'an identical accepted-submission retry returns the existing acceptance'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM public.assessment_submissions
+   WHERE id = current_setting('test.workflow_submission_id')::uuid),
+  1,
+  'an identical acceptance retry does not create a second submission'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE action = 'assessment_submission_accepted'
+     AND target_id = current_setting('test.workflow_submission_id')::uuid),
+  1,
+  'replayed acceptance does not duplicate the original acceptance audit event'
+);
+SELECT ok(
+  public.audit_authorized_protected_read('student_submission_list_authorized', NULL),
+  'student can record an authorised own-submission list read'
+);
+SELECT ok(
+  public.audit_authorized_protected_read(
+    'student_submission_read_authorized',
+    current_setting('test.workflow_submission_id')::uuid
+  ),
+  'student can record an authorised read of their own submission'
+);
+SELECT ok(
+  NOT public.audit_authorized_protected_read(
+    'student_submission_read_authorized',
+    'd2222222-2222-4222-8222-222222222222'::uuid
+  ),
+  'student cannot audit-read another learner submission'
+);
+
+-- Repeated identical typed-response saves do not create redundant versions,
+-- archive rows or audit records.
+SELECT set_config(
+  'test.workflow_attempt_id',
+  (SELECT attempt_id::text
+   FROM public.create_attempt('a1111111-1111-4111-8111-111111111111')),
+  true
+);
+SELECT is(
+  (SELECT version FROM public.save_attempt_response(
+    current_setting('test.workflow_attempt_id')::uuid,
+    'b1111111-1111-4111-8111-111111111111',
+    'An identical synthetic response is safely retried without changing its version.'
+  )),
+  1,
+  'first typed response save creates version one'
+);
+SELECT is(
+  (SELECT version FROM public.save_attempt_response(
+    current_setting('test.workflow_attempt_id')::uuid,
+    'b1111111-1111-4111-8111-111111111111',
+    'An identical synthetic response is safely retried without changing its version.'
+  )),
+  1,
+  'an identical typed-response retry returns the same version'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.attempt_response_versions
+   WHERE attempt_id = current_setting('test.workflow_attempt_id')::uuid),
+  0,
+  'an identical typed-response retry creates no redundant archive snapshot'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE action = 'attempt_response_saved'
+     AND target_id = current_setting('test.workflow_attempt_id')::uuid),
+  1,
+  'an identical typed-response retry creates no duplicate save audit event'
+);
+SELECT ok(
+  public.audit_authorized_protected_read(
+    'student_attempt_read_authorized',
+    current_setting('test.workflow_attempt_id')::uuid
+  ),
+  'student can record an authorised read of their own typed attempt'
+);
+SELECT ok(
+  NOT public.audit_authorized_protected_read(
+    'student_attempt_read_authorized',
+    'c2222222-2222-4222-8222-222222222222'::uuid
+  ),
+  'student cannot record an authorised read of another learner attempt'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE action = 'student_attempt_read_authorized'
+     AND target_id = current_setting('test.workflow_attempt_id')::uuid),
+  1,
+  'the authorised attempt read creates an append-only audit event'
+);
+
+-- Owner queue inspection and assignment require AAL2 inside PostgreSQL.
+SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}', true);
+SELECT ok(
+  NOT public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL),
+  'owner at AAL1 cannot record privileged submission queue access'
+);
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
+SELECT ok(
+  public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL),
+  'active owner at AAL2 can record protected submission queue access'
+);
+SELECT lives_ok(
+  $$SELECT * FROM public.assign_submission_to_grader(
+    current_setting('test.workflow_submission_id')::uuid,
+    '55555555-5555-4555-8555-555555555555',
+    'Workflow integrity synthetic assignment'
+  )$$,
+  'owner at AAL2 assigns synthetic submission through the protected RPC'
+);
+
+-- Grader queue/detail audit is independently scoped by active assignment and AAL2.
+SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);
+SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal1"}', true);
+SELECT ok(
+  NOT public.audit_authorized_protected_read('grader_submission_queue_authorized', NULL),
+  'grader at AAL1 cannot record assessment queue access'
+);
+SELECT ok(
+  NOT public.audit_authorized_protected_read(
+    'grader_submission_read_authorized',
+    current_setting('test.workflow_submission_id')::uuid
+  ),
+  'grader at AAL1 cannot record submission detail access'
+);
+SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}', true);
+SELECT ok(
+  public.audit_authorized_protected_read('grader_submission_queue_authorized', NULL),
+  'assigned grader at AAL2 can record assessment queue access'
+);
+SELECT ok(
+  public.audit_authorized_protected_read(
+    'grader_submission_read_authorized',
+    current_setting('test.workflow_submission_id')::uuid
+  ),
+  'assigned grader at AAL2 can record only their assigned submission read'
+);
+
+-- Identical feedback retries retain the revision while preserving a replay event.
+SELECT is(
+  (SELECT draft_revision FROM public.save_assessment_draft(
+    current_setting('test.workflow_submission_id')::uuid,
+    'This synthetic feedback explains the learner strengths and next improvement step.',
+    NULL,
+    '[
+      {"criterion_id":"f3333333-3333-4333-8333-333333333333","points_awarded":3,"feedback":"The learner selects relevant evidence and integrates it into a supported explanation."},
+      {"criterion_id":"f4444444-4444-4444-8444-444444444444","points_awarded":2,"feedback":"The learner explains one effect and can develop the link to the wider meaning."}
+    ]'::jsonb
+  )),
+  1,
+  'first grader draft save creates revision one'
+);
+SELECT is(
+  (SELECT draft_revision FROM public.save_assessment_draft(
+    current_setting('test.workflow_submission_id')::uuid,
+    'This synthetic feedback explains the learner strengths and next improvement step.',
+    NULL,
+    '[
+      {"criterion_id":"f3333333-3333-4333-8333-333333333333","points_awarded":3,"feedback":"The learner selects relevant evidence and integrates it into a supported explanation."},
+      {"criterion_id":"f4444444-4444-4444-8444-444444444444","points_awarded":2,"feedback":"The learner explains one effect and can develop the link to the wider meaning."}
+    ]'::jsonb
+  )),
+  1,
+  'an identical grader draft retry returns the existing revision'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE action = 'assessment_draft_saved'
+     AND target_id = current_setting('test.workflow_submission_id')::uuid),
+  1,
+  'identical grader draft retry does not duplicate the primary save event'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE action = 'assessment_draft_save_replayed'
+     AND target_id = current_setting('test.workflow_submission_id')::uuid),
+  1,
+  'identical grader draft retry is separately recorded as a replay'
+);
+SELECT ok(
+  NOT public.audit_authorized_protected_read(
+    'grader_submission_read_authorized',
+    'd2222222-2222-4222-8222-222222222222'::uuid
+  ),
+  'assigned grader cannot record a read of an unrelated submission'
+);
+
+-- Admin role must not inherit owner or grader operational access.
+SELECT set_config('request.jwt.claim.sub', '77777777-7777-4777-8777-777777777777', true);
+SELECT set_config('request.jwt.claims', '{"sub":"77777777-7777-4777-8777-777777777777","role":"authenticated","aal":"aal2"}', true);
+SELECT ok(
+  NOT public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL),
+  'admin does not inherit owner submission queue access'
+);
+SELECT ok(
+  NOT public.audit_authorized_protected_read('grader_submission_queue_authorized', NULL),
+  'admin does not inherit grader submission queue access'
+);
+
+-- The audit schema contains no learner answer or feedback payload columns.
+SELECT is(
+  (SELECT count(*)::integer FROM information_schema.columns
+   WHERE table_schema = 'private'
+     AND table_name = 'security_audit_events'
+     AND column_name IN ('response_text', 'overall_feedback', 'criterion_results')),
+  0,
+  'security audit schema excludes learner response and feedback content'
+);
+
+SELECT * FROM finish();
+ROLLBACK;
