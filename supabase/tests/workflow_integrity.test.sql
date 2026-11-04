@@ -90,8 +90,8 @@ RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM private.attempt_response_versions
    WHERE attempt_id = current_setting('test.workflow_attempt_id')::uuid),
-  0,
-  'an identical typed-response retry creates no redundant archive snapshot'
+  1,
+  'the initial response is archived once and an identical retry creates no additional snapshot'
 );
 RESET ROLE;
 SELECT is(
