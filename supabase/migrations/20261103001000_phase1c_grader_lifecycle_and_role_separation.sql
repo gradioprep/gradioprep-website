@@ -279,10 +279,12 @@ BEGIN
     p_submission_id, actor_id, btrim(p_reason)
   );
 
-  UPDATE public.submission_grader_assignments
+  -- submission_id is also a RETURNS TABLE output variable; qualify the
+  -- table reference so PL/pgSQL cannot confuse it with that output variable.
+  UPDATE public.submission_grader_assignments AS assignment
   SET revoked_by = actor_id, revoked_at = clock_timestamp()
-  WHERE submission_id = p_submission_id
-    AND revoked_at IS NULL;
+  WHERE assignment.submission_id = p_submission_id
+    AND assignment.revoked_at IS NULL;
   GET DIAGNOSTICS assignment_rows = ROW_COUNT;
 
   UPDATE public.assessment_submissions
