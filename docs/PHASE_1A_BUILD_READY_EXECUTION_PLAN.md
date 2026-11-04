@@ -333,7 +333,7 @@ Exact-head run [#41646515558](https://github.com/gradioprep/gradioprep-website/a
 
 **Revocation regression fix:** Before revoking the synthetic grader, the SQL test saves the existing submission ID and asserts that the target grader has an active assignment. Both revoked-grader denial RPC calls use that preserved ID and pass with `42501 / grader_assessment_forbidden`.
 
-**Current next steps:** complete 1C-D operational role separation, 1C-E expanded audit/workflow integrity, 1C-F full adversarial acceptance, and any remaining table-by-table Worker/database permission gaps. Keep Phase 1D blocked until the entire Phase 1C exit gate passes. Use local Supabase and synthetic records only; do not request a Founder Preview for routine backend/security work.
+**Historical next-step note — superseded 4 November 2026:** Phase 1C-D operational role separation has passed exact-head CI run #41828382786 on commit c1647c7c7048b1d791c3d24f59ed51168f219d51. The current next steps are 1C-E expanded audit/workflow integrity, 1C-F full adversarial acceptance, and any remaining table-by-table Worker/database permission gaps. Keep Phase 1D blocked until the entire Phase 1C exit gate passes. Use local Supabase and synthetic records only; do not request a Founder Preview for routine backend/security work.
 
 
 ### 16.4 Verified Phase 1C-D completion and integrated commercial/diagnostic roadmap — 4 November 2026
