@@ -1,7 +1,7 @@
 # Phase 1 — Secure Application Foundation Implementation Specification
 
-**Version:** 0.19-draft
-**Date:** 3 November 2026  
+**Version:** 0.20-draft
+**Date:** 4 November 2026  
 **Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff invitations are complete. Phase 1C-A/B/C/D have been implemented and verified using local Supabase/synthetic data. Latest exact code head `c1647c7c7048b1d791c3d24f59ed51168f219d51` passed GitHub Actions run [#41828382786](https://github.com/gradioprep/gradioprep-website/actions/runs/41828382786): PostgreSQL/RLS checks, TypeScript/Worker/Vite builds, 27/27 Playwright tests, local reset/seed, cleanup and clean public-Preview asset build. Phase 1C-E audit/workflow integrity and 1C-F adversarial acceptance remain, together with any residual operation-specific authorization gaps. Do not begin Phase 1D until the complete Phase 1C exit gate passes. PR #22 remains open, draft and unmerged. All implementation remains local-Supabase/synthetic-only; hosted resources, paid use, real learner data, external processing, merge, production and DNS changes remain separately gated. Apply `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`.
 **Parent decision register:** `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DATA_MODEL.md`, `docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md`, `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md` and `docs/DESIGN_SPEC.md`.
