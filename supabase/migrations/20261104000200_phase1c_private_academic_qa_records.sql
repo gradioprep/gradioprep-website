@@ -80,8 +80,11 @@ BEGIN
 
   IF p_assessment_version_id IS NULL
     OR p_checks IS NULL
-    OR jsonb_typeof(p_checks) <> 'object'
-    OR octet_length(p_checks::text) > 8192
+    OR jsonb_typeof(p_checks) <> 'object' THEN
+    RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'invalid_private_qa_record';
+  END IF;
+
+  IF octet_length(p_checks::text) > 8192
     OR p_status IS NULL
     OR p_status NOT IN ('pending', 'passed', 'action_required')
     OR p_explanation IS NULL

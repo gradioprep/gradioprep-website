@@ -51,7 +51,7 @@ WITH created_version AS (
     submission.id, 1, submission.rubric_version_id, 5, 8,
     'Synthetic published feedback for private QA access testing.',
     '88888888-8888-4888-8888-888888888888',
-    clock_timestamp(), clock_timestamp(), 60, 86_000, true
+    now(), now(), 60, 86_000, true
   FROM public.assessment_submissions AS submission
   WHERE submission.id = current_setting('test.private_qa_submission_id')::uuid
   RETURNING id
