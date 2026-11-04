@@ -532,12 +532,13 @@ Follow:
 - `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md`
 - `docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md`
 - `docs/DATA_MODEL.md`
+- `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md`
 - `docs/ENGLISH_STAGE_1_ROADMAP.md`
 - `docs/ENGLISH_CURRICULUM_GUIDES.md`
 - `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`
 - `docs/DESIGN_SPEC.md`
 
-Cycle 1's Grade 9 IB MYP provider research is Founder-approved and recorded in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_PROVIDER_REVIEW.md`. The skill taxonomy and high-level blueprint are Founder-approved in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md`; the detailed task-level item map/scoring specification was approved on 2 November 2026 in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md`. The flagship PDF-response, teacher-grading and timed-analytics feature, 24-hour grading target and Phase 0 decisions are Founder-approved and Phase 0 is complete. See `docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md`, `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md` and `docs/DATA_MODEL.md`. Phase 1B local synthetic-only coding is approved and underway in draft PR #22; hosted provisioning, paid services, real learner data, merge, production deployment and later checkpoints remain separately gated. Actual item authoring follows core feature implementation and pilot validation.
+Cycle 1's Grade 9 IB MYP provider research is Founder-approved and recorded in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_PROVIDER_REVIEW.md`. The skill taxonomy and high-level blueprint are Founder-approved in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md`; the detailed task-level item map/scoring specification was approved on 2 November 2026 in `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md`. The flagship PDF-response, teacher-grading and timed-analytics feature, unified 24-hour grading target and Phase 0 decisions are Founder-approved and Phase 0 is complete. See docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md, docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md and docs/DATA_MODEL.md. Phase 1B and Phase 1C-A/B/C/D local synthetic implementation are verified in draft PR #22; exact latest code head c1647c7c7048b1d791c3d24f59ed51168f219d51 passed run #41828382786. Complete 1C-E and 1C-F before Phase 1D. PR #22 remains open, draft and unmerged. Hosted provisioning, paid services, real learner data, merge, production deployment and later checkpoints remain separately gated. Actual item authoring follows core feature implementation and pilot validation. The approved grading-credit, free-report and remedial-access model is in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md; its payment, credit ledger and course entitlement systems are future work, not live implementation.
 
 ---
 
