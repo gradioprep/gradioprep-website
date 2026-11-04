@@ -21,6 +21,7 @@ VALUES
   ('00000000-0000-0000-0000-000000000000', '55555555-5555-4555-8555-555555555555', 'authenticated', 'authenticated', 'grader.a@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Grader A"}'::jsonb, now(), now(), false, false),
   ('00000000-0000-0000-0000-000000000000', '66666666-6666-4666-8666-666666666666', 'authenticated', 'authenticated', 'grader.b@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Grader B"}'::jsonb, now(), now(), false, false),
   ('00000000-0000-0000-0000-000000000000', 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 'authenticated', 'authenticated', 'grader.c@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Grader C"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', 'dddddddd-dddd-4ddd-8ddd-dddddddddddd', 'authenticated', 'authenticated', 'guardian.d@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Guardian D"}'::jsonb, now(), now(), false, false),
   ('00000000-0000-0000-0000-000000000000', '77777777-7777-4777-8777-777777777777', 'authenticated', 'authenticated', 'admin@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Admin"}'::jsonb, now(), now(), false, false),
   ('00000000-0000-0000-0000-000000000000', '88888888-8888-4888-8888-888888888888', 'authenticated', 'authenticated', 'owner@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Owner"}'::jsonb, now(), now(), false, false),
   ('00000000-0000-0000-0000-000000000000', '99999999-9999-4999-8999-999999999999', 'authenticated', 'authenticated', 'suspended.student@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Suspended Student"}'::jsonb, now(), now(), false, false)
@@ -55,6 +56,7 @@ WHERE users.email IN (
   'grader.a@example.invalid',
   'grader.b@example.invalid',
   'grader.c@example.invalid',
+  'guardian.d@example.invalid',
   'admin@example.invalid',
   'owner@example.invalid',
   'suspended.student@example.invalid'
@@ -71,6 +73,7 @@ WHERE user_id IN (
   '55555555-5555-4555-8555-555555555555',
   '66666666-6666-4666-8666-666666666666',
   'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+  'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
   '77777777-7777-4777-8777-777777777777',
   '88888888-8888-4888-8888-888888888888'
 )
@@ -84,6 +87,7 @@ VALUES
   ('55555555-5555-4555-8555-555555555555', 'grader', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
   ('66666666-6666-4666-8666-666666666666', 'grader', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
   ('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 'grader', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
+  ('dddddddd-dddd-4ddd-8ddd-dddddddddddd', 'guardian', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
   ('77777777-7777-4777-8777-777777777777', 'admin', '88888888-8888-4888-8888-888888888888', 'synthetic_local_fixture'),
   ('88888888-8888-4888-8888-888888888888', 'owner', NULL, 'synthetic_local_fixture')
 ON CONFLICT DO NOTHING;

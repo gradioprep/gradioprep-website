@@ -242,7 +242,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
   });
 
   test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {
-    const token = await signIn(page, "guardian.a@example.invalid", "Synthetic Guardian A");
+    const token = await signIn(page, "guardian.d@example.invalid", "Synthetic Guardian D");
     const headers = { Authorization: token };
     const attemptRoute = await page.request.get("/api/v1/learner/submissions", { headers });
     expect(attemptRoute.status()).toBe(403);

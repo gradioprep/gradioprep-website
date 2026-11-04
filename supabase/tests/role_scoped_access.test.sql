@@ -134,8 +134,8 @@ SELECT is((SELECT count(*)::integer FROM public.attempts), 0, 'owner at AAL1 can
 SELECT is((SELECT count(*)::integer FROM public.attempt_responses), 0, 'owner at AAL1 cannot inspect learner responses');
 SELECT is((SELECT count(*)::integer FROM public.grader_assignments), 0, 'owner at AAL1 cannot inspect grader assignments');
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
-SELECT is((SELECT count(*)::integer FROM public.profiles), 11, 'owner at AAL2 can inspect all eleven synthetic profiles');
-SELECT is((SELECT count(*)::integer FROM public.role_assignments), 11, 'owner at AAL2 can inspect all eleven role assignments');
+SELECT is((SELECT count(*)::integer FROM public.profiles), 12, 'owner at AAL2 can inspect all twelve synthetic profiles');
+SELECT is((SELECT count(*)::integer FROM public.role_assignments), 12, 'owner at AAL2 can inspect all twelve role assignments');
 SELECT is((SELECT count(*)::integer FROM public.guardian_learner_links), 2, 'owner at AAL2 can inspect all guardian links');
 SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 2, 'owner at AAL2 can inspect all enrolments');
 SELECT is((SELECT count(*)::integer FROM public.task_versions), 2, 'owner at AAL2 can inspect all task versions');
