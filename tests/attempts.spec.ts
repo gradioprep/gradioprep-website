@@ -344,7 +344,10 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     await guardianContext.close();
     const graderContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
     const graderPage = await graderContext.newPage();
-    const graderAal1 = await signIn(graderPage, "grader.a@example.invalid", "Synthetic Grader A");
+    // Grader A is used by the concurrent AAL2-enrolment test below. Keep this
+    // AAL1-only denial check on the separate synthetic Grader B account so the
+    // two browser tests cannot mutate the same account's MFA state.
+    const graderAal1 = await signIn(graderPage, "grader.b@example.invalid", "Synthetic Grader B");
     const graderResponse = await graderPage.request.get("/api/v1/grader/submissions", {
       headers: { Authorization: graderAal1 },
     });
