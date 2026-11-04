@@ -35,7 +35,7 @@ Any approved or reviewed feature, content item or document may be updated later.
 - [Master project brief](docs/PROJECT_MASTER_BRIEF.md) — approved product and business rules.
 - [Design specification](docs/DESIGN_SPEC.md) — approved visual system and screen behaviour.
 - [English Stage 1 roadmap](docs/ENGLISH_STAGE_1_ROADMAP.md) — tracks the reviewed pilot preview and the remaining curriculum mapping/release gates.
-- [Logical data model](docs/DATA_MODEL.md) — proposed content, learner-record and access-control structure; not a live database.
+- [Logical data model](docs/DATA_MODEL.md) — logical content, learner-record and access-control structure; selected identity/assessment records are implemented only in the local synthetic PR/CI environment, not in a hosted production database.
 - [Grading credit and remedial access policy](docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md) — approved tier allocation, curriculum-frequency method, free/paid access and commercial implementation sequence; specifications only, not live payment or credit processing.
 - [Typed pathway catalogue](src/content/pathways.ts) — 10 planned entries and 30 unit slots; the first slot is approved for pilot preview but remains officially unmapped.
 - [Content types](src/content/model.ts) — shared TypeScript structures for pathway, unit and demonstration content.
