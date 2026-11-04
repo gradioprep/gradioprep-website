@@ -609,6 +609,48 @@ function hasOnlySubmissionTransitionFields(value: unknown): value is {
     record.reason.trim().length <= 240;
 }
 
+function hasOnlyPrivateQaRecordFields(value: unknown): value is {
+  checks: Record<string, boolean | number | string>;
+  status: "pending" | "passed" | "action_required";
+  explanation: string;
+  uncertainty?: string;
+  reviewer_action: string;
+} {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  const keys = Object.keys(record);
+  if (!keys.includes("checks") || !keys.includes("status") ||
+      !keys.includes("explanation") || !keys.includes("reviewer_action") ||
+      keys.some(key => ![
+        "checks", "status", "explanation", "uncertainty", "reviewer_action",
+      ].includes(key))) return false;
+
+  if (typeof record.checks !== "object" || record.checks === null ||
+      Array.isArray(record.checks)) return false;
+  const checks = record.checks as Record<string, unknown>;
+  const entries = Object.entries(checks);
+  if (entries.length < 1 || entries.length > 30 || JSON.stringify(checks).length > 8_192) {
+    return false;
+  }
+  if (!entries.every(([key, item]) =>
+    /^[a-z][a-z0-9_]{1,39}$/.test(key) &&
+    ((typeof item === "boolean") ||
+      (typeof item === "string" && item.length <= 200) ||
+      (typeof item === "number" && Number.isFinite(item)))
+  )) return false;
+
+  if (!["pending", "passed", "action_required"].includes(String(record.status)) ||
+      typeof record.explanation !== "string" ||
+      record.explanation.trim().length < 5 ||
+      record.explanation.length > 2_000 ||
+      typeof record.reviewer_action !== "string" ||
+      record.reviewer_action.trim().length < 3 ||
+      record.reviewer_action.length > 1_000) return false;
+
+  return record.uncertainty === undefined ||
+    (typeof record.uncertainty === "string" && record.uncertainty.length <= 1_000);
+}
+
 function hasOnlyAssessmentDraftFields(value: unknown): value is {
   overall_feedback: string;
   change_reason?: string;
@@ -1140,6 +1182,78 @@ async function transitionAssessmentSubmission(
   return jsonResponse({ transition });
 }
 
+async function createOwnerPrivateQaRecord(
+  request: Request,
+  env: WorkerEnv,
+  assessmentVersionId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 12_288);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlyPrivateQaRecordFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_private_qa_record" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("create_private_qa_record", {
+    p_assessment_version_id: assessmentVersionId,
+    p_checks: parsed.body.checks,
+    p_status: parsed.body.status,
+    p_explanation: parsed.body.explanation.trim(),
+    p_uncertainty: parsed.body.uncertainty?.trim() ?? "",
+    p_reviewer_action: parsed.body.reviewer_action.trim(),
+  });
+  if (error) {
+    if (error.message === "private_qa_forbidden") {
+      return jsonResponse({ error: "private_qa_forbidden" }, 403);
+    }
+    if (error.message === "private_qa_assessment_version_not_found") {
+      return jsonResponse({ error: "assessment_version_not_found" }, 404);
+    }
+    if (["invalid_private_qa_record", "invalid_private_qa_checks"].includes(error.message)) {
+      return jsonResponse({ error: error.message }, 400);
+    }
+    return jsonResponse({ error: "private_qa_record_create_failed" }, 500);
+  }
+
+  const qaRecord = asRows(data)[0];
+  if (!qaRecord) return jsonResponse({ error: "private_qa_record_create_failed" }, 500);
+  return jsonResponse({ qa_record: qaRecord }, 201);
+}
+
+async function listOwnerPrivateQaRecords(
+  request: Request,
+  env: WorkerEnv,
+  assessmentVersionId: string,
+): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("get_private_qa_records", {
+    p_assessment_version_id: assessmentVersionId,
+  });
+  if (error) {
+    if (error.message === "private_qa_forbidden") {
+      return jsonResponse({ error: "private_qa_forbidden" }, 403);
+    }
+    if (error.message === "private_qa_assessment_version_not_found") {
+      return jsonResponse({ error: "assessment_version_not_found" }, 404);
+    }
+    return jsonResponse({ error: "private_qa_records_unavailable" }, 500);
+  }
+
+  return jsonResponse({ qa_records: asRows(data) });
+}
+
 async function listAssignedAssessmentSubmissions(request: Request, env: WorkerEnv): Promise<Response> {
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
@@ -1498,6 +1612,14 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const ownerSubmissionTransitionMatch = url.pathname.match(/^\/api\/v1\/owner\/submissions\/([0-9a-f-]{36})\/transition$/i);
   if (ownerSubmissionTransitionMatch && request.method === "POST") {
     return transitionAssessmentSubmission(request, env, ownerSubmissionTransitionMatch[1]);
+  }
+
+  const ownerPrivateQaMatch = url.pathname.match(/^\/api\/v1\/owner\/assessment-versions\/([0-9a-f-]{36})\/private-qa$/i);
+  if (ownerPrivateQaMatch && request.method === "GET") {
+    return listOwnerPrivateQaRecords(request, env, ownerPrivateQaMatch[1]);
+  }
+  if (ownerPrivateQaMatch && request.method === "POST") {
+    return createOwnerPrivateQaRecord(request, env, ownerPrivateQaMatch[1]);
   }
 
   if (url.pathname === "/api/v1/grader/submissions" && request.method === "GET") {

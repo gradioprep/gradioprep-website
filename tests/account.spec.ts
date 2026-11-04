@@ -408,6 +408,28 @@ test.describe("Phase 1B account foundation", () => {
     expect(ownerAal1Transition.status()).toBe(403);
     await expect(ownerAal1Transition.json()).resolves.toMatchObject({ error: "mfa_required" });
 
+    const ownerAal1QaRead = await page.request.get(
+      "/api/v1/owner/assessment-versions/d3333333-3333-4333-8333-333333333333/private-qa",
+      { headers: { Authorization: firstFactorToken } },
+    );
+    expect(ownerAal1QaRead.status()).toBe(403);
+    await expect(ownerAal1QaRead.json()).resolves.toMatchObject({ error: "mfa_required" });
+
+    const ownerAal1QaCreate = await page.request.post(
+      "/api/v1/owner/assessment-versions/d3333333-3333-4333-8333-333333333333/private-qa",
+      {
+        headers: { Authorization: firstFactorToken },
+        data: {
+          checks: { rubric_alignment: true },
+          status: "passed",
+          explanation: "Synthetic QA route denial test.",
+          reviewer_action: "No change required.",
+        },
+      },
+    );
+    expect(ownerAal1QaCreate.status()).toBe(403);
+    await expect(ownerAal1QaCreate.json()).resolves.toMatchObject({ error: "mfa_required" });
+
     const ownerAal1SubmissionQueue = await page.request.get("/api/v1/admin/submissions/queue", {
       headers: { Authorization: firstFactorToken },
     });
@@ -449,6 +471,28 @@ test.describe("Phase 1B account foundation", () => {
         grader_user_id: "55555555-5555-4555-8555-555555555555",
       },
     });
+
+    const ownerAal2QaRead = await page.request.get(
+      "/api/v1/owner/assessment-versions/d3333333-3333-4333-8333-333333333333/private-qa",
+      { headers: { Authorization: ownerToken } },
+    );
+    expect(ownerAal2QaRead.status()).toBe(404);
+    await expect(ownerAal2QaRead.json()).resolves.toMatchObject({ error: "assessment_version_not_found" });
+
+    const ownerAal2QaCreate = await page.request.post(
+      "/api/v1/owner/assessment-versions/d3333333-3333-4333-8333-333333333333/private-qa",
+      {
+        headers: { Authorization: ownerToken },
+        data: {
+          checks: { rubric_alignment: true },
+          status: "passed",
+          explanation: "Synthetic QA route denial test.",
+          reviewer_action: "No change required.",
+        },
+      },
+    );
+    expect(ownerAal2QaCreate.status()).toBe(404);
+    await expect(ownerAal2QaCreate.json()).resolves.toMatchObject({ error: "assessment_version_not_found" });
 
     const ownerAal2InitialSubmissionAssignment = await page.request.post(
       "/api/v1/admin/submissions/" + lifecycleSubmissionId + "/assign",

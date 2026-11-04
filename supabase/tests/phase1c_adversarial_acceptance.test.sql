@@ -9,7 +9,9 @@ SELECT ok(
   AND NOT has_function_privilege('anon', 'public.save_assessment_draft(uuid,text,text,jsonb)', 'EXECUTE')
   AND NOT has_function_privilege('anon', 'public.publish_assessment_feedback(uuid)', 'EXECUTE')
   AND NOT has_function_privilege('anon', 'public.accept_assessment_submission(uuid,uuid,text)', 'EXECUTE')
-  AND NOT has_function_privilege('anon', 'public.save_attempt_response(uuid,uuid,text)', 'EXECUTE'),
+  AND NOT has_function_privilege('anon', 'public.save_attempt_response(uuid,uuid,text)', 'EXECUTE')
+  AND NOT has_function_privilege('anon', 'public.create_private_qa_record(uuid,jsonb,text,text,text,text)', 'EXECUTE')
+  AND NOT has_function_privilege('anon', 'public.get_private_qa_records(uuid)', 'EXECUTE'),
   'anonymous has no execute privilege on sensitive assessment, grading, audit or replay RPCs'
 );
 SELECT ok(
@@ -20,7 +22,9 @@ SELECT ok(
   AND has_function_privilege('authenticated', 'public.save_assessment_draft(uuid,text,text,jsonb)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.publish_assessment_feedback(uuid)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.accept_assessment_submission(uuid,uuid,text)', 'EXECUTE')
-  AND has_function_privilege('authenticated', 'public.save_attempt_response(uuid,uuid,text)', 'EXECUTE'),
+  AND has_function_privilege('authenticated', 'public.save_attempt_response(uuid,uuid,text)', 'EXECUTE')
+  AND has_function_privilege('authenticated', 'public.create_private_qa_record(uuid,jsonb,text,text,text,text)', 'EXECUTE')
+  AND has_function_privilege('authenticated', 'public.get_private_qa_records(uuid)', 'EXECUTE'),
   'narrow authenticated RPCs are executable but retain their own actor, role, AAL and resource checks'
 );
 SELECT ok(
@@ -32,7 +36,8 @@ SELECT ok(
   NOT has_table_privilege('authenticated', 'private.assessment_drafts', 'SELECT')
   AND NOT has_table_privilege('authenticated', 'private.assessment_draft_history', 'SELECT')
   AND NOT has_table_privilege('authenticated', 'private.security_audit_events', 'SELECT')
-  AND NOT has_table_privilege('authenticated', 'private.attempt_response_versions', 'SELECT'),
+  AND NOT has_table_privilege('authenticated', 'private.attempt_response_versions', 'SELECT')
+  AND NOT has_table_privilege('authenticated', 'private.private_qa_records', 'SELECT'),
   'authenticated callers cannot inspect private drafts, audit events or response history directly'
 );
 

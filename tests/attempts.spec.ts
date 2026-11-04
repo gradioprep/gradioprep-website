@@ -323,6 +323,15 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       request.post("/api/v1/owner/submissions/" + submissionId + "/transition", {
         data: { target_status: "withdrawn", reason: "Anonymous route denial" },
       }),
+      request.get("/api/v1/owner/assessment-versions/" + submissionId + "/private-qa"),
+      request.post("/api/v1/owner/assessment-versions/" + submissionId + "/private-qa", {
+        data: {
+          checks: { rubric_alignment: true },
+          status: "passed",
+          explanation: "Synthetic QA route denial test.",
+          reviewer_action: "No change required.",
+        },
+      }),
     ]);
     for (const response of anonymousChecks) expect(response.status()).toBe(401);
 
@@ -360,6 +369,18 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
         headers: studentHeaders,
         data: { target_status: "withdrawn", reason: "Student route denial" },
       }),
+      studentPage.request.get("/api/v1/owner/assessment-versions/" + submissionId + "/private-qa", {
+        headers: studentHeaders,
+      }),
+      studentPage.request.post("/api/v1/owner/assessment-versions/" + submissionId + "/private-qa", {
+        headers: studentHeaders,
+        data: {
+          checks: { rubric_alignment: true },
+          status: "passed",
+          explanation: "Synthetic QA route denial test.",
+          reviewer_action: "No change required.",
+        },
+      }),
     ]);
     for (const response of studentChecks) {
       expect(response.status()).toBe(403);
@@ -370,6 +391,13 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     const guardianContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
     const guardianPage = await guardianContext.newPage();
     const guardianToken = await signIn(guardianPage, "guardian.c@example.invalid", "Synthetic Guardian C");
+    const guardianQaResponse = await guardianPage.request.get(
+      "/api/v1/owner/assessment-versions/" + submissionId + "/private-qa",
+      { headers: { Authorization: guardianToken } },
+    );
+    expect(guardianQaResponse.status()).toBe(403);
+    await expect(guardianQaResponse.json()).resolves.toMatchObject({ error: "role_required" });
+
     const guardianResponse = await guardianPage.request.get("/api/v1/grader/submissions", {
       headers: { Authorization: guardianToken },
     });
@@ -388,6 +416,13 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     });
     expect(graderResponse.status()).toBe(403);
     await expect(graderResponse.json()).resolves.toMatchObject({ error: "mfa_required" });
+    const graderQaRoute = await graderPage.request.get(
+      "/api/v1/owner/assessment-versions/" + submissionId + "/private-qa",
+      { headers: { Authorization: graderAal1 } },
+    );
+    expect(graderQaRoute.status()).toBe(403);
+    await expect(graderQaRoute.json()).resolves.toMatchObject({ error: "role_required" });
+
     const graderLifecycleRoute = await graderPage.request.post(
       "/api/v1/owner/submissions/" + submissionId + "/reassign",
       {

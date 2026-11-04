@@ -36,11 +36,12 @@ SELECT is(
         'assessment_versions',
         'criterion_results',
         'assessment_drafts',
-        'assessment_draft_history'
+        'assessment_draft_history',
+        'private_qa_records'
       )
   ),
-  24,
-  'all twenty-four currently protected application tables are present'
+  25,
+  'all twenty-five currently protected application tables are present'
 );
 
 SELECT is(
@@ -74,11 +75,12 @@ SELECT is(
         'assessment_versions',
         'criterion_results',
         'assessment_drafts',
-        'assessment_draft_history'
+        'assessment_draft_history',
+        'private_qa_records'
       )
       AND relation.relrowsecurity
   ),
-  24,
+  25,
   'RLS is enabled on every protected application table'
 );
 
@@ -134,7 +136,8 @@ SELECT ok(
         'assessment_versions',
         'criterion_results',
         'assessment_drafts',
-        'assessment_draft_history'
+        'assessment_draft_history',
+        'private_qa_records'
       )
   ),
   'anonymous has no direct read or write privilege on any protected table'
@@ -180,10 +183,11 @@ SELECT ok(
         'assessment_submissions',
         'submission_versions',
         'assessment_drafts',
-        'assessment_draft_history'
+        'assessment_draft_history',
+        'private_qa_records'
       )
   ),
-  'authenticated has no direct table privilege on private audit, invitation, response-history, capacity and draft records'
+  'authenticated has no direct table privilege on private audit, invitation, response-history, capacity, draft and academic-QA records'
 );
 
 SELECT ok(
