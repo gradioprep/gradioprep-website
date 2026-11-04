@@ -36,6 +36,7 @@ Any approved or reviewed feature, content item or document may be updated later.
 - [Design specification](docs/DESIGN_SPEC.md) — approved visual system and screen behaviour.
 - [English Stage 1 roadmap](docs/ENGLISH_STAGE_1_ROADMAP.md) — tracks the reviewed pilot preview and the remaining curriculum mapping/release gates.
 - [Logical data model](docs/DATA_MODEL.md) — proposed content, learner-record and access-control structure; not a live database.
+- [Grading credit and remedial access policy](docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md) — approved tier allocation, curriculum-frequency method, free/paid access and commercial implementation sequence; specifications only, not live payment or credit processing.
 - [Typed pathway catalogue](src/content/pathways.ts) — 10 planned entries and 30 unit slots; the first slot is approved for pilot preview but remains officially unmapped.
 - [Content types](src/content/model.ts) — shared TypeScript structures for pathway, unit and demonstration content.
 - [Pilot unit brief](src/content/pilotUnitDraft.ts) — teacher/editor source; candidate objective references and official mapping remain unverified.
