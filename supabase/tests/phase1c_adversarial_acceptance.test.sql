@@ -48,13 +48,15 @@ SELECT ok(
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
 SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}', true);
-SELECT ok(
-  NOT public.audit_authorized_protected_read('arbitrary_function_name', NULL),
-  'the protected-read audit RPC rejects unknown action names by default'
+SELECT throws_ok(
+  $$SELECT public.audit_authorized_protected_read('arbitrary_function_name', NULL)$$,
+  '42501', NULL,
+  'authenticated callers cannot invoke the legacy protected-read audit RPC'
 );
-SELECT ok(
-  NOT public.audit_authorized_protected_read('student_submission_read_authorized', NULL),
-  'the protected-read audit RPC rejects missing detail record IDs'
+SELECT throws_ok(
+  $$SELECT public.audit_authorized_protected_read('student_submission_read_authorized', NULL)$$,
+  '42501', NULL,
+  'authenticated callers cannot bypass Worker-only audit ingestion with a missing target'
 );
 SELECT throws_ok(
   $$INSERT INTO public.submission_grader_assignments DEFAULT VALUES$$,
@@ -81,9 +83,10 @@ RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}', true);
-SELECT ok(
-  NOT public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL),
-  'Owner at AAL1 cannot audit privileged submission queue access'
+SELECT throws_ok(
+  $$SELECT public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL)$$,
+  '42501', NULL,
+  'Owner at AAL1 cannot invoke the legacy browser-facing audit RPC'
 );
 SELECT throws_ok(
   $$SELECT * FROM public.reassign_submission_grader(
@@ -124,10 +127,15 @@ SELECT throws_ok(
   '42501', 'assessment_transition_forbidden',
   'AAL2 Admin cannot inherit Owner workflow-transition rights'
 );
-SELECT ok(
-  NOT public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL)
-  AND NOT public.audit_authorized_protected_read('grader_submission_queue_authorized', NULL),
-  'AAL2 Admin receives neither Owner nor Grader protected-read authority'
+SELECT throws_ok(
+  $$SELECT public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL)$$,
+  '42501', NULL,
+  'AAL2 Admin cannot invoke Owner audit ingestion directly'
+);
+SELECT throws_ok(
+  $$SELECT public.audit_authorized_protected_read('grader_submission_queue_authorized', NULL)$$,
+  '42501', NULL,
+  'AAL2 Admin cannot invoke Grader audit ingestion directly'
 );
 RESET ROLE;
 

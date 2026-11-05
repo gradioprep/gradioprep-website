@@ -40,25 +40,25 @@ SELECT is(
   1,
   'replayed acceptance does not duplicate the original acceptance audit event'
 );
-SET LOCAL ROLE authenticated;
+SET LOCAL ROLE service_role;
+SELECT set_config('request.jwt.claims','{"role":"service_role"}',true);
+SELECT set_config('request.headers','{"x-request-id":"eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"}',true);
 SELECT ok(
-  public.audit_authorized_protected_read('student_submission_list_authorized', NULL),
-  'student can record an authorised own-submission list read'
-);
-SELECT ok(
-  public.audit_authorized_protected_read(
-    'student_submission_read_authorized',
-    current_setting('test.workflow_submission_id')::uuid
+  public.record_worker_audit_outcome(
+    '11111111-1111-4111-8111-111111111111',
+    'student_submission_list_authorized',NULL,'success',NULL
   ),
-  'student can record an authorised read of their own submission'
+  'trusted Worker records the completed student submission-list read'
 );
 SELECT ok(
-  NOT public.audit_authorized_protected_read(
+  public.record_worker_audit_outcome(
+    '11111111-1111-4111-8111-111111111111',
     'student_submission_read_authorized',
-    'd2222222-2222-4222-8222-222222222222'::uuid
+    current_setting('test.workflow_submission_id')::uuid,'success',NULL
   ),
-  'student cannot audit-read another learner submission'
+  'trusted Worker records the completed student-owned submission read'
 );
+RESET ROLE;
 
 -- Repeated identical typed-response saves do not create redundant versions,
 -- archive rows or audit records.
@@ -101,20 +101,15 @@ SELECT is(
   1,
   'an identical typed-response retry creates no duplicate save audit event'
 );
-SET LOCAL ROLE authenticated;
+SET LOCAL ROLE service_role;
+SELECT set_config('request.jwt.claims','{"role":"service_role"}',true);
 SELECT ok(
-  public.audit_authorized_protected_read(
+  public.record_worker_audit_outcome(
+    '11111111-1111-4111-8111-111111111111',
     'student_attempt_read_authorized',
-    current_setting('test.workflow_attempt_id')::uuid
+    current_setting('test.workflow_attempt_id')::uuid,'success',NULL
   ),
-  'student can record an authorised read of their own typed attempt'
-);
-SELECT ok(
-  NOT public.audit_authorized_protected_read(
-    'student_attempt_read_authorized',
-    'c2222222-2222-4222-8222-222222222222'::uuid
-  ),
-  'student cannot record an authorised read of another learner attempt'
+  'trusted Worker records the completed student-owned typed-attempt read'
 );
 RESET ROLE;
 SELECT is(
@@ -126,18 +121,11 @@ SELECT is(
 );
 SET LOCAL ROLE authenticated;
 
--- Owner queue inspection and assignment require AAL2 inside PostgreSQL.
+-- Owner workflow mutation continues at AAL2. Direct client audit writes
+-- are intentionally unavailable; the Worker records protected-read outcomes.
+SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
-SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}', true);
-SELECT ok(
-  NOT public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL),
-  'owner at AAL1 cannot record privileged submission queue access'
-);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
-SELECT ok(
-  public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL),
-  'active owner at AAL2 can record protected submission queue access'
-);
 SELECT lives_ok(
   $$SELECT * FROM public.assign_submission_to_grader(
     current_setting('test.workflow_submission_id')::uuid,
@@ -147,32 +135,11 @@ SELECT lives_ok(
   'owner at AAL2 assigns synthetic submission through the protected RPC'
 );
 
--- Grader queue/detail audit is independently scoped by active assignment and AAL2.
+-- Grader workflow mutations continue under an assigned AAL2 account.
+-- The Worker-only audit RPC is exercised separately through the route tests.
+SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);
-SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal1"}', true);
-SELECT ok(
-  NOT public.audit_authorized_protected_read('grader_submission_queue_authorized', NULL),
-  'grader at AAL1 cannot record assessment queue access'
-);
-SELECT ok(
-  NOT public.audit_authorized_protected_read(
-    'grader_submission_read_authorized',
-    current_setting('test.workflow_submission_id')::uuid
-  ),
-  'grader at AAL1 cannot record submission detail access'
-);
 SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}', true);
-SELECT ok(
-  public.audit_authorized_protected_read('grader_submission_queue_authorized', NULL),
-  'assigned grader at AAL2 can record assessment queue access'
-);
-SELECT ok(
-  public.audit_authorized_protected_read(
-    'grader_submission_read_authorized',
-    current_setting('test.workflow_submission_id')::uuid
-  ),
-  'assigned grader at AAL2 can record only their assigned submission read'
-);
 
 -- Identical feedback retries retain the revision while preserving a replay event.
 SELECT is(
@@ -219,25 +186,11 @@ SELECT is(
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);
 SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}', true);
-SELECT ok(
-  NOT public.audit_authorized_protected_read(
-    'grader_submission_read_authorized',
-    'd2222222-2222-4222-8222-222222222222'::uuid
-  ),
-  'assigned grader cannot record a read of an unrelated submission'
-);
 
 -- Admin role must not inherit owner or grader operational access.
 SELECT set_config('request.jwt.claim.sub', '77777777-7777-4777-8777-777777777777', true);
 SELECT set_config('request.jwt.claims', '{"sub":"77777777-7777-4777-8777-777777777777","role":"authenticated","aal":"aal2"}', true);
-SELECT ok(
-  NOT public.audit_authorized_protected_read('owner_submission_queue_authorized', NULL),
-  'admin does not inherit owner submission queue access'
-);
-SELECT ok(
-  NOT public.audit_authorized_protected_read('grader_submission_queue_authorized', NULL),
-  'admin does not inherit grader submission queue access'
-);
+
 
 -- The audit schema contains no learner answer or feedback payload columns.
 RESET ROLE;
