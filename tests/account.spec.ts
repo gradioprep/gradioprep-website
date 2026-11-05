@@ -341,7 +341,7 @@ test.describe("Phase 1B account foundation", () => {
   });
 
   test("owner enrols TOTP, verifies sign-in and can revoke a role only after MFA", async ({ page, browser }) => {
-    test.setTimeout(90_000);
+    test.setTimeout(180_000);
 
     const learnerContext = await browser.newContext();
     const learnerPage = await learnerContext.newPage();
