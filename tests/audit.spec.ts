@@ -167,8 +167,23 @@ test.describe("Phase 1C-E Worker audit correlation and failure injection", () =>
   });
 
   test.afterAll(async () => {
+    // Stop the secondary Wrangler process completely before deleting its config.
+    // Awaiting the child exit prevents a passing test suite from leaving an
+    // orphan Worker process attached to Playwright's runner.
     if (failureWorker && failureWorker.exitCode === null && failureWorker.signalCode === null) {
-      failureWorker.kill("SIGTERM");
+      await new Promise<void>((resolveStop) => {
+        const timeout = setTimeout(() => {
+          if (failureWorker && failureWorker.exitCode === null && failureWorker.signalCode === null) {
+            failureWorker.kill("SIGKILL");
+          }
+          resolveStop();
+        }, 5_000);
+        failureWorker?.once("exit", () => {
+          clearTimeout(timeout);
+          resolveStop();
+        });
+        failureWorker?.kill("SIGTERM");
+      });
     }
     if (configDirectory) rmSync(configDirectory, { recursive: true, force: true });
   });
