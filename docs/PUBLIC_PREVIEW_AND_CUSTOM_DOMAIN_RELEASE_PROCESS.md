@@ -143,11 +143,13 @@ A branded staging host is **required**, not optional, before final Diagnostic/Ev
 
 | Stage | Work | Approval / verification |
 |---|---|---|
-| Every implementation PR | Relevant build, database/RLS, API, security and browser checks | CI evidence; no routine Founder Preview request |\n| New substantial learner/staff-visible feature | One public synthetic-data Preview after checks pass | One focused Founder review of the new capability |
+| Every implementation PR | Relevant build, database/RLS, API, security and browser checks | CI evidence; no routine Founder Preview request |
+| New substantial learner/staff-visible feature | One public synthetic-data Preview after checks pass | One focused Founder review of the new capability |
 | Phase 1B–1F | In-scope implementation of the approved secure foundation, with local synthetic services first and public Preview verification | Proceed through the approved sequence with draft PR/CI evidence; hosted provisioning, paid spend, real data, merge and production release remain separate gates |
 | Later hosted synthetic integration | Isolated hosted Supabase + Preview end-to-end auth/API using the Free tier where suitable | Separate hosted-resource provisioning approval; any paid plan or usage requires a documented unavoidable need and explicit cost approval; synthetic data only |
 | Flagship phases 2–5 | PDF, extraction/OCR, grader workflow, feedback, timer/analytics | One Founder Preview when a phase adds a concrete, substantial learner/staff-visible capability that is ready for review; backend-only increments and routine sub-slices remain CI/local verification only; external services require separate approvals |
-| Branded staging before Diagnostic/Report acceptance | Dedicated staging subdomain, separate Worker and isolated hosted synthetic backend; full public synthetic journey | Mandatory pre-acceptance gate; separate explicit hosted-resource, DNS/domain and paid-cost approvals; synthetic data only |\n| Controlled pilot / diagnostic cycle | Full MYP Year 4 synthetic journey then separately authorised limited live pilot | Founder/privacy/security/academic/accessibility/cost approvals |
+| Branded staging before Diagnostic/Report acceptance | Dedicated staging subdomain, separate Worker and isolated hosted synthetic backend; full public synthetic journey | Mandatory pre-acceptance gate; separate explicit hosted-resource, DNS/domain and paid-cost approvals; synthetic data only |
+| Controlled pilot / diagnostic cycle | Full MYP Year 4 synthetic journey then separately authorised limited live pilot | Founder/privacy/security/academic/accessibility/cost approvals |
 | Launch Candidate / Production Cutover | Connect confirmed custom domain; final production smoke test | Separate explicit production/domain/DNS approval |
 | Official launch | Open the approved public site and learner access | Founder release approval |
 
