@@ -24,7 +24,11 @@ type PrivilegedWriteAuditAction =
   | "owner_submission_transition"
   | "owner_private_qa_record_create"
   | "grader_assessment_draft_save"
-  | "grader_assessment_feedback_publish";
+  | "grader_assessment_feedback_publish"
+  | "student_attempt_create"
+  | "student_attempt_response_save"
+  | "student_attempt_submit"
+  | "student_assessment_submission_accept";
 
 type PrivilegedWriteFailureCategory =
   | "resource_not_found"
@@ -806,7 +810,7 @@ function classifyPrivilegedWriteError(error: { code?: string; message?: string }
   if (error.code === "P0002" || message.endsWith("_not_found")) {
     return { outcome: "failed", failureCategory: "resource_not_found" };
   }
-  if (error.code === "23514" || message === "last_active_owner_protected") {
+  if (message === "last_active_owner_protected") {
     return { outcome: "failed", failureCategory: "last_owner_protected" };
   }
   if (error.code === "22023" || message.startsWith("invalid_") || message === "grader_not_available") {
@@ -821,6 +825,9 @@ function classifyPrivilegedWriteError(error: { code?: string; message?: string }
     "assessment_draft_required",
     "attempt_already_assigned",
     "attempt_not_submitted",
+    "attempt_not_editable",
+    "attempt_response_required",
+    "submission_idempotency_conflict",
   ].includes(message)) {
     return { outcome: "failed", failureCategory: "state_conflict" };
   }
@@ -896,7 +903,14 @@ async function createLearnerAttempt(request: Request, env: WorkerEnv): Promise<R
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "student");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditPrivilegedWriteOutcome(
+          auth.context, "student_attempt_create", parsed.body.task_version_id, "denied",
+        )
+      : null;
+    return audit ?? roleDenied;
+  }
 
   const { data: taskVersion, error: taskError } = await auth.context.supabase
     .from("task_versions")
@@ -905,8 +919,21 @@ async function createLearnerAttempt(request: Request, env: WorkerEnv): Promise<R
     .eq("release_state", "published")
     .eq("response_mode", "typed")
     .maybeSingle();
-  if (taskError) return jsonResponse({ error: "task_unavailable" }, 500);
-  if (!taskVersion) return jsonResponse({ error: "task_not_available" }, 404);
+  if (taskError) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_create", parsed.body.task_version_id,
+      "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "task_unavailable" }, 500);
+  }
+  if (!taskVersion) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_create", parsed.body.task_version_id, "denied",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "task_not_available" }, 404);
+  }
 
   const { data: enrolment, error: enrolmentError } = await auth.context.supabase
     .from("course_enrolments")
@@ -915,14 +942,32 @@ async function createLearnerAttempt(request: Request, env: WorkerEnv): Promise<R
     .eq("pathway_id", taskVersion.pathway_id)
     .eq("status", "active")
     .maybeSingle();
-  if (enrolmentError) return jsonResponse({ error: "enrolment_unavailable" }, 500);
-  if (!enrolment) return jsonResponse({ error: "task_not_available" }, 404);
+  if (enrolmentError) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_create", taskVersion.id, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "enrolment_unavailable" }, 500);
+  }
+  if (!enrolment) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_create", taskVersion.id, "denied",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "task_not_available" }, 404);
+  }
 
   const { data, error: createError } = await auth.context.supabase.rpc("create_attempt", {
     p_task_version_id: taskVersion.id,
   });
 
   if (createError) {
+    const auditOutcome = classifyPrivilegedWriteError(createError);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_create", taskVersion.id,
+      auditOutcome.outcome, auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (createError.message === "attempt_creation_forbidden") {
       return jsonResponse({ error: "attempt_creation_forbidden" }, 403);
     }
@@ -1016,16 +1061,41 @@ async function saveAttemptResponse(
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "student");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditPrivilegedWriteOutcome(
+          auth.context, "student_attempt_response_save", attemptId, "denied",
+        )
+      : null;
+    return audit ?? roleDenied;
+  }
 
   const { data: attempt, error: attemptError } = await auth.context.supabase
     .from("attempts")
     .select("id, task_version_id, status")
     .eq("id", attemptId)
     .maybeSingle();
-  if (attemptError) return jsonResponse({ error: "attempt_unavailable" }, 500);
-  if (!attempt) return jsonResponse({ error: "attempt_not_found" }, 404);
-  if (attempt.status !== "in_progress") return jsonResponse({ error: "attempt_not_editable" }, 409);
+  if (attemptError) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_response_save", attemptId, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "attempt_unavailable" }, 500);
+  }
+  if (!attempt) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_response_save", attemptId, "denied",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "attempt_not_found" }, 404);
+  }
+  if (attempt.status !== "in_progress") {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_response_save", attemptId, "failed", "state_conflict",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "attempt_not_editable" }, 409);
+  }
 
   const { data: prompt, error: promptError } = await auth.context.supabase
     .from("task_version_prompts")
@@ -1033,8 +1103,20 @@ async function saveAttemptResponse(
     .eq("id", promptId)
     .eq("task_version_id", attempt.task_version_id)
     .maybeSingle();
-  if (promptError) return jsonResponse({ error: "prompt_unavailable" }, 500);
-  if (!prompt) return jsonResponse({ error: "prompt_not_found" }, 400);
+  if (promptError) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_response_save", attemptId, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "prompt_unavailable" }, 500);
+  }
+  if (!prompt) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_response_save", attemptId, "failed", "validation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "prompt_not_found" }, 400);
+  }
 
   const { data, error: saveError } = await auth.context.supabase.rpc("save_attempt_response", {
     p_attempt_id: attemptId,
@@ -1043,6 +1125,12 @@ async function saveAttemptResponse(
   });
 
   if (saveError) {
+    const auditOutcome = classifyPrivilegedWriteError(saveError);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_response_save", attemptId,
+      auditOutcome.outcome, auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (saveError.message === "attempt_not_found") return jsonResponse({ error: "attempt_not_found" }, 404);
     if (saveError.message === "attempt_not_editable") return jsonResponse({ error: "attempt_not_editable" }, 409);
     if (saveError.message === "attempt_response_forbidden") return jsonResponse({ error: "attempt_response_forbidden" }, 403);
@@ -1065,12 +1153,25 @@ async function submitLearnerAttempt(request: Request, env: WorkerEnv, attemptId:
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "student");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditPrivilegedWriteOutcome(
+          auth.context, "student_attempt_submit", attemptId, "denied",
+        )
+      : null;
+    return audit ?? roleDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("submit_attempt", {
     p_attempt_id: attemptId,
   });
   if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_attempt_submit", attemptId,
+      auditOutcome.outcome, auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (error.message === "attempt_not_found") return jsonResponse({ error: "attempt_not_found" }, 404);
     if (error.message === "attempt_not_in_progress") return jsonResponse({ error: "attempt_not_editable" }, 409);
     if (error.message === "attempt_response_required") return jsonResponse({ error: "attempt_response_required" }, 409);
@@ -1124,7 +1225,15 @@ async function acceptLearnerSubmission(request: Request, env: WorkerEnv): Promis
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "student");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditPrivilegedWriteOutcome(
+          auth.context, "student_assessment_submission_accept",
+          parsed.body.task_version_id, "denied",
+        )
+      : null;
+    return audit ?? roleDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("accept_assessment_submission", {
     p_task_version_id: parsed.body.task_version_id,
@@ -1133,6 +1242,12 @@ async function acceptLearnerSubmission(request: Request, env: WorkerEnv): Promis
   });
 
   if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "student_assessment_submission_accept",
+      parsed.body.task_version_id, auditOutcome.outcome, auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (error.message === "assessment_submission_forbidden") {
       return jsonResponse({ error: "assessment_submission_forbidden" }, 403);
     }
