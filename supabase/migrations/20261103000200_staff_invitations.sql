@@ -161,10 +161,10 @@ RETURNS TABLE (
   status text
 )
 LANGUAGE plpgsql
-VOLATILE
+STABLE
 SECURITY DEFINER
 SET search_path = ''
-AS $
+AS $$
 DECLARE
   actor_id uuid := auth.uid();
 BEGIN
@@ -177,20 +177,6 @@ BEGIN
   IF COALESCE(auth.jwt() ->> 'aal', 'aal1') <> 'aal2' THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'mfa_required';
   END IF;
-
-  -- This is a privileged collection read. Record only its metadata in the
-  -- same database transaction as the read; never log invitation email/token data.
-  INSERT INTO private.security_audit_events (
-    actor_id, action, target_type, target_id, outcome, reason_category
-  )
-  VALUES (
-    actor_id,
-    'staff_invitations_listed',
-    'staff_invitation_collection',
-    NULL,
-    'success',
-    'owner_aal2'
-  );
 
   RETURN QUERY
     SELECT
@@ -211,11 +197,7 @@ BEGIN
     ORDER BY invitation.created_at DESC
     LIMIT 100;
 END;
-$;
-
-ALTER FUNCTION public.list_staff_invitations() OWNER TO postgres;
-REVOKE ALL ON FUNCTION public.list_staff_invitations() FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION public.list_staff_invitations() TO authenticated;
+$$;
 
 CREATE OR REPLACE FUNCTION public.revoke_staff_invitation(
   p_invitation_id uuid,
