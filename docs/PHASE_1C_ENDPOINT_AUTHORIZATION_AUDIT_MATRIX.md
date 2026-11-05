@@ -1,6 +1,6 @@
 # Phase 1C endpoint-to-authorization and audit matrix
 
-**Scope:** PR #22 local Worker/API surface as verified at the Worker-only audit-ingestion increment. This is an implementation map, not a grant of additional product scope. Business-data access is always performed by the verified caller-scoped Supabase client; the Worker service-role client is used only for `record_worker_audit_outcome`. The physical data inventory remains 25 tables (18 public, seven private).
+**Scope:** PR #22 local Worker/API surface, verified at branch head `203926d6db83e7003bfd4ee1a5c42e9d89c1f034` and exact-head run [#42005970837](https://github.com/gradioprep/gradioprep-website/actions/runs/42005970837). The matrix contains 29 HTTP method/path rows. The 25 Worker-audited routes have missing-audit-service/key/acknowledgement fail-closed coverage. This is an implementation map, not a grant of additional product scope. Business-data access is always performed by the verified caller-scoped Supabase client; the Worker service-role client is used only for `record_worker_audit_outcome`. The physical data inventory remains 25 tables (18 public, seven private).
 
 ## Audit and correlation rules
 
@@ -51,8 +51,27 @@
 - The acceptance-failure helper is deliberately distinct and must be tested as a database-derived, caller-scoped operation. No raw token, token hash, bearer token, invitation email, learner response, grader feedback, private-QA content, signed URL, credential or raw database error is an audit field.
 - The health endpoint, authenticated self-profile read and routine self-service display-name edit are intentionally outside the diagnostic/privileged audit event set. Revisit only if an explicit account-profile audit requirement is approved; do not silently expand the audit payload or scope.
 
+## Current verified audit-correlation and adversarial evidence — 5 November 2026
+
+Exact-head CI [#42005970837](https://github.com/gradioprep/gradioprep-website/actions/runs/42005970837) passed 494 pgTAP assertions across 14 SQL files, the TypeScript/Worker/Vite builds and 29/29 Playwright tests.
+
+**Route-level fail-closed coverage:** the 25 Worker-audited routes are exercised with missing/unavailable audit service or missing acknowledgement. Each expected path fails closed with HTTP 503 and exposes a generated `X-Request-ID`; the 29-row table also records routes intentionally outside the audit set or rejected before verified caller context.
+
+**Persisted request-ID correlation currently evidenced for selected flows:**
+- Student attempt list and create success.
+- Cross-learner attempt read and response-save denial.
+- Cross-learner submit using non-enumerating `attempt_not_found`, mapped to `failed/resource_not_found`.
+- Staff-invitation acceptance email-mismatch denial, AAL2 denial and successful acceptance.
+- Staff-invitation acceptance-helper acknowledgement failure: HTTP 503, with no false success/acceptance event.
+
+These selected cases are not a substitute for per-action proof of every matrix row's persisted actor, action, target, outcome, safe reason and request ID.
+
+**Concurrency evidence now passing:** concurrent Owner assignments of the same attempt produce one success and one `attempt_already_assigned` conflict; concurrent feedback publication produces one success and one conflict with exactly one published version and one `assessment_feedback_published` event. Existing duplicate-submission idempotency/replay tests also pass. This supersedes the earlier instruction to recheck assignment/publication concurrency. Simultaneous staff-invitation acceptance and any other scenario not explicitly evidenced should remain in the 1C-F matrix as unverified rather than assumed covered.
+
 ## 1C-F adversarial coverage and remaining acceptance
 
-The existing local synthetic CI suite provides database-boundary coverage for: Student A/B ownership and cross-learner reads; linked Guardian with limited consent and revoked-link denial; Grader A/B assignment isolation, AAL1 denial, AAL2 access and revoked-assignment denial; Admin non-inheritance; Owner AAL1/AAL2 boundaries; suspended-account denial; direct private-table/role mutation/RPC privilege bypass; response/feedback immutability; and idempotent replay paths. Relevant files include `role_scoped_access.test.sql`, `attempts_rls.test.sql`, `protected_table_permissions.test.sql`, `phase1c_adversarial_acceptance.test.sql`, `workflow_integrity.test.sql`, `accepted_submissions.test.sql`, and the existing Playwright account/attempt suites.
+The existing local synthetic CI suite provides database-boundary coverage for Student A/B ownership and cross-learner reads; linked Guardian consent and revoked-link denial; Grader AAL1 denial, AAL2 active-assignment access and revoked-assignment denial; Admin non-inheritance; Owner AAL1/AAL2 boundaries; suspended-account denial; direct private-table/role-mutation/RPC privilege bypass; response/feedback immutability; and idempotent replay. Relevant files include `role_scoped_access.test.sql`, `attempts_rls.test.sql`, `protected_table_permissions.test.sql`, `phase1c_adversarial_acceptance.test.sql`, `workflow_integrity.test.sql`, `accepted_submissions.test.sql` and the Playwright account/attempt suites.
 
-**Do not declare Phase 1C-F complete from that SQL inventory alone.** The route-level acceptance added with this matrix must also pass exact-head CI, including persisted request-ID correlation and missing-audit-service fail-closed tests. Recheck concurrent duplicate acceptance/assignment/publication behavior, suspension/revocation at the Worker boundary, all 29 method/path handlers and staff-invitation acceptance-helper failure semantics. Record any uncovered gap as blocked and keep Phase 1D blocked until each item has positive test evidence.
+**Still open:** create one consolidated adversarial acceptance matrix mapping each actor, assurance level, attempted operation, expected allow/deny result and exact SQL/Worker test evidence. Include suspension, account/role/link/assignment revocation, cross-learner isolation, forged actor/role/ownership/assignment/state/timestamps, replay/idempotency, concurrency, direct table mutation and RPC bypass/misuse. Map the tests already listed above; do not duplicate passing tests. Mark any scenario without direct evidence as open and implement only that gap. Do not declare Phase 1C-F complete or begin Phase 1D until each required item has positive exact-head synthetic-CI evidence.
+
+**Phase gate:** Phase 1C-E remains partial because full per-distinct-audit-action persisted event correlation is not yet demonstrated; Phase 1C-F remains open until the consolidated matrix passes. Phase 1D remains blocked. PR #22 remains draft and unmerged; local Supabase/synthetic records only; all hosted, paid, real-data, merge, production and DNS gates remain separate.
