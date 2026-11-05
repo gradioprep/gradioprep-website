@@ -98,9 +98,17 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
     return { data: null, error: { status: 401, code: "missing_user_claims" } };
   }
 
+  // Generate correlation metadata inside the trusted Worker. The database
+  // trigger records this value but never uses it for authorization.
+  const requestId = crypto.randomUUID();
   const supabase = createContextClient({
     auth: { token: auth.token },
     env: supabaseEnv,
+    supabaseOptions: {
+      global: {
+        headers: { "x-request-id": requestId },
+      },
+    },
   });
 
   // Signature/expiry verification alone cannot detect a globally revoked
