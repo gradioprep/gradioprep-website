@@ -4,7 +4,7 @@ The curriculum-aware IB and Cambridge learning platform described in the master 
 
 **Criterion Lab is a placeholder working name.** The final brand and domain have not been decided.
 
-**Current visual system:** approved Palette B—aubergine, dusty blue, soft lilac and plum charcoal, with cool-white and pale blue-grey surfaces, plus restrained semantic deep-blue and muted-amber feedback accents. Typography remains locked. Follow `docs/DESIGN_SPEC.md` v1.5 and the shared tokens in `src/styles.css` for every page.
+**Current visual system:** approved Palette B—aubergine, dusty blue, soft lilac and plum charcoal, with cool-white and pale blue-grey surfaces, plus restrained semantic deep-blue and muted-amber feedback accents. Typography remains locked. Follow the current approved `docs/DESIGN_SPEC.md` (v2.19) and the shared tokens in `src/styles.css` for every page.
 
 ## Current status
 
