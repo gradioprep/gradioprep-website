@@ -14,8 +14,11 @@ function localSqlCsv(sql: string): string {
         stdio: ["ignore", "pipe", "pipe"],
       },
     );
-  } catch {
-    throw new Error("The local invitation audit verification query failed.");
+  } catch (error) {
+    const details = error && typeof error === "object" && "stderr" in error
+      ? String((error as { stderr?: string | Buffer }).stderr ?? "").trim().slice(-1200)
+      : String(error);
+    throw new Error("The local invitation audit verification query failed: " + details);
   }
 }
 
@@ -739,11 +742,12 @@ test.describe("Phase 1B account foundation", () => {
         RETURN NEW;
       END;
       $test$;
-      DROP TRIGGER IF EXISTS gradioprep_test_fail_invitation_role_insert
-        ON public.role_assignments;
+    `);
+    localSqlCsv(`DROP TRIGGER IF EXISTS gradioprep_test_fail_invitation_role_insert ON public.role_assignments;`);
+    localSqlCsv(`
       CREATE TRIGGER gradioprep_test_fail_invitation_role_insert
-        BEFORE INSERT ON public.role_assignments
-        FOR EACH ROW EXECUTE FUNCTION public.gradioprep_test_fail_invitation_role_insert();
+      BEFORE INSERT ON public.role_assignments
+      FOR EACH ROW EXECUTE FUNCTION public.gradioprep_test_fail_invitation_role_insert();
     `);
     try {
       const unacknowledgedAcceptance = await page.request.post("/api/v1/staff-invitations/accept", {
@@ -768,11 +772,8 @@ test.describe("Phase 1B account foundation", () => {
       `);
       expect(noFalseEvent).toContain("NO_FALSE_ACCEPTANCE_AUDIT_EVENT");
     } finally {
-      localSqlCsv(`
-        DROP TRIGGER IF EXISTS gradioprep_test_fail_invitation_role_insert
-          ON public.role_assignments;
-        DROP FUNCTION IF EXISTS public.gradioprep_test_fail_invitation_role_insert();
-      `);
+      localSqlCsv(`DROP TRIGGER IF EXISTS gradioprep_test_fail_invitation_role_insert ON public.role_assignments;`);
+      localSqlCsv(`DROP FUNCTION IF EXISTS public.gradioprep_test_fail_invitation_role_insert();`);
     }
 
     await page.getByLabel("Staff email address").fill("invited.grader@example.invalid");
