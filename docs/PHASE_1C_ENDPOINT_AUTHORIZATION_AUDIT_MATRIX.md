@@ -51,27 +51,38 @@
 - The acceptance-failure helper is deliberately distinct and must be tested as a database-derived, caller-scoped operation. No raw token, token hash, bearer token, invitation email, learner response, grader feedback, private-QA content, signed URL, credential or raw database error is an audit field.
 - The health endpoint, authenticated self-profile read and routine self-service display-name edit are intentionally outside the diagnostic/privileged audit event set. Revisit only if an explicit account-profile audit requirement is approved; do not silently expand the audit payload or scope.
 
-## Current verified audit-correlation and adversarial evidence — 5 November 2026
+## Current verified audit-correlation evidence — 5 November 2026
 
-Exact-head CI [#42005970837](https://github.com/gradioprep/gradioprep-website/actions/runs/42005970837) passed 494 pgTAP assertions across 14 SQL files, the TypeScript/Worker/Vite builds and 29/29 Playwright tests.
+Exact-head CI [#42041037808](https://github.com/gradioprep/gradioprep-website/actions/runs/42041037808) passed on `5dba933dce39b05c69a6616e5bb730d404e3b5a2`: 494 pgTAP assertions across 14 SQL files, TypeScript/Worker/Vite builds and 29/29 Playwright tests. The exact run skipped Preview upload/comment steps; no Preview or production deployment occurred.
 
-**Route-level fail-closed coverage:** the 25 Worker-audited routes are exercised with missing/unavailable audit service or missing acknowledgement. Each expected path fails closed with HTTP 503 and exposes a generated `X-Request-ID`; the 29-row table also records routes intentionally outside the audit set or rejected before verified caller context.
+**Route-level fail-closed coverage:** all 25 Worker-audited routes are exercised with the audit service/key/acknowledgement unavailable. Expected behaviour is HTTP 503 with a generated `X-Request-ID`. The 29-row matrix also identifies routes intentionally outside the audit set or rejected before a verified caller context.
 
-**Persisted request-ID correlation currently evidenced for selected flows:**
-- Student attempt list and create success.
-- Cross-learner attempt read and response-save denial.
-- Cross-learner submit using non-enumerating `attempt_not_found`, mapped to `failed/resource_not_found`.
-- Staff-invitation acceptance email-mismatch denial, AAL2 denial and successful acceptance.
-- Staff-invitation acceptance-helper acknowledgement failure: HTTP 503, with no false success/acceptance event.
+**Worker action to persisted-event mapping:**
 
-These selected cases are not a substitute for per-action proof of every matrix row's persisted actor, action, target, outcome, safe reason and request ID.
+| Worker route/action | Successful persisted business event | Denied/failed Worker audit action |
+|---|---|---|
+| `POST /api/v1/learner/attempts` — `student_attempt_create` | `attempt_created` | `student_attempt_create` |
+| `PUT /api/v1/grader/submissions/:submissionId/draft` — `grader_assessment_draft_save` | `assessment_draft_saved` | `grader_assessment_draft_save` |
 
-**Concurrency evidence now passing:** concurrent Owner assignments of the same attempt produce one success and one `attempt_already_assigned` conflict; concurrent feedback publication produces one success and one conflict with exactly one published version and one `assessment_feedback_published` event. Existing duplicate-submission idempotency/replay tests also pass. This supersedes the earlier instruction to recheck assignment/publication concurrency. Simultaneous staff-invitation acceptance and any other scenario not explicitly evidenced should remain in the 1C-F matrix as unverified rather than assumed covered.
+Successful write events are inserted transactionally by the operation RPC. The Worker-only service-role audit RPC records allowlisted denied/failed outcomes; these action names intentionally differ from the successful business-event names in the two cases above.
 
-## 1C-F adversarial coverage and remaining acceptance
+**Correlation scope:** Phase 1C-E has **representative per-distinct-action persisted request-ID/event correlation coverage**, not exhaustive coverage of every possible outcome for every route. Existing Playwright assertions use `tests/audit-assertions.ts` to check persisted actor, actor-role snapshot, action, target type/ID, outcome, safe reason, exact Worker response request ID and transaction ID. Representative cases include Student attempt list/create, own attempt and submission reads/writes, cross-learner denials and non-enumerating failures, linked Guardian and Grader access boundaries, Owner/operational Admin boundaries, staff-invitation acceptance/create/list/revoke, private-QA actions, grader draft save/replay and feedback publication. This is deliberately representative per distinct action, not an exhaustive matrix of all outcome variants.
 
-The existing local synthetic CI suite provides database-boundary coverage for Student A/B ownership and cross-learner reads; linked Guardian consent and revoked-link denial; Grader AAL1 denial, AAL2 active-assignment access and revoked-assignment denial; Admin non-inheritance; Owner AAL1/AAL2 boundaries; suspended-account denial; direct private-table/role-mutation/RPC privilege bypass; response/feedback immutability; and idempotent replay. Relevant files include `role_scoped_access.test.sql`, `attempts_rls.test.sql`, `protected_table_permissions.test.sql`, `phase1c_adversarial_acceptance.test.sql`, `workflow_integrity.test.sql`, `accepted_submissions.test.sql` and the Playwright account/attempt suites.
+**Already-passing synchronized concurrency and replay tests — retain without duplication:**
+- Competing Owner assignments for the same attempt: one success and one conflict, with only one active assignment and the expected audit evidence.
+- Competing feedback publications: one success and one conflict, exactly one published version and one publication event.
+- Duplicate human-assessment submission/idempotency replay and draft revision/replay checks.
 
-**Still open:** create one consolidated adversarial acceptance matrix mapping each actor, assurance level, attempted operation, expected allow/deny result and exact SQL/Worker test evidence. Include suspension, account/role/link/assignment revocation, cross-learner isolation, forged actor/role/ownership/assignment/state/timestamps, replay/idempotency, concurrency, direct table mutation and RPC bypass/misuse. Map the tests already listed above; do not duplicate passing tests. Mark any scenario without direct evidence as open and implement only that gap. Do not declare Phase 1C-F complete or begin Phase 1D until each required item has positive exact-head synthetic-CI evidence.
+These are existing passing tests in `tests/account.spec.ts`, `tests/attempts.spec.ts`, `supabase/tests/accepted_submissions.test.sql`, `assessment_workflow.test.sql` and `workflow_integrity.test.sql`; see the consolidated coverage map in `docs/PHASE_1C_ADVERSARIAL_ACCEPTANCE_MATRIX.md`. Do not duplicate them.
 
-**Phase gate:** Phase 1C-E remains partial because full per-distinct-audit-action persisted event correlation is not yet demonstrated; Phase 1C-F remains open until the consolidated matrix passes. Phase 1D remains blocked. PR #22 remains draft and unmerged; local Supabase/synthetic records only; all hosted, paid, real-data, merge, production and DNS gates remain separate.
+## Phase 1C-F adversarial acceptance — remaining gaps
+
+The consolidated actor/assurance and attack-surface evidence matrix is `docs/PHASE_1C_ADVERSARIAL_ACCEPTANCE_MATRIX.md`. It maps anonymous, Student, linked Guardian, assigned/unassigned/revoked Grader, operational Admin and Owner access at relevant AAL levels, plus suspension, revocation, cross-learner isolation, forged fields, direct table/RPC bypass, sequential replay/idempotency and the already-passing concurrency tests.
+
+**Only two synchronized synthetic tests remain open:**
+1. Simultaneous acceptance of the same single-use staff-invitation token. Assert exactly one acceptance/role grant and one `staff_invitation_accepted` event; the competing request must fail safely with no duplicate grant/event.
+2. Revocation or account suspension racing an in-flight privileged request. Use deterministic synchronization at the authorization/transaction boundary. A stale preflight role/account snapshot must never permit a privileged side effect after revocation/suspension has taken effect. Assert the final authorization state, side effect and audit evidence.
+
+Do not duplicate the already-passing Owner assignment, feedback-publication or duplicate-submission concurrency tests. Keep all new tests local-Supabase and synthetic-only.
+
+**Phase gate:** Phase 1C-E is representative per-distinct-action correlation coverage, not exhaustive outcome coverage. Phase 1C-F remains open until both synchronized race tests pass exact-head synthetic CI. Phase 1D remains blocked until every Phase 1C exit criterion is documented and passes. PR #22 remains open, draft and unmerged. No hosted backend/resource, paid use, real learner data, email delivery, external processing, merge, Preview deployment, production deployment or DNS/custom-domain change is authorised.
