@@ -16,8 +16,10 @@ SELECT ok(
   'anonymous has no execute privilege on sensitive assessment, grading, audit or replay RPCs'
 );
 SELECT ok(
-  has_function_privilege('authenticated', 'public.audit_authorized_protected_read(text,uuid)', 'EXECUTE')
-  AND has_function_privilege('authenticated', 'public.audit_protected_read_outcome(text,uuid,text)', 'EXECUTE')
+  NOT has_function_privilege('authenticated', 'public.audit_authorized_protected_read(text,uuid)', 'EXECUTE')
+  AND NOT has_function_privilege('authenticated', 'public.audit_protected_read_outcome(text,uuid,text)', 'EXECUTE')
+  AND NOT has_function_privilege('authenticated', 'public.audit_privileged_write_outcome(text,uuid,text,text)', 'EXECUTE')
+  AND has_function_privilege('service_role', 'public.record_worker_audit_outcome(uuid,text,uuid,text,text)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.reassign_submission_grader(uuid,uuid,text)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.transition_assessment_submission(uuid,text,text)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.assign_submission_to_grader(uuid,uuid,text)', 'EXECUTE')
@@ -27,7 +29,7 @@ SELECT ok(
   AND has_function_privilege('authenticated', 'public.save_attempt_response(uuid,uuid,text)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.create_private_qa_record(uuid,jsonb,text,text,text,text)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.get_private_qa_records(uuid)', 'EXECUTE'),
-  'narrow authenticated RPCs are executable but retain their own actor, role, AAL and resource checks'
+  'business RPCs retain authorization checks while audit ingestion is restricted to the Worker service role'
 );
 SELECT ok(
   NOT has_function_privilege('authenticated', 'private.archive_assessment_draft(uuid,uuid,text)', 'EXECUTE')

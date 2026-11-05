@@ -228,55 +228,5 @@ SELECT is(
   'security audit rows contain no QA check, explanation or reviewer-action payload columns'
 );
 
--- Phase 1C-E: denied and failed Owner-only private-QA history read outcomes.
-SET LOCAL ROLE authenticated;
-SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
-SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal2"}', true);
-SELECT set_config('request.headers', '{"x-request-id":"abababab-abab-4bab-8bab-abababababab"}', true);
-SELECT ok(
-  NOT public.audit_protected_read_outcome(
-    'private_qa_records_read',
-    current_setting('test.private_qa_assessment_version_id')::uuid,
-    'success'
-  ),
-  'a learner cannot claim a successful Owner-only private-QA read'
-);
-RESET ROLE;
-SELECT is(
-  (SELECT count(*)::integer FROM private.security_audit_events
-   WHERE actor_id = '11111111-1111-4111-8111-111111111111'
-     AND action = 'private_qa_records_read'
-     AND outcome = 'denied'
-     AND reason_category = 'role_required'
-     AND request_id = 'abababab-abab-4bab-8bab-abababababab'),
-  1,
-  'learner private-QA attempts are recorded as denied metadata'
-);
-
-SET LOCAL ROLE authenticated;
-SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
-SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
-SELECT set_config('request.headers', '{"x-request-id":"cdcdcdcd-cdcd-4dcd-8dcd-cdcdcdcdcdcd"}', true);
-SELECT ok(
-  public.audit_protected_read_outcome(
-    'private_qa_records_read',
-    current_setting('test.private_qa_assessment_version_id')::uuid,
-    'failed'
-  ),
-  'Owner AAL2 can append a failed private-QA history read outcome'
-);
-RESET ROLE;
-SELECT is(
-  (SELECT count(*)::integer FROM private.security_audit_events
-   WHERE actor_id = '88888888-8888-4888-8888-888888888888'
-     AND action = 'private_qa_records_read'
-     AND outcome = 'failed'
-     AND reason_category = 'database_read_failed'
-     AND target_type = 'assessment_version'
-     AND request_id = 'cdcdcdcd-cdcd-4dcd-8dcd-cdcdcdcdcdcd'),
-  1,
-  'failed private-QA reads keep actor/request context and no QA payload'
-);
-
 SELECT * FROM finish();
 ROLLBACK;

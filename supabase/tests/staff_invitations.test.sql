@@ -279,102 +279,15 @@ SELECT is(
   'the invitation acceptance is attributed to the accepting user in the audit log'
 );
 
--- Phase 1C-E: staff invitation create/revoke/list/accept denied and failed outcomes.
+-- Prepare a pending synthetic invitation for the database-derived failure
+-- helper. Generic audit outcome ingestion is now Worker-only.
 SET LOCAL ROLE authenticated;
-SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
-SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
-SELECT set_config('request.headers', '{"x-request-id":"dddddddd-dddd-4ddd-8ddd-dddddddddddd"}', true);
-SELECT ok(
-  public.audit_privileged_write_outcome('staff_invitation_created', NULL, 'failed', 'capacity_unavailable'),
-  'Owner AAL2 can append a failed invitation-create outcome without a target ID'
-);
-RESET ROLE;
-SELECT is(
-  (SELECT count(*)::integer FROM private.security_audit_events
-   WHERE actor_id = '88888888-8888-4888-8888-888888888888'
-     AND action = 'staff_invitation_created'
-     AND target_type = 'staff_invitation'
-     AND target_id IS NULL
-     AND outcome = 'failed'
-     AND reason_category = 'capacity_unavailable'
-     AND request_id = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd'),
-  1,
-  'failed invitation creation stores no email or token identifier'
-);
-SET LOCAL ROLE authenticated;
-SELECT ok(
-  public.audit_privileged_write_outcome(
-    'staff_invitation_revoked',
-    (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures LIMIT 1),
-    'failed',
-    'state_conflict'
-  ),
-  'Owner AAL2 can append a failed revocation outcome for an existing invitation'
-);
-SELECT ok(
-  NOT public.audit_privileged_write_outcome('staff_invitation_created', NULL, 'denied', NULL),
-  'an authorised Owner cannot forge a denial for an operation the database allows'
-);
-RESET ROLE;
-SELECT is(
-  (SELECT count(*)::integer FROM private.security_audit_events
-   WHERE actor_id = '88888888-8888-4888-8888-888888888888'
-     AND action = 'staff_invitation_created'
-     AND target_id IS NULL
-     AND outcome = 'denied'
-     AND request_id = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd'),
-  0,
-  'authorised Owners cannot inject fabricated denial events'
-);
-SET LOCAL ROLE authenticated;
-SELECT ok(
-  public.audit_protected_read_outcome('staff_invitations_listed', NULL, 'failed'),
-  'Owner AAL2 can append a failed invitation-list outcome'
-);
-RESET ROLE;
-SELECT is(
-  (SELECT count(*)::integer FROM private.security_audit_events
-   WHERE actor_id = '88888888-8888-4888-8888-888888888888'
-     AND action = 'staff_invitations_listed'
-     AND outcome = 'failed'
-     AND reason_category = 'database_read_failed'
-     AND target_type = 'staff_invitation_collection'
-     AND request_id = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd'),
-  1,
-  'failed invitation-list reads retain only scoped metadata'
-);
-SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
 INSERT INTO pg_temp.staff_invitation_fixtures
-SELECT invitation_id,
-       encode(extensions.digest('pending-student-b-admin-audit-test', 'sha256'), 'hex'),
-       invited_email,
-       invited_role
-FROM public.create_staff_invitation(
-  'student.b@example.invalid',
-  'admin',
-  encode(extensions.digest('pending-student-b-admin-audit-test', 'sha256'), 'hex')
-);
+SELECT invitation_id, encode(extensions.digest('pending-student-b-admin-audit-test','sha256'),'hex'), invited_email, invited_role
+FROM public.create_staff_invitation('student.b@example.invalid','admin',encode(extensions.digest('pending-student-b-admin-audit-test','sha256'),'hex'));
 RESET ROLE;
-
-SET LOCAL ROLE authenticated;
-SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
-SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal2"}', true);
-SELECT set_config('request.headers', '{"x-request-id":"eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"}', true);
-SELECT ok(
-  NOT public.audit_protected_read_outcome('staff_invitations_listed', NULL, 'success'),
-  'a student cannot claim a successful Owner-only invitation-list read'
-);
-RESET ROLE;
-SELECT is(
-  (SELECT count(*)::integer FROM private.security_audit_events
-   WHERE actor_id = '11111111-1111-4111-8111-111111111111'
-     AND action = 'staff_invitations_listed'
-     AND outcome = 'denied'
-     AND reason_category = 'role_required'
-     AND request_id = 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee'),
-  1,
-  'student invitation-list attempts are recorded as database-derived denials'
-);
 
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);

@@ -21,8 +21,10 @@ function parseEnvOutput(output) {
   // Older CLI output uses human-readable labels instead of KEY=value pairs.
   const apiLine = output.match(/^\s*API URL:\s*(\S+)/im);
   const publishableLine = output.match(/^\s*(?:publishable key|anon key):\s*(\S+)/im);
+  const serviceRoleLine = output.match(/^\s*(?:service_role key|service role key):\s*(\S+)/im);
   if (apiLine && !values.has("API_URL")) values.set("API_URL", apiLine[1]);
   if (publishableLine && !values.has("PUBLISHABLE_KEY")) values.set("PUBLISHABLE_KEY", publishableLine[1]);
+  if (serviceRoleLine && !values.has("SERVICE_ROLE_KEY")) values.set("SERVICE_ROLE_KEY", serviceRoleLine[1]);
 
   return values;
 }
@@ -82,9 +84,10 @@ const publishableKey =
   values.get("SUPABASE_PUBLISHABLE_KEY") ??
   values.get("ANON_KEY") ??
   values.get("SUPA_ANON_KEY");
+const serviceRoleKey = values.get("SERVICE_ROLE_KEY") ?? values.get("SUPABASE_SERVICE_ROLE_KEY");
 
-if (!url || !publishableKey) {
-  console.error("The local Supabase CLI did not report an API URL and publishable/anonymous key.");
+if (!url || !publishableKey || !serviceRoleKey) {
+  console.error("The local Supabase CLI did not report an API URL, publishable/anonymous key and service-role key.");
   process.exit(1);
 }
 
@@ -103,7 +106,7 @@ if (!["127.0.0.1", "localhost", "::1"].includes(safeUrl.hostname)) {
 
 writeFileSync(
   ".dev.vars",
-  `SUPABASE_URL=${url}\nSUPABASE_PUBLISHABLE_KEY=${publishableKey}\n`,
+  `SUPABASE_URL=${url}\nSUPABASE_PUBLISHABLE_KEY=${publishableKey}\nSUPABASE_SERVICE_ROLE_KEY=${serviceRoleKey}\n`,
   { mode: 0o600 },
 );
 
@@ -113,4 +116,4 @@ writeFileSync(
   { mode: 0o600 },
 );
 
-console.log("Local Supabase URL and publishable key written to ignored development-only files. No service-role key was copied.");
+console.log("Local Supabase URL and publishable key written to ignored development files; the service-role key is restricted to .dev.vars and excluded from .env.local/browser builds.");

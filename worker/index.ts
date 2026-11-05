@@ -1,8 +1,10 @@
 import { createContextClient, verifyAuth } from "@supabase/server/core";
+import { createClient } from "@supabase/supabase-js";
 
 type WorkerEnv = Env & {
   SUPABASE_URL?: string;
   SUPABASE_PUBLISHABLE_KEY?: string;
+  SUPABASE_SERVICE_ROLE_KEY?: string;
 };
 
 type ProtectedReadAuditAction =
@@ -124,8 +126,8 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
     return { data: null, error: { status: 401, code: "missing_user_claims" } };
   }
 
-  // Generate correlation metadata inside the trusted Worker. The database
-  // trigger records this value but never uses it for authorization.
+  // Generate correlation metadata inside the trusted Worker. Both clients
+  // attach the same ID so the database can correlate the operation and audit.
   const requestId = crypto.randomUUID();
   const supabase = createContextClient({
     auth: { token: auth.token },
@@ -136,6 +138,13 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
       },
     },
   });
+
+  const auditSupabase = env.SUPABASE_SERVICE_ROLE_KEY
+    ? createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+        auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false },
+        global: { headers: { "x-request-id": requestId } },
+      })
+    : null;
 
   // Signature/expiry verification alone cannot detect a globally revoked
   // session until its JWT expires. Introspect the live session with GoTrue
@@ -176,6 +185,7 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
   return {
     data: {
       supabase,
+      auditSupabase,
       userId: auth.userClaims.id,
       assuranceLevel,
     },
@@ -513,7 +523,7 @@ async function listStaffInvitations(request: Request, env: WorkerEnv): Promise<R
       context,
       "staff_invitations_listed",
       undefined,
-      authorizationDenied ? "success" : "failed",
+      authorizationDenied ? "denied" : "failed",
       response,
     );
     return audit ?? response;
@@ -829,11 +839,12 @@ async function auditPrivilegedWriteOutcome(
   outcome: "denied" | "failed",
   failureCategory?: PrivilegedWriteFailureCategory,
 ): Promise<Response | null> {
-  const { data, error } = await context.supabase.rpc("audit_privileged_write_outcome", {
-    p_action: action,
-    p_target_id: targetId ?? null,
-    p_outcome: outcome,
-    p_failure_category: failureCategory ?? null,
+  if (!context.auditSupabase) {
+    return jsonResponse({ error: "privileged_write_audit_unavailable", message: "The privileged operation cannot be completed without its server-side audit service." }, 503);
+  }
+  const { data, error } = await context.auditSupabase.rpc("record_worker_audit_outcome", {
+    p_actor_id: context.userId, p_action: action, p_target_id: targetId ?? null,
+    p_outcome: outcome, p_failure_category: failureCategory ?? null,
   });
   if (error || data !== true) {
     return jsonResponse({
@@ -916,13 +927,15 @@ async function auditProtectedReadOutcome(
   context: CallerContext,
   action: ProtectedReadAuditAction,
   targetId: string | undefined,
-  outcome: "success" | "failed",
+  outcome: "success" | "denied" | "failed",
   deniedResponse?: Response,
 ): Promise<Response | null> {
-  const { data, error } = await context.supabase.rpc("audit_protected_read_outcome", {
-    p_action: action,
-    p_target_id: targetId ?? null,
-    p_outcome: outcome,
+  if (!context.auditSupabase) {
+    return jsonResponse({ error: "protected_read_audit_unavailable", message: "The protected read cannot be completed without its server-side audit service." }, 503);
+  }
+  const { data, error } = await context.auditSupabase.rpc("record_worker_audit_outcome", {
+    p_actor_id: context.userId, p_action: action, p_target_id: targetId ?? null,
+    p_outcome: outcome, p_failure_category: null,
   });
   if (error) {
     return jsonResponse({
@@ -942,7 +955,7 @@ async function listLearnerAttempts(request: Request, env: WorkerEnv): Promise<Re
   const roleDenied = await requireActiveRole(auth.context, "student");
   if (roleDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "student_attempt_list_authorized", undefined, "success", roleDenied,
+      auth.context, "student_attempt_list_authorized", undefined, "denied", roleDenied,
     );
     return audit ?? roleDenied;
   }
@@ -1095,7 +1108,7 @@ async function getLearnerAttempt(request: Request, env: WorkerEnv, attemptId: st
   const roleDenied = await requireActiveRole(auth.context, "student");
   if (roleDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "student_attempt_read_authorized", attemptId, "success", roleDenied,
+      auth.context, "student_attempt_read_authorized", attemptId, "denied", roleDenied,
     );
     return audit ?? roleDenied;
   }
@@ -1110,7 +1123,7 @@ async function getLearnerAttempt(request: Request, env: WorkerEnv, attemptId: st
   }
   if (!result.attempt) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "student_attempt_read_authorized", attemptId, "success",
+      auth.context, "student_attempt_read_authorized", attemptId, "denied",
     );
     return audit ?? jsonResponse({ error: "attempt_not_found" }, 404);
   }
@@ -1264,7 +1277,7 @@ async function listLearnerSubmissions(request: Request, env: WorkerEnv): Promise
   const roleDenied = await requireActiveRole(auth.context, "student");
   if (roleDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "student_submission_list_authorized", undefined, "success", roleDenied,
+      auth.context, "student_submission_list_authorized", undefined, "denied", roleDenied,
     );
     return audit ?? roleDenied;
   }
@@ -1362,7 +1375,7 @@ async function getLearnerSubmission(
   const roleDenied = await requireActiveRole(auth.context, "student");
   if (roleDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "student_submission_read_authorized", submissionId, "success", roleDenied,
+      auth.context, "student_submission_read_authorized", submissionId, "denied", roleDenied,
     );
     return audit ?? roleDenied;
   }
@@ -1383,7 +1396,7 @@ async function getLearnerSubmission(
   }
   if (!data) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "student_submission_read_authorized", submissionId, "success",
+      auth.context, "student_submission_read_authorized", submissionId, "denied",
     );
     return audit ?? jsonResponse({ error: "assessment_submission_not_found" }, 404);
   }
@@ -1668,7 +1681,7 @@ async function listOwnerPrivateQaRecords(
   if (roleDenied) {
     if (roleDenied.status === 403) {
       const audit = await auditProtectedReadOutcome(
-        auth.context, "private_qa_records_read", assessmentVersionId, "success", roleDenied,
+        auth.context, "private_qa_records_read", assessmentVersionId, "denied", roleDenied,
       );
       if (audit) return audit;
     }
@@ -1677,7 +1690,7 @@ async function listOwnerPrivateQaRecords(
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "private_qa_records_read", assessmentVersionId, "success", mfaDenied,
+      auth.context, "private_qa_records_read", assessmentVersionId, "denied", mfaDenied,
     );
     return audit ?? mfaDenied;
   }
@@ -1699,7 +1712,7 @@ async function listOwnerPrivateQaRecords(
       error.message === "private_qa_assessment_version_not_found";
     const audit = await auditProtectedReadOutcome(
       auth.context, "private_qa_records_read", assessmentVersionId,
-      authorizationDenied ? "success" : "failed", response,
+      authorizationDenied ? "denied" : "failed", response,
     );
     return audit ?? response;
   }
@@ -1714,7 +1727,7 @@ async function listAssignedAssessmentSubmissions(request: Request, env: WorkerEn
   const roleDenied = await requireActiveRole(auth.context, "grader");
   if (roleDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_submission_queue_authorized", undefined, "success", roleDenied,
+      auth.context, "grader_submission_queue_authorized", undefined, "denied", roleDenied,
     );
     return audit ?? roleDenied;
   }
@@ -1722,7 +1735,7 @@ async function listAssignedAssessmentSubmissions(request: Request, env: WorkerEn
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_submission_queue_authorized", undefined, "success", mfaDenied,
+      auth.context, "grader_submission_queue_authorized", undefined, "denied", mfaDenied,
     );
     return audit ?? mfaDenied;
   }
@@ -1758,7 +1771,7 @@ async function getAssignedAssessmentSubmission(
   const roleDenied = await requireActiveRole(auth.context, "grader");
   if (roleDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_submission_read_authorized", submissionId, "success", roleDenied,
+      auth.context, "grader_submission_read_authorized", submissionId, "denied", roleDenied,
     );
     return audit ?? roleDenied;
   }
@@ -1766,7 +1779,7 @@ async function getAssignedAssessmentSubmission(
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_submission_read_authorized", submissionId, "success", mfaDenied,
+      auth.context, "grader_submission_read_authorized", submissionId, "denied", mfaDenied,
     );
     return audit ?? mfaDenied;
   }
@@ -1785,7 +1798,7 @@ async function getAssignedAssessmentSubmission(
   }
   if (!submission) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_submission_read_authorized", submissionId, "success",
+      auth.context, "grader_submission_read_authorized", submissionId, "denied",
     );
     return audit ?? jsonResponse({ error: "assessment_submission_not_found" }, 404);
   }
@@ -1844,7 +1857,7 @@ async function getAssignedAssessmentSubmission(
   }
   if (!assignmentResult.data) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_submission_read_authorized", submissionId, "success",
+      auth.context, "grader_submission_read_authorized", submissionId, "denied",
     );
     return audit ?? jsonResponse({ error: "assessment_submission_not_found" }, 404);
   }
@@ -1982,7 +1995,7 @@ async function listAssessmentSubmissionQueue(request: Request, env: WorkerEnv): 
   const roleDenied = await requireActiveRole(auth.context, "owner");
   if (roleDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "owner_submission_queue_authorized", undefined, "success", roleDenied,
+      auth.context, "owner_submission_queue_authorized", undefined, "denied", roleDenied,
     );
     return audit ?? roleDenied;
   }
@@ -1990,7 +2003,7 @@ async function listAssessmentSubmissionQueue(request: Request, env: WorkerEnv): 
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "owner_submission_queue_authorized", undefined, "success", mfaDenied,
+      auth.context, "owner_submission_queue_authorized", undefined, "denied", mfaDenied,
     );
     return audit ?? mfaDenied;
   }
@@ -2023,7 +2036,7 @@ async function listGraderQueue(request: Request, env: WorkerEnv): Promise<Respon
   const roleDenied = await requireActiveRole(auth.context, "grader");
   if (roleDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_attempt_queue_authorized", undefined, "success", roleDenied,
+      auth.context, "grader_attempt_queue_authorized", undefined, "denied", roleDenied,
     );
     return audit ?? roleDenied;
   }
@@ -2031,7 +2044,7 @@ async function listGraderQueue(request: Request, env: WorkerEnv): Promise<Respon
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_attempt_queue_authorized", undefined, "success", mfaDenied,
+      auth.context, "grader_attempt_queue_authorized", undefined, "denied", mfaDenied,
     );
     return audit ?? mfaDenied;
   }
@@ -2063,7 +2076,7 @@ async function getGraderAttempt(request: Request, env: WorkerEnv, attemptId: str
   const roleDenied = await requireActiveRole(auth.context, "grader");
   if (roleDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_attempt_read_authorized", attemptId, "success", roleDenied,
+      auth.context, "grader_attempt_read_authorized", attemptId, "denied", roleDenied,
     );
     return audit ?? roleDenied;
   }
@@ -2071,7 +2084,7 @@ async function getGraderAttempt(request: Request, env: WorkerEnv, attemptId: str
   const mfaDenied = requireAal2(auth.context);
   if (mfaDenied) {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_attempt_read_authorized", attemptId, "success", mfaDenied,
+      auth.context, "grader_attempt_read_authorized", attemptId, "denied", mfaDenied,
     );
     return audit ?? mfaDenied;
   }
@@ -2086,7 +2099,7 @@ async function getGraderAttempt(request: Request, env: WorkerEnv, attemptId: str
   }
   if (!result.attempt || result.attempt.status !== "submitted") {
     const audit = await auditProtectedReadOutcome(
-      auth.context, "grader_attempt_read_authorized", attemptId, "success",
+      auth.context, "grader_attempt_read_authorized", attemptId, "denied",
     );
     return audit ?? jsonResponse({ error: "attempt_not_found" }, 404);
   }
