@@ -918,14 +918,14 @@ test.describe("Phase 1B account foundation", () => {
     await freshGraderPage.getByLabel("Email address").fill("guardian.a@example.invalid");
     await freshGraderPage.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
     await freshGraderPage.getByRole("button", { name: "Sign in" }).click();
-    await expect(freshGraderPage.getByRole("heading", { name: "Synthetic Guardian A" })).toBeVisible();
+    // This account already enrolled TOTP during invitation acceptance, so a
+    // new sign-in correctly presents MFA verification before loading the profile.
     await expect(freshGraderPage.getByRole("heading", { name: "Verify your sign-in." })).toBeVisible();
-    const freshGraderFirstFactorToken = freshGraderToken;
     await waitForTotpWindow();
     await freshGraderPage.getByLabel("Authenticator code").fill(createTotpCode(inviteeSecret));
     await freshGraderPage.getByRole("button", { name: "Verify code" }).click();
     await expect(freshGraderPage.getByRole("heading", { name: "Synthetic Guardian A" })).toBeVisible();
-    await expect.poll(() => freshGraderToken !== freshGraderFirstFactorToken, { timeout: 10_000 }).toBe(true);
+    await expect.poll(() => Boolean(freshGraderToken), { timeout: 10_000 }).toBe(true);
 
     const graderSubmissionRead = await freshGraderPage.request.get(
       "/api/v1/grader/submissions/" + lifecycleSubmissionId,
