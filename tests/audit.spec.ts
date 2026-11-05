@@ -3,6 +3,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { assertPersistedAuditCorrelation } from "./audit-assertions";
 
 const ROOT = process.cwd();
 const STUDENT_ID = "11111111-1111-4111-8111-111111111111";
@@ -54,58 +55,6 @@ async function signInStudent(apiUrl: string, publishableKey: string): Promise<st
   const payload = await response.json() as { access_token?: string };
   if (!payload.access_token) throw new Error("The local Auth response did not contain an access token.");
   return payload.access_token;
-}
-
-function sqlCsv(sql: string): string {
-  try {
-    return execFileSync(
-      "npx",
-      ["--no-install", "supabase", "db", "query", sql, "--local", "--output", "csv"],
-      {
-        cwd: ROOT,
-        encoding: "utf8",
-        timeout: 30_000,
-        stdio: ["ignore", "pipe", "pipe"],
-      },
-    );
-  } catch {
-    throw new Error("The local Supabase audit-row verification query failed.");
-  }
-}
-
-function assertPersistedAuditCorrelation(args: {
-  requestId: string | null;
-  action: string;
-  actorId: string;
-  targetId: string | null;
-  outcome: string;
-  reason: string;
-}): void {
-  const { requestId, action, actorId, targetId, outcome, reason } = args;
-  expect(requestId, "Worker response must expose its generated correlation ID").toMatch(
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-  );
-  const targetPredicate = targetId === null
-    ? "target_id IS NULL"
-    : `target_id = '${targetId}'::uuid`;
-  const sql = `
-    SELECT CASE
-      WHEN count(*) = 1
-       AND bool_and(actor_id = '${actorId}'::uuid)
-       AND bool_and(action = '${action}')
-       AND bool_and(${targetPredicate})
-       AND bool_and(outcome = '${outcome}')
-       AND bool_and(reason_category = '${reason}')
-       AND bool_and(request_id = '${requestId}'::uuid)
-       AND bool_and(transaction_id IS NOT NULL)
-      THEN 'AUDIT_ROW_MATCHED'
-      ELSE 'AUDIT_ROW_MISMATCH'
-    END AS result
-    FROM private.security_audit_events
-    WHERE request_id = '${requestId}'::uuid
-      AND action = '${action}';
-  `;
-  expect(sqlCsv(sql)).toContain("AUDIT_ROW_MATCHED");
 }
 
 async function waitForWorker(child: ChildProcess): Promise<void> {
@@ -194,14 +143,7 @@ test.describe("Phase 1C-E Worker audit correlation and failure injection", () =>
 
     const listResponse = await fetch("http://127.0.0.1:8787/api/v1/learner/attempts", { headers });
     expect(listResponse.status).toBe(200);
-    assertPersistedAuditCorrelation({
-      requestId: listResponse.headers.get("x-request-id"),
-      action: "student_attempt_list_authorized",
-      actorId: STUDENT_ID,
-      targetId: null,
-      outcome: "success",
-      reason: "student_self",
-    });
+    assertPersistedAuditCorrelation(listResponse.headers.get("x-request-id"),{actorId:STUDENT_ID,actorRole:"student",action:"student_attempt_list_authorized",targetType:"attempt_collection",targetId:null,outcome:"success",reason:"student_self"});
 
     const createResponse = await fetch("http://127.0.0.1:8787/api/v1/learner/attempts", {
       method: "POST",
@@ -213,28 +155,14 @@ test.describe("Phase 1C-E Worker audit correlation and failure injection", () =>
     expect(created.attempt?.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
     );
-    assertPersistedAuditCorrelation({
-      requestId: createResponse.headers.get("x-request-id"),
-      action: "attempt_created",
-      actorId: STUDENT_ID,
-      targetId: created.attempt!.id!,
-      outcome: "success",
-      reason: "learner_action",
-    });
+    assertPersistedAuditCorrelation(createResponse.headers.get("x-request-id"),{actorId:STUDENT_ID,actorRole:"student",action:"attempt_created",targetType:"attempt",targetId:created.attempt!.id!,outcome:"success",reason:"learner_action"});
 
     const crossLearnerRead = await fetch(
       `http://127.0.0.1:8787/api/v1/learner/attempts/${ATTEMPT_B_ID}`,
       { headers },
     );
     expect(crossLearnerRead.status).toBe(404);
-    assertPersistedAuditCorrelation({
-      requestId: crossLearnerRead.headers.get("x-request-id"),
-      action: "student_attempt_read_authorized",
-      actorId: STUDENT_ID,
-      targetId: ATTEMPT_B_ID,
-      outcome: "denied",
-      reason: "resource_scope_denied",
-    });
+    assertPersistedAuditCorrelation(crossLearnerRead.headers.get("x-request-id"),{actorId:STUDENT_ID,actorRole:"student",action:"student_attempt_read_authorized",targetType:"attempt",targetId:ATTEMPT_B_ID,outcome:"denied",reason:"resource_scope_denied"});
 
     const crossLearnerResponseSave = await fetch(
       `http://127.0.0.1:8787/api/v1/learner/attempts/${ATTEMPT_B_ID}/responses/${PROMPT_B_ID}`,
@@ -245,14 +173,7 @@ test.describe("Phase 1C-E Worker audit correlation and failure injection", () =>
       },
     );
     expect([403, 404]).toContain(crossLearnerResponseSave.status);
-    assertPersistedAuditCorrelation({
-      requestId: crossLearnerResponseSave.headers.get("x-request-id"),
-      action: "student_attempt_response_save",
-      actorId: STUDENT_ID,
-      targetId: ATTEMPT_B_ID,
-      outcome: "denied",
-      reason: "resource_scope_denied",
-    });
+    assertPersistedAuditCorrelation(crossLearnerResponseSave.headers.get("x-request-id"),{actorId:STUDENT_ID,actorRole:"student",action:"student_attempt_response_save",targetType:"attempt",targetId:ATTEMPT_B_ID,outcome:"denied",reason:"resource_scope_denied"});
 
     const crossLearnerSubmit = await fetch(
       `http://127.0.0.1:8787/api/v1/learner/attempts/${ATTEMPT_B_ID}/submit`,
@@ -263,17 +184,7 @@ test.describe("Phase 1C-E Worker audit correlation and failure injection", () =>
       },
     );
     expect([403, 404]).toContain(crossLearnerSubmit.status);
-    assertPersistedAuditCorrelation({
-      requestId: crossLearnerSubmit.headers.get("x-request-id"),
-      action: "student_attempt_submit",
-      actorId: STUDENT_ID,
-      targetId: ATTEMPT_B_ID,
-      // submit_attempt is SECURITY DEFINER: it derives learner ownership and
-      // deliberately returns P0002/attempt_not_found for another learner.
-      // The Worker classifies that non-enumerating result as failed/not_found.
-      outcome: "failed",
-      reason: "resource_not_found",
-    });
+    assertPersistedAuditCorrelation(crossLearnerSubmit.headers.get("x-request-id"),{actorId:STUDENT_ID,actorRole:"student",action:"student_attempt_submit",targetType:"attempt",targetId:ATTEMPT_B_ID,outcome:"failed",reason:"resource_not_found"});
   });
 
   test("every Worker-audited route fails closed when its audit service is absent", async () => {

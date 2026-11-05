@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { createHmac, randomUUID } from "node:crypto";
+import { actorIdFromAuthorizationHeader, assertPersistedAuditCorrelation } from "./audit-assertions";
 
 const localPassword = ["Local-only", "GradiPrep", "2026!"].join("-");
 const taskVersionA = "a1111111-1111-4111-8111-111111111111";
@@ -65,6 +66,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
 
     const listResponse = await page.request.get("/api/v1/learner/attempts", { headers });
     expect(listResponse.status()).toBe(200);
+    assertPersistedAuditCorrelation(listResponse.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"student_attempt_list_authorized",targetType:"attempt_collection",targetId:null,outcome:"success",reason:"student_self"});
     const listBody = await listResponse.json() as { attempts: Array<{ id: string; learner_id: string }> };
     const listedIds = listBody.attempts.map(attempt => attempt.id);
     expect(listedIds).toContain(attemptA);
@@ -76,6 +78,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
 
     const ownAttempt = await page.request.get("/api/v1/learner/attempts/" + attemptA, { headers });
     expect(ownAttempt.status()).toBe(200);
+    assertPersistedAuditCorrelation(ownAttempt.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"student_attempt_read_authorized",targetType:"attempt",targetId:attemptA,outcome:"success",reason:"student_self"});
     const ownBody = await ownAttempt.json() as {
       attempt: { attempt_responses: Array<{ response_text: string; word_count: number }> };
       prompts: Array<{ id: string }>;
@@ -96,6 +99,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     const createBody = await createResponse.json() as Record<string, unknown>;
     expect(createResponse.status(), JSON.stringify(createBody)).toBe(201);
     const created = createBody as { attempt: { id: string; status: string } };
+    assertPersistedAuditCorrelation(createResponse.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"attempt_created",targetType:"attempt",targetId:created.attempt.id,outcome:"success",reason:"learner_action"});
     expect(created.attempt.status).toBe("in_progress");
 
     const responseText = "This synthetic typed response explains how a carefully chosen detail shapes the reader's interpretation.";
@@ -104,6 +108,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       { headers, data: { response_text: responseText } },
     );
     expect(saveResponse.status()).toBe(200);
+    assertPersistedAuditCorrelation(saveResponse.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"attempt_response_saved",targetType:"attempt",targetId:created.attempt.id,outcome:"success",reason:"learner_action"});
     const saved = await saveResponse.json() as { response: { word_count: number; version: number } };
     expect(saved.response.word_count).toBeGreaterThan(0);
     expect(saved.response.version).toBe(1);
@@ -113,6 +118,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       { headers, data: { response_text: responseText + " A further explanation supports the interpretation." } },
     );
     expect(reviseResponse.status()).toBe(200);
+    assertPersistedAuditCorrelation(reviseResponse.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"attempt_response_saved",targetType:"attempt",targetId:created.attempt.id,outcome:"success",reason:"learner_action"});
     const revised = await reviseResponse.json() as { response: { version: number } };
     expect(revised.response.version).toBe(2);
 
@@ -121,6 +127,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       { headers, data: {} },
     );
     expect(submitResponse.status()).toBe(200);
+    assertPersistedAuditCorrelation(submitResponse.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"attempt_submitted",targetType:"attempt",targetId:created.attempt.id,outcome:"success",reason:"learner_action"});
     const submitted = await submitResponse.json() as {
       attempt: { status: string; submitted_at: string };
     };
@@ -132,9 +139,10 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       { headers, data: { response_text: "This must not overwrite a submitted response." } },
     );
     expect(lateEdit.status()).toBe(409);
-
+    assertPersistedAuditCorrelation(lateEdit.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"student_attempt_response_save",targetType:"attempt",targetId:created.attempt.id,outcome:"failed",reason:"state_conflict"});
     const graderRoute = await page.request.get("/api/v1/grader/queue", { headers });
     expect(graderRoute.status()).toBe(403);
+    assertPersistedAuditCorrelation(graderRoute.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"grader_attempt_queue_authorized",targetType:"attempt_queue",targetId:null,outcome:"denied",reason:"resource_scope_denied"});
     await expect(graderRoute.json()).resolves.toMatchObject({ error: "role_required" });
   });
 
@@ -169,6 +177,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       };
     };
     expect(acceptedResponse.status(), JSON.stringify(acceptedBody)).toBe(201);
+    assertPersistedAuditCorrelation(acceptedResponse.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"assessment_submission_accepted",targetType:"assessment_submission",targetId:acceptedBody.submission.submission_id,outcome:"success",reason:"learner_action"});
     expect(acceptedBody.submission.learner_id).toBe("11111111-1111-4111-8111-111111111111");
     expect(acceptedBody.submission.task_version_id).toBe(taskVersionA);
     expect(acceptedBody.submission.rubric_version_id).toBe("f1111111-1111-4111-8111-111111111111");
@@ -223,6 +232,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
 
     const listResponse = await page.request.get("/api/v1/learner/submissions", { headers });
     expect(listResponse.status()).toBe(200);
+    assertPersistedAuditCorrelation(listResponse.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"student_submission_list_authorized",targetType:"assessment_submission_collection",targetId:null,outcome:"success",reason:"student_self"});
     const listBody = await listResponse.json() as {
       submissions: Array<{ id: string; status: string; accepted_at: string; grading_due_at: string }>;
     };
@@ -235,6 +245,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       { headers },
     );
     expect(detailResponse.status()).toBe(200);
+    assertPersistedAuditCorrelation(detailResponse.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"student_submission_read_authorized",targetType:"assessment_submission",targetId:acceptedBody.submission.submission_id,outcome:"success",reason:"student_self"});
     const detailBody = await detailResponse.json() as {
       submission: {
         submission_versions: Array<{ version_number: number; response_text: string; word_count: number }>;
@@ -260,6 +271,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       },
     });
     expect(taskOutsideEnrolment.status()).toBe(404);
+    assertPersistedAuditCorrelation(taskOutsideEnrolment.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"student_assessment_submission_accept",targetType:"task_version",targetId:"a2222222-2222-4222-8222-222222222222",outcome:"failed",reason:"resource_not_found"});
   });
 
   test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {
@@ -288,6 +300,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     const learnerAttempts = await page.request.get("/api/v1/learner/attempts", { headers });
     expect(learnerAttempts.status()).toBe(403);
     await expect(learnerAttempts.json()).resolves.toMatchObject({ error: "role_required" });
+    assertPersistedAuditCorrelation(learnerAttempts.headers()["x-request-id"],{actorId:actorIdFromAuthorizationHeader(token),actorRole:"guardian",action:"student_attempt_list_authorized",targetType:"attempt_collection",targetId:null,outcome:"denied",reason:"resource_scope_denied"});
 
     const graderQueue = await page.request.get("/api/v1/grader/queue", { headers });
     expect(graderQueue.status()).toBe(403);
@@ -416,6 +429,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     });
     expect(graderResponse.status()).toBe(403);
     await expect(graderResponse.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(graderResponse.headers()["x-request-id"],{actorId:actorIdFromAuthorizationHeader(graderAal1),actorRole:"grader",action:"grader_submission_queue_authorized",targetType:"assessment_submission_queue",targetId:null,outcome:"denied",reason:"resource_scope_denied"});
     const graderQaRoute = await graderPage.request.get(
       "/api/v1/owner/assessment-versions/" + submissionId + "/private-qa",
       { headers: { Authorization: graderAal1 } },
@@ -464,6 +478,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
 
     const headers = { Authorization: aal2Token };
     const queueResponse = await page.request.get("/api/v1/grader/queue", { headers });
+    assertPersistedAuditCorrelation(queueResponse.headers()["x-request-id"],{actorId:"55555555-5555-4555-8555-555555555555",actorRole:"grader",action:"grader_attempt_queue_authorized",targetType:"attempt_queue",targetId:null,outcome:"success",reason:"assigned_grader_aal2"});
     const queuePayload = await queueResponse.json() as Record<string, unknown>;
     expect(queueResponse.status(), JSON.stringify(queuePayload)).toBe(200);
     const queueBody = queuePayload as { attempts: Array<{ id: string }> };
@@ -473,6 +488,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
 
     const assignedDetail = await page.request.get("/api/v1/grader/attempts/" + attemptA, { headers });
     expect(assignedDetail.status()).toBe(200);
+    assertPersistedAuditCorrelation(assignedDetail.headers()["x-request-id"],{actorId:"55555555-5555-4555-8555-555555555555",actorRole:"grader",action:"grader_attempt_read_authorized",targetType:"attempt",targetId:attemptA,outcome:"success",reason:"active_grader_assignment_aal2"});
     const detailBody = await assignedDetail.json() as {
       attempt: { attempt_responses: Array<{ response_text: string }> };
       prompts: Array<{ prompt_text: string }>;
@@ -482,6 +498,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
 
     const unassignedToThisGrader = await page.request.get("/api/v1/grader/attempts/" + attemptB, { headers });
     expect(unassignedToThisGrader.status()).toBe(404);
+    assertPersistedAuditCorrelation(unassignedToThisGrader.headers()["x-request-id"],{actorId:"55555555-5555-4555-8555-555555555555",actorRole:"grader",action:"grader_attempt_read_authorized",targetType:"attempt",targetId:attemptB,outcome:"denied",reason:"resource_scope_denied"});
     const learnerRoute = await page.request.get("/api/v1/learner/attempts", { headers });
     expect(learnerRoute.status()).toBe(403);
     await expect(learnerRoute.json()).resolves.toMatchObject({ error: "role_required" });
