@@ -238,8 +238,6 @@ test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
   test("two independent AAL2 sessions accepting one invitation token produce one grant and one success", async ({ page, browser }) => {
     test.setTimeout(180_000);
     const secret = readLocalRaceSecret();
-    let owner: Awaited<ReturnType<typeof createSyntheticOwner>> | null = null;
-    let invitee: Awaited<ReturnType<typeof createSyntheticAccount>> | null = null;
     let inviteeContext: Awaited<ReturnType<typeof browser.newContext>> | null = null;
     let secondSession: Awaited<ReturnType<typeof signInIndependentSession>> | null = null;
     let invitationId: string | null = null;
@@ -247,11 +245,9 @@ test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
 
     try {
       const ownerAccount = await createSyntheticOwner(page);
-      owner = ownerAccount;
       inviteeContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
       const inviteePage = await inviteeContext.newPage();
       const inviteeAccount = await createSyntheticAccount(inviteePage, "Synthetic Phase 1C Race Invitee");
-      invitee = inviteeAccount;
       const inviteeMfa = await enableTotp(inviteePage, inviteeAccount.capture);
 
       const createInvitation = await page.request.post("/api/v1/admin/staff-invitations", {
@@ -350,15 +346,9 @@ test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
       await releaseBarrierQuietly(page.request, secret, barrierId);
       if (secondSession) await secondSession.context.close();
       if (inviteeContext) await inviteeContext.close();
-      if (invitationId) {
-        localSqlCsv("DELETE FROM private.staff_invitations WHERE id = '" + invitationId + "'::uuid;");
-      }
-      if (invitee?.userId) {
-        localSqlCsv("DELETE FROM auth.users WHERE id = '" + invitee.userId + "'::uuid;");
-      }
-      if (owner?.userId) {
-        localSqlCsv("DELETE FROM auth.users WHERE id = '" + owner.userId + "'::uuid;");
-      }
+      // Preserve synthetic invitation/account records and append-only audit
+      // history. CI recreates the entire local database for each run; deleting
+      // parent rows here would attempt to delete immutable audit events.
     }
   });
 
@@ -502,13 +492,17 @@ test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
         await releaseBarrierQuietly(page.request, secret, barrierId);
       }
       if (owner?.userId) {
+        // Restore only mutable access state. Keep the synthetic account and
+        // append-only security audit evidence; the local CI database is reset
+        // for the next run, and auth-user deletion would cascade into audit rows.
         localSqlCsv(
           "UPDATE public.profiles SET account_status = 'active'::public.account_status " +
-          "WHERE user_id = '" + owner.userId + "'::uuid; " +
+          "WHERE user_id = '" + owner.userId + "'::uuid;",
+        );
+        localSqlCsv(
           "UPDATE public.role_assignments SET revoked_at = NULL, revoked_by = NULL, " +
           "reason = 'phase1c_race_test_owner' WHERE user_id = '" + owner.userId + "'::uuid " +
-          "AND role = 'owner'::public.app_role; " +
-          "DELETE FROM auth.users WHERE id = '" + owner.userId + "'::uuid;",
+          "AND role = 'owner'::public.app_role;",
         );
       }
     }
