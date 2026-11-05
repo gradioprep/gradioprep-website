@@ -744,6 +744,12 @@ test.describe("Phase 1B account foundation", () => {
       "Staff invitation API failed: " + (createInvitationBody.error ?? "unknown_error") +
         (createInvitationBody.message ? " — " + createInvitationBody.message : "")
     ).toBe(201);
+    assertPersistedAuditCorrelation(createInvitationResponse.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "staff_invitation_created", targetType: "staff_invitation",
+      targetId: createInvitationBody.invitation?.invitation_id ?? null,
+      outcome: "success", reason: "grader",
+    });
     expect(createInvitationBody.invite_url).toMatch(/^https?:\/\//);
     expect(createInvitationBody.invitation).toMatchObject({
       invited_email: "guardian.a@example.invalid",
@@ -771,6 +777,11 @@ test.describe("Phase 1B account foundation", () => {
       headers: { Authorization: ownerToken },
     });
     expect(ownerInvitationList.status()).toBe(200);
+    assertPersistedAuditCorrelation(ownerInvitationList.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "staff_invitations_listed", targetType: "staff_invitation_collection",
+      targetId: null, outcome: "success", reason: "owner_aal2",
+    });
     const listBody = await ownerInvitationList.json() as {
       invitations: Array<{ invited_email: string; invited_role: string; status: string }>;
     };
@@ -789,6 +800,11 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(duplicateInvite.status()).toBe(409);
     await expect(duplicateInvite.json()).resolves.toMatchObject({ error: "invitation_already_pending" });
+    assertPersistedAuditCorrelation(duplicateInvite.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "staff_invitation_created", targetType: "staff_invitation",
+      targetId: null, outcome: "failed", reason: "state_conflict",
+    });
 
     const mismatchAcceptance = await page.request.post("/api/v1/staff-invitations/accept", {
       headers: { Authorization: ownerToken },
@@ -798,7 +814,7 @@ test.describe("Phase 1B account foundation", () => {
     await expect(mismatchAcceptance.json()).resolves.toMatchObject({ error: "invitation_email_mismatch" });
     assertStaffInvitationAuditCorrelation({
       requestId: mismatchAcceptance.headers()["x-request-id"],
-      actorId: "88888888-8888-4888-8888-888888888888",
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
       invitationId: createInvitationBody.invitation!.invitation_id!,
       outcome: "denied",
       reason: "email_mismatch",
@@ -876,12 +892,36 @@ test.describe("Phase 1B account foundation", () => {
 
     await page.getByLabel("Staff email address").fill("invited.grader@example.invalid");
     await page.getByLabel("Invitation role").selectOption("admin");
+    const revokeCreatePromise = page.waitForResponse(response =>
+      new URL(response.url()).pathname === "/api/v1/admin/staff-invitations" &&
+      response.request().method() === "POST"
+    );
     await page.getByRole("button", { name: "Create invitation link" }).click();
+    const revokeCreate = await revokeCreatePromise;
+    const revokeCreateBody = await revokeCreate.json() as { invitation?: { invitation_id?: string } };
+    expect(revokeCreate.status()).toBe(201);
+    const revokedInvitationId = revokeCreateBody.invitation?.invitation_id;
+    assertPersistedAuditCorrelation(revokeCreate.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "staff_invitation_created", targetType: "staff_invitation",
+      targetId: revokedInvitationId ?? null, outcome: "success", reason: "admin",
+    });
     const revokedInvitationUrl = await page.getByTestId("staff-invite-url").inputValue();
     const revokedInvitationToken = new URLSearchParams(new URL(revokedInvitationUrl).hash.slice(1)).get("staff-invite");
     expect(revokedInvitationToken).toMatch(/^[A-Za-z0-9_-]{43}$/);
     page.on("dialog", dialog => dialog.accept());
+    const revokeResponsePromise = page.waitForResponse(response =>
+      new URL(response.url()).pathname === `/api/v1/admin/staff-invitations/${revokedInvitationId}/revoke` &&
+      response.request().method() === "POST"
+    );
     await page.getByRole("button", { name: "Revoke invitation for invited.grader@example.invalid" }).click();
+    const revokeResponse = await revokeResponsePromise;
+    expect(revokeResponse.status()).toBe(200);
+    assertPersistedAuditCorrelation(revokeResponse.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "staff_invitation_revoked", targetType: "staff_invitation", targetId: revokedInvitationId!,
+      outcome: "success", reason: "owner_revocation",
+    });
     await expect(page.getByText("Revoked", { exact: true })).toBeVisible();
 
     await page.getByRole("button", { name: "Sign out" }).click();
@@ -914,7 +954,7 @@ test.describe("Phase 1B account foundation", () => {
     await expect(firstFactorInviteAcceptance.json()).resolves.toMatchObject({ error: "mfa_required" });
     assertStaffInvitationAuditCorrelation({
       requestId: firstFactorInviteAcceptance.headers()["x-request-id"],
-      actorId: "33333333-3333-4333-8333-333333333333",
+      actorId: "33333333-3333-4333-8333-333333333333", actorRole: "guardian",
       invitationId: createInvitationBody.invitation!.invitation_id!,
       outcome: "denied",
       reason: "aal2_required",
@@ -945,7 +985,7 @@ test.describe("Phase 1B account foundation", () => {
     await expect.poll(() => Boolean(acceptedRequestId), { timeout: 10_000 }).toBe(true);
     assertStaffInvitationAuditCorrelation({
       requestId: acceptedRequestId,
-      actorId: "33333333-3333-4333-8333-333333333333",
+      actorId: "33333333-3333-4333-8333-333333333333", actorRole: "grader",
       invitationId: createInvitationBody.invitation!.invitation_id!,
       outcome: "success",
       reason: "grader",
@@ -1016,6 +1056,15 @@ test.describe("Phase 1B account foundation", () => {
     await expect(freshGraderPage.getByRole("heading", { name: "Synthetic Guardian A" })).toBeVisible();
     await expect.poll(() => Boolean(freshGraderToken), { timeout: 10_000 }).toBe(true);
 
+    const graderSubmissionQueue = await freshGraderPage.request.get("/api/v1/grader/submissions", {
+      headers: { Authorization: freshGraderToken },
+    });
+    expect(graderSubmissionQueue.status()).toBe(200);
+    assertPersistedAuditCorrelation(graderSubmissionQueue.headers()["x-request-id"], {
+      actorId: "33333333-3333-4333-8333-333333333333", actorRole: "grader",
+      action: "grader_submission_queue_authorized", targetType: "assessment_submission_queue",
+      targetId: null, outcome: "success", reason: "assigned_grader_aal2",
+    });
     const graderSubmissionRead = await freshGraderPage.request.get(
       "/api/v1/grader/submissions/" + lifecycleSubmissionId,
       { headers: { Authorization: freshGraderToken } },
@@ -1026,24 +1075,41 @@ test.describe("Phase 1B account foundation", () => {
       published_versions?: Array<{ version_number: number }>;
     };
     expect(graderSubmissionRead.status(), JSON.stringify(graderSubmissionBody)).toBe(200);
+    assertPersistedAuditCorrelation(graderSubmissionRead.headers()["x-request-id"], {
+      actorId: "33333333-3333-4333-8333-333333333333", actorRole: "grader",
+      action: "grader_submission_read_authorized", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "success", reason: "active_grader_assignment_aal2",
+    });
     expect(graderSubmissionBody.submission?.status).toBe("assigned");
     expect(graderSubmissionBody.criteria?.length).toBeGreaterThan(0);
 
+    const draftPayload = {
+      overall_feedback: "Synthetic feedback used to verify concurrent publication safety.",
+      criterion_results: graderSubmissionBody.criteria!.map(criterion => ({
+        criterion_id: criterion.id, points_awarded: Math.min(criterion.max_points, 1),
+        feedback: "Synthetic criterion feedback.",
+      })),
+    };
     const concurrentDraft = await page.request.put(
       "/api/v1/grader/submissions/" + lifecycleSubmissionId + "/draft",
-      {
-        headers: { Authorization: freshGraderToken },
-        data: {
-          overall_feedback: "Synthetic feedback used to verify concurrent publication safety.",
-          criterion_results: graderSubmissionBody.criteria!.map(criterion => ({
-            criterion_id: criterion.id,
-            points_awarded: Math.min(criterion.max_points, 1),
-            feedback: "Synthetic criterion feedback.",
-          })),
-        },
-      },
+      { headers: { Authorization: freshGraderToken }, data: draftPayload },
     );
     expect(concurrentDraft.status()).toBe(200);
+    assertPersistedAuditCorrelation(concurrentDraft.headers()["x-request-id"], {
+      actorId: "33333333-3333-4333-8333-333333333333", actorRole: "grader",
+      action: "assessment_draft_saved", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "success", reason: "grader_action",
+    });
+    const replayDraft = await freshGraderPage.request.put(
+      "/api/v1/grader/submissions/" + lifecycleSubmissionId + "/draft",
+      { headers: { Authorization: freshGraderToken }, data: draftPayload },
+    );
+    expect(replayDraft.status()).toBe(200);
+    assertPersistedAuditCorrelation(replayDraft.headers()["x-request-id"], {
+      actorId: "33333333-3333-4333-8333-333333333333", actorRole: "grader",
+      action: "assessment_draft_save_replayed", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "success", reason: "idempotent_retry",
+    });
 
     const concurrentPublications = await Promise.all([
       page.request.post(
@@ -1057,10 +1123,22 @@ test.describe("Phase 1B account foundation", () => {
     ]);
     const concurrentPublicationBodies = await Promise.all(
       concurrentPublications.map(response => response.json()),
-    ) as Array<{ error?: string; assessment?: { version_number: number } }>;
+    ) as Array<{ error?: string; assessment?: { version_number: number; assessment_version_id?: string } }>;
     expect(concurrentPublications.map(response => response.status()).sort()).toEqual([201, 409]);
     expect(concurrentPublicationBodies.filter(body => body.assessment?.version_number === 1)).toHaveLength(1);
     expect(concurrentPublicationBodies.find(body => body.error)?.error).toBe("assessment_draft_required");
+    const successfulPublicationIndex = concurrentPublications.findIndex(response => response.status() === 201);
+    const failedPublicationIndex = concurrentPublications.findIndex(response => response.status() === 409);
+    assertPersistedAuditCorrelation(concurrentPublications[successfulPublicationIndex].headers()["x-request-id"], {
+      actorId: "33333333-3333-4333-8333-333333333333", actorRole: "grader",
+      action: "assessment_feedback_published", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "success", reason: "human_grader_publication",
+    });
+    assertPersistedAuditCorrelation(concurrentPublications[failedPublicationIndex].headers()["x-request-id"], {
+      actorId: "33333333-3333-4333-8333-333333333333", actorRole: "grader",
+      action: "grader_assessment_feedback_publish", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "failed", reason: "state_conflict",
+    });
 
     const publishedSubmissionRead = await freshGraderPage.request.get(
       "/api/v1/grader/submissions/" + lifecycleSubmissionId,
@@ -1073,6 +1151,32 @@ test.describe("Phase 1B account foundation", () => {
     expect(publishedSubmissionRead.status()).toBe(200);
     expect(publishedSubmissionBody.submission?.status).toBe("feedback_published");
     expect(publishedSubmissionBody.published_versions?.map(version => version.version_number)).toEqual([1]);
+    const publishedVersionId = concurrentPublicationBodies[successfulPublicationIndex].assessment?.assessment_version_id;
+    expect(publishedVersionId).toMatch(/^[0-9a-f-]{36}$/i);
+    const ownerPrivateQaRead = await page.request.get(
+      "/api/v1/owner/assessment-versions/" + publishedVersionId + "/private-qa",
+      { headers: { Authorization: ownerToken } },
+    );
+    expect(ownerPrivateQaRead.status()).toBe(200);
+    assertPersistedAuditCorrelation(ownerPrivateQaRead.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "private_qa_records_read", targetType: "assessment_version",
+      targetId: publishedVersionId!, outcome: "success", reason: "owner_qa_review",
+    });
+    const ownerPrivateQaCreate = await page.request.post(
+      "/api/v1/owner/assessment-versions/" + publishedVersionId + "/private-qa",
+      { headers: { Authorization: ownerToken }, data: {
+        checks: { rubric_alignment: true }, status: "passed",
+        explanation: "Synthetic QA confirms the published assessment version has complete rubric alignment.",
+        reviewer_action: "Retain this synthetic version; no changes are required.",
+      } },
+    );
+    expect(ownerPrivateQaCreate.status()).toBe(201);
+    assertPersistedAuditCorrelation(ownerPrivateQaCreate.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "private_qa_record_created", targetType: "assessment_version",
+      targetId: publishedVersionId!, outcome: "success", reason: "owner_qa_review",
+    });
 
     const onePublication = localSqlCsv(`
       SELECT CASE
@@ -1113,12 +1217,22 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(adminAttempt.status()).toBe(403);
     await expect(adminAttempt.json()).resolves.toMatchObject({ error: "role_management_forbidden" });
+    assertPersistedAuditCorrelation(adminAttempt.headers()["x-request-id"], {
+      actorId: "77777777-7777-4777-8777-777777777777", actorRole: "admin",
+      action: "owner_role_revocation", targetType: "role_assignment_subject",
+      targetId: roleRequest.target_user_id, outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const adminInvitationList = await page.request.get("/api/v1/admin/staff-invitations", {
       headers: { Authorization: adminToken },
     });
     expect(adminInvitationList.status()).toBe(403);
     await expect(adminInvitationList.json()).resolves.toMatchObject({ error: "staff_invitation_forbidden" });
+    assertPersistedAuditCorrelation(adminInvitationList.headers()["x-request-id"], {
+      actorId: "77777777-7777-4777-8777-777777777777", actorRole: "admin",
+      action: "staff_invitations_listed", targetType: "staff_invitation_collection",
+      targetId: null, outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const adminGraderQueue = await page.request.get("/api/v1/grader/queue", {
       headers: { Authorization: adminToken },
