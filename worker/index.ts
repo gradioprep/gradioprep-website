@@ -607,10 +607,7 @@ async function acceptStaffInvitation(request: Request, env: WorkerEnv): Promise<
   });
   if (acceptError) {
     if (acceptError.message !== "invitation_not_found") {
-      const auditOutcome = classifyPrivilegedWriteError(acceptError);
-      const audit = await auditStaffInvitationAcceptanceFailure(
-        context, tokenHash, auditOutcome.failureCategory,
-      );
+      const audit = await auditStaffInvitationAcceptanceFailure(context, tokenHash);
       if (audit) return audit;
     }
     return staffInvitationRpcError(acceptError);
@@ -850,11 +847,9 @@ async function auditPrivilegedWriteOutcome(
 async function auditStaffInvitationAcceptanceFailure(
   context: CallerContext,
   tokenHash: string,
-  failureCategory?: PrivilegedWriteFailureCategory,
 ): Promise<Response | null> {
   const { data, error } = await context.supabase.rpc("audit_staff_invitation_acceptance_failure", {
     p_token_hash: tokenHash,
-    p_failure_category: failureCategory ?? null,
   });
   if (error || data !== true) {
     return jsonResponse({

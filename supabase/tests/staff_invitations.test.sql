@@ -288,6 +288,7 @@ SELECT ok(
   public.audit_privileged_write_outcome('staff_invitation_created', NULL, 'failed', 'capacity_unavailable'),
   'Owner AAL2 can append a failed invitation-create outcome without a target ID'
 );
+RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM private.security_audit_events
    WHERE actor_id = '88888888-8888-4888-8888-888888888888'
@@ -300,6 +301,7 @@ SELECT is(
   1,
   'failed invitation creation stores no email or token identifier'
 );
+SET LOCAL ROLE authenticated;
 SELECT ok(
   public.audit_privileged_write_outcome(
     'staff_invitation_revoked',
@@ -313,6 +315,7 @@ SELECT ok(
   NOT public.audit_privileged_write_outcome('staff_invitation_created', NULL, 'denied', NULL),
   'an authorised Owner cannot forge a denial for an operation the database allows'
 );
+RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM private.security_audit_events
    WHERE actor_id = '88888888-8888-4888-8888-888888888888'
@@ -323,10 +326,12 @@ SELECT is(
   0,
   'authorised Owners cannot inject fabricated denial events'
 );
+SET LOCAL ROLE authenticated;
 SELECT ok(
   public.audit_protected_read_outcome('staff_invitations_listed', NULL, 'failed'),
   'Owner AAL2 can append a failed invitation-list outcome'
 );
+RESET ROLE;
 SELECT is(
   (SELECT count(*)::integer FROM private.security_audit_events
    WHERE actor_id = '88888888-8888-4888-8888-888888888888'
@@ -337,6 +342,17 @@ SELECT is(
      AND request_id = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd'),
   1,
   'failed invitation-list reads retain only scoped metadata'
+);
+SET LOCAL ROLE authenticated;
+INSERT INTO pg_temp.staff_invitation_fixtures
+SELECT invitation_id,
+       encode(extensions.digest('pending-student-b-admin-audit-test', 'sha256'), 'hex'),
+       invited_email,
+       invited_role
+FROM public.create_staff_invitation(
+  'student.b@example.invalid',
+  'admin',
+  encode(extensions.digest('pending-student-b-admin-audit-test', 'sha256'), 'hex')
 );
 RESET ROLE;
 
@@ -367,8 +383,7 @@ SELECT set_config('request.headers', '{"x-request-id":"ffffffff-ffff-4fff-8fff-f
 SELECT ok(
   public.audit_staff_invitation_acceptance_failure(
     (SELECT token_hash FROM pg_temp.staff_invitation_fixtures
-     WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1),
-    'state_conflict'
+     WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1)
   ),
   'acceptance failure is bound to the private invitation resolved from the token hash'
 );
@@ -393,8 +408,7 @@ SELECT set_config('request.headers', '{"x-request-id":"abababab-abab-4bab-8bab-a
 SELECT ok(
   public.audit_staff_invitation_acceptance_failure(
     (SELECT token_hash FROM pg_temp.staff_invitation_fixtures
-     WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1),
-    'validation_failed'
+     WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1)
   ),
   'a different email attempting acceptance is retained as a derived denial'
 );
@@ -413,11 +427,44 @@ SELECT is(
 );
 
 SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
+SELECT set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal2"}', true);
+SELECT set_config('request.headers', '{"x-request-id":"bcbcbcbc-bcbc-4bcb-8bcb-bcbcbcbcbcbc"}', true);
+SELECT ok(
+  NOT public.audit_staff_invitation_acceptance_failure(
+    (SELECT token_hash FROM pg_temp.staff_invitation_fixtures
+     WHERE invited_role = 'admin' AND invited_email = 'student.b@example.invalid' LIMIT 1)
+  ),
+  'an otherwise eligible invitee cannot forge an acceptance failure event'
+);
+RESET ROLE;
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE actor_id = '22222222-2222-4222-8222-222222222222'
+     AND action = 'staff_invitation_accepted'
+     AND target_id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures
+       WHERE invited_role = 'admin' AND invited_email = 'student.b@example.invalid' LIMIT 1)),
+  0,
+  'eligible invitation acceptance attempts do not create false failure audit entries'
+);
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
+SELECT set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal2"}', true);
+SELECT lives_ok(
+  $SELECT * FROM public.accept_staff_invitation(
+      (SELECT token_hash FROM pg_temp.staff_invitation_fixtures
+       WHERE invited_role = 'admin' AND invited_email = 'student.b@example.invalid' LIMIT 1)
+    )$,
+  'the same otherwise eligible invitation can be accepted through the operation RPC'
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT set_config('request.headers', '{"x-request-id":"cdcdcdcd-cdcd-4dcd-8dcd-cdcdcdcdcdcd"}', true);
 SELECT ok(
-  NOT public.audit_staff_invitation_acceptance_failure(repeat('f',64), 'operation_failed'),
+  NOT public.audit_staff_invitation_acceptance_failure(repeat('f',64)),
   'unknown invitation hashes cannot create unscoped acceptance audit events'
 );
 RESET ROLE;
