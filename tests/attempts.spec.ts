@@ -92,6 +92,21 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     });
     expect(forgedCreate.status()).toBe(400);
 
+    const outOfPathwayAttempt = await page.request.post("/api/v1/learner/attempts", {
+      headers,
+      data: { task_version_id: "a2222222-2222-4222-8222-222222222222" },
+    });
+    expect(outOfPathwayAttempt.status()).toBe(404);
+    assertPersistedAuditCorrelation(outOfPathwayAttempt.headers()["x-request-id"], {
+      actorId: "11111111-1111-4111-8111-111111111111",
+      actorRole: "student",
+      action: "student_attempt_create",
+      targetType: "task_version",
+      targetId: "a2222222-2222-4222-8222-222222222222",
+      outcome: "denied",
+      reason: "resource_scope_denied",
+    });
+
     const createResponse = await page.request.post("/api/v1/learner/attempts", {
       headers,
       data: { task_version_id: taskVersionA },
@@ -430,6 +445,40 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     expect(graderResponse.status()).toBe(403);
     await expect(graderResponse.json()).resolves.toMatchObject({ error: "mfa_required" });
     assertPersistedAuditCorrelation(graderResponse.headers()["x-request-id"],{actorId:actorIdFromAuthorizationHeader(graderAal1),actorRole:"grader",action:"grader_submission_queue_authorized",targetType:"assessment_submission_queue",targetId:null,outcome:"denied",reason:"resource_scope_denied"});
+
+    const graderDraftAal1 = await graderPage.request.put(
+      "/api/v1/grader/submissions/" + submissionId + "/draft",
+      {
+        headers: { Authorization: graderAal1 },
+        data: {
+          overall_feedback: "A valid-length synthetic draft feedback.",
+          criterion_results: [{
+            criterion_id: "f3333333-3333-4333-8333-333333333333",
+            points_awarded: 2,
+            feedback: "The learner selects a relevant detail and links it to an interpretation.",
+          }],
+        },
+      },
+    );
+    expect(graderDraftAal1.status()).toBe(403);
+    await expect(graderDraftAal1.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(graderDraftAal1.headers()["x-request-id"], {
+      actorId: actorIdFromAuthorizationHeader(graderAal1), actorRole: "grader",
+      action: "grader_assessment_draft_save", targetType: "assessment_submission",
+      targetId: submissionId, outcome: "denied", reason: "resource_scope_denied",
+    });
+
+    const graderPublishAal1 = await graderPage.request.post(
+      "/api/v1/grader/submissions/" + submissionId + "/publish",
+      { headers: { Authorization: graderAal1 }, data: {} },
+    );
+    expect(graderPublishAal1.status()).toBe(403);
+    await expect(graderPublishAal1.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(graderPublishAal1.headers()["x-request-id"], {
+      actorId: actorIdFromAuthorizationHeader(graderAal1), actorRole: "grader",
+      action: "grader_assessment_feedback_publish", targetType: "assessment_submission",
+      targetId: submissionId, outcome: "denied", reason: "resource_scope_denied",
+    });
     const graderQaRoute = await graderPage.request.get(
       "/api/v1/owner/assessment-versions/" + submissionId + "/private-qa",
       { headers: { Authorization: graderAal1 } },

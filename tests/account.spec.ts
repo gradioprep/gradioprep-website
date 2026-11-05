@@ -418,6 +418,18 @@ test.describe("Phase 1B account foundation", () => {
       targetId: null, outcome: "denied", reason: "resource_scope_denied",
     });
 
+    const ownerAal1InvitationCreate = await page.request.post("/api/v1/admin/staff-invitations", {
+      headers: { Authorization: firstFactorToken },
+      data: { email: "aal1-denial@example.invalid", role: "grader" },
+    });
+    expect(ownerAal1InvitationCreate.status()).toBe(403);
+    await expect(ownerAal1InvitationCreate.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(ownerAal1InvitationCreate.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "staff_invitation_created", targetType: "staff_invitation",
+      targetId: null, outcome: "denied", reason: "resource_scope_denied",
+    });
+
     const ownerAal1Assignment = await page.request.post(
       "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign",
       {
@@ -772,6 +784,22 @@ test.describe("Phase 1B account foundation", () => {
     const invitationLink = await invitationLinkField.inputValue();
     const invitationToken = new URLSearchParams(new URL(invitationLink).hash.slice(1)).get("staff-invite");
     expect(invitationToken).toMatch(/^[A-Za-z0-9_-]{43}$/);
+
+    const ownerAal1InvitationRevoke = await page.request.post(
+      `/api/v1/admin/staff-invitations/${createInvitationBody.invitation!.invitation_id}/revoke`,
+      {
+        headers: { Authorization: firstFactorToken },
+        data: { reason: "Synthetic AAL1 invitation revocation denial" },
+      },
+    );
+    expect(ownerAal1InvitationRevoke.status()).toBe(403);
+    await expect(ownerAal1InvitationRevoke.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(ownerAal1InvitationRevoke.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "staff_invitation_revoked", targetType: "staff_invitation",
+      targetId: createInvitationBody.invitation!.invitation_id!,
+      outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const ownerInvitationList = await page.request.get("/api/v1/admin/staff-invitations", {
       headers: { Authorization: ownerToken },
