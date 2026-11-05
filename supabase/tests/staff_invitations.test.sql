@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(24);
+SELECT plan(25);
 
 CREATE TEMP TABLE staff_invitation_fixtures (
   invitation_id uuid,
@@ -94,14 +94,30 @@ SELECT is(
   'owner can list safe invitation status'
 );
 SELECT throws_ok(
-  $$SELECT * FROM public.create_staff_invitation(
+  $SELECT * FROM public.create_staff_invitation(
       'student.b@example.invalid', 'grader',
       encode(extensions.digest('second-student-b-invitation', 'sha256'), 'hex')
-    )$$,
+    )$,
   '23505', 'invitation_already_pending',
   'duplicate pending invitation for the same email and role is denied'
 );
 RESET ROLE;
+
+SELECT is(
+  (SELECT count(*)::integer
+   FROM private.security_audit_events
+   WHERE action = 'staff_invitations_listed'
+     AND actor_id = '88888888-8888-4888-8888-888888888888'
+     AND outcome = 'success'
+     AND reason_category = 'owner_aal2'
+     AND target_type = 'staff_invitation_collection'
+     AND target_id IS NULL
+     AND actor_roles @> ARRAY['owner'::public.app_role]
+     AND request_id IS NOT NULL
+     AND transaction_id IS NOT NULL),
+  2,
+  'each privileged staff-invitation list read is attributed and correlation-enriched'
+);
 
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
