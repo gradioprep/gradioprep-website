@@ -32,13 +32,13 @@ SELECT set_config(
   true
 );
 SELECT ok(
-  NOT public.audit_privileged_write_outcome(
+  public.audit_privileged_write_outcome(
     'owner_submission_transition',
     'd3333333-3333-4333-8333-333333333333',
     'failed',
     'state_conflict'
   ),
-  'a student is denied when attempting to record an Owner-only write failure'
+  'a student request appends a database-derived Owner-role denial'
 );
 RESET ROLE;
 SELECT is(
@@ -70,13 +70,13 @@ SELECT set_config(
   true
 );
 SELECT ok(
-  NOT public.audit_privileged_write_outcome(
+  public.audit_privileged_write_outcome(
     'owner_submission_transition',
     'd3333333-3333-4333-8333-333333333333',
     'failed',
     'state_conflict'
   ),
-  'Owner at AAL1 cannot be recorded as an authorised write failure'
+  'Owner AAL1 appends a database-derived MFA denial'
 );
 RESET ROLE;
 SELECT is(
@@ -143,13 +143,13 @@ SELECT set_config(
   true
 );
 SELECT ok(
-  NOT public.audit_privileged_write_outcome(
+  public.audit_privileged_write_outcome(
     'owner_attempt_assignment',
     'c1111111-1111-4111-8111-111111111111',
     'denied',
     NULL
   ),
-  'Admin at AAL2 cannot create an Owner-attributed denial for an Owner operation'
+  'Admin AAL2 appends a database-derived Owner-role denial'
 );
 RESET ROLE;
 SELECT is(
@@ -179,13 +179,13 @@ SELECT set_config(
   true
 );
 SELECT ok(
-  NOT public.audit_privileged_write_outcome(
+  public.audit_privileged_write_outcome(
     'grader_assessment_draft_save',
     'd3333333-3333-4333-8333-333333333333',
     'failed',
     'validation_failed'
   ),
-  'an unassigned grader cannot record an authorised assessment draft failure'
+  'an unassigned Grader appends a database-derived assignment denial'
 );
 RESET ROLE;
 SELECT is(

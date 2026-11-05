@@ -74,7 +74,7 @@ SELECT set_config(
   true
 );
 SELECT ok(
-  NOT public.audit_privileged_write_outcome(
+  public.audit_privileged_write_outcome(
     'student_attempt_response_save',
     'c2222222-2222-4222-8222-222222222222',
     'failed',
@@ -83,7 +83,7 @@ SELECT ok(
   'learner cannot log a failed write against another student attempt'
 );
 SELECT ok(
-  NOT public.audit_privileged_write_outcome(
+  public.audit_privileged_write_outcome(
     'student_attempt_create',
     'a2222222-2222-4222-8222-222222222222',
     'failed',
@@ -111,7 +111,7 @@ SELECT set_config(
   true
 );
 SELECT ok(
-  NOT public.audit_privileged_write_outcome(
+  public.audit_privileged_write_outcome(
     'student_attempt_submit',
     'c1111111-1111-4111-8111-111111111111',
     'failed',
@@ -134,13 +134,13 @@ SELECT set_config(
   true
 );
 SELECT ok(
-  public.audit_privileged_write_outcome(
+  NOT public.audit_privileged_write_outcome(
     'student_attempt_submit',
     'c1111111-1111-4111-8111-111111111111',
     'denied',
     NULL
   ),
-  'a trusted Worker denial is recorded even when the database role/ownership checks allow the learner'
+  'an authorised learner cannot forge a Worker-denial event through the browser-callable audit RPC'
 );
 RESET ROLE;
 SELECT is(
@@ -150,10 +150,9 @@ SELECT is(
      AND action = 'student_attempt_submit'
      AND target_id = 'c1111111-1111-4111-8111-111111111111'
      AND outcome = 'denied'
-     AND reason_category = 'worker_precheck_denied'
      AND request_id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'),
-  1,
-  'Worker precheck denials are not silently dropped'
+  0,
+  'authorised callers cannot create false denied audit events for their own valid operations'
 );
 
 SET LOCAL ROLE authenticated;

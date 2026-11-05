@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(25);
+SELECT no_plan();
 
 CREATE TEMP TABLE staff_invitation_fixtures (
   invitation_id uuid,
@@ -278,6 +278,149 @@ SELECT is(
   1,
   'the invitation acceptance is attributed to the accepting user in the audit log'
 );
+
+-- Phase 1C-E: staff invitation create/revoke/list/accept denied and failed outcomes.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
+SELECT set_config('request.headers', '{"x-request-id":"dddddddd-dddd-4ddd-8ddd-dddddddddddd"}', true);
+SELECT ok(
+  public.audit_privileged_write_outcome('staff_invitation_created', NULL, 'failed', 'capacity_unavailable'),
+  'Owner AAL2 can append a failed invitation-create outcome without a target ID'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE actor_id = '88888888-8888-4888-8888-888888888888'
+     AND action = 'staff_invitation_created'
+     AND target_type = 'staff_invitation'
+     AND target_id IS NULL
+     AND outcome = 'failed'
+     AND reason_category = 'capacity_unavailable'
+     AND request_id = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd'),
+  1,
+  'failed invitation creation stores no email or token identifier'
+);
+SELECT ok(
+  public.audit_privileged_write_outcome(
+    'staff_invitation_revoked',
+    (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures LIMIT 1),
+    'failed',
+    'state_conflict'
+  ),
+  'Owner AAL2 can append a failed revocation outcome for an existing invitation'
+);
+SELECT ok(
+  NOT public.audit_privileged_write_outcome('staff_invitation_created', NULL, 'denied', NULL),
+  'an authorised Owner cannot forge a denial for an operation the database allows'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE actor_id = '88888888-8888-4888-8888-888888888888'
+     AND action = 'staff_invitation_created'
+     AND target_id IS NULL
+     AND outcome = 'denied'
+     AND request_id = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd'),
+  0,
+  'authorised Owners cannot inject fabricated denial events'
+);
+SELECT ok(
+  public.audit_protected_read_outcome('staff_invitations_listed', NULL, 'failed'),
+  'Owner AAL2 can append a failed invitation-list outcome'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE actor_id = '88888888-8888-4888-8888-888888888888'
+     AND action = 'staff_invitations_listed'
+     AND outcome = 'failed'
+     AND reason_category = 'database_read_failed'
+     AND target_type = 'staff_invitation_collection'
+     AND request_id = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd'),
+  1,
+  'failed invitation-list reads retain only scoped metadata'
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal2"}', true);
+SELECT set_config('request.headers', '{"x-request-id":"eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"}', true);
+SELECT ok(
+  NOT public.audit_protected_read_outcome('staff_invitations_listed', NULL, 'success'),
+  'a student cannot claim a successful Owner-only invitation-list read'
+);
+RESET ROLE;
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE actor_id = '11111111-1111-4111-8111-111111111111'
+     AND action = 'staff_invitations_listed'
+     AND outcome = 'denied'
+     AND reason_category = 'role_required'
+     AND request_id = 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee'),
+  1,
+  'student invitation-list attempts are recorded as database-derived denials'
+);
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal2"}', true);
+SELECT set_config('request.headers', '{"x-request-id":"ffffffff-ffff-4fff-8fff-ffffffffffff"}', true);
+SELECT ok(
+  public.audit_staff_invitation_acceptance_failure(
+    (SELECT token_hash FROM pg_temp.staff_invitation_fixtures
+     WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1),
+    'state_conflict'
+  ),
+  'acceptance failure is bound to the private invitation resolved from the token hash'
+);
+RESET ROLE;
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE actor_id = '11111111-1111-4111-8111-111111111111'
+     AND action = 'staff_invitation_accepted'
+     AND target_id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures
+       WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1)
+     AND outcome = 'failed'
+     AND reason_category = 'state_conflict'
+     AND request_id = 'ffffffff-ffff-4fff-8fff-ffffffffffff'),
+  1,
+  'revoked invitation replays are recorded without token hash or email'
+);
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
+SELECT set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal2"}', true);
+SELECT set_config('request.headers', '{"x-request-id":"abababab-abab-4bab-8bab-abababababab"}', true);
+SELECT ok(
+  public.audit_staff_invitation_acceptance_failure(
+    (SELECT token_hash FROM pg_temp.staff_invitation_fixtures
+     WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1),
+    'validation_failed'
+  ),
+  'a different email attempting acceptance is retained as a derived denial'
+);
+RESET ROLE;
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE actor_id = '22222222-2222-4222-8222-222222222222'
+     AND action = 'staff_invitation_accepted'
+     AND target_id = (SELECT invitation_id FROM pg_temp.staff_invitation_fixtures
+       WHERE invited_role = 'grader' AND invited_email = 'student.a@example.invalid' LIMIT 1)
+     AND outcome = 'denied'
+     AND reason_category = 'email_mismatch'
+     AND request_id = 'abababab-abab-4bab-8bab-abababababab'),
+  1,
+  'email-mismatched acceptance stores metadata only'
+);
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
+SELECT set_config('request.headers', '{"x-request-id":"cdcdcdcd-cdcd-4dcd-8dcd-cdcdcdcdcdcd"}', true);
+SELECT ok(
+  NOT public.audit_staff_invitation_acceptance_failure(repeat('f',64), 'operation_failed'),
+  'unknown invitation hashes cannot create unscoped acceptance audit events'
+);
+RESET ROLE;
 
 SELECT * FROM finish();
 ROLLBACK;

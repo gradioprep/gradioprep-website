@@ -14,7 +14,9 @@ type ProtectedReadAuditAction =
   | "student_submission_read_authorized"
   | "grader_submission_queue_authorized"
   | "grader_submission_read_authorized"
-  | "owner_submission_queue_authorized";
+  | "owner_submission_queue_authorized"
+  | "staff_invitations_listed"
+  | "private_qa_records_read";
 
 type PrivilegedWriteAuditAction =
   | "owner_role_revocation"
@@ -28,7 +30,9 @@ type PrivilegedWriteAuditAction =
   | "student_attempt_create"
   | "student_attempt_response_save"
   | "student_attempt_submit"
-  | "student_assessment_submission_accept";
+  | "student_assessment_submission_accept"
+  | "staff_invitation_created"
+  | "staff_invitation_revoked";
 
 type PrivilegedWriteFailureCategory =
   | "resource_not_found"
@@ -500,7 +504,20 @@ async function listStaffInvitations(request: Request, env: WorkerEnv): Promise<R
     return jsonResponse({ error: "authentication_required", code: error?.code ?? "missing_user_claims" }, error?.status ?? 401);
   }
   const { data, error: listError } = await context.supabase.rpc("list_staff_invitations");
-  if (listError) return staffInvitationRpcError(listError);
+  if (listError) {
+    const response = staffInvitationRpcError(listError);
+    const authorizationDenied =
+      listError.message === "staff_invitation_forbidden" ||
+      listError.message === "mfa_required";
+    const audit = await auditProtectedReadOutcome(
+      context,
+      "staff_invitations_listed",
+      undefined,
+      authorizationDenied ? "success" : "failed",
+      response,
+    );
+    return audit ?? response;
+  }
   return jsonResponse({ invitations: asRows(data) });
 }
 
@@ -522,7 +539,18 @@ async function createStaffInvitation(request: Request, env: WorkerEnv): Promise<
     p_role: parsed.body.role,
     p_token_hash: tokenHash,
   });
-  if (createError) return staffInvitationRpcError(createError);
+  if (createError) {
+    const auditOutcome = classifyPrivilegedWriteError(createError);
+    const audit = await auditPrivilegedWriteOutcome(
+      context,
+      "staff_invitation_created",
+      undefined,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
+    return staffInvitationRpcError(createError);
+  }
 
   const invitation = asRows(data)[0];
   if (!invitation) return jsonResponse({ error: "staff_invitation_failed" }, 500);
@@ -549,7 +577,18 @@ async function revokeStaffInvitation(request: Request, env: WorkerEnv, invitatio
     p_invitation_id: invitationId,
     p_reason: parsed.body.reason.trim(),
   });
-  if (revokeError) return staffInvitationRpcError(revokeError);
+  if (revokeError) {
+    const auditOutcome = classifyPrivilegedWriteError(revokeError);
+    const audit = await auditPrivilegedWriteOutcome(
+      context,
+      "staff_invitation_revoked",
+      invitationId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
+    return staffInvitationRpcError(revokeError);
+  }
   return jsonResponse({ revoked: true });
 }
 
@@ -566,7 +605,16 @@ async function acceptStaffInvitation(request: Request, env: WorkerEnv): Promise<
   const { data, error: acceptError } = await context.supabase.rpc("accept_staff_invitation", {
     p_token_hash: tokenHash,
   });
-  if (acceptError) return staffInvitationRpcError(acceptError);
+  if (acceptError) {
+    if (acceptError.message !== "invitation_not_found") {
+      const auditOutcome = classifyPrivilegedWriteError(acceptError);
+      const audit = await auditStaffInvitationAcceptanceFailure(
+        context, tokenHash, auditOutcome.failureCategory,
+      );
+      if (audit) return audit;
+    }
+    return staffInvitationRpcError(acceptError);
+  }
   const accepted = asRows(data)[0];
   if (!accepted || !["grader", "admin"].includes(String(accepted.accepted_role))) {
     return jsonResponse({ error: "staff_invitation_failed" }, 500);
@@ -784,16 +832,34 @@ async function auditPrivilegedWriteOutcome(
   outcome: "denied" | "failed",
   failureCategory?: PrivilegedWriteFailureCategory,
 ): Promise<Response | null> {
-  const { error } = await context.supabase.rpc("audit_privileged_write_outcome", {
+  const { data, error } = await context.supabase.rpc("audit_privileged_write_outcome", {
     p_action: action,
     p_target_id: targetId ?? null,
     p_outcome: outcome,
     p_failure_category: failureCategory ?? null,
   });
-  if (error) {
+  if (error || data !== true) {
     return jsonResponse({
       error: "privileged_write_audit_unavailable",
       message: "The privileged operation could not be safely completed because its audit outcome could not be recorded.",
+    }, 503);
+  }
+  return null;
+}
+
+async function auditStaffInvitationAcceptanceFailure(
+  context: CallerContext,
+  tokenHash: string,
+  failureCategory?: PrivilegedWriteFailureCategory,
+): Promise<Response | null> {
+  const { data, error } = await context.supabase.rpc("audit_staff_invitation_acceptance_failure", {
+    p_token_hash: tokenHash,
+    p_failure_category: failureCategory ?? null,
+  });
+  if (error || data !== true) {
+    return jsonResponse({
+      error: "staff_invitation_audit_unavailable",
+      message: "The invitation attempt could not be safely completed because its audit outcome could not be recorded.",
     }, 503);
   }
   return null;
@@ -831,8 +897,22 @@ function classifyPrivilegedWriteError(error: { code?: string; message?: string }
   ].includes(message)) {
     return { outcome: "failed", failureCategory: "state_conflict" };
   }
-  if (message === "submission_capacity_unavailable" || message === "submission_capacity_full") {
+  if (message === "submission_capacity_unavailable" || message === "submission_capacity_full" ||
+      message === "invitation_rate_limited") {
     return { outcome: "failed", failureCategory: "capacity_unavailable" };
+  }
+  if ([
+    "invitation_expired",
+    "invitation_revoked",
+    "invitation_already_used",
+    "invitation_not_pending",
+    "invitation_already_pending",
+    "invitation_role_already_active",
+  ].includes(message)) {
+    return { outcome: "failed", failureCategory: "state_conflict" };
+  }
+  if (message.startsWith("invalid_invitation_")) {
+    return { outcome: "failed", failureCategory: "validation_failed" };
   }
   return { outcome: "failed", failureCategory: "operation_failed" };
 }
@@ -1590,23 +1670,46 @@ async function listOwnerPrivateQaRecords(
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "owner");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditProtectedReadOutcome(
+        auth.context, "private_qa_records_read", assessmentVersionId, "success", roleDenied,
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
   const mfaDenied = requireAal2(auth.context);
-  if (mfaDenied) return mfaDenied;
+  if (mfaDenied) {
+    const audit = await auditProtectedReadOutcome(
+      auth.context, "private_qa_records_read", assessmentVersionId, "success", mfaDenied,
+    );
+    return audit ?? mfaDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("get_private_qa_records", {
     p_assessment_version_id: assessmentVersionId,
   });
   if (error) {
+    let response: Response;
     if (error.message === "private_qa_forbidden") {
-      return jsonResponse({ error: "private_qa_forbidden" }, 403);
+      response = jsonResponse({ error: "private_qa_forbidden" }, 403);
+    } else if (error.message === "private_qa_assessment_version_not_found") {
+      response = jsonResponse({ error: "assessment_version_not_found" }, 404);
+    } else {
+      response = jsonResponse({ error: "private_qa_records_unavailable" }, 500);
     }
-    if (error.message === "private_qa_assessment_version_not_found") {
-      return jsonResponse({ error: "assessment_version_not_found" }, 404);
-    }
-    return jsonResponse({ error: "private_qa_records_unavailable" }, 500);
+    const authorizationDenied =
+      error.message === "private_qa_forbidden" ||
+      error.message === "private_qa_assessment_version_not_found";
+    const audit = await auditProtectedReadOutcome(
+      auth.context, "private_qa_records_read", assessmentVersionId,
+      authorizationDenied ? "success" : "failed", response,
+    );
+    return audit ?? response;
   }
 
+  // get_private_qa_records appends its success event atomically with the read.
   return jsonResponse({ qa_records: asRows(data) });
 }
 
