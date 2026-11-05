@@ -88,6 +88,27 @@ SELECT throws_ok(
 );
 RESET ROLE;
 
+-- A verified guardian link is intentionally insufficient for private academic QA.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '33333333-3333-4333-8333-333333333333', true);
+SELECT set_config('request.jwt.claims', '{"sub":"33333333-3333-4333-8333-333333333333","role":"authenticated","aal":"aal2"}', true);
+SELECT throws_ok(
+  $SELECT * FROM public.get_private_qa_records(current_setting('test.private_qa_assessment_version_id')::uuid)$,
+  '42501', 'private_qa_forbidden',
+  'verified linked guardian at AAL2 cannot read private academic-QA records'
+);
+SELECT throws_ok(
+  $SELECT * FROM public.create_private_qa_record(
+    current_setting('test.private_qa_assessment_version_id')::uuid,
+    '{"rubric_alignment":true}',
+    'passed', 'Synthetic QA explanation for guardian denial test.', '',
+    'Guardian access must not include private academic QA.'
+  )$,
+  '42501', 'private_qa_forbidden',
+  'verified linked guardian at AAL2 cannot create private academic-QA records'
+);
+RESET ROLE;
+
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '77777777-7777-4777-8777-777777777777', true);
 SELECT set_config('request.jwt.claims', '{"sub":"77777777-7777-4777-8777-777777777777","role":"authenticated","aal":"aal2"}', true);
