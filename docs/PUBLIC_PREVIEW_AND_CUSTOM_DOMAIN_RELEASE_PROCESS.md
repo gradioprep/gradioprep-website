@@ -1,8 +1,8 @@
 # Public Preview, Verification and Custom-Domain Release Process
 
-**Version:** 1.5-draft
-**Date:** 4 November 2026  
-**Status:** Conditional Preview/review standard updated by Founder on 3 November 2026. Founder-facing Preview requests are reserved for new, concrete and substantial learner/staff-visible features. Routine, unchanged, backend-only and documentation-only previews must not be repeatedly surfaced. PR #22's security and CI records remain in the engineering history.
+**Version:** 1.6-draft
+**Date:** 5 November 2026  
+**Status:** Cloudflare `workers.dev` branch Previews remain the normal development verification environment and are disconnected from hosted learner services. Founder-facing Preview requests are reserved for new, concrete and substantial learner/staff-visible features; routine, unchanged, backend-only and documentation-only changes do not trigger a Preview request. A branded custom-domain staging journey backed by an isolated hosted synthetic test environment is a mandatory gate before final Diagnostic/Evaluation Report acceptance, after separate provisioning and DNS approvals. Production custom-domain cutover remains a separate later gate. No hosted staging backend, branded host mapping, paid use, production deployment or DNS change is authorised by this document.
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md`; free-first cost decisions: `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`
 **Related:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`, `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`, `docs/CONTROLLED_CLOUDFLARE_PREVIEW.md`, `docs/DESIGN_SPEC.md` and the approved Phase 0 decision register.
 
@@ -105,7 +105,7 @@ Never call the Preview URL the official production site. Never promote a Preview
 
 ## 6. Custom-domain connection stage
 
-The custom domain should be connected at the **Launch Candidate / Production Cutover checkpoint**, after the required public Preview iterations and the complete launch-readiness gates have passed. The website should be developed and publicly verified through PR Previews throughout Phase 1 and subsequent feature phases; it is not necessary to attach the custom domain to every development build.
+The **production** custom domain should be connected only at the Launch Candidate / Production Cutover checkpoint, after launch-readiness gates and separate explicit production approval. This production cutover is distinct from the mandatory branded **staging**-domain verification in Section 9, which must pass before final acceptance of the Diagnostic and Evaluation Report. Continue feature development through isolated per-PR `workers.dev` Previews; do not attach a domain to every development build.
 
 ### 6.1 Before connecting the domain
 
@@ -135,9 +135,9 @@ The final sequence is:
 
 Custom Domain creation, DNS/nameserver changes, production deployment, Auth production redirect changes and public launch each require their relevant explicit approval. This document does not authorise them.
 
-### 6.3 Optional branded staging subdomain
+### 6.3 Mandatory pre-acceptance branded staging subdomain
 
-If a persistent branded verification address is genuinely useful before launch, a separate subdomain such as `staging.<confirmed-domain>` may be evaluated after the custom domain is confirmed. It requires its own Worker Preview/domain mapping, DNS/certificate review, strict synthetic-data isolation and separate Founder DNS approval. It is optional; the per-PR `workers.dev` Preview is the default because it is automatic, isolated and avoids unnecessary DNS work.
+A branded staging host is **required**, not optional, before final Diagnostic/Evaluation Report acceptance (see Section 9). After the exact purchased domain and canonical hostname are confirmed by the Founder, use a dedicated subdomain such as `staging.<confirmed-domain>`, a separate staging Worker and an isolated hosted synthetic test backend. Verify DNS and certificate/TLS setup, HTTPS redirects and the complete synthetic learner journey. Staging backend/Worker provisioning and DNS/custom-domain mapping each require separate explicit approval; any paid resource or usage also requires separate cost approval. The ordinary per-PR `workers.dev` Preview remains the default development environment and is not evidence that branded hosted authentication or persistence works.
 
 ## 7. Release sequence and approval gates
 
@@ -147,7 +147,7 @@ If a persistent branded verification address is genuinely useful before launch, 
 | Phase 1B–1F | In-scope implementation of the approved secure foundation, with local synthetic services first and public Preview verification | Proceed through the approved sequence with draft PR/CI evidence; hosted provisioning, paid spend, real data, merge and production release remain separate gates |
 | Later hosted synthetic integration | Isolated hosted Supabase + Preview end-to-end auth/API using the Free tier where suitable | Separate hosted-resource provisioning approval; any paid plan or usage requires a documented unavoidable need and explicit cost approval; synthetic data only |
 | Flagship phases 2–5 | PDF, extraction/OCR, grader workflow, feedback, timer/analytics | One Founder Preview when a phase adds a concrete, substantial learner/staff-visible capability that is ready for review; backend-only increments and routine sub-slices remain CI/local verification only; external services require separate approvals |
-| Controlled pilot / diagnostic cycle | Full MYP Year 4 synthetic journey then separately authorised limited live pilot | Founder/privacy/security/academic/accessibility/cost approvals |
+| Branded staging before Diagnostic/Report acceptance | Dedicated staging subdomain, separate Worker and isolated hosted synthetic backend; full public synthetic journey | Mandatory pre-acceptance gate; separate explicit hosted-resource, DNS/domain and paid-cost approvals; synthetic data only |\n| Controlled pilot / diagnostic cycle | Full MYP Year 4 synthetic journey then separately authorised limited live pilot | Founder/privacy/security/academic/accessibility/cost approvals |
 | Launch Candidate / Production Cutover | Connect confirmed custom domain; final production smoke test | Separate explicit production/domain/DNS approval |
 | Official launch | Open the approved public site and learner access | Founder release approval |
 
@@ -166,7 +166,7 @@ MYP Year 4 actual diagnostic item authoring remains gated until the flagship fea
 
 ## 9. Pre-launch branded staging-domain verification (added 4 November 2026)
 
-The Founder has clarified that the public website experience—including authentication, navigation, the Diagnostic and Evaluation Report—must be verified on a branded custom-domain host before final acceptance/launch. Therefore, domain readiness and branded staging verification are now explicit pre-launch roadmap gates; they are not deferred entirely until production cutover.
+The Founder has clarified that the public website experience—including authentication, navigation, the Diagnostic and Evaluation Report—must be verified on a branded custom-domain staging host before final Diagnostic/Report acceptance. This staging gate is mandatory and is not production cutover. Therefore, domain readiness and branded staging verification are now explicit pre-launch roadmap gates; they are not deferred entirely until production cutover.
 
 ### 9.1 Staging host, not premature production cutover
 
