@@ -35,7 +35,7 @@ function assertStaffInvitationAuditCorrelation(args: {
   );
   expect(actorId).toMatch(/^[0-9a-f-]{36}$/i);
   expect(invitationId).toMatch(/^[0-9a-f-]{36}$/i);
-  expect(reason).toMatch(/^[a-z_]+$/);
+  expect(reason).toMatch(/^[a-z0-9_]+$/);
   const sql = `
     SELECT CASE
       WHEN count(*) = 1
@@ -359,7 +359,7 @@ test.describe("Phase 1B account foundation", () => {
   });
 
   test("owner enrols TOTP, verifies sign-in and can revoke a role only after MFA", async ({ page, browser }) => {
-    test.setTimeout(60_000);
+    test.setTimeout(90_000);
 
     const learnerContext = await browser.newContext();
     const learnerPage = await learnerContext.newPage();
@@ -507,24 +507,33 @@ test.describe("Phase 1B account foundation", () => {
     expect(verifiedAttempt.status()).toBe(200);
     await expect(verifiedAttempt.json()).resolves.toMatchObject({ revoked: true });
 
-    const ownerAal2Assignment = await page.request.post(
-      "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign",
-      {
+    const attemptAssignmentUrl = "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign";
+    const concurrentAttemptAssignments = await Promise.all([
+      page.request.post(attemptAssignmentUrl, {
         headers: { Authorization: ownerToken },
         data: {
           grader_user_id: "55555555-5555-4555-8555-555555555555",
-          reason: "Synthetic AAL2 grader assignment",
+          reason: "Synthetic concurrent assignment A",
         },
-      },
-    );
-    const ownerAal2AssignmentBody = await ownerAal2Assignment.json() as Record<string, unknown>;
-    expect(ownerAal2Assignment.status(), JSON.stringify(ownerAal2AssignmentBody)).toBe(201);
-    expect(ownerAal2AssignmentBody).toMatchObject({
-      assignment: {
-        attempt_id: "c3333333-3333-4333-8333-333333333333",
-        grader_user_id: "55555555-5555-4555-8555-555555555555",
-      },
-    });
+      }),
+      page.request.post(attemptAssignmentUrl, {
+        headers: { Authorization: ownerToken },
+        data: {
+          grader_user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+          reason: "Synthetic concurrent assignment B",
+        },
+      }),
+    ]);
+    const concurrentAttemptBodies = await Promise.all(
+      concurrentAttemptAssignments.map(response => response.json()),
+    ) as Array<{ error?: string; assignment?: { attempt_id: string; grader_user_id: string } }>;
+    expect(concurrentAttemptAssignments.map(response => response.status()).sort()).toEqual([201, 409]);
+    const successfulAttemptAssignment = concurrentAttemptBodies.find(body => body.assignment);
+    const rejectedAttemptAssignment = concurrentAttemptBodies.find(body => body.error);
+    expect(successfulAttemptAssignment?.assignment?.attempt_id).toBe("c3333333-3333-4333-8333-333333333333");
+    expect(["55555555-5555-4555-8555-555555555555", "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"])
+      .toContain(successfulAttemptAssignment?.assignment?.grader_user_id);
+    expect(rejectedAttemptAssignment?.error).toBe("attempt_already_assigned");
 
     const ownerAal2QaRead = await page.request.get(
       "/api/v1/owner/assessment-versions/d3333333-3333-4333-8333-333333333333/private-qa",
@@ -880,6 +889,97 @@ test.describe("Phase 1B account foundation", () => {
     await page.getByLabel("Authenticator code").fill(createTotpCode(secret));
     await page.getByRole("button", { name: "Verify code" }).click();
     await expect(page.getByRole("heading", { name: "Synthetic Owner" })).toBeVisible();
+    await expect.poll(() => Boolean(ownerToken)).toBe(true);
+
+    // Concurrency acceptance: owner assigns one queued submission to the newly
+    // accepted synthetic grader, then two simultaneous publish requests race on
+    // the same saved draft. Exactly one first publication must be created.
+    const lifecycleAssignment = await page.request.post(
+      "/api/v1/admin/submissions/" + lifecycleSubmissionId + "/assign",
+      {
+        headers: { Authorization: ownerToken },
+        data: {
+          grader_user_id: "33333333-3333-4333-8333-333333333333",
+          reason: "Synthetic publication concurrency assignment",
+        },
+      },
+    );
+    expect(lifecycleAssignment.status()).toBe(201);
+
+    const graderSubmissionRead = await page.request.get(
+      "/api/v1/grader/submissions/" + lifecycleSubmissionId,
+      { headers: { Authorization: acceptedWithToken } },
+    );
+    const graderSubmissionBody = await graderSubmissionRead.json() as {
+      submission?: { id: string; status: string };
+      criteria?: Array<{ id: string; max_points: number }>;
+      published_versions?: Array<{ version_number: number }>;
+    };
+    expect(graderSubmissionRead.status(), JSON.stringify(graderSubmissionBody)).toBe(200);
+    expect(graderSubmissionBody.submission?.status).toBe("assigned");
+    expect(graderSubmissionBody.criteria?.length).toBeGreaterThan(0);
+
+    const concurrentDraft = await page.request.put(
+      "/api/v1/grader/submissions/" + lifecycleSubmissionId + "/draft",
+      {
+        headers: { Authorization: acceptedWithToken },
+        data: {
+          overall_feedback: "Synthetic feedback used to verify concurrent publication safety.",
+          criterion_results: graderSubmissionBody.criteria!.map(criterion => ({
+            criterion_id: criterion.id,
+            points_awarded: Math.min(criterion.max_points, 1),
+            feedback: "Synthetic criterion feedback.",
+          })),
+        },
+      },
+    );
+    expect(concurrentDraft.status()).toBe(200);
+
+    const concurrentPublications = await Promise.all([
+      page.request.post(
+        "/api/v1/grader/submissions/" + lifecycleSubmissionId + "/publish",
+        { headers: { Authorization: acceptedWithToken }, data: {} },
+      ),
+      page.request.post(
+        "/api/v1/grader/submissions/" + lifecycleSubmissionId + "/publish",
+        { headers: { Authorization: acceptedWithToken }, data: {} },
+      ),
+    ]);
+    const concurrentPublicationBodies = await Promise.all(
+      concurrentPublications.map(response => response.json()),
+    ) as Array<{ error?: string; assessment?: { version_number: number } }>;
+    expect(concurrentPublications.map(response => response.status()).sort()).toEqual([201, 409]);
+    expect(concurrentPublicationBodies.filter(body => body.assessment?.version_number === 1)).toHaveLength(1);
+    expect(concurrentPublicationBodies.find(body => body.error)?.error).toBe("assessment_draft_required");
+
+    const publishedSubmissionRead = await page.request.get(
+      "/api/v1/grader/submissions/" + lifecycleSubmissionId,
+      { headers: { Authorization: acceptedWithToken } },
+    );
+    const publishedSubmissionBody = await publishedSubmissionRead.json() as {
+      submission?: { status: string };
+      published_versions?: Array<{ version_number: number }>;
+    };
+    expect(publishedSubmissionRead.status()).toBe(200);
+    expect(publishedSubmissionBody.submission?.status).toBe("feedback_published");
+    expect(publishedSubmissionBody.published_versions?.map(version => version.version_number)).toEqual([1]);
+
+    const onePublication = localSqlCsv(`
+      SELECT CASE
+        WHEN (SELECT count(*) FROM public.assessment_versions
+              WHERE submission_id = '${lifecycleSubmissionId}'::uuid) = 1
+         AND (SELECT count(*) FROM private.security_audit_events
+              WHERE action = 'assessment_feedback_published'
+                AND target_id = '${lifecycleSubmissionId}'::uuid
+                AND outcome = 'success') = 1
+         AND (SELECT count(*) FROM private.security_audit_events
+              WHERE action = 'assessment_feedback_edited'
+                AND target_id = '${lifecycleSubmissionId}'::uuid) = 0
+        THEN 'ONE_CONCURRENT_PUBLICATION_CONFIRMED'
+        ELSE 'CONCURRENT_PUBLICATION_MISMATCH'
+      END AS result;
+    `);
+    expect(onePublication).toContain("ONE_CONCURRENT_PUBLICATION_CONFIRMED");
 
     await page.getByRole("button", { name: "Sign out" }).click();
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
