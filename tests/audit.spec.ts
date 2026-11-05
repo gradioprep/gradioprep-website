@@ -268,8 +268,11 @@ test.describe("Phase 1C-E Worker audit correlation and failure injection", () =>
       action: "student_attempt_submit",
       actorId: STUDENT_ID,
       targetId: ATTEMPT_B_ID,
-      outcome: "denied",
-      reason: "resource_scope_denied",
+      // submit_attempt is SECURITY DEFINER: it derives learner ownership and
+      // deliberately returns P0002/attempt_not_found for another learner.
+      // The Worker classifies that non-enumerating result as failed/not_found.
+      outcome: "failed",
+      reason: "resource_not_found",
     });
   });
 
