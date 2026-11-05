@@ -136,5 +136,121 @@ SELECT throws_ok(
 );
 RESET ROLE;
 
+
+-- The outcome parameter is required and arbitrary actions remain rejected.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config(
+  'request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
+  true
+);
+SELECT ok(
+  NOT public.audit_protected_read_outcome('student_attempt_list_authorized', NULL, NULL),
+  'a null audit outcome is rejected'
+);
+SELECT ok(
+  NOT public.audit_protected_read_outcome('arbitrary_protected_read', NULL, 'success'),
+  'an unknown protected-read action is rejected'
+);
+RESET ROLE;
+
+-- A database read that fails after authorization is recorded as failed, not success.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config(
+  'request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
+  true
+);
+SELECT set_config(
+  'request.headers',
+  '{"x-request-id":"cccccccc-cccc-4ccc-8ccc-cccccccccccc"}',
+  true
+);
+SELECT ok(
+  public.audit_protected_read_outcome('student_attempt_list_authorized', NULL, 'failed'),
+  'an authorised student read failure is recorded as a failed outcome'
+);
+RESET ROLE;
+SELECT is(
+  (SELECT count(*)::integer
+   FROM private.security_audit_events
+   WHERE actor_id = '11111111-1111-4111-8111-111111111111'
+     AND action = 'student_attempt_list_authorized'
+     AND outcome = 'failed'
+     AND reason_category = 'database_read_failed'
+     AND request_id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'),
+  1,
+  'failed read audit records retain actor, request, transaction and safe reason metadata'
+);
+
+-- Cross-learner access is recorded as denied even when the Worker read returned no row.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config(
+  'request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
+  true
+);
+SELECT set_config(
+  'request.headers',
+  '{"x-request-id":"dddddddd-dddd-4ddd-8ddd-dddddddddddd"}',
+  true
+);
+SELECT ok(
+  NOT public.audit_protected_read_outcome(
+    'student_attempt_read_authorized',
+    'c2222222-2222-4222-8222-222222222222',
+    'success'
+  ),
+  'a student cannot mark another learner attempt read as successful'
+);
+RESET ROLE;
+SELECT is(
+  (SELECT count(*)::integer
+   FROM private.security_audit_events
+   WHERE actor_id = '11111111-1111-4111-8111-111111111111'
+     AND action = 'student_attempt_read_authorized'
+     AND target_id = 'c2222222-2222-4222-8222-222222222222'
+     AND outcome = 'denied'
+     AND reason_category = 'resource_scope_denied'
+     AND request_id = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd'),
+  1,
+  'cross-learner read denial is retained without learner-content data'
+);
+
+-- A grader at AAL1 is denied at the database boundary and cannot be logged as failed.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);
+SELECT set_config(
+  'request.jwt.claims',
+  '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal1"}',
+  true
+);
+SELECT set_config(
+  'request.headers',
+  '{"x-request-id":"eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"}',
+  true
+);
+SELECT ok(
+  NOT public.audit_protected_read_outcome(
+    'grader_submission_queue_authorized', NULL, 'failed'
+  ),
+  'a grader at AAL1 is denied rather than recorded as an authorised query failure'
+);
+RESET ROLE;
+SELECT is(
+  (SELECT count(*)::integer
+   FROM private.security_audit_events
+   WHERE actor_id = '55555555-5555-4555-8555-555555555555'
+     AND action = 'grader_submission_queue_authorized'
+     AND outcome = 'denied'
+     AND reason_category = 'aal2_required'
+     AND request_id = 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee'),
+  1,
+  'AAL2 denials are recorded distinctly from authorised query failures'
+);
+
 SELECT * FROM finish();
 ROLLBACK;

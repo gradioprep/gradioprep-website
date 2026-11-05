@@ -3,6 +3,7 @@ SELECT no_plan();
 
 SELECT ok(
   NOT has_function_privilege('anon', 'public.audit_authorized_protected_read(text,uuid)', 'EXECUTE')
+  AND NOT has_function_privilege('anon', 'public.audit_protected_read_outcome(text,uuid,text)', 'EXECUTE')
   AND NOT has_function_privilege('anon', 'public.reassign_submission_grader(uuid,uuid,text)', 'EXECUTE')
   AND NOT has_function_privilege('anon', 'public.transition_assessment_submission(uuid,text,text)', 'EXECUTE')
   AND NOT has_function_privilege('anon', 'public.assign_submission_to_grader(uuid,uuid,text)', 'EXECUTE')
@@ -16,6 +17,7 @@ SELECT ok(
 );
 SELECT ok(
   has_function_privilege('authenticated', 'public.audit_authorized_protected_read(text,uuid)', 'EXECUTE')
+  AND has_function_privilege('authenticated', 'public.audit_protected_read_outcome(text,uuid,text)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.reassign_submission_grader(uuid,uuid,text)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.transition_assessment_submission(uuid,text,text)', 'EXECUTE')
   AND has_function_privilege('authenticated', 'public.assign_submission_to_grader(uuid,uuid,text)', 'EXECUTE')
