@@ -16,6 +16,24 @@ type ProtectedReadAuditAction =
   | "grader_submission_read_authorized"
   | "owner_submission_queue_authorized";
 
+type PrivilegedWriteAuditAction =
+  | "owner_role_revocation"
+  | "owner_attempt_assignment"
+  | "owner_submission_assignment"
+  | "owner_submission_reassignment"
+  | "owner_submission_transition"
+  | "owner_private_qa_record_create"
+  | "grader_assessment_draft_save"
+  | "grader_assessment_feedback_publish";
+
+type PrivilegedWriteFailureCategory =
+  | "resource_not_found"
+  | "state_conflict"
+  | "validation_failed"
+  | "last_owner_protected"
+  | "capacity_unavailable"
+  | "operation_failed";
+
 type AppRole = "student" | "guardian" | "grader" | "admin" | "owner";
 
 const APP_ROLES: readonly AppRole[] = [
@@ -311,6 +329,15 @@ async function revokeRole(request: Request, env: WorkerEnv): Promise<Response> {
   });
 
   if (revokeError) {
+    const auditOutcome = classifyPrivilegedWriteError(revokeError);
+    const audit = await auditPrivilegedWriteOutcome(
+      context,
+      "owner_role_revocation",
+      body.target_user_id,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (revokeError.message === "mfa_required") {
       return jsonResponse({
         error: "mfa_required",
@@ -746,6 +773,63 @@ function requireAal2(context: CallerContext): Response | null {
       }, 403);
 }
 
+async function auditPrivilegedWriteOutcome(
+  context: CallerContext,
+  action: PrivilegedWriteAuditAction,
+  targetId: string | undefined,
+  outcome: "denied" | "failed",
+  failureCategory?: PrivilegedWriteFailureCategory,
+): Promise<Response | null> {
+  const { error } = await context.supabase.rpc("audit_privileged_write_outcome", {
+    p_action: action,
+    p_target_id: targetId ?? null,
+    p_outcome: outcome,
+    p_failure_category: failureCategory ?? null,
+  });
+  if (error) {
+    return jsonResponse({
+      error: "privileged_write_audit_unavailable",
+      message: "The privileged operation could not be safely completed because its audit outcome could not be recorded.",
+    }, 503);
+  }
+  return null;
+}
+
+function classifyPrivilegedWriteError(error: { code?: string; message?: string }): {
+  outcome: "denied" | "failed";
+  failureCategory?: PrivilegedWriteFailureCategory;
+} {
+  const message = error.message ?? "";
+  if (error.code === "42501" || message === "mfa_required" || message.endsWith("_forbidden")) {
+    return { outcome: "denied" };
+  }
+  if (error.code === "P0002" || message.endsWith("_not_found")) {
+    return { outcome: "failed", failureCategory: "resource_not_found" };
+  }
+  if (error.code === "23514" || message === "last_active_owner_protected") {
+    return { outcome: "failed", failureCategory: "last_owner_protected" };
+  }
+  if (error.code === "22023" || message.startsWith("invalid_") || message === "grader_not_available") {
+    return { outcome: "failed", failureCategory: "validation_failed" };
+  }
+  if ([
+    "assessment_submission_not_assignable",
+    "assessment_submission_not_reassignable",
+    "assessment_assignment_not_found",
+    "grader_already_assigned",
+    "invalid_assessment_transition",
+    "assessment_draft_required",
+    "attempt_already_assigned",
+    "attempt_not_submitted",
+  ].includes(message)) {
+    return { outcome: "failed", failureCategory: "state_conflict" };
+  }
+  if (message === "submission_capacity_unavailable" || message === "submission_capacity_full") {
+    return { outcome: "failed", failureCategory: "capacity_unavailable" };
+  }
+  return { outcome: "failed", failureCategory: "operation_failed" };
+}
+
 async function auditProtectedReadOutcome(
   context: CallerContext,
   action: ProtectedReadAuditAction,
@@ -1133,9 +1217,22 @@ async function assignAssessmentSubmissionToGrader(
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "owner");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditPrivilegedWriteOutcome(
+        auth.context, "owner_submission_assignment", submissionId, "denied",
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
   const mfaDenied = requireAal2(auth.context);
-  if (mfaDenied) return mfaDenied;
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "owner_submission_assignment", submissionId, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("assign_submission_to_grader", {
     p_submission_id: submissionId,
@@ -1143,6 +1240,15 @@ async function assignAssessmentSubmissionToGrader(
     p_reason: parsed.body.reason.trim(),
   });
   if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context,
+      "owner_submission_assignment",
+      submissionId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (error.message === "assessment_assignment_forbidden") return jsonResponse({ error: "assessment_assignment_forbidden" }, 403);
     if (error.message === "assessment_submission_not_found") return jsonResponse({ error: "assessment_submission_not_found" }, 404);
     if (error.message === "assessment_submission_not_assignable") return jsonResponse({ error: "assessment_submission_not_assignable" }, 409);
@@ -1169,9 +1275,22 @@ async function reassignAssessmentSubmissionGrader(
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "owner");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditPrivilegedWriteOutcome(
+        auth.context, "owner_submission_reassignment", submissionId, "denied",
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
   const mfaDenied = requireAal2(auth.context);
-  if (mfaDenied) return mfaDenied;
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "owner_submission_reassignment", submissionId, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("reassign_submission_grader", {
     p_submission_id: submissionId,
@@ -1179,6 +1298,15 @@ async function reassignAssessmentSubmissionGrader(
     p_reason: parsed.body.reason.trim(),
   });
   if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context,
+      "owner_submission_reassignment",
+      submissionId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (error.message === "assessment_assignment_forbidden") {
       return jsonResponse({ error: "assessment_assignment_forbidden" }, 403);
     }
@@ -1221,9 +1349,22 @@ async function transitionAssessmentSubmission(
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "owner");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditPrivilegedWriteOutcome(
+        auth.context, "owner_submission_transition", submissionId, "denied",
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
   const mfaDenied = requireAal2(auth.context);
-  if (mfaDenied) return mfaDenied;
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "owner_submission_transition", submissionId, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("transition_assessment_submission", {
     p_submission_id: submissionId,
@@ -1231,6 +1372,15 @@ async function transitionAssessmentSubmission(
     p_reason: parsed.body.reason.trim(),
   });
   if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context,
+      "owner_submission_transition",
+      submissionId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (error.message === "assessment_transition_forbidden") {
       return jsonResponse({ error: "assessment_transition_forbidden" }, 403);
     }
@@ -1265,9 +1415,22 @@ async function createOwnerPrivateQaRecord(
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "owner");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditPrivilegedWriteOutcome(
+        auth.context, "owner_private_qa_record_create", assessmentVersionId, "denied",
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
   const mfaDenied = requireAal2(auth.context);
-  if (mfaDenied) return mfaDenied;
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "owner_private_qa_record_create", assessmentVersionId, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("create_private_qa_record", {
     p_assessment_version_id: assessmentVersionId,
@@ -1278,6 +1441,15 @@ async function createOwnerPrivateQaRecord(
     p_reviewer_action: parsed.body.reviewer_action.trim(),
   });
   if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context,
+      "owner_private_qa_record_create",
+      assessmentVersionId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (error.message === "private_qa_forbidden") {
       return jsonResponse({ error: "private_qa_forbidden" }, 403);
     }
@@ -1493,9 +1665,22 @@ async function saveAssignedAssessmentDraft(
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "grader");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditPrivilegedWriteOutcome(
+        auth.context, "grader_assessment_draft_save", submissionId, "denied",
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
   const mfaDenied = requireAal2(auth.context);
-  if (mfaDenied) return mfaDenied;
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "grader_assessment_draft_save", submissionId, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("save_assessment_draft", {
     p_submission_id: submissionId,
@@ -1504,6 +1689,15 @@ async function saveAssignedAssessmentDraft(
     p_criterion_results: parsed.body.criterion_results,
   });
   if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context,
+      "grader_assessment_draft_save",
+      submissionId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (error.message === "grader_assessment_forbidden") return jsonResponse({ error: "grader_assessment_forbidden" }, 403);
     if (error.message === "assessment_submission_not_found") return jsonResponse({ error: "assessment_submission_not_found" }, 404);
     if (error.message === "assessment_change_reason_required") return jsonResponse({ error: "assessment_change_reason_required" }, 400);
@@ -1529,14 +1723,36 @@ async function publishAssignedAssessmentFeedback(
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "grader");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditPrivilegedWriteOutcome(
+        auth.context, "grader_assessment_feedback_publish", submissionId, "denied",
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
   const mfaDenied = requireAal2(auth.context);
-  if (mfaDenied) return mfaDenied;
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "grader_assessment_feedback_publish", submissionId, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("publish_assessment_feedback", {
     p_submission_id: submissionId,
   });
   if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context,
+      "grader_assessment_feedback_publish",
+      submissionId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (error.message === "grader_assessment_forbidden") return jsonResponse({ error: "grader_assessment_forbidden" }, 403);
     if (error.message === "assessment_submission_not_found") return jsonResponse({ error: "assessment_submission_not_found" }, 404);
     if (error.message === "assessment_draft_required") return jsonResponse({ error: "assessment_draft_required" }, 409);
@@ -1682,9 +1898,22 @@ async function assignAttemptToGrader(
   const auth = await authenticatedCaller(request, env);
   if (!auth.context) return auth.response!;
   const roleDenied = await requireActiveRole(auth.context, "owner");
-  if (roleDenied) return roleDenied;
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditPrivilegedWriteOutcome(
+        auth.context, "owner_attempt_assignment", attemptId, "denied",
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
   const mfaDenied = requireAal2(auth.context);
-  if (mfaDenied) return mfaDenied;
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "owner_attempt_assignment", attemptId, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
 
   const { data, error } = await auth.context.supabase.rpc("assign_attempt_to_grader", {
     p_attempt_id: attemptId,
@@ -1692,6 +1921,15 @@ async function assignAttemptToGrader(
     p_reason: parsed.body.reason.trim(),
   });
   if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context,
+      "owner_attempt_assignment",
+      attemptId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
     if (error.message === "mfa_required") return jsonResponse({ error: "mfa_required" }, 403);
     if (error.message === "attempt_assignment_forbidden") return jsonResponse({ error: "attempt_assignment_forbidden" }, 403);
     if (error.message === "attempt_not_found") return jsonResponse({ error: "attempt_not_found" }, 404);
