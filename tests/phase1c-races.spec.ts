@@ -35,6 +35,20 @@ function readLocalRaceSecret(): string {
   return match[1];
 }
 
+function createUnassignedSubmittedAttempt(attemptId: string): void {
+  const inserted = localSqlCsv(
+    "INSERT INTO public.attempts " +
+    "(id, learner_id, task_version_id, status, started_at, submitted_at, created_at, updated_at) " +
+    "SELECT '" + attemptId + "'::uuid, learner_id, task_version_id, status, " +
+    "started_at, submitted_at, now(), now() FROM public.attempts " +
+    "WHERE id = 'c3333333-3333-4333-8333-333333333333'::uuid AND status = 'submitted' " +
+    "RETURNING id;",
+  );
+  if (!inserted.includes(attemptId)) {
+    throw new Error("Could not create an independent submitted synthetic attempt for the race test.");
+  }
+}
+
 type MeCapture = {
   tokens: string[];
   userId: string;
@@ -363,6 +377,7 @@ test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
       owner = ownerAccount;
 
       const revokedAttemptId = randomUUID();
+      createUnassignedSubmittedAttempt(revokedAttemptId);
       const revokeBarrierId = randomUUID();
       openBarriers.push(revokeBarrierId);
       await registerBarrier(page.request, secret, revokeBarrierId, 1);
@@ -431,6 +446,7 @@ test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
       );
 
       const suspendedAttemptId = randomUUID();
+      createUnassignedSubmittedAttempt(suspendedAttemptId);
       const suspensionBarrierId = randomUUID();
       openBarriers.push(suspensionBarrierId);
       await registerBarrier(page.request, secret, suspensionBarrierId, 1);
