@@ -35,6 +35,36 @@ function readLocalRaceSecret(): string {
   return match[1];
 }
 
+function ensureLocalRaceBarrierStore(): void {
+  localSqlCsv(
+    "CREATE TABLE IF NOT EXISTS public.gradioprep_test_race_barriers (" +
+    "id uuid PRIMARY KEY, expected_arrivals smallint NOT NULL CHECK (expected_arrivals IN (1, 2)), " +
+    "arrivals smallint NOT NULL DEFAULT 0 CHECK (arrivals >= 0 AND arrivals <= expected_arrivals), " +
+    "released boolean NOT NULL DEFAULT false, created_at timestamptz NOT NULL DEFAULT now());",
+  );
+  localSqlCsv("ALTER TABLE public.gradioprep_test_race_barriers ENABLE ROW LEVEL SECURITY;");
+  localSqlCsv("REVOKE ALL ON TABLE public.gradioprep_test_race_barriers FROM PUBLIC, anon, authenticated;");
+  localSqlCsv("GRANT ALL ON TABLE public.gradioprep_test_race_barriers TO service_role;");
+  localSqlCsv(
+    "CREATE OR REPLACE FUNCTION public.gradioprep_test_race_barrier_arrive(p_barrier_id uuid) " +
+    "RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $barrier$ " +
+    "DECLARE did_arrive boolean := false; BEGIN " +
+    "UPDATE public.gradioprep_test_race_barriers AS barrier " +
+    "SET arrivals = barrier.arrivals + 1 " +
+    "WHERE barrier.id = p_barrier_id AND barrier.released = false " +
+    "AND barrier.arrivals < barrier.expected_arrivals " +
+    "RETURNING true INTO did_arrive; RETURN coalesce(did_arrive, false); " +
+    "END; $barrier$;",
+  );
+  localSqlCsv("NOTIFY pgrst, 'reload schema';");
+  localSqlCsv(
+    "REVOKE ALL ON FUNCTION public.gradioprep_test_race_barrier_arrive(uuid) FROM PUBLIC, anon, authenticated;",
+  );
+  localSqlCsv(
+    "GRANT EXECUTE ON FUNCTION public.gradioprep_test_race_barrier_arrive(uuid) TO service_role;",
+  );
+}
+
 function createUnassignedSubmittedAttempt(attemptId: string): void {
   const inserted = localSqlCsv(
     "INSERT INTO public.attempts " +
@@ -252,6 +282,7 @@ test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
   test("two independent AAL2 sessions accepting one invitation token produce one grant and one success", async ({ page, browser }) => {
     test.setTimeout(300_000);
     const secret = readLocalRaceSecret();
+    ensureLocalRaceBarrierStore();
     let inviteeContext: Awaited<ReturnType<typeof browser.newContext>> | null = null;
     let secondSession: Awaited<ReturnType<typeof signInIndependentSession>> | null = null;
     let invitationId: string | null = null;
@@ -369,6 +400,7 @@ test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
   test("role revocation and account suspension racing an in-flight privileged assignment are rechecked", async ({ page }) => {
     test.setTimeout(300_000);
     const secret = readLocalRaceSecret();
+    ensureLocalRaceBarrierStore();
     let owner: Awaited<ReturnType<typeof createSyntheticOwner>> | null = null;
     const openBarriers: string[] = [];
 

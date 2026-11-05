@@ -14,14 +14,14 @@ type WorkerEnv = Env & {
 // between concurrent requests.
 const requestCorrelationIds = new WeakMap<Request, string>();
 
-type LocalTestRaceBarrier = {
-  expectedArrivals: number;
-  arrivals: number;
-  release: () => void;
-  released: Promise<void>;
-};
+const localTestRaceBarrierTable = "gradioprep_test_race_barriers";
 
-const localTestRaceBarriers = new Map<string, LocalTestRaceBarrier>();
+function localTestRaceBarrierClient(env: WorkerEnv) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return null;
+  return createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+    auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false },
+  });
+}
 const localRaceSecretHeader = "x-gradioprep-test-race-secret";
 const localRaceBarrierHeader = "x-gradioprep-test-race-barrier";
 const localRacePointHeader = "x-gradioprep-test-race-point";
@@ -113,6 +113,9 @@ async function handleLocalTestRaceBarrierControl(
     return jsonResponse({ error: "not_found" }, 404);
   }
 
+  const barrierClient = localTestRaceBarrierClient(env);
+  if (!barrierClient) return jsonResponse({ error: "not_found" }, 404);
+
   const barrierId = match[1].toLowerCase();
   const isRelease = Boolean(match[2]);
   if (!isRelease && request.method === "POST") {
@@ -121,36 +124,40 @@ async function handleLocalTestRaceBarrierControl(
     if (expectedArrivals !== 1 && expectedArrivals !== 2) {
       return jsonResponse({ error: "invalid_test_barrier" }, 400);
     }
-    if (localTestRaceBarriers.has(barrierId)) {
-      return jsonResponse({ error: "test_barrier_already_exists" }, 409);
-    }
 
-    let release: () => void = () => {};
-    const released = new Promise<void>((resolve) => {
-      release = resolve;
-    });
-    localTestRaceBarriers.set(barrierId, {
-      expectedArrivals,
+    const { error } = await barrierClient.from(localTestRaceBarrierTable).insert({
+      id: barrierId,
+      expected_arrivals: expectedArrivals,
       arrivals: 0,
-      release,
-      released,
+      released: false,
     });
+    if (error) return jsonResponse({ error: "test_barrier_unavailable" }, 503);
     return jsonResponse({ registered: true }, 201);
   }
 
-  const barrier = localTestRaceBarriers.get(barrierId);
-  if (!barrier) return jsonResponse({ error: "test_barrier_not_found" }, 404);
-
   if (!isRelease && request.method === "GET") {
+    const { data, error } = await barrierClient
+      .from(localTestRaceBarrierTable)
+      .select("arrivals,expected_arrivals")
+      .eq("id", barrierId)
+      .maybeSingle();
+    if (error) return jsonResponse({ error: "test_barrier_unavailable" }, 503);
+    if (!data) return jsonResponse({ error: "test_barrier_not_found" }, 404);
     return jsonResponse({
-      arrivals: barrier.arrivals,
-      expected_arrivals: barrier.expectedArrivals,
+      arrivals: data.arrivals,
+      expected_arrivals: data.expected_arrivals,
     });
   }
 
   if (isRelease && request.method === "POST") {
-    barrier.release();
-    localTestRaceBarriers.delete(barrierId);
+    const { data, error } = await barrierClient
+      .from(localTestRaceBarrierTable)
+      .update({ released: true })
+      .eq("id", barrierId)
+      .select("id")
+      .maybeSingle();
+    if (error) return jsonResponse({ error: "test_barrier_unavailable" }, 503);
+    if (!data) return jsonResponse({ error: "test_barrier_not_found" }, 404);
     return jsonResponse({ released: true });
   }
 
@@ -168,14 +175,30 @@ async function waitAtLocalTestRaceBarrier(
     return jsonResponse({ error: "test_barrier_point_mismatch" }, 400);
   }
 
-  const barrier = localTestRaceBarriers.get(barrierId.toLowerCase());
-  if (!barrier || barrier.arrivals >= barrier.expectedArrivals) {
+  const barrierClient = localTestRaceBarrierClient(env);
+  if (!barrierClient) return jsonResponse({ error: "test_barrier_unavailable" }, 503);
+
+  const { data: accepted, error: arrivalError } = await barrierClient.rpc(
+    "gradioprep_test_race_barrier_arrive",
+    { p_barrier_id: barrierId.toLowerCase() },
+  );
+  if (arrivalError || accepted !== true) {
     return jsonResponse({ error: "test_barrier_unavailable" }, 409);
   }
 
-  barrier.arrivals += 1;
-  await barrier.released;
-  return null;
+  const deadline = Date.now() + 90_000;
+  while (Date.now() < deadline) {
+    const { data, error } = await barrierClient
+      .from(localTestRaceBarrierTable)
+      .select("released")
+      .eq("id", barrierId.toLowerCase())
+      .maybeSingle();
+    if (error || !data) return jsonResponse({ error: "test_barrier_unavailable" }, 503);
+    if (data.released) return null;
+    await new Promise<void>((resolve) => setTimeout(resolve, 50));
+  }
+
+  return jsonResponse({ error: "test_barrier_timeout" }, 504);
 }
 
 function isValidDisplayName(value: unknown): value is string {
