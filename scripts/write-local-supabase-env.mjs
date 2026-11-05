@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 
@@ -104,9 +105,11 @@ if (!["127.0.0.1", "localhost", "::1"].includes(safeUrl.hostname)) {
   process.exit(1);
 }
 
+const localRaceBarrierSecret = randomBytes(32).toString("hex");
+
 writeFileSync(
   ".dev.vars",
-  `SUPABASE_URL=${url}\nSUPABASE_PUBLISHABLE_KEY=${publishableKey}\nSUPABASE_SERVICE_ROLE_KEY=${serviceRoleKey}\n`,
+  `SUPABASE_URL=${url}\nSUPABASE_PUBLISHABLE_KEY=${publishableKey}\nSUPABASE_SERVICE_ROLE_KEY=${serviceRoleKey}\nGRADIPREP_TEST_RACE_BARRIER_SECRET=${localRaceBarrierSecret}\n`,
   { mode: 0o600 },
 );
 
