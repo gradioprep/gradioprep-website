@@ -451,10 +451,10 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
 SELECT set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
-  $SELECT * FROM public.accept_staff_invitation(
+  $q$SELECT * FROM public.accept_staff_invitation(
       (SELECT token_hash FROM pg_temp.staff_invitation_fixtures
        WHERE invited_role = 'admin' AND invited_email = 'student.b@example.invalid' LIMIT 1)
-    )$,
+    )$q$,
   'the same otherwise eligible invitation can be accepted through the operation RPC'
 );
 RESET ROLE;
