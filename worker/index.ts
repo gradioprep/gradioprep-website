@@ -107,10 +107,10 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
     throw new Error("Local Supabase environment is not configured.");
   }
 
-  // Verify the bearer token against this project's signing keys, then create
-  // only the caller-scoped client. createSupabaseContext also constructs an
-  // admin client, which requires a secret key even when this route never uses
-  // it. This API deliberately has no service-role/admin client.
+  // Verify the bearer token and create the caller-scoped client. A separate
+  // service-role client is constructed below only for the narrow audit RPC;
+  // it is never returned to the browser or used for application data reads
+  // or writes.
   const supabaseEnv = {
     url: env.SUPABASE_URL,
     publishableKeys: { default: env.SUPABASE_PUBLISHABLE_KEY },
