@@ -1,5 +1,56 @@
+import { execFileSync } from "node:child_process";
 import { createHmac, randomUUID } from "node:crypto";
 import { expect, test } from "@playwright/test";
+
+function localSqlCsv(sql: string): string {
+  try {
+    return execFileSync(
+      "npx",
+      ["--no-install", "supabase", "db", "query", sql, "--local", "--output", "csv"],
+      {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        timeout: 30_000,
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+  } catch {
+    throw new Error("The local invitation audit verification query failed.");
+  }
+}
+
+function assertStaffInvitationAuditCorrelation(args: {
+  requestId: string | undefined;
+  actorId: string;
+  invitationId: string;
+  outcome: "success" | "denied" | "failed";
+  reason: string;
+}): void {
+  const { requestId, actorId, invitationId, outcome, reason } = args;
+  expect(requestId, "Staff invitation response must expose its Worker-generated request ID").toMatch(
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+  );
+  expect(actorId).toMatch(/^[0-9a-f-]{36}$/i);
+  expect(invitationId).toMatch(/^[0-9a-f-]{36}$/i);
+  expect(reason).toMatch(/^[a-z_]+$/);
+  const sql = `
+    SELECT CASE
+      WHEN count(*) = 1
+       AND bool_and(actor_id = '${actorId}'::uuid)
+       AND bool_and(target_id = '${invitationId}'::uuid)
+       AND bool_and(outcome = '${outcome}')
+       AND bool_and(reason_category = '${reason}')
+       AND bool_and(request_id = '${requestId}'::uuid)
+       AND bool_and(transaction_id IS NOT NULL)
+      THEN 'INVITATION_AUDIT_ROW_MATCHED'
+      ELSE 'INVITATION_AUDIT_ROW_MISMATCH'
+    END AS result
+    FROM private.security_audit_events
+    WHERE action = 'staff_invitation_accepted'
+      AND request_id = '${requestId}'::uuid;
+  `;
+  expect(localSqlCsv(sql)).toContain("INVITATION_AUDIT_ROW_MATCHED");
+}
 
 function createTotpCode(secret: string, timestamp = Date.now()): string {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
@@ -581,7 +632,12 @@ test.describe("Phase 1B account foundation", () => {
     );
     await page.getByRole("button", { name: "Create invitation link" }).click();
     const createInvitationResponse = await createInvitationResponsePromise;
-    const createInvitationBody = await createInvitationResponse.json() as { error?: string; message?: string; invite_url?: string };
+    const createInvitationBody = await createInvitationResponse.json() as {
+      error?: string;
+      message?: string;
+      invite_url?: string;
+      invitation?: { invitation_id?: string; invited_email?: string; invited_role?: string };
+    };
     expect(
       createInvitationResponse.status(),
       "Staff invitation API failed: " + (createInvitationBody.error ?? "unknown_error") +
@@ -639,6 +695,85 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(mismatchAcceptance.status()).toBe(403);
     await expect(mismatchAcceptance.json()).resolves.toMatchObject({ error: "invitation_email_mismatch" });
+    assertStaffInvitationAuditCorrelation({
+      requestId: mismatchAcceptance.headers()["x-request-id"],
+      actorId: "88888888-8888-4888-8888-888888888888",
+      invitationId: createInvitationBody.invitation!.invitation_id!,
+      outcome: "denied",
+      reason: "email_mismatch",
+    });
+
+    // Exercise the separate caller-scoped acceptance helper's false-ack path.
+    // The temporary local-only trigger makes the real acceptance RPC fail while
+    // leaving the invite otherwise eligible; the helper must refuse to invent
+    // a failure event and the Worker must return 503 rather than the RPC error.
+    const acceptanceFailureInvite = await page.request.post("/api/v1/admin/staff-invitations", {
+      headers: { Authorization: ownerToken },
+      data: { email: "owner@example.invalid", role: "grader" },
+    });
+    expect(acceptanceFailureInvite.status()).toBe(201);
+    const acceptanceFailureInviteBody = await acceptanceFailureInvite.json() as {
+      invitation?: { invitation_id?: string };
+      invite_url?: string;
+    };
+    const acceptanceFailureInvitationId = acceptanceFailureInviteBody.invitation?.invitation_id;
+    const acceptanceFailureToken = acceptanceFailureInviteBody.invite_url
+      ? new URLSearchParams(new URL(acceptanceFailureInviteBody.invite_url).hash.slice(1)).get("staff-invite")
+      : null;
+    expect(acceptanceFailureInvitationId).toMatch(/^[0-9a-f-]{36}$/i);
+    expect(acceptanceFailureToken).toMatch(/^[A-Za-z0-9_-]{43}$/);
+
+    localSqlCsv(`
+      CREATE OR REPLACE FUNCTION public.gradioprep_test_fail_invitation_role_insert()
+      RETURNS trigger
+      LANGUAGE plpgsql
+      AS $test$
+      BEGIN
+        IF NEW.user_id = '88888888-8888-4888-8888-888888888888'::uuid
+          AND NEW.role = 'grader'::public.app_role
+          AND NEW.reason = 'accepted_staff_invitation' THEN
+          RAISE EXCEPTION USING
+            ERRCODE = 'P0001',
+            MESSAGE = 'synthetic_staff_invitation_acceptance_failure';
+        END IF;
+        RETURN NEW;
+      END;
+      $test$;
+      DROP TRIGGER IF EXISTS gradioprep_test_fail_invitation_role_insert
+        ON public.role_assignments;
+      CREATE TRIGGER gradioprep_test_fail_invitation_role_insert
+        BEFORE INSERT ON public.role_assignments
+        FOR EACH ROW EXECUTE FUNCTION public.gradioprep_test_fail_invitation_role_insert();
+    `);
+    try {
+      const unacknowledgedAcceptance = await page.request.post("/api/v1/staff-invitations/accept", {
+        headers: { Authorization: ownerToken },
+        data: { token: acceptanceFailureToken },
+      });
+      expect(unacknowledgedAcceptance.status()).toBe(503);
+      await expect(unacknowledgedAcceptance.json()).resolves.toMatchObject({
+        error: "staff_invitation_audit_unavailable",
+      });
+      expect(unacknowledgedAcceptance.headers()["x-request-id"]).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+      );
+      const noFalseEvent = localSqlCsv(`
+        SELECT CASE WHEN count(*) = 0
+          THEN 'NO_FALSE_ACCEPTANCE_AUDIT_EVENT'
+          ELSE 'UNEXPECTED_ACCEPTANCE_AUDIT_EVENT'
+        END AS result
+        FROM private.security_audit_events
+        WHERE action = 'staff_invitation_accepted'
+          AND target_id = '${acceptanceFailureInvitationId}'::uuid;
+      `);
+      expect(noFalseEvent).toContain("NO_FALSE_ACCEPTANCE_AUDIT_EVENT");
+    } finally {
+      localSqlCsv(`
+        DROP TRIGGER IF EXISTS gradioprep_test_fail_invitation_role_insert
+          ON public.role_assignments;
+        DROP FUNCTION IF EXISTS public.gradioprep_test_fail_invitation_role_insert();
+      `);
+    }
 
     await page.getByLabel("Staff email address").fill("invited.grader@example.invalid");
     await page.getByLabel("Invitation role").selectOption("admin");
@@ -678,8 +813,22 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(firstFactorInviteAcceptance.status()).toBe(403);
     await expect(firstFactorInviteAcceptance.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertStaffInvitationAuditCorrelation({
+      requestId: firstFactorInviteAcceptance.headers()["x-request-id"],
+      actorId: "33333333-3333-4333-8333-333333333333",
+      invitationId: createInvitationBody.invitation!.invitation_id!,
+      outcome: "denied",
+      reason: "aal2_required",
+    });
 
     let acceptedWithToken = "";
+    let acceptedRequestId: string | undefined;
+    page.on("response", response => {
+      if (new URL(response.url()).pathname === "/api/v1/staff-invitations/accept" &&
+          response.request().method() === "POST") {
+        acceptedRequestId = response.headers()["x-request-id"];
+      }
+    });
     page.on("request", request => {
       if (new URL(request.url()).pathname === "/api/v1/staff-invitations/accept" && request.method() === "POST") {
         acceptedWithToken = request.headers()["authorization"] ?? acceptedWithToken;
@@ -694,6 +843,14 @@ test.describe("Phase 1B account foundation", () => {
     await expect(page.getByText("Staff invitation accepted. Your grader role is active.")).toBeVisible();
     await expect(page.getByText("grader", { exact: true })).toBeVisible();
     await expect.poll(() => Boolean(acceptedWithToken), { timeout: 10_000 }).toBe(true);
+    await expect.poll(() => Boolean(acceptedRequestId), { timeout: 10_000 }).toBe(true);
+    assertStaffInvitationAuditCorrelation({
+      requestId: acceptedRequestId,
+      actorId: "33333333-3333-4333-8333-333333333333",
+      invitationId: createInvitationBody.invitation!.invitation_id!,
+      outcome: "success",
+      reason: "grader",
+    });
 
     const revokedAcceptance = await page.request.post("/api/v1/staff-invitations/accept", {
       headers: { Authorization: acceptedWithToken },
