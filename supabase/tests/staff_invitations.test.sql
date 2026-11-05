@@ -94,10 +94,10 @@ SELECT is(
   'owner can list safe invitation status'
 );
 SELECT throws_ok(
-  $SELECT * FROM public.create_staff_invitation(
+  $$SELECT * FROM public.create_staff_invitation(
       'student.b@example.invalid', 'grader',
       encode(extensions.digest('second-student-b-invitation', 'sha256'), 'hex')
-    )$,
+    )$$,
   '23505', 'invitation_already_pending',
   'duplicate pending invitation for the same email and role is denied'
 );
