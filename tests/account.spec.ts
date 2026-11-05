@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { createHmac, randomUUID } from "node:crypto";
 import { expect, test } from "@playwright/test";
+import { assertPersistedAuditCorrelation, readPersistedAuditTargetId } from "./audit-assertions";
 
 function localSqlCsv(sql: string): string {
   try {
@@ -25,34 +26,15 @@ function localSqlCsv(sql: string): string {
 function assertStaffInvitationAuditCorrelation(args: {
   requestId: string | undefined;
   actorId: string;
+  actorRole: "student" | "guardian" | "grader" | "admin" | "owner";
   invitationId: string;
   outcome: "success" | "denied" | "failed";
   reason: string;
 }): void {
-  const { requestId, actorId, invitationId, outcome, reason } = args;
-  expect(requestId, "Staff invitation response must expose its Worker-generated request ID").toMatch(
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-  );
-  expect(actorId).toMatch(/^[0-9a-f-]{36}$/i);
-  expect(invitationId).toMatch(/^[0-9a-f-]{36}$/i);
-  expect(reason).toMatch(/^[a-z0-9_]+$/);
-  const sql = `
-    SELECT CASE
-      WHEN count(*) = 1
-       AND bool_and(actor_id = '${actorId}'::uuid)
-       AND bool_and(target_id = '${invitationId}'::uuid)
-       AND bool_and(outcome = '${outcome}')
-       AND bool_and(reason_category = '${reason}')
-       AND bool_and(request_id = '${requestId}'::uuid)
-       AND bool_and(transaction_id IS NOT NULL)
-      THEN 'INVITATION_AUDIT_ROW_MATCHED'
-      ELSE 'INVITATION_AUDIT_ROW_MISMATCH'
-    END AS result
-    FROM private.security_audit_events
-    WHERE action = 'staff_invitation_accepted'
-      AND request_id = '${requestId}'::uuid;
-  `;
-  expect(localSqlCsv(sql)).toContain("INVITATION_AUDIT_ROW_MATCHED");
+  assertPersistedAuditCorrelation(args.requestId, {
+    actorId: args.actorId, actorRole: args.actorRole, action: "staff_invitation_accepted",
+    targetType: "staff_invitation", targetId: args.invitationId, outcome: args.outcome, reason: args.reason,
+  });
 }
 
 function createTotpCode(secret: string, timestamp = Date.now()): string {
@@ -419,12 +401,22 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(firstFactorAttempt.status()).toBe(403);
     await expect(firstFactorAttempt.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(firstFactorAttempt.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_role_revocation", targetType: "role_assignment_subject",
+      targetId: roleRequest.target_user_id, outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const ownerAal1InvitationList = await page.request.get("/api/v1/admin/staff-invitations", {
       headers: { Authorization: firstFactorToken },
     });
     expect(ownerAal1InvitationList.status()).toBe(403);
     await expect(ownerAal1InvitationList.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(ownerAal1InvitationList.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "staff_invitations_listed", targetType: "staff_invitation_collection",
+      targetId: null, outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const ownerAal1Assignment = await page.request.post(
       "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign",
@@ -438,7 +430,23 @@ test.describe("Phase 1B account foundation", () => {
     );
     expect(ownerAal1Assignment.status()).toBe(403);
     await expect(ownerAal1Assignment.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(ownerAal1Assignment.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_attempt_assignment", targetType: "attempt",
+      targetId: "c3333333-3333-4333-8333-333333333333", outcome: "denied", reason: "resource_scope_denied",
+    });
 
+    const ownerAal1SubmissionAssignment = await page.request.post(
+      "/api/v1/admin/submissions/" + lifecycleSubmissionId + "/assign",
+      { headers: { Authorization: firstFactorToken },
+        data: { grader_user_id: "55555555-5555-4555-8555-555555555555", reason: "Synthetic AAL1 assignment denial" } },
+    );
+    expect(ownerAal1SubmissionAssignment.status()).toBe(403);
+    assertPersistedAuditCorrelation(ownerAal1SubmissionAssignment.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_submission_assignment", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "denied", reason: "resource_scope_denied",
+    });
     const ownerAal1Reassignment = await page.request.post(
       "/api/v1/owner/submissions/" + lifecycleSubmissionId + "/reassign",
       {
@@ -451,6 +459,11 @@ test.describe("Phase 1B account foundation", () => {
     );
     expect(ownerAal1Reassignment.status()).toBe(403);
     await expect(ownerAal1Reassignment.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(ownerAal1Reassignment.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_submission_reassignment", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const ownerAal1Transition = await page.request.post(
       "/api/v1/owner/submissions/" + lifecycleSubmissionId + "/transition",
@@ -461,6 +474,11 @@ test.describe("Phase 1B account foundation", () => {
     );
     expect(ownerAal1Transition.status()).toBe(403);
     await expect(ownerAal1Transition.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(ownerAal1Transition.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_submission_transition", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const ownerAal1QaRead = await page.request.get(
       "/api/v1/owner/assessment-versions/d3333333-3333-4333-8333-333333333333/private-qa",
@@ -468,6 +486,11 @@ test.describe("Phase 1B account foundation", () => {
     );
     expect(ownerAal1QaRead.status()).toBe(403);
     await expect(ownerAal1QaRead.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(ownerAal1QaRead.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "private_qa_records_read", targetType: "assessment_version",
+      targetId: "d3333333-3333-4333-8333-333333333333", outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const ownerAal1QaCreate = await page.request.post(
       "/api/v1/owner/assessment-versions/d3333333-3333-4333-8333-333333333333/private-qa",
@@ -483,12 +506,22 @@ test.describe("Phase 1B account foundation", () => {
     );
     expect(ownerAal1QaCreate.status()).toBe(403);
     await expect(ownerAal1QaCreate.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(ownerAal1QaCreate.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_private_qa_record_create", targetType: "assessment_version",
+      targetId: "d3333333-3333-4333-8333-333333333333", outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const ownerAal1SubmissionQueue = await page.request.get("/api/v1/admin/submissions/queue", {
       headers: { Authorization: firstFactorToken },
     });
     expect(ownerAal1SubmissionQueue.status()).toBe(403);
     await expect(ownerAal1SubmissionQueue.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(ownerAal1SubmissionQueue.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_submission_queue_authorized", targetType: "assessment_submission_queue",
+      targetId: null, outcome: "denied", reason: "resource_scope_denied",
+    });
 
     await page.getByRole("button", { name: "Set up authenticator app" }).click();
     await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
@@ -506,6 +539,12 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(verifiedAttempt.status()).toBe(200);
     await expect(verifiedAttempt.json()).resolves.toMatchObject({ revoked: true });
+    const roleEventTarget = readPersistedAuditTargetId(verifiedAttempt.headers()["x-request-id"], "role_revoked");
+    assertPersistedAuditCorrelation(verifiedAttempt.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "role_revoked", targetType: "role_assignment", targetId: roleEventTarget,
+      outcome: "success", reason: "Synthetic access review",
+    });
 
     const attemptAssignmentUrl = "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign";
     const concurrentAttemptAssignments = await Promise.all([
@@ -530,6 +569,21 @@ test.describe("Phase 1B account foundation", () => {
     expect(concurrentAttemptAssignments.map(response => response.status()).sort()).toEqual([201, 409]);
     const successfulAttemptAssignment = concurrentAttemptBodies.find(body => body.assignment);
     const rejectedAttemptAssignment = concurrentAttemptBodies.find(body => body.error);
+    const successfulIndex = concurrentAttemptBodies.findIndex(body => body.assignment);
+    const failedIndex = concurrentAttemptBodies.findIndex(body => body.error);
+    const assignmentAuditTarget = readPersistedAuditTargetId(
+      concurrentAttemptAssignments[successfulIndex].headers()["x-request-id"], "attempt_assigned_to_grader",
+    );
+    assertPersistedAuditCorrelation(concurrentAttemptAssignments[successfulIndex].headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "attempt_assigned_to_grader", targetType: "grader_assignment",
+      targetId: assignmentAuditTarget, outcome: "success", reason: "owner_assignment",
+    });
+    assertPersistedAuditCorrelation(concurrentAttemptAssignments[failedIndex].headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_attempt_assignment", targetType: "attempt",
+      targetId: "c3333333-3333-4333-8333-333333333333", outcome: "failed", reason: "state_conflict",
+    });
     expect(successfulAttemptAssignment?.assignment?.attempt_id).toBe("c3333333-3333-4333-8333-333333333333");
     expect(["55555555-5555-4555-8555-555555555555", "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"])
       .toContain(successfulAttemptAssignment?.assignment?.grader_user_id);
@@ -541,6 +595,11 @@ test.describe("Phase 1B account foundation", () => {
     );
     expect(ownerAal2QaRead.status()).toBe(404);
     await expect(ownerAal2QaRead.json()).resolves.toMatchObject({ error: "assessment_version_not_found" });
+    assertPersistedAuditCorrelation(ownerAal2QaRead.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "private_qa_records_read", targetType: "assessment_version",
+      targetId: "d3333333-3333-4333-8333-333333333333", outcome: "denied", reason: "resource_scope_denied",
+    });
 
     const ownerAal2QaCreate = await page.request.post(
       "/api/v1/owner/assessment-versions/d3333333-3333-4333-8333-333333333333/private-qa",
@@ -556,6 +615,11 @@ test.describe("Phase 1B account foundation", () => {
     );
     expect(ownerAal2QaCreate.status()).toBe(404);
     await expect(ownerAal2QaCreate.json()).resolves.toMatchObject({ error: "assessment_version_not_found" });
+    assertPersistedAuditCorrelation(ownerAal2QaCreate.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_private_qa_record_create", targetType: "assessment_version",
+      targetId: "d3333333-3333-4333-8333-333333333333", outcome: "failed", reason: "resource_not_found",
+    });
 
     const ownerAal2InitialSubmissionAssignment = await page.request.post(
       "/api/v1/admin/submissions/" + lifecycleSubmissionId + "/assign",
@@ -568,6 +632,11 @@ test.describe("Phase 1B account foundation", () => {
       },
     );
     expect(ownerAal2InitialSubmissionAssignment.status()).toBe(201);
+    assertPersistedAuditCorrelation(ownerAal2InitialSubmissionAssignment.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "assessment_submission_assigned", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "success", reason: "owner_assignment",
+    });
 
     const ownerAal2Reassignment = await page.request.post(
       "/api/v1/owner/submissions/" + lifecycleSubmissionId + "/reassign",
@@ -588,6 +657,11 @@ test.describe("Phase 1B account foundation", () => {
         new_grader_user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
         submission_status: "assigned",
       },
+    });
+    assertPersistedAuditCorrelation(ownerAal2Reassignment.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "assessment_submission_reassigned", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "success", reason: "owner_reassignment",
     });
 
     const ownerAal2Transition = await page.request.post(
@@ -610,6 +684,11 @@ test.describe("Phase 1B account foundation", () => {
         active_assignment_revoked: true,
       },
     });
+    assertPersistedAuditCorrelation(ownerAal2Transition.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "assessment_submission_unassigned", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "success", reason: "owner_requeue",
+    });
 
     const ownerAal2SubmissionQueue = await page.request.get("/api/v1/admin/submissions/queue", {
       headers: { Authorization: ownerToken },
@@ -618,6 +697,11 @@ test.describe("Phase 1B account foundation", () => {
       submissions: Array<{ accepted_at: string; status: string }>;
     };
     expect(ownerAal2SubmissionQueue.status(), JSON.stringify(ownerQueueBody)).toBe(200);
+    assertPersistedAuditCorrelation(ownerAal2SubmissionQueue.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_submission_queue_authorized", targetType: "assessment_submission_queue",
+      targetId: null, outcome: "success", reason: "owner_aal2",
+    });
     const acceptedTimes = ownerQueueBody.submissions.map(item => Date.parse(item.accepted_at));
     expect(acceptedTimes).toEqual([...acceptedTimes].sort((first, second) => first - second));
 
@@ -634,6 +718,11 @@ test.describe("Phase 1B account foundation", () => {
     );
     expect(duplicateAttemptAssignment.status()).toBe(409);
     await expect(duplicateAttemptAssignment.json()).resolves.toMatchObject({ error: "attempt_already_assigned" });
+    assertPersistedAuditCorrelation(duplicateAttemptAssignment.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "owner_attempt_assignment", targetType: "attempt",
+      targetId: "c3333333-3333-4333-8333-333333333333", outcome: "failed", reason: "state_conflict",
+    });
 
     await expect(page.getByRole("heading", { name: "Staff invitations" })).toBeVisible();
     await page.getByLabel("Staff email address").fill("guardian.a@example.invalid");
