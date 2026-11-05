@@ -906,9 +906,30 @@ test.describe("Phase 1B account foundation", () => {
     );
     expect(lifecycleAssignment.status()).toBe(201);
 
-    const graderSubmissionRead = await page.request.get(
+    const freshGraderContext = await browser.newContext();
+    const freshGraderPage = await freshGraderContext.newPage();
+    let freshGraderToken = "";
+    freshGraderPage.on("request", request => {
+      if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
+        freshGraderToken = request.headers()["authorization"] ?? freshGraderToken;
+      }
+    });
+    await freshGraderPage.goto("/account");
+    await freshGraderPage.getByLabel("Email address").fill("guardian.a@example.invalid");
+    await freshGraderPage.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
+    await freshGraderPage.getByRole("button", { name: "Sign in" }).click();
+    await expect(freshGraderPage.getByRole("heading", { name: "Synthetic Guardian A" })).toBeVisible();
+    await expect(freshGraderPage.getByRole("heading", { name: "Verify your sign-in." })).toBeVisible();
+    const freshGraderFirstFactorToken = freshGraderToken;
+    await waitForTotpWindow();
+    await freshGraderPage.getByLabel("Authenticator code").fill(createTotpCode(inviteeSecret));
+    await freshGraderPage.getByRole("button", { name: "Verify code" }).click();
+    await expect(freshGraderPage.getByRole("heading", { name: "Synthetic Guardian A" })).toBeVisible();
+    await expect.poll(() => freshGraderToken !== freshGraderFirstFactorToken, { timeout: 10_000 }).toBe(true);
+
+    const graderSubmissionRead = await freshGraderPage.request.get(
       "/api/v1/grader/submissions/" + lifecycleSubmissionId,
-      { headers: { Authorization: acceptedWithToken } },
+      { headers: { Authorization: freshGraderToken } },
     );
     const graderSubmissionBody = await graderSubmissionRead.json() as {
       submission?: { id: string; status: string };
@@ -922,7 +943,7 @@ test.describe("Phase 1B account foundation", () => {
     const concurrentDraft = await page.request.put(
       "/api/v1/grader/submissions/" + lifecycleSubmissionId + "/draft",
       {
-        headers: { Authorization: acceptedWithToken },
+        headers: { Authorization: freshGraderToken },
         data: {
           overall_feedback: "Synthetic feedback used to verify concurrent publication safety.",
           criterion_results: graderSubmissionBody.criteria!.map(criterion => ({
@@ -938,11 +959,11 @@ test.describe("Phase 1B account foundation", () => {
     const concurrentPublications = await Promise.all([
       page.request.post(
         "/api/v1/grader/submissions/" + lifecycleSubmissionId + "/publish",
-        { headers: { Authorization: acceptedWithToken }, data: {} },
+        { headers: { Authorization: freshGraderToken }, data: {} },
       ),
       page.request.post(
         "/api/v1/grader/submissions/" + lifecycleSubmissionId + "/publish",
-        { headers: { Authorization: acceptedWithToken }, data: {} },
+        { headers: { Authorization: freshGraderToken }, data: {} },
       ),
     ]);
     const concurrentPublicationBodies = await Promise.all(
@@ -952,9 +973,9 @@ test.describe("Phase 1B account foundation", () => {
     expect(concurrentPublicationBodies.filter(body => body.assessment?.version_number === 1)).toHaveLength(1);
     expect(concurrentPublicationBodies.find(body => body.error)?.error).toBe("assessment_draft_required");
 
-    const publishedSubmissionRead = await page.request.get(
+    const publishedSubmissionRead = await freshGraderPage.request.get(
       "/api/v1/grader/submissions/" + lifecycleSubmissionId,
-      { headers: { Authorization: acceptedWithToken } },
+      { headers: { Authorization: freshGraderToken } },
     );
     const publishedSubmissionBody = await publishedSubmissionRead.json() as {
       submission?: { status: string };
@@ -980,6 +1001,7 @@ test.describe("Phase 1B account foundation", () => {
       END AS result;
     `);
     expect(onePublication).toContain("ONE_CONCURRENT_PUBLICATION_CONFIRMED");
+    await freshGraderContext.close();
 
     await page.getByRole("button", { name: "Sign out" }).click();
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
