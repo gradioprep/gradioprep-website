@@ -58,7 +58,7 @@ BEGIN
     event_reason := success_reason;
   ELSIF p_outcome = 'denied' THEN
     IF p_failure_category IS NOT NULL THEN RETURN false; END IF;
-    event_reason := 'worker_precheck_denied';
+    event_reason := 'resource_scope_denied';
   ELSIF p_outcome = 'failed' THEN
     IF is_protected_read THEN
       IF p_failure_category IS NOT NULL THEN RETURN false; END IF;
