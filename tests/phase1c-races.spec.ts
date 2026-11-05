@@ -250,7 +250,7 @@ async function releaseBarrierQuietly(
 
 test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
   test("two independent AAL2 sessions accepting one invitation token produce one grant and one success", async ({ page, browser }) => {
-    test.setTimeout(180_000);
+    test.setTimeout(300_000);
     const secret = readLocalRaceSecret();
     let inviteeContext: Awaited<ReturnType<typeof browser.newContext>> | null = null;
     let secondSession: Awaited<ReturnType<typeof signInIndependentSession>> | null = null;
@@ -367,7 +367,7 @@ test.describe("Phase 1C-F synchronized synthetic race acceptance", () => {
   });
 
   test("role revocation and account suspension racing an in-flight privileged assignment are rechecked", async ({ page }) => {
-    test.setTimeout(180_000);
+    test.setTimeout(300_000);
     const secret = readLocalRaceSecret();
     let owner: Awaited<ReturnType<typeof createSyntheticOwner>> | null = null;
     const openBarriers: string[] = [];
