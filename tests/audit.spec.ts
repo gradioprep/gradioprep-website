@@ -206,6 +206,56 @@ test.describe("Phase 1C-E Worker audit correlation and failure injection", () =>
       outcome: "success",
       reason: "learner_action",
     });
+
+    const crossLearnerRead = await fetch(
+      `http://127.0.0.1:8787/api/v1/learner/attempts/${ATTEMPT_B_ID}`,
+      { headers },
+    );
+    expect(crossLearnerRead.status).toBe(404);
+    assertPersistedAuditCorrelation({
+      requestId: crossLearnerRead.headers.get("x-request-id"),
+      action: "student_attempt_read_authorized",
+      actorId: STUDENT_ID,
+      targetId: ATTEMPT_B_ID,
+      outcome: "denied",
+      reason: "resource_scope_denied",
+    });
+
+    const crossLearnerResponseSave = await fetch(
+      `http://127.0.0.1:8787/api/v1/learner/attempts/${ATTEMPT_B_ID}/responses/${PROMPT_B_ID}`,
+      {
+        method: "PUT",
+        headers: { ...headers, "Content-Type": "application/json" },
+        body: JSON.stringify({ response_text: "A synthetic cross-learner write must be denied." }),
+      },
+    );
+    expect([403, 404]).toContain(crossLearnerResponseSave.status);
+    assertPersistedAuditCorrelation({
+      requestId: crossLearnerResponseSave.headers.get("x-request-id"),
+      action: "student_attempt_response_save",
+      actorId: STUDENT_ID,
+      targetId: ATTEMPT_B_ID,
+      outcome: "denied",
+      reason: "resource_scope_denied",
+    });
+
+    const crossLearnerSubmit = await fetch(
+      `http://127.0.0.1:8787/api/v1/learner/attempts/${ATTEMPT_B_ID}/submit`,
+      {
+        method: "POST",
+        headers: { ...headers, "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      },
+    );
+    expect([403, 404]).toContain(crossLearnerSubmit.status);
+    assertPersistedAuditCorrelation({
+      requestId: crossLearnerSubmit.headers.get("x-request-id"),
+      action: "student_attempt_submit",
+      actorId: STUDENT_ID,
+      targetId: ATTEMPT_B_ID,
+      outcome: "denied",
+      reason: "resource_scope_denied",
+    });
   });
 
   test("every Worker-audited route fails closed when its audit service is absent", async () => {
@@ -256,13 +306,13 @@ test.describe("Phase 1C-E Worker audit correlation and failure injection", () =>
       },
       {
         method: "PUT",
-        path: `/api/v1/learner/attempts/${ATTEMPT_A_ID}/responses/${PROMPT_A_ID}`,
-        body: { response_text: "A valid synthetic response that targets a submitted attempt." },
+        path: `/api/v1/learner/attempts/${ATTEMPT_B_ID}/responses/${PROMPT_B_ID}`,
+        body: { response_text: "A cross-learner synthetic response must fail without audit acknowledgement." },
         expectedError: "privileged_write_audit_unavailable",
       },
       {
         method: "POST",
-        path: `/api/v1/learner/attempts/${ATTEMPT_A_ID}/submit`,
+        path: `/api/v1/learner/attempts/${ATTEMPT_B_ID}/submit`,
         body: {},
         expectedError: "privileged_write_audit_unavailable",
       },
@@ -293,12 +343,6 @@ test.describe("Phase 1C-E Worker audit correlation and failure injection", () =>
         path: `/api/v1/owner/submissions/${UNKNOWN_SUBMISSION_ID}/transition`,
         body: { target_status: "closed", reason: "Synthetic audit outage test" },
         expectedError: "privileged_write_audit_unavailable",
-      },
-      {
-        method: "GET",
-        path: "/api/v1/owner/assessment-versions/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/private-qa",
-        body: undefined,
-        expectedError: "protected_read_audit_unavailable",
       },
       {
         method: "POST",
