@@ -1,6 +1,6 @@
-# IB/IGCSE Learning Platform — Master Project Brief
+# GradioPrep — Master Project Brief
 
-**Version:** 4.59
+**Version:** 4.60
 **Last updated:** 6 November 2026
 **Status:** PR #22 remains open, draft and unmerged. Verified application-code head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481` passed exact-head run [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858): 494 pgTAP assertions across 14 SQL files, TypeScript/Worker/Vite builds and 31/31 Playwright tests, including both synchronized Phase 1C-F races. Latest documentation-only head before this reconciliation, `69423db70fd2ff1f45c57e8b8589a95673d00c4c`, passed exact-head run [#42163013589](https://github.com/gradioprep/gradioprep-website/actions/runs/42163013589) with the same 494/14 SQL and 31/31 browser checks. Phase 1C-E audit correlation is representative per distinct action, not exhaustive outcome coverage. Phase 1C-F's two synchronized races are complete; the remaining Phase 1C closeout is the final exit-criteria/documentation review. Phase 1D is not started. No public Preview/production deployment, hosted provisioning, paid usage, real learner data, merge or DNS change is authorised.
 
@@ -241,7 +241,7 @@ The passage, question, teacher-pack and response-counter standards remain bindin
 - Curriculum and pathway discovery, syllabus-map navigation and selected sample learning materials.
 - The complete Diagnostic and complete Evaluation Report are free permanently. ₹999 is a stated reference value only; it is not a future or post-campaign paywall.
 - At least one meaningful free starter remedial activity remains available after the report.
-- One complimentary Standard human-graded task per learner account remains a separate one-time entitlement, with the same 24-hour SLA as other accepted human-grading work.
+- One complimentary human-graded task per learner account remains a separate one-time entitlement when its server-calculated requirement is one credit; it is not a recurring allowance and uses the same 24-hour SLA as other accepted human-grading work.
 
 ### Full Remedial Course
 
@@ -306,7 +306,7 @@ For each curriculum/grade/course, measure independently gradable response-task f
 
 ### Turnaround SLA and initial solo-grader capacity
 
-One shared target applies to **all accepted human-graded submissions**: 24 elapsed hours from server-accepted submission to first publication of final human feedback. This supersedes the earlier separate 72-hour free / 48-hour paid Standard / 24-hour urgent proposal. There is no separate ₹199 urgent-grading add-on at initial launch.
+One shared target applies to **all accepted human-graded submissions**: 24 elapsed hours from server-accepted submission to first publication of final human feedback. This supersedes the earlier separate 72-hour free / 48-hour paid Standard / 24-hour urgent proposal. There is no separate urgent-grading surcharge at initial launch.
 
 Founder is the sole grader initially. Start with:
 - Up to 30 paid grading submissions per month.
