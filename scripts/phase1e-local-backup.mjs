@@ -33,7 +33,22 @@ function run(command, args, options = {}) {
   });
   if (result.error) fail(command + " could not be started.");
   if (result.status !== 0) {
-    fail(command + " failed (exit " + String(result.status) + "). No command output is included because it can contain local credentials.");
+    const safeArgs = args.slice(0, 5).map((arg, index) => {
+      if (args[index - 1] === "-c") return "[SQL omitted]";
+      return String(arg).replace(/eyJ[A-Za-z0-9_-]{20,}/g, "[redacted]");
+    }).join(" ");
+    const safeStderr = String(result.stderr ?? "")
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .slice(-3)
+      .join(" ")
+      .replace(/eyJ[A-Za-z0-9_-]{20,}/g, "[redacted]")
+      .replace(/(?:SUPABASE_SERVICE_ROLE_KEY|service_role key)[^\s]*/gi, "[redacted]")
+      .slice(0, 700);
+    fail(
+      command + " " + safeArgs + " failed (exit " + String(result.status) + ")." +
+      (safeStderr ? " Safe diagnostic: " + safeStderr : ""),
+    );
   }
   return String(result.stdout ?? "").trim();
 }
