@@ -1,5 +1,6 @@
 import { createContextClient, verifyAuth } from "@supabase/server/core";
 import { createClient } from "@supabase/supabase-js";
+import { PDFDocument } from "pdf-lib";
 
 type WorkerEnv = Env & {
   SUPABASE_URL?: string;
@@ -53,7 +54,9 @@ type PrivilegedWriteAuditAction =
   | "student_attempt_submit"
   | "student_assessment_submission_accept"
   | "staff_invitation_created"
-  | "staff_invitation_revoked";
+  | "staff_invitation_revoked"
+  | "student_submission_file_upload"
+  | "owner_submission_file_cleanup";
 
 type PrivilegedWriteFailureCategory =
   | "resource_not_found"
@@ -234,10 +237,10 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
     throw new Error("Local Supabase environment is not configured.");
   }
 
-  // Verify the bearer token and create the caller-scoped client. A separate
-  // service-role client is constructed below only for the narrow audit RPC;
-  // it is never returned to the browser or used for application data reads
-  // or writes.
+  // Verify the bearer token and create the caller-scoped client. The separate
+  // service-role client is reserved for audit ingestion and the narrowly scoped
+  // Phase 1D file-storage lifecycle; it is never returned to browsers or used
+  // for ordinary business-data reads or writes.
   const supabaseEnv = {
     url: env.SUPABASE_URL,
     publishableKeys: { default: env.SUPABASE_PUBLISHABLE_KEY },
@@ -267,7 +270,7 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
     },
   });
 
-  const auditSupabase = env.SUPABASE_SERVICE_ROLE_KEY
+  const serviceSupabase = env.SUPABASE_SERVICE_ROLE_KEY
     ? createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
         auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false },
         global: { headers: { "x-request-id": requestId } },
@@ -313,7 +316,7 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
   return {
     data: {
       supabase,
-      auditSupabase,
+      serviceSupabase,
       userId: auth.userClaims.id,
       assuranceLevel,
     },
@@ -971,10 +974,10 @@ async function auditPrivilegedWriteOutcome(
   outcome: "denied" | "failed",
   failureCategory?: PrivilegedWriteFailureCategory,
 ): Promise<Response | null> {
-  if (!context.auditSupabase) {
+  if (!context.serviceSupabase) {
     return jsonResponse({ error: "privileged_write_audit_unavailable", message: "The privileged operation cannot be completed without its server-side audit service." }, 503);
   }
-  const { data, error } = await context.auditSupabase.rpc("record_worker_audit_outcome", {
+  const { data, error } = await context.serviceSupabase.rpc("record_worker_audit_outcome", {
     p_actor_id: context.userId, p_action: action, p_target_id: targetId ?? null,
     p_outcome: outcome, p_failure_category: failureCategory ?? null,
   });
@@ -1062,10 +1065,10 @@ async function auditProtectedReadOutcome(
   outcome: "success" | "denied" | "failed",
   deniedResponse?: Response,
 ): Promise<Response | null> {
-  if (!context.auditSupabase) {
+  if (!context.serviceSupabase) {
     return jsonResponse({ error: "protected_read_audit_unavailable", message: "The protected read cannot be completed without its server-side audit service." }, 503);
   }
-  const { data, error } = await context.auditSupabase.rpc("record_worker_audit_outcome", {
+  const { data, error } = await context.serviceSupabase.rpc("record_worker_audit_outcome", {
     p_actor_id: context.userId, p_action: action, p_target_id: targetId ?? null,
     p_outcome: outcome, p_failure_category: null,
   });
@@ -2307,6 +2310,340 @@ async function assignAttemptToGrader(
   return jsonResponse({ assignment }, 201);
 }
 
+
+
+const privateSubmissionBucket = "private-submissions";
+const maxSubmissionPdfBytes = 10 * 1024 * 1024;
+const maxSubmissionPdfPages = 10;
+const submissionPdfSignedUrlTtlSeconds = 60;
+
+async function rejectPendingSubmissionPdf(
+  context: CallerContext,
+  fileId: string,
+  reason: string,
+): Promise<boolean> {
+  if (!context.serviceSupabase) return false;
+  const { data, error } = await context.serviceSupabase.rpc("reject_submission_file_upload", {
+    p_actor_id: context.userId,
+    p_file_id: fileId,
+    p_reason_category: reason,
+  });
+  return !error && data === true;
+}
+
+async function markSubmissionPdfForCleanup(
+  context: CallerContext,
+  fileId: string,
+): Promise<boolean> {
+  if (!context.serviceSupabase) return false;
+  const { data, error } = await context.serviceSupabase.rpc("mark_submission_file_cleanup_pending", {
+    p_actor_id: context.userId,
+    p_file_id: fileId,
+  });
+  return !error && data === true;
+}
+
+function pdfRejectionResponse(reason: string): Response {
+  switch (reason) {
+    case "invalid_extension":
+      return jsonResponse({ error: "pdf_extension_required" }, 400);
+    case "invalid_mime":
+      return jsonResponse({ error: "pdf_mime_type_required" }, 415);
+    case "invalid_signature":
+      return jsonResponse({ error: "invalid_pdf_signature" }, 400);
+    case "file_too_large":
+      return jsonResponse({ error: "pdf_file_too_large", max_bytes: maxSubmissionPdfBytes }, 413);
+    case "page_limit_exceeded":
+      return jsonResponse({ error: "pdf_page_limit_exceeded", max_pages: maxSubmissionPdfPages }, 413);
+    case "encrypted_pdf":
+      return jsonResponse({ error: "encrypted_pdf_not_supported" }, 422);
+    default:
+      return jsonResponse({ error: "malformed_pdf" }, 400);
+  }
+}
+
+async function uploadSubmissionPdf(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const context = auth.context;
+
+  const roleDenied = await requireActiveRole(context, "student");
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditPrivilegedWriteOutcome(context, "student_submission_file_upload", submissionId, "denied")
+      : null;
+    return audit ?? roleDenied;
+  }
+  if (!context.serviceSupabase) {
+    return jsonResponse({ error: "private_file_service_unavailable" }, 503);
+  }
+
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > maxSubmissionPdfBytes + 128 * 1024) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "student_submission_file_upload", submissionId, "failed", "validation_failed",
+    );
+    return audit ?? jsonResponse({ error: "pdf_file_too_large", max_bytes: maxSubmissionPdfBytes }, 413);
+  }
+
+  const contentType = request.headers.get("content-type") ?? "";
+  if (!/^multipart\/form-data(?:;|$)/i.test(contentType)) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "student_submission_file_upload", submissionId, "failed", "validation_failed",
+    );
+    return audit ?? jsonResponse({ error: "multipart_pdf_required" }, 415);
+  }
+
+  let form: FormData;
+  try {
+    form = await request.formData();
+  } catch {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "student_submission_file_upload", submissionId, "failed", "validation_failed",
+    );
+    return audit ?? jsonResponse({ error: "invalid_multipart_upload" }, 400);
+  }
+
+  const entries = Array.from(form.entries());
+  const submittedFile = form.get("file");
+  if (entries.length !== 1 || entries[0]?.[0] !== "file" || !(submittedFile instanceof File)) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "student_submission_file_upload", submissionId, "failed", "validation_failed",
+    );
+    return audit ?? jsonResponse({ error: "single_pdf_file_required" }, 400);
+  }
+
+  const { data: started, error: startError } = await context.serviceSupabase.rpc(
+    "begin_submission_file_upload",
+    { p_actor_id: context.userId, p_submission_id: submissionId },
+  );
+  if (startError) {
+    const forbidden = startError.message === "submission_file_upload_forbidden";
+    const notFound = startError.message === "submission_file_submission_not_found";
+    const audit = await auditPrivilegedWriteOutcome(
+      context,
+      "student_submission_file_upload",
+      submissionId,
+      forbidden ? "denied" : "failed",
+      forbidden ? undefined : notFound ? "resource_not_found" : "state_conflict",
+    );
+    if (audit) return audit;
+    if (forbidden) return jsonResponse({ error: "submission_file_upload_forbidden" }, 403);
+    if (notFound) return jsonResponse({ error: "submission_not_found" }, 404);
+    return jsonResponse({ error: "submission_file_upload_unavailable" }, 409);
+  }
+
+  const upload = asRows(started)[0];
+  if (
+    !upload ||
+    typeof upload.file_id !== "string" ||
+    typeof upload.object_path !== "string" ||
+    typeof upload.version_number !== "number"
+  ) {
+    return jsonResponse({ error: "submission_file_upload_unavailable" }, 503);
+  }
+
+  const fileId = upload.file_id;
+  const filename = submittedFile.name.split(/[\\/]/).pop() ?? "";
+  const reject = async (reason: string): Promise<Response> => {
+    const acknowledged = await rejectPendingSubmissionPdf(context, fileId, reason);
+    if (!acknowledged) {
+      return jsonResponse({ error: "submission_file_audit_unavailable" }, 503);
+    }
+    return pdfRejectionResponse(reason);
+  };
+
+  if (!/\.pdf$/i.test(filename)) return reject("invalid_extension");
+  if (submittedFile.type !== "application/pdf") return reject("invalid_mime");
+  if (submittedFile.size < 1 || submittedFile.size > maxSubmissionPdfBytes) {
+    return reject("file_too_large");
+  }
+
+  let bytes: Uint8Array;
+  try {
+    bytes = new Uint8Array(await submittedFile.arrayBuffer());
+  } catch {
+    return reject("malformed_pdf");
+  }
+
+  if (new TextDecoder().decode(bytes.subarray(0, 5)) !== "%PDF-") {
+    return reject("invalid_signature");
+  }
+
+  let pageCount: number;
+  try {
+    const parsedPdf = await PDFDocument.load(bytes, {
+      ignoreEncryption: false,
+      updateMetadata: false,
+      throwOnInvalidObject: true,
+    });
+    pageCount = parsedPdf.getPageCount();
+  } catch (error) {
+    const message = error instanceof Error ? (error.name + " " + error.message).toLowerCase() : "";
+    return reject(/encrypt|password/.test(message) ? "encrypted_pdf" : "malformed_pdf");
+  }
+
+  if (!Number.isInteger(pageCount) || pageCount < 1 || pageCount > maxSubmissionPdfPages) {
+    return reject("page_limit_exceeded");
+  }
+
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const sha256 = Array.from(new Uint8Array(digest))
+    .map(value => value.toString(16).padStart(2, "0"))
+    .join("");
+
+  const { error: storageError } = await context.serviceSupabase.storage
+    .from(privateSubmissionBucket)
+    .upload(upload.object_path, bytes, {
+      cacheControl: "60",
+      contentType: "application/pdf",
+      upsert: false,
+    });
+
+  if (storageError) {
+    await markSubmissionPdfForCleanup(context, fileId);
+    return jsonResponse({ error: "private_file_storage_unavailable" }, 503);
+  }
+
+  const { data: finalized, error: finalizeError } = await context.serviceSupabase.rpc(
+    "finalize_submission_file_upload",
+    {
+      p_actor_id: context.userId,
+      p_file_id: fileId,
+      p_sha256: sha256,
+      p_byte_size: bytes.byteLength,
+      p_page_count: pageCount,
+      p_mime_type: "application/pdf",
+    },
+  );
+  const fileRecord = asRows(finalized)[0];
+  if (finalizeError || !fileRecord || fileRecord.upload_state !== "accepted") {
+    // Do not delete on an uncertain finalisation result. Cleanup removes only
+    // records the database still identifies as incomplete.
+    await markSubmissionPdfForCleanup(context, fileId);
+    return jsonResponse({ error: "private_file_acceptance_unavailable" }, 503);
+  }
+
+  return jsonResponse({
+    file: {
+      id: fileRecord.file_id,
+      version: fileRecord.version_number,
+      sha256: fileRecord.sha256,
+      byte_size: fileRecord.byte_size,
+      page_count: fileRecord.page_count,
+      upload_state: fileRecord.upload_state,
+      accepted_at: fileRecord.accepted_at,
+    },
+  }, 201);
+}
+
+async function getAuthorizedSubmissionPdf(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const context = auth.context;
+  if (!context.serviceSupabase) {
+    return jsonResponse({ error: "private_file_service_unavailable" }, 503);
+  }
+
+  const { data, error } = await context.serviceSupabase.rpc("get_authorized_submission_file", {
+    p_actor_id: context.userId,
+    p_assurance: context.assuranceLevel,
+    p_submission_id: submissionId,
+  });
+  if (error) return jsonResponse({ error: "private_file_authorization_unavailable" }, 503);
+  const fileRecord = asRows(data)[0];
+  if (!fileRecord || typeof fileRecord.object_path !== "string") {
+    return jsonResponse({ error: "submission_file_not_found" }, 404);
+  }
+
+  const { data: signed, error: signedError } = await context.serviceSupabase.storage
+    .from(privateSubmissionBucket)
+    .createSignedUrl(fileRecord.object_path, submissionPdfSignedUrlTtlSeconds);
+  if (signedError || !signed?.signedUrl) {
+    return jsonResponse({ error: "private_file_access_unavailable" }, 503);
+  }
+
+  return jsonResponse({
+    file: {
+      version: fileRecord.version_number,
+      sha256: fileRecord.sha256,
+      byte_size: fileRecord.byte_size,
+      page_count: fileRecord.page_count,
+      mime_type: fileRecord.mime_type,
+      signed_url: signed.signedUrl,
+      expires_in_seconds: submissionPdfSignedUrlTtlSeconds,
+    },
+  });
+}
+
+async function cleanupExpiredSubmissionPdfs(
+  _request: Request,
+  env: WorkerEnv,
+): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const context = auth.context;
+
+  const roleDenied = await requireActiveRole(context, "owner");
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditPrivilegedWriteOutcome(context, "owner_submission_file_cleanup", undefined, "denied")
+      : null;
+    return audit ?? roleDenied;
+  }
+  const mfaDenied = requireAal2(context);
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "owner_submission_file_cleanup", undefined, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
+  if (!context.serviceSupabase) {
+    return jsonResponse({ error: "private_file_service_unavailable" }, 503);
+  }
+
+  const { data, error } = await context.serviceSupabase.rpc("claim_expired_submission_file_uploads", {
+    p_actor_id: context.userId,
+    p_assurance: context.assuranceLevel,
+  });
+  if (error) return jsonResponse({ error: "private_file_cleanup_unavailable" }, 503);
+
+  let cleaned = 0;
+  for (const item of asRows(data)) {
+    if (typeof item.file_id !== "string" || typeof item.object_path !== "string") continue;
+
+    const { error: removeError } = await context.serviceSupabase.storage
+      .from(privateSubmissionBucket)
+      .remove([item.object_path]);
+    if (removeError) {
+      return jsonResponse({ error: "private_file_cleanup_incomplete" }, 503);
+    }
+
+    const { data: finished, error: finishError } = await context.serviceSupabase.rpc(
+      "finish_submission_file_cleanup",
+      {
+        p_actor_id: context.userId,
+        p_assurance: context.assuranceLevel,
+        p_file_id: item.file_id,
+      },
+    );
+    if (finishError || finished !== true) {
+      return jsonResponse({ error: "private_file_cleanup_incomplete" }, 503);
+    }
+    cleaned += 1;
+  }
+
+  return jsonResponse({ cleaned });
+}
+
 async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const testBarrierResponse = await handleLocalTestRaceBarrierControl(request, env);
   if (testBarrierResponse) return testBarrierResponse;
@@ -2366,6 +2703,20 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const learnerAttemptMatch = url.pathname.match(/^\/api\/v1\/learner\/attempts\/([0-9a-f-]{36})$/i);
   if (learnerAttemptMatch && request.method === "GET") {
     return getLearnerAttempt(request, env, learnerAttemptMatch[1]);
+  }
+
+  const learnerSubmissionFileMatch = url.pathname.match(/^\/api\/v1\/learner\/submissions\/([0-9a-f-]{36})\/file$/i);
+  if (learnerSubmissionFileMatch && request.method === "POST") {
+    return uploadSubmissionPdf(request, env, learnerSubmissionFileMatch[1]);
+  }
+
+  const authorizedSubmissionFileMatch = url.pathname.match(/^\/api\/v1\/submissions\/([0-9a-f-]{36})\/file$/i);
+  if (authorizedSubmissionFileMatch && request.method === "GET") {
+    return getAuthorizedSubmissionPdf(request, env, authorizedSubmissionFileMatch[1]);
+  }
+
+  if (url.pathname === "/api/v1/owner/submission-files/cleanup" && request.method === "POST") {
+    return cleanupExpiredSubmissionPdfs(request, env);
   }
 
   if (url.pathname === "/api/v1/learner/submissions" && request.method === "GET") {

@@ -1,5 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { createHmac, randomUUID } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { PDFDocument } from "pdf-lib";
 import { actorIdFromAuthorizationHeader, assertPersistedAuditCorrelation } from "./audit-assertions";
 
 const localPassword = ["Local-only", "GradiPrep", "2026!"].join("-");
@@ -272,6 +274,148 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     });
     expect(taskOutsideEnrolment.status()).toBe(404);
     assertPersistedAuditCorrelation(taskOutsideEnrolment.headers()["x-request-id"],{actorId:"11111111-1111-4111-8111-111111111111",actorRole:"student",action:"student_assessment_submission_accept",targetType:"task_version",targetId:"a2222222-2222-4222-8222-222222222222",outcome:"failed",reason:"resource_not_found"});
+
+
+    // Phase 1D: the Worker validates actual bytes, not the browser's claims,
+    // and only the authorised API can issue short-lived access to the private original.
+    const submissionId = acceptedBody.submission.submission_id;
+    const fileUploadRoute = "/api/v1/learner/submissions/" + submissionId + "/file";
+    const fileReadRoute = "/api/v1/submissions/" + submissionId + "/file";
+    expect((await request.post(fileUploadRoute)).status()).toBe(401);
+    expect((await request.get(fileReadRoute)).status()).toBe(401);
+
+    const createPdf = async (pages: number): Promise<Buffer> => {
+      const document = await PDFDocument.create();
+      for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) document.addPage();
+      return Buffer.from(await document.save());
+    };
+    const expectRejectedUpload = async (
+      name: string,
+      mimeType: string,
+      buffer: Buffer,
+      status: number,
+      error: string,
+    ) => {
+      const response = await page.request.post(fileUploadRoute, {
+        headers,
+        multipart: { file: { name, mimeType, buffer } },
+      });
+      expect(response.status(), name).toBe(status);
+      await expect(response.json()).resolves.toMatchObject({ error });
+    };
+
+    const onePagePdf = await createPdf(1);
+    await expectRejectedUpload("response.txt", "application/pdf", onePagePdf, 400, "pdf_extension_required");
+    await expectRejectedUpload("response.pdf", "application/octet-stream", onePagePdf, 415, "pdf_mime_type_required");
+    await expectRejectedUpload("response.pdf", "application/pdf", Buffer.from("not a PDF"), 400, "invalid_pdf_signature");
+    await expectRejectedUpload(
+      "malformed.pdf",
+      "application/pdf",
+      Buffer.from("%PDF-1.7\\nthis is not a valid PDF document\\n%%EOF"),
+      400,
+      "malformed_pdf",
+    );
+    const encryptedPdf = Buffer.from(
+      "JVBERi0xLjMKJeLjz9MKMSAwIG9iago8PAovUHJvZHVjZXIgPDU5MTI3MzdiN2I+Cj4+CmVuZG9iagoyIDAgb2JqCjw8Ci9UeXBlIC9QYWdlcwovQ291bnQgMQovS2lkcyBbIDQgMCBSIF0KPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDIgMCBSCj4+CmVuZG9iago0IDAgb2JqCjw8Ci9UeXBlIC9QYWdlCi9SZXNvdXJjZXMgPDwKPj4KL01lZGlhQm94IFsgMC4wIDAuMCA2MTIgNzkyIF0KL1BhcmVudCAyIDAgUgo+PgplbmRvYmoKNSAwIG9iago8PAovViAyCi9SIDMKL0xlbmd0aCAxMjgKL1AgNDI5NDk2NzI5MgovRmlsdGVyIC9TdGFuZGFyZAovTyA8NTQyMTc4Zjk2YTVhYWFmNmZlMGFmYzMzYzU1ZTFjOGQ0YTc2NDllZDY4NDU2YzRjMjdiMDc5NGRlOGM0ZTc5Yz4KL1UgPDU1NjY0NzdiZDMzOTRmMTEyN2YzZTRlMTQxNjVlMzYyMjhiZjRlNWU0ZTc1OGE0MTY0MDA0ZTU2ZmZmYTAxMDg+Cj4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA1OSAwMDAwMCBuIAowMDAwMDAwMTE4IDAwMDAwIG4gCjAwMDAwMDAxNjcgMDAwMDAgbiAKMDAwMDAwMDI2MSAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9TaXplIDYKL1Jvb3QgMyAwIFIKL0luZm8gMSAwIFIKL0lEIFsgPDM1NjEzMTMyNjIzNzY0MzczODM1NjEzNjY0MzUzNTM3MzUzNjM5NjI2MjM3MzA2NDMyMzQzMjMyNjEzNzMwMzk+IDwzNTYxMzEzMjYyMzc2NDM3MzgzNTYxMzY2NDM1MzUzNzM1MzYzOTYyNjIzNzMwNjQzMjM0MzIzMjYxMzczMDM5PiBdCi9FbmNyeXB0IDUgMCBSCj4+CnN0YXJ0eHJlZgo0NzYKJSVFT0YK",
+      "base64",
+    );
+    await expectRejectedUpload("encrypted.pdf", "application/pdf", encryptedPdf, 422, "encrypted_pdf_not_supported");
+    await expectRejectedUpload("eleven-pages.pdf", "application/pdf", await createPdf(11), 413, "pdf_page_limit_exceeded");
+    await expectRejectedUpload(
+      "too-large.pdf",
+      "application/pdf",
+      Buffer.alloc(10 * 1024 * 1024 + 1, 0),
+      413,
+      "pdf_file_too_large",
+    );
+
+    const acceptedPdfUpload = await page.request.post(fileUploadRoute, {
+      headers,
+      multipart: { file: { name: "learner-response.pdf", mimeType: "application/pdf", buffer: onePagePdf } },
+    });
+    const acceptedPdfBody = await acceptedPdfUpload.json() as {
+      file: { id: string; version: number; sha256: string; byte_size: number; page_count: number; upload_state: string };
+    };
+    expect(acceptedPdfUpload.status(), JSON.stringify(acceptedPdfBody)).toBe(201);
+    expect(acceptedPdfBody.file.version).toBe(8);
+    expect(acceptedPdfBody.file.sha256).toMatch(/^[a-f0-9]{64}$/);
+    expect(acceptedPdfBody.file.byte_size).toBe(onePagePdf.byteLength);
+    expect(acceptedPdfBody.file.page_count).toBe(1);
+    expect(acceptedPdfBody.file.upload_state).toBe("accepted");
+
+    const fileAccess = await page.request.get(fileReadRoute, { headers });
+    const fileAccessBody = await fileAccess.json() as {
+      file: { signed_url: string; expires_in_seconds: number; sha256: string; page_count: number };
+    };
+    expect(fileAccess.status()).toBe(200);
+    expect(fileAccessBody.file.expires_in_seconds).toBe(60);
+    expect(fileAccessBody.file.sha256).toBe(acceptedPdfBody.file.sha256);
+    expect(fileAccessBody.file.page_count).toBe(1);
+    const downloadedPdf = await page.request.get(fileAccessBody.file.signed_url);
+    expect(downloadedPdf.status()).toBe(200);
+    expect((await downloadedPdf.body()).byteLength).toBe(onePagePdf.byteLength);
+
+    // The object path is visible only inside the short-lived signed URL. The
+    // ordinary private-object endpoint remains inaccessible to anonymous and
+    // authenticated browser clients even when they know that opaque path.
+    const signedUrl = new URL(fileAccessBody.file.signed_url);
+    const signedPath = signedUrl.pathname.match(/^\/storage\/v1\/object\/sign\/private-submissions\/(.+)$/);
+    expect(signedPath).not.toBeNull();
+    const objectPath = decodeURIComponent(signedPath![1]);
+    const storagePath = objectPath.split("/").map(segment => encodeURIComponent(segment)).join("/");
+    const directObjectUrl = new URL(
+      "/storage/v1/object/private-submissions/" + storagePath,
+      signedUrl.origin,
+    ).toString();
+    const envLines = readFileSync(".dev.vars", "utf8").split(/\\r?\\n/);
+    const publishableKey = envLines.find(line => line.startsWith("SUPABASE_PUBLISHABLE_KEY="))?.slice("SUPABASE_PUBLISHABLE_KEY=".length);
+    expect(publishableKey).toBeTruthy();
+    const anonymousDirect = await page.request.get(directObjectUrl, {
+      headers: { apikey: publishableKey! },
+    });
+    expect(anonymousDirect.status()).not.toBe(200);
+    const authenticatedDirect = await page.request.get(directObjectUrl, {
+      headers: { apikey: publishableKey!, Authorization: "Bearer " + token },
+    });
+    expect(authenticatedDirect.status()).not.toBe(200);
+
+    const secondLearnerContext = await page.context().browser()!.newContext({
+      baseURL: "http://127.0.0.1:8787",
+    });
+    try {
+      const secondLearnerPage = await secondLearnerContext.newPage();
+      const secondLearnerToken = await signIn(
+        secondLearnerPage,
+        "student.b@example.invalid",
+        "Synthetic Student B",
+      );
+      const secondLearnerHeaders = { Authorization: secondLearnerToken };
+      const crossLearnerRead = await secondLearnerPage.request.get(fileReadRoute, {
+        headers: secondLearnerHeaders,
+      });
+      expect(crossLearnerRead.status()).toBe(404);
+      const crossLearnerUpload = await secondLearnerPage.request.post(fileUploadRoute, {
+        headers: secondLearnerHeaders,
+        multipart: { file: { name: "other-learner.pdf", mimeType: "application/pdf", buffer: onePagePdf } },
+      });
+      expect(crossLearnerUpload.status()).toBe(404);
+    } finally {
+      await secondLearnerContext.close();
+    }
+
+    const graderContext = await page.context().browser()!.newContext({
+      baseURL: "http://127.0.0.1:8787",
+    });
+    try {
+      const graderPage = await graderContext.newPage();
+      const graderToken = await signIn(graderPage, "grader.a@example.invalid", "Synthetic Grader A");
+      const unassignedGraderRead = await graderPage.request.get(fileReadRoute, {
+        headers: { Authorization: graderToken },
+      });
+      expect(unassignedGraderRead.status()).toBe(404);
+    } finally {
+      await graderContext.close();
+    }
   });
 
   test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {
