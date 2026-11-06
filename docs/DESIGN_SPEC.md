@@ -1,6 +1,6 @@
 # GradioPrep — Design Specification
 
-**Version:** 2.21
+**Version:** 2.22
 **Status:** Approved visual tokens, typography, Palette B, spacing and curriculum-first page architecture remain in force. Product name is GradioPrep. Application-code head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481` passed exact-head run [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858): 494 pgTAP assertions/14 SQL files, builds and 31/31 Playwright tests, including both Phase 1C-F races. Latest docs-only checkpoint before the present reconciliation `69423db70fd2ff1f45c57e8b8589a95673d00c4c` passed run [#42163013589](https://github.com/gradioprep/gradioprep-website/actions/runs/42163013589). Phase 1C-E audit correlation remains representative per distinct action, not exhaustive outcomes; complete final Phase 1C exit-criteria/documentation closeout before Phase 1D. Approved queue search/filter extends the existing grader queue and is not implemented. The public site is not connected to hosted Supabase. Branded staging on `gradioprep.com` with an isolated hosted synthetic backend is mandatory before final Diagnostic/Report acceptance, after separate hosted-resource and DNS approvals. No hosted provisioning, paid service, real learner data, merge, production deployment or DNS change is authorised.
 
 **Founder Preview review rule — 3 November 2026:** Request a public Preview review only when a concrete, substantial learner/staff-visible feature is ready. Do not repeatedly mention unchanged previews or ask the Founder to inspect documentation-only, internal backend/security, test, refactor, maintenance or minor-fix revisions. See `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md`.  
@@ -366,12 +366,9 @@ Make founder-led grading transparent, evidence-based and genuinely useful. This 
 
 Show the mapped task and curriculum, what one credit includes, the rubric/criteria family, expected response format, whether additional credits are required and the turnaround time before the student commits. State scope and credit requirements before submission, not afterwards.
 
-The master brief specifies:
-- Free human-graded task: within 72 elapsed hours after an accepted submission.
-- Paid standard task: within 48 elapsed hours after an accepted submission.
-- Urgent grading: within 24 elapsed hours only when an eligible Master Grader and an urgent slot exist; keep this disabled until eligibility and capacity support it.
+Before confirmation, show the exact task scope and rubric, the server-calculated accepted-word credits, predicted-time credits, final requirement (the greater of the two, never their sum), applicable price/credit requirement and the grading target. The current catalogue and universal tariff are defined in the Master Brief and `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md`; do not infer a price tier from a Standard/Premium/Elite label or vary comparable work by curriculum/board.
 
-The interface must respect actual capacity. If the promised SLA cannot be met, preserve the draft and credit without accepting the job.
+One shared target applies to **all accepted human-graded submissions**: 24 elapsed hours from server-accepted submission to first publication of final human feedback. This includes the one-time complimentary task where its calculated requirement is exactly one credit. It supersedes the former differentiated 72-hour free / 48-hour paid Standard / 24-hour urgent proposal. There is no separate urgent-grading surcharge in the initial model. The interface must respect actual capacity; if the 24-hour target cannot be met, preserve the draft and unspent entitlement/credit without accepting the job.
 
 ### Published feedback screen
 
@@ -617,3 +614,6 @@ Preserve the existing visual hierarchy, spacing, Palette B, responsive design to
 The UI reflects server-authorised results only: Owner+AAL2 sees the allowed team scope; Grader+AAL2 sees active assignments only. The server filters after authorization, including counts and pagination. Use existing PostgreSQL and same-origin Worker APIs, bounded parameters, debounced input, stable cursor/keyset pagination (25 results initially, load more on demand), no-store authenticated responses, and no logging of private search text or response content. Add indexes only where measured query plans and synthetic load tests justify them.
 
 Provide accessible loading, no-results, error, active-filter and reset states. Verify combined filters, board metadata, oldest-first order, SLA visibility, PDF states, cross-Grader isolation, Owner/Grader scope, tampered parameters and duplicate/omitted records at page boundaries. This is approved design scope, not an implemented UI.
+
+
+**Version 2.22 change note — 6 November 2026:** Reconciled the human-assessment submission design with the current universal word/time credit tariff, approved catalogue and single 24-hour grading target. Removed the active reference to the superseded 72-hour free / 48-hour paid / urgent 24-hour SLA. Queue priority remains a separate display attribute and does not silently reorder the oldest-accepted-first queue. No implementation status changed.
