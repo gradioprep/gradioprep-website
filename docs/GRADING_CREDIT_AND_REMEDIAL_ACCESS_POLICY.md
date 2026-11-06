@@ -202,3 +202,55 @@ As at 4 November 2026, the following are **specified/approved but not yet implem
 Existing building blocks include local synthetic Auth and staff-invitation verified-email acceptance; typed-response counters and server-generated word-count metadata; conceptual required_credits in the logical data model; accepted submission and human-feedback backend records; the approved 24-hour target; and the 10 MB/10-page PDF design. Those are not proof that the commercial/credit system or PDF storage/OCR is live.
 
 No document in this policy authorises hosted provisioning, paid spend, external processing, real learner data, a payment transaction, PR merge, production deployment, DNS change or public launch. Apply the separate approval gates in docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md.
+
+## 11. Founder-approved commercial and credit-policy amendment — 6 November 2026
+
+This section supersedes all conflicting earlier price, package, promotional and credit-band hypotheses in this document.
+
+### Approved catalogue
+
+| Product | Price / stated value | Entitlement |
+|---|---:|---|
+| Diagnostic + complete Evaluation Report | ₹999 stated value; free | Diagnostic and full report; no paywall |
+| Standalone Remedial Course | ₹1,999 | Full course |
+| 2-credit pack | ₹1,500 | 2 human-grading credits |
+| 5-credit pack | ₹3,750 | 5 human-grading credits |
+| Gold Plan | ₹7,500 | 10 human-grading credits |
+| Platinum Plan | ₹14,999 | 20 human-grading credits |
+
+Smaller packs are proportionate to the Platinum reference rate (₹14,999 / 20 = ₹749.95 per credit), rounded to whole rupees. No other pack or discount is approved.
+
+### Only two Diwali offers
+
+1. Free Diagnostic + complete Evaluation Report (stated value ₹999).
+2. Platinum Diwali bundle: 20 grading credits plus the full Remedial Course (standalone reference price ₹1,999) for ₹7,999. Combined stated component value: ₹16,998.
+
+No discounted Gold, bonus credits, coupon, additional bundle or other Diwali offer. Record exact campaign start/end timestamps and India-time display before activation. The report remains free after the campaign; ₹999 is not a future paywall.
+
+### Universal board-neutral credit schedule
+
+Identical for IB, Cambridge and CBSE. Board, curriculum, grade or school identity cannot change the price of comparable work.
+
+| Accepted response length | Word-based credits |
+|---|---:|
+| 1–50 words | 1 |
+| 51–150 words | 2 |
+| 151–350 words | 3 |
+| 351–450 words | 4 |
+| 451–550 words | 5 |
+| 551–650 words | 6 |
+| 651–750 words | 7 |
+| 751–850 words | 8 |
+| 851–950 words | 9 |
+| 951–1,050 words | 10 |
+| Each further complete or partial 100-word band above 350 | +1 credit |
+
+For positive word counts above 350: word-based credits = 3 + ceiling((word_count − 350) / 100). For 1–350 words use the fixed bands. Zero-word submissions are not accepted as graded responses. Use a server-defined tokenizer/version; never trust client word counts.
+
+### Grading-time safeguard
+
+Time-based credits = max(1, ceiling(predicted grader minutes / 20)). Final required credits = max(word-based credits, time-based credits). Do not add the estimates; they approximate the same work and summing them double-charges. Display both calculations and the final requirement before acceptance; reserve only after learner confirmation. Snapshot word count, tokenizer version, predicted minutes, both calculations, final credits and policy version. No retrospective debit.
+
+Example: 1,000 words = 3 + ceiling(650/100) = 10 word credits. 180 predicted minutes = ceiling(180/20) = 9 time credits. Final = 10 credits, not 19, identically across all three boards. Board-specific frequency research is for demand forecasting only and cannot alter the tariff.
+
+Credits pay for human grading; course access is separate. Platinum Diwali fulfilment grants both 20 credits and Remedial Course access. Standalone course grants course access only. These are approved policies, not implemented checkout or ledger functionality. Before paid sales implement versioned server-side catalogue/campaign rules, append-only credit ledger, separate course entitlements, trusted payment confirmation, idempotent bundle fulfilment, refunds/reversals and audited Admin exceptions. Store INR in integer paise. This docs amendment authorises no provider, live charge, paid subscription or hosted resource.
