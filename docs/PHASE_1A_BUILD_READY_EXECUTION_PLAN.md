@@ -1,10 +1,8 @@
 # Phase 1A — Build-Ready Execution Plan
 
-**Version:** 0.26-draft
-**Date:** 5 November 2026  
-**Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff-invitation work are complete; the Phase 1B public-shell review is approved. Phase 1C-A/B/C/D are verified using local synthetic Supabase. PR #22 remains open, draft and unmerged; verified code/test head `5dba933dce39b05c69a6616e5bb730d404e3b5a2`; exact-head run [#42041037808](https://github.com/gradioprep/gradioprep-website/actions/runs/42041037808) passed 494 pgTAP assertions across 14 SQL files, TypeScript/Worker/Vite builds and 29/29 Playwright tests. No Preview or production deployment occurred for this checkpoint.
-
-Phase 1C-E has representative per-distinct-action persisted audit correlation, not exhaustive outcome coverage. Worker action `student_attempt_create` maps to successful event `attempt_created`, and `grader_assessment_draft_save` maps to `assessment_draft_saved`. The 29-route authorization/audit matrix and consolidated adversarial evidence map are linked below. Existing assignment and feedback-publication concurrency tests and duplicate-submission idempotency are passing and must not be duplicated. Only same-token invitation acceptance and revocation/suspension racing an in-flight privileged request remain as synchronized Phase 1C-F tests. Phase 1D is blocked until every Phase 1C exit criterion passes.
+**Version:** 0.27-draft
+**Date:** 6 November 2026  
+**Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff-invitation work are complete. Verified application-code head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481` passed exact-head run [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858): 494 pgTAP assertions/14 SQL files, TypeScript/Worker/Vite builds and 31/31 Playwright tests, including both synchronized Phase 1C-F races. The latest docs-only checkpoint before this reconciliation, `69423db70fd2ff1f45c57e8b8589a95673d00c4c`, passed exact-head run [#42163013589](https://github.com/gradioprep/gradioprep-website/actions/runs/42163013589) with the same database/build/browser counts, local cleanup and credential-free asset build. Preview steps were skipped. PR #22 remains open, draft and unmerged. Phase 1C-E correlation is representative per distinct action, not exhaustive outcome coverage; Phase 1C-F race acceptance is complete. Finish the Phase 1C exit-criteria/documentation closeout before beginning Phase 1D. Phase 1D has not started.
 
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and the approved Phase 0 decision register.
@@ -437,13 +435,13 @@ All work remains local-Supabase/synthetic-only. No hosted-resource provisioning,
 
 **Canonical evidence records:**
 - `docs/PHASE_1C_ENDPOINT_AUTHORIZATION_AUDIT_MATRIX.md` — 29 route rows, 25 Worker-audited routes, authorization, event mapping and representative persisted correlation evidence.
-- `docs/PHASE_1C_ADVERSARIAL_ACCEPTANCE_MATRIX.md` — actor/assurance and attack-surface evidence; passing concurrency tests; only two synchronized race tests remaining.
+- `docs/PHASE_1C_ADVERSARIAL_ACCEPTANCE_MATRIX.md` — actor/assurance and attack-surface evidence; both synchronized Phase 1C-F race tests now pass. Phase 1C-E remains representative per-distinct-action persisted audit correlation, not exhaustive outcome coverage.
 
 **Next implementation order:**
-1. Implement only the two open synchronized synthetic tests in the adversarial matrix: same-token invitation acceptance; and revocation/suspension racing an in-flight privileged request. First inspect existing invitation acceptance, role-revocation/account-suspension authorization helpers and local test hooks; use deterministic barriers rather than timing sleeps.
-2. Do not duplicate existing passing attempt-assignment concurrency, feedback-publication concurrency or duplicate-submission idempotency tests.
-3. Run full local synthetic CI at the exact new head, verify all assertions/builds/Playwright results, and reconcile source-of-truth docs and PR #22.
-4. Keep Phase 1D blocked until every Phase 1C exit criterion, including both synchronized tests, passes exact-head synthetic CI.
+1. Finish the final Phase 1C exit-criteria review across the endpoint authorization/audit matrix, adversarial matrix, code and tests. Do not reimplement or duplicate the passing synchronized races, attempt-assignment/publication concurrency or duplicate-submission idempotency.
+2. Reconcile the remaining Phase 1C current-status records and run exact-head local synthetic CI after the documentation-only closeout.
+3. Once every Phase 1C exit criterion is documented, reviewed and passing at the exact PR head, begin Phase 1D private PDF/file controls, then Phase 1E backup/recovery/deletion and Phase 1F synthetic security acceptance.
+4. Add the approved submission-queue search/filter layer inside the existing flagship grader queue, not as a separate service, after/in conjunction with the existing queue implementation.
 
 **Do not** provision hosted services, incur paid usage, process real learner data, send external email, merge, deploy Preview/production or change DNS/custom-domain settings without the relevant separate explicit approval. No Founder Preview is requested for backend/security/tests/docs.
 
@@ -461,3 +459,12 @@ The barrier is disposable local test plumbing: a synthetic test creates an RLS-p
 Existing Owner assignment concurrency, feedback-publication concurrency and duplicate-submission idempotency tests were retained without duplication. Phase 1C-E remains **representative per-distinct-action persisted request-ID/event correlation coverage**, not exhaustive outcome coverage. The required successful event mappings remain Worker `student_attempt_create` → `attempt_created` and Worker `grader_assessment_draft_save` → `assessment_draft_saved`.
 
 **Sequencing:** the two previously outstanding synchronized Phase 1C-F cases now have exact-head passing evidence. Phase 1D was not implemented or started in this change. Keep it unstarted until the final source-of-truth documentation reconciliation has itself passed exact-head CI and the Phase 1C exit record is fully reconciled. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, external processing/email, public Preview, production deployment, DNS change or merge occurred or is authorised.
+
+
+### 16.12 Current closeout and approved downstream scope — 6 November 2026
+
+Both synchronized Phase 1C-F race tests now have exact-head passing evidence (application-code head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481`, run [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858)). The latest docs-only checkpoint before this final reconciliation, `69423db70fd2ff1f45c57e8b8589a95673d00c4c`, passed run [#42163013589](https://github.com/gradioprep/gradioprep-website/actions/runs/42163013589): 494 pgTAP assertions across 14 SQL files, builds and 31/31 Playwright tests; no Preview was deployed. Phase 1C-E remains representative per-distinct-action audit correlation, not exhaustive outcome coverage. The remaining gate is the final whole-Phase-1C exit-criteria/documentation review; Phase 1D is not started.
+
+Approved downstream order: Phase 1D private PDF/file controls; 1E backup/recovery/deletion; 1F synthetic security acceptance; existing flagship grader queue and workflow with the approved queue-search/filter layer; typed/PDF submission, grading and human publication; timer/analytics; Cycle 1 Grade 9 / IB MYP Year 4 Diagnostic and permanently free complete Evaluation Report; whole-site learner-facing copy cleanup; standalone Remedial Course; then commercial catalogue, append-only credit ledger, distinct course entitlements, trusted payment fulfilment and the two Diwali offers. Branded staging on `gradioprep.com` with an isolated hosted synthetic backend remains required before final Diagnostic/Report acceptance, but hosted resources and DNS/custom-domain mapping require separate explicit approvals.
+
+This is a planning/status record only. It does not implement any downstream capability or authorise hosted provisioning, paid usage, real learner data, merge, deployment or DNS changes.
