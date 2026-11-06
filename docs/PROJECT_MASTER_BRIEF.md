@@ -417,19 +417,16 @@ Do not commit credentials, `.env` files, API keys, student submissions or privat
 
 Supabase Pro's current published seven-day daily database backups do not include Storage API objects. Maintain separate encrypted off-site PDF-object backups using Cloudflare R2 only after region/transfer review; its APAC location hint is best-effort, not an India-residency guarantee. Restore database and file objects together. Recheck plan pricing, compute, quotas and terms before provisioning. No plan has been purchased.
 
-## 11. Payments, plans and customer controls
+## 11. Payments, entitlements and customer controls
 
-- Study Lab course access and human-grading credits are separate entitlements. Diagnostic/report access and designated free starter resources remain free.
-- The complete diagnostic and evaluation report must be available without payment. At least one meaningful starter remedial activity remains free; the full personalised remedial programme requires an active Study Lab or explicitly granted course entitlement.
-- Routine valid paid course purchases activate automatically only after trusted provider confirmation. The future Admin dashboard handles complimentary grants, disputes and exceptions; it is not a manual approval queue for every purchase.
-- Record course access in a server-authoritative entitlement model with source, scope, course/pathway, status, grantor/provider, effective dates, expiry and audit history.
-- Record grading-credit purchases/uses/reservations/releases/refunds/adjustments/expiry in an append-only ledger. Never trust a browser-supplied balance or let a client directly mutate credits.
-- Reserve the required credit and grading-capacity slot on accepted submission; consume the credit only under the defined successful acceptance/fulfilment rule; release/refund on documented cancellation/failure. Preserve the original submission and audit all changes.
-- Show the task tier, required credits, price, rubric/scope and shared 24-hour target before acceptance. No post-submission surprise debit based on actual word count, OCR or PDF page count.
-- Exhausted grading credits block new paid human-graded submissions only; they do not block free practice, diagnostic/report access, an active Study Lab course entitlement or published feedback already earned.
-- The one-time free human-grading entitlement is one Standard task per student account. Topic, grade, pathway or course changes must not create additional free reviews. Apply reasonable abuse safeguards without intrusive data collection.
-- Normal public learner accounts must verify their email before real learner-record access and paid entitlements. Staff invitation verified-email acceptance remains a separate existing control.
-- Payment provider, email provider, refunds/tax implementation and checkout design are not yet selected. No account, live payment or paid service is activated by this specification.
+- The full Remedial Course is a standalone ₹1,999 entitlement. The former ₹199/month Study Lab proposal is superseded and is not an approved current product.
+- Approved human-grading packages: 2 credits ₹1,500; 5 credits ₹3,750; Gold 10 credits ₹7,500; Platinum 20 credits ₹14,999. Course access and grading credits remain separate entitlements.
+- The complete Diagnostic and Evaluation Report remain permanently free (₹999 is a stated reference value only). A meaningful starter remedial activity remains free.
+- The only Diwali offers are the free Diagnostic + complete Report and Platinum (20 credits plus full Remedial Course access) for ₹7,999. No other discounts, coupons, bonus credits or bundles are approved. Exact start/end timestamps and India-time display are required before activation.
+- Required grading credits are calculated server-side from accepted words and predicted grader minutes; final credits are max(word credits,time credits), never the sum. Display the calculation and price before acceptance; reserve only after confirmation and never debit retrospectively.
+- Maintain a server-authoritative append-only credit ledger and separate course-entitlement records. Routine paid purchases activate only after trusted payment confirmation; Admin handles audited exceptions, complimentary grants and approved refunds, not routine purchase approvals.
+- Exhausted credits cannot block free practice, Diagnostic/Report access, a separately active Remedial Course entitlement or previously published feedback. One complimentary task per learner account applies only when its calculated requirement is one credit.
+- Public learner email verification is required before real learner-record access and paid entitlements. Payment/email provider, checkout, tax/refund terms and live-payment implementation are not yet selected or authorised.
 
 ## 12. First 30-day launch plan
 
