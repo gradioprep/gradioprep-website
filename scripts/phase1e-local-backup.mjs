@@ -1,7 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import {
-  copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -353,7 +352,6 @@ async function verifyRoundTrip(storage, container, outputDirectory) {
   }
 
   const dumpPath = verifyBackupFiles(outputDirectory, manifest);
-  dockerExec(container, ["pg_restore", "--list", containerDumpPath]).catch;
   run("docker", ["cp", dumpPath, container + ":" + containerDumpPath]);
   dockerExec(container, ["pg_restore", "--list", containerDumpPath]);
   verifyCorruptArchiveRejected(container, dumpPath, outputDirectory);
