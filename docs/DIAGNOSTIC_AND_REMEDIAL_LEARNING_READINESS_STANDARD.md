@@ -1,8 +1,8 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.9
+**Version:** 2.10
 **Approved:** 31 October 2026  
-**Last updated:** 5 November 2026  
+**Last updated:** 6 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md`, `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`, `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md`, `docs/ENGLISH_CURRICULUM_GUIDES.md`, `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/DESIGN_SPEC.md`.
@@ -105,11 +105,11 @@ Teach and practise in descending priority, starting at Priority 5 and moving thr
 
 ## 8A. Free diagnostic, evaluation report and remedial-course access
 
-The initial diagnostic and complete evaluation report are free. Do not place a paywall before the diagnostic or before the full report. The report must remain accessible after it is earned, even if a learner later has no active subscription or grading credits.
+The initial diagnostic and complete evaluation report are free. Do not place a paywall before the diagnostic or before the full report. The report must remain accessible after it is earned, even if a learner later has no active Remedial Course entitlement or grading credits.
 
-Provide at least one meaningful free starter remedial lesson/activity linked to a reported improvement area. The full personalised remedial programme is a separate course entitlement, proposed through Study Lab at ₹199/month (a price hypothesis) or a specifically approved complimentary pilot/cohort grant. A confirmed paid course purchase activates the entitlement automatically; a future internal Admin dashboard handles complimentary grants and exceptions, not manual approval of every ordinary purchase.
+Provide at least one meaningful free starter remedial lesson/activity linked to a reported improvement area. The full personalised Remedial Course is a separate ₹1,999 course entitlement or a specifically approved complimentary grant. The former ₹199/month Study Lab proposal is superseded and is not a current approved product or price. A confirmed paid course purchase activates the entitlement automatically; a future internal Admin dashboard handles complimentary grants and exceptions, not manual approval of every ordinary purchase.
 
-Study Lab course entitlement and human-grading credits are separate. Running out of grading credits does not restrict free practice, the diagnostic/report, a paid course entitlement already active or feedback already published. The one complimentary human-grading task per account is one Standard task only. Further human grading uses the approved Standard/Premium/Elite task credit rules.
+The Remedial Course entitlement and human-grading credits are separate. Running out of grading credits does not restrict free practice, the permanently free Diagnostic/Report, a separately active Remedial Course entitlement or feedback already published. One complimentary human-graded task per account is available only when its server-calculated requirement is one credit. Further human grading uses the universal word/time maximum tariff and the approved credit packages.
 
 The shared access and tier specification is docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. These are approved product rules; payment, physical entitlement/credit records, checkout, Admin dashboard and ordinary public email verification delivery remain future implementation work and must not be described as live.
 
