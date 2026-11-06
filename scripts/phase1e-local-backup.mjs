@@ -15,6 +15,7 @@ const projectId = "gradioprep-local";
 const databaseContainerName = "supabase_db_" + projectId;
 const bucketName = "private-submissions";
 const restoreDatabaseName = "gradioprep_phase1e_restore";
+const restoreRoleName = "supabase_admin";
 const containerDumpPath = "/tmp/gradioprep-phase1e-backup.dump";
 const containerCorruptPath = "/tmp/gradioprep-phase1e-corrupt.dump";
 const appRoot = process.cwd();
@@ -109,6 +110,28 @@ function findDatabaseContainer() {
 
 function dockerExec(container, args, options = {}) {
   return run("docker", ["exec", container, ...args], options);
+}
+
+function assertRestoreRoleAvailable(container) {
+  const roleStatus = dockerExec(container, [
+    "psql", "-U", "postgres", "-d", "postgres", "-At",
+    "-c",
+    "SELECT CASE WHEN rolsuper AND rolcanlogin THEN 'ready' ELSE 'unavailable' END " +
+      "FROM pg_roles WHERE rolname = '" + restoreRoleName + "';",
+  ]);
+  if (roleStatus !== "ready") {
+    fail("The local Supabase administrative restore role is unavailable or lacks superuser/login capability.");
+  }
+
+  const connectionStatus = dockerExec(container, [
+    "psql", "-U", restoreRoleName, "-d", "postgres", "-At",
+    "-c",
+    "SELECT CASE WHEN rolsuper THEN 'superuser' ELSE 'not_superuser' END " +
+      "FROM pg_roles WHERE rolname = current_user;",
+  ]);
+  if (connectionStatus !== "superuser") {
+    fail("The local administrative restore role did not connect with the required privileges.");
+  }
 }
 
 function assertSyntheticUsers(container) {
@@ -226,7 +249,7 @@ async function createBackup(storage, container, outputDirectory) {
 
   dockerExec(container, [
     "pg_dump", "-U", "postgres", "-d", "postgres",
-    "--format=custom", "--no-owner", "--file=" + containerDumpPath,
+    "--format=custom", "--file=" + containerDumpPath,
   ]);
   const databaseDumpPath = join(outputDirectory, "database.dump");
   run("docker", ["cp", container + ":" + containerDumpPath, databaseDumpPath]);
@@ -328,9 +351,10 @@ function restoreDatabase(container, dumpPath) {
     "-c", "DROP DATABASE IF EXISTS " + restoreDatabaseName + " WITH (FORCE);",
   ]);
   dockerExec(container, ["createdb", "-U", "postgres", restoreDatabaseName]);
+  assertRestoreRoleAvailable(container);
   dockerExec(container, [
-    "pg_restore", "-U", "postgres", "-d", restoreDatabaseName,
-    "--exit-on-error", "--no-owner", containerDumpPath,
+    "pg_restore", "-U", restoreRoleName, "-d", restoreDatabaseName,
+    "--exit-on-error", containerDumpPath,
   ]);
 }
 
