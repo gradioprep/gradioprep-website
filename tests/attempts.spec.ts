@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { createHmac, randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { PDFDocument } from "pdf-lib";
+import { createClient } from "@supabase/supabase-js";
 import { actorIdFromAuthorizationHeader, assertPersistedAuditCorrelation } from "./audit-assertions";
 
 const localPassword = ["Local-only", "GradiPrep", "2026!"].join("-");
@@ -367,17 +368,55 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       "/storage/v1/object/private-submissions/" + storagePath,
       signedUrl.origin,
     ).toString();
-    const envLines = readFileSync(".dev.vars", "utf8").split(/\\r?\\n/);
-    const publishableKey = envLines.find(line => line.startsWith("SUPABASE_PUBLISHABLE_KEY="))?.slice("SUPABASE_PUBLISHABLE_KEY=".length);
-    expect(publishableKey).toBeTruthy();
+    const envLines = readFileSync(".dev.vars", "utf8").split(/\r?\n/);
+    const envValue = (key: string): string => {
+      const value = envLines.find(line => line.startsWith(key + "="))?.slice(key.length + 1).trim();
+      if (!value) throw new Error("Missing local test environment value: " + key);
+      return value;
+    };
+    const publishableKey = envValue("SUPABASE_PUBLISHABLE_KEY");
+    const storageAdmin = createClient(
+      envValue("SUPABASE_URL"),
+      envValue("SUPABASE_SERVICE_ROLE_KEY"),
+      { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } },
+    );
+
     const anonymousDirect = await page.request.get(directObjectUrl, {
-      headers: { apikey: publishableKey! },
+      headers: { apikey: publishableKey },
     });
     expect(anonymousDirect.status()).not.toBe(200);
     const authenticatedDirect = await page.request.get(directObjectUrl, {
-      headers: { apikey: publishableKey!, Authorization: "Bearer " + token },
+      headers: { apikey: publishableKey, Authorization: "Bearer " + token },
     });
     expect(authenticatedDirect.status()).not.toBe(200);
+
+    // Opaque paths are unguessable, and knowing a plausible path does not
+    // disclose whether an object exists or grant direct bucket access.
+    const guessedObjectPath = randomUUID() + "/" + randomUUID() + ".pdf";
+    const guessedStoragePath = guessedObjectPath.split("/").map(segment => encodeURIComponent(segment)).join("/");
+    const guessedObjectUrl = new URL(
+      "/storage/v1/object/private-submissions/" + guessedStoragePath,
+      signedUrl.origin,
+    ).toString();
+    const anonymousGuessed = await page.request.get(guessedObjectUrl, {
+      headers: { apikey: publishableKey },
+    });
+    expect(anonymousGuessed.status()).not.toBe(200);
+    const authenticatedGuessed = await page.request.get(guessedObjectUrl, {
+      headers: { apikey: publishableKey, Authorization: "Bearer " + token },
+    });
+    expect(authenticatedGuessed.status()).not.toBe(200);
+
+    // Issue a deliberately one-second signed URL from the local-only service
+    // client to verify the Storage gateway rejects access after expiration.
+    const shortLived = await storageAdmin.storage
+      .from("private-submissions")
+      .createSignedUrl(objectPath, 1);
+    expect(shortLived.error).toBeNull();
+    expect(shortLived.data?.signedUrl).toBeTruthy();
+    await new Promise(resolve => setTimeout(resolve, 2_100));
+    const expiredSignedDownload = await page.request.get(shortLived.data!.signedUrl);
+    expect(expiredSignedDownload.status()).not.toBe(200);
 
     const secondLearnerContext = await page.context().browser()!.newContext({
       baseURL: "http://127.0.0.1:8787",

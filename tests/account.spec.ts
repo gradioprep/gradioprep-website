@@ -297,17 +297,17 @@ test.describe("Phase 1B account foundation", () => {
 
     try {
       await secondPage.goto("http://127.0.0.1:8787/account");
-      await secondPage.getByLabel("Email address").fill("student.a@example.invalid");
+      await secondPage.getByLabel("Email address").fill("guardian.d@example.invalid");
       await secondPage.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
       await secondPage.getByRole("button", { name: "Sign in" }).click();
-      await expect(secondPage.getByRole("heading", { name: "Synthetic Student A" })).toBeVisible();
+      await expect(secondPage.getByRole("heading", { name: "Synthetic Guardian D" })).toBeVisible();
       await expect.poll(() => Boolean(secondRefreshToken && publishableKey && secondAccessToken)).toBe(true);
 
       await page.goto("/account");
-      await page.getByLabel("Email address").fill("student.a@example.invalid");
+      await page.getByLabel("Email address").fill("guardian.d@example.invalid");
       await page.getByLabel("Password").fill("Local-only-GradiPrep-2026!");
       await page.getByRole("button", { name: "Sign in" }).click();
-      await expect(page.getByRole("heading", { name: "Synthetic Student A" })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "Synthetic Guardian D" })).toBeVisible();
 
       await page.getByRole("button", { name: "Sign out" }).click();
       await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
