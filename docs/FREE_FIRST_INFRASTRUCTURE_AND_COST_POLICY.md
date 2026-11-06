@@ -89,3 +89,11 @@ No assistant, developer or automation may infer spending authority from this pla
 - AWS KMS pricing (candidate reference only): https://aws.amazon.com/kms/pricing/
 
 **No provisioning or spending action is authorised by this policy itself.**
+
+## Approved cost and feature additions — 6 November 2026
+
+Build submission search/filter using existing PostgreSQL, measured indexes and existing Worker APIs. No paid search service, second database or separate application. Use bounded query parameters, permission-scoped server filtering and stable pagination; add indexes only when synthetic query plans/load tests justify them.
+
+Develop catalogue, credit formula, ledger and course entitlements locally with synthetic data. Store INR prices in integer paise; keep prices/campaigns versioned and server-authoritative. No payment provider, paid subscription, live payment or hosted resource is activated by this documentation amendment. A no-monthly-fee payment provider may still charge transaction fees.
+
+Approved catalogue: free Diagnostic + complete report (₹999 stated value); standalone Remedial Course ₹1,999; 2 credits ₹1,500; 5 credits ₹3,750; Gold 10 credits ₹7,500; Platinum 20 credits ₹14,999. Only Diwali offers: free Diagnostic/report and Platinum 20 credits plus Remedial Course for ₹7,999. No other campaign discount or bundle. Full tariff is in the Grading Credit and Remedial Access Policy.
