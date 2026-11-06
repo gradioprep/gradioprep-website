@@ -132,11 +132,19 @@ Use explicit state transitions such as draft → uploading → accepted/processi
 
 ### 2A. Commercial access and grading-credit invariants
 
-The commercial access and tier definitions are governed by docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. The full diagnostic/report and designated free resources remain free; a meaningful starter remedial activity is free; the full personalised remedial course requires a Study Lab or expressly granted course entitlement. Human grading credits are independent of course entitlements.
+The commercial access, catalogue and tariff are governed by `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md`. The complete Diagnostic and Evaluation Report remain permanently free (₹999 is stated reference value only), and at least one meaningful starter remedial activity remains free. The full Remedial Course is a separate ₹1,999 course entitlement; the superseded ₹199/month Study Lab proposal is not a current product. Human-grading credits are independent of course entitlements.
 
-Use the approved default tier bands (Standard 1 credit, Premium 2, Elite 3, Custom 4+) and server-side time formula max(1, ceiling(predicted_grader_minutes / 20)). Task word ranges are indicative guidance only. The 10 MB/10-page PDF cap is not a pricing unit. No extra debit may be based only on actual word count, PDF page count or OCR use. The required tier/credits and policy version must be visible before acceptance and snapshotted at acceptance.
+Apply the same server-side tariff to IB, Cambridge and CBSE:
+- Accepted words 1–50 = 1 credit; 51–150 = 2; 151–350 = 3.
+- Above 350 words, add one credit for each complete or partial additional 100-word band. For positive counts above 350, word credits = 3 + ceiling((accepted_word_count − 350) / 100); zero-word graded submissions are not accepted.
+- Time credits = max(1, ceiling(predicted_grader_minutes / 20)).
+- Final required credits = max(word_credits, time_credits), never their sum.
 
-The one complimentary human-grade entitlement is one Standard task per learner account. The shared 24-hour elapsed-time SLA applies to every accepted human-graded task, including the complimentary task. Purchases, reservations, use, releases, refunds, expiry, course-entitlement changes and Admin grants are server-authoritative, versioned and auditable. Ordinary learner email verification is required before real learner-record access/paid entitlements; provider delivery is a later implementation decision.
+The approved regular catalogue is 2 credits for ₹1,500; 5 for ₹3,750; Gold 10 for ₹7,500; and Platinum 20 for ₹14,999. The only Diwali offers are the permanently free Diagnostic/report and the Platinum 20-credit plus full Remedial Course bundle for ₹7,999. Prices and entitlements are policy-controlled and must be snapshotted at purchase/acceptance. Store INR amounts in integer paise.
+
+The one complimentary human-grading entitlement is one task per learner account and may be used only when the server-calculated total requirement is exactly one credit. The shared 24-hour elapsed-time SLA applies to every accepted human-graded task, including this complimentary task. The 10 MB/10-page PDF cap is a file-safety limit, not a pricing unit; no extra debit may be based only on PDF page count, OCR use or words beyond the ideal target. No retrospective debit is permitted.
+
+Purchases, reservations, consumption, releases, refunds, expiry, course-entitlement changes and Admin grants are server-authoritative, versioned and auditable. Ordinary learner email verification is required before real learner-record access/paid entitlements; provider delivery is a later implementation decision.
 
 These are logical future records/rules, not a claim that the physical credit, payment, entitlement or commercial Admin tables/routes are already implemented.
 
