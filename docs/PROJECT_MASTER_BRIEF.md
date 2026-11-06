@@ -311,7 +311,7 @@ One shared target applies to **all accepted human-graded submissions**: 24 elaps
 Founder is the sole grader initially. Start with:
 - Up to 30 paid grading submissions per month.
 - Target no more than 2 newly accepted paid submissions per day.
-- Up to 4 complimentary Standard graded tasks per week.
+- Up to four complimentary one-credit graded tasks per week, subject to the one-time per-account entitlement and capacity safeguards.
 - No accepted work unless the 24-hour target can be met. If no slot is available, preserve the student's draft and unspent entitlement/credit without accepting the submission.
 
 ### Market evidence and access policy
@@ -392,7 +392,7 @@ Students/guardians should see on login:
 - Error log and recommended next objectives.
 - Published human assessments and feedback.
 - Pending submissions and due times.
-- Remaining grading credits, tier-specific usage, ledger activity and credit-expiry dates.
+- Remaining grading credits, tariff-band usage, ledger activity and credit-expiry dates.
 - Current course entitlements (including complimentary/pilot grants and expiry where applicable).
 
 Distinguish automatically checked practice from human-assessed work. Do not imply an AI score is an official IB/Cambridge grade or manufacture a grade prediction without validation. Monthly report is generated automatically from existing event/assessment data; no extra human grading is required.
