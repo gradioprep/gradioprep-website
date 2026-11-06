@@ -355,3 +355,16 @@ The barrier is disposable local test plumbing: a synthetic test creates an RLS-p
 Existing Owner assignment concurrency, feedback-publication concurrency and duplicate-submission idempotency tests were retained without duplication. Phase 1C-E remains **representative per-distinct-action persisted request-ID/event correlation coverage**, not exhaustive outcome coverage. The required successful event mappings remain Worker `student_attempt_create` → `attempt_created` and Worker `grader_assessment_draft_save` → `assessment_draft_saved`.
 
 **Sequencing:** the two previously outstanding synchronized Phase 1C-F cases now have exact-head passing evidence. Phase 1D was not implemented or started in this change. Keep it unstarted until the final source-of-truth documentation reconciliation has itself passed exact-head CI and the Phase 1C exit record is fully reconciled. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, external processing/email, public Preview, production deployment, DNS change or merge occurred or is authorised.
+
+## Founder-approved logical extensions — 6 November 2026 (design only)
+
+Preserve the existing Supabase/PostgreSQL model and Worker authorization boundary. These are logical requirements, not deployed tables or migrations.
+
+- Versioned product catalogue: product ID/version, type, INR price in integer paise, credit quantity, included course entitlement, effective dates and approval reference. Snapshot price/benefits on purchase.
+- Campaign configuration: campaign ID/version, eligible bundle, exact start/end timestamps, India-time display metadata, price, entitlements and status. Validate server-side.
+- Purchase fulfilment: trusted payment/manual reconciliation reference, idempotency key, status, catalogue/campaign version, amount/currency and separate credit/course grant references. Platinum Diwali purchase must idempotently grant 20 credits and course entitlement.
+- Credit calculation snapshot: accepted word count, tokenizer/version, predicted grader minutes, word credits, time credits, final maximum, tariff version and learner confirmation. Universal schedule: 1–50=1; 51–150=2; 151–350=3; above 350 add one per additional 100 words or part thereof. Time is one credit per 20 predicted minutes. Never sum estimates or debit retrospectively.
+- Queue support: stable metadata/joins for board/programme, grade, subject, pathway/unit/task, accepted timestamp, status, response format, PDF extraction status and assignment scope. Add indexes based on query plans/load tests. Search permitted learner name/reference and submission ID; do not expose email or private response text by default. Enforce role/assignment scope before filters/counts/pagination.
+- Course entitlements remain separate from the append-only grading credit ledger. Platinum bundle grants both; standalone course grants course access only.
+
+No physical schema, RLS, RPC or migration is authorised by this documentation-only amendment.
