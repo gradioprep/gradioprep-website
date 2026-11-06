@@ -1,8 +1,8 @@
 # Public Preview, Verification and Custom-Domain Release Process
 
-**Version:** 1.6-draft
-**Date:** 5 November 2026  
-**Status:** Cloudflare `workers.dev` branch Previews remain the normal development verification environment and are disconnected from hosted learner services. Founder-facing Preview requests are reserved for new, concrete and substantial learner/staff-visible features; routine, unchanged, backend-only and documentation-only changes do not trigger a Preview request. A branded custom-domain staging journey backed by an isolated hosted synthetic test environment is a mandatory gate before final Diagnostic/Evaluation Report acceptance, after separate provisioning and DNS approvals. Production custom-domain cutover remains a separate later gate. No hosted staging backend, branded host mapping, paid use, production deployment or DNS change is authorised by this document.
+**Version:** 1.7-draft
+**Date:** 6 November 2026  
+**Status:** Product name is GradioPrep and the confirmed custom domain is `gradioprep.com`; the domain is not connected to the site and no DNS changes have been made. Cloudflare `workers.dev` branch Previews remain the normal development verification environment and are disconnected from hosted learner services. Founder-facing Preview requests are reserved for new, concrete and substantial learner/staff-visible features; routine, unchanged, backend-only and documentation-only changes do not trigger a Preview request. A branded custom-domain staging journey backed by an isolated hosted synthetic test environment is mandatory before final Diagnostic/Evaluation Report acceptance, after separate provisioning and DNS approvals. The canonical host (apex, `www` or staging subdomain) remains to be selected. Production custom-domain cutover remains a separate later gate. No hosted staging backend, branded host mapping, paid use, production deployment or DNS change is authorised by this document.
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md`; free-first cost decisions: `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`
 **Related:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`, `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`, `docs/CONTROLLED_CLOUDFLARE_PREVIEW.md`, `docs/DESIGN_SPEC.md` and the approved Phase 0 decision register.
 
@@ -118,7 +118,7 @@ Confirm and record:
 - authentication redirect allow-list and email confirmation/password-recovery callbacks;
 - backup/restore, retention/deletion, monitoring, privacy/legal, accessibility, security and content/release approvals.
 
-The exact domain name is not fixed by this process. Do not guess between previously discussed spellings or add records until the Founder confirms the purchased domain and canonical host.
+The confirmed custom domain is `gradioprep.com`. The canonical host (apex, `www` or staging subdomain) remains to be selected and recorded. The domain is not connected to the site; no DNS changes have been made. Do not add, remove or change DNS records, nameservers or Cloudflare custom-domain mappings without separate explicit approval.
 
 ### 6.2 Connect to the production Worker
 
@@ -172,7 +172,7 @@ The Founder has clarified that the public website experience—including authent
 
 ### 9.1 Staging host, not premature production cutover
 
-- Confirm the exact purchased domain and canonical hostname with the Founder before creating DNS records. The previously discussed domain spelling is not sufficient authority to change DNS.
+- The confirmed custom domain is `gradioprep.com`. Select and record the canonical staging/production hostname separately; no DNS changes have been made and the site is not connected to the domain. Any DNS record, nameserver or Cloudflare custom-domain change still requires separate explicit approval.
 - After separate explicit approval, configure a dedicated staging subdomain (for example, `staging.<confirmed-domain>`) to an isolated staging Worker and isolated hosted test backend. Use synthetic accounts and records only.
 - Do not connect staging to production Auth, database, storage, email credentials or learner records. Configure the staging Auth Site URL and narrow confirmation/recovery callback allow-list for the staging host only.
 - Verify TLS/HTTPS, canonical redirects, API and SPA routes, navigation, direct/deep links, refresh and browser Back/Forward.
