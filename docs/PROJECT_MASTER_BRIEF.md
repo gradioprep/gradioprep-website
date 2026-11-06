@@ -460,24 +460,9 @@ LinkedIn is the only planned promotional channel for the initial months. Use hel
 
 ## 14. Success metrics and operating gates
 
-At minimum, measure:
+Measure Diagnostic completion and skill evidence; post-remediation progress; five-session Remedial Course completion; learner activation and practice; revisions after feedback; separate free-to-course and free-to-human-grading conversion; 24-hour SLA compliance; predicted versus actual grader minutes; word/time credit calculations and final credit consumption; package purchase/use/refund/expiry; queue age and capacity-full events; feedback quality; disputes, refunds, complaints; and contribution after grader, payment, tax and refund costs.
 
-- Diagnostic completion rate and completion by skill domain.
-- Evidence confidence/coverage for reported skill judgements.
-- Priority-area progression and post-remediation reassessment change.
-- Five-day remedial course completion and session engagement.
-- First-week active learner rate.
-- Practice completion and repeat attempts.
-- Percentage of students who revise after receiving feedback.
-- Free-to-paid conversion.
-- Study Lab retention/renewals.
-- Review turnaround compliance.
-- Actual minutes per assessment.
-- Reviewer consistency against the rubric.
-- Refunds, disputes and complaint rates.
-- Cost per paying subscriber and contribution after review/payment fees.
-
-Do not scale marketing, prepaid credit sales or reviewer recruitment until service quality and actual usage justify it. The initial pricing, subscriber targets and demand estimates are hypotheses to validate, not guaranteed results.
+Do not scale marketing, prepaid credit sales or reviewer recruitment until service quality and actual usage justify it. Approved prices are binding; any price change needs a new explicit, versioned Founder decision. Validate margin and fulfilment capacity before public paid sales without silently changing the approved catalogue.
 
 ## 15. Decisions still owned by the founder
 
