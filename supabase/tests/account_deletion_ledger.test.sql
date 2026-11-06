@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(36);
+SELECT plan(38);
 
 SELECT ok(
   (SELECT relrowsecurity FROM pg_class WHERE oid = 'private.account_deletion_requests'::regclass),
@@ -301,6 +301,31 @@ SELECT ok(
     WHERE id = '11111111-1111-4111-8111-111111111111'
   ),
   'an approved request does not delete or disable the account in this ledger-only slice'
+);
+UPDATE private.account_deletion_requests
+SET subject_user_id = NULL
+WHERE id = (SELECT request_id FROM account_deletion_request_context LIMIT 1);
+UPDATE private.account_deletion_legal_holds
+SET subject_user_id = NULL
+WHERE id = (SELECT hold_id FROM account_deletion_hold_context);
+
+SELECT ok(
+  (SELECT subject_user_id IS NULL
+          AND status = 'approved'
+          AND reviewed_at IS NOT NULL
+          AND decision_reason_category = 'retention_review_complete'
+   FROM private.account_deletion_requests
+   WHERE id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
+  'detaching the account identity preserves its non-content deletion-request evidence'
+);
+SELECT ok(
+  (SELECT subject_user_id IS NULL
+          AND released_at IS NOT NULL
+          AND release_reason_category = 'review_cleared'
+          AND authority_reference = 'SYNTHETIC-CASE-01'
+   FROM private.account_deletion_legal_holds
+   WHERE id = (SELECT hold_id FROM account_deletion_hold_context)),
+  'detaching the account identity preserves released legal-hold evidence'
 );
 SELECT ok(
   EXISTS (
