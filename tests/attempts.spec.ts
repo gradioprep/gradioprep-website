@@ -425,8 +425,8 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       const secondLearnerPage = await secondLearnerContext.newPage();
       const secondLearnerToken = await signIn(
         secondLearnerPage,
-        "student.b@example.invalid",
-        "Synthetic Student B",
+        "student.c@example.invalid",
+        "Synthetic Student C",
       );
       const secondLearnerHeaders = { Authorization: secondLearnerToken };
       const crossLearnerRead = await secondLearnerPage.request.get(fileReadRoute, {

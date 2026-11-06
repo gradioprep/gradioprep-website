@@ -15,6 +15,7 @@ INSERT INTO auth.users (
 VALUES
   ('00000000-0000-0000-0000-000000000000', '11111111-1111-4111-8111-111111111111', 'authenticated', 'authenticated', 'student.a@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Student A","role":"owner"}'::jsonb, now(), now(), false, false),
   ('00000000-0000-0000-0000-000000000000', '22222222-2222-4222-8222-222222222222', 'authenticated', 'authenticated', 'student.b@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Student B"}'::jsonb, now(), now(), false, false),
+  ('00000000-0000-0000-0000-000000000000', 'cccccccc-cccc-4ccc-8ccc-cccccccccccc', 'authenticated', 'authenticated', 'student.c@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Student C"}'::jsonb, now(), now(), false, false),
   ('00000000-0000-0000-0000-000000000000', '33333333-3333-4333-8333-333333333333', 'authenticated', 'authenticated', 'guardian.a@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Guardian A","role":"owner"}'::jsonb, now(), now(), false, false),
   ('00000000-0000-0000-0000-000000000000', '44444444-4444-4444-8444-444444444444', 'authenticated', 'authenticated', 'guardian.b@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Guardian B"}'::jsonb, now(), now(), false, false),
   ('00000000-0000-0000-0000-000000000000', 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'authenticated', 'authenticated', 'guardian.c@example.invalid', extensions.crypt(('Local-only-' || 'GradiPrep-2026!'), extensions.gen_salt('bf')), now(), '', '', '', '', '', '', '', '', 0, '{"provider":"email","providers":["email"]}'::jsonb, '{"display_name":"Synthetic Guardian C"}'::jsonb, now(), now(), false, false),
@@ -50,6 +51,7 @@ FROM auth.users AS users
 WHERE users.email IN (
   'student.a@example.invalid',
   'student.b@example.invalid',
+  'student.c@example.invalid',
   'guardian.a@example.invalid',
   'guardian.b@example.invalid',
   'guardian.c@example.invalid',
