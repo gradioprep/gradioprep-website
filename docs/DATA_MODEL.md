@@ -1,8 +1,6 @@
 # Logical Data Model — Curriculum, Practice and Assessment
 
-**Status:** Provider-independent logical model with approved Supabase Auth/PostgreSQL/Storage architecture. Phase 1B and Phase 1C-A/B/C/D are verified at their recorded local-synthetic checkpoints. PR #22 remains open, draft and unmerged; verified code/test head `5dba933dce39b05c69a6616e5bb730d404e3b5a2`, exact-head run [#42041037808](https://github.com/gradioprep/gradioprep-website/actions/runs/42041037808) passed 494 pgTAP assertions across 14 SQL files, TypeScript/Worker/Vite builds and 29/29 Playwright tests. No Preview or production deployment occurred for this checkpoint.
-
-The endpoint authorization/audit matrix contains 29 HTTP method/path rows; all 25 Worker-audited routes have fail-closed audit-service outage coverage. Phase 1C-E correlation evidence is representative per distinct action, not exhaustive for every outcome. Successful persistence maps Worker `student_attempt_create` to `attempt_created` and `grader_assessment_draft_save` to `assessment_draft_saved`; denied/failed events retain Worker action names. The adversarial acceptance matrix maps existing actor/assurance, RLS, forgery, replay and passing concurrency evidence. Only simultaneous acceptance of the same invitation token and revocation/suspension racing an in-flight privileged request remain as synchronized Phase 1C-F tests. Phase 1D remains blocked.
+**Status:** Provider-independent logical model using the approved Supabase Auth/PostgreSQL/private Storage architecture. Application-code head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481` passed run [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858): 494 pgTAP/14 SQL files, builds and 31/31 Playwright tests, including both synchronized Phase 1C-F races. Latest docs-only checkpoint before this reconciliation `69423db70fd2ff1f45c57e8b8589a95673d00c4c` passed run [#42163013589](https://github.com/gradioprep/gradioprep-website/actions/runs/42163013589). Phase 1C-E audit correlation remains representative per distinct action, not exhaustive outcomes. Final Phase 1C exit-criteria/documentation closeout precedes Phase 1D; Phase 1D has not started. PR #22 remains open, draft and unmerged; all checks remain local-synthetic-only.
 
 The former browser-callable generic audit writers are revoked; only the trusted Worker service-role client can call `record_worker_audit_outcome`, and that client is restricted to audit ingestion. Application reads/writes remain caller-scoped. The protected physical inventory remains **25 tables (18 public, seven private)**. Credit purchasing, physical credit ledger, course entitlements, payment workflow and commercial Admin dashboard remain logical future records, not live tables. See `docs/PHASE_1C_ENDPOINT_AUTHORIZATION_AUDIT_MATRIX.md` and `docs/PHASE_1C_ADVERSARIAL_ACCEPTANCE_MATRIX.md`.
 
@@ -368,3 +366,23 @@ Preserve the existing Supabase/PostgreSQL model and Worker authorization boundar
 - Course entitlements remain separate from the append-only grading credit ledger. Platinum bundle grants both; standalone course grants course access only.
 
 No physical schema, RLS, RPC or migration is authorised by this documentation-only amendment.
+
+
+### 6.10 Approved commercial catalogue and distinct entitlement model — 6 November 2026 (logical design only)
+
+The current catalogue is owned by `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md`:
+
+| Product | Approved price | Benefit |
+|---|---:|---|
+| Diagnostic + complete Evaluation Report | Free (₹999 stated reference value) | Complete report; permanently free |
+| Standalone Remedial Course | ₹1,999 | Full course entitlement |
+| 2-credit pack | ₹1,500 | 2 human-grading credits |
+| 5-credit pack | ₹3,750 | 5 human-grading credits |
+| Gold Plan | ₹7,500 | 10 human-grading credits |
+| Platinum Plan | ₹14,999 | 20 human-grading credits |
+
+The only Diwali offers are free Diagnostic + complete report, and Platinum (20 grading credits plus separate full Remedial Course entitlement) for ₹7,999. The bundle's listed component reference value is ₹16,998. No other offer, discount or bonus credit is approved. Exact campaign timestamps and India-time display are required before activation.
+
+Credit tariff must be applied consistently across boards: fixed word bands of 1–50=1, 51–150=2 and 151–350=3; above 350, add one credit per complete or partial 100 words. Time credits are max(1, ceiling(predicted grader minutes/20)); final required credits are max(word credits,time credits), never their sum. Price and benefit snapshots are server-authoritative and stored in integer paise. Course entitlements are separate from the append-only human-grading credit ledger; Platinum Diwali fulfillment grants both, while standalone course purchase grants course access only.
+
+These are logical requirements, not physical tables, migrations, RLS policies, RPCs or deployed payment features.
