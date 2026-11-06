@@ -604,6 +604,16 @@ PR #22 remains open, draft and unmerged. The public deployment on `main` remains
 
 **Acceptance checks:** Maintain an inventory of all website routes and states; test every item in that inventory at desktop and mobile widths. Add automated browser/content checks for the known phrases and other internal-note patterns, and verify that no temporary marker or team-facing instruction appears in rendered pages. Confirm that empty states explain the relevant next action, every displayed metric is backed by real or explicitly isolated test data, no syllabus coverage is inferred from an unconfirmed placeholder, and all existing visual bands/cards remain intact. Record the routes reviewed, tests, corrected copy and any genuine remaining limitations. The Founder then verifies the refreshed public Preview before the Cycle 1 remedial content work proceeds.
 
-## Submission queue search/filter design addition — 6 November 2026
+## 18. Submission queue search and filter design — 6 November 2026
 
-Add a compact search field above the existing teacher/grader queue, with accessible composable filters for board/programme, grade/year/stage, subject, pathway/unit/task, submission date, workflow state, assignment, response format/PDF extraction state and 24-hour SLA. Show active filters as removable selections with clear-all. Preserve visual hierarchy, responsive design tokens and readable queue cards; do not turn the queue into a dense database table. Default order remains oldest accepted first; SLA urgency is separate. Planned, not implemented.
+Keep this as a layer within the existing teacher/grader queue and workspace; do not create a separate application or search service.
+
+Add a compact search field for permitted learner name/reference, exact or partial submission ID, task/assessment title and curriculum metadata. Do not search by email, private response text or private notes by default, and never reveal whether an out-of-scope record exists.
+
+Provide accessible composable filters for board/programme (IB, Cambridge, CBSE), grade/year/stage, subject, pathway/unit/task, accepted submission date/range, workflow state, assignment scope, typed/PDF response format, PDF extraction/review state and 24-hour SLA category. Multiple filters combine. Show active filters as removable selections and provide clear-all/reset.
+
+Preserve the existing visual hierarchy, spacing, Palette B, responsive design tokens and readable queue cards; do not convert the workspace into a dense database table. Keep oldest accepted first as the default order with a stable unique tie-breaker. SLA urgency/overdue is a visible separate status and must not silently change chronological order. Overdue records remain visible.
+
+The UI reflects server-authorised results only: Owner+AAL2 sees the allowed team scope; Grader+AAL2 sees active assignments only. The server filters after authorization, including counts and pagination. Use existing PostgreSQL and same-origin Worker APIs, bounded parameters, debounced input, stable cursor/keyset pagination (25 results initially, load more on demand), no-store authenticated responses, and no logging of private search text or response content. Add indexes only where measured query plans and synthetic load tests justify them.
+
+Provide accessible loading, no-results, error, active-filter and reset states. Verify combined filters, board metadata, oldest-first order, SLA visibility, PDF states, cross-Grader isolation, Owner/Grader scope, tampered parameters and duplicate/omitted records at page boundaries. This is approved design scope, not an implemented UI.
