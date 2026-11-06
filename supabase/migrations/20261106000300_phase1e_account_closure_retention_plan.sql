@@ -537,9 +537,23 @@ BEGIN
 
   -- Close and de-identify the Auth identity while retaining the UUID needed
   -- to link protected academic records through their approved retention period.
-  DELETE FROM auth.sessions WHERE user_id = target_user_id;
-  DELETE FROM auth.identities WHERE user_id = target_user_id;
-  DELETE FROM auth.mfa_factors WHERE user_id = target_user_id;
+  UPDATE auth.identities
+  SET id = 'closed-' || replace(target_user_id::text, '-', ''),
+      provider_id = 'closed-' || replace(target_user_id::text, '-', ''),
+      identity_data = '{}'::jsonb,
+      updated_at = close_time
+  WHERE user_id = target_user_id;
+
+  UPDATE auth.mfa_factors
+  SET secret = NULL,
+      friendly_name = 'Closed account',
+      status = 'unverified',
+      updated_at = close_time
+  WHERE user_id = target_user_id;
+
+  UPDATE auth.sessions
+  SET not_after = close_time
+  WHERE user_id = target_user_id;
 
   UPDATE auth.users
   SET email = 'closed+' || replace(target_user_id::text, '-', '') || '@invalid.invalid',
