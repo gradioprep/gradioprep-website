@@ -295,8 +295,11 @@ RETURNS TABLE(
   requested_at timestamptz,
   response_due_at timestamptz,
   identity_verified_at timestamptz,
+  identity_verification_method text,
+  reviewed_by uuid,
   reviewed_at timestamptz,
   decision_reason_category text,
+  completed_at timestamptz,
   has_active_legal_hold boolean,
   active_legal_hold_authority_category text,
   active_legal_hold_authority_reference text,
@@ -329,8 +332,9 @@ BEGIN
   RETURN QUERY
   SELECT request.id, request.subject_user_id,
     request.request_reason_category, request.status, request.requested_at,
-    request.response_due_at, request.identity_verified_at, request.reviewed_at,
-    request.decision_reason_category,
+    request.response_due_at, request.identity_verified_at,
+    request.identity_verification_method, request.reviewed_by,
+    request.reviewed_at, request.decision_reason_category, request.completed_at,
     EXISTS (
       SELECT 1 FROM private.account_deletion_legal_holds AS legal_hold
       WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
