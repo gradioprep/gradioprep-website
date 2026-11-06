@@ -75,6 +75,11 @@ SELECT ok(
    FROM account_deletion_request_context LIMIT 1),
   'the response target is exactly 30 days after verified request receipt'
 );
+INSERT INTO account_deletion_request_context
+SELECT request_id, request_status, requested_at, response_due_at, is_replay
+FROM public.request_account_deletion('data_erasure');
+RESET ROLE;
+
 SELECT is(
   (SELECT identity_verification_method
    FROM private.account_deletion_requests
@@ -82,10 +87,6 @@ SELECT is(
   'authenticated_confirmed_email'::text,
   'verification evidence records the confirmed-email authenticated method'
 );
-INSERT INTO account_deletion_request_context
-SELECT request_id, request_status, requested_at, response_due_at, is_replay
-FROM public.request_account_deletion('data_erasure');
-RESET ROLE;
 
 SELECT ok(
   (SELECT is_replay FROM account_deletion_request_context ORDER BY requested_at LIMIT 1 OFFSET 1),
