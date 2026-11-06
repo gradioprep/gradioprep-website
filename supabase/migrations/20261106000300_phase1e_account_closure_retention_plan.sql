@@ -542,8 +542,7 @@ BEGIN
   -- Close and de-identify the Auth identity while retaining the UUID needed
   -- to link protected academic records through their approved retention period.
   UPDATE auth.identities
-  SET id = 'closed-' || replace(target_user_id::text, '-', ''),
-      provider_id = 'closed-' || replace(target_user_id::text, '-', ''),
+  SET provider_id = 'closed-' || replace(target_user_id::text, '-', ''),
       identity_data = '{}'::jsonb,
       updated_at = close_time
   WHERE user_id = target_user_id;
