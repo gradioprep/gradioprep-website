@@ -11,3 +11,5 @@ supabase/.temp/
 supabase/.branches/
 *.local
 .DS_Store
+
+.local-backups/

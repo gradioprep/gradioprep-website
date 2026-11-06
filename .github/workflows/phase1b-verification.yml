@@ -88,6 +88,9 @@ jobs:
       - name: Run navigation, account and API browser tests
         run: npm run test:e2e
 
+      - name: Verify local synthetic database and private-PDF backup/restore round trip
+        run: npm run phase1e:backup:verify
+
       - name: Stop local Supabase
         if: always()
         run: npx supabase stop --no-backup || true

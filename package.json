@@ -16,7 +16,8 @@
     "supabase:stop": "supabase stop",
     "supabase:reset": "supabase db reset",
     "supabase:test": "supabase test db",
-    "supabase:env": "node scripts/write-local-supabase-env.mjs"
+    "supabase:env": "node scripts/write-local-supabase-env.mjs",
+    "phase1e:backup:verify": "node scripts/phase1e-local-backup.mjs --verify-roundtrip"
   },
   "dependencies": {
     "@supabase/server": "1.9.2",
