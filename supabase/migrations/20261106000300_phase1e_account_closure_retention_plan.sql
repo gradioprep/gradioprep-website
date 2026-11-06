@@ -300,7 +300,89 @@ CREATE TRIGGER retention_backup_late_insert_expiry
   FOR EACH ROW EXECUTE FUNCTION private.prepare_late_retention_backup_expiry();
 
 -- Recreate the Owner queue with the account-closure checkpoint fields.
-DROP FUNCTION public.list_account_deletion_requests(uuid);
+DROP FUNCTION public.list_account_deletion_requests();
+
+CREATE FUNCTION public.list_account_deletion_requests()
+RETURNS TABLE(
+  request_id uuid,
+  subject_user_id uuid,
+  request_reason_category text,
+  request_status text,
+  requested_at timestamptz,
+  response_due_at timestamptz,
+  identity_verified_at timestamptz,
+  identity_verification_method text,
+  reviewed_by uuid,
+  reviewed_at timestamptz,
+  decision_reason_category text,
+  completed_at timestamptz,
+  closure_executed_at timestamptz,
+  retention_items_created integer,
+  has_active_legal_hold boolean,
+  active_legal_hold_authority_category text,
+  active_legal_hold_authority_reference text,
+  active_legal_hold_reason_summary text,
+  active_legal_hold_review_due_at timestamptz
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $function$
+DECLARE
+  actor_id uuid := auth.uid();
+BEGIN
+  IF coalesce(auth.jwt() ->> 'role', '') <> 'authenticated'
+    OR actor_id IS NULL
+    OR NOT private.current_account_is_active()
+    OR NOT private.current_user_has_role('owner'::public.app_role)
+    OR coalesce(auth.jwt() ->> 'aal', 'aal1') <> 'aal2' THEN
+    RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_owner_aal2_required';
+  END IF;
+
+  INSERT INTO private.security_audit_events (
+    actor_id, action, target_type, target_id, outcome, reason_category
+  )
+  VALUES (
+    actor_id, 'account_deletion_requests_listed',
+    'account_deletion_request_collection', NULL, 'success', 'owner_aal2'
+  );
+
+  RETURN QUERY
+  SELECT request.id, request.subject_user_id,
+    request.request_reason_category, request.status, request.requested_at,
+    request.response_due_at, request.identity_verified_at,
+    request.identity_verification_method, request.reviewed_by,
+    request.reviewed_at, request.decision_reason_category,
+    request.completed_at, request.closure_executed_at,
+    request.retention_items_created,
+    EXISTS (
+      SELECT 1 FROM private.account_deletion_legal_holds AS legal_hold
+      WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
+    ),
+    (
+      SELECT legal_hold.authority_category
+      FROM private.account_deletion_legal_holds AS legal_hold
+      WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
+    ),
+    (
+      SELECT legal_hold.authority_reference
+      FROM private.account_deletion_legal_holds AS legal_hold
+      WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
+    ),
+    (
+      SELECT legal_hold.reason_summary
+      FROM private.account_deletion_legal_holds AS legal_hold
+      WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
+    ),
+    (
+      SELECT legal_hold.review_due_at
+      FROM private.account_deletion_legal_holds AS legal_hold
+      WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
+    )
+  FROM private.account_deletion_requests AS request
+  ORDER BY request.requested_at ASC, request.id ASC;
+END;
+$function$;
 CREATE OR REPLACE FUNCTION public.close_account_for_deletion(p_request_id uuid)
 RETURNS TABLE(
   request_id uuid,
@@ -739,6 +821,9 @@ ALTER FUNCTION private.protect_retention_item() OWNER TO postgres;
 ALTER FUNCTION private.protect_retention_backup_object() OWNER TO postgres;
 ALTER FUNCTION private.propagate_retention_backup_expiry() OWNER TO postgres;
 ALTER FUNCTION private.prepare_late_retention_backup_expiry() OWNER TO postgres;
+ALTER FUNCTION public.list_account_deletion_requests() OWNER TO postgres;
+REVOKE ALL ON FUNCTION public.list_account_deletion_requests() FROM PUBLIC, anon, service_role;
+GRANT EXECUTE ON FUNCTION public.list_account_deletion_requests() TO authenticated;
 ALTER FUNCTION public.close_account_for_deletion(uuid) OWNER TO postgres;
 ALTER FUNCTION public.list_account_retention_plan(uuid) OWNER TO postgres;
 
