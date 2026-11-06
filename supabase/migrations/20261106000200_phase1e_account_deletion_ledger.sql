@@ -5,7 +5,6 @@
 
 CREATE TABLE private.account_deletion_requests (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  requester_user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
   subject_user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
   request_scope text NOT NULL DEFAULT 'account_and_associated_learning_records'
     CHECK (request_scope = 'account_and_associated_learning_records'),
@@ -30,7 +29,6 @@ CREATE TABLE private.account_deletion_requests (
       'identity_mismatch', 'request_out_of_scope', 'other_review'
     )),
   completed_at timestamptz,
-  CHECK (requester_user_id IS NOT DISTINCT FROM subject_user_id),
   CHECK (identity_verified_at = requested_at),
   CHECK (response_due_at = requested_at + interval '30 days'),
   CHECK (
@@ -52,6 +50,7 @@ CREATE TABLE private.account_deletion_legal_holds (
   request_id uuid NOT NULL
     REFERENCES private.account_deletion_requests(id) ON DELETE RESTRICT,
   subject_user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  prior_request_status text NOT NULL CHECK (prior_request_status IN ('under_review', 'approved')),
   authority_category text NOT NULL
     CHECK (authority_category IN (
       'court_order', 'statutory_requirement', 'safeguarding',
@@ -108,7 +107,6 @@ BEGIN
     OLD.identity_verification_method, OLD.identity_verified_at,
     OLD.requester_email_confirmed_at, OLD.requested_at, OLD.response_due_at
   )
-  OR (NEW.requester_user_id IS DISTINCT FROM OLD.requester_user_id AND NEW.requester_user_id IS NOT NULL)
   OR (NEW.subject_user_id IS DISTINCT FROM OLD.subject_user_id AND NEW.subject_user_id IS NOT NULL) THEN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_request_identity_immutable';
   END IF;
@@ -116,7 +114,7 @@ BEGIN
   IF NEW.status IS DISTINCT FROM OLD.status AND NOT (
     (OLD.status = 'under_review' AND NEW.status IN ('on_hold', 'approved', 'rejected'))
     OR (OLD.status = 'approved' AND NEW.status IN ('on_hold', 'executing'))
-    OR (OLD.status = 'on_hold' AND NEW.status = 'under_review')
+    OR (OLD.status = 'on_hold' AND NEW.status IN ('under_review', 'approved'))
     OR (OLD.status = 'executing' AND NEW.status = 'completed')
   ) THEN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_request_invalid_transition';
@@ -157,10 +155,10 @@ BEGIN
   END IF;
 
   IF ROW(
-    NEW.id, NEW.request_id, NEW.authority_category, NEW.authority_reference,
+    NEW.id, NEW.request_id, NEW.prior_request_status, NEW.authority_category, NEW.authority_reference,
     NEW.reason_summary, NEW.placed_by, NEW.placed_at, NEW.review_due_at
   ) IS DISTINCT FROM ROW(
-    OLD.id, OLD.request_id, OLD.authority_category, OLD.authority_reference,
+    OLD.id, OLD.request_id, OLD.prior_request_status, OLD.authority_category, OLD.authority_reference,
     OLD.reason_summary, OLD.placed_by, OLD.placed_at, OLD.review_due_at
   )
   OR (NEW.subject_user_id IS DISTINCT FROM OLD.subject_user_id AND NEW.subject_user_id IS NOT NULL) THEN
@@ -234,12 +232,12 @@ BEGIN
 
   request_time := clock_timestamp();
   INSERT INTO private.account_deletion_requests (
-    requester_user_id, subject_user_id, request_reason_category, status,
+    subject_user_id, request_reason_category, status,
     identity_verification_method, identity_verified_at,
     requester_email_confirmed_at, requested_at, response_due_at
   )
   VALUES (
-    actor_id, actor_id, p_reason_category, 'under_review',
+    actor_id, p_reason_category, 'under_review',
     'authenticated_confirmed_email', request_time,
     confirmed_at, request_time, request_time + interval '30 days'
   )
@@ -262,7 +260,6 @@ $function$;
 CREATE OR REPLACE FUNCTION public.list_account_deletion_requests()
 RETURNS TABLE(
   request_id uuid,
-  requester_user_id uuid,
   subject_user_id uuid,
   request_reason_category text,
   request_status text,
@@ -297,7 +294,7 @@ BEGIN
   );
 
   RETURN QUERY
-  SELECT request.id, request.requester_user_id, request.subject_user_id,
+  SELECT request.id, request.subject_user_id,
     request.request_reason_category, request.status, request.requested_at,
     request.response_due_at, request.identity_verified_at, request.reviewed_at,
     request.decision_reason_category,
@@ -364,11 +361,11 @@ BEGIN
   END IF;
 
   INSERT INTO private.account_deletion_legal_holds (
-    request_id, subject_user_id, authority_category, authority_reference,
+    request_id, subject_user_id, prior_request_status, authority_category, authority_reference,
     reason_summary, placed_by, review_due_at
   )
   VALUES (
-    p_request_id, selected_request.subject_user_id, p_authority_category,
+    p_request_id, selected_request.subject_user_id, selected_request.status, p_authority_category,
     btrim(p_authority_reference), btrim(p_reason_summary), actor_id, p_review_due_at
   )
   RETURNING * INTO created_hold;
@@ -430,7 +427,7 @@ BEGIN
   WHERE id = p_hold_id;
 
   UPDATE private.account_deletion_requests
-  SET status = 'under_review'
+  SET status = selected_hold.prior_request_status
   WHERE id = selected_hold.request_id AND status = 'on_hold';
 
   INSERT INTO private.security_audit_events (
