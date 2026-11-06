@@ -39,9 +39,9 @@ The approved intended journey is:
 3. Learner receives the complete Evaluation Report without payment; it remains free permanently (₹999 is stated reference value only).
 4. Learner receives a meaningful free starter remedial lesson/activity and can continue using designated free practice/resources.
 5. The learner may purchase the standalone ₹1,999 Remedial Course entitlement or receive an approved complimentary course grant.
-6. Human grading is separately optional: the account may use its one free Standard task entitlement, then purchase a 2-, 5-, 10- or 20-credit package for additional human-reviewed submissions.
+6. Human grading is separately optional: the account may use its one complimentary task entitlement when its server-calculated requirement is exactly one credit, then purchase a 2-, 5-, 10- or 20-credit package for additional human-reviewed submissions.
 
-The complete report and already-earned report/history remain visible even when Study Lab is inactive or grading credits are exhausted. A paywall may appear when the learner chooses a paid course or paid grading action; it must not block the free diagnostic, complete report, free starter activity, free resources or access already purchased.
+The complete report and already-earned report/history remain visible even when the Remedial Course entitlement is inactive or grading credits are exhausted. A paywall may appear when the learner chooses a paid course or paid grading action; it must not block the free diagnostic, complete report, free starter activity, free resources or access already purchased.
 
 ### 3.1 Course entitlements and Admin grants
 
@@ -98,7 +98,7 @@ Do not combine CBSE, IB and Cambridge response distributions. Do not transfer on
 1. Collect at least five recent official past/sample assessments or validated school assessments where available and rights permit. Record source, date/series, curriculum mapping and the actual written-response task inventory.
 2. Count one independently gradable written-response prompt as one task. Do not count each rubric criterion, evidence observation, subskill or marking bullet as a separate response.
 3. Exclude selected-response items that do not require human grading. Keep objective task volume separately for product planning.
-4. Record for each written task: expected response range/ideal words, marks, independently graded parts, rubric criteria, response mode, estimated grader minutes, assigned tier and credits.
+4. Record for each written task: expected response range/ideal words, accepted/expected word basis, marks, independently graded parts, rubric criteria, response mode, predicted grader minutes, word-based credits, time-based credits and final maximum credits.
 5. Use a median of paper-level distributions where possible so one unusually long or short paper does not dominate the curriculum. When fewer than five comparable assessments are available, mark the estimate provisional; do not fabricate a representative frequency.
 
 The user's example that CBSE may feature approximately 50-word responses frequently is a research hypothesis for the specific CBSE grade/subject/examination format, not a universal CBSE rule. Validate it against the selected official materials before using it to forecast usage. Board-specific frequency must never modify the universal price tariff.
@@ -127,24 +127,24 @@ Recalculate when a syllabus/exam pattern changes, after the first meaningful sam
 - The 10 MB and 10-page PDF restrictions are file-safety limits, not credit tiers or billable page counts. A ten-page file is not automatically ten credits.
 - Use PDF.js for digital text extraction first. Scanned-page OCR is a later external-processing path subject to synthetic quality evaluation, regional/privacy/consent approval and free-quota limits. OCR failure or quota exhaustion must preserve the original accepted PDF and allow the approved manual-grading fallback.
 - Do not charge more solely because a response is a PDF, because OCR was required, because a file has more pages within the allowed cap, or because its raw word count exceeds the ideal target.
-- Set the task tier and credits from the approved task scope/rubric/predicted grader minutes before submission. Display that requirement, price, scope, rubric and SLA before acceptance.
+- Calculate required credits from the approved task scope/rubric, server-derived accepted word count and predicted grader minutes before submission. Display the word/time calculations, final credits, price, scope, rubric and SLA before acceptance.
 - If a learner chooses an additional independent task or a broader paper, require an explicit revised task/price/credit confirmation before accepting it. No retrospective or surprise debit is permitted.
 
 ## 7. Turnaround, capacity and free grading
 
-**One shared launch target applies:** 24 elapsed hours from server-accepted human-grading submission to first publication of final human feedback. This applies to complimentary Standard work and all paid tiers when accepted. The approved 24-hour flagship target supersedes the earlier 72-hour free / 48-hour paid Standard / separate urgent 24-hour pricing proposal. There is no separate ₹199 urgent-grading add-on at initial launch. Reconsider differentiated SLAs only after real fulfilment evidence and a new Founder decision.
+**One shared launch target applies:** 24 elapsed hours from server-accepted human-grading submission to first publication of final human feedback. This applies to the one-time complimentary one-credit task entitlement and all other accepted human-grading work. The approved 24-hour flagship target supersedes the earlier 72-hour free / 48-hour paid Standard / separate urgent 24-hour pricing proposal. There is no separate ₹199 urgent-grading add-on at initial launch. Reconsider differentiated SLAs only after real fulfilment evidence and a new Founder decision.
 
 Initial Founder-as-sole-grader controls remain:
 - Up to 30 paid human-grading submissions per month.
 - Target no more than two newly accepted paid submissions per day.
-- Up to four complimentary Standard graded tasks per week.
+- Up to four complimentary one-credit graded tasks per week, subject to the one-time per-account entitlement and capacity safeguards.
 - Do not accept work unless the 24-hour target can be met; preserve the learner's draft and unspent entitlement/credit when capacity is full.
 - Do not sell credit packs or course promises beyond demonstrated fulfilment capacity. Show availability before acceptance.
 
 ## 8. Payments, ledger and provider boundaries
 
 - Use an append-only, server-authoritative credit ledger. It records purchase, reservation, consumption, release, refund, expiry and manual adjustment; it does not store a mutable client-controlled balance.
-- Maintain course/subscription entitlements separately from human-grading credits and their ledger.
+- Maintain standalone Remedial Course entitlements separately from human-grading credits and their append-only ledger.
 - A payment transaction must be matched to a trusted provider confirmation/webhook or an explicitly approved, auditable manual reconciliation process before entitlements/credits are activated.
 - Payment provider, email provider, merchant terms, refund policy, tax treatment and checkout architecture are not selected by this approval. Compare low/no-cost options first; no provider account, hosted resource, paid API, charge or live payment is authorised here.
 - Normal public learner registration must require verified email before real learner-record access and paid entitlements are enabled. Staff invitation acceptance already has separate verified-email controls. Local synthetic CI may use preconfirmed fixtures without sending real email; no transactional email provider is selected or configured.
@@ -152,23 +152,18 @@ Initial Founder-as-sole-grader controls remain:
 
 ## 9. Integrated implementation order
 
-Keep the approved engineering sequence intact; commercial implementation must not delay the permanently free Diagnostic/Report:
+Keep the approved sequence intact; commercial implementation must not delay the permanently free Diagnostic/Report:
 
 1. **Close Phase 1C:** both synchronized Phase 1C-F races pass exact-head synthetic CI. Complete the final Phase 1C exit-criteria and documentation review; Phase 1D remains blocked until that closeout is accepted.
-2. **Phase 1D:** private PDF storage/file controls, signature/MIME/size/page checks, assignment-scoped access, original-file integrity, PDF.js extraction and transcript-version controls.
-3. **Phase 1E:** tested database and file-object backups, restore, deletion and retention workflows.
-4. **Phase 1F:** synthetic-data security acceptance, threat-model closure and required runbooks.
-5. **Shared flagship submission/grading workflow:** typed/PDF submission, existing grader queue/search/filter management, rubric-based human grading and publication, 24-hour SLA, then timer/analytics and synthetic/pilot validation. Search/filter stays within the existing PostgreSQL/Worker application; no second service or search database.
-6. **Cycle 1 free Diagnostic/Report:** after the shared flagship feature is built and pilot-validated, author and validate the approved Grade 9 / IB MYP Year 4 diagnostic and teacher pack, build the free Diagnostic and complete Evaluation Report, and verify accessibility/calculations.
-7. **Mandatory whole-website copy cleanup:** complete the existing route/state copy sweep immediately after Diagnostic/Report validation and before any remedial content authoring.
+2. **Phase 1D:** implement private PDF storage/file controls, signature/MIME/size/page checks, assignment-scoped access, original-file integrity, PDF.js extraction and transcript-version controls.
+3. **Phase 1E:** implement and test database/file-object backups, restore, deletion and retention workflows.
+4. **Phase 1F:** complete synthetic-data security acceptance, threat-model closure and required runbooks.
+5. **Shared flagship submission/grading workflow:** implement typed/PDF submission, the existing grader queue with approved search/filter management, rubric-based human grading and human-only publication, the 24-hour SLA, then timer/analytics and synthetic/pilot validation.
+6. **Cycle 1 Diagnostic/Report:** after the shared flagship feature is built and pilot-validated, author and validate the approved Grade 9 / IB MYP Year 4 Diagnostic and teacher pack, build the complete permanently free Evaluation Report, and verify accessibility/calculations.
+7. **Mandatory whole-website copy cleanup:** complete the existing route/state copy sweep immediately after Diagnostic/Report validation and before remedial-content authoring.
 8. **Remedial Course:** implement the standalone ₹1,999 full course, five 60-minute sessions by default; extend to six/seven only where evaluation analytics justify it. Preserve a meaningful free starter activity.
-9. **Commercial systems:** versioned catalogue/campaigns, append-only credit ledger, separate course entitlements, trusted payment confirmation, idempotent fulfilment, refund/reversal and audited Admin exceptions. Only the approved Diwali offers may be configured.
+9. **Commercial systems:** implement versioned catalogue/campaigns, append-only credit ledger, separate course entitlements, trusted payment confirmation, idempotent fulfilment, refund/reversal and audited Admin exceptions. Only the two approved Diwali offers may be configured.
 10. **Branded staging and final acceptance:** verify the complete synthetic journey on the dedicated staging host on `gradioprep.com`, backed by an isolated hosted synthetic backend, before final Diagnostic/Report acceptance. Hosted resources, DNS/custom-domain mapping and paid usage each require separate approval.
-8. **Remedial course:** author the five-session default (extend to six/seven only where justified), free starter activity, personalised pathway, and fresh outcome check. Preserve the report and starter activity regardless of paid status.
-9. **Commercial entitlement layer, before selling paid access:** implement ordinary learner email verification, course entitlements, credit ledger, payment confirmation/checkout, approved Admin dashboard and access/credit exception workflow. The learner-facing Admin dashboard and customer payment UI are not Phase 1C security work.
-10. **Controlled launch:** retain the free resources; initially expose only 2- and 5-credit packs; enforce the one-free-Standard-task entitlement and capacity limits; measure real grading time, task frequency, pack usage, conversion, refunds and contribution. Cambridge Grade 6 remains blocked until Cycle 1 completes and the Founder directs the transition.
-
-Where implementation order must be parallelised, shared data contracts and security design may be prepared earlier, but do not begin paid sales or lock the diagnostic/report behind checkout. Do not request unnecessary Preview reviews: only a new concrete, substantial learner/staff-visible feature warrants Founder inspection.
 
 ## 10. Recalibration and launch metrics
 
@@ -179,7 +174,7 @@ Measure by curriculum, grade, task family and tier:
 - Standard/Premium/Elite mix and average credits per learner;
 - credit pack purchase/use/refund/expiry and unused balances;
 - free diagnostic/report completion and report-to-starter activity conversion;
-- starter-to-full-course conversion and Study Lab retention;
+- free-starter-to-Remedial-Course conversion and course completion;
 - one-free-task use, paid-grading conversion and repeat purchases;
 - 24-hour target compliance, queue age, capacity-full events and regrades;
 - contribution after payment fees, taxes, refunds and fulfilment costs.
