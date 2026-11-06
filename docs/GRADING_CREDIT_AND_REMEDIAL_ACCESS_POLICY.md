@@ -167,11 +167,11 @@ Keep the approved sequence intact; commercial implementation must not delay the 
 
 ## 10. Recalibration and launch metrics
 
-Measure by curriculum, grade, task family and tier:
+Measure by curriculum, grade and task family; report the distribution of tasks and required-credit bands:
 - response-task frequency and marks share;
 - expected versus actual grader minutes (median and upper quartile);
 - expected versus actual credits consumed;
-- Standard/Premium/Elite mix and average credits per learner;
+- observed credit-band mix and average credits consumed per learner;
 - credit pack purchase/use/refund/expiry and unused balances;
 - free diagnostic/report completion and report-to-starter activity conversion;
 - free-starter-to-Remedial-Course conversion and course completion;
