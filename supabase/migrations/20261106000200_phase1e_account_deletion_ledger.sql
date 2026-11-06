@@ -22,7 +22,7 @@ CREATE TABLE private.account_deletion_requests (
   requester_email_confirmed_at timestamptz NOT NULL,
   requested_at timestamptz NOT NULL,
   response_due_at timestamptz NOT NULL,
-  reviewed_by uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  reviewed_by uuid, -- retain only the staff UUID as minimal, non-content decision evidence
   reviewed_at timestamptz,
   decision_reason_category text
     CHECK (decision_reason_category IS NULL OR decision_reason_category IN (
@@ -61,10 +61,10 @@ CREATE TABLE private.account_deletion_legal_holds (
     CHECK (char_length(btrim(authority_reference)) BETWEEN 3 AND 120),
   reason_summary text NOT NULL
     CHECK (char_length(btrim(reason_summary)) BETWEEN 12 AND 500),
-  placed_by uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  placed_by uuid, -- minimal non-content actor reference survives account closure
   placed_at timestamptz NOT NULL DEFAULT clock_timestamp(),
   review_due_at timestamptz NOT NULL CHECK (review_due_at > placed_at),
-  released_by uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  released_by uuid, -- minimal non-content actor reference survives account closure
   released_at timestamptz,
   release_reason_category text
     CHECK (release_reason_category IS NULL OR release_reason_category IN (
@@ -100,16 +100,16 @@ BEGIN
   END IF;
 
   IF ROW(
-    NEW.id, NEW.requester_user_id, NEW.subject_user_id, NEW.request_scope,
-    NEW.request_reason_category, NEW.identity_verification_method,
-    NEW.identity_verified_at, NEW.requester_email_confirmed_at,
-    NEW.requested_at, NEW.response_due_at
+    NEW.id, NEW.request_scope, NEW.request_reason_category,
+    NEW.identity_verification_method, NEW.identity_verified_at,
+    NEW.requester_email_confirmed_at, NEW.requested_at, NEW.response_due_at
   ) IS DISTINCT FROM ROW(
-    OLD.id, OLD.requester_user_id, OLD.subject_user_id, OLD.request_scope,
-    OLD.request_reason_category, OLD.identity_verification_method,
-    OLD.identity_verified_at, OLD.requester_email_confirmed_at,
-    OLD.requested_at, OLD.response_due_at
-  ) THEN
+    OLD.id, OLD.request_scope, OLD.request_reason_category,
+    OLD.identity_verification_method, OLD.identity_verified_at,
+    OLD.requester_email_confirmed_at, OLD.requested_at, OLD.response_due_at
+  )
+  OR (NEW.requester_user_id IS DISTINCT FROM OLD.requester_user_id AND NEW.requester_user_id IS NOT NULL)
+  OR (NEW.subject_user_id IS DISTINCT FROM OLD.subject_user_id AND NEW.subject_user_id IS NOT NULL) THEN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_request_identity_immutable';
   END IF;
 
@@ -157,14 +157,13 @@ BEGIN
   END IF;
 
   IF ROW(
-    NEW.id, NEW.request_id, NEW.subject_user_id, NEW.authority_category,
-    NEW.authority_reference, NEW.reason_summary, NEW.placed_by,
-    NEW.placed_at, NEW.review_due_at
+    NEW.id, NEW.request_id, NEW.authority_category, NEW.authority_reference,
+    NEW.reason_summary, NEW.placed_by, NEW.placed_at, NEW.review_due_at
   ) IS DISTINCT FROM ROW(
-    OLD.id, OLD.request_id, OLD.subject_user_id, OLD.authority_category,
-    OLD.authority_reference, OLD.reason_summary, OLD.placed_by,
-    OLD.placed_at, OLD.review_due_at
-  ) THEN
+    OLD.id, OLD.request_id, OLD.authority_category, OLD.authority_reference,
+    OLD.reason_summary, OLD.placed_by, OLD.placed_at, OLD.review_due_at
+  )
+  OR (NEW.subject_user_id IS DISTINCT FROM OLD.subject_user_id AND NEW.subject_user_id IS NOT NULL) THEN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_legal_hold_evidence_immutable';
   END IF;
 
@@ -337,7 +336,7 @@ BEGIN
   END IF;
 
   IF p_request_id IS NULL
-    OR p_authority_category NOT IN (
+    OR p_authority_category IS NULL OR p_authority_category NOT IN (
       'court_order', 'statutory_requirement', 'safeguarding',
       'active_dispute', 'regulatory_request', 'other_approved'
     )
@@ -411,7 +410,7 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_owner_aal2_required';
   END IF;
 
-  IF p_hold_id IS NULL OR p_release_reason_category NOT IN (
+  IF p_hold_id IS NULL OR p_release_reason_category IS NULL OR p_release_reason_category NOT IN (
     'authority_expired', 'authority_withdrawn', 'review_cleared', 'other_release'
   ) THEN
     RAISE EXCEPTION USING ERRCODE = '22023', MESSAGE = 'invalid_account_deletion_hold_release';
@@ -469,8 +468,8 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_owner_aal2_required';
   END IF;
 
-  IF p_request_id IS NULL OR p_decision NOT IN ('approve', 'reject')
-    OR p_reason_category NOT IN (
+  IF p_request_id IS NULL OR p_decision IS NULL OR p_decision NOT IN ('approve', 'reject')
+    OR p_reason_category IS NULL OR p_reason_category NOT IN (
       'retention_review_complete', 'legal_retention_required',
       'identity_mismatch', 'request_out_of_scope', 'other_review'
     ) THEN
@@ -482,7 +481,7 @@ BEGIN
   WHERE request.id = p_request_id
   FOR UPDATE;
 
-  IF NOT FOUND OR selected_request.status <> 'under_review' THEN
+  IF NOT FOUND THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'account_deletion_request_not_reviewable';
   END IF;
   IF EXISTS (
@@ -490,6 +489,9 @@ BEGIN
     WHERE legal_hold.request_id = p_request_id AND legal_hold.released_at IS NULL
   ) THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'account_deletion_request_on_legal_hold';
+  END IF;
+  IF selected_request.status <> 'under_review' THEN
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'account_deletion_request_not_reviewable';
   END IF;
 
   resulting_status := CASE WHEN p_decision = 'approve' THEN 'approved' ELSE 'rejected' END;
