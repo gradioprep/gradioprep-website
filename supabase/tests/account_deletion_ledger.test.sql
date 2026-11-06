@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(35);
+SELECT plan(36);
 
 SELECT ok(
   (SELECT relrowsecurity FROM pg_class WHERE oid = 'private.account_deletion_requests'::regclass),
@@ -183,6 +183,16 @@ SELECT is(
   'placing a legal hold moves the request into on-hold state'
 );
 SELECT ok(
+  (SELECT has_active_legal_hold
+          AND active_legal_hold_authority_category = 'court_order'
+          AND active_legal_hold_authority_reference = 'SYNTHETIC-CASE-01'
+          AND active_legal_hold_reason_summary = 'Synthetic legal hold reason for permission testing'
+          AND active_legal_hold_review_due_at > now()
+   FROM public.list_account_deletion_requests()
+   WHERE request_id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
+  'Owner AAL2 queue exposes the active hold authority, reason and review date'
+);
+SELECT ok(
   (SELECT authority_reference = 'SYNTHETIC-CASE-01'
           AND char_length(reason_summary) >= 12
           AND review_due_at > placed_at
@@ -244,8 +254,8 @@ SELECT is(
      'account_deletion_legal_hold_released',
      'account_deletion_request_reviewed'
    )),
-  5,
-  'request, protected queue read, hold and review transitions are audited'
+  6,
+  'request, protected queue reads, hold and review transitions are audited'
 );
 SELECT throws_ok(
   format(
