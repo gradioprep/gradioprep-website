@@ -224,10 +224,20 @@ BEGIN
   END IF;
 
   IF NEW.state IS DISTINCT FROM OLD.state AND NOT (
-    OLD.state = 'expiry_due' AND NEW.state = 'expired'
-    AND OLD.expires_at <= clock_timestamp()
-    AND NEW.expired_at IS NOT NULL
-    AND NEW.expired_at >= OLD.expires_at
+    (
+      OLD.state = 'retained' AND NEW.state = 'expiry_due'
+      AND OLD.source_deleted_at IS NULL
+      AND NEW.source_deleted_at IS NOT NULL
+      AND NEW.expires_at = NEW.source_deleted_at + interval '30 days'
+      AND NEW.expired_at IS NULL
+    )
+    OR
+    (
+      OLD.state = 'expiry_due' AND NEW.state = 'expired'
+      AND OLD.expires_at <= clock_timestamp()
+      AND NEW.expired_at IS NOT NULL
+      AND NEW.expired_at >= OLD.expires_at
+    )
   ) THEN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'retention_backup_invalid_transition';
   END IF;
@@ -289,6 +299,8 @@ CREATE TRIGGER retention_backup_late_insert_expiry
   BEFORE INSERT ON private.retention_backup_objects
   FOR EACH ROW EXECUTE FUNCTION private.prepare_late_retention_backup_expiry();
 
+-- Recreate the Owner queue with the account-closure checkpoint fields.
+DROP FUNCTION public.list_account_deletion_requests(uuid);
 CREATE OR REPLACE FUNCTION public.close_account_for_deletion(p_request_id uuid)
 RETURNS TABLE(
   request_id uuid,
