@@ -150,19 +150,48 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_legal_hold_delete_forbidden';
   END IF;
 
+  -- Account closure may detach the subject UUID, but must not rewrite the
+  -- underlying authority, reason, review schedule or release history.
+  IF NEW.subject_user_id IS DISTINCT FROM OLD.subject_user_id
+    AND NEW.subject_user_id IS NOT NULL THEN
+    RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_legal_hold_evidence_immutable';
+  END IF;
+
   IF OLD.released_at IS NOT NULL THEN
-    RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_legal_hold_release_immutable';
+    IF ROW(
+      NEW.id, NEW.request_id, NEW.prior_request_status, NEW.authority_category,
+      NEW.authority_reference, NEW.reason_summary, NEW.placed_by,
+      NEW.placed_at, NEW.review_due_at, NEW.released_by, NEW.released_at,
+      NEW.release_reason_category
+    ) IS DISTINCT FROM ROW(
+      OLD.id, OLD.request_id, OLD.prior_request_status, OLD.authority_category,
+      OLD.authority_reference, OLD.reason_summary, OLD.placed_by,
+      OLD.placed_at, OLD.review_due_at, OLD.released_by, OLD.released_at,
+      OLD.release_reason_category
+    ) THEN
+      RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_legal_hold_release_immutable';
+    END IF;
+    RETURN NEW;
   END IF;
 
   IF ROW(
-    NEW.id, NEW.request_id, NEW.prior_request_status, NEW.authority_category, NEW.authority_reference,
-    NEW.reason_summary, NEW.placed_by, NEW.placed_at, NEW.review_due_at
+    NEW.id, NEW.request_id, NEW.prior_request_status, NEW.authority_category,
+    NEW.authority_reference, NEW.reason_summary, NEW.placed_by,
+    NEW.placed_at, NEW.review_due_at
   ) IS DISTINCT FROM ROW(
-    OLD.id, OLD.request_id, OLD.prior_request_status, OLD.authority_category, OLD.authority_reference,
-    OLD.reason_summary, OLD.placed_by, OLD.placed_at, OLD.review_due_at
-  )
-  OR (NEW.subject_user_id IS DISTINCT FROM OLD.subject_user_id AND NEW.subject_user_id IS NOT NULL) THEN
+    OLD.id, OLD.request_id, OLD.prior_request_status, OLD.authority_category,
+    OLD.authority_reference, OLD.reason_summary, OLD.placed_by,
+    OLD.placed_at, OLD.review_due_at
+  ) THEN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_legal_hold_evidence_immutable';
+  END IF;
+
+  -- A subject FK can be set NULL when the account identity is removed. This
+  -- is not a hold release and must not change the legal-hold state.
+  IF NEW.released_at IS NULL
+    AND NEW.released_by IS NULL
+    AND NEW.release_reason_category IS NULL THEN
+    RETURN NEW;
   END IF;
 
   IF NEW.released_at IS NULL OR NEW.released_by IS NULL
