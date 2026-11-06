@@ -174,7 +174,7 @@ SELECT is((SELECT count(*)::integer FROM public.role_assignments), 1, 'owner at 
 SELECT is((SELECT count(*)::integer FROM public.guardian_learner_links), 0, 'owner at AAL1 cannot inspect guardian links');
 SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 0, 'owner at AAL1 cannot inspect learner enrolments');
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
-SELECT is((SELECT count(*)::integer FROM public.profiles), 12, 'active owner at AAL2 can read all twelve synthetic profiles including suspended accounts');
+SELECT is((SELECT count(*)::integer FROM public.profiles), 13, 'active owner at AAL2 can read all thirteen synthetic profiles including suspended accounts');
 SELECT is((SELECT count(*)::integer FROM public.profiles WHERE user_id = '99999999-9999-4999-8999-999999999999'), 1, 'active owner at AAL2 can inspect a suspended account');
 SELECT is((SELECT display_name FROM public.profiles WHERE user_id = '99999999-9999-4999-8999-999999999999'), 'Synthetic Suspended Student', 'suspended profile display name remains unchanged after blocked update');
 SELECT is((SELECT count(*)::integer FROM public.role_assignments WHERE role = 'owner'), 1, 'only the explicitly seeded owner has the owner role');
