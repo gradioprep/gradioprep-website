@@ -23,6 +23,24 @@ function fail(message) {
   throw new Error(message);
 }
 
+function safeDiagnostic(stderr) {
+  const lines = String(stderr ?? "").split(/\r?\n/);
+  // Keep PostgreSQL's structured error headers, never the SQL statement or
+  // nearby LINE/CONTEXT output that can contain stored application data.
+  const diagnosticLines = lines.filter(line =>
+    /^\s*(?:pg_restore:\s+(?:error|warning):|ERROR:|FATAL:|PANIC:|HINT:)/i.test(line)
+  );
+  return diagnosticLines
+    .slice(0, 5)
+    .join(" ")
+    .replace(/eyJ[A-Za-z0-9_-]{20,}/g, "[redacted-token]")
+    .replace(/\b(?:sb_secret|sb_publishable)_[A-Za-z0-9_-]{10,}\b/g, "[redacted-key]")
+    .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, "[redacted-email]")
+    .replace(/(?:postgres(?:ql)?:\/\/)[^\s"'<>]+/gi, "[redacted-database-url]")
+    .replace(/\b(?:password|secret|token|api[_ -]?key)\s*[=:]\s*[^,\s;]+/gi, "[redacted-credential]")
+    .slice(0, 700);
+}
+
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
     cwd: appRoot,
@@ -37,14 +55,7 @@ function run(command, args, options = {}) {
       if (args[index - 1] === "-c") return "[SQL omitted]";
       return String(arg).replace(/eyJ[A-Za-z0-9_-]{20,}/g, "[redacted]");
     }).join(" ");
-    const safeStderr = String(result.stderr ?? "")
-      .split(/\r?\n/)
-      .filter(Boolean)
-      .slice(-3)
-      .join(" ")
-      .replace(/eyJ[A-Za-z0-9_-]{20,}/g, "[redacted]")
-      .replace(/(?:SUPABASE_SERVICE_ROLE_KEY|service_role key)[^\s]*/gi, "[redacted]")
-      .slice(0, 700);
+    const safeStderr = safeDiagnostic(result.stderr);
     fail(
       command + " " + safeArgs + " failed (exit " + String(result.status) + ")." +
       (safeStderr ? " Safe diagnostic: " + safeStderr : ""),
