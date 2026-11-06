@@ -43,7 +43,14 @@ CREATE TABLE private.submission_files (
     upload_state <> 'accepted'
     OR (
       sha256 IS NOT NULL
-      AND sha256 ~ '^[a-f0-9]{64}
+      AND sha256 ~ '^[a-f0-9]{64}$'
+      AND byte_size IS NOT NULL
+      AND byte_size BETWEEN 1 AND 10485760
+      AND mime_type IS NOT NULL
+      AND mime_type = 'application/pdf'
+      AND page_count IS NOT NULL
+      AND page_count BETWEEN 1 AND 10
+      AND accepted_at IS NOT NULL
       AND rejection_category IS NULL
     )
   ),
