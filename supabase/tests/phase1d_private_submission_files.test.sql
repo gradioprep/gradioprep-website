@@ -63,31 +63,8 @@ FROM public.accept_assessment_submission(
 );
 RESET ROLE;
 
-CREATE TEMP TABLE phase1d_pending_context (file_id uuid, object_path text);
-GRANT SELECT, INSERT ON phase1d_pending_context TO service_role;
-SET LOCAL ROLE service_role;
-SELECT set_config(
-  'request.jwt.claims',
-  '{"sub":"11111111-1111-4111-8111-111111111111","role":"service_role","aal":"aal1"}',
-  true
-);
-INSERT INTO phase1d_pending_context
-SELECT file_id, object_path
-FROM public.begin_submission_file_upload(
-  '11111111-1111-4111-8111-111111111111',
-  (SELECT submission_id FROM phase1d_submission_context)
-);
-RESET ROLE;
-
-SELECT is(
-  (SELECT upload_state FROM private.submission_files
-   WHERE id = (SELECT file_id FROM phase1d_pending_context)),
-  'pending'::text,
-  'Worker upload initialization creates a pending opaque-path record'
-);
-
--- Create a synthetic accepted metadata row (the Worker/Storage end-to-end
--- path is exercised by Playwright). This row deliberately contains no bytes.
+-- Create a synthetic accepted file version first. The pending upload below
+-- must receive version 2; its Worker acceptance is covered end-to-end in Playwright.
 INSERT INTO private.submission_files (
   submission_id, learner_id, version_number, object_path,
   sha256, byte_size, mime_type, page_count,
@@ -116,6 +93,29 @@ SELECT id, submission_id
 FROM private.submission_files
 WHERE upload_state = 'accepted'
   AND submission_id = (SELECT submission_id FROM phase1d_submission_context);
+
+CREATE TEMP TABLE phase1d_pending_context (file_id uuid, object_path text);
+GRANT SELECT, INSERT ON phase1d_pending_context TO service_role;
+SET LOCAL ROLE service_role;
+SELECT set_config(
+  'request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"service_role","aal":"aal1"}',
+  true
+);
+INSERT INTO phase1d_pending_context
+SELECT file_id, object_path
+FROM public.begin_submission_file_upload(
+  '11111111-1111-4111-8111-111111111111',
+  (SELECT submission_id FROM phase1d_submission_context)
+);
+RESET ROLE;
+
+SELECT is(
+  (SELECT upload_state FROM private.submission_files
+   WHERE id = (SELECT file_id FROM phase1d_pending_context)),
+  'pending'::text,
+  'Worker upload initialization creates a pending opaque-path record'
+);
 
 INSERT INTO public.submission_grader_assignments (
   submission_id, grader_user_id, assigned_by, reason
