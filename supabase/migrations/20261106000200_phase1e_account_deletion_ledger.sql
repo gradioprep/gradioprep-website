@@ -268,7 +268,11 @@ RETURNS TABLE(
   identity_verified_at timestamptz,
   reviewed_at timestamptz,
   decision_reason_category text,
-  has_active_legal_hold boolean
+  has_active_legal_hold boolean,
+  active_legal_hold_authority_category text,
+  active_legal_hold_authority_reference text,
+  active_legal_hold_reason_summary text,
+  active_legal_hold_review_due_at timestamptz
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -300,6 +304,26 @@ BEGIN
     request.decision_reason_category,
     EXISTS (
       SELECT 1 FROM private.account_deletion_legal_holds AS legal_hold
+      WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
+    ),
+    (
+      SELECT legal_hold.authority_category
+      FROM private.account_deletion_legal_holds AS legal_hold
+      WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
+    ),
+    (
+      SELECT legal_hold.authority_reference
+      FROM private.account_deletion_legal_holds AS legal_hold
+      WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
+    ),
+    (
+      SELECT legal_hold.reason_summary
+      FROM private.account_deletion_legal_holds AS legal_hold
+      WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
+    ),
+    (
+      SELECT legal_hold.review_due_at
+      FROM private.account_deletion_legal_holds AS legal_hold
       WHERE legal_hold.request_id = request.id AND legal_hold.released_at IS NULL
     )
   FROM private.account_deletion_requests AS request
@@ -350,7 +374,7 @@ BEGIN
   WHERE request.id = p_request_id
   FOR UPDATE;
 
-  IF NOT FOUND OR selected_request.status IN ('completed', 'rejected', 'cancelled') THEN
+  IF NOT FOUND OR selected_request.status NOT IN ('under_review', 'approved') THEN
     RAISE EXCEPTION USING ERRCODE = 'P0002', MESSAGE = 'account_deletion_request_not_open';
   END IF;
   IF EXISTS (
