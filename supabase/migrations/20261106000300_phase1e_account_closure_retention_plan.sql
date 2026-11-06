@@ -18,7 +18,18 @@ ALTER TABLE private.account_deletion_requests
       (closure_executed_at IS NOT NULL AND closure_executed_by IS NOT NULL)
     ),
   ADD CONSTRAINT account_deletion_execution_status_matches_evidence
-    CHECK ((status IN ('executing', 'completed')) = (closure_executed_at IS NOT NULL));
+    CHECK (
+      (
+        status IN ('executing', 'completed')
+        OR (status = 'on_hold' AND closure_executed_at IS NOT NULL)
+      ) = (closure_executed_at IS NOT NULL)
+    );
+
+ALTER TABLE private.account_deletion_legal_holds
+  DROP CONSTRAINT IF EXISTS account_deletion_legal_holds_prior_request_status_check;
+ALTER TABLE private.account_deletion_legal_holds
+  ADD CONSTRAINT account_deletion_legal_holds_prior_request_status_check
+  CHECK (prior_request_status IN ('under_review', 'approved', 'executing'));
 
 CREATE TABLE private.retention_items (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -123,8 +134,8 @@ BEGIN
   IF NEW.status IS DISTINCT FROM OLD.status AND NOT (
     (OLD.status = 'under_review' AND NEW.status IN ('on_hold', 'approved', 'rejected'))
     OR (OLD.status = 'approved' AND NEW.status IN ('on_hold', 'executing'))
-    OR (OLD.status = 'on_hold' AND NEW.status IN ('under_review', 'approved'))
-    OR (OLD.status = 'executing' AND NEW.status = 'completed')
+    OR (OLD.status = 'on_hold' AND NEW.status IN ('under_review', 'approved', 'executing'))
+    OR (OLD.status = 'executing' AND NEW.status IN ('on_hold', 'completed'))
   ) THEN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'account_deletion_request_invalid_transition';
   END IF;
@@ -425,8 +436,7 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0002', MESSAGE = 'account_deletion_request_not_found';
   END IF;
 
-  IF selected_request.status IN ('executing', 'completed')
-    AND selected_request.closure_executed_at IS NOT NULL THEN
+  IF selected_request.closure_executed_at IS NOT NULL THEN
     RETURN QUERY SELECT selected_request.id, selected_request.closure_executed_at,
       selected_request.retention_items_created, true;
     RETURN;
@@ -806,7 +816,7 @@ BEGIN
 
   IF p_request_id IS NULL OR NOT EXISTS (
     SELECT 1 FROM private.account_deletion_requests AS request
-    WHERE request.id = p_request_id AND request.status IN ('executing', 'completed')
+    WHERE request.id = p_request_id AND request.closure_executed_at IS NOT NULL
   ) THEN
     RAISE EXCEPTION USING ERRCODE = 'P0002', MESSAGE = 'account_retention_plan_not_found';
   END IF;
