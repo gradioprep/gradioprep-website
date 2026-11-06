@@ -225,3 +225,17 @@ The flagship plan and 24-hour grading target remain approved; they do not imply 
 The new service-role-only `record_worker_audit_outcome` function closes the browser-forgeable generic audit-writer path. The Worker keeps application reads/writes caller-scoped and uses a separate service-role Supabase client only for audit ingestion. The local service-role key is kept in ignored `.dev.vars`, not browser/Vite variables. Direct browser-RPC abuse, trusted audit-write semantics and the account/API route flows pass the exact-head tests. The route matrix still needs per-endpoint persisted audit correlation and explicit audit-service outage/failure injection before Phase 1C-E can be signed off.
 
 The flagship learner-facing PDF workflow, OCR, teacher workspace, full analytics and Diagnostic/Evaluation Report remain approved plans, not implemented capabilities. Phase 1C-E remains partial; Phase 1C-F remains open; Phase 1D remains blocked. No Preview was deployed. The approved product scope, timing, access and grading policies are unchanged.
+
+## 7. Submission queue search and management — approved addition, 6 November 2026
+
+Extend the existing queue/workspace; do not add a separate service, search database or application.
+
+Search permitted learner name/reference, exact or partial submission ID, task/assessment title and curriculum/task metadata. Do not make email, response text or private notes default search keys. Do not disclose out-of-scope record existence.
+
+Composable filters: board/programme (IB, Cambridge, CBSE), grade/year/stage, subject, pathway/unit/task, accepted date/range, workflow state, assignment (assigned to me; Owner-authorised team states), response format (typed/PDF), PDF extraction/review state and SLA category (normal, approaching, urgent, overdue). Filters combine; show active filters and clear/reset actions.
+
+Default order remains accepted_at ascending (oldest first), with stable unique tie-breaker. SLA priority is a separate indicator and never silently reorders. Overdue submissions remain visible.
+
+Use existing PostgreSQL and same-origin Worker APIs. Validate/bound parameters; debounce browser input; filter/search server-side after authorization; use stable cursor/keyset pagination; return only actor-authorised fields. Add indexes based on measured query plans and synthetic load tests. Owner remains Owner+AAL2; Grader remains Grader+AAL2 and active-assignment scoped. Enforce scope before search, counts, filters and pagination. No-store authenticated responses; never log search strings or private response content.
+
+Initial UX: 25 records per page, further pages on demand; accessible loading, no-match, error, active-filter and reset states. Acceptance tests cover name/reference and ID search, combined filters, board metadata, oldest-first ordering, stable pagination, SLA/overdue visibility, PDF states, cross-Grader denial, Owner/Grader scope, tampered parameters and no duplicate/omitted page-boundary records. Planned only; not implemented.
