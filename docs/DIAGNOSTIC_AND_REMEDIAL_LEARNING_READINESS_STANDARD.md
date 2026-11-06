@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.10
+**Version:** 2.11
 **Approved:** 31 October 2026  
 **Last updated:** 6 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
@@ -217,7 +217,7 @@ The route authorization/audit matrix maps Worker action `student_attempt_create`
 
 **Readiness implication:** passing the local security workflow does not mean the Diagnostic/Evaluation Report, PDF workflow, learner-facing diagnostic, remediation course, public learner registration or branded staging is ready. Preserve separate authoring, academic, rights, accessibility, public staging and final acceptance gates. The whole-website learner-facing copy cleanup remains after the Diagnostic/Report is completed and checked, and before remedial content is authored. Cambridge Grade 6 remains blocked until Cycle 1 is complete and the Founder directs transition.
 
-## 16. Verified Phase 1C-F synchronized race acceptance — 5 November 2026
+## 16. Historical Phase 1C-F synchronized race acceptance — superseded by Section 17
 
 **Exact verified code/test head:** `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481` on PR #22, branch `feature/phase-1b-local-auth-api`. Exact-head local synthetic GitHub Actions run [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858) completed successfully. The workflow passed **494 pgTAP assertions across 14 SQL files**, TypeScript/Worker/Vite builds, **31/31 Playwright tests**, local Supabase shutdown, local-only environment-file cleanup and the credential-free public-preview asset build. The Cloudflare Workers Builds check also passed. Public Preview creation/update and PR Preview-link steps were skipped. **No public Preview or production deployment occurred.**
 
@@ -237,3 +237,9 @@ Existing Owner assignment concurrency, feedback-publication concurrency and dupl
 The complete Diagnostic and Evaluation Report is permanently free; ₹999 is a stated reference value only. Standalone full Remedial Course: ₹1,999. Approved grading packages: 2 credits ₹1,500; 5 credits ₹3,750; Gold 10 credits ₹7,500; Platinum 20 credits ₹14,999. Regular package rates are approximately ₹750 per credit. The only Diwali offers are (1) free Diagnostic + complete Report, and (2) Platinum 20 credits plus full Remedial Course access for ₹7,999. No other discount, bonus credit or bundle is authorised. Exact campaign start/end timestamps and India-time display are required before activation.
 
 Credit tariff is identical for IB, Cambridge and CBSE: 1–50 words=1; 51–150=2; 151–350=3; above 350 add one credit per additional 100 words or part thereof. Time credits = max(1, ceiling(predicted grader minutes/20)); final credits are max(word-based,time-based), never their sum. Board-specific frequency data forecasts demand only. The old ₹199/month Study Lab and ₹399-per-credit proposals are superseded.
+
+## 17. Secure-foundation closeout and diagnostic readiness boundary — 6 November 2026
+
+Phase 1C is closed for the local-Supabase/synthetic-data scope. Its code/test head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481` passed [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858) with 494 pgTAP assertions across 14 SQL files, TypeScript/Worker/Vite builds and 31/31 Playwright tests, including both synchronized Phase 1C-F races. The final documentation review reconciles the 25-table protected inventory, 29-route authorization/audit matrix and 25 Worker-audited fail-closed routes. Audit correlation remains representative per distinct action, not exhaustive outcome coverage.
+
+This security closeout does not release the Diagnostic or Evaluation Report. The PDF/file workflow, full teacher/grader workflow, diagnostic assessment, report analytics and remedial course remain unbuilt or separately gated. The flagship feature must be implemented and pilot-validated before actual Cycle 1 Grade 9 / IB MYP Year 4 diagnostic item authoring. Branded staging on `gradioprep.com` with an isolated hosted synthetic backend remains mandatory before final Diagnostic/Report acceptance, subject to separate approvals. Cambridge Grade 6 remains blocked pending Cycle 1 completion and Founder direction.

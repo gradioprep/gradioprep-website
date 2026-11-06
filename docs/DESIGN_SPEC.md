@@ -1,7 +1,7 @@
 # GradioPrep — Design Specification
 
-**Version:** 2.22
-**Status:** Approved visual tokens, typography, Palette B, spacing and curriculum-first page architecture remain in force. Product name is GradioPrep. Application-code head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481` passed exact-head run [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858): 494 pgTAP assertions/14 SQL files, builds and 31/31 Playwright tests, including both Phase 1C-F races. Latest docs-only checkpoint before the present reconciliation `69423db70fd2ff1f45c57e8b8589a95673d00c4c` passed run [#42163013589](https://github.com/gradioprep/gradioprep-website/actions/runs/42163013589). Phase 1C-E audit correlation remains representative per distinct action, not exhaustive outcomes; complete final Phase 1C exit-criteria/documentation closeout before Phase 1D. Approved queue search/filter extends the existing grader queue and is not implemented. The public site is not connected to hosted Supabase. Branded staging on `gradioprep.com` with an isolated hosted synthetic backend is mandatory before final Diagnostic/Report acceptance, after separate hosted-resource and DNS approvals. No hosted provisioning, paid service, real learner data, merge, production deployment or DNS change is authorised.
+**Version:** 2.23
+**Status:** Approved visual tokens, typography, Palette B, spacing and curriculum-first page architecture remain in force. Phase 1C secure identity, protected API/database and representative audit foundations are complete at the local synthetic boundary; exact-head evidence is recorded in the Phase 1C matrices and PR #22. Phase 1D private PDF/file controls remain unstarted and precede full PDF/grading workspace implementation. The queue search/filter design in Section 18 is approved scope only, not implemented functionality. No public or production learner workflow is implied.
 
 **Founder Preview review rule — 3 November 2026:** Request a public Preview review only when a concrete, substantial learner/staff-visible feature is ready. Do not repeatedly mention unchanged previews or ask the Founder to inspect documentation-only, internal backend/security, test, refactor, maintenance or minor-fix revisions. See `docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md`.  
 **Product name:** GradioPrep. Confirmed custom domain: `gradioprep.com`; it is not connected to the site and no DNS changes have been made.  
@@ -566,7 +566,7 @@ For PR #22, Cloudflare's linked Workers Builds integration published the exact t
 During Phase 1B the backend remains local Supabase with synthetic data; public previews must never imply a hosted login/database is active. Show clear, accessible unauthenticated, expired-session, forbidden and backend-unavailable states without disclosing private record existence. Public `workers.dev` previews are not production and no-index is not access control. The custom domain is connected later at Launch Candidate / Production Cutover, not for every PR. Do not change the approved palette, typography or curriculum visual hierarchy to implement this workflow.
 
 
-## 16. Current implementation and Preview boundary — 5 November 2026
+## 16. Historical implementation and Preview boundary — superseded by Section 19
 
 The design system and approved user-interface decisions remain unchanged. This is a security-status reconciliation only; Palette B, typography, spacing, hierarchy, navigation, page layout, accessibility and approved interaction rules are untouched.
 
@@ -617,3 +617,9 @@ Provide accessible loading, no-results, error, active-filter and reset states. V
 
 
 **Version 2.22 change note — 6 November 2026:** Reconciled the human-assessment submission design with the current universal word/time credit tariff, approved catalogue and single 24-hour grading target. Removed the active reference to the superseded 72-hour free / 48-hour paid / urgent 24-hour SLA. Queue priority remains a separate display attribute and does not silently reorder the oldest-accepted-first queue. No implementation status changed.
+
+## 19. Secure-foundation closeout and remaining visible-feature gates — 6 November 2026
+
+Phase 1C is complete for the local synthetic scope: protected identity and role checks, Worker APIs, database/RLS boundaries, assessment lifecycle, role separation, append-only audit operations and the documented adversarial acceptance have passed exact-head synthetic CI [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858) (494 pgTAP assertions/14 SQL files, all TypeScript/Worker/Vite builds and 31/31 Playwright tests). The synchronized invitation-token and revocation/suspension races are included.
+
+This does not mean the flagship PDF response workflow, teacher/grader workspace, full learner dashboards, Diagnostic/Evaluation Report or timer/analytics are implemented. Phase 1D private PDF/file controls are the next backend step. Queue search/filter remains approved design scope only. The custom-domain branded-staging verification remains a mandatory later gate before final Diagnostic/Report acceptance and still requires separate hosted-resource and DNS approval.

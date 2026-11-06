@@ -1,6 +1,6 @@
 # Grading Credit, Curriculum-Frequency and Remedial Access Policy
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Approved:** 4 November 2026; commercial amendment approved 6 November 2026  
 **Status:** Founder-approved product and commercial specification. Documentation-only approval; no payment service, credit ledger, entitlement service, Admin dashboard, email provider or paid integration has been provisioned or implemented.  
 **Authority:** This is the single detailed source of truth for grading-credit allocation, curriculum-frequency analysis, learner free/paid access, customer entitlements and commercial sequencing. The Master Brief records binding product decisions; DATA_MODEL records logical records; the flagship PDF/grading specification records task/PDF workflow; and the diagnostic standard governs the diagnostic/remedial cycle.
@@ -154,7 +154,7 @@ Initial Founder-as-sole-grader controls remain:
 
 Keep the approved sequence intact; commercial implementation must not delay the permanently free Diagnostic/Report:
 
-1. **Close Phase 1C:** both synchronized Phase 1C-F races pass exact-head synthetic CI. Complete the final Phase 1C exit-criteria and documentation review; Phase 1D remains blocked until that closeout is accepted.
+1. **Phase 1C — complete:** both synchronized Phase 1C-F races passed exact-head synthetic CI, and the final protected-table, endpoint authorization/audit and adversarial exit review is closed at the local synthetic boundary. Code/test evidence: [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858). Phase 1D private PDF/file controls are the next unstarted implementation phase.
 2. **Phase 1D:** implement private PDF storage/file controls, signature/MIME/size/page checks, assignment-scoped access, original-file integrity, PDF.js extraction and transcript-version controls.
 3. **Phase 1E:** implement and test database/file-object backups, restore, deletion and retention workflows.
 4. **Phase 1F:** complete synthetic-data security acceptance, threat-model closure and required runbooks.
