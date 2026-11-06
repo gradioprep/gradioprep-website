@@ -445,3 +445,18 @@ The barrier is disposable local test plumbing: a synthetic test creates an RLS-p
 Existing Owner assignment concurrency, feedback-publication concurrency and duplicate-submission idempotency tests were retained without duplication. Phase 1C-E remains **representative per-distinct-action persisted request-ID/event correlation coverage**, not exhaustive outcome coverage. The required successful event mappings remain Worker `student_attempt_create` → `attempt_created` and Worker `grader_assessment_draft_save` → `assessment_draft_saved`.
 
 **Sequencing:** the two previously outstanding synchronized Phase 1C-F cases now have exact-head passing evidence. Phase 1D was not implemented or started in this change. Keep it unstarted until the final source-of-truth documentation reconciliation has itself passed exact-head CI and the Phase 1C exit record is fully reconciled. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, external processing/email, public Preview, production deployment, DNS change or merge occurred or is authorised.
+
+## Founder-approved roadmap additions — 6 November 2026
+
+Keep the current architecture and milestone order.
+
+1. Complete Phase 1D private PDF storage/file controls, Phase 1E backup/recovery/deletion and Phase 1F synthetic security acceptance.
+2. Within existing flagship queue work, add search (permitted learner name/reference, submission ID, task/curriculum metadata), composable board/programme, grade, subject, task, date, assignment, workflow, response/PDF state and SLA filters, stable pagination and measured PostgreSQL indexes. Oldest accepted first remains default; SLA priority is separate. Enforce Owner+AAL2 and assignment-scoped Grader+AAL2 before returning results. No external search provider.
+3. Complete typed/PDF submission, split-screen review, rubric workspace, grader assignment, human-only feedback publication and 24-hour SLA.
+4. Complete timer/analytics and synthetic/pilot validation of the shared flagship workflow.
+5. Complete Cycle 1 free Diagnostic and complete Evaluation Report (₹999 stated reference value only), then mandatory whole-site learner-copy sweep before remedial authoring.
+6. Build standalone Remedial Course (₹1,999 reference price), five-session default with evidence-based extension only.
+7. Implement catalogue, universal credit tariff, append-only ledger, separate course entitlements, trusted payment confirmation, audited Admin exceptions and promotional fulfilment. Catalogue: 2 credits ₹1,500; 5 credits ₹3,750; Gold 10 credits ₹7,500; Platinum 20 credits ₹14,999. Only Diwali offers: free Diagnostic/report and Platinum 20 credits + full Remedial Course for ₹7,999.
+8. Complete branded staging with isolated hosted synthetic backend and verify learner/staff, queue, credit and entitlement journeys before final acceptance. Hosted resources, DNS, paid usage and production cutover remain separately gated.
+
+Universal tariff: 1–50 words=1; 51–150=2; 151–350=3; above 350 add 1 credit per additional 100 words or part thereof. Time-based requirement is one credit per 20 predicted grader minutes. Final requirement is max(word, time), never their sum. Identical work costs the same across all boards.
