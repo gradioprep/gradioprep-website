@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(42);
+SELECT plan(47);
 
 SELECT ok(
   (SELECT relrowsecurity FROM pg_class WHERE oid = 'private.retention_items'::regclass),
@@ -290,6 +290,55 @@ SELECT is(
      AND eligible_after = source_end_event_at + interval '24 months'),
   1,
   'published rubric outcomes receive the 24-month retention schedule'
+);
+
+-- A new legal hold can pause an already closed account's retention plan.
+CREATE TEMP TABLE post_closure_hold_context (hold_id uuid);
+GRANT SELECT, INSERT ON post_closure_hold_context TO authenticated;
+INSERT INTO post_closure_hold_context
+SELECT public.place_account_deletion_legal_hold(
+  request_id,
+  'statutory_requirement',
+  'SYNTHETIC-POST-CLOSURE-01',
+  'Synthetic post-closure legal hold to test retention pause',
+  clock_timestamp() + interval '30 days'
+)
+FROM closure_request_context
+LIMIT 1;
+
+SELECT ok(
+  (SELECT hold_id IS NOT NULL FROM post_closure_hold_context),
+  'Owner AAL2 can place a legal hold after account closure'
+);
+SELECT is(
+  (SELECT request_status FROM public.list_account_deletion_requests()
+   WHERE request_id = (SELECT request_id FROM closure_request_context LIMIT 1)),
+  'on_hold'::text,
+  'a post-closure legal hold pauses the executing retention plan'
+);
+SELECT is(
+  (SELECT count(*)::integer
+   FROM public.list_account_retention_plan(
+     (SELECT request_id FROM closure_request_context LIMIT 1)
+   )),
+  (SELECT retention_items_created
+   FROM closure_execution_context
+   WHERE is_replay = false),
+  'Owner can still inspect the retention inventory while the request is on hold'
+);
+SELECT is(
+  public.release_account_deletion_legal_hold(
+    (SELECT hold_id FROM post_closure_hold_context),
+    'review_cleared'
+  ),
+  true,
+  'Owner AAL2 can release a post-closure legal hold with a reason'
+);
+SELECT is(
+  (SELECT request_status FROM public.list_account_deletion_requests()
+   WHERE request_id = (SELECT request_id FROM closure_request_context LIMIT 1)),
+  'executing'::text,
+  'releasing a post-closure hold resumes the executing retention plan'
 );
 
 RESET ROLE;
