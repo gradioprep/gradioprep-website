@@ -132,7 +132,7 @@ Recalculate when a syllabus/exam pattern changes, after the first meaningful sam
 
 ## 7. Turnaround, capacity and free grading
 
-**One shared launch target applies:** 24 elapsed hours from server-accepted human-grading submission to first publication of final human feedback. This applies to the one-time complimentary one-credit task entitlement and all other accepted human-grading work. The approved 24-hour flagship target supersedes the earlier 72-hour free / 48-hour paid Standard / separate urgent 24-hour pricing proposal. There is no separate ₹199 urgent-grading add-on at initial launch. Reconsider differentiated SLAs only after real fulfilment evidence and a new Founder decision.
+**One shared launch target applies:** 24 elapsed hours from server-accepted human-grading submission to first publication of final human feedback. This applies to the one-time complimentary one-credit task entitlement and all other accepted human-grading work. The approved 24-hour flagship target supersedes the earlier 72-hour free / 48-hour paid Standard / separate urgent 24-hour pricing proposal. There is no separate urgent-grading surcharge at initial launch. Reconsider differentiated SLAs only after real fulfilment evidence and a new Founder decision.
 
 Initial Founder-as-sole-grader controls remain:
 - Up to 30 paid human-grading submissions per month.
