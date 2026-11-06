@@ -2585,7 +2585,7 @@ async function getAuthorizedSubmissionPdf(
 }
 
 async function cleanupExpiredSubmissionPdfs(
-  _request: Request,
+  request: Request,
   env: WorkerEnv,
 ): Promise<Response> {
   const auth = await authenticatedCaller(request, env);
