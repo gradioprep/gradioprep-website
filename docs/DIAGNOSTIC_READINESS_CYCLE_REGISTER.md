@@ -143,7 +143,7 @@ The current authority is `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md` and
 
 - The complete Diagnostic and Evaluation Report remain free permanently; ₹999 is stated reference value only. Provide at least one meaningful free starter remedial activity.
 - The standalone full Remedial Course is ₹1,999 and is a separate course entitlement. The old proposed ₹199/month Study Lab is superseded and is not a current approved product.
-- One complimentary Standard human-graded task per learner account remains separate from purchased credits.
+- One complimentary human-graded task per learner account remains separate from purchased credits and is available only when the server-calculated total requirement is exactly one credit.
 - Human-grading credits use the same word/time maximum tariff for IB, Cambridge and CBSE: 1–50 words=1; 51–150=2; 151–350=3; above 350 add one per additional 100 words or part thereof; time credits = max(1, ceiling(predicted grader minutes/20)); final credits = max(word credits,time credits), never the sum.
 - Approved credit catalogue: 2 credits ₹1,500; 5 credits ₹3,750; Gold 10 credits ₹7,500; Platinum 20 credits ₹14,999. Regular package pricing is approximately ₹750 per credit.
 - Only Diwali offers: free Diagnostic + complete Report (₹999 stated value, permanently free), and Platinum 20 credits plus full Remedial Course access for ₹7,999. No other campaign discount or bonus is approved. Exact campaign start/end timestamps and India-time display are required before activation.

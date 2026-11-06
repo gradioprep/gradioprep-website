@@ -204,14 +204,14 @@ This section supersedes all conflicting earlier price, package, promotional and 
 | Gold Plan | ₹7,500 | 10 human-grading credits |
 | Platinum Plan | ₹14,999 | 20 human-grading credits |
 
-Smaller packs are proportionate to the Platinum reference rate (₹14,999 / 20 = ₹749.95 per credit), rounded to whole rupees. No other pack or discount is approved.
+Smaller packs are proportionate to the Platinum reference rate (₹14,999 / 20 = ₹749.95 per credit), rounded to whole rupees: 2 credits are ₹750/credit, 5 are ₹750/credit, Gold 10 are ₹750/credit, and Platinum 20 are ₹749.95/credit. No regular bulk discount or additional pack is approved.
 
 ### Only two Diwali offers
 
 1. Free Diagnostic + complete Evaluation Report (stated value ₹999).
 2. Platinum Diwali bundle: 20 grading credits plus the full Remedial Course (standalone reference price ₹1,999) for ₹7,999. Combined stated component value: ₹16,998.
 
-No discounted Gold, bonus credits, coupon, additional bundle or other Diwali offer. Record exact campaign start/end timestamps and India-time display before activation. The report remains free after the campaign; ₹999 is not a future paywall.
+No discounted Gold, bonus credits, coupon, additional bundle or other Diwali offer. The Platinum bundle's stated component value is ₹16,998 (₹14,999 + ₹1,999); the ₹7,999 campaign price is a saving of ₹8,999 (about 52.94%). Treat this as the single approved campaign exception, not as the regular price of the 20-credit pack. Record exact campaign start/end timestamps and India-time display before activation. The report remains free after the campaign; ₹999 is not a future paywall.
 
 ### Universal board-neutral credit schedule
 

@@ -291,7 +291,7 @@ Time-based credits = max(1, ceiling(predicted_grader_minutes / 20)). Final requi
 | Gold Plan | 10 | ₹7,500 | ₹750 |
 | Platinum Plan | 20 | ₹14,999 | ₹749.95 |
 
-The approved regular catalogue is approximately ₹750 per credit across all packages. No additional standard package, discount or credit bonus is approved.
+The approved regular catalogue is approximately ₹750 per credit across all packages: 2/5/10-credit packs are ₹750 per credit and Platinum is ₹749.95 per credit. There is no regular volume discount. The separate Diwali bundle has stated components worth ₹16,998 (₹14,999 + ₹1,999) and a ₹7,999 offer price, saving ₹8,999 (about 52.94%); this is the one approved campaign exception, not a revised regular pack rate.
 
 ### Only two Diwali offers
 
@@ -749,3 +749,16 @@ This amendment is the current authority for revised commercial rules and added q
 **Roadmap:** retain Phase 1D private PDF storage, 1E backup/recovery/deletion and 1F security acceptance. Add queue search/filter within existing flagship grading-queue work. Complete submission/PDF/grading/publication and timer/analytics; then Cycle 1 free Diagnostic/report and mandatory whole-site copy sweep; then Remedial Course; then commercial catalogue, credit ledger, separate course entitlements, trusted payment confirmation/Admin controls and two-offer fulfilment. No paid sale before those controls pass.
 
 This records future scope only. It does not claim implementation of queue search, revised pricing UI, credit formula, ledger, checkout, payment, entitlements or promotions. Preserve synthetic local CI, free-first policy and existing separate approvals for hosted resources, DNS, paid usage, merge and production deployment.
+
+
+## 19. Documentation reconciliation continuation — 6 November 2026
+
+The 6 November documentation continuation reconciles the current approved credit catalogue, word/time tariff, free access, course entitlements, grading SLA and queue-search/filter scope across the README, Master Brief, detailed credit policy, logical Data Model, Design Spec, Diagnostic/Remedial readiness records, Phase 1A execution plan, Phase 1 secure-foundation specification, flagship workflow specification and release/roadmap records.
+
+The current tariff is universal across IB, Cambridge and CBSE: 1–50 words = 1 credit; 51–150 = 2; 151–350 = 3; above 350 add one credit for each complete or partial 100-word band. Time credits = max(1, ceiling(predicted grader minutes/20)); the final requirement is the greater of word- and time-based credits, never their sum. The one-time complimentary human-grading task is available once per learner account only when the calculated total is exactly one credit; avoid using the superseded Standard/Premium/Elite names as current product tiers.
+
+Regular package rates are proportionate: 2 credits ₹1,500 (₹750/credit); 5 credits ₹3,750 (₹750/credit); Gold 10 credits ₹7,500 (₹750/credit); Platinum 20 credits ₹14,999 (₹749.95/credit). The separate Platinum Diwali bundle combines the 20-credit package and ₹1,999 Remedial Course, stated component value ₹16,998, at ₹7,999: saving ₹8,999 (about 52.94%). This is the only approved campaign bundle and must be treated as a limited promotion, not a regular pack discount. No other credit pack, coupon, discount or bundle is approved.
+
+The Design Spec now uses the universal tariff and one 24-hour grading target; the logical Data Model no longer treats the obsolete Study Lab subscription or historical effort-tier labels as current entitlements. The queue search/filter layer remains within the existing grader queue and is not implemented. The Phase 1A records retain the Phase 1C-F passing evidence and the required order: Phase 1C final closeout, then 1D private PDF/file controls, 1E recovery/deletion, 1F synthetic security acceptance, flagship workflows, Diagnostic/Report, whole-site copy cleanup, Remedial Course and commercial systems. Branded staging on `gradioprep.com` with an isolated hosted synthetic backend remains a mandatory pre-acceptance gate; hosted-resource and DNS changes require separate approval.
+
+This is documentation-only. It does not close Phase 1C, start Phase 1D, implement the queue search, credit ledger, payment, course entitlements, checkout or promotions, or authorise hosted provisioning, paid usage, real learner data, external processing, Preview creation, merge, production deployment or DNS changes. The final documentation commit must pass exact-head CI before the reconciliation gate is marked complete.
