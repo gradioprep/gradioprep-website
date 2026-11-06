@@ -151,6 +151,9 @@ CREATE TEMP TABLE closure_execution_context (
 );
 GRANT SELECT, INSERT ON closure_execution_context TO authenticated;
 
+CREATE TEMP TABLE closure_hold_context (hold_id uuid);
+GRANT SELECT, INSERT ON closure_hold_context TO authenticated;
+
 SET LOCAL ROLE authenticated;
 SELECT set_config(
   'request.jwt.claims',
@@ -158,15 +161,19 @@ SELECT set_config(
   true
 );
 
-SELECT is(
-  (SELECT public.place_account_deletion_legal_hold(
-    request_id,
-    'court_order',
-    'SYNTHETIC-CLOSURE-01',
-    'Synthetic closure legal hold to test the protected close path',
-    clock_timestamp() + interval '30 days'
-  ) IS NOT NULL FROM closure_request_context LIMIT 1),
-  true,
+INSERT INTO closure_hold_context
+SELECT public.place_account_deletion_legal_hold(
+  request_id,
+  'court_order',
+  'SYNTHETIC-CLOSURE-01',
+  'Synthetic closure legal hold to test the protected close path',
+  clock_timestamp() + interval '30 days'
+)
+FROM closure_request_context
+LIMIT 1;
+
+SELECT ok(
+  (SELECT hold_id IS NOT NULL FROM closure_hold_context),
   'Owner AAL2 can place a legal hold before closure'
 );
 
@@ -182,9 +189,7 @@ SELECT throws_ok(
 
 SELECT is(
   public.release_account_deletion_legal_hold(
-    (SELECT id FROM private.account_deletion_legal_holds
-     WHERE request_id = (SELECT request_id FROM closure_request_context LIMIT 1)
-       AND released_at IS NULL),
+    (SELECT hold_id FROM closure_hold_context),
     'review_cleared'
   ),
   true,
