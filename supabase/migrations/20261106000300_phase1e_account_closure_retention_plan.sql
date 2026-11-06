@@ -432,15 +432,19 @@ BEGIN
     RETURN;
   END IF;
 
-  IF selected_request.status <> 'approved' OR selected_request.subject_user_id IS NULL THEN
-    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'account_deletion_request_not_approved';
+  IF selected_request.subject_user_id IS NULL THEN
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'account_deletion_subject_not_active';
   END IF;
 
-  IF EXISTS (
+  IF selected_request.status = 'on_hold' OR EXISTS (
     SELECT 1 FROM private.account_deletion_legal_holds AS legal_hold
     WHERE legal_hold.request_id = p_request_id AND legal_hold.released_at IS NULL
   ) THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'account_deletion_request_on_legal_hold';
+  END IF;
+
+  IF selected_request.status <> 'approved' THEN
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'account_deletion_request_not_approved';
   END IF;
 
   target_user_id := selected_request.subject_user_id;
