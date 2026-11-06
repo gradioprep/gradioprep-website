@@ -1,7 +1,7 @@
 # Grading Credit, Curriculum-Frequency and Remedial Access Policy
 
-**Version:** 1.0  
-**Approved:** 4 November 2026  
+**Version:** 1.1  
+**Approved:** 4 November 2026; commercial amendment approved 6 November 2026  
 **Status:** Founder-approved product and commercial specification. Documentation-only approval; no payment service, credit ledger, entitlement service, Admin dashboard, email provider or paid integration has been provisioned or implemented.  
 **Authority:** This is the single detailed source of truth for grading-credit allocation, curriculum-frequency analysis, learner free/paid access, customer entitlements and commercial sequencing. The Master Brief records binding product decisions; DATA_MODEL records logical records; the flagship PDF/grading specification records task/PDF workflow; and the diagnostic standard governs the diagnostic/remedial cycle.
 
@@ -9,8 +9,8 @@
 
 1. The initial diagnostic and its complete evaluation report are free to the learner. The report must not be hidden behind a registration-to-payment conversion gate or a paywall.
 2. Provide a meaningful free starter remedial lesson/activity after the report. Keep selected lessons, practice questions, explanations, syllabus discovery and other designated free resources available before 100 subscribers.
-3. The full personalised remedial programme is a separate course entitlement. The proposed Study Lab subscription is ₹199/month and remains a price hypothesis, not validated willingness-to-pay evidence. A Founder/authorised Admin may grant a complimentary entitlement to a pilot cohort or an individual.
-4. Human grading is a separate optional paid service. A learner may have Study Lab course access without grading credits, or grading credits without a Study Lab subscription where the task is otherwise available.
+3. The full Remedial Course is a separate course entitlement, priced at ₹1,999 standalone. The earlier ₹199/month Study Lab subscription proposal is superseded and is not an approved current product or price. An authorised Admin may grant a complimentary entitlement through the future audited entitlement controls.
+4. Human grading is a separate optional paid service. A learner may hold the Remedial Course entitlement without grading credits, or grading credits without course access where the task is otherwise available.
 5. One grading credit represents a defined unit of human-grading effort. It is not a universal word-count allowance, a page allowance or an AI-processing token.
 6. Task credit requirements are calculated and shown before submission acceptance. A learner is never charged an unexpected extra credit after submission or because the typed response exceeds its ideal word target.
 7. The task's expected response length informs the effort estimate. Predicted grader time and task complexity determine the final credit requirement. Curriculum frequency estimates typical consumption and pack mix; it does not override the task-level rule.
@@ -36,10 +36,10 @@ The approved intended journey is:
 
 1. Learner creates an account and verifies the email address before accessing real learner records or paid entitlements.
 2. Learner completes the initial diagnostic without payment.
-3. Learner receives the complete evaluation report, including skill evidence, confidence, priorities and next steps, without payment.
+3. Learner receives the complete Evaluation Report without payment; it remains free permanently (₹999 is stated reference value only).
 4. Learner receives a meaningful free starter remedial lesson/activity and can continue using designated free practice/resources.
-5. The learner may purchase the proposed Study Lab subscription (₹199/month hypothesis) to unlock the full personalised remedial programme and the Study Lab resource set.
-6. Human grading is separately optional: the account may use its one free Standard task entitlement, then purchase grading-credit packs for additional human-reviewed submissions.
+5. The learner may purchase the standalone ₹1,999 Remedial Course entitlement or receive an approved complimentary course grant.
+6. Human grading is separately optional: the account may use its one free Standard task entitlement, then purchase a 2-, 5-, 10- or 20-credit package for additional human-reviewed submissions.
 
 The complete report and already-earned report/history remain visible even when Study Lab is inactive or grading credits are exhausted. A paywall may appear when the learner chooses a paid course or paid grading action; it must not block the free diagnostic, complete report, free starter activity, free resources or access already purchased.
 
@@ -51,7 +51,7 @@ The complete report and already-earned report/history remain visible even when S
 - Admin permissions remain narrowly delegated. Admin does not inherit owner, grader or private academic-QA rights. Privileged actions require the specified strong authentication (AAL2 where applicable) and server/database enforcement.
 - Owner-only QA and role-management functions stay separate. The future dashboard is not the existing Owner staff-invitation UI and is not part of current Phase 1C security code.
 
-## 4. Human-grading credit tiers
+## 4. Historical Standard/Premium/Elite effort-tier proposal — superseded 6 November 2026
 
 The launch proposal uses the existing ₹399 unit-credit hypothesis and the following transparent tier defaults:
 
@@ -64,7 +64,7 @@ The launch proposal uses the existing ₹399 unit-credit hypothesis and the foll
 
 The word bands are initial task-classification guidance, not a learner input cap or a guarantee that every task in the band has the same workload. A 50-word task requiring extensive evidence comparison or several independent rubric judgements may be Premium. An unusually straightforward task may be reclassified only where the rubric and validated time evidence support it. Academic authorship must not manipulate response targets merely to fit a cheaper tier.
 
-### 4.1 Server-side credit calculation
+### 4.1 Historical time-only credit calculation — superseded 6 November 2026
 
 The default effort unit is 20 predicted grader minutes:
 
@@ -74,7 +74,7 @@ The system assigns the visible tier from the resulting credit count: 1 = Standar
 
 A task's expected word band is one input to its predicted grading minutes. Actual submitted word count does not automatically trigger a post-submission debit. The expected/ideal counter remains guidance only. A separate paper or additional task requires a separate, explicit task/credit confirmation before acceptance.
 
-### 4.2 Credit packs and existing price hypotheses
+### 4.2 Historical ₹399-per-credit package hypotheses — superseded 6 November 2026
 
 Retain the Master Brief's current pack hypothesis pending pilot calibration:
 
@@ -101,33 +101,21 @@ Do not combine CBSE, IB and Cambridge response distributions. Do not transfer on
 4. Record for each written task: expected response range/ideal words, marks, independently graded parts, rubric criteria, response mode, estimated grader minutes, assigned tier and credits.
 5. Use a median of paper-level distributions where possible so one unusually long or short paper does not dominate the curriculum. When fewer than five comparable assessments are available, mark the estimate provisional; do not fabricate a representative frequency.
 
-The user's example that CBSE may feature approximately 50-word responses frequently is a research hypothesis for the specific CBSE grade/subject/examination format, not a universal CBSE rule. Validate it against the selected official materials before using it to set a tier share.
+The user's example that CBSE may feature approximately 50-word responses frequently is a research hypothesis for the specific CBSE grade/subject/examination format, not a universal CBSE rule. Validate it against the selected official materials before using it to forecast usage. Board-specific frequency must never modify the universal price tariff.
 
 ### 5.2 Calculate frequency and marks independently
 
-For tier i (Standard, Premium, Elite):
+For every independently gradable response task, calculate its approved word-based credit requirement using the current universal tariff and its predicted-time credit requirement using the calibrated task/rubric metadata. Record marks share separately as an academic cross-check. Task frequency and marks share are separate observations; do not use marks alone as a proxy for grader effort.
 
-**Fᵢ = tasks in tier i / all independently gradable written-response tasks**
+### 5.3 Translate observed task mix into expected credit demand
 
-**Mᵢ = marks assigned to tier i / all marks assigned to written-response tasks**
+For each sampled task, apply the approved credit calculation separately:
 
-Store both as percentages. Fᵢ measures how often a learner encounters that response type; Mᵢ is an academic-importance cross-check. Do not use marks alone as a proxy for grader effort and do not force the two percentages to match.
+- Word credits: 1–50 words=1; 51–150=2; 151–350=3; above 350 add one credit per complete or partial 100-word band.
+- Time credits: max(1, ceiling(predicted grader minutes/20)).
+- Required credits per task: max(word credits,time credits), never their sum.
 
-### 5.3 Translate task mix into expected credit allocation
-
-Use tier credits Cᵢ (1, 2 or 3) to calculate a curriculum's expected credit demand:
-
-**Expected credits for N tasks in tier i = N × Fᵢ × Cᵢ**
-
-**Share of expected credit consumption for tier i = (Fᵢ × Cᵢ) / Σ(Fⱼ × Cⱼ)**
-
-This produces two different outputs:
-- **Task mix:** what proportion of written-response tasks are Standard, Premium and Elite.
-- **Credit mix:** what proportion of the learner's expected grading-credit use comes from each tier.
-
-Illustrative example only: if a verified curriculum sample has 60% Standard, 30% Premium and 10% Elite tasks, then 100 representative tasks would consume an estimated 60 + 60 + 30 = **150 credits**. The expected credit-consumption mix would be 40% Standard, 40% Premium and 20% Elite. This example is a calculation demonstration, not an assertion about CBSE, IB or Cambridge.
-
-Use the credit mix to forecast typical learner pack requirements, likely pack depletion, sales messaging and fulfilment capacity. Show learners a simple example of how many credits a specific task costs; keep source frequencies, calibration data and internal commercial assumptions out of learner reports.
+Sum the resulting task-level credits over the representative assessment sample to forecast total demand, average credits per independently gradable task, and the expected split of tasks across credit bands. Keep the sample source, curriculum/grade/series, task count and assumptions. A board's observed response mix is for demand and capacity forecasting only; it never changes the tariff or makes comparable work cost differently across boards. Do not use the old Standard/Premium/Elite consumption-share calculation as the current tariff.
 
 ### 5.4 Recalibration
 
@@ -164,15 +152,18 @@ Initial Founder-as-sole-grader controls remain:
 
 ## 9. Integrated implementation order
 
-Keep the current approved engineering sequence intact; the commercial layer must not delay the free diagnostic/report:
+Keep the approved engineering sequence intact; commercial implementation must not delay the permanently free Diagnostic/Report:
 
-1. **Finish Phase 1C:** current verified D slice is complete; implement 1C-E audit/workflow integrity and 1C-F adversarial acceptance, close any remaining authorization gaps and reconcile the current security model.
-2. **Phase 1D:** private PDF storage, signature/MIME/size/page checks, assignment-scoped access, original-file integrity, PDF.js extraction and transcript-version controls.
+1. **Close Phase 1C:** both synchronized Phase 1C-F races pass exact-head synthetic CI. Complete the final Phase 1C exit-criteria and documentation review; Phase 1D remains blocked until that closeout is accepted.
+2. **Phase 1D:** private PDF storage/file controls, signature/MIME/size/page checks, assignment-scoped access, original-file integrity, PDF.js extraction and transcript-version controls.
 3. **Phase 1E:** tested database and file-object backups, restore, deletion and retention workflows.
-4. **Phase 1F:** synthetic-data security acceptance, threat-model closure and required runbooks. No Phase 1C exit may be inferred from a single passing slice.
-5. **Shared flagship user/staff experience:** learner typed/PDF submission, teacher queue/workspace, rubric-based human grading and publication, timer and elapsed-time analytics. Apply this policy's task metadata for predicted grading time, tier and credit requirement. Complete privacy, external-processing and capacity gates before real data.
-6. **Cycle 1 free diagnostic/report:** after the shared feature is built and pilot-validated, author and validate the approved MYP Year 4 diagnostic and teacher pack, build the free diagnostic and complete evaluation report, and verify accessibility/calculations.
-7. **Mandatory whole-website copy cleanup:** complete the existing route/state copy sweep immediately after diagnostic/report validation and before any remedial content authoring.
+4. **Phase 1F:** synthetic-data security acceptance, threat-model closure and required runbooks.
+5. **Shared flagship submission/grading workflow:** typed/PDF submission, existing grader queue/search/filter management, rubric-based human grading and publication, 24-hour SLA, then timer/analytics and synthetic/pilot validation. Search/filter stays within the existing PostgreSQL/Worker application; no second service or search database.
+6. **Cycle 1 free Diagnostic/Report:** after the shared flagship feature is built and pilot-validated, author and validate the approved Grade 9 / IB MYP Year 4 diagnostic and teacher pack, build the free Diagnostic and complete Evaluation Report, and verify accessibility/calculations.
+7. **Mandatory whole-website copy cleanup:** complete the existing route/state copy sweep immediately after Diagnostic/Report validation and before any remedial content authoring.
+8. **Remedial Course:** implement the standalone ₹1,999 full course, five 60-minute sessions by default; extend to six/seven only where evaluation analytics justify it. Preserve a meaningful free starter activity.
+9. **Commercial systems:** versioned catalogue/campaigns, append-only credit ledger, separate course entitlements, trusted payment confirmation, idempotent fulfilment, refund/reversal and audited Admin exceptions. Only the approved Diwali offers may be configured.
+10. **Branded staging and final acceptance:** verify the complete synthetic journey on the dedicated staging host on `gradioprep.com`, backed by an isolated hosted synthetic backend, before final Diagnostic/Report acceptance. Hosted resources, DNS/custom-domain mapping and paid usage each require separate approval.
 8. **Remedial course:** author the five-session default (extend to six/seven only where justified), free starter activity, personalised pathway, and fresh outcome check. Preserve the report and starter activity regardless of paid status.
 9. **Commercial entitlement layer, before selling paid access:** implement ordinary learner email verification, course entitlements, credit ledger, payment confirmation/checkout, approved Admin dashboard and access/credit exception workflow. The learner-facing Admin dashboard and customer payment UI are not Phase 1C security work.
 10. **Controlled launch:** retain the free resources; initially expose only 2- and 5-credit packs; enforce the one-free-Standard-task entitlement and capacity limits; measure real grading time, task frequency, pack usage, conversion, refunds and contribution. Cambridge Grade 6 remains blocked until Cycle 1 completes and the Founder directs the transition.
@@ -197,7 +188,7 @@ Use real pilot data only after the applicable privacy, hosted-service and limite
 
 ## 11. Explicit implementation status
 
-As at 4 November 2026, the following are **specified/approved but not yet implemented**: three-tier task pricing; curriculum-frequency calculation; physical credit ledger and credit reservation/consumption; payment/checkout; course entitlement and Study Lab paywall; Admin entitlement dashboard; normal learner email-confirmation delivery/configuration; full diagnostic/report learner experience; full remedial course and free/paid access enforcement.
+As at 6 November 2026, the following are **specified/approved but not yet implemented**: server-side word/time credit calculation and reservation; versioned catalogue/campaign; append-only credit ledger; purchase/checkout/payment confirmation and idempotent fulfilment; separate course entitlements; future commercial Admin exception/grant/refund console; normal learner email-confirmation delivery/configuration; queue search/filter UI; full learner PDF/typed submission and grader workflow; timer/analytics; Diagnostic/Report experience; full Remedial Course and paid/free access enforcement.
 
 Existing building blocks include local synthetic Auth and staff-invitation verified-email acceptance; typed-response counters and server-generated word-count metadata; conceptual required_credits in the logical data model; accepted submission and human-feedback backend records; the approved 24-hour target; and the 10 MB/10-page PDF design. Those are not proof that the commercial/credit system or PDF storage/OCR is live.
 
