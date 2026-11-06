@@ -1,8 +1,8 @@
 # Phase 1 — Secure Application Foundation Implementation Specification
 
-**Version:** 0.26-draft
-**Date:** 5 November 2026  
-**Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff invitations are complete; Phase 1C-A/B/C/D are verified at their recorded local-synthetic checkpoints. PR #22 is open, draft and unmerged. Current verified code/test head: `5dba933dce39b05c69a6616e5bb730d404e3b5a2`; exact-head run [#42041037808](https://github.com/gradioprep/gradioprep-website/actions/runs/42041037808) passed 494 pgTAP assertions across 14 SQL files, TypeScript/Worker/Vite builds and 29/29 Playwright tests. No Preview or production deployment occurred for this checkpoint. Phase 1C-E provides representative per-distinct-action persisted audit correlation, not exhaustive outcome coverage. The success event mappings are `student_attempt_create` → `attempt_created` and `grader_assessment_draft_save` → `assessment_draft_saved`; denied/failed audit rows retain Worker action names. Phase 1C-F is open only for the two synchronized synthetic race tests in `docs/PHASE_1C_ADVERSARIAL_ACCEPTANCE_MATRIX.md`: simultaneous acceptance of one invitation token, and revocation/suspension racing an in-flight privileged request. Phase 1D remains blocked until every Phase 1C exit criterion passes.
+**Version:** 0.27-draft
+**Date:** 6 November 2026  
+**Status:** Phase 1A preparation and Phase 1B local Auth/MFA/staff invitations are complete. Verified application-code head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481` passed exact-head run [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858): 494 pgTAP assertions/14 SQL files, TypeScript/Worker/Vite builds and 31/31 Playwright tests, including both synchronized Phase 1C-F races. Latest docs-only checkpoint before this reconciliation, `69423db70fd2ff1f45c57e8b8589a95673d00c4c`, passed exact-head run [#42163013589](https://github.com/gradioprep/gradioprep-website/actions/runs/42163013589) with the same test/build counts, local cleanup and credential-free asset build. Preview steps were skipped. PR #22 remains open, draft and unmerged. Phase 1C-E is representative per-distinct-action persisted audit correlation, not exhaustive outcome coverage. Complete the final Phase 1C exit-criteria/documentation closeout before Phase 1D; Phase 1D has not started.
 
 **Parent decision register:** `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DATA_MODEL.md`, `docs/PHASE_1C_ENDPOINT_AUTHORIZATION_AUDIT_MATRIX.md`, `docs/PHASE_1C_ADVERSARIAL_ACCEPTANCE_MATRIX.md`, `docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md`, `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md` and `docs/DESIGN_SPEC.md`.
@@ -507,7 +507,7 @@ The private academic-QA implementation remains owner-only at AAL2, with RLS, no 
 
 **Historical next-order note:** the next staff-invitation/private-QA outcome slice is recorded in Section 24. The remaining generic failure-audit integrity gap, route-level Worker integration tests and consolidated 1C-F matrix supersede the earlier immediate order. All current work remains local Supabase with synthetic records only; staging/hosted resource, DNS, spend, real-data, merge and production gates remain separate.
 
-## 22. Founder-approved commercial and remedial-access boundary — 4 November 2026
+## 22. Historical commercial and remedial-access proposal — 4 November 2026 (superseded by current 6 November policy)
 
 The grading tier, curriculum-frequency, learner free/paid access and commercial implementation rules are defined in docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md. They are approved product specifications, not Phase 1 implementation authorisation.
 
@@ -591,3 +591,12 @@ The barrier is disposable local test plumbing: a synthetic test creates an RLS-p
 Existing Owner assignment concurrency, feedback-publication concurrency and duplicate-submission idempotency tests were retained without duplication. Phase 1C-E remains **representative per-distinct-action persisted request-ID/event correlation coverage**, not exhaustive outcome coverage. The required successful event mappings remain Worker `student_attempt_create` → `attempt_created` and Worker `grader_assessment_draft_save` → `assessment_draft_saved`.
 
 **Sequencing:** the two previously outstanding synchronized Phase 1C-F cases now have exact-head passing evidence. Phase 1D was not implemented or started in this change. Keep it unstarted until the final source-of-truth documentation reconciliation has itself passed exact-head CI and the Phase 1C exit record is fully reconciled. PR #22 remains open, draft and unmerged. No hosted provisioning, paid use, real learner data, external processing/email, public Preview, production deployment, DNS change or merge occurred or is authorised.
+
+
+## 28. Current Phase 1 closeout and approved downstream feature scope — 6 November 2026
+
+Both synchronized Phase 1C-F tests passed exact-head synthetic CI on application-code head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481`, run [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858). The latest prior docs-only head `69423db70fd2ff1f45c57e8b8589a95673d00c4c` passed exact-head run [#42163013589](https://github.com/gradioprep/gradioprep-website/actions/runs/42163013589). Phase 1C-E coverage remains representative per distinct action, not exhaustive outcomes. Complete the final Phase 1C exit-criteria/documentation review before Phase 1D. Phase 1D, 1E and 1F remain unstarted.
+
+The approved queue-search/filter capability is an extension of the existing grader queue/workspace only; it must preserve same-origin Worker APIs, existing PostgreSQL, role/assignment scope, no-store results, privacy-safe search fields and oldest-accepted-first default. Do not create a second app, database or search provider. Commercial catalogue/ledger/course entitlements/payment fulfilment remain later local-synthetic implementation, separate from the secure-foundation schema and requiring their own acceptance gates.
+
+The current commercial authority is `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md`; it supersedes Section 22's older subscription and per-credit hypotheses. No payment/ledger/course-entitlement functionality is implemented by this specification update. PR #22 remains draft/open/unmerged; no hosted provisioning, paid usage, real learner data, merge, Preview/production deployment or DNS change is authorised.
