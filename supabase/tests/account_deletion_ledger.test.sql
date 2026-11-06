@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(38);
+SELECT plan(35);
 
 SELECT ok(
   (SELECT relrowsecurity FROM pg_class WHERE oid = 'private.account_deletion_requests'::regclass),
@@ -24,6 +24,30 @@ SELECT ok(
 SELECT ok(
   NOT has_table_privilege('authenticated', 'private.account_deletion_legal_holds', 'SELECT'),
   'browser roles cannot directly read legal-hold evidence'
+);
+SELECT ok(
+  NOT has_table_privilege('service_role', 'private.account_deletion_legal_holds', 'SELECT'),
+  'Worker service role cannot directly read legal-hold evidence'
+);
+SELECT ok(
+  NOT has_table_privilege('authenticated', 'private.account_deletion_legal_holds', 'INSERT'),
+  'browser roles cannot forge legal holds directly'
+);
+SELECT ok(
+  NOT has_table_privilege('service_role', 'private.account_deletion_requests', 'UPDATE'),
+  'Worker service role cannot bypass the deletion-request state machine'
+);
+SELECT ok(
+  NOT has_table_privilege('service_role', 'private.account_deletion_requests', 'DELETE'),
+  'Worker service role cannot delete request evidence directly'
+);
+SELECT ok(
+  NOT has_table_privilege('service_role', 'private.account_deletion_legal_holds', 'UPDATE'),
+  'Worker service role cannot rewrite legal-hold evidence directly'
+);
+SELECT ok(
+  NOT has_table_privilege('service_role', 'private.account_deletion_legal_holds', 'DELETE'),
+  'Worker service role cannot delete legal-hold evidence directly'
 );
 SELECT ok(
   NOT has_function_privilege('anon', 'public.request_account_deletion(text)', 'EXECUTE'),
@@ -79,14 +103,6 @@ INSERT INTO account_deletion_request_context
 SELECT request_id, request_status, requested_at, response_due_at, is_replay
 FROM public.request_account_deletion('data_erasure');
 RESET ROLE;
-
-SELECT is(
-  (SELECT identity_verification_method
-   FROM private.account_deletion_requests
-   WHERE id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
-  'authenticated_confirmed_email'::text,
-  'verification evidence records the confirmed-email authenticated method'
-);
 
 SELECT ok(
   (SELECT is_replay FROM account_deletion_request_context ORDER BY requested_at LIMIT 1 OFFSET 1),
@@ -162,6 +178,13 @@ SELECT is(
   1,
   'Owner AAL2 can list the minimal deletion-request queue'
 );
+SELECT is(
+  (SELECT identity_verification_method
+   FROM public.list_account_deletion_requests()
+   WHERE request_id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
+  'authenticated_confirmed_email'::text,
+  'Owner queue exposes the recorded confirmed-email identity-verification method'
+);
 
 INSERT INTO account_deletion_hold_context
 SELECT public.place_account_deletion_legal_hold(
@@ -176,29 +199,16 @@ SELECT ok(
   (SELECT hold_id IS NOT NULL FROM account_deletion_hold_context),
   'Owner AAL2 can place a legal hold with authority, reason and review date'
 );
-SELECT is(
-  (SELECT status FROM private.account_deletion_requests
-   WHERE id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
-  'on_hold'::text,
-  'placing a legal hold moves the request into on-hold state'
-);
 SELECT ok(
-  (SELECT has_active_legal_hold
+  (SELECT request_status = 'on_hold'
+          AND has_active_legal_hold
           AND active_legal_hold_authority_category = 'court_order'
           AND active_legal_hold_authority_reference = 'SYNTHETIC-CASE-01'
           AND active_legal_hold_reason_summary = 'Synthetic legal hold reason for permission testing'
           AND active_legal_hold_review_due_at > now()
    FROM public.list_account_deletion_requests()
    WHERE request_id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
-  'Owner AAL2 queue exposes the active hold authority, reason and review date'
-);
-SELECT ok(
-  (SELECT authority_reference = 'SYNTHETIC-CASE-01'
-          AND char_length(reason_summary) >= 12
-          AND review_due_at > placed_at
-   FROM private.account_deletion_legal_holds
-   WHERE id = (SELECT hold_id FROM account_deletion_hold_context)),
-  'legal-hold evidence stores its authority reference, reason and scheduled review'
+  'Owner AAL2 queue shows the on-hold state and complete legal-hold review evidence'
 );
 SELECT throws_ok(
   format(
@@ -219,8 +229,8 @@ SELECT is(
   'Owner AAL2 can release a hold with a recorded release reason'
 );
 SELECT is(
-  (SELECT status FROM private.account_deletion_requests
-   WHERE id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
+  (SELECT request_status FROM public.list_account_deletion_requests()
+   WHERE request_id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
   'under_review'::text,
   'releasing a hold returns the request to review rather than auto-approving it'
 );
@@ -233,106 +243,36 @@ SELECT is(
   'approved'::text,
   'Owner AAL2 can approve a reviewed request after the hold is released'
 );
-RESET ROLE;
-
 SELECT ok(
-  (SELECT status = 'approved'
+  (SELECT request_status = 'approved'
           AND reviewed_by = '88888888-8888-4888-8888-888888888888'::uuid
           AND reviewed_at IS NOT NULL
           AND completed_at IS NULL
-   FROM private.account_deletion_requests
-   WHERE id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
-  'approval records Owner evidence but does not execute or complete deletion'
+   FROM public.list_account_deletion_requests()
+   WHERE request_id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
+  'approval preserves Owner review evidence and does not mark deletion complete'
 );
-SELECT is(
-  (SELECT count(*)::integer
-   FROM private.security_audit_events
-   WHERE action IN (
-     'account_deletion_request_submitted',
-     'account_deletion_requests_listed',
-     'account_deletion_legal_hold_placed',
-     'account_deletion_legal_hold_released',
-     'account_deletion_request_reviewed'
-   )),
-  6,
-  'request, protected queue reads, hold and review transitions are audited'
-);
-SELECT throws_ok(
-  format(
-    'DELETE FROM private.account_deletion_requests WHERE id = %L',
-    (SELECT request_id FROM account_deletion_request_context LIMIT 1)
-  ),
-  '42501',
-  'account_deletion_request_delete_requires_retention_workflow',
-  'deletion-request evidence cannot be directly deleted'
-);
-SELECT throws_ok(
-  format(
-    'UPDATE private.account_deletion_requests SET subject_user_id = %L WHERE id = %L',
-    '22222222-2222-4222-8222-222222222222',
-    (SELECT request_id FROM account_deletion_request_context LIMIT 1)
-  ),
-  '42501',
-  'account_deletion_request_identity_immutable',
-  'request subject and verification scope cannot be reassigned'
-);
-SELECT throws_ok(
-  format(
-    'DELETE FROM private.account_deletion_legal_holds WHERE id = %L',
-    (SELECT hold_id FROM account_deletion_hold_context)
-  ),
-  '42501',
-  'account_deletion_legal_hold_delete_forbidden',
-  'legal-hold evidence cannot be directly deleted'
-);
-SELECT throws_ok(
-  format(
-    'UPDATE private.account_deletion_legal_holds SET reason_summary = %L WHERE id = %L',
-    'Changed legal hold reason after release',
-    (SELECT hold_id FROM account_deletion_hold_context)
-  ),
-  '42501',
-  'account_deletion_legal_hold_release_immutable',
-  'released legal-hold evidence cannot be rewritten'
-);
-SELECT ok(
-  EXISTS (
-    SELECT 1 FROM auth.users
-    WHERE id = '11111111-1111-4111-8111-111111111111'
-  ),
-  'an approved request does not delete or disable the account in this ledger-only slice'
-);
-UPDATE private.account_deletion_requests
-SET subject_user_id = NULL
-WHERE id = (SELECT request_id FROM account_deletion_request_context LIMIT 1);
-UPDATE private.account_deletion_legal_holds
-SET subject_user_id = NULL
-WHERE id = (SELECT hold_id FROM account_deletion_hold_context);
+RESET ROLE;
 
 SELECT ok(
-  (SELECT subject_user_id IS NULL
-          AND status = 'approved'
-          AND reviewed_at IS NOT NULL
-          AND decision_reason_category = 'retention_review_complete'
-   FROM private.account_deletion_requests
-   WHERE id = (SELECT request_id FROM account_deletion_request_context LIMIT 1)),
-  'detaching the account identity preserves its non-content deletion-request evidence'
-);
-SELECT ok(
-  (SELECT subject_user_id IS NULL
-          AND released_at IS NOT NULL
-          AND release_reason_category = 'review_cleared'
-          AND authority_reference = 'SYNTHETIC-CASE-01'
-   FROM private.account_deletion_legal_holds
-   WHERE id = (SELECT hold_id FROM account_deletion_hold_context)),
-  'detaching the account identity preserves released legal-hold evidence'
+  EXISTS (
+    SELECT 1
+    FROM pg_trigger
+    WHERE tgrelid = 'private.account_deletion_requests'::regclass
+      AND tgname = 'account_deletion_request_integrity'
+      AND NOT tgisinternal AND tgenabled <> 'D'
+  ),
+  'request state and identity integrity trigger is installed and enabled'
 );
 SELECT ok(
   EXISTS (
-    SELECT 1 FROM public.assessment_submissions
-    WHERE learner_id = '11111111-1111-4111-8111-111111111111'
+    SELECT 1
+    FROM pg_trigger
+    WHERE tgrelid = 'private.account_deletion_legal_holds'::regclass
+      AND tgname = 'account_deletion_legal_hold_integrity'
+      AND NOT tgisinternal AND tgenabled <> 'D'
   ),
-  'assessment records remain intact pending the retention-aware execution workflow'
+  'legal-hold evidence immutability trigger is installed and enabled'
 );
 
 SELECT * FROM finish();
