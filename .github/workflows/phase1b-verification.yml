@@ -1,10 +1,9 @@
 name: Phase 1B/1C local security and feature verification
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push:
     branches:
-      - docs/phase-1-secure-foundation-spec
+      - feature/phase-1b-local-auth-api
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -13,7 +12,7 @@ on:
       - '**/*.mdx'
 
 concurrency:
-  group: phase1b-verification-${{ github.event.pull_request.number }}
+  group: phase1b-verification-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -22,14 +21,11 @@ permissions:
 jobs:
   verify-and-preview:
     name: Local Supabase security, build and browser tests
-    if: >-
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.user.login == 'gradioprep'
+    if: github.actor == 'gradioprep'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
       contents: read
-      pull-requests: write
     steps:
       - name: Check out exact pull request revision
         uses: actions/checkout@v7
