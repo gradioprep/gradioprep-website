@@ -427,3 +427,22 @@ Synthetic fixtures set the MYP task to opt in and keep the Cambridge task typed-
 Exact-head CI [#42484474739](https://github.com/gradioprep/gradioprep-website/actions/runs/42484474739) passed 619 PostgreSQL assertions across 17 SQL files, 32/32 Playwright tests, TypeScript/Worker/Vite builds, synthetic DB/private-PDF backup and restore (`backup_restore_verified`), Supabase shutdown, temporary credential cleanup and credential-free asset build. This is synthetic GitHub-hosted CI evidence only.
 
 **Scope boundary:** this is the backend rule for typed text plus an optional PDF attachment. PDF-only submission acceptance, PDF.js extraction, scanned-page OCR, teacher split-screen, grading queue/search UI, feedback publication and timer/analytics remain future increments. No new table, hosted service, external processor or cost was introduced.
+
+
+## 6.13 Phase 2 PDF-only submission and transcript records — implementation status pending CI — 8 November 2026
+
+Migration `20261108000500_phase2_pdf_only_and_transcripts.sql` adds PDF-only acceptance while preserving `typed` and `typed_pdf` modes. Task eligibility remains controlled by `task_versions.pdf_response_enabled` and `ideal_words > 20`. The existing `private-submissions` bucket and `private.submission_files` metadata model are reused; original PDF bytes remain private and authoritative.
+
+| Physical record / control | Purpose and invariant |
+|---|---|
+| `private.pdf_submission_reservations` | Holds a capacity slot during a bounded 15-minute upload window; learner/task/rubric/mode/idempotency and opaque object path are immutable. Accepted/released/expired states are terminal. Direct table access is revoked. |
+| `private.enforce_submission_capacity_with_pdf_reservations()` | Serializes against the existing singleton grading-capacity row and includes active non-expired PDF holds in the queue count; prevents typed acceptance from consuming a reserved slot and prevents cross-mode idempotency-key reuse. |
+| `public.begin_pdf_assessment_submission()` | Authenticated active Student RPC; rechecks task release, enrolment, published rubric, prompt and PDF eligibility; opens or replays an idempotent reservation. |
+| `private.submission_transcript_versions` | Private, append-only, numbered transcript records linked to the accepted submission and immutable private file record. Version 1 stores extraction method `pdfjs`, page-aligned JSON, combined text, extraction state and verification state. UPDATE/DELETE is blocked. |
+| `public.finalize_pdf_assessment_submission()` | Worker-only transaction that rechecks active Student, task/enrolment/rubric and private object existence, creates the accepted submission/file/transcript, records the idempotency key, and starts the 24-hour SLA from final `accepted_at`. |
+| `public.get_authorized_submission_transcript()` | Worker-only read RPC that first applies the same database file-authorization scope, then returns the latest transcript version. |
+| Reservation cleanup RPCs | Mark failed uploads for cleanup; Owner+AAL2 claims expired/incomplete object paths; Worker removes the private object before the reservation becomes expired. |
+
+The learner app uses PDF.js to extract existing digital text in the browser, preserving page numbering. Each page is either `digital_text` or `no_text_layer`; a page without text is stored with an empty text field and is not OCRed or guessed. Initial transcript state is `complete`, `partial` or `none`; verification state begins as `unverified` because browser-supplied extraction is not authoritative. The original PDF is always the evidence source. The table supports future append-only correction versions, but the write endpoint/UI and teacher correction audit workflow are not included in this increment.
+
+Synthetic SQL coverage is added in `supabase/tests/phase2_pdf_only_transcripts.test.sql`; Playwright coverage exercises PDF-only acceptance, page alignment/no-text flagging and the 24-hour SLA. **This code/test commit is `432a0a3c4b649610f683a25da4d311480049d761`; its exact-head CI result is not verified in the current record.** Do not use the earlier `86c0099` run as evidence for this migration. Keep this schema increment pending until the branch-push verification workflow is confirmed and all tests pass. No hosted database/storage, external OCR, cost or real learner record was used.
