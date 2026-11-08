@@ -10,7 +10,7 @@
 
 **Node.js setup complete:** Node `v22.23.4`, npm `10.9.9`; both resolve inside `/home/gradioprep/.nvm/versions/node/v22.23.4/bin/`. Do not reinstall Node. Project requirement is Node `>=20.19.0`; the GitHub Actions workflow uses Node 22.
 
-**Repository status:** clone path is `/home/gradioprep/src/gradioprep-website`; last recorded local HEAD was `2a582c42c071a7dda85d197672e9255398e55140`. The live PR #22 head is currently `acfde1e9572d5149e8d4a857bfb32032db1dc45a`. The local branch, working tree and current HEAD have not yet been rechecked after the Node installation. Verify them before fast-forwarding; use `git pull --ff-only origin feature/phase-1b-local-auth-api` only if behind and clean. Do not reinstall or reclone the repository.
+**Repository status:** clone path is `/home/gradioprep/src/gradioprep-website`; last recorded local HEAD was `2a582c42c071a7dda85d197672e9255398e55140`. The live PR #22 head has advanced through this documentation-only reconciliation; retrieve its current SHA before synchronising. The local branch, working tree and current HEAD have not yet been rechecked after the Node installation. Verify them before fast-forwarding; use `git pull --ff-only origin feature/phase-1b-local-auth-api` only if behind and clean. Do not reinstall or reclone the repository.
 
 **Dependency installation:** pending. After the checkout is verified at the live PR head, run `npm install --no-audit --no-fund`, then check `git status --short` and confirm there are no unintended tracked changes or dependency-lock modifications.
 
