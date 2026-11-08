@@ -77,3 +77,26 @@ The Phase 1D private bucket and file lifecycle remain the trusted backend for th
 The Worker and upload lifecycle RPC both enforce task opt-in and threshold. Finalisation rechecks eligibility and changes the submission to `typed_pdf` only in the same transaction that accepts the private PDF. Synthetic MYP task A opts in; synthetic Cambridge task B remains typed-only. SQL coverage includes the 20-word boundary, typed-only denial without a pending file record and forged response-mode rejection. Existing 10 MB/10-page PDF validation, private Storage, opaque non-overwriting paths, ownership/assignment checks, signed URL expiry, audit and cleanup remain unchanged.
 
 Exact-head CI [#42484474739](https://github.com/gradioprep/gradioprep-website/actions/runs/42484474739) passed 619 PostgreSQL assertions across 17 SQL files, 32/32 Playwright tests, TypeScript/Worker/Vite builds, synthetic backup/restore, shutdown and credential cleanup. No Preview was deployed because this was backend-only. This increment does not add PDF-only submission acceptance, OCR, a teacher split-screen or learner-facing upload UI. No hosted services, external processing, paid use or real learner data were introduced.
+
+
+## 8. Phase 2 PDF-only reservation and digital transcript controls — implementation pending exact-head CI — 8 November 2026
+
+Application-code/test commits 432a0a3c4b649610f683a25da4d311480049d761 and f5e25909576ff17ac30e1c0bf4f68bcdbd39dda7 extend the Phase 1D private-PDF controls as follows:
+
+| Control | Implemented behavior | Current evidence status |
+|---|---|---|
+| Eligibility | Authenticated active Student; active enrolment; published task/rubric/prompt; explicit task PDF opt-in; ideal response strictly greater than 20 words. | Migration and Worker implementation added; SQL allow/deny cases added. |
+| File validation | PDF extension, MIME, %PDF- signature, parser/encryption check, 10 MiB cap and 10-page cap before reservation/upload. | Worker implementation added; browser flow uses the same limits. Exact-head tests pending. |
+| Private object | Opaque non-overwriting Storage path in existing non-public private-submissions bucket. | Uses the existing Phase 1D private Storage model. |
+| Queue reservation | 15-minute reservation holds one slot; typed acceptance and PDF reservations lock the same capacity singleton and count active holds. | Migration and mixed-capacity/idempotency SQL cases added. |
+| Acceptance and SLA | Worker-only finalizer verifies stored object and rechecks eligibility, then atomically inserts accepted submission, file metadata and initial transcript. The 24-hour SLA starts at final acceptance. | Migration and SLA Playwright assertions added; exact-head CI pending. |
+| Idempotency | Active/accepted reservation replay handled; conflicting payloads and cross-mode key reuse rejected. | SQL cases added; exact-head CI pending. |
+| Failure/expiry cleanup | Storage/finalization failures become cleanup_pending; expired reservations are claimed by Owner+AAL2 cleanup, which removes the object before marking expired. | Database/Worker paths added; exact-head cleanup tests remain to be verified. |
+| Text extraction | App-local PDF.js extracts available digital text page by page. Pages with no extractable text are marked no_text_layer; no OCR or guessed text is produced. | Extractor and synthetic two-page Playwright case added; exact-head CI pending. |
+| Transcript integrity | Versioned private table, direct-access revocation, immutable UPDATE/DELETE guard; version 1 starts unverified. Original PDF remains authoritative. | Migration and authorization path added. Teacher correction/version-append endpoint, UI and audit workflow remain outstanding. |
+
+The transcript arrives from the learner's browser and is intentionally labelled unverified; this first increment does not cryptographically prove that every transcript character matches the stored PDF. Graders must inspect the original PDF. No external OCR provider is invoked and no scanned page is reconstructed from inference. A page with no digital text layer is explicitly identified for human review.
+
+The current application-code head is f5e25909576ff17ac30e1c0bf4f68bcdbd39dda7 (latest database hardening); the related UI correction is in 432a0a3. GitHub's combined-status lookup returned no check records, and the available workflow-run listing did not expose a branch-push run for this exact code. The previously passed #42498299576 predates these changes. Therefore this section records implementation presence, not a passed acceptance test. Keep the new controls pending until the exact branch-push Actions run confirms migrations, SQL/RLS, Worker build, Playwright and backup/restore all pass.
+
+PR #22 remains open, draft and unmerged. No hosted Storage/database, real learner data, external OCR/provider, cost, DNS change or production deployment was used or authorised. This does not establish production readiness.
