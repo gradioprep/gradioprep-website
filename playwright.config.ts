@@ -2,8 +2,11 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests",
-  fullyParallel: true,
-  workers: 2,
+  // The local CI suite shares one synthetic grading-capacity singleton.
+  // Run test cases deterministically; request-level races remain exercised inside
+  // the dedicated Promise.all acceptance and role-revocation tests.
+  fullyParallel: false,
+  workers: 1,
   reporter: "list",
   timeout: 30_000,
   expect: {
