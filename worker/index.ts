@@ -2625,18 +2625,6 @@ async function markPdfReservationForCleanup(
   return !error && data === true;
 }
 
-async function releasePdfReservation(
-  context: CallerContext,
-  reservationId: string,
-): Promise<boolean> {
-  if (!context.serviceSupabase) return false;
-  const { data, error } = await context.serviceSupabase.rpc(
-    "release_pdf_submission_reservation",
-    { p_actor_id: context.userId, p_reservation_id: reservationId },
-  );
-  return !error && data === true;
-}
-
 async function createPdfLearnerSubmission(
   request: Request,
   env: WorkerEnv,
