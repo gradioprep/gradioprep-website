@@ -1,7 +1,7 @@
 # Windows/WSL2 Developer Environment — Local Supabase Disabled
 
 **Status date:** 8 November 2026  
-**Repository:** private `gradioprep/gradioprep-website`, PR #22  
+**Repository:** public `gradioprep/gradioprep-website`, PR #22  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md` and `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`.
 
 ## 1. Binding decision
@@ -34,7 +34,7 @@ Do not reinstall Node or dependencies. No additional local environment setup is 
 
 ## 3. Repository synchronisation checkpoint
 
-The user confirmed a clean local checkout at `1caf00e134333f7effcdaf94ac0cb233218e295b` on `feature/phase-1b-local-auth-api`. The remote branch has advanced through documentation-only infrastructure/CI reconciliations after the user's confirmed local head. Before the next local repository operation, run one `git pull --ff-only origin feature/phase-1b-local-auth-api`; do not reclone or reinstall tools. PR #22 remains open, draft and unmerged.
+The last user-reported clean local checkout was `1caf00e134333f7effcdaf94ac0cb233218e295b` on `feature/phase-1b-local-auth-api`. The remote branch has advanced since that report. This session cannot inspect the WSL filesystem or local working tree, so synchronization and cleanliness are unverified. Before local work, run `git status --short --branch`; only if the working tree is clean, run `git pull --ff-only origin feature/phase-1b-local-auth-api`. Do not reclone or reinstall. PR #22 remains open, draft and unmerged.
 
 ## 4. Where database tests run
 
@@ -42,7 +42,7 @@ The checked-in `.github/workflows/phase1b-verification.yml` uses `runs-on: ubunt
 
 **This does not start Supabase on the user's computer.** The runner is hosted by GitHub and is separate from Windows, WSL and Docker Desktop on the user's machine. Keep this isolation. Never redirect the workflow to `self-hosted`, `gradioprep-wsl2` or another label referring to this computer.
 
-The current workflow has documentation-trigger inefficiencies: a push to the feature branch can run the full job even when only Markdown changes, and PR `edited` events can run it again. A later workflow change should ignore docs-only changes and remove `edited` from the heavy test trigger, while retaining all security-relevant source, migration, SQL, browser, dependency, workflow and configuration files. Review the separate `build.yml` for duplicate checks. These workflow changes have not yet been made.
+The workflow correction is committed as `355e1239a76e7863ae7808788141c7a57c8a2361`. The heavy verification job now runs only for same-repository PR `opened`, `synchronize` and `reopened` events to the approved base; `docs/**` and Markdown-only diffs are ignored. Feature-branch pushes and PR-description `edited` events no longer start the full suite. A per-PR concurrency group cancels superseded runs. Standard `ubuntu-latest`, dependency installation, synthetic database reset/seed, full pgTAP, Worker/browser build, Playwright, Phase 1E backup/restore and cleanup remain. The separate Build workflow also ignores docs/Markdown and cancels stale runs; it continues to skip PR #22's stacked base. A successful post-change run is not yet confirmed.
 
 ## 5. Existing Cloudflare Workers Builds integration
 
@@ -51,7 +51,7 @@ Read-only inspection of the connected Cloudflare account on 8 November 2026 conf
 | Setting | Existing value |
 |---|---|
 | Worker | `gradioprep-website` |
-| GitHub repository | `gradioprep/gradioprep-website` (private) |
+| GitHub repository | `gradioprep/gradioprep-website` (public) |
 | Production branch | `main` |
 | Automatic builds | Enabled |
 | Branch Previews | Enabled |
@@ -66,7 +66,7 @@ The selected direction is to retain this existing Git-connected Workers Builds i
 
 ## 6. GitHub Actions billing and repository visibility
 
-The repository remains private. GitHub's public-repository standard-runner allowance is not a sufficient reason to publish GradioPrep's full source and its internal strategy/security records. Public visibility would expose the complete repository history, branches, PRs, documentation, Actions logs and artifacts. Reconsider it only after a deliberate open-source/IP decision and full history/secret review.
+GitHub confirms the repository is public. Its source, history, branches, pull requests, documentation, Actions logs and artifacts may be publicly accessible. Never commit credentials, tokens, real learner submissions or confidential teacher material. This guide does not claim a full historical secret scan has been completed.
 
 For private repositories, GitHub-hosted Actions minutes depend on the owner account's GitHub plan and included usage. The account's current plan/remaining minutes have not been verified. The latest exact-head run `#42466941118` failed without reporting job steps and its logs were unavailable. That does not establish whether the failure was caused by an included-minute limit, a runner/queue issue or another configuration problem. Do not label the cause as quota exhaustion without evidence. All five GitHub spending budgets remain blocked; do not unblock them or permit paid overage.
 
@@ -84,14 +84,14 @@ A hosted test project is not needed for the current database/RLS CI tests and is
 - Phase 1F: follows Phase 1E acceptance.
 - PR #22: open, draft and unmerged; no merge or production release is authorised.
 
-Next engineering sequence: (1) add GitHub docs-only workflow path filters and remove unnecessary PR-edited triggering; (2) configure Cloudflare Workers Builds watch-path exclusions; (3) verify a new branch Preview/build and exact-head hosted CI; (4) run the pending Phase 1E suites and backup/restore verifier in GitHub-hosted ephemeral CI. Reconcile duplicate Preview deployment paths before removing either existing mechanism.
+Next engineering sequence: (1) verify the new PR-triggered workflow and obtain one successful exact-head hosted run; (2) execute both Phase 1E SQL suites and the database/private-PDF backup/restore verifier in that run, fixing evidenced failures; (3) review Cloudflare's separate production/Preview watch paths and exclude docs-only files only if the existing settings support it without changing deployment behavior; (4) proceed to Phase 1F only after Phase 1E acceptance. Keep Worker Preview cleanup and deployment ownership unchanged until duplicate/orphan behavior has been verified.
 
 ## 9. Approval boundaries
 
 This guide does not authorise:
 - starting Supabase/Docker database containers on the user's computer or registering a local self-hosted runner;
 - creating or linking any hosted Supabase project, even on the Free plan;
-- making the GitHub repository public;
+- changing repository visibility without a separate explicit owner decision;
 - changing GitHub spending budgets, billing, overage or paid usage;
 - changing Cloudflare build/deployment settings, production Worker configuration, bindings, secrets, custom domains or DNS;
 - production deployment, PR merge, real learner data, external processing/email or public launch.
