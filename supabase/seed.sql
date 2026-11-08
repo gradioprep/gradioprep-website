@@ -156,7 +156,7 @@ VALUES
   ('b2222222-2222-4222-8222-222222222222', 'a2222222-2222-4222-8222-222222222222', 1,
    'Synthetic test prompt: explain the effect of one word choice in a short passage.'),
   ('b3333333-3333-4333-8333-333333333333', 'a3333333-3333-4333-8333-333333333333', 1,
-   'Synthetic test prompt: explain how one selected textual detail supports an interpretation.'),
+   'Synthetic test prompt: explain how one selected textual detail supports an interpretation.')
 ON CONFLICT (id) DO NOTHING;
 
 -- Phase 1C-B synthetic rubric snapshots and local-only grading capacity.
