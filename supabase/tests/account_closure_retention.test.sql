@@ -109,8 +109,8 @@ VALUES (
   6, 8,
   'Synthetic published feedback retained for the approved period.',
   '88888888-8888-4888-8888-888888888888',
-  clock_timestamp() - interval '1 hour',
-  clock_timestamp() - interval '1 hour',
+  now() - interval '1 hour',
+  now() - interval '1 hour',
   3600, 3600, true
 );
 
