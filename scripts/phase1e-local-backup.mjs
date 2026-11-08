@@ -358,6 +358,49 @@ function restoreDatabase(container, dumpPath) {
   ]);
 }
 
+function verifyRestoredAuthorization(container) {
+  // Verify the restored database as application roles, not only as the
+  // restore superuser. Row/policy counts alone cannot prove that RLS still
+  // hides another learner's rows or blocks browser access to private PDFs.
+  const sql = [
+    "BEGIN;",
+    "DO $verify$ DECLARE bucket_private boolean; storage_rls boolean; owner_visible integer; BEGIN " +
+      "SELECT NOT public INTO bucket_private FROM storage.buckets WHERE id = 'private-submissions'; " +
+      "IF bucket_private IS DISTINCT FROM true THEN RAISE EXCEPTION 'restored private PDF bucket is not private'; END IF; " +
+      "SELECT relrowsecurity INTO storage_rls FROM pg_class WHERE oid = 'storage.objects'::regclass; " +
+      "IF storage_rls IS DISTINCT FROM true THEN RAISE EXCEPTION 'restored Storage object RLS is disabled'; END IF; " +
+      "SELECT count(*)::integer INTO owner_visible FROM storage.objects WHERE bucket_id = 'private-submissions'; " +
+      "IF owner_visible < 1 THEN RAISE EXCEPTION 'restored private PDF object metadata is missing'; END IF; " +
+    "END $verify$;",
+    "SET LOCAL ROLE authenticated;",
+    "SELECT set_config('request.jwt.claims', '{\"sub\":\"11111111-1111-4111-8111-111111111111\",\"role\":\"authenticated\",\"aal\":\"aal1\"}', true);",
+    "DO $verify$ DECLARE own_attempts integer; foreign_attempts integer; visible_storage integer := 0; file_access_denied boolean := false; BEGIN " +
+      "SELECT count(*)::integer INTO own_attempts FROM public.attempts; " +
+      "IF own_attempts < 2 THEN RAISE EXCEPTION 'restored RLS did not expose the learner\'s own synthetic attempts'; END IF; " +
+      "SELECT count(*)::integer INTO foreign_attempts FROM public.attempts WHERE id = 'c2222222-2222-4222-8222-222222222222'; " +
+      "IF foreign_attempts <> 0 THEN RAISE EXCEPTION 'restored RLS exposed another learner\'s synthetic attempt'; END IF; " +
+      "BEGIN PERFORM 1 FROM private.submission_files LIMIT 1; EXCEPTION WHEN insufficient_privilege THEN file_access_denied := true; END; " +
+      "IF NOT file_access_denied THEN RAISE EXCEPTION 'authenticated browser role can read private PDF metadata directly'; END IF; " +
+      "BEGIN SELECT count(*)::integer INTO visible_storage FROM storage.objects WHERE bucket_id = 'private-submissions'; " +
+      "EXCEPTION WHEN insufficient_privilege THEN visible_storage := 0; END; " +
+      "IF visible_storage <> 0 THEN RAISE EXCEPTION 'authenticated browser role can list private PDF Storage objects'; END IF; " +
+    "END $verify$;",
+    "RESET ROLE;",
+    "SET LOCAL ROLE anon;",
+    "SELECT set_config('request.jwt.claims', '{\"role\":\"anon\"}', true);",
+    "DO $verify$ DECLARE visible_storage integer := 0; BEGIN " +
+      "BEGIN SELECT count(*)::integer INTO visible_storage FROM storage.objects WHERE bucket_id = 'private-submissions'; " +
+      "EXCEPTION WHEN insufficient_privilege THEN visible_storage := 0; END; " +
+      "IF visible_storage <> 0 THEN RAISE EXCEPTION 'anonymous role can list private PDF Storage objects'; END IF; " +
+    "END $verify$;",
+    "RESET ROLE;",
+    "ROLLBACK;",
+  ].join("\\n");
+  dockerExec(container, [
+    "psql", "-U", restoreRoleName, "-d", restoreDatabaseName,
+    "-v", "ON_ERROR_STOP=1", "-c", sql,
+  ]);
+}
 function verifyCorruptArchiveRejected(container, dumpPath, workingDirectory) {
   const bytes = readFileSync(dumpPath);
   const corruptPath = join(workingDirectory, "corrupt.dump");
@@ -413,6 +456,7 @@ async function verifyRoundTrip(storage, container, outputDirectory) {
     if (JSON.stringify(restoredState) !== JSON.stringify(manifest.database.stateSnapshot)) {
       fail("The restored database does not match its backed-up table, constraint, policy and Storage metadata snapshot.");
     }
+    verifyRestoredAuthorization(container);
     restoreObjects.push(...await restoreStorageObjects(storage, outputDirectory, manifest));
   } finally {
     await removeTemporaryObjects(storage, restoreObjects);
