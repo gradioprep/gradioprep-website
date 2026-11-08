@@ -1,8 +1,10 @@
 # Phase 1F — Final Synthetic Security Acceptance Evidence Crosswalk
 
-**Version:** 0.3-draft  
+
+> **Authoritative current checkpoint — 8 November 2026:** Repository `gradioprep/gradioprep-website` is public. PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. Verified application/test head: `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`; latest Phase 1F security migration head: `5011ec73669ddd3f94e4618a508e63f5ee698fc8`. Exact-head GitHub Actions run [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070) passed 609 PostgreSQL assertions across 17 SQL files, TypeScript/Worker/Vite builds, 32/32 Playwright tests, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection, local Supabase shutdown, local credential cleanup and a clean credential-free asset build. The restore report recorded one restored database snapshot and one protected PDF checksum. Cloudflare Preview steps were skipped; no Preview or production deployment occurred. Seven Phase 1F runbooks are documented; Founder/security review and provider-specific activation remain outstanding. Local WSL checkout was not inspected and remains unverified. Use standard GitHub-hosted `ubuntu-latest`; do not start local Supabase/Docker or register a self-hosted runner. Hosted Supabase/R2, paid usage, real learner data, external processors, DNS/custom-domain changes, production deployment and PR merge remain separately gated.
+**Version:** 0.4-draft
 **Date:** 8 November 2026  
-**Status:** Source review and remediation in progress. Final Phase 1F acceptance is **not yet granted**.
+**Status:** Phase 1F source review, implementation and exact-head synthetic CI evidence are complete for the documented scope. Formal Phase 1F acceptance is **not yet granted**; Founder/security review and explicit approval remain pending.
 
 ## 1. Purpose and boundary
 
@@ -50,9 +52,9 @@ All work remains synthetic-only and uses standard GitHub-hosted `ubuntu-latest`.
 
 ## 5. Phase 1F exit criteria
 
-Phase 1F remains open until:
+Technical synthetic verification is complete. Formal Phase 1F acceptance remains open until:
 
-- The exact combined application/migration head `5011ec7` passes hosted CI [#42479011331](https://github.com/gradioprep/gradioprep-website/actions/runs/42479011331).
+- The exact application/test head `746727d` passes hosted CI [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070).
 - Every review row has a source/test citation and a pass, gap or deferred disposition.
 - Restored RLS/Storage allow/deny checks pass (already verified at #42477476400 and must also remain green on the combined head).
 - False audit acknowledgements fail closed; role grant/revocation actor attribution is correct; free-text role reasons and draft-archive explanations are excluded from audit metadata (awaiting #42479011331).
@@ -64,7 +66,7 @@ Until those conditions are met, do not describe the Secure Application Foundatio
 
 ## 6. Current next action
 
-Complete the pending exact-head hosted workflow #42478042674 and inspect its PostgreSQL, Worker/browser, backup/restore and cleanup steps. Repair only failures proven by that run. Do not trigger duplicate runs or start local services.
+Complete Founder/security review of the evidence crosswalk and seven operational runbooks, record residual risks and required revisions, and obtain explicit acceptance. No further CI run is needed unless code or tests change. Do not start local services.
 
 PR #22 remains open, draft and unmerged. No hosted services, paid usage, real learner data, external processing, DNS change, production deployment or merge is authorised by this plan.
 
@@ -78,4 +80,13 @@ A scan of the current migrations' audit inserts and reason-category paths found 
 
 Other reason values reviewed are fixed internal categories or enum-like inputs validated against finite allowlists (for example file-rejection categories and deletion/legal-hold decision categories). The scan does not constitute a complete historical secret scan.
 
-The latest SQL review also exposed a flaky test fixture: independent `clock_timestamp()` calls could make `first_published_at` slightly later than `published_at`. The fixture now uses the same transaction-stable `now()`; no production constraint or retention code was changed. Exact-head hosted CI [#42479011331](https://github.com/gradioprep/gradioprep-website/actions/runs/42479011331) is pending.
+The latest SQL review also exposed a flaky test fixture: independent `clock_timestamp()` calls could make `first_published_at` slightly later than `published_at`. The fixture now uses the same transaction-stable `now()`; no production constraint or retention code was changed. Historical pre-final-verification note (superseded by exact-head CI #42479406070): Exact-head hosted CI [#42479011331](https://github.com/gradioprep/gradioprep-website/actions/runs/42479011331) is pending.
+
+
+## Phase 1F exact-head technical verification and formal acceptance boundary — 8 November 2026
+
+The complete Phase 1F synthetic suite passed on application/test head `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`, exact-head hosted CI [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070): 609 PostgreSQL assertions across 17 SQL files, 32/32 Playwright tests, TypeScript/Worker/Vite builds, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection, local Supabase shutdown, local credential cleanup and clean credential-free asset build. The workflow skipped Cloudflare Preview steps; no Preview or production deployment occurred.
+
+Technical synthetic evidence includes restored RLS/Storage allow-deny checks; audit missing/error/false-acknowledgement fail-closed behavior; role grant/revocation actor attribution; fixed audit categories and free-text exclusions for role changes and draft archival; private history preservation; deterministic retention fixtures; private PDF ownership/direct-access controls; and existing retention/legal-hold/closure tests. Coverage is representative per distinct audit action, not exhaustive for every route/outcome permutation.
+
+**Formal Phase 1F acceptance is not yet granted.** The seven operational runbooks require Founder/security review, named operational contacts and provider-specific adaptation before activation. Hosted backup encryption/key custody, physical learner/object deletion, scheduled retention execution, production monitoring, provider-specific activation, real-data privacy/legal review and branded hosted staging remain deferred approval gates. The synthetic CI backup verifier is not a production restore service. PR #22 remains open, draft and unmerged.
