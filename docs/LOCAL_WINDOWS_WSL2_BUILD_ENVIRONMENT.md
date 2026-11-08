@@ -6,7 +6,7 @@
 
 ## 1. Current setup checkpoint
 
-WSL2 and Ubuntu are installed. The Linux account is `gradioprep`. Docker Desktop/WSL integration, a private repository checkout inside the Linux filesystem, a separately reviewed workflow change and a repository-scoped self-hosted runner remain pending.
+**Verified on 8 November 2026:** WSL2 Ubuntu is installed and runs as Linux user `gradioprep`. Docker Desktop 4.98.0 is integrated with Ubuntu; Docker Engine 29.9.2 and Compose 5.6.1 respond successfully to `docker version`, `docker compose version` and `docker info`. Git 2.43.0 and GitHub CLI 2.103.3 are installed. The Windows PC has 8 GB DDR4 RAM; Ubuntu/Docker currently reports about 2.8 GiB total memory and 2.1 GiB available, with about 955 GB free in the Linux home filesystem. **GitHub CLI authentication has not yet been completed**, the private repository has not yet been cloned into Linux, and workflow review/runner registration remain pending. The user paused before `gh auth login`; resume there.
 
 The current workflow is `.github/workflows/phase1b-verification.yml` and still targets `runs-on: ubuntu-latest`. **Registering a self-hosted runner alone will not redirect the workflow.** The workflow change is a separate security-sensitive implementation task and is not part of this documentation-only reconciliation.
 
@@ -39,13 +39,7 @@ Expected `whoami` output: `gradioprep`. Do not disclose passwords or authenticat
 2. In Docker Desktop, open **Settings → General** and enable **Use the WSL 2 based engine**.
 3. Open **Settings → Resources → WSL Integration** and enable integration for the installed Ubuntu distribution.
 4. Apply the settings, let Docker Desktop restart and keep it running while local Supabase is used.
-5. In Ubuntu, run:
-
-```bash
-docker version
-docker compose version
-docker info
-```
+5. This was verified on 8 November 2026: Ubuntu integration is enabled and Docker Desktop appears in the Windows taskbar. Ubuntu reports Docker Desktop 4.98.0 / Engine 29.9.2 and Compose 5.6.1. The commands `docker version`, `docker compose version` and `docker info` completed successfully with both Client and Server details.
 
 Both client and server details should appear in `docker version`; `docker info` must complete without a daemon connection error. If not, check that Docker Desktop is running, the WSL2 engine is enabled and Ubuntu integration is on; restart Docker Desktop and reopen Ubuntu before retrying.
 
@@ -55,7 +49,7 @@ When using Docker Desktop's WSL integration, **do not install a second Docker En
 
 Keep the checkout on the Linux filesystem, for example under `/home/gradioprep`, rather than under `/mnt/c`. This avoids Windows-mounted filesystem performance and permission differences and keeps runner work separate from personal Windows files.
 
-First authenticate to GitHub using an approved secure method, such as GitHub CLI interactive authentication or an SSH key. Never put a personal access token in a clone URL, script, shell history, terminal screenshot or committed file.
+**Current pause point (8 November 2026):** GitHub CLI is installed (`gh version 2.103.3`), but the user has not yet signed in. Resume in Ubuntu with `gh auth login`, choose `GitHub.com`, `HTTPS`, and `Login with a web browser`, complete GitHub's browser/device authorisation, then verify with `gh auth status`. Do not share the one-time code, password or any token. The private repository has not yet been cloned. Never put a personal access token in a clone URL, script, shell history, terminal screenshot or committed file.
 
 Then in Ubuntu:
 
@@ -141,11 +135,21 @@ The backup/restore verifier is also unverified until it completes. It is restric
 
 Exact-head Actions run [#42208654326](https://github.com/gradioprep/gradioprep-website/actions/runs/42208654326), attempt 4, failed before runner assignment. Job `127868964485` reports runner ID 0, an empty runner name and no steps; no SQL test or other workflow step executed. This is a runner-assignment failure, not a failed SQL assertion.
 
-1. Finish Docker Desktop WSL2 integration and confirm `docker info` works in Ubuntu.
-2. Clone/update the private repository inside `/home/gradioprep` and verify the branch/head.
-3. Complete a separate workflow security review and change `runs-on` only when the trusted repository-scoped runner is ready.
-4. Register/start the repository-scoped runner under the restrictions above.
-5. Run the Phase 1E SQL tests and local backup/restore round-trip; repair actual failures in a later implementation change, then rerun exact-head verification.
-6. Proceed to Phase 1F only after Phase 1E acceptance passes.
+1. **Resume at GitHub authentication:** run `gh auth login` in Ubuntu and verify with `gh auth status`.
+2. Clone the private repository under `/home/gradioprep/src`, switch to `feature/phase-1b-local-auth-api`, fast-forward from origin and verify the local HEAD against live PR #22.
+3. Review available memory before starting Supabase. The PC has 8 GB physical RAM, while Docker/Ubuntu currently reports about 2.8 GiB total memory. Do not change WSL/Docker memory limits or start the full Supabase stack until resource requirements and safe settings are reviewed; Windows also needs memory.
+4. Complete a separate workflow security review and change `runs-on` only when the trusted repository-scoped runner is ready.
+5. Register/start the repository-scoped runner under the restrictions above.
+6. Run the Phase 1E SQL tests and local backup/restore round-trip; repair actual failures in a later implementation change, then rerun exact-head verification.
+7. Proceed to Phase 1F only after Phase 1E acceptance passes.
 
 Phase 1C is complete; Phase 1D remains verified at its recorded checkpoint; Phase 1E is partial and unverified. No hosted Supabase provisioning, R2, real learner data, external processing, paid usage, Preview/production deployment, DNS/custom-domain change or PR merge is authorised.
+
+
+## 10. Verified Windows/Ubuntu setup checkpoint — 8 November 2026
+
+The user verified: Windows PC has 8 GB DDR4 RAM; WSL2 Ubuntu runs as `gradioprep` in `/home/gradioprep`; Docker Desktop 4.98.0 is integrated with Ubuntu; Docker Engine 29.9.2 and Compose 5.6.1 respond successfully; Git 2.43.0 and GitHub CLI 2.103.3 are installed. `whoami`, `docker version`, `docker compose version` and `docker info` succeeded. Docker/Ubuntu reported about 2.8 GiB total memory and 2.1 GiB available at the check; the Linux home filesystem had about 955 GB free.
+
+**Exact pause point:** GitHub CLI is installed but not authenticated. The next command is `gh auth login` in Ubuntu. Choose GitHub.com, HTTPS and browser-based login; complete device authorisation privately, then run `gh auth status`. Never share the one-time code, password or token. The private repository has not yet been cloned.
+
+Do not force a larger WSL/Docker memory allocation or start the full Supabase stack until safe resource requirements and a reduced-resource option are reviewed. No memory settings have been changed. Phase 1E remains partial/unverified and its 35- and 47-assertion SQL suites remain unrun. All five GitHub spending budgets remain blocked. PR #22 remains open, draft and unmerged; no workflow, application, migration or test changes were made by this setup work.

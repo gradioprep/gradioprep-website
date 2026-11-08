@@ -9,7 +9,7 @@ The curriculum-aware IB, Cambridge and CBSE English learning platform described 
 
 ## Current status
 
-The public deployment on `main` remains the static prototype and is not connected to hosted Supabase. Phase 1E remains unverified until both SQL suites and local backup/restore checks pass. Do not treat run #42208654326 as test evidence: attempt 4 failed before runner assignment and ran no steps. See [the Windows WSL2 build environment guide](docs/LOCAL_WINDOWS_WSL2_BUILD_ENVIRONMENT.md).
+The public deployment on `main` remains the static prototype and is not connected to hosted Supabase. Phase 1C is complete; Phase 1D is verified at its recorded checkpoint; Phase 1E remains partial/unverified, with its 35- and 47-assertion SQL suites still unrun. Actions #42208654326 attempt 4 and exact-head documentation run #42362097858 both failed before runner assignment and ran no steps; neither is test evidence. As of 8 November 2026, WSL2 Ubuntu, Docker Desktop integration, Git and GitHub CLI are installed and verified; GitHub CLI authentication is the current pause point, followed by the private Linux-side checkout. The PC has 8 GB RAM, but Ubuntu/Docker currently reports about 2.8 GiB, so full Supabase startup must wait for a safe resource review. See [the Windows WSL2 build environment guide](docs/LOCAL_WINDOWS_WSL2_BUILD_ENVIRONMENT.md).
 ## Initial planned pathways
 
 - IB MYP Language and Literature — Years 1–5.
