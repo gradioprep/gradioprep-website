@@ -89,3 +89,13 @@ The Phase 1E restore verifier previously compared schema/policy counts but did n
 The combined head also corrects two audit issues awaiting CI: Worker protected reads now return HTTP 503 unless the audit RPC explicitly acknowledges with boolean `true`; and role-assignment audit records use fixed action categories instead of free-text `role_assignments.reason`. A synthetic canary regression is included in `audit_context.test.sql`.
 
 These controls are synthetic-data evidence only. They do not prove hosted encryption/key custody, physical learner/object erasure, scheduled retention execution or production recovery. See `docs/PHASE_1F_FINAL_SYNTHETIC_SECURITY_ACCEPTANCE.md` and `docs/PHASE_1F_OPERATIONAL_SECURITY_RUNBOOKS.md`.
+
+
+## Phase 1F audit metadata minimisation extension — 8 November 2026
+
+A review of the migration sequence found that free-text role-assignment reasons and free-text draft-archive explanations could be copied to `security_audit_events.reason_category`. The active migration sequence now overrides both behaviours:
+
+- `20261108000200_phase1f_audit_role_reason_allowlist.sql` uses the grant actor on grant events and the actual revoker on revoke events, with fixed action names as audit categories.
+- `20261108000300_phase1f_audit_draft_archive_reason_allowlist.sql` keeps the full explanation in private immutable draft history and writes only `draft_archived` in the audit row.
+
+SQL regressions in `role_revocation.test.sql`, `audit_context.test.sql` and `workflow_integrity.test.sql` cover actor attribution, fixed categories and sensitive-text exclusion. The retained-content boundary is deliberate: a draft explanation remains in private history, not the audit trail. Exact-head hosted CI [#42479011331](https://github.com/gradioprep/gradioprep-website/actions/runs/42479011331) is pending.

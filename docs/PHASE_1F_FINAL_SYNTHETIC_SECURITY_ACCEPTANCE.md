@@ -1,6 +1,6 @@
 # Phase 1F — Final Synthetic Security Acceptance Evidence Crosswalk
 
-**Version:** 0.2-draft  
+**Version:** 0.3-draft  
 **Date:** 8 November 2026  
 **Status:** Source review and remediation in progress. Final Phase 1F acceptance is **not yet granted**.
 
@@ -8,7 +8,7 @@
 
 This crosswalk maps the Phase 1E verified baseline and the new Phase 1F evidence to actual migrations, SQL tests, Worker behavior, Playwright coverage and operational runbooks. It is an evidence index, not a declaration of production readiness.
 
-PR #22 remains open, draft and unmerged. Latest application/migration head: `b3e8da7a12d3cd5dcb2710151334a58976975965`. Exact-head hosted workflow [#42478042674](https://github.com/gradioprep/gradioprep-website/actions/runs/42478042674) is pending. The restore-policy increment at `b844e0a` passed [#42477476400](https://github.com/gradioprep/gradioprep-website/actions/runs/42477476400); the Phase 1E baseline at `edc3340` passed [#42473595308](https://github.com/gradioprep/gradioprep-website/actions/runs/42473595308).
+PR #22 remains open, draft and unmerged. Latest application/migration head: `5011ec73669ddd3f94e4618a508e63f5ee698fc8`. Exact-head hosted workflow [#42479011331](https://github.com/gradioprep/gradioprep-website/actions/runs/42479011331) is pending. Earlier Phase 1F runs exposed the role-audit actor-priority defect and a microsecond-sensitive retention fixture; both corrections are included in the current head. The restore-policy increment at `b844e0a` passed [#42477476400](https://github.com/gradioprep/gradioprep-website/actions/runs/42477476400); the Phase 1E baseline at `edc3340` passed [#42473595308](https://github.com/gradioprep/gradioprep-website/actions/runs/42473595308).
 
 All work remains synthetic-only and uses standard GitHub-hosted `ubuntu-latest`. Do not start Supabase/Docker on the user's WSL computer, register a self-hosted runner, provision hosted Supabase/R2, use real learner data, change DNS/custom domains, deploy production, incur paid overages or merge PR #22 without separate approval.
 
@@ -21,12 +21,12 @@ All work remains synthetic-only and uses standard GitHub-hosted `ubuntu-latest`.
 | Cross-learner isolation | `phase1c_adversarial_acceptance.test.sql`, `attempts_rls.test.sql`, `phase1d_private_submission_files.test.sql`, `tests/attempts.spec.ts` | Synthetic own-learner/foreign-learner attempt and private-file boundaries, guessed IDs/paths, Guardian scope and Grader assignment checks are covered. |
 | Assessment lifecycle, races and replay | `assessment_workflow.test.sql`, `accepted_submissions.test.sql`, `workflow_integrity.test.sql`, `tests/account.spec.ts`, `tests/phase1c-races.spec.ts` | Concurrent assignment/publication, single-use invitation race, in-flight role revocation/suspension and idempotency coverage are present. |
 | Audit attribution and fail-closed behavior | `audit_context.test.sql`, `privileged_write_audit.test.sql`, `learner_write_audit.test.sql`, `tests/audit.spec.ts`, `worker/audit-contract.ts`, `worker/index.ts` | Existing route-level missing-service tests return HTTP 503. Phase 1F now also treats an explicit false RPC result as unacknowledged; a focused regression test is included. Combined exact-head CI is pending. |
-| Audit sensitive-data exclusion | `20261108000200_phase1f_audit_role_reason_allowlist.sql`, `audit_context.test.sql`, `20261105000900_phase1c_worker_only_audit_ingestion.sql`, invitation tests | Fixed role-action categories replace free-form role reasons in audit metadata. Synthetic canary assertion is added but awaits combined exact-head CI. Invitation token/hash and invite URL exclusions are already tested. No full historical secret scan is claimed. |
+| Audit sensitive-data exclusion | `20261108000200_phase1f_audit_role_reason_allowlist.sql`, `20261108000300_phase1f_audit_draft_archive_reason_allowlist.sql`, `audit_context.test.sql`, `role_revocation.test.sql`, `workflow_integrity.test.sql`, invitation tests | Role reasons and draft-archive explanations no longer enter audit metadata. Revocations are attributed to the actual revoking actor. Full archive explanations remain only in intended private history. Canary regressions await exact-head CI #42479011331. Invitation token/hash and invite URL exclusions are also tested. No full historical secret scan is claimed. |
 | Private PDF ownership and Storage | `20261106000100_phase1d_private_submission_files.sql`, `phase1d_private_submission_files.test.sql`, `tests/attempts.spec.ts` | Private bucket, no direct browser metadata access, narrow Worker file RPCs, short signed access, guessed-path/direct Storage denial, cross-learner denial and expiry tests are present. The file feature remains an attachment to an existing queued typed submission, not the complete learner PDF workflow. |
 | Restored RLS and Storage policy effectiveness | `scripts/phase1e-local-backup.mjs`, `verifyRestoredAuthorization()` | **Verified at code head `b844e0a`, CI #42477476400.** After DB restore the verifier checks own Student A attempt visibility, Student B attempt denial, direct private file-metadata denial, private bucket flag, Storage RLS and anonymous/authenticated object-list denial. The combined `b3e8da7` workflow is pending. |
 | Retention, closure and legal holds | `account_deletion_ledger.test.sql` (35 assertions), `account_closure_retention.test.sql` (47 assertions), Phase 1E migrations | Synthetic request, approval, Owner+AAL2, legal-hold precedence including a hold after closure began, retention schedules and backup-expiry metadata are covered. Physical learner-row/external object erasure and a scheduled deletion worker are not implemented. |
 | Operational runbooks | `docs/PHASE_1F_OPERATIONAL_SECURITY_RUNBOOKS.md` | Seven procedures are documented and initially reviewed: account/session compromise; secret rotation; cross-learner incident; malicious PDF; DB/Storage outage and restore; failed deletion/legal hold; backup integrity/key loss. Founder/security sign-off and provider-specific adaptation remain pending. |
-| Build/browser/backup regression | `.github/workflows/phase1b-verification.yml`, TypeScript/Worker/Vite builds, Playwright, `phase1e:backup:verify` | Phase 1E baseline CI passed. The combined Phase 1F exact-head run #42478042674 is pending. |
+| Build/browser/backup regression | `.github/workflows/phase1b-verification.yml`, TypeScript/Worker/Vite builds, Playwright, `phase1e:backup:verify` | Phase 1E baseline CI passed. The combined Phase 1F exact-head run #42479011331 is pending. |
 
 ## 3. Priority review findings and remediation
 
@@ -34,7 +34,9 @@ All work remains synthetic-only and uses standard GitHub-hosted `ubuntu-latest`.
 |---|---|---|
 | Restore verifier checked schema/policy counts but not restored authorization behavior | In-scope evidence gap | Fixed in `scripts/phase1e-local-backup.mjs`; restored allow/deny checks passed in #42477476400. |
 | Protected-read audit helper treated `data === false` as a normal 404/denial rather than an unacknowledged audit result | In-scope fail-closed contract gap | Fixed: only `isAuditAcknowledged(data,error) === true` is accepted; otherwise the Worker returns HTTP 503. Focused Playwright regression is pending #42478042674. |
-| Role-assignment audit copied free-text `role_assignments.reason` into `reason_category` | In-scope sensitive-data gap | Fixed by migration `20261108000200_phase1f_audit_role_reason_allowlist.sql`; audit now records only `role_granted`, `role_revoked` or `role_assignment_updated`. Canary regression awaits #42478042674. |
+| Role-assignment audit copied free-text `role_assignments.reason` into `reason_category`, and actor selection preferred the historical grantor | In-scope sensitive-data and attribution gap | Fixed by migration `20261108000200_phase1f_audit_role_reason_allowlist.sql`: grant uses `granted_by`, revocation uses `revoked_by`, and the category is fixed. Role-revocation assertions await #42479011331. |
+| Draft archive audit copied free-text archive reason into `reason_category` | In-scope sensitive-data gap | Fixed by migration `20261108000300_phase1f_audit_draft_archive_reason_allowlist.sql`; the full explanation remains only in private immutable history and audit uses `draft_archived`. Four SQL assertions await #42479011331. |
+| Retention fixture sampled ordered timestamps independently | Synthetic regression determinism gap | Fixed in `account_closure_retention.test.sql` by using transaction-stable `now()` for both publication timestamps; production constraint and retention logic are unchanged. |
 | No Phase 1F runbook documents existed | Documentation gap | Seven runbooks added in `PHASE_1F_OPERATIONAL_SECURITY_RUNBOOKS.md`; final Owner/security review remains. |
 
 ## 4. Explicit deferred requirements
@@ -50,10 +52,10 @@ All work remains synthetic-only and uses standard GitHub-hosted `ubuntu-latest`.
 
 Phase 1F remains open until:
 
-- The exact combined application/migration head `b3e8da7` passes hosted CI [#42478042674](https://github.com/gradioprep/gradioprep-website/actions/runs/42478042674).
+- The exact combined application/migration head `5011ec7` passes hosted CI [#42479011331](https://github.com/gradioprep/gradioprep-website/actions/runs/42479011331).
 - Every review row has a source/test citation and a pass, gap or deferred disposition.
 - Restored RLS/Storage allow/deny checks pass (already verified at #42477476400 and must also remain green on the combined head).
-- False audit acknowledgements fail closed and role-reason canary text is excluded (awaiting combined CI).
+- False audit acknowledgements fail closed; role grant/revocation actor attribution is correct; free-text role reasons and draft-archive explanations are excluded from audit metadata (awaiting #42479011331).
 - The seven runbooks receive final Founder/security review; provider-specific activation remains a pre-real-data operational gate.
 - The Master Brief, implementation specification and matrices agree on status and remaining gates.
 - Founder explicitly accepts the Phase 1F synthetic evidence and authorises the next phase separately.
@@ -65,3 +67,15 @@ Until those conditions are met, do not describe the Secure Application Foundatio
 Complete the pending exact-head hosted workflow #42478042674 and inspect its PostgreSQL, Worker/browser, backup/restore and cleanup steps. Repair only failures proven by that run. Do not trigger duplicate runs or start local services.
 
 PR #22 remains open, draft and unmerged. No hosted services, paid usage, real learner data, external processing, DNS change, production deployment or merge is authorised by this plan.
+
+
+## 7. Latest audit metadata review — 8 November 2026
+
+A scan of the current migrations' audit inserts and reason-category paths found two free-text categories, both addressed on current head `5011ec7`:
+
+- Role-assignment audit: grants use `granted_by`; revocations use `revoked_by`; `reason_category` uses only the fixed action name. The test verifies the revoking Owner, `role_revoked`, and exclusion of the supplied free-text explanation.
+- Draft archival: private immutable `assessment_draft_history.archive_reason` keeps the full explanation; the security audit stores only `draft_archived`. Four pgTAP assertions cover preservation and exclusion.
+
+Other reason values reviewed are fixed internal categories or enum-like inputs validated against finite allowlists (for example file-rejection categories and deletion/legal-hold decision categories). The scan does not constitute a complete historical secret scan.
+
+The latest SQL review also exposed a flaky test fixture: independent `clock_timestamp()` calls could make `first_published_at` slightly later than `published_at`. The fixture now uses the same transaction-stable `now()`; no production constraint or retention code was changed. Exact-head hosted CI [#42479011331](https://github.com/gradioprep/gradioprep-website/actions/runs/42479011331) is pending.

@@ -1,6 +1,6 @@
 # Phase 1C endpoint-to-authorization and audit matrix
 
-> **Current execution checkpoint — 8 November 2026:** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`; the repository is public. Latest application/migration head `b3e8da7a12d3cd5dcb2710151334a58976975965` includes explicit false-audit-acknowledgement handling and the role-reason audit redaction migration. Exact-head CI [#42478042674](https://github.com/gradioprep/gradioprep-website/actions/runs/42478042674) is pending. The restored RLS/Storage verifier passed separately at `b844e0a`, run [#42477476400](https://github.com/gradioprep/gradioprep-website/actions/runs/42477476400). Phase 1E baseline passed [#42473595308](https://github.com/gradioprep/gradioprep-website/actions/runs/42473595308). Local WSL checkout remains unverified; do not start local Supabase/Docker or register a self-hosted runner. Standard `ubuntu-latest` remains the CI runner. Hosted provisioning, real data, paid use, DNS, production deployment and merge remain separately gated.
+> **Current execution checkpoint — 8 November 2026:** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`; the repository is public. Latest application/migration head `5011ec73669ddd3f94e4618a508e63f5ee698fc8` includes explicit false-audit-acknowledgement handling, correct role actor attribution, fixed role/draft-archive categories and synthetic free-text exclusion tests. Exact-head CI [#42479011331](https://github.com/gradioprep/gradioprep-website/actions/runs/42479011331) is pending. The restored RLS/Storage verifier passed separately at `b844e0a`, run [#42477476400](https://github.com/gradioprep/gradioprep-website/actions/runs/42477476400). Phase 1E baseline passed [#42473595308](https://github.com/gradioprep/gradioprep-website/actions/runs/42473595308). Local WSL checkout remains unverified; do not start local Supabase/Docker or register a self-hosted runner. Standard `ubuntu-latest` remains the CI runner. Hosted provisioning, real data, paid use, DNS, production deployment and merge remain separately gated.
 
 
 
@@ -124,3 +124,8 @@ The Worker audit contract now accepts only an explicit boolean `true` with no RP
 Migration `20261108000200_phase1f_audit_role_reason_allowlist.sql` removes free-form role-assignment reason text from audit `reason_category`; the trigger records only `role_granted`, `role_revoked` or `role_assignment_updated`. A synthetic canary assertion in `audit_context.test.sql` verifies the submitted free text is absent. This test also awaits #42478042674.
 
 Audit correlation remains representative per distinct action, not exhaustive over every route/outcome permutation. See the Phase 1F crosswalk for current evidence and deferred hosted/production boundaries.
+
+
+## Phase 1F audit metadata minimisation — 8 November 2026
+
+The active migration sequence fixes both identified free-text audit paths: role-assignment reason text is replaced with fixed role action categories, with grants attributed to `granted_by` and revocations to `revoked_by`; draft-archive explanations remain in private immutable draft history while audit metadata records only `draft_archived`. SQL canaries cover exclusion and attribution. Full combined verification is pending at [#42479011331](https://github.com/gradioprep/gradioprep-website/actions/runs/42479011331).
