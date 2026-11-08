@@ -36,6 +36,40 @@ SELECT ok(public.record_worker_audit_outcome('11111111-1111-4111-8111-1111111111
 RESET ROLE;
 SELECT is((SELECT count(*)::integer FROM private.security_audit_events WHERE actor_id='11111111-1111-4111-8111-111111111111' AND action='student_attempt_list_authorized' AND request_id IS NOT NULL AND request_id <> 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'),1,'database trigger replaces invalid request correlation IDs');
 
+-- Role-assignment reason is free text and must never be copied into the audit category.
+UPDATE public.role_assignments
+SET reason = 'SYNTHETIC-SENSITIVE-CANARY-DO-NOT-LOG'
+WHERE id = (
+  SELECT id FROM public.role_assignments
+  WHERE user_id = '11111111-1111-4111-8111-111111111111'
+    AND role = 'student' AND revoked_at IS NULL
+  LIMIT 1
+);
+SELECT is(
+  (
+    SELECT reason_category
+    FROM private.security_audit_events
+    WHERE action = 'role_assignment_updated'
+      AND target_id = (
+        SELECT id FROM public.role_assignments
+        WHERE user_id = '11111111-1111-4111-8111-111111111111'
+          AND role = 'student' AND revoked_at IS NULL
+        LIMIT 1
+      )
+    ORDER BY occurred_at DESC
+    LIMIT 1
+  ),
+  'role_assignment_updated'::text,
+  'role audit records store only a fixed action category, not the supplied free-text reason'
+);
+SELECT ok(
+  NOT EXISTS (
+    SELECT 1 FROM private.security_audit_events
+    WHERE reason_category = 'SYNTHETIC-SENSITIVE-CANARY-DO-NOT-LOG'
+  ),
+  'synthetic sensitive canary text is excluded from persisted audit metadata'
+);
+
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
