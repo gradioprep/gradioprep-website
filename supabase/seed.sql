@@ -130,7 +130,9 @@ VALUES
   ('a1111111-1111-4111-8111-111111111111', 'synthetic-phase1c-ib', 'synthetic-ib-myp-year-4',
    'Synthetic Phase 1C response task A', 1, 'typed', 15, 80, 'published'),
   ('a2222222-2222-4222-8222-222222222222', 'synthetic-phase1c-cambridge', 'synthetic-cambridge-grade-6',
-   'Synthetic Phase 1C response task B', 1, 'typed', 15, 80, 'published')
+   'Synthetic Phase 1C response task B', 1, 'typed', 15, 80, 'published'),
+  ('a3333333-3333-4333-8333-333333333333', 'synthetic-phase2-typed-only', 'synthetic-ib-myp-year-4',
+   'Synthetic Phase 2 typed-only task', 1, 'typed', 15, 80, 'published')
 ON CONFLICT (id) DO NOTHING;
 
 -- The IB fixture opts into typed-plus-optional-PDF; the Cambridge fixture is
@@ -142,7 +144,10 @@ WHERE id = 'a1111111-1111-4111-8111-111111111111'
 
 UPDATE public.task_versions
 SET pdf_response_enabled = false
-WHERE id = 'a2222222-2222-4222-8222-222222222222';
+WHERE id IN (
+  'a2222222-2222-4222-8222-222222222222',
+  'a3333333-3333-4333-8333-333333333333'
+);
 
 INSERT INTO public.task_version_prompts (id, task_version_id, sequence, prompt_text)
 VALUES
@@ -192,7 +197,8 @@ WHERE id IN (
 INSERT INTO public.task_rubric_mappings (id, task_version_id, rubric_version_id)
 VALUES
   ('f7777777-7777-4777-8777-777777777777', 'a1111111-1111-4111-8111-111111111111', 'f1111111-1111-4111-8111-111111111111'),
-  ('f8888888-8888-4888-8888-888888888888', 'a2222222-2222-4222-8222-222222222222', 'f2222222-2222-4222-8222-222222222222')
+  ('f8888888-8888-4888-8888-888888888888', 'a2222222-2222-4222-8222-222222222222', 'f2222222-2222-4222-8222-222222222222'),
+  ('f9999999-9999-4999-8999-999999999999', 'a3333333-3333-4333-8333-333333333333', 'f1111111-1111-4111-8111-111111111111')
 ON CONFLICT (task_version_id) DO NOTHING;
 
 UPDATE private.grading_capacity_config

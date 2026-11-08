@@ -468,14 +468,34 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
 
   
 test("learner task selector keeps PDF attachments disabled for typed-only tasks", async ({ page }) => {
-  await signIn(page, "student.b@example.invalid", "Synthetic Student B");
+  const token = await signIn(page, "student.a@example.invalid", "Synthetic Student A");
   const panel = page.getByTestId("learner-submissions-panel");
-  await expect(panel.getByLabel("Assessment task")).toHaveValue("a2222222-2222-4222-8222-222222222222");
+  const typedOnlyTaskId = "a3333333-3333-4333-8333-333333333333";
+
+  await panel.getByLabel("Assessment task").selectOption(typedOnlyTaskId);
   await expect(panel.getByText(
     "This task accepts typed responses only. PDF attachments are not enabled.",
   )).toBeVisible();
   await expect(panel.getByLabel("Optional PDF attachment")).toHaveCount(0);
-  await expect(panel.getByText("Typed response only", { exact: true })).toBeVisible();
+
+  const accepted = await page.request.post("/api/v1/learner/submissions", {
+    headers: { Authorization: token },
+    data: {
+      task_version_id: typedOnlyTaskId,
+      idempotency_key: randomUUID(),
+      response_text: "This synthetic written response verifies a typed-only assessment submission without an optional PDF.",
+    },
+  });
+  const body = await accepted.json() as { submission?: { submission_id?: string }; error?: string };
+  expect(accepted.status(), JSON.stringify(body)).toBe(201);
+  const submissionId = body.submission?.submission_id;
+  expect(submissionId).toBeTruthy();
+
+  await page.reload();
+  const row = page.getByTestId("learner-submission-" + submissionId);
+  await expect(row).toBeVisible();
+  await expect(row.getByText("Typed response only")).toBeVisible();
+  await expect(row.getByLabel("Attach optional PDF")).toHaveCount(0);
 });
 
 test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {
