@@ -6,7 +6,7 @@
 
 ## 1. Current setup checkpoint
 
-**Verified on 8 November 2026:** WSL2 Ubuntu is installed and runs as Linux user `gradioprep`. Docker Desktop 4.98.0 is integrated with Ubuntu; Docker Engine 29.9.2 and Compose 5.6.1 respond successfully to `docker version`, `docker compose version` and `docker info`. Git 2.43.0 and GitHub CLI 2.103.3 are installed. The Windows PC has 8 GB DDR4 RAM; Ubuntu/Docker currently reports about 2.8 GiB total memory and 2.1 GiB available, with about 955 GB free in the Linux home filesystem. **GitHub CLI authentication has not yet been completed**, the private repository has not yet been cloned into Linux, and workflow review/runner registration remain pending. The user paused before `gh auth login`; resume there.
+**Verified on 8 November 2026:** WSL2 Ubuntu is installed and runs as Linux user `gradioprep`. Docker Desktop 4.98.0 is integrated with Ubuntu; Docker Engine 29.9.2 and Compose 5.6.1 respond successfully to `docker version`, `docker compose version` and `docker info`. Git 2.43.0 and GitHub CLI 2.103.3 are installed. The Windows PC has 8 GB DDR4 RAM; Ubuntu/Docker currently reports about 2.8 GiB total memory and 2.1 GiB available, with about 955 GB free in the Linux home filesystem. **GitHub CLI authentication is now verified:** `gh auth status` showed active account `gradioprep` using HTTPS, and `gh repo view gradioprep/gradioprep-website --json nameWithOwner,isPrivate` confirmed access to the private repository. No password, device code or token was disclosed in chat. **Current pause point:** clone the private repository into `/home/gradioprep/src`, verify the local branch/HEAD, then review the memory footprint before attempting Supabase.
 
 The current workflow is `.github/workflows/phase1b-verification.yml` and still targets `runs-on: ubuntu-latest`. **Registering a self-hosted runner alone will not redirect the workflow.** The workflow change is a separate security-sensitive implementation task and is not part of this documentation-only reconciliation.
 
@@ -49,7 +49,7 @@ When using Docker Desktop's WSL integration, **do not install a second Docker En
 
 Keep the checkout on the Linux filesystem, for example under `/home/gradioprep`, rather than under `/mnt/c`. This avoids Windows-mounted filesystem performance and permission differences and keeps runner work separate from personal Windows files.
 
-**Current pause point (8 November 2026):** GitHub CLI is installed (`gh version 2.103.3`), but the user has not yet signed in. Resume in Ubuntu with `gh auth login`, choose `GitHub.com`, `HTTPS`, and `Login with a web browser`, complete GitHub's browser/device authorisation, then verify with `gh auth status`. Do not share the one-time code, password or any token. The private repository has not yet been cloned. Never put a personal access token in a clone URL, script, shell history, terminal screenshot or committed file.
+**Authentication complete (8 November 2026):** `gh auth status` confirms active account `gradioprep`, HTTPS Git operations and the `repo`/`workflow` scopes; `gh repo view gradioprep/gradioprep-website --json nameWithOwner,isPrivate` confirms private-repository access. The private repository has not yet been cloned. Never put a personal access token in a clone URL, script, shell history, terminal screenshot or committed file.
 
 Then in Ubuntu:
 
@@ -158,3 +158,16 @@ Do not force a larger WSL/Docker memory allocation or start the full Supabase st
 ## 11. Resource note — 8 November 2026
 
 Supabase's current CLI reference recommends at least 7 GB RAM to start all local services. The GradioPrep workflow already excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor, so a reduced local stack may require less. However, the user's Docker/Ubuntu environment currently reports about 2.8 GiB total memory. Do not assume this is sufficient, increase WSL/Docker memory limits, or attempt a full local stack before inspecting the project-specific service list and planning a safe reduced-resource run. Windows must retain enough memory for normal operation. See the [Supabase local development guide](https://supabase.com/docs/guides/local-development) and [Supabase CLI start reference](https://supabase.com/docs/reference/cli/introduction).
+
+
+## 12. GitHub CLI authentication and repository access — verified 8 November 2026
+
+The user completed GitHub CLI browser authentication from Ubuntu. Reported output confirmed:
+- Host: `github.com`
+- Active account: `gradioprep`
+- Git operations protocol: HTTPS
+- Token scopes shown: `gist`, `read:org`, `repo`, `workflow`
+
+The read-only repository check `gh repo view gradioprep/gradioprep-website --json nameWithOwner,isPrivate` returned `nameWithOwner: gradioprep/gradioprep-website` and `isPrivate: true`. No password, device code or token was shared in chat.
+
+**Next local operation:** clone the branch into `/home/gradioprep/src` and verify its HEAD against live PR #22 before any install, Supabase start, runner setup or code edits.
