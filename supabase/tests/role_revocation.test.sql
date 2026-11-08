@@ -106,6 +106,27 @@ SELECT is(
   1,
   'role revocation audit records the actual revoking owner'
 );
+SELECT is(
+  (SELECT reason_category FROM private.security_audit_events
+   WHERE action = 'role_revoked'
+     AND actor_id = '88888888-8888-4888-8888-888888888888'
+     AND target_id = (
+       SELECT id FROM public.role_assignments
+       WHERE user_id = '66666666-6666-4666-8666-666666666666'
+         AND role = 'grader'
+     )
+   ORDER BY occurred_at DESC LIMIT 1),
+  'role_revoked'::text,
+  'role revocation audit uses the fixed action category'
+);
+SELECT ok(
+  NOT EXISTS (
+    SELECT 1 FROM private.security_audit_events
+    WHERE action = 'role_revoked'
+      AND reason_category = 'synthetic test revocation'
+  ),
+  'free-text revocation reason is not copied into audit metadata'
+);
 
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
