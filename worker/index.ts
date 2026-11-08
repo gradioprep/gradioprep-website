@@ -2879,6 +2879,19 @@ async function getAuthorizedSubmissionPdf(
     return jsonResponse({ error: "submission_file_not_found" }, 404);
   }
 
+  const { data: transcriptData, error: transcriptError } = await context.serviceSupabase.rpc(
+    "get_authorized_submission_transcript",
+    {
+      p_actor_id: context.userId,
+      p_assurance: context.assuranceLevel,
+      p_submission_id: submissionId,
+    },
+  );
+  if (transcriptError) {
+    return jsonResponse({ error: "private_transcript_access_unavailable" }, 503);
+  }
+  const transcript = asRows(transcriptData)[0] ?? null;
+
   const { data: signed, error: signedError } = await context.serviceSupabase.storage
     .from(privateSubmissionBucket)
     .createSignedUrl(fileRecord.object_path, submissionPdfSignedUrlTtlSeconds);
@@ -2896,6 +2909,16 @@ async function getAuthorizedSubmissionPdf(
       signed_url: signed.signedUrl,
       expires_in_seconds: submissionPdfSignedUrlTtlSeconds,
     },
+    transcript: transcript ? {
+      version: transcript.transcript_version,
+      method: transcript.extraction_method,
+      state: transcript.extraction_state,
+      verification_state: transcript.verification_state,
+      page_count: transcript.page_count,
+      pages: transcript.pages,
+      text: transcript.content_text,
+      created_at: transcript.created_at,
+    } : null,
   });
 }
 
@@ -2948,6 +2971,37 @@ async function cleanupExpiredSubmissionPdfs(
         p_actor_id: context.userId,
         p_assurance: context.assuranceLevel,
         p_file_id: item.file_id,
+      },
+    );
+    if (finishError || finished !== true) {
+      return jsonResponse({ error: "private_file_cleanup_incomplete" }, 503);
+    }
+    cleaned += 1;
+  }
+
+  const { data: reservations, error: reservationError } = await context.serviceSupabase.rpc(
+    "claim_expired_pdf_submission_reservations",
+    { p_actor_id: context.userId, p_assurance: context.assuranceLevel },
+  );
+  if (reservationError) return jsonResponse({ error: "private_file_cleanup_unavailable" }, 503);
+
+  for (const reservation of asRows(reservations)) {
+    if (typeof reservation.reservation_id !== "string" ||
+        typeof reservation.object_path !== "string") continue;
+
+    const { error: removeError } = await context.serviceSupabase.storage
+      .from(privateSubmissionBucket)
+      .remove([reservation.object_path]);
+    if (removeError) {
+      return jsonResponse({ error: "private_file_cleanup_incomplete" }, 503);
+    }
+
+    const { data: finished, error: finishError } = await context.serviceSupabase.rpc(
+      "finish_expired_pdf_submission_reservation_cleanup",
+      {
+        p_actor_id: context.userId,
+        p_assurance: context.assuranceLevel,
+        p_reservation_id: reservation.reservation_id,
       },
     );
     if (finishError || finished !== true) {
