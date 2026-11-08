@@ -62,9 +62,9 @@ SELECT ok(
   'the synthetic Cambridge task remains typed-only'
 );
 SELECT throws_ok(
-  $UPDATE public.task_versions
+  'UPDATE public.task_versions
     SET pdf_response_enabled = true, ideal_words = 20
-    WHERE id = 'a1111111-1111-4111-8111-111111111111'$,
+    WHERE id = ''a1111111-1111-4111-8111-111111111111''',
   '23514',
   'new row for relation "task_versions" violates check constraint "task_versions_pdf_response_threshold_check"',
   'a task at the 20-word boundary cannot enable PDF response'
