@@ -6,17 +6,19 @@
 
 ## 1. Current setup checkpoint
 
-**Verified on 8 November 2026:** WSL2 Ubuntu runs as Linux user gradioprep; Docker Desktop integration, Docker Engine, Compose, Git, GitHub CLI authentication and private repository access are verified. The PC has 8 GB DDR4 RAM. A previous Docker/Ubuntu reading reported approximately 2.8 GiB total and 2.1 GiB available; this is not a current snapshot.
+**Verified on 8 November 2026:** WSL2 Ubuntu runs as Linux user gradioprep; Docker Desktop integration, Docker Engine, Compose, Git, GitHub CLI authentication and private repository access are verified. The PC has 8 GB DDR4 RAM.
 
-**Node and dependencies complete:** Node v22.23.4 and npm 10.9.9 both resolve inside /home/gradioprep/.nvm/versions/node/v22.23.4/bin/. npm install --no-audit --no-fund succeeded and added 130 packages. node_modules/ is ignored. The workflow says package-lock.json is intentionally not committed; the user confirmed a clean working tree after fast-forward.
+**Node and dependencies complete:** Node v22.23.4 and npm 10.9.9 both resolve inside /home/gradioprep/.nvm/versions/node/v22.23.4/bin/. npm install --no-audit --no-fund succeeded and added 130 packages. node_modules/ is ignored by Git. The workflow explicitly says package-lock.json is intentionally not committed.
 
-**Repository synchronisation:** the user fast-forwarded from acfde1e9572d5149e8d4a857bfb32032db1dc45a to 39b34c9727b15b2e6a1f514d87e1676a093b217f. Local HEAD, origin and PR head matched there, and the working tree was clean. This follow-on documentation reconciliation produced two later remote-only documentation commits: cc9dd03fbbf9d43a46ac223dcb231a5dbe02a9aa and the present update. The last user-verified local checkout is therefore two documentation-only commits behind. Fast-forward before the next local project operation; do not reclone or reinstall Node/dependencies.
+**Repository synchronisation complete:** the user fast-forwarded from 39b34c9727b15b2e6a1f514d87e1676a093b217f to 480e019e3a3b9f4ce07b257fd5bd15d7fc68cc7f. The user confirmed local HEAD and PR head both matched 480e019e3a3b9f4ce07b257fd5bd15d7fc68cc7f. git status --short --branch showed only the branch/tracking line, with no modified or untracked files.
 
-**Supabase reduced-service configuration:** the checked-in workflow excludes studio, logflare, vector, edge-runtime, postgres-meta, realtime and supavisor. It retains the database plus Auth, Storage API, imgproxy, Kong, Mailpit and PostgREST. Supabase's CLI reference recommends at least 7 GB RAM to start all services and supports excluding unneeded containers; no minimum-memory figure is published for this exact reduced configuration. See https://supabase.com/docs/reference/cli/introduction and https://supabase.com/docs/guides/local-development.
+**Current WSL/Docker memory snapshot:** WSL free -h reports 2.8 GiB total, 688 MiB used, 1.8 GiB free and 2.1 GiB available. Swap is 1.0 GiB total and unused. Docker reports MemTotal 3,020,513,280 bytes (approximately 2.81 GiB) and 4 CPUs. docker ps lists no running containers.
 
-**Resource decision: HOLD — do not start Supabase.** The machine has 8 GB physical RAM. Refresh the previous 2.8 GiB Docker/Ubuntu total / 2.1 GiB available reading. Capture current Windows available physical RAM, WSL free -h, Docker daemon MemTotal and running container names. Do not edit .wslconfig or Docker memory/CPU/swap limits, and do not start containers during this assessment.
+**Supabase reduced-service configuration:** the checked-in workflow excludes studio, logflare, vector, edge-runtime, postgres-meta, realtime and supavisor. It retains PostgreSQL plus Auth, Storage API, imgproxy, Kong, Mailpit and PostgREST. Supabase recommends at least 7 GB RAM to start all services but publishes no minimum-memory figure for this exact reduced combination. See https://supabase.com/docs/reference/cli/introduction and https://supabase.com/docs/guides/local-development.
 
-**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. Its 35- and 47-assertion SQL suites and local backup/restore verifier have not passed. Latest exact-head Actions run #42463494126 failed with no job steps reported and logs unavailable; no SQL/build/browser test failure is established.
+**Resource decision: HOLD — do not start Supabase yet.** The PC has 8 GB physical RAM, and the Windows available-physical-memory reading has not yet been supplied. Obtain this reading before deciding. Do not edit .wslconfig or Docker memory/CPU/swap limits, and do not start containers during the assessment.
+
+**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. Its 35- and 47-assertion SQL suites and local backup/restore verifier have not passed. Latest exact-head Actions run #42463591504 failed with no job steps reported and logs unavailable; no SQL/build/browser test failure is established.
 
 ## 2. Verify the WSL2 Ubuntu installation
 
@@ -139,33 +141,23 @@ npm run supabase:stop
 
 The Supabase environment script writes ignored local-only files. Do not print or upload secret values. Confirm cleanup even after a test failure; stop the local stack and remove local-only credentials using the repository's cleanup procedure.
 
-## 9. Current next step — collect memory readings (no startup)
+## 9. Current next step — Windows memory reading (no startup)
 
-Node installation, dependency installation and the first Git fast-forward are complete. Two subsequent documentation-only commits have since advanced the remote branch; fast-forward the local checkout once before continuing. Do not repeat Node or npm installation.
+Node installation, dependency installation and repository synchronisation are complete. WSL and Docker memory readings are also supplied. Only the Windows available-physical-memory reading remains outstanding.
 
-The next task is read-only resource assessment. Run this in Windows PowerShell:
+Run this read-only command in Windows PowerShell:
 
 ```powershell
 Get-CimInstance Win32_OperatingSystem | Select-Object @{Name='TotalRAM_GiB';Expression={[math]::Round($_.TotalVisibleMemorySize/1MB,2)}}, @{Name='AvailableRAM_GiB';Expression={[math]::Round($_.FreePhysicalMemory/1MB,2)}}
 ```
 
-Then run in Ubuntu/WSL:
+This reports installed visible RAM and currently available physical RAM. Do not run supabase start, do not change .wslconfig or Docker resource limits, and do not start additional containers before reviewing the result.
 
-```bash
-cd ~/src/gradioprep-website
-git pull --ff-only origin feature/phase-1b-local-auth-api
-git rev-parse HEAD
-git status --short --branch
-free -h
-docker info --format 'Docker daemon memory total: {{.MemTotal}} bytes; CPUs: {{.NCPU}}'
-docker ps --format 'table {{.Names}}\t{{.Status}}'
-```
+Current Linux readings: WSL 2.8 GiB total, 688 MiB used, 1.8 GiB free, 2.1 GiB available; 1 GiB swap unused. Docker daemon: approximately 2.81 GiB memory and 4 CPUs. No containers are running. The project excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor; the remaining database/Auth/Storage/API services have no published minimum-memory figure for this exact combination. Supabase's 7 GB recommendation applies to all services.
 
-The PowerShell and Docker/WSL commands only inspect memory and existing containers; git pull only fast-forwards documentation. Do not run supabase start, do not change .wslconfig or Docker resource limits, and do not start additional containers.
+Resource decision remains HOLD until the Windows reading is reviewed. Do not infer that the reduced stack will fit from available WSL memory alone.
 
-The workflow retains the database plus Auth, Storage API, imgproxy, Kong, Mailpit and PostgREST; it excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor. The 7 GB Supabase recommendation is for all local services. No minimum is documented for this reduced set. Review the new readings before deciding whether a local run is reasonable on this 8 GB PC.
-
-Phase 1E remains partial/unverified: the 35- and 47-assertion SQL suites and backup/restore verifier remain pending. The latest exact-head Actions run #42463494126 failed without reporting job steps; logs were unavailable, so no test failure or precise runner cause is established. The workflow remains on ubuntu-latest; runner registration alone does not redirect it. Any self-hosted runner change requires a separate security review.
+Phase 1E remains partial/unverified: the 35- and 47-assertion SQL suites and backup/restore verifier remain pending. Exact-head Actions run #42463591504 failed without reporting job steps; logs were unavailable, so no test failure or precise runner cause is established. The workflow remains on ubuntu-latest; runner registration alone does not redirect it. Any self-hosted runner change requires a separate security review.
 
 PR #22 remains open, draft and unmerged. All existing hosted provisioning, cost, real-data, external processing/email, DNS, production deployment and merge restrictions remain in force.
 
@@ -193,4 +185,4 @@ The user completed GitHub CLI browser authentication from Ubuntu. Reported outpu
 
 The read-only repository check `gh repo view gradioprep/gradioprep-website --json nameWithOwner,isPrivate` returned `nameWithOwner: gradioprep/gradioprep-website` and `isPrivate: true`. No password, device code or token was shared in chat.
 
-**Current status — 8 November 2026:** GitHub CLI authentication, repository clone, Node/npm setup, dependency installation and the first fast-forward are complete. The last user-verified local HEAD, origin and PR head all matched 39b34c9727b15b2e6a1f514d87e1676a093b217f and the working tree was clean. Two subsequent documentation-only commits have advanced the remote branch; fast-forward once before local project work. Node v22.23.4/npm 10.9.9 are installed; npm added 130 packages. package-lock.json is not committed under the workflow policy. The next task is the Windows/WSL/Docker memory snapshot described in Section 9. Supabase remains stopped.
+**Current status — 8 November 2026:** GitHub CLI authentication, repository clone, Node/npm setup, dependency installation and repository synchronisation are complete. Local HEAD and PR head match 480e019e3a3b9f4ce07b257fd5bd15d7fc68cc7f; the working tree is clean. WSL reports 2.8 GiB total / 2.1 GiB available, 1 GiB swap unused. Docker reports 2.81 GiB / 4 CPUs with no running containers. The Windows available-memory reading is the only remaining input before the local Supabase resource decision. Supabase remains stopped.
