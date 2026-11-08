@@ -717,34 +717,6 @@ test.describe("Phase 1B account foundation", () => {
     const acceptedTimes = ownerQueueBody.submissions.map(item => Date.parse(item.accepted_at));
     expect(acceptedTimes).toEqual([...acceptedTimes].sort((first, second) => first - second));
 
-    // Release the synthetic queue slot using the real, AAL2-protected owner
-    // lifecycle API so this test cannot leave shared local CI capacity occupied.
-    const ownerAal2Withdrawal = await page.request.post(
-      "/api/v1/owner/submissions/" + lifecycleSubmissionId + "/transition",
-      {
-        headers: { Authorization: ownerToken },
-        data: {
-          target_status: "withdrawn",
-          reason: "Release synthetic CI capacity after lifecycle assertions",
-        },
-      },
-    );
-    const withdrawalBody = await ownerAal2Withdrawal.json() as Record<string, unknown>;
-    expect(ownerAal2Withdrawal.status(), JSON.stringify(withdrawalBody)).toBe(200);
-    expect(withdrawalBody).toMatchObject({
-      transition: {
-        submission_id: lifecycleSubmissionId,
-        previous_status: "queued",
-        status: "withdrawn",
-        active_assignment_revoked: false,
-      },
-    });
-    assertPersistedAuditCorrelation(ownerAal2Withdrawal.headers()["x-request-id"], {
-      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
-      action: "assessment_submission_withdrawn", targetType: "assessment_submission",
-      targetId: lifecycleSubmissionId, outcome: "success", reason: "owner_withdrawal",
-    });
-
 
     const duplicateAttemptAssignment = await page.request.post(
       "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign",
@@ -1232,6 +1204,34 @@ test.describe("Phase 1B account foundation", () => {
       actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
       action: "private_qa_record_created", targetType: "assessment_version",
       targetId: publishedVersionId!, outcome: "success", reason: "owner_qa_review",
+    });
+
+    // Close the synthetic submission only after the grader publication and
+    // owner QA checks are complete. This uses the real AAL2 lifecycle route and
+    // releases the shared local CI capacity without disrupting workflow tests.
+    const ownerAal2Closure = await page.request.post(
+      "/api/v1/owner/submissions/" + lifecycleSubmissionId + "/transition",
+      {
+        headers: { Authorization: ownerToken },
+        data: {
+          target_status: "closed",
+          reason: "Close synthetic CI submission after publication and QA assertions",
+        },
+      },
+    );
+    const closureBody = await ownerAal2Closure.json() as Record<string, unknown>;
+    expect(ownerAal2Closure.status(), JSON.stringify(closureBody)).toBe(200);
+    expect(closureBody).toMatchObject({
+      transition: {
+        submission_id: lifecycleSubmissionId,
+        previous_status: "feedback_published",
+        status: "closed",
+      },
+    });
+    assertPersistedAuditCorrelation(ownerAal2Closure.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
+      action: "assessment_submission_closed", targetType: "assessment_submission",
+      targetId: lifecycleSubmissionId, outcome: "success", reason: "owner_closure",
     });
 
     const onePublication = localSqlCsv(`
