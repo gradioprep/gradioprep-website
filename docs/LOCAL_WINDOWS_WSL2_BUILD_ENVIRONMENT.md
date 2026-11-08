@@ -1,6 +1,6 @@
 # Local Windows WSL2 Build and CI Recovery Guide
 
-**Status date:** 7 November 2026  
+**Status date:** 8 November 2026  
 **Repository:** private `gradioprep/gradioprep-website`, PR #22  
 **Purpose:** use a trusted repository-scoped Linux runner for local Supabase verification without consuming GitHub-hosted Actions job minutes.
 
@@ -133,7 +133,7 @@ The backup/restore verifier is also unverified until it completes. It is restric
 
 ## 9. Exact current blocker and next steps
 
-Exact-head Actions run [#42208654326](https://github.com/gradioprep/gradioprep-website/actions/runs/42208654326), attempt 4, failed before runner assignment. Job `127868964485` reports runner ID 0, an empty runner name and no steps; no SQL test or other workflow step executed. This is a runner-assignment failure, not a failed SQL assertion.
+Exact-head code run [#42208654326](https://github.com/gradioprep/gradioprep-website/actions/runs/42208654326), attempt 4, failed before runner assignment. Job `127868964485` reports runner ID 0, an empty runner name and no steps; no SQL test or other workflow step executed. The latest exact-head documentation run [#42458908066](https://github.com/gradioprep/gradioprep-website/actions/runs/42458908066), on branch head `f366e32083a984a81ee7bf0ee51c2248bb7682fe`, failed the same way: job `128663754783`, runner ID 0, empty runner name and no steps. Both are runner-assignment failures, not failed SQL assertions. The workflow still has `runs-on: ubuntu-latest`.
 
 1. **Resume at GitHub authentication:** run `gh auth login` in Ubuntu and verify with `gh auth status`.
 2. Clone the private repository under `/home/gradioprep/src`, switch to `feature/phase-1b-local-auth-api`, fast-forward from origin and verify the local HEAD against live PR #22.
@@ -153,3 +153,8 @@ The user verified: Windows PC has 8 GB DDR4 RAM; WSL2 Ubuntu runs as `gradioprep
 **Exact pause point:** GitHub CLI is installed but not authenticated. The next command is `gh auth login` in Ubuntu. Choose GitHub.com, HTTPS and browser-based login; complete device authorisation privately, then run `gh auth status`. Never share the one-time code, password or token. The private repository has not yet been cloned.
 
 Do not force a larger WSL/Docker memory allocation or start the full Supabase stack until safe resource requirements and a reduced-resource option are reviewed. No memory settings have been changed. Phase 1E remains partial/unverified and its 35- and 47-assertion SQL suites remain unrun. All five GitHub spending budgets remain blocked. PR #22 remains open, draft and unmerged; no workflow, application, migration or test changes were made by this setup work.
+
+
+## 11. Resource note — 8 November 2026
+
+Supabase's current CLI reference recommends at least 7 GB RAM to start all local services. The GradioPrep workflow already excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor, so a reduced local stack may require less. However, the user's Docker/Ubuntu environment currently reports about 2.8 GiB total memory. Do not assume this is sufficient, increase WSL/Docker memory limits, or attempt a full local stack before inspecting the project-specific service list and planning a safe reduced-resource run. Windows must retain enough memory for normal operation. See the [Supabase local development guide](https://supabase.com/docs/guides/local-development) and [Supabase CLI start reference](https://supabase.com/docs/reference/cli/introduction).
