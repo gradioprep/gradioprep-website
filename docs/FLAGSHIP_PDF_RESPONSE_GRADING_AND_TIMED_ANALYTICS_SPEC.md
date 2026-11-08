@@ -1,8 +1,8 @@
 # Flagship PDF Response, Teacher Grading and Timed Analytics — Implementation Plan
 
-**Version:** 1.4
+**Version:** 1.5
 **Date:** 6 November 2026  
-**Status:** The flagship typed/PDF response, human-grading, feedback-publication and timer/analytics plan remains approved but is not implemented as a complete learner/staff workflow. Phase 1F synthetic security evidence was accepted by the Founder on 8 November 2026. The backend task-level PDF eligibility/response_mode slice passed exact-head CI at b6dc72f3534b873b63536f5a994fe5027ddcc162 / [#42484474739](https://github.com/gradioprep/gradioprep-website/actions/runs/42484474739). The learner-facing typed-response and optional-PDF selector/upload journey has since been added at 4f4be588880fd51abe628544a5af84102b5e59ca, but exact-head CI [#42490565745](https://github.com/gradioprep/gradioprep-website/actions/runs/42490565745) is not green: PostgreSQL RLS and builds passed, while Playwright finished 32/33 because the typed-only task test received HTTP 404 assessment_task_not_available instead of expected HTTP 201. Backup/restore was skipped. The UI increment is therefore not yet accepted. PDF.js extraction, scanned-page OCR, complete teacher/grader workspace, feedback publication and timer/analytics remain future work. PR #22 remains open, draft and unmerged; hosted resources, real learner data, external processing, costs, DNS, merge and production deployment require separate approval.
+**Status:** The flagship typed/PDF response, human-grading, feedback-publication and timer/analytics plan remains approved but is not implemented as a complete learner/staff workflow. Phase 1F synthetic security evidence was accepted by the Founder on 8 November 2026. The backend task-level PDF eligibility and the learner-facing typed-response/optional-PDF selector-upload journey are now verified on exact application-code/test revision `86c0099c4e795443342280b1c251d77c9f9f34a4` / [#42498299576](https://github.com/gradioprep/gradioprep-website/actions/runs/42498299576): PostgreSQL RLS tests, builds, **33/33 Playwright tests** and synthetic database/private-PDF backup/restore passed. The current UI still requires typed text; PDF-only submission, PDF.js digital-text extraction/transcript versioning, scanned-page OCR, complete teacher/grader workspace, feedback publication and timer/analytics remain future work. PR #22 remains open, draft and unmerged. Hosted resources, real learner data, external processing, costs, DNS, merge and production deployment require separate approval.
 
 
 
@@ -270,7 +270,9 @@ Exact-head CI [#42484474739](https://github.com/gradioprep/gradioprep-website/ac
 **Next:** implement the learner-facing optional PDF selector and upload interaction, driven by task metadata, preserving the existing typed option and clearly identifying tasks that do not permit PDF. PDF-only submission, extraction/OCR, split-screen teacher grading, feedback UI and timer/analytics follow as separate increments.
 
 
-## 20. Milestone batching, synthetic validation and staged learner testing — 8 November 2026
+## 20. Historical milestone batching and staged learner testing — current test checkpoint superseded by Section 21
+
+> **Historical status note:** The sequencing and approval boundaries remain valid. The specific statement below identifying the 32/33 browser failure as the immediate task was superseded by the successful exact-head run recorded in Section 21.
 
 The Founder approved implementation in coherent feature milestones instead of requesting an instruction for each small technical step. Continue the approved synthetic-only work through related implementation, automated testing and documentation batches. The current first task is to resolve the failing typed-only Playwright case on 4f4be588880fd51abe628544a5af84102b5e59ca and rerun the full pipeline. Do not weaken the database PDF-eligibility rule or role/security checks to make the test pass.
 
@@ -285,3 +287,20 @@ Continue in this order:
 8. After the Founder’s staging test is satisfactory, a separate invitation-only, free pilot with 2–3 participants may proceed only after all required privacy/legal, security, safeguarding, parent/guardian consent where applicable, provider and cost approvals. Analyse feedback and correct material defects before public-release approval.
 
 The initial free public release (Diagnostic + complete Evaluation Report and approved free starter activity/resources) is separate from the later full commercial launch. Paid grading, credits, the Remedial Course and related entitlements/payments must not be represented as available until implemented and accepted. See the authoritative sequence in docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md and the release gates in docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md.
+
+
+## 21. Verified typed/optional-PDF learner journey and next implementation batch — 8 November 2026
+
+The learner-facing typed-response and optional-PDF selector/upload journey is verified within the local synthetic-data scope. Exact application-code/test revision `86c0099c4e795443342280b1c251d77c9f9f34a4` passed GitHub Actions [#42498299576](https://github.com/gradioprep/gradioprep-website/actions/runs/42498299576), including fresh local Supabase reset/seed, PostgreSQL RLS tests, TypeScript/Worker/Vite builds, **33/33 Playwright tests**, private-PDF/database backup/restore, shutdown, local credential cleanup and a clean build without local credentials. The backup verifier reported `backup_restore_verified`, restored one database snapshot and one protected-PDF checksum, and rejected a corrupt archive.
+
+The latest commit's browser-test cleanup occurs after the synthetic grader has completed publication and Owner private-QA checks. It does not change product authorization or the protected PDF rules. The current learner UI requires typed text and permits an optional PDF on eligible tasks. The approved feature design requires an eligible PDF to be accepted as the learner's response without requiring duplicate typed text. Therefore, the typed/optional-PDF user journey is accepted, but the complete approved PDF response workflow is not.
+
+**Next implementation batch:**
+1. Implement a secure PDF-only submission path for eligible written-response tasks (explicit task opt-in and approved expected-response threshold), preserving the typed-only and typed-plus-optional-PDF paths.
+2. Add in-house PDF.js extraction for existing digital text layers. Preserve the original PDF as authoritative, keep extracted transcript separate and versioned, page-align it, and allow controlled teacher correction with an audit trail.
+3. Add synthetic tests for normal digital-text PDFs, empty-text/scanned PDFs, malformed files and upload size/page limits. Do not invoke external OCR by default.
+4. Keep any external OCR provider account, provider call, learner-content transfer, region/terms review and cost behind separate explicit approval.
+5. Continue with the chronological oldest-first grader queue/workspace, rubric-based human grading, human-only feedback publication/versioning, advisory timer and validated analytics.
+6. Run end-to-end synthetic flagship validation before actual MYP Year 4 diagnostic item authoring. The synthetic validation is not the later 2–3 participant live pilot.
+
+The successful Actions run was a branch-push event; its PR Preview creation and comment steps were skipped. It did not create or update a PR Preview and does not prove or disprove a separate Cloudflare Workers Builds deployment. PR #22 remains open, draft and unmerged. Hosted resources, paid use, external processing, real learner data, DNS, merge and production deployment remain separate approvals.
