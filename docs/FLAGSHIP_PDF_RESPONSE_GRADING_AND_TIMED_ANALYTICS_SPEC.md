@@ -308,7 +308,7 @@ The successful Actions run was a branch-push event; its PR Preview creation and 
 
 ## 22. PDF-only submission and digital-text extraction implementation — CI verification pending — 8 November 2026
 
-The application-code/test slice at `432a0a3c4b649610f683a25da4d311480049d761` implements a learner choice among typed response, typed response plus PDF and PDF-only for tasks that explicitly enable PDF response and have `ideal_words > 20`. The older typed submission followed by an optional PDF upload remains supported. File constraints remain PDF-only, 10 MiB maximum and 10 pages, stored in the existing private bucket.
+The application-code/test slice, with latest code head `f5e25909576ff17ac30e1c0bf4f68bcdbd39dda7` following UI changes in `432a0a3c4b649610f683a25da4d311480049d761`, implements a learner choice among typed response, typed response plus PDF and PDF-only for tasks that explicitly enable PDF response and have `ideal_words > 20`. The older typed submission followed by an optional PDF upload remains supported. File constraints remain PDF-only, 10 MiB maximum and 10 pages, stored in the existing private bucket.
 
 The new Worker route reserves capacity for up to 15 minutes, stores the original file privately and finalizes acceptance together with the initial transcript record. Capacity reservation and typed acceptance share the serialized queue limit; same-key retries are idempotent and cross-mode key reuse is rejected. The 24-hour SLA begins at the final `accepted_at` timestamp after the PDF object and transcript are accepted, not when a reservation is opened. Expired or incomplete reservations are marked for the existing Owner+AAL2 cleanup path.
 
