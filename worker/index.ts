@@ -1415,25 +1415,71 @@ async function listLearnerSubmissions(request: Request, env: WorkerEnv): Promise
     return audit ?? roleDenied;
   }
 
-  const { data, error } = await auth.context.supabase
-    .from("assessment_submissions")
-    .select("id, learner_id, task_version_id, rubric_version_id, response_mode, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, pdf_response_enabled, expected_min_words, ideal_words), submission_versions(id, version_number, word_count, created_at)")
-    .eq("learner_id", auth.context.userId)
-    .order("accepted_at", { ascending: false })
-    .order("id", { ascending: false });
+  const [{ data: submissions, error: submissionsError }, { data: enrolments, error: enrolmentsError }] =
+    await Promise.all([
+      auth.context.supabase
+        .from("assessment_submissions")
+        .select("id, learner_id, task_version_id, rubric_version_id, response_mode, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, pdf_response_enabled, expected_min_words, ideal_words), submission_versions(id, version_number, word_count, created_at)")
+        .eq("learner_id", auth.context.userId)
+        .order("accepted_at", { ascending: false })
+        .order("id", { ascending: false }),
+      auth.context.supabase
+        .from("course_enrolments")
+        .select("pathway_id")
+        .eq("learner_id", auth.context.userId)
+        .eq("status", "active"),
+    ]);
 
-  if (error) {
+  if (submissionsError || enrolmentsError) {
     const audit = await auditProtectedReadOutcome(
       auth.context, "student_submission_list_authorized", undefined, "failed",
     );
     if (audit) return audit;
     return jsonResponse({ error: "assessment_submissions_unavailable" }, 500);
   }
+
+  const pathwayIds = Array.from(new Set(
+    (enrolments ?? [])
+      .map((enrolment) => enrolment.pathway_id)
+      .filter((pathwayId): pathwayId is string => typeof pathwayId === "string"),
+  ));
+  let availableTasks: Array<{
+    id: string;
+    task_code: string;
+    title: string;
+    version: number;
+    expected_min_words: number;
+    ideal_words: number;
+    pdf_response_enabled: boolean;
+  }> = [];
+
+  if (pathwayIds.length > 0) {
+    const { data: tasks, error: tasksError } = await auth.context.supabase
+      .from("task_versions")
+      .select("id, task_code, title, version, expected_min_words, ideal_words, pdf_response_enabled")
+      .in("pathway_id", pathwayIds)
+      .eq("release_state", "published")
+      .order("title", { ascending: true })
+      .order("id", { ascending: true });
+
+    if (tasksError) {
+      const audit = await auditProtectedReadOutcome(
+        auth.context, "student_submission_list_authorized", undefined, "failed",
+      );
+      if (audit) return audit;
+      return jsonResponse({ error: "assessment_tasks_unavailable" }, 500);
+    }
+    availableTasks = tasks ?? [];
+  }
+
   const audit = await auditProtectedReadOutcome(
     auth.context, "student_submission_list_authorized", undefined, "success",
   );
   if (audit) return audit;
-  return jsonResponse({ submissions: data ?? [] });
+  return jsonResponse({
+    submissions: submissions ?? [],
+    available_tasks: availableTasks,
+  });
 }
 
 async function acceptLearnerSubmission(request: Request, env: WorkerEnv): Promise<Response> {

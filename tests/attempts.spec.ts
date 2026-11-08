@@ -330,19 +330,16 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       "pdf_file_too_large",
     );
 
-    const acceptedPdfUpload = await page.request.post(fileUploadRoute, {
-      headers,
-      multipart: { file: { name: "learner-response.pdf", mimeType: "application/pdf", buffer: onePagePdf } },
+    // Exercise the learner-facing upload control for an already accepted typed response.
+    await page.reload();
+    const learnerSubmissionRow = page.getByTestId("learner-submission-" + submissionId);
+    await expect(learnerSubmissionRow).toBeVisible();
+    await learnerSubmissionRow.getByLabel("Attach optional PDF").setInputFiles({
+      name: "learner-response.pdf",
+      mimeType: "application/pdf",
+      buffer: onePagePdf,
     });
-    const acceptedPdfBody = await acceptedPdfUpload.json() as {
-      file: { id: string; version: number; sha256: string; byte_size: number; page_count: number; upload_state: string };
-    };
-    expect(acceptedPdfUpload.status(), JSON.stringify(acceptedPdfBody)).toBe(201);
-    expect(acceptedPdfBody.file.version).toBe(8);
-    expect(acceptedPdfBody.file.sha256).toMatch(/^[a-f0-9]{64}$/);
-    expect(acceptedPdfBody.file.byte_size).toBe(onePagePdf.byteLength);
-    expect(acceptedPdfBody.file.page_count).toBe(1);
-    expect(acceptedPdfBody.file.upload_state).toBe("accepted");
+    await expect(learnerSubmissionRow.getByText("Typed response + PDF attached")).toBeVisible();
 
     const pdfSubmissionDetail = await page.request.get(
       "/api/v1/learner/submissions/" + submissionId,
@@ -360,7 +357,9 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     };
     expect(fileAccess.status()).toBe(200);
     expect(fileAccessBody.file.expires_in_seconds).toBe(60);
-    expect(fileAccessBody.file.sha256).toBe(acceptedPdfBody.file.sha256);
+    expect(fileAccessBody.file.sha256).toMatch(/^[a-f0-9]{64}$/);
+    expect(fileAccessBody.file.byte_size).toBe(onePagePdf.byteLength);
+    expect(fileAccessBody.file.mime_type).toBe("application/pdf");
     expect(fileAccessBody.file.page_count).toBe(1);
     const downloadedPdf = await page.request.get(fileAccessBody.file.signed_url);
     expect(downloadedPdf.status()).toBe(200);
@@ -467,7 +466,19 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     }
   });
 
-  test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {
+  
+test("learner task selector keeps PDF attachments disabled for typed-only tasks", async ({ page }) => {
+  await signIn(page, "student.b@example.invalid", "Synthetic Student B");
+  const panel = page.getByTestId("learner-submissions-panel");
+  await expect(panel.getByLabel("Assessment task")).toHaveValue("a2222222-2222-4222-8222-222222222222");
+  await expect(panel.getByText(
+    "This task accepts typed responses only. PDF attachments are not enabled.",
+  )).toBeVisible();
+  await expect(panel.getByLabel("Optional PDF attachment")).toHaveCount(0);
+  await expect(panel.getByText("Typed response only", { exact: true })).toBeVisible();
+});
+
+test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {
     const token = await signIn(page, "guardian.d@example.invalid", "Synthetic Guardian D");
     const headers = { Authorization: token };
     const attemptRoute = await page.request.get("/api/v1/learner/submissions", { headers });

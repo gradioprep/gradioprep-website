@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { Navigate } from "../App";
 import { useAuth } from "./AuthProvider";
+import LearnerSubmissionPanel from "./LearnerSubmissionPanel";
 
 type AccountMode = "sign-in" | "sign-up" | "recovery-request";
 
@@ -545,6 +546,9 @@ export default function AccountPage({ go }: { go: Navigate }) {
         <small>ACTIVE ROLE(S)</small>
         {account?.roles.length ? account.roles.map(role => <span key={role}>{role.replaceAll("_", " ")}</span>) : <em>Loading role assignment…</em>}
       </div>
+      {account?.roles.includes("student") && auth.session?.access_token && (
+        <LearnerSubmissionPanel accessToken={auth.session.access_token} />
+      )}
       <section className="proto-account-security" aria-labelledby="proto-account-security-heading">
         <div className="proto-account-security-heading">
           <div><p className="proto-eyebrow"><span />ACCOUNT SECURITY</p><h3 id="proto-account-security-heading">Authenticator app</h3></div>
