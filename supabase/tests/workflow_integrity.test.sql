@@ -183,6 +183,37 @@ SELECT is(
   1,
   'identical grader draft retry is separately recorded as a replay'
 );
+SELECT ok(
+  private.archive_assessment_draft(
+    current_setting('test.workflow_submission_id')::uuid,
+    '55555555-5555-4555-8555-555555555555',
+    'SYNTHETIC-ARCHIVE-REASON-CANARY'
+  ),
+  'private synthetic draft can be archived with a bounded explanation'
+);
+SELECT is(
+  (SELECT archive_reason FROM private.assessment_draft_history
+   WHERE submission_id = current_setting('test.workflow_submission_id')::uuid
+   ORDER BY archived_at DESC LIMIT 1),
+  'SYNTHETIC-ARCHIVE-REASON-CANARY'::text,
+  'the full archive explanation remains in private immutable draft history'
+);
+SELECT is(
+  (SELECT reason_category FROM private.security_audit_events
+   WHERE action = 'assessment_draft_archived'
+     AND target_id = current_setting('test.workflow_submission_id')::uuid
+   ORDER BY occurred_at DESC LIMIT 1),
+  'draft_archived'::text,
+  'draft archive audit uses a fixed category'
+);
+SELECT ok(
+  NOT EXISTS (
+    SELECT 1 FROM private.security_audit_events
+    WHERE action = 'assessment_draft_archived'
+      AND reason_category = 'SYNTHETIC-ARCHIVE-REASON-CANARY'
+  ),
+  'free-text archive explanation is excluded from audit metadata'
+);
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);
 SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}', true);
