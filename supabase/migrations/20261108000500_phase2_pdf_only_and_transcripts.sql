@@ -155,7 +155,8 @@ BEGIN
   SELECT count(*)::integer INTO reserved_count
   FROM private.pdf_submission_reservations AS reservation
   WHERE reservation.status = 'reserved'
-    AND reservation.expires_at > clock_timestamp();
+    AND reservation.expires_at > clock_timestamp()
+    AND reservation.idempotency_key IS DISTINCT FROM NEW.idempotency_key;
 
   IF open_count + reserved_count >= capacity.max_open_submissions THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_capacity_full';
@@ -458,6 +459,7 @@ DECLARE
   extracted_text text;
   transcript_state text;
   page_entry jsonb;
+  created_transcript_id uuid;
   expected_number integer;
   page_text text;
   page_status text;
@@ -620,12 +622,9 @@ BEGIN
 
   accepted_time := clock_timestamp();
 
-  -- Changing the reservation to accepted before the INSERT removes its own
-  -- hold from the capacity trigger in this same atomic transaction.
-  UPDATE private.pdf_submission_reservations
-  SET status = 'accepted', updated_at = accepted_time
-  WHERE id = selected_reservation.id;
-
+  -- The INSERT trigger excludes this reservation by idempotency key, while
+  -- retaining its capacity hold for all competing transactions. The state is
+  -- changed to accepted only once all linked rows are ready in this transaction.
   INSERT INTO public.assessment_submissions (
     learner_id, task_version_id, rubric_version_id, status,
     accepted_at, grading_due_at, sla_target_seconds,
@@ -672,10 +671,11 @@ BEGIN
     transcript_state, 'unverified', p_page_count, p_transcript_pages,
     extracted_text, p_actor_id, accepted_time
   )
-  RETURNING id INTO page_entry;
+  RETURNING id INTO created_transcript_id;
 
   UPDATE private.pdf_submission_reservations
-  SET accepted_submission_id = created_submission.id,
+  SET status = 'accepted',
+      accepted_submission_id = created_submission.id,
       sha256 = p_sha256,
       byte_size = p_byte_size,
       page_count = p_page_count,
