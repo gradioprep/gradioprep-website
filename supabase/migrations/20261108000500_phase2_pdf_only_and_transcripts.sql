@@ -148,15 +148,36 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_capacity_unavailable';
   END IF;
 
+  IF EXISTS (
+    SELECT 1 FROM public.assessment_submissions AS submission
+    WHERE submission.learner_id = actor_id
+      AND submission.idempotency_key = p_idempotency_key
+  ) THEN
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_idempotency_conflict';
+  END IF;
+
   SELECT count(*)::integer INTO open_count
   FROM public.assessment_submissions AS submission
   WHERE submission.status IN ('queued', 'assigned', 'grading');
+
+  IF NEW.response_mode = 'typed' AND EXISTS (
+    SELECT 1
+    FROM private.pdf_submission_reservations AS reservation
+    WHERE reservation.learner_id = NEW.learner_id
+      AND reservation.idempotency_key = NEW.idempotency_key
+      AND reservation.status IN ('reserved', 'accepted', 'cleanup_pending')
+  ) THEN
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_idempotency_conflict';
+  END IF;
 
   SELECT count(*)::integer INTO reserved_count
   FROM private.pdf_submission_reservations AS reservation
   WHERE reservation.status = 'reserved'
     AND reservation.expires_at > clock_timestamp()
-    AND reservation.idempotency_key IS DISTINCT FROM NEW.idempotency_key;
+    AND NOT (
+      NEW.response_mode IN ('typed_pdf', 'pdf_only')
+      AND reservation.idempotency_key = NEW.idempotency_key
+    );
 
   IF open_count + reserved_count >= capacity.max_open_submissions THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_capacity_full';
@@ -259,6 +280,14 @@ BEGIN
       AND existing_reservation.expires_at > clock_timestamp() THEN
       RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'pdf_submission_in_progress';
     END IF;
+    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_idempotency_conflict';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM public.assessment_submissions AS submission
+    WHERE submission.learner_id = actor_id
+      AND submission.idempotency_key = p_idempotency_key
+  ) THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_idempotency_conflict';
   END IF;
 
