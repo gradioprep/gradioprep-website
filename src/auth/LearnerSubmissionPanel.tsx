@@ -57,8 +57,8 @@ function userFacingApiError(code?: string): string {
     pdf_submission_reservation_failed: "A submission place could not be reserved. Your work has not been accepted.",
     submission_not_found: "This submission is no longer available for PDF attachment.",
     submission_file_upload_unavailable: "The PDF could not be attached to this submission.",
-    private_file_storage_unavailable: "Private file storage is temporarily unavailable. Your typed response remains submitted.",
-    private_file_acceptance_unavailable: "The PDF could not be confirmed as accepted. Your typed response remains submitted.",
+    private_file_storage_unavailable: "Private file storage could not accept the PDF. Check your recent submissions before retrying.",
+    private_file_acceptance_unavailable: "The PDF could not be confirmed as accepted. Check your recent submissions before retrying.",
   };
   return (code && messages[code]) || "The request could not be completed. Your typed response has not been changed.";
 }
