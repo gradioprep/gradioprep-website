@@ -2,9 +2,9 @@
 
 
 > **Authoritative current checkpoint — 8 November 2026:** Repository `gradioprep/gradioprep-website` is public. PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. Verified application/test head: `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`; latest Phase 1F security migration head: `5011ec73669ddd3f94e4618a508e63f5ee698fc8`. Exact-head GitHub Actions run [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070) passed 609 PostgreSQL assertions across 17 SQL files, TypeScript/Worker/Vite builds, 32/32 Playwright tests, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection, local Supabase shutdown, local credential cleanup and a clean credential-free asset build. The restore report recorded one restored database snapshot and one protected PDF checksum. Cloudflare Preview steps were skipped; no Preview or production deployment occurred. Seven Phase 1F runbooks are documented; Founder/security review and provider-specific activation remain outstanding. Local WSL checkout was not inspected and remains unverified. Use standard GitHub-hosted `ubuntu-latest`; do not start local Supabase/Docker or register a self-hosted runner. Hosted Supabase/R2, paid usage, real learner data, external processors, DNS/custom-domain changes, production deployment and PR merge remain separately gated.
-**Version:** 0.8-draft
+**Version:** 0.9-draft
 **Date:** 8 November 2026  
-**Status:** Phase 1F technical synthetic security evidence is **ACCEPTED by the Founder on 8 November 2026**, limited to the documented synthetic-data scope and subject to the explicit conditions below. This is not production or operational-readiness acceptance.
+**Status:** Phase 1F technical synthetic security evidence is **ACCEPTED by the Founder on 8 November 2026**, limited to the documented scope. This is not production or operational-readiness acceptance; explicit residual controls and approval boundaries remain active.
 
 ## 1. Purpose and boundary
 
@@ -99,18 +99,18 @@ Technical synthetic evidence includes restored RLS/Storage allow-deny checks; au
 
 | Review item | Required decision or record | Current status |
 |---|---|---|
-| Evidence crosswalk | Confirm each technical row, its test reference and pass/gap/deferred classification | Technical evidence compiled; Founder review outstanding |
+| Evidence crosswalk | Confirm each technical row, its test reference and pass/gap/deferred classification | **Founder accepted the documented synthetic technical evidence — 8 November 2026** |
 | Seven runbooks | Review all seven procedures for safe sequencing, authority, escalation and practicality | Preliminary document-level review completed; Founder/security sign-off outstanding |
 | Operational ownership | Name the authorised incident lead, backup contact and approval authority before activation | Not assigned in this document |
 | Provider adaptation | Add provider-specific console steps, contact routes and recovery targets only after provider selection/approval | Deferred; no provider activation |
 | Residual risks | Accept, mitigate or defer each limitation in Section 4 and record owner/date | Decision outstanding |
 | Phase 1F technical evidence decision | Founder acceptance of the synthetic security evidence, limited to the documented scope and stated conditions | **ACCEPTED — 8 November 2026** |
 
-**Decision record:** Reviewer: `[to be completed]`; review date: `[to be completed]`; decision: `[accept / accept with conditions / reject]`; conditions and residual-risk owners: `[to be completed]`. Do not fill this record by inference or treat this documentation change as approval.
+**Decision record:** Founder decision recorded: accept the technical security evidence for the documented synthetic-data scope on 8 November 2026, subject to the conditions in Section 9. Operational ownership and residual-risk owners still require assignment before activation.
 
-**Preliminary review result:** the seven procedures are structurally coherent and consistently require containment, non-content evidence preservation, fail-closed behavior and independent verification. This is a document-level review only, not a professional security certification or Founder acceptance. Outstanding operational blockers are listed in the runbook's Section 10.
+**Preliminary review result:** the seven procedures are structurally coherent and consistently require containment, non-content evidence preservation, fail-closed behavior and independent verification. This is a document-level review only, not a professional security certification or operational activation. Outstanding operational blockers are listed in the runbook's Section 10.
 
-**Next action:** Founder/security review and completion of the decision record. No application change or new CI run is indicated unless the review identifies a concrete code/test gap. Phase 1G and all hosted/live-data/release work remain separately gated.
+**Next action:** continue the approved roadmap using synthetic data. Founder acceptance of technical evidence is complete; named operational contacts, provider-specific procedures and all deferred production controls remain separate gates.
 
 
 **Preliminary document-level review — 8 November 2026:** The seven procedures have been checked for coverage, consistency with the documented synthetic-only implementation, and unsafe instructions. No instruction authorises bypassing RLS/MFA/audit/legal holds, sending learner content to unapproved processors, or using the synthetic CI backup against production. The runbooks explicitly distinguish implemented controls from future capabilities. This review is not a provider-readiness assessment, legal opinion, penetration test or Founder approval.
@@ -129,3 +129,12 @@ The Founder explicitly accepted the Phase 1F technical security evidence and con
 - Obtain separate approval before real learner data, hosted service provisioning, any incurred cost, DNS changes, PR merge or production deployment.
 
 This acceptance does not activate the seven runbooks for production incidents, provision any provider, authorise external OCR/AI processing, or approve branded staging/DNS. The seven runbooks remain drafts pending named operational ownership and provider-specific implementation.
+
+
+## 10. Post-acceptance Phase 2 first increment — verified 8 November 2026
+
+The first approved flagship workflow increment has been implemented and verified after the Founder acceptance record in Section 9. Append-only migration `20261108000400_phase2_optional_pdf_response_eligibility.sql` adds task-level `pdf_response_enabled`, a database constraint requiring `ideal_words > 20`, and persisted `assessment_submissions.response_mode` (`typed` / `typed_pdf`). Upload-start and finalisation both enforce task opt-in and threshold; the submission changes to `typed_pdf` only after a private file is accepted. Direct response-mode forgery is blocked.
+
+The synthetic MYP task is opted in; the synthetic Cambridge task remains typed-only. The private-PDF SQL suite now has 35 assertions. Exact-head CI [#42484474739](https://github.com/gradioprep/gradioprep-website/actions/runs/42484474739) passed 619 PostgreSQL assertions across 17 SQL files, 32/32 Playwright tests, TypeScript/Worker/Vite builds, synthetic backup/restore, shutdown and credential cleanup. Cloudflare Preview was intentionally skipped because this was backend-only; no public Preview or production deployment occurred.
+
+This increment does not implement PDF-only acceptance, PDF.js extraction, OCR, the teacher-facing split-screen, feedback publication or timer/analytics. No hosted resources, paid usage, external processors or real learner data were used.
