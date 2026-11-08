@@ -133,7 +133,7 @@ The backup/restore verifier is also unverified until it completes. It is restric
 
 ## 9. Exact current blocker and next steps
 
-Exact-head code run [#42208654326](https://github.com/gradioprep/gradioprep-website/actions/runs/42208654326), attempt 4, failed before runner assignment. Job `127868964485` reports runner ID 0, an empty runner name and no steps; no SQL test or other workflow step executed. The latest exact-head documentation run [#42458908066](https://github.com/gradioprep/gradioprep-website/actions/runs/42458908066), on branch head `f366e32083a984a81ee7bf0ee51c2248bb7682fe`, failed the same way: job `128663754783`, runner ID 0, empty runner name and no steps. Both are runner-assignment failures, not failed SQL assertions. The workflow still has `runs-on: ubuntu-latest`.
+Exact-head code run [#42208654326](https://github.com/gradioprep/gradioprep-website/actions/runs/42208654326), attempt 4, failed before runner assignment. Job `127868964485` reports runner ID 0, an empty runner name and no steps; no SQL test or other workflow step executed. The prior exact-head documentation run [#42458908066](https://github.com/gradioprep/gradioprep-website/actions/runs/42458908066), on branch head `f366e32083a984a81ee7bf0ee51c2248bb7682fe`, failed the same way: job `128663754783`, runner ID 0, empty runner name and no steps. Both are runner-assignment failures, not failed SQL assertions. The workflow still has `runs-on: ubuntu-latest`.
 
 1. **Resume at GitHub authentication:** run `gh auth login` in Ubuntu and verify with `gh auth status`.
 2. Clone the private repository under `/home/gradioprep/src`, switch to `feature/phase-1b-local-auth-api`, fast-forward from origin and verify the local HEAD against live PR #22.
