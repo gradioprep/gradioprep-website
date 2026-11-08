@@ -555,7 +555,7 @@ test.describe("Phase 1B account foundation", () => {
     assertPersistedAuditCorrelation(verifiedAttempt.headers()["x-request-id"], {
       actorId: "88888888-8888-4888-8888-888888888888", actorRole: "owner",
       action: "role_revoked", targetType: "role_assignment", targetId: roleEventTarget,
-      outcome: "success", reason: "Synthetic access review",
+      outcome: "success", reason: "role_revoked",
     });
 
     const attemptAssignmentUrl = "/api/v1/admin/attempts/c3333333-3333-4333-8333-333333333333/assign";
