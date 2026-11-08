@@ -33,7 +33,6 @@ export async function extractDigitalTextFromPdf(file: File): Promise<ExtractedPd
     data: bytes,
     useWorkerFetch: false,
     isEvalSupported: false,
-    stopEvent: undefined,
   });
 
   const document = await loadingTask.promise;
