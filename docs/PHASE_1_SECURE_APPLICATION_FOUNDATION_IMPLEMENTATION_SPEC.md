@@ -3,11 +3,11 @@
 > **Authoritative current checkpoint — 8 November 2026:** Repository `gradioprep/gradioprep-website` is public. PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. Verified application/test head: `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`; latest Phase 1F security migration head: `5011ec73669ddd3f94e4618a508e63f5ee698fc8`. Exact-head GitHub Actions run [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070) passed 609 PostgreSQL assertions across 17 SQL files, TypeScript/Worker/Vite builds, 32/32 Playwright tests, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection, local Supabase shutdown, local credential cleanup and a clean credential-free asset build. The restore report recorded one restored database snapshot and one protected PDF checksum. Cloudflare Preview steps were skipped; no Preview or production deployment occurred. Seven Phase 1F runbooks are documented; Founder/security review and provider-specific activation remain outstanding. Local WSL checkout was not inspected and remains unverified. Use standard GitHub-hosted `ubuntu-latest`; do not start local Supabase/Docker or register a self-hosted runner. Hosted Supabase/R2, paid usage, real learner data, external processors, DNS/custom-domain changes, production deployment and PR merge remain separately gated.
 
 
-**Version:** 0.43-draft
+**Version:** 0.44-draft
 **Date:** 8 November 2026
-**Status:** Phase 1C, Phase 1D, Phase 1E and Phase 1F implementation/synthetic CI evidence are verified complete for the approved synthetic-only scope. Exact-head Phase 1F CI #42479406070 passed; formal acceptance remains pending Founder/security review of the crosswalk and seven runbooks and explicit Founder acceptance. Local WSL checkout is unverified. Hosted provisioning, real data, DNS, production deployment and PR merge remain separately gated.
+**Status:** Phase 1C, Phase 1D, Phase 1E and Phase 1F technical synthetic evidence are verified complete. The Founder accepted the Phase 1F synthetic technical scope on 8 November 2026, subject to the stated operational/production conditions. Continue the approved roadmap with synthetic data only. Local WSL checkout is unverified; hosted provisioning, real data, DNS, production deployment, cost and PR merge remain separately gated.
 
-**Phase 1F evidence crosswalk:** `docs/PHASE_1F_FINAL_SYNTHETIC_SECURITY_ACCEPTANCE.md` — active evidence crosswalk; final acceptance remains pending.
+**Phase 1F evidence crosswalk:** `docs/PHASE_1F_FINAL_SYNTHETIC_SECURITY_ACCEPTANCE.md` — technical synthetic evidence accepted by the Founder on 8 November 2026; operational activation and production readiness remain unaccepted.
 
 **Parent decision register:** `docs/PHASE_0_ARCHITECTURE_AND_DATA_GOVERNANCE_DECISIONS.md`  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DATA_MODEL.md`, `docs/PHASE_1C_ENDPOINT_AUTHORIZATION_AUDIT_MATRIX.md`, `docs/PHASE_1C_ADVERSARIAL_ACCEPTANCE_MATRIX.md`, `docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md`, `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md` and `docs/DESIGN_SPEC.md`.
@@ -710,11 +710,11 @@ This is the authoritative current checkpoint. Sections 32 and 34 are retained as
 
 **Verified synthetic scope:** application/test head `746727d0c103efb8ad2fa59374a9c2c5557ba1a7` passed exact-head GitHub Actions [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070): 609 PostgreSQL assertions across 17 SQL files, 32/32 Playwright tests, TypeScript/Worker/Vite builds, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection, local Supabase shutdown, local credential cleanup and credential-free asset build. The workflow skipped Cloudflare Preview; no Preview or production deployment occurred.
 
-Phase 1C, 1D, 1E and Phase 1F implementation/synthetic CI evidence are verified complete for the approved synthetic-only scope. **Formal Phase 1F acceptance remains pending** Founder/security review of the evidence crosswalk and seven operational runbooks and an explicit recorded Founder decision. The crosswalk now contains a review worksheet; it must not be completed by inference.
+Phase 1C, 1D, 1E and Phase 1F technical synthetic evidence are verified complete for the approved synthetic-only scope. **Founder acceptance of the Phase 1F technical evidence is recorded on 8 November 2026.** The operational runbooks remain drafts; that acceptance does not activate them or establish production readiness.
 
 The seven runbooks require named operational contacts and provider-specific adaptation before activation. Hosted backup encryption/key custody, physical learner/object deletion, scheduled retention execution, production monitoring, provider activation, real-data privacy/legal review and branded hosted staging remain separate deferred approval gates. The synthetic CI backup verifier is not a production restore service.
 
-**Next action:** Founder/security review and a written accept / accept-with-conditions / reject decision. No new application implementation or CI run is indicated unless review identifies a concrete code/test gap. Phase 1G, hosted provisioning, paid use, real learner data, external processing/email, DNS/custom-domain changes, production deployment and PR merge remain separately gated.
+**Next action:** continue the approved flagship workflow with synthetic data. The first bounded increment enforces per-task PDF eligibility for the current typed-plus-PDF attachment path and records response mode. No external OCR/AI, hosted provisioning, costs, real learner data, DNS/custom-domain changes, production deployment or PR merge are authorised.
 
 
 ## 36. Preliminary operational-runbook review — 8 November 2026
@@ -724,3 +724,12 @@ A preliminary document-level review of the seven Phase 1F runbooks found their s
 This is not formal Founder/security acceptance, legal review, penetration testing or provider-readiness approval. Before operational activation, the runbooks still require named incident/security/privacy/provider contacts, severity and response-time definitions, approved RTO/RPO, provider-specific least-privilege procedures, tested monitoring and secret/session revocation, malicious-object quarantine, encrypted hosted backup/key custody, production restore, physical deletion and scheduled retention execution, evidence-retention controls, legal/privacy review and tabletop exercises.
 
 The next gate remains Founder/security review and an explicit recorded decision. No Phase 1G or hosted/live-data/release activity is authorised by this preliminary review.
+
+
+## 37. Founder acceptance and Phase 2 implementation handoff — 8 November 2026
+
+The Founder accepted the Phase 1F technical security evidence for the documented synthetic-data scope on 8 November 2026. The exact evidence is application/test head `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`, GitHub Actions [#42479406070](https://github.com/gradioprep/gradioprep-website). This closes the Phase 1F technical evidence decision for that scope.
+
+The acceptance is explicitly **not production readiness**. Hosted backups, physical deletion, monitoring, named operational contacts, provider-specific procedures and privacy/legal approval remain outstanding. The approved implementation roadmap continues using synthetic data. Separate approval remains mandatory before real learner data, hosted provisioning, any cost, DNS changes, PR merge or production deployment.
+
+**Next implementation increment:** enforce the approved PDF alternative at the task/database boundary for the existing typed-plus-PDF attachment path. A task must explicitly opt in and have an expected response greater than 20 words before a PDF can be attached. Persist the actual accepted response mode and test allowed/denied cases. This is not yet PDF-only acceptance or OCR. External OCR/AI, hosted resources and real learner data remain excluded. Subsequent increments will address PDF-only acceptance lifecycle, PDF.js digital text extraction, scanned-page OCR after separate approval, teacher/grader workspace, feedback publication, timer/analytics and pilot validation.

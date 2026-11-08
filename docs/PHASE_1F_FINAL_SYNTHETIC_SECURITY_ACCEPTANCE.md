@@ -2,9 +2,9 @@
 
 
 > **Authoritative current checkpoint — 8 November 2026:** Repository `gradioprep/gradioprep-website` is public. PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. Verified application/test head: `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`; latest Phase 1F security migration head: `5011ec73669ddd3f94e4618a508e63f5ee698fc8`. Exact-head GitHub Actions run [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070) passed 609 PostgreSQL assertions across 17 SQL files, TypeScript/Worker/Vite builds, 32/32 Playwright tests, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection, local Supabase shutdown, local credential cleanup and a clean credential-free asset build. The restore report recorded one restored database snapshot and one protected PDF checksum. Cloudflare Preview steps were skipped; no Preview or production deployment occurred. Seven Phase 1F runbooks are documented; Founder/security review and provider-specific activation remain outstanding. Local WSL checkout was not inspected and remains unverified. Use standard GitHub-hosted `ubuntu-latest`; do not start local Supabase/Docker or register a self-hosted runner. Hosted Supabase/R2, paid usage, real learner data, external processors, DNS/custom-domain changes, production deployment and PR merge remain separately gated.
-**Version:** 0.7-draft
+**Version:** 0.8-draft
 **Date:** 8 November 2026  
-**Status:** Phase 1F source review, implementation and exact-head synthetic CI evidence are complete for the documented scope. Formal Phase 1F acceptance is **not yet granted**; Founder/security review and explicit approval remain pending.
+**Status:** Phase 1F technical synthetic security evidence is **ACCEPTED by the Founder on 8 November 2026**, limited to the documented synthetic-data scope and subject to the explicit conditions below. This is not production or operational-readiness acceptance.
 
 ## 1. Purpose and boundary
 
@@ -58,15 +58,15 @@ Technical synthetic verification is complete. Formal Phase 1F acceptance remains
 - Every review row has a source/test citation and a pass, gap or deferred disposition.
 - **Completed:** restored RLS/Storage allow/deny checks passed on the final combined head in #42479406070.
 - **Completed:** false audit acknowledgements fail closed; role grant/revocation actor attribution is correct; free-text role reasons and draft-archive explanations are excluded from audit metadata, verified in #42479406070.
-- The seven runbooks receive final Founder/security review; provider-specific activation remains a pre-real-data operational gate.
+- **Completed for this scope:** the Founder accepted the documented synthetic technical evidence on 8 November 2026. The runbooks' preliminary document-level review does not constitute operational activation; named contacts and provider-specific adaptation remain pre-real-data gates.
 - The Master Brief, implementation specification and matrices agree on status and remaining gates.
-- Founder explicitly accepts the Phase 1F synthetic evidence and authorises the next phase separately.
+- **Completed:** Founder acceptance of Phase 1F synthetic technical evidence is recorded below. The acceptance authorises continuation of already-approved synthetic-only roadmap work, not hosted or live-data operation.
 
 Until those conditions are met, do not describe the Secure Application Foundation as fully closed or production-ready.
 
 ## 6. Current next action
 
-Complete Founder/security review of the evidence crosswalk and seven operational runbooks, record residual risks and required revisions, and obtain explicit acceptance. No further CI run is needed unless code or tests change. Do not start local services.
+Founder acceptance is recorded in Section 9. Continue the approved roadmap with synthetic data. Keep operational activation, hosted backup/key custody, physical deletion, monitoring, named contacts, provider-specific procedures and privacy/legal approval as separate gates. No further CI run is needed unless code or tests change. Do not start local services.
 
 PR #22 remains open, draft and unmerged. No hosted services, paid usage, real learner data, external processing, DNS change, production deployment or merge is authorised by this plan.
 
@@ -104,7 +104,7 @@ Technical synthetic evidence includes restored RLS/Storage allow-deny checks; au
 | Operational ownership | Name the authorised incident lead, backup contact and approval authority before activation | Not assigned in this document |
 | Provider adaptation | Add provider-specific console steps, contact routes and recovery targets only after provider selection/approval | Deferred; no provider activation |
 | Residual risks | Accept, mitigate or defer each limitation in Section 4 and record owner/date | Decision outstanding |
-| Phase 1F decision | Explicitly accept or reject the synthetic evidence scope; record date and conditions | **Not accepted yet** |
+| Phase 1F technical evidence decision | Founder acceptance of the synthetic security evidence, limited to the documented scope and stated conditions | **ACCEPTED — 8 November 2026** |
 
 **Decision record:** Reviewer: `[to be completed]`; review date: `[to be completed]`; decision: `[accept / accept with conditions / reject]`; conditions and residual-risk owners: `[to be completed]`. Do not fill this record by inference or treat this documentation change as approval.
 
@@ -114,3 +114,18 @@ Technical synthetic evidence includes restored RLS/Storage allow-deny checks; au
 
 
 **Preliminary document-level review — 8 November 2026:** The seven procedures have been checked for coverage, consistency with the documented synthetic-only implementation, and unsafe instructions. No instruction authorises bypassing RLS/MFA/audit/legal holds, sending learner content to unapproved processors, or using the synthetic CI backup against production. The runbooks explicitly distinguish implemented controls from future capabilities. This review is not a provider-readiness assessment, legal opinion, penetration test or Founder approval.
+
+
+## 9. Founder acceptance record — 8 November 2026
+
+**Decision:** ACCEPTED — technical security evidence for the documented synthetic-data testing scope.
+
+The Founder explicitly accepted the Phase 1F technical security evidence and conditions on 8 November 2026. The accepted evidence is the exact-head application/test run [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070) on code head `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`: 609 PostgreSQL assertions across 17 SQL files, 32/32 Playwright tests, TypeScript/Worker/Vite builds, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection and cleanup.
+
+**Conditions expressly retained by the Founder:**
+- Acceptance applies only to the documented synthetic-data technical scope; it does not establish production readiness.
+- Hosted backups, physical deletion, monitoring, named operational contacts, provider-specific procedures and privacy/legal approval remain outstanding.
+- Continue the already-approved roadmap using synthetic data.
+- Obtain separate approval before real learner data, hosted service provisioning, any incurred cost, DNS changes, PR merge or production deployment.
+
+This acceptance does not activate the seven runbooks for production incidents, provision any provider, authorise external OCR/AI processing, or approve branded staging/DNS. The seven runbooks remain drafts pending named operational ownership and provider-specific implementation.

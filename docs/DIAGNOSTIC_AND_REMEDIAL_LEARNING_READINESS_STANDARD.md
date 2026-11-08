@@ -1,8 +1,8 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.11
+**Version:** 2.12
 **Approved:** 31 October 2026  
-**Last updated:** 6 November 2026  
+**Last updated:** 8 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md`, `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`, `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md`, `docs/ENGLISH_CURRICULUM_GUIDES.md`, `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/DESIGN_SPEC.md`.
@@ -238,8 +238,17 @@ The complete Diagnostic and Evaluation Report is permanently free; ₹999 is a s
 
 Credit tariff is identical for IB, Cambridge and CBSE: 1–50 words=1; 51–150=2; 151–350=3; above 350 add one credit per additional 100 words or part thereof. Time credits = max(1, ceiling(predicted grader minutes/20)); final credits are max(word-based,time-based), never their sum. Board-specific frequency data forecasts demand only. The old ₹199/month Study Lab and ₹399-per-credit proposals are superseded.
 
-## 17. Secure-foundation closeout and diagnostic readiness boundary — 6 November 2026
+## 17. Historical secure-foundation closeout and diagnostic readiness boundary — 6 November 2026 (superseded by Section 18)
 
 Phase 1C is closed for the local-Supabase/synthetic-data scope. Its code/test head `fcd1f7c2f0b4a91d5f7900ee91b046dc6debc481` passed [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858) with 494 pgTAP assertions across 14 SQL files, TypeScript/Worker/Vite builds and 31/31 Playwright tests, including both synchronized Phase 1C-F races. The final documentation review reconciles the 25-table protected inventory, 29-route authorization/audit matrix and 25 Worker-audited fail-closed routes. Audit correlation remains representative per distinct action, not exhaustive outcome coverage.
 
 This security closeout does not release the Diagnostic or Evaluation Report. The PDF/file workflow, full teacher/grader workflow, diagnostic assessment, report analytics and remedial course remain unbuilt or separately gated. The flagship feature must be implemented and pilot-validated before actual Cycle 1 Grade 9 / IB MYP Year 4 diagnostic item authoring. Branded staging on `gradioprep.com` with an isolated hosted synthetic backend remains mandatory before final Diagnostic/Report acceptance, subject to separate approvals. Cambridge Grade 6 remains blocked pending Cycle 1 completion and Founder direction.
+
+
+## 18. Current Phase 1F acceptance and MYP Year 4 dependency — 8 November 2026
+
+The Founder accepted the Phase 1F technical security evidence for the documented synthetic-data testing scope on 8 November 2026. Exact-head CI [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070) passed 609 PostgreSQL assertions across 17 SQL files, 32/32 Playwright tests, TypeScript/Worker/Vite builds and synthetic database/private-PDF backup and restore. This acceptance is not production readiness. Hosted backups, physical deletion, monitoring, named operational contacts, provider-specific procedures and privacy/legal approval remain outstanding.
+
+The approved roadmap now proceeds to the shared flagship learner submission and teacher-grading workflow using synthetic data only. Its first bounded increment enforces task-level opt-in for optional PDF attachments and the expected-response threshold (greater than 20 words) on the existing typed-plus-PDF path. No external OCR/AI processing or hosted service is used. The full PDF-only workflow, digital text extraction, OCR, teacher workspace, feedback publication, timer/analytics and pilot validation remain subsequent work.
+
+Cycle 1 remains Grade 9 — IB MYP Year 4. Its item map is approved, but actual item authoring remains blocked until the shared flagship feature is implemented and pilot-validated. The diagnostic and Evaluation Report remain unbuilt and cannot be treated as client-ready. Branded staging under `gradioprep.com` with an isolated hosted synthetic backend remains a mandatory later gate before final Diagnostic/Report acceptance; hosting and DNS require separate approval. Cambridge Grade 6 remains blocked until Cycle 1 is complete and the Founder directs transition.
