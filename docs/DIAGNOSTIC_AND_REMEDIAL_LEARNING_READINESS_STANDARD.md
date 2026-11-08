@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.13
+**Version:** 2.14
 **Approved:** 31 October 2026  
 **Last updated:** 8 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
@@ -261,3 +261,17 @@ The Founder accepted Phase 1F technical security evidence for the documented syn
 The verified slice adds task-level PDF opt-in, enforces `ideal_words > 20` in the database, and records `typed` / `typed_pdf` response mode only after an eligible private PDF is accepted. It does not implement the learner-facing PDF selector/upload journey, PDF-only acceptance, PDF.js extraction, scanned-page OCR, teacher workspace, feedback UI or timer/analytics. The next shared-feature increment is the learner-facing optional PDF selector/upload interaction, using synthetic data and the verified Worker route.
 
 Cycle 1 remains Grade 9 — IB MYP Year 4. Provider research, taxonomy, 90-minute blueprint and detailed item map are approved, but actual question/item authoring remains blocked until the complete shared flagship feature is implemented and pilot-validated. The diagnostic and Evaluation Report remain unbuilt and are not client-ready. Branded staging under `gradioprep.com` with isolated hosted synthetic authentication and persistence is mandatory before final Diagnostic/Report acceptance; hosting/DNS approval remains separate. Cambridge Grade 6 remains blocked until Cycle 1 is complete and the Founder directs transition.
+
+
+## 20. Founder-approved validation stages and milestone batching — 8 November 2026
+
+The Founder approved working in coherent implementation milestones rather than requiring a new “implement the next step” instruction for each small technical action. Continue the approved synthetic-data roadmap through connected implementation, automated verification and documentation batches. Do not ask for repeated approval of routine substeps already within scope. Pause for genuine technical blockers, material product decisions or separately gated actions (hosted-resource provisioning, external processing, costs, real learner data, DNS, merge or production deployment). Report at meaningful milestone boundaries.
+
+For this standard, the following validation stages are distinct and must not be conflated:
+
+1. **Synthetic flagship validation:** the shared response/grading/timer capability is exercised end-to-end using fictional learners, tasks and PDF fixtures. This is the synthetic pilot-validation gate required before actual Cycle 1 MYP Year 4 diagnostic item authoring. It does not require real students.
+2. **Founder’s branded-staging test:** after the Diagnostic and full Evaluation Report are built, the Founder tests the full synthetic learner journey on a branded staging host with isolated hosted synthetic Auth/database/storage. This is required before final Diagnostic/Report acceptance. It is not a live pilot. Hosted services, DNS/custom-domain mapping and any associated costs require separate approval.
+3. **Limited live participant pilot:** only after the Founder’s staging test is satisfactory and the applicable privacy/legal, security, safeguarding, hosting/provider, cost and consent approvals are complete may 2–3 invited participants test the defined journey. The initial pilot is invitation-only and free. Obtain parent/guardian consent where applicable; minimise collected data and define deletion/retention and support arrangements before invitations.
+4. **First public free release:** only after pilot findings are reviewed and material issues resolved, and the Founder separately approves public release, expose the completed free Diagnostic and complete Evaluation Report to the intended public audience. Do not imply that unbuilt remedial or paid services are available. Full-cycle and commercial launch gates remain separate.
+
+The earlier requirement that the flagship feature be “pilot-validated” before MYP item authoring refers to stage 1 (synthetic validation), not stage 3 (the small live participant pilot). This clarification preserves the security boundary while avoiding an unnecessary dependency on real learners before the Diagnostic has been authored and built.
