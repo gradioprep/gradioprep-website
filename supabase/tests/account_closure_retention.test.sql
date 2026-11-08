@@ -63,23 +63,26 @@ FROM public.request_account_deletion('account_closure');
 RESET ROLE;
 
 -- The test fixtures are intentionally synthetic and are rolled back below.
+WITH fixture_times AS (
+  SELECT clock_timestamp() - interval '2 hours' AS accepted_at
+)
 INSERT INTO public.assessment_submissions (
   id, learner_id, task_version_id, rubric_version_id, status,
   accepted_at, grading_due_at, sla_target_seconds,
   capacity_config_version, capacity_limit_snapshot,
   open_submissions_before_acceptance, idempotency_key
 )
-VALUES (
+SELECT
   'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeee1',
   '11111111-1111-4111-8111-111111111111',
   'a1111111-1111-4111-8111-111111111111',
   'f1111111-1111-4111-8111-111111111111',
   'feedback_published',
-  clock_timestamp() - interval '2 hours',
-  clock_timestamp() + interval '22 hours',
+  fixture_times.accepted_at,
+  fixture_times.accepted_at + interval '24 hours',
   86400, 1, 10, 0,
   'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeee2'
-);
+FROM fixture_times;
 
 INSERT INTO public.submission_versions (
   id, submission_id, version_number, response_text, created_by
