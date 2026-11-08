@@ -1,9 +1,9 @@
 # Phase 1A — Build-Ready Execution Plan
 
-> **Current execution checkpoint — 8 November 2026 (authoritative active state; earlier dated records are historical):** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`, based on `docs/phase-1-secure-foundation-spec`. The user has fast-forwarded the WSL checkout to `480e019e3a3b9f4ce07b257fd5bd15d7fc68cc7f`; local HEAD, origin and PR head matched, and the working tree was clean. **Node/dependencies:** Node `v22.23.4`, npm `10.9.9`, both at `/home/gradioprep/.nvm/versions/node/v22.23.4/bin/`; `npm install --no-audit --no-fund` succeeded and added 130 packages. The workflow intentionally does not commit `package-lock.json`; the local working tree is clean. **Current WSL/Docker memory snapshot:** WSL `free -h`: 2.8 GiB total, 688 MiB used, 1.8 GiB free, 2.1 GiB available; swap 1.0 GiB total, none used. Docker daemon: `MemTotal=3,020,513,280` bytes (approximately 2.81 GiB), 4 CPUs. `docker ps` reports no running containers. The PC has 8 GB DDR4 RAM; current Windows available physical RAM is still unreported. **Resource decision: HOLD — do not start Supabase or change WSL/Docker limits until the Windows free-memory reading is reviewed.** The workflow excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor, retaining PostgreSQL, Auth, Storage API, imgproxy, Kong, Mailpit and PostgREST. Supabase recommends at least 7 GB RAM for all local services but publishes no minimum for this exact reduced set. Phase 1C is complete; Phase 1D is verified; Phase 1E remains partial/unverified: the 35- and 47-assertion SQL suites and local backup/restore verifier have not passed. Latest exact-head Actions run [#42463591504](https://github.com/gradioprep/gradioprep-website/actions/runs/42463591504) failed with no job steps reported and unavailable logs; this is not evidence of a test failure, and the precise cause is unknown. Workflow remains on `ubuntu-latest`; runner registration alone does not redirect jobs, and any self-hosted-runner change requires separate security review. All five GitHub spending budgets remain blocked. Local Supabase and synthetic data only; all hosted-service, paid-use, real-data, external-processing/email, DNS, deployment and merge restrictions remain in force.
-**Version:** 0.32-draft
+> **Current execution checkpoint — 8 November 2026 (authoritative active state; prior environment-setup proposals are superseded):** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`, based on `docs/phase-1-secure-foundation-spec`. The user's confirmed local WSL checkout is clean at `1caf00e134333f7effcdaf94ac0cb233218e295b`; this reconciliation will add one documentation-only commit, after which a single fast-forward will be needed before further local repository work. Node `v22.23.4`, npm `10.9.9` and the 130-package dependency installation are already complete; do not reinstall them. **Memory snapshot:** Windows reports 5.94 GiB visible RAM and 1.44 GiB available; WSL reports 2.8 GiB total, 688 MiB used, 1.8 GiB free and 2.1 GiB available, with 1 GiB swap unused; Docker reports about 2.81 GiB and 4 CPUs, with no running containers. **Binding device rule:** do not start Supabase/Docker-based database testing on this Windows/WSL computer, do not register it as a persistent self-hosted runner, and do not change its WSL/Docker resource limits. Run synthetic Supabase tests only inside an ephemeral GitHub-hosted `ubuntu-latest` CI job. Keep the repository private. The existing GitHub Actions failures, most recently [#42464106211](https://github.com/gradioprep/gradioprep-website/actions/runs/42464106211), reported no executed job steps and have unavailable logs; their cause and current Actions-minute usage are unconfirmed, so do not claim that a quota was exhausted. All five GitHub spending budgets remain blocked. **Cloudflare:** the private repository is already connected to Workers Builds; automatic builds and previews are enabled, with `main` configured for production, `npm run build` as build command and `npx wrangler deploy` as production deploy command. Build watch-path exclusions are currently empty; configure documentation-only exclusions in a later reviewed settings change. The account build-limit check on 8 November reported that the limit had not been reached; this does not establish historical usage or a successful new build. Phase 1C is complete, Phase 1D verified and Phase 1E partial/unverified; its 35- and 47-assertion SQL suites and backup/restore verifier remain pending. Hosted Supabase is not provisioned. Any later isolated cloud test project, branded staging, paid use, real learner data, external processing/email, DNS change, production configuration/deployment or PR merge remains separately gated.
+**Version:** 0.33-draft
 **Date:** 8 November 2026
-**Status:** Phase 1C complete, Phase 1D verified and Phase 1E partial/unverified. Local checkout is synchronised at 480e019e3a3b9f4ce07b257fd5bd15d7fc68cc7f with a clean working tree. Node 22.23.4/npm 10.9.9 and 130 installed packages are verified. WSL reports 2.8 GiB total / 2.1 GiB available; Docker sees 2.81 GiB / 4 CPUs and no containers. The current Windows free-memory reading remains pending. Hold Supabase startup until reviewed.
+**Status:** Phase 1C complete, Phase 1D verified and Phase 1E partial/unverified. Local checkout was clean at 1caf00e134333f7effcdaf94ac0cb233218e295b before this documentation-only update. Node 22.23.4/npm 10.9.9 and 130 packages are installed. Windows has 1.44 GiB available RAM. Do not run Supabase or a self-hosted runner on this PC; synthetic database tests run inside ephemeral GitHub-hosted CI. Cloudflare Workers Builds is already connected; watch-path exclusions and GitHub docs-only path filters remain pending.
 
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
 **Authority:** `docs/PROJECT_MASTER_BRIEF.md` and the approved Phase 0 decision register.
@@ -12,7 +12,7 @@
 
 The purpose of Phase 1A is to remove avoidable design uncertainty so the next approved step can begin coding without reopening the architecture.
 
-**Implementation route selected for the first coding step:** work against a local Supabase stack using fictional records, with no hosted Supabase project, paid plan, R2 bucket, AWS KMS key, Azure resource or real learner data. Supabase documents the local stack as a free, self-contained development environment for Auth, PostgreSQL and Storage; it requires the Supabase CLI and a Docker-compatible local runtime. This lets schema, Auth, RLS and Storage policies be tested before any remote service is considered.
+**Implementation route selected for the first coding step:** use a disposable Supabase stack with fictional records inside a GitHub-hosted CI job. Do not run Supabase or its Docker containers on the user's Windows/WSL computer, and do not register that computer as a persistent self-hosted runner. No hosted Supabase project, paid plan, R2 bucket, AWS KMS key, Azure resource or real learner data is needed for the current synthetic CI tests.
 
 The first code slice was **Phase 1B — local application foundation, Auth and role-aware identity**. It added the Worker API gateway, local Supabase configuration/migrations/synthetic fixtures, browser sign-in/out and recovery, the protected `/api/v1/me` endpoint, role/suspension controls, MFA safeguards and the secure staff-invitation lifecycle. The invitation/security slice passed exact code-bearing CI on commit `1953bd1` and the latest documentation-only branch tip passed CI as recorded in Section 13. This does not implement learner PDF submissions, OCR, AI feedback, the grading queue, the complete protected grader/admin data workflow, hosted services or production integrations.
 
@@ -107,33 +107,39 @@ No endpoint for assigning roles, reading arbitrary profiles, guardians viewing c
 
 ## 7. Local development, synthetic fixtures and CI
 
-### 7.1 Local stack
+### 7.1 Synthetic database environment — hosted CI only
 
-Add the Supabase CLI configuration, migrations, seed data and database tests to the repository. Use a local Docker-compatible runtime (Docker Desktop or OrbStack on macOS are documented supported options) to run the local Supabase Auth, PostgreSQL and Storage stack. Keep all CLI state, local data and secrets out of Git. No remote project should be linked during the first code slice.
+The project retains Supabase CLI configuration, migrations, seed data and database tests in the repository. **Run the disposable Supabase stack only inside the ephemeral GitHub-hosted `ubuntu-latest` verification job.** That job uses fictional identities and records, resets the database for each run, and stops the stack/cleans local-only files at completion. This is the existing workflow's meaning of "local Supabase": local to the isolated hosted job, not local to the user's Windows/WSL computer.
 
-The local seed must create clearly fictional test users and records for:
-- two students;
-- two guardians, with one verified link and one unlinked/revoked case;
-- two graders;
-- one admin;
-- one owner;
-- at least one suspended/revoked account and one expired session case.
+Do not run `npm run supabase:start`, `npx supabase start` or Docker-based database tests on the user's PC. Do not increase WSL/Docker memory, install another Docker Engine or register a persistent self-hosted runner. The available Windows RAM is 1.44 GiB and the senior developer advised against local Supabase. Keep the existing WSL/Docker installation idle for these tests.
 
-Do not use real email addresses, student names, handwritten samples, school identifiers or copies of any real learner work. Use reserved fictional domains and obviously synthetic labels.
+### 7.2 GitHub Actions security and browser pipeline
 
-### 7.2 CI pipeline
+The current verification workflow uses `runs-on: ubuntu-latest`; the GitHub-hosted environment, not the user's computer, performs these steps:
 
-Extend the existing Build check in a separate implementation PR to:
-1. Install the pinned Node and Supabase CLI versions.
-2. After the workflow is separately changed to target the trusted repository-scoped WSL2 runner, start local Supabase there. The current workflow targets ubuntu-latest; runner registration alone will not redirect jobs.
-3. Apply migrations and deterministic synthetic seed data.
-4. Run SQL/RLS database tests.
-5. Run Worker unit/API tests with stubbed provider endpoints where appropriate.
-6. Run TypeScript checks and the existing Vite build.
-7. Run the existing Playwright Chromium suite plus auth/route/role UI coverage.
-8. Stop the local stack and ensure CI logs contain no secrets or synthetic user credentials.
+1. Check out the exact trusted PR/push revision and install the repository's Node 22 dependencies.
+2. Start the reduced Supabase services within the ephemeral hosted job.
+3. Write ignored local-only CI environment files and reset the disposable database with synthetic fixtures.
+4. Run PostgreSQL RLS/pgTAP tests.
+5. Type-check/build the Worker and browser application and run the Playwright Chromium suite.
+6. Run the Phase 1E backup/restore verifier when its suites are ready.
+7. Stop Supabase, remove local-only environment files and complete any credential-free asset/build checks.
 
-CI must not authenticate to any remote Supabase project, use production Cloudflare bindings, create resources or process real learner data. Keep the existing controlled preview/deployment workflow unchanged.
+Keep the database reset and synthetic data inside the job; never cache database state or upload secrets/test-user credentials. Continue to use least-privilege job permissions and same-repository trust checks. Do not expose Cloudflare deployment credentials to a persistent self-hosted runner.
+
+**Pending efficiency correction:** the heavyweight workflow should ignore documentation-only/Markdown changes and should not rerun on pull-request `edited` events. Relevant application, Worker, migration, SQL/browser test, dependency, workflow and configuration changes must still trigger the appropriate verification. Review the separate `build.yml` to avoid duplicate build/browser runs. These trigger changes are not made in this documentation-only update.
+
+### 7.3 Cloudflare application builds and Previews
+
+The repository is already connected to Cloudflare Workers Builds. Read-only inspection confirmed automatic builds and branch Previews are enabled, with `main` as the production branch, `npm run build` as the build command and `npx wrangler deploy` as the production deploy command. Preview builds use `npm run build` and `npx wrangler preview`. Use this existing integration for normal app build/deployment; do not create a second hosting service.
+
+Current watch-path settings include every file and exclude none, so Markdown-only updates may still trigger Cloudflare builds. A later reviewed settings change should exclude documentation-only paths for both production and Preview builds while preserving application, Worker, migration, test and configuration paths. Do not change the production branch, production deploy command, DNS, domain, Worker bindings or secrets under this plan.
+
+### 7.4 Private repository and hosted Supabase fallback
+
+Keep the repository private because it contains unpublished product plans, internal curriculum/assessment specifications and security architecture. Public visibility is not an approved CI cost workaround.
+
+A separate Supabase Free project may be considered only for a later hosted end-to-end integration/staging requirement. It is not needed for current security database tests, and its creation still requires separate explicit approval, synthetic-only data and restricted credentials. Free projects may pause after a week of insufficient activity; do not assume always-on staging.
 
 ## 8. First-slice acceptance gate
 
@@ -180,12 +186,13 @@ R2 remains the secondary file-backup destination only. Its APAC location hint is
 
 ## 10. Current cost picture and free-first 12-month operating target
 
-### Local synthetic development
+### Hosted synthetic development and cost model
 
-- Supabase local CLI stack: no Supabase subscription or hosted usage charge; local computer/container resources are required.
-- Current Cloudflare Worker local development, static Preview assets and GitHub Actions use the included free allowances; monitor the actual account usage.
-- Use self-hosted WSL2 runner jobs for local Supabase verification after secure setup and a separate runs-on change. Self-hosted job execution does not consume GitHub-hosted Actions minutes; artifact/cache storage may still have cost implications. Keep all five spending budgets blocked.
-- No hosted Supabase project, paid plan, R2 bucket, KMS key, Azure resource or Workers AI paid endpoint is required for the current Phase 1B local synthetic slice.
+- Disposable Supabase CLI stack: run only inside the ephemeral GitHub-hosted `ubuntu-latest` CI job; no Supabase subscription or local PC containers are required for current database tests.
+- GitHub-hosted Actions minutes for the private repository depend on the owner account's plan. The current account plan and remaining minute balance have not been verified; the latest no-step failure does not prove minutes were exhausted.
+- Cloudflare Workers Builds is the existing application build/deployment integration. Its Free allowance is currently documented as 3,000 build minutes/month, one concurrent build and a 20-minute timeout. The Cloudflare account limit check on 8 November reported the limit had not been reached; a recent completed build was not returned by the build-list query.
+- Keep all five GitHub spending budgets blocked. Do not use a self-hosted WSL runner or make the repository public to avoid minute usage.
+- No cloud Supabase project, paid plan, R2 bucket, KMS key, Azure resource or paid Workers AI endpoint is required or authorised for current Phase 1E test preparation.
 
 ### Future hosted services — dated cost snapshot, not an approved spend
 
@@ -198,7 +205,7 @@ The binding rule is in `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`: targ
 | Cloudflare R2 | Free: 10 GB-month, 1 million Class A and 10 million Class B operations, free egress | Standard storage above allowance $0.015/GB-month; operation overages apply. APAC placement hint is not India-residency assurance. |
 | Azure Document Intelligence Read | F0: 500 pages/month, 4 MB/document, 2 pages per analysis and 1 request/second | S0 is metered per page. Confirm exact Central India rate before use. |
 | Cloudflare Workers AI | 10,000 Neurons/day free | Usage above the allocation requires Workers Paid (minimum $5/month) and is $0.011/1,000 Neurons above the free allocation. |
-| GitHub Actions | Target a trusted repository-scoped WSL2 self-hosted runner for local Supabase verification | Self-hosted jobs do not consume GitHub-hosted minutes; artifact/cache storage may still use quotas or incur cost. Keep all five spending budgets blocked. |
+| GitHub Actions | Ephemeral `ubuntu-latest` hosted jobs for synthetic Supabase/RLS, API and browser testing; suppress docs-only triggers | Private-repository included minutes depend on the account plan; usage above included minutes may cost. Keep all five spending budgets blocked and do not enable overage. |
 | AWS KMS / other key manager | No provider selected; assess suitable free options first | AWS KMS candidate reference is about $1/customer-managed key/month plus requests; not an approved default. |
 
 These base prices are not an additive stack. Supabase Pro, Workers Paid, PITR, AWS KMS, Azure S0, paid email and other paid APIs are **not** planned subscriptions. The only cost target is zero recurring infrastructure cost unless an evidence-backed exception is approved.
@@ -218,15 +225,15 @@ These base prices are not an additive stack. Supabase Pro, Workers Paid, PITR, A
 
 | Stage | Required access | Not required |
 |---|---|---|
-| First coding slice, local only | GitHub repository write for a draft branch/PR; GitHub Actions CI; local Docker-compatible runtime | Supabase hosted account/project, Cloudflare account changes, AWS/Azure account, billing owner, production credentials |
+| First coding slice, hosted synthetic CI | GitHub repository write for a draft branch/PR; GitHub Actions hosted CI; existing Cloudflare Git build connection | Local Docker/Supabase runtime, Supabase hosted project, Cloudflare account changes, AWS/Azure account, billing owner, production credentials |
 | Later isolated hosted synthetic test | Explicitly approved isolated synthetic project; use the free tier if suitable; restricted developer access for migrations; separate review of Preview access | Production learner records or production credentials; any paid plan/usage without a separately approved cost exception |
 | Real learner pilot | Founder-owned Supabase billing/ownership and recovery; least-privilege project developer/operator; Cloudflare Worker deployment authority; separately reviewed backup/KMS rights; legal/privacy reviewer | Shared accounts or general admin credentials for all developers |
 
-For the first code slice, do not ask the Founder for any password, API key, recovery code, billing details or remote credentials. The local CLI and Docker-compatible runtime are sufficient.
+For the first code slice, do not ask the Founder for any password, API key, recovery code, billing details or remote credentials. The disposable hosted CI workflow is sufficient for current synthetic database testing; do not start Supabase on the user's computer.
 
 ## 12. Remaining decisions and blockers
 
-**Can be coded locally in the next step:** Worker API entrypoint, browser auth client, Supabase local config/migrations, profiles and role assignments, safe helper functions, first RLS policies, synthetic fixtures, tests, CI and no-data API responses.
+**Can proceed in the next implementation step:** Phase 1E SQL migration/test work and its backup/restore verifier, with all database execution inside the ephemeral GitHub-hosted Supabase CI job. No local PC Supabase setup is part of the route.
 
 **Must remain blocked until their specific gates pass:** hosted Supabase or other hosted resource provisioning, Cloudflare production Worker changes, R2 bucket/object replication, any key-management service, paid PITR, real learner records, real PDFs, Azure OCR, Workers AI and live pilot. Use free tiers by default where suitable; any paid plan/usage requires a documented unavoidable need and explicit cost approval.
 
@@ -492,3 +499,14 @@ Phase 1E is partial/unverified: the request/legal-hold and retention-plan migrat
 Verified: Windows PC has 8 GB DDR4 RAM; WSL2 Ubuntu runs as `gradioprep`; Docker Desktop 4.98.0 integration is enabled; Docker Engine 29.9.2, Compose 5.6.1, Git 2.43.0 and GitHub CLI 2.103.3 are installed. Docker/Ubuntu currently reports about 2.8 GiB total memory, so do not start full Supabase or increase memory limits until a safe resource review is completed.
 
 **Authentication completed — 8 November 2026:** active GitHub account `gradioprep`, HTTPS Git protocol and private-repository access are verified by `gh auth status` and `gh repo view`. **Resume point:** clone under `/home/gradioprep/src`, verify `feature/phase-1b-local-auth-api` and the live PR #22 head, then review safe Supabase resource requirements. Do not share device codes, passwords or tokens. The workflow still targets `ubuntu-latest`; a separate security-reviewed workflow edit is required before a repository-scoped runner can receive jobs. Phase 1E's 35- and 47-assertion SQL suites remain unrun. All five spending budgets remain blocked. See `docs/LOCAL_WINDOWS_WSL2_BUILD_ENVIRONMENT.md`.
+
+
+## Current CI and device execution decision — 8 November 2026
+
+This decision supersedes any earlier instruction in this plan to run Supabase on the user's own Windows/WSL computer or to configure a WSL self-hosted runner.
+
+Windows reports 1.44 GiB available physical RAM. WSL reports 2.1 GiB available, and Docker reports approximately 2.81 GiB total with no running containers. In accordance with the senior developer's advice, the local Supabase route is rejected. The GitHub Actions workflow's `supabase start` step runs inside GitHub's temporary hosted runner and does not use the user's local memory.
+
+The repository remains private. Cloudflare Workers Builds remains the connected app-build/deployment integration. The next operational correction is to add docs-only path exclusions in Cloudflare's production/Preview watch paths and GitHub workflow triggers; those settings/code changes have not been applied by this documentation-only update. The current Actions no-step failure has no confirmed quota cause. All five spending budgets remain blocked.
+
+Phase 1E remains the next implementation milestone: run the pending 35- and 47-assertion SQL suites and backup/restore verifier through the hosted synthetic CI environment. Phase 1F follows only after Phase 1E acceptance. Hosted Supabase staging, paid usage, real data, DNS, production deployment and PR merge remain separately gated.

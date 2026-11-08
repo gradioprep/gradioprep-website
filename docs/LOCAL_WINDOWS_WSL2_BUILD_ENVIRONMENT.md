@@ -1,188 +1,99 @@
-# Local Windows WSL2 Build and CI Recovery Guide
+# Windows/WSL2 Developer Environment — Local Supabase Disabled
 
 **Status date:** 8 November 2026  
 **Repository:** private `gradioprep/gradioprep-website`, PR #22  
-**Purpose:** use a trusted repository-scoped Linux runner for local Supabase verification without consuming GitHub-hosted Actions job minutes.
+**Authority:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md` and `docs/PHASE_1A_BUILD_READY_EXECUTION_PLAN.md`.
 
-## 1. Current setup checkpoint
+## 1. Binding decision
 
-**Verified on 8 November 2026:** WSL2 Ubuntu runs as Linux user gradioprep; Docker Desktop integration, Docker Engine, Compose, Git, GitHub CLI authentication and private repository access are verified. The PC has 8 GB DDR4 RAM.
+**Do not run Supabase or its Docker database containers on this Windows/WSL computer. Do not register this computer as a GitHub self-hosted runner.** The user's senior developer advised against local Supabase because of the risk to this machine. The observed available memory reinforces that precaution. The approved testing route is an ephemeral GitHub-hosted `ubuntu-latest` job that starts synthetic Supabase services inside the hosted job, not on the user's PC.
 
-**Node and dependencies complete:** Node v22.23.4 and npm 10.9.9 both resolve inside /home/gradioprep/.nvm/versions/node/v22.23.4/bin/. npm install --no-audit --no-fund succeeded and added 130 packages. node_modules/ is ignored by Git. The workflow explicitly says package-lock.json is intentionally not committed.
+Do not attempt to solve this by increasing WSL/Docker RAM, changing swap/CPU settings, installing a second Docker Engine or starting a reduced Supabase stack locally. This is not a temporary "wait for more RAM" instruction; local Supabase is removed from the user's device workflow.
 
-**Repository synchronisation complete:** the user fast-forwarded from 39b34c9727b15b2e6a1f514d87e1676a093b217f to 480e019e3a3b9f4ce07b257fd5bd15d7fc68cc7f. The user confirmed local HEAD and PR head both matched 480e019e3a3b9f4ce07b257fd5bd15d7fc68cc7f. git status --short --branch showed only the branch/tracking line, with no modified or untracked files.
+## 2. Verified computer and installed tools
 
-**Current WSL/Docker memory snapshot:** WSL free -h reports 2.8 GiB total, 688 MiB used, 1.8 GiB free and 2.1 GiB available. Swap is 1.0 GiB total and unused. Docker reports MemTotal 3,020,513,280 bytes (approximately 2.81 GiB) and 4 CPUs. docker ps lists no running containers.
+The user provided these read-only readings on 8 November 2026:
 
-**Supabase reduced-service configuration:** the checked-in workflow excludes studio, logflare, vector, edge-runtime, postgres-meta, realtime and supavisor. It retains PostgreSQL plus Auth, Storage API, imgproxy, Kong, Mailpit and PostgREST. Supabase recommends at least 7 GB RAM to start all services but publishes no minimum-memory figure for this exact reduced combination. See https://supabase.com/docs/reference/cli/introduction and https://supabase.com/docs/guides/local-development.
+| Environment | Total / limit | Used | Free | Available |
+|---|---:|---:|---:|---:|
+| Windows physical RAM | 5.94 GiB visible | — | — | 1.44 GiB |
+| WSL2 | 2.8 GiB | 688 MiB | 1.8 GiB | 2.1 GiB |
+| Docker daemon | 2.81 GiB | — | — | Not separately reported |
+| WSL swap | 1.0 GiB | 0 | 1.0 GiB | 1.0 GiB |
 
-**Resource decision: HOLD — do not start Supabase yet.** The PC has 8 GB physical RAM, and the Windows available-physical-memory reading has not yet been supplied. Obtain this reading before deciding. Do not edit .wslconfig or Docker memory/CPU/swap limits, and do not start containers during the assessment.
+Docker reports four CPUs. `docker ps` listed no running containers at the time of the check.
 
-**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. Its 35- and 47-assertion SQL suites and local backup/restore verifier have not passed. Latest exact-head Actions run #42463591504 failed with no job steps reported and logs unavailable; no SQL/build/browser test failure is established.
+Already installed and verified:
+- WSL2 Ubuntu, Linux user `gradioprep`.
+- Docker Desktop WSL integration, Docker Engine 29.9.2 and Compose 5.6.1.
+- Git and GitHub CLI; GitHub CLI is authenticated to the private `gradioprep` repository.
+- Node.js 22.23.4 and npm 10.9.9 using nvm.
+- `npm install --no-audit --no-fund` completed and installed 130 packages. `node_modules/` is ignored; the generated `package-lock.json` is intentionally not committed.
 
-## 2. Verify the WSL2 Ubuntu installation
+Do not reinstall Node or dependencies. No additional local environment setup is required for the selected CI route. The WSL/Docker installation may remain in place but must remain idle for Supabase/CI work.
 
-Open Windows PowerShell and run:
+## 3. Repository synchronisation checkpoint
 
-```powershell
-wsl --list --verbose
-```
+The user confirmed a clean local checkout at `1caf00e134333f7effcdaf94ac0cb233218e295b` on `feature/phase-1b-local-auth-api`. This documentation-only reconciliation advances the remote branch by one commit. Before the next local repository operation, fast-forward once; do not reclone or reinstall tools. PR #22 remains open, draft and unmerged.
 
-Confirm Ubuntu is listed and the VERSION column is `2`. If it is version 1, use the exact distribution name shown:
+## 4. Where database tests run
 
-```powershell
-wsl --set-version Ubuntu 2
-```
+The checked-in `.github/workflows/phase1b-verification.yml` uses `runs-on: ubuntu-latest`. Its `npx supabase start --exclude ...` command runs inside a temporary GitHub-hosted machine. It creates only disposable synthetic test data, runs database/RLS tests, builds and browser tests, stops Supabase and removes ignored local environment files at the end.
 
-Use `wsl --update` only if Windows reports that the WSL kernel needs updating. Open Ubuntu and confirm the Linux account:
+**This does not start Supabase on the user's computer.** The runner is hosted by GitHub and is separate from Windows, WSL and Docker Desktop on the user's machine. Keep this isolation. Never redirect the workflow to `self-hosted`, `gradioprep-wsl2` or another label referring to this computer.
 
-```bash
-whoami
-pwd
-```
+The current workflow has documentation-trigger inefficiencies: a push to the feature branch can run the full job even when only Markdown changes, and PR `edited` events can run it again. A later workflow change should ignore docs-only changes and remove `edited` from the heavy test trigger, while retaining all security-relevant source, migration, SQL, browser, dependency, workflow and configuration files. Review the separate `build.yml` for duplicate checks. These workflow changes have not yet been made.
 
-Expected `whoami` output: `gradioprep`. Do not disclose passwords or authentication tokens in screenshots or terminal transcripts.
+## 5. Existing Cloudflare Workers Builds integration
 
-## 3. Install Docker Desktop and connect it to Ubuntu
+Read-only inspection of the connected Cloudflare account on 8 November 2026 confirmed:
 
-1. Install Docker Desktop for Windows using the [official Docker Desktop installation guide](https://docs.docker.com/desktop/setup/install/windows-install/).
-2. In Docker Desktop, open **Settings → General** and enable **Use the WSL 2 based engine**.
-3. Open **Settings → Resources → WSL Integration** and enable integration for the installed Ubuntu distribution.
-4. Apply the settings, let Docker Desktop restart and keep it running while local Supabase is used.
-5. This was verified on 8 November 2026: Ubuntu integration is enabled and Docker Desktop appears in the Windows taskbar. Ubuntu reports Docker Desktop 4.98.0 / Engine 29.9.2 and Compose 5.6.1. The commands `docker version`, `docker compose version` and `docker info` completed successfully with both Client and Server details.
+| Setting | Existing value |
+|---|---|
+| Worker | `gradioprep-website` |
+| GitHub repository | `gradioprep/gradioprep-website` (private) |
+| Production branch | `main` |
+| Automatic builds | Enabled |
+| Branch Previews | Enabled |
+| Build command | `npm run build` |
+| Production deploy command | `npx wrangler deploy` |
+| Preview command | `npx wrangler preview` |
+| Watch paths | Include `*`; exclude list is empty |
 
-Both client and server details should appear in `docker version`; `docker info` must complete without a daemon connection error. If not, check that Docker Desktop is running, the WSL2 engine is enabled and Ubuntu integration is on; restart Docker Desktop and reopen Ubuntu before retrying.
+The Cloudflare account build-limit endpoint reported that the limit had not been reached and showed a refresh date of 30 November 2026. The current build-list query returned no records; a successful current build has therefore not been newly verified by this inspection. Cloudflare's current Workers Builds documentation lists 3,000 free build minutes per month, one concurrent build and a 20-minute timeout.
 
-When using Docker Desktop's WSL integration, **do not install a second Docker Engine inside Ubuntu**. Supabase should use the Docker daemon exposed by Docker Desktop.
+The selected direction is to retain this existing Git-connected Workers Builds integration for normal application builds/deployments and branch Previews. Add documentation-only exclusions to production and Preview watch paths after a reviewed configuration change; keep application, Worker, migration, test and configuration files included. Do not alter production deployment commands/branch, DNS, custom domains, Worker bindings or secrets as part of path filtering. No Cloudflare settings were changed by this documentation update.
 
-## 4. Clone the private repository inside Linux
+## 6. GitHub Actions billing and repository visibility
 
-Keep the checkout on the Linux filesystem, not under `/mnt/c`. This avoids Windows-mounted filesystem performance and permission differences and keeps runner work separate from personal Windows files.
+The repository remains private. GitHub's public-repository standard-runner allowance is not a sufficient reason to publish GradioPrep's full source and its internal strategy/security records. Public visibility would expose the complete repository history, branches, PRs, documentation, Actions logs and artifacts. Reconsider it only after a deliberate open-source/IP decision and full history/secret review.
 
-**Clone completed and verified (8 November 2026):** GitHub CLI authentication was confirmed for account `gradioprep`; the private repository was cloned into `/home/gradioprep/src/gradioprep-website`. The local branch is `feature/phase-1b-local-auth-api`, tracking the same origin branch. These checks returned the same SHA for local HEAD, remote branch and live PR #22 head: `2a582c42c071a7dda85d197672e9255398e55140`. PR #22 is open, draft and unmerged. Never put a personal access token in a clone URL, script, shell history, terminal screenshot or committed file.
+For private repositories, GitHub-hosted Actions minutes depend on the owner account's GitHub plan and included usage. The account's current plan/remaining minutes have not been verified. The latest exact-head run `#42464106211` failed without reporting job steps and its logs were unavailable. That does not establish whether the failure was caused by an included-minute limit, a runner/queue issue or another configuration problem. Do not label the cause as quota exhaustion without evidence. All five GitHub spending budgets remain blocked; do not unblock them or permit paid overage.
 
-The clone and head checks were (recorded at the original clone point):
+## 7. Conditional hosted Supabase option
 
-```bash
-gh auth setup-git
-mkdir -p ~/src
-cd ~/src
-git clone --branch feature/phase-1b-local-auth-api --single-branch https://github.com/gradioprep/gradioprep-website.git
-cd gradioprep-website
-git status --short --branch
-git rev-parse HEAD
-git ls-remote origin refs/heads/feature/phase-1b-local-auth-api
-gh pr view 22 --repo gradioprep/gradioprep-website --json number,state,isDraft,headRefName,headRefOid,baseRefName
-```
+A separate Supabase Free project may be considered later if the team needs a real hosted Auth/API/Storage integration test or branded staging journey that cannot be proved through the disposable CI stack. Supabase currently permits up to two active Free projects per eligible account, but Free projects may pause after a week of insufficient database activity. Do not assume project capacity is available or that Free means always-on.
 
-**Node 22 setup is complete.** Do not repeat installation. Continue with the current checkout synchronisation and dependency-verification checkpoint in Section 1.
+A hosted test project is not needed for the current database/RLS CI tests and is not provisioned. Even a free hosted project requires separate explicit approval, a dedicated synthetic-only purpose, restricted credentials, no production linkage, and a reviewed reset/backup/restore/deletion process. The future branded staging requirement remains separate and mandatory before final Diagnostic/Evaluation Report acceptance; its hosted project/Worker/DNS approvals still apply.
 
-## 5. Register a repository-scoped self-hosted runner
+## 8. Current project status and next steps
 
-Do this only after Docker/repository setup is ready and the workflow trust review is complete.
+- Phase 1C: complete.
+- Phase 1D: verified.
+- Phase 1E: partial/unverified. The 35- and 47-assertion SQL suites and the backup/restore verifier remain pending.
+- Phase 1F: follows Phase 1E acceptance.
+- PR #22: open, draft and unmerged; no merge or production release is authorised.
 
-1. Open the private repository on GitHub: **Settings → Actions → Runners → New self-hosted runner**.
-2. Select **Linux** and the architecture shown for the Ubuntu installation (normally x64 on a standard Windows PC).
-3. Follow the current download/configuration commands shown by GitHub for that repository. Runner versions and one-time configuration tokens change; do not use stale copied commands.
-4. Download and configure the runner in a dedicated directory outside the checkout, such as `/home/gradioprep/actions-runner`.
-5. Retain the default labels `self-hosted`, `linux` and `x64`; add a project label such as `gradioprep-wsl2`.
-6. Configure and run it as the ordinary Linux user `gradioprep`, never as root. Start it interactively for the initial validation. Consider service installation only after the security review and lifecycle are settled.
-7. Treat GitHub's one-time runner registration token as a short-lived credential: use it immediately; never save, share, screenshot or commit it.
+Next engineering sequence: (1) add GitHub docs-only workflow path filters and remove unnecessary PR-edited triggering; (2) configure Cloudflare Workers Builds watch-path exclusions; (3) verify a new branch Preview/build and exact-head hosted CI; (4) run the pending Phase 1E suites and backup/restore verifier in GitHub-hosted ephemeral CI. Reconcile duplicate Preview deployment paths before removing either existing mechanism.
 
-Register at the **repository level only**, not account-wide or organization-wide. Keep the runner installation and work directory outside the code checkout and away from Windows personal folders.
+## 9. Approval boundaries
 
-## 6. Security requirements before the workflow targets this runner
+This guide does not authorise:
+- starting Supabase/Docker database containers on the user's computer or registering a local self-hosted runner;
+- creating or linking any hosted Supabase project, even on the Free plan;
+- making the GitHub repository public;
+- changing GitHub spending budgets, billing, overage or paid usage;
+- changing Cloudflare build/deployment settings, production Worker configuration, bindings, secrets, custom domains or DNS;
+- production deployment, PR merge, real learner data, external processing/email or public launch.
 
-A self-hosted runner is a persistent machine, not a fresh virtual machine for every job. Untrusted workflow code can compromise it and access other files, services or credentials available to the host. It must therefore be tightly restricted.
-
-- Keep the repository private and limit write access to trusted maintainers. Never execute fork or untrusted pull-request code on this runner.
-- Restrict triggers to trusted pushes and explicitly trusted same-repository PR activity; review every trigger and job-level condition. Never use `pull_request_target` to check out or execute untrusted PR code with privileged access.
-- Only after runner registration, separately change the workflow's runner label to an exact set such as `[self-hosted, linux, x64, gradioprep-wsl2]`. The current `ubuntu-latest` setting must be changed; runner registration alone does not route jobs.
-- Use least-privilege `GITHUB_TOKEN` permissions. The local SQL/build/test job should not have deployment permissions or broad write access.
-- Do not store Cloudflare API tokens, R2 credentials, hosted Supabase credentials, production secrets or real learner data on this persistent runner. Keep any secret-bearing Preview/deployment job isolated from persistent test execution and separately permissioned.
-- Keep `.dev.vars`, `.env.local`, database dumps, PDF fixtures and backup artefacts out of Git. Use synthetic test identities only and clean local credentials and disposable test data after each run.
-- Do not mount personal Windows folders into the runner workspace. If untrusted code runs or host compromise is suspected, stop and remove the runner registration, rebuild WSL from a clean state, and rotate credentials the machine could access.
-
-Official guidance: [add a self-hosted runner](https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/add-runners) and [secure use of GitHub Actions](https://docs.github.com/en/actions/reference/security/secure-use).
-
-## 7. Avoid additional GitHub-hosted Actions minutes
-
-GitHub documents that self-hosted runner job execution does not incur GitHub-hosted Actions minutes. Artifact/cache storage may still consume quotas or be billed. The Windows computer, electricity and internet are also local costs, so this is not a guarantee of zero total cost.
-
-**All five GitHub spending budgets remain blocked.** Do not unblock them, enable paid usage, increase spend caps or permit paid overage.
-
-References: [GitHub Actions billing concepts](https://docs.github.com/en/actions/concepts/billing-and-usage) and [viewing job execution time](https://docs.github.com/en/actions/how-tos/monitor-workflows/view-job-execution-time).
-
-## 8. Local synthetic verification sequence
-
-Node 22 and npm dependency installation are already verified on the synchronised checkout. The following commands are version/path verification only; do not repeat installation unnecessarily:
-
-```bash
-node --version
-npm --version
-command -v node
-command -v npm
-```
-
-Confirm `node --version` reports a v22 release and `command -v node` points inside `/home/gradioprep/.nvm/`. Do not continue if WSL is still resolving Node/npm from a Windows-mounted path.
-
-**Do not start Supabase yet.** The PC has 8 GB RAM, and Docker/Ubuntu reported about 2.8 GiB total memory. Review the reduced-service footprint and safe memory plan first. After that gate is passed, the intended local synthetic-only sequence is:
-
-```bash
-npm run supabase:start
-npm run supabase:env
-npx supabase db reset --local
-npx supabase test db --local
-npm run build
-npm run test:e2e
-npm run phase1e:backup:verify
-npm run supabase:stop
-```
-
-The Supabase environment script writes ignored local-only files. Do not print or upload secret values. Confirm cleanup even after a test failure; stop the local stack and remove local-only credentials using the repository's cleanup procedure.
-
-## 9. Current next step — Windows memory reading (no startup)
-
-Node installation, dependency installation and repository synchronisation are complete. WSL and Docker memory readings are also supplied. Only the Windows available-physical-memory reading remains outstanding.
-
-Run this read-only command in Windows PowerShell:
-
-```powershell
-Get-CimInstance Win32_OperatingSystem | Select-Object @{Name='TotalRAM_GiB';Expression={[math]::Round($_.TotalVisibleMemorySize/1MB,2)}}, @{Name='AvailableRAM_GiB';Expression={[math]::Round($_.FreePhysicalMemory/1MB,2)}}
-```
-
-This reports installed visible RAM and currently available physical RAM. Do not run supabase start, do not change .wslconfig or Docker resource limits, and do not start additional containers before reviewing the result.
-
-Current Linux readings: WSL 2.8 GiB total, 688 MiB used, 1.8 GiB free, 2.1 GiB available; 1 GiB swap unused. Docker daemon: approximately 2.81 GiB memory and 4 CPUs. No containers are running. The project excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor; the remaining database/Auth/Storage/API services have no published minimum-memory figure for this exact combination. Supabase's 7 GB recommendation applies to all services.
-
-Resource decision remains HOLD until the Windows reading is reviewed. Do not infer that the reduced stack will fit from available WSL memory alone.
-
-Phase 1E remains partial/unverified: the 35- and 47-assertion SQL suites and backup/restore verifier remain pending. Exact-head Actions run #42463591504 failed without reporting job steps; logs were unavailable, so no test failure or precise runner cause is established. The workflow remains on ubuntu-latest; runner registration alone does not redirect it. Any self-hosted runner change requires a separate security review.
-
-PR #22 remains open, draft and unmerged. All existing hosted provisioning, cost, real-data, external processing/email, DNS, production deployment and merge restrictions remain in force.
-
-## 10. Historical Windows/Ubuntu setup checkpoint — 8 November 2026 (superseded by Section 1)
-
-The user verified: Windows PC has 8 GB DDR4 RAM; WSL2 Ubuntu runs as `gradioprep` in `/home/gradioprep`; Docker Desktop 4.98.0 is integrated with Ubuntu; Docker Engine 29.9.2 and Compose 5.6.1 respond successfully; Git 2.43.0 and GitHub CLI 2.103.3 are installed. `whoami`, `docker version`, `docker compose version` and `docker info` succeeded. Docker/Ubuntu reported about 2.8 GiB total memory and 2.1 GiB available at the check; the Linux home filesystem had about 955 GB free.
-
-**Exact pause point:** GitHub CLI is installed but not authenticated. The next command is `gh auth login` in Ubuntu. Choose GitHub.com, HTTPS and browser-based login; complete device authorisation privately, then run `gh auth status`. Never share the one-time code, password or token. The private repository has not yet been cloned.
-
-Do not force a larger WSL/Docker memory allocation or start the full Supabase stack until safe resource requirements and a reduced-resource option are reviewed. No memory settings have been changed. Phase 1E remains partial/unverified and its 35- and 47-assertion SQL suites remain unrun. All five GitHub spending budgets remain blocked. PR #22 remains open, draft and unmerged; no workflow, application, migration or test changes were made by this setup work.
-
-
-## 11. Resource note — 8 November 2026
-
-Supabase's current CLI reference recommends at least 7 GB RAM to start all local services. The GradioPrep workflow already excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor, so a reduced local stack may require less. However, the user's Docker/Ubuntu environment currently reports about 2.8 GiB total memory. Do not assume this is sufficient, increase WSL/Docker memory limits, or attempt a full local stack before inspecting the project-specific service list and planning a safe reduced-resource run. Windows must retain enough memory for normal operation. See the [Supabase local development guide](https://supabase.com/docs/guides/local-development) and [Supabase CLI start reference](https://supabase.com/docs/reference/cli/introduction).
-
-
-## 12. GitHub CLI authentication and repository access — verified 8 November 2026 (clone status superseded by Section 4)
-
-The user completed GitHub CLI browser authentication from Ubuntu. Reported output confirmed:
-- Host: `github.com`
-- Active account: `gradioprep`
-- Git operations protocol: HTTPS
-- Token scopes shown: `gist`, `read:org`, `repo`, `workflow`
-
-The read-only repository check `gh repo view gradioprep/gradioprep-website --json nameWithOwner,isPrivate` returned `nameWithOwner: gradioprep/gradioprep-website` and `isPrivate: true`. No password, device code or token was shared in chat.
-
-**Current status — 8 November 2026:** GitHub CLI authentication, repository clone, Node/npm setup, dependency installation and repository synchronisation are complete. Local HEAD and PR head match 480e019e3a3b9f4ce07b257fd5bd15d7fc68cc7f; the working tree is clean. WSL reports 2.8 GiB total / 2.1 GiB available, 1 GiB swap unused. Docker reports 2.81 GiB / 4 CPUs with no running containers. The Windows available-memory reading is the only remaining input before the local Supabase resource decision. Supabase remains stopped.
+Use synthetic data only until the appropriate independent security, privacy and release approvals are granted.
