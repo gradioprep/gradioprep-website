@@ -536,6 +536,7 @@ BEGIN
     page_status := page_entry ->> 'status';
     IF (page_entry ->> 'page_number')::integer IS DISTINCT FROM expected_number
       OR page_text IS NULL OR char_length(page_text) > 12000
+      OR page_status IS NULL
       OR page_status NOT IN ('digital_text', 'no_text_layer')
       OR (page_status = 'no_text_layer' AND page_text <> '')
       OR (page_status = 'digital_text' AND char_length(btrim(page_text)) = 0) THEN
