@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(19);
+SELECT plan(17);
 
 SELECT ok(
   (SELECT relrowsecurity FROM pg_class WHERE oid = 'private.pdf_submission_reservations'::regclass),
