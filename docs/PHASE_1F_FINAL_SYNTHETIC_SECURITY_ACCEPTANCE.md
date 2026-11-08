@@ -2,7 +2,7 @@
 
 
 > **Authoritative current checkpoint — 8 November 2026:** Repository `gradioprep/gradioprep-website` is public. PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. Verified application/test head: `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`; latest Phase 1F security migration head: `5011ec73669ddd3f94e4618a508e63f5ee698fc8`. Exact-head GitHub Actions run [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070) passed 609 PostgreSQL assertions across 17 SQL files, TypeScript/Worker/Vite builds, 32/32 Playwright tests, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection, local Supabase shutdown, local credential cleanup and a clean credential-free asset build. The restore report recorded one restored database snapshot and one protected PDF checksum. Cloudflare Preview steps were skipped; no Preview or production deployment occurred. Seven Phase 1F runbooks are documented; Founder/security review and provider-specific activation remain outstanding. Local WSL checkout was not inspected and remains unverified. Use standard GitHub-hosted `ubuntu-latest`; do not start local Supabase/Docker or register a self-hosted runner. Hosted Supabase/R2, paid usage, real learner data, external processors, DNS/custom-domain changes, production deployment and PR merge remain separately gated.
-**Version:** 0.5-draft
+**Version:** 0.6-draft
 **Date:** 8 November 2026  
 **Status:** Phase 1F source review, implementation and exact-head synthetic CI evidence are complete for the documented scope. Formal Phase 1F acceptance is **not yet granted**; Founder/security review and explicit approval remain pending.
 
@@ -100,7 +100,7 @@ Technical synthetic evidence includes restored RLS/Storage allow-deny checks; au
 | Review item | Required decision or record | Current status |
 |---|---|---|
 | Evidence crosswalk | Confirm each technical row, its test reference and pass/gap/deferred classification | Technical evidence compiled; Founder review outstanding |
-| Seven runbooks | Review all seven procedures for safe sequencing, authority, escalation and practicality | Drafts exist; Founder/security review outstanding |
+| Seven runbooks | Review all seven procedures for safe sequencing, authority, escalation and practicality | Preliminary document-level review completed; Founder/security sign-off outstanding |
 | Operational ownership | Name the authorised incident lead, backup contact and approval authority before activation | Not assigned in this document |
 | Provider adaptation | Add provider-specific console steps, contact routes and recovery targets only after provider selection/approval | Deferred; no provider activation |
 | Residual risks | Accept, mitigate or defer each limitation in Section 4 and record owner/date | Decision outstanding |
@@ -108,4 +108,9 @@ Technical synthetic evidence includes restored RLS/Storage allow-deny checks; au
 
 **Decision record:** Reviewer: `[to be completed]`; review date: `[to be completed]`; decision: `[accept / accept with conditions / reject]`; conditions and residual-risk owners: `[to be completed]`. Do not fill this record by inference or treat this documentation change as approval.
 
+**Preliminary review result:** the seven procedures are structurally coherent and consistently require containment, non-content evidence preservation, fail-closed behavior and independent verification. This is a document-level review only, not a professional security certification or Founder acceptance. Outstanding operational blockers are listed in the runbook's Section 10.
+
 **Next action:** Founder/security review and completion of the decision record. No application change or new CI run is indicated unless the review identifies a concrete code/test gap. Phase 1G and all hosted/live-data/release work remain separately gated.
+
+
+**Preliminary document-level review — 8 November 2026:** The seven procedures have been checked for coverage, consistency with the documented synthetic-only implementation, and unsafe instructions. No instruction authorises bypassing RLS/MFA/audit/legal holds, sending learner content to unapproved processors, or using the synthetic CI backup against production. The runbooks explicitly distinguish implemented controls from future capabilities. This review is not a provider-readiness assessment, legal opinion, penetration test or Founder approval.

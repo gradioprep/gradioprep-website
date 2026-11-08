@@ -3,7 +3,7 @@
 > **Authoritative current checkpoint — 8 November 2026:** Repository `gradioprep/gradioprep-website` is public. PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. Verified application/test head: `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`; latest Phase 1F security migration head: `5011ec73669ddd3f94e4618a508e63f5ee698fc8`. Exact-head GitHub Actions run [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070) passed 609 PostgreSQL assertions across 17 SQL files, TypeScript/Worker/Vite builds, 32/32 Playwright tests, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection, local Supabase shutdown, local credential cleanup and a clean credential-free asset build. The restore report recorded one restored database snapshot and one protected PDF checksum. Cloudflare Preview steps were skipped; no Preview or production deployment occurred. Seven Phase 1F runbooks are documented; Founder/security review and provider-specific activation remain outstanding. Local WSL checkout was not inspected and remains unverified. Use standard GitHub-hosted `ubuntu-latest`; do not start local Supabase/Docker or register a self-hosted runner. Hosted Supabase/R2, paid usage, real learner data, external processors, DNS/custom-domain changes, production deployment and PR merge remain separately gated.
 
 
-**Version:** 4.75
+**Version:** 4.76
 **Last updated:** 8 November 2026
 **Status:** PR #22 remains open, draft and unmerged. Phase 1C, 1D, 1E and Phase 1F implementation/synthetic CI evidence are verified complete for the approved synthetic-only scope. Formal Phase 1F acceptance remains pending Founder/security review of the evidence crosswalk and seven runbooks and explicit Founder acceptance. Local WSL checkout is unverified. Hosted/production requirements remain separate approval gates.
 
@@ -903,3 +903,12 @@ This section is the authoritative current Phase 1F checkpoint and supersedes the
 - **Current next action:** complete the Founder/security review worksheet in `docs/PHASE_1F_FINAL_SYNTHETIC_SECURITY_ACCEPTANCE.md`. No application-code change or new CI run is needed unless the review identifies a concrete test/code gap.
 
 This status update does not authorise Phase 1G, hosted provisioning, paid usage, real learner data, external processing/email, DNS/custom-domain changes, production deployment or PR merge.
+
+
+## 31. Preliminary Phase 1F runbook review — 8 November 2026
+
+A preliminary document-level review of all seven Phase 1F operational runbooks is complete. The procedures consistently prioritise access containment, non-content evidence preservation, fail-closed handling, synthetic-only reproduction and independent verification. They do not authorise bypassing RLS/MFA/audit/legal holds or sending learner content/secrets to unapproved processors.
+
+This is not formal Founder/security acceptance or a production-readiness certification. Operational activation remains blocked on named incident/security/privacy/provider contacts; severity and response-time definitions; approved RTO/RPO; provider-specific procedures; tested monitoring, secret/session revocation, object quarantine, encrypted backup/key custody, production restore and physical deletion/retention execution; evidence-retention controls; legal/privacy review; and tabletop exercises.
+
+The next action remains the Founder/security review worksheet and explicit accept / accept-with-conditions / reject decision in the Phase 1F crosswalk. No Phase 1G, hosted provisioning, real learner data or release activity is authorised by this review.

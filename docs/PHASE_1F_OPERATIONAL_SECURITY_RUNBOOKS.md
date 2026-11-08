@@ -1,6 +1,6 @@
 # Phase 1F — Operational Security Runbooks
 
-**Version:** 0.1-draft  
+**Version:** 0.2-draft  
 **Date:** 8 November 2026  
 **Status:** Seven required runbooks documented; operational activation and Founder/security review remain outstanding.
 
@@ -145,3 +145,22 @@ Every incident record should contain only:
 Before enabling real learner data, the Founder and designated security/privacy reviewers must confirm: named on-call contacts; provider-specific session and secret rotation steps; approved monitoring and escalation channels; hosted backup and key custody; tested database/object restore; physical deletion and legal-hold execution; retention and backup expiry; incident evidence access controls; and applicable legal/privacy notices.
 
 **Acceptance boundary:** this document supplies the seven required procedural runbooks. It does not close hosted/production readiness or authorise any of those operations. Phase 1F acceptance still requires code/test evidence, a completed source-to-test crosswalk, review of these procedures, and explicit Founder acceptance. Real learner data, hosted provisioning, paid usage, external processors, DNS changes, production deployment and PR merge remain separately gated.
+
+
+## 10. Preliminary document review and activation blockers — 8 November 2026
+
+A preliminary document-level review checked all seven procedures for scenario coverage, consistency with the verified synthetic implementation, preservation of non-content evidence, fail-closed containment and avoidance of unsafe workarounds.
+
+**Review result:** the seven runbooks form a coherent draft set. They consistently direct operators to restrict access first, preserve audit evidence, avoid exposing learner content or secrets, use synthetic fixtures for reproduction, and require independent verification before reopening access. They also disclose that the current repository does not provide production monitoring, hosted encrypted backups/key custody, a production restore service, a quarantine workflow for malicious PDFs, or a scheduled physical-deletion worker.
+
+**Required before operational activation:**
+
+1. Name the primary incident owner, backup, security approver, privacy/legal contact and provider-account owner; document secure primary and alternate escalation channels.
+2. Define incident severity levels, response/containment targets, notification decision owners and escalation time limits.
+3. Approve numeric recovery-time and recovery-point objectives (RTO/RPO) and map each to tested provider capabilities.
+4. Add provider-specific, least-privilege console procedures for session revocation/account suspension, credential rotation, monitoring/log preservation, private-object containment, encrypted backup, key custody and restore.
+5. Implement and test the controls currently described only as future procedures, including malicious-object quarantine where required, scheduled retention/deletion execution, physical object deletion, backup expiry and independent restore verification.
+6. Define incident-evidence access controls and retention periods, and obtain qualified privacy/legal review of notification, cross-border transfer, statutory retention and legal-hold requirements.
+7. Run a tabletop exercise for each scenario and record participants, gaps, corrective-action owners and retest evidence.
+
+**Boundary:** this preliminary review does not activate any runbook, establish production readiness, grant provider access, approve spending or authorise real learner data. Formal Founder/security review and explicit Phase 1F acceptance remain outstanding.
