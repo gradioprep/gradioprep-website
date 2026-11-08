@@ -42,6 +42,14 @@ SELECT has_column(
   'accepted submissions record their actual response mode'
 );
 SELECT ok(
+  EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conrelid = 'public.task_versions'::regclass
+      AND conname = 'task_versions_pdf_response_threshold_check'
+  ),
+  'database constraint enforces the greater-than-20-word PDF eligibility threshold'
+);
+SELECT ok(
   (SELECT pdf_response_enabled AND ideal_words > 20
    FROM public.task_versions
    WHERE id = 'a1111111-1111-4111-8111-111111111111'),
