@@ -793,7 +793,7 @@ PR #22 remains open, draft and unmerged. No merge, hosted provisioning, paid usa
 **Limits:** This is a backend/file-control foundation only. The current file route attaches a PDF to an existing queued typed human-assessment submission; the typed-only acceptance RPC is unchanged. The learner-facing optional PDF submission journey, OCR/page extraction, corrected transcript, split-screen teacher/grader workspace, full grading/feedback UX, queue search, timer/analytics, Diagnostic/Report and Remedial Course remain unimplemented. Phase 1E backup/recovery/deletion is the next foundation step. Branded synthetic staging on \`gradioprep.com\` remains mandatory before final Diagnostic/Evaluation Report acceptance; hosted resources and DNS require separate explicit approval. PR #22 remains open, draft and unmerged.
 
 
-## 22. Current Phase 1D closeout and Phase 1E handoff — 6 November 2026
+## 22. Historical Phase 1D closeout and Phase 1E handoff — 6 November 2026 (superseded by Section 26)
 
 Phase 1D is complete for the approved local-Supabase/synthetic-data scope. Exact application-code/test head `251e9633e2b1be32fbb0abebb9b1bc0dc2bf07ef` passed [#42189786947](https://github.com/gradioprep/gradioprep-website/actions/runs/42189786947): 519 pgTAP assertions across 15 SQL files, TypeScript/Worker/Vite builds, 31/31 Playwright tests, local Supabase shutdown, local credential cleanup and credential-free asset build. Current inventory is 26 protected tables (18 public, eight private) and 32 API route rows; 27 routes use Worker audit-outcome ingestion and the file-read route records authorization outcomes in its database RPC. Phase 1C-E correlation remains representative per distinct action, not exhaustive outcome coverage.
 
@@ -802,7 +802,7 @@ Phase 1D is complete for the approved local-Supabase/synthetic-data scope. Exact
 The current Phase 1D increment does not implement the complete learner-facing optional PDF submission journey, OCR/extraction, corrected transcript, split-screen grader workspace, full grading/feedback UX, queue search, timer/analytics, Diagnostic/Report or Remedial Course. Cycle 1 remains Grade 9 / IB MYP Year 4; Cambridge Grade 6 remains blocked. Branded synthetic staging on `gradioprep.com` remains mandatory before final Diagnostic/Evaluation Report acceptance and requires separate hosted-resource/DNS approval. PR #22 remains open, draft and unmerged.
 
 
-## 23. Historical Phase 1E and local CI recovery — 7 November 2026 (superseded by Section 25)
+## 23. Historical Phase 1E and local CI recovery — 7 November 2026 (superseded by Section 26)
 
 Phase 1E is partially implemented and **not verified**. The request/legal-hold migration and account-closure/retention-plan migration are present, but their paired SQL tests declare `plan(35)` and `plan(47)` and neither has been run. The current scope creates request/hold records and a retention inventory; it does not prove physical erasure of learner content or Storage objects. R2 backup-object rows are metadata only; no R2 resource is provisioned.
 
@@ -819,7 +819,7 @@ WSL2 Ubuntu is installed as `gradioprep`; Docker Desktop 4.98.0 integration is e
 The current workflow still targets `ubuntu-latest`; runner registration alone will not redirect jobs. A separate workflow security review/change remains required before the repository-scoped runner is used. Phase 1E remains partial/unverified and the existing 35- and 47-assertion SQL suites remain unrun. Latest exact-head docs workflow [#42459347668](https://github.com/gradioprep/gradioprep-website/actions/runs/42459347668) failed before runner assignment and ran no steps. All five GitHub spending budgets remain blocked. See [the local WSL2 build guide](LOCAL_WINDOWS_WSL2_BUILD_ENVIRONMENT.md). No application, migration, test or workflow changes are included in this setup checkpoint. PR #22 remains open, draft and unmerged.
 
 
-## 25. Current infrastructure, build and test execution decision — 8 November 2026
+## 26. Current infrastructure, build and test execution decision — 8 November 2026
 
 This section is the current operating decision and supersedes Sections 23–24 wherever they propose starting Supabase on the user's PC, configuring a WSL self-hosted runner, or waiting for further local memory measurements.
 

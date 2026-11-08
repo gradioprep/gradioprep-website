@@ -635,7 +635,7 @@ The inventory is now **26 protected tables (18 public, eight private)** and **32
 The implementation is not the complete flagship feature. Submission acceptance remains typed-response only; the file route attaches a PDF to an existing queued submission. The learner-facing optional PDF selection/upload journey, OCR/extraction, corrected transcript, split-screen grading workspace, queue search, full feedback UX, timer/analytics and Diagnostic/Report are not implemented. Phase 1E backup/recovery/deletion is next; retain the separate branded synthetic-staging and approval gates before final Diagnostic/Report acceptance.
 
 
-## Current Phase 1E and CI handoff — 7 November 2026
+## Historical Phase 1E and CI handoff — 7 November 2026 (superseded by Section 31)
 
 Phase 1C is complete and Phase 1D is verified at the recorded code/test checkpoints above. Phase 1E is partial and unverified. The present migrations are paired with `supabase/tests/account_deletion_ledger.test.sql` (`plan(35)`) and `supabase/tests/account_closure_retention.test.sql` (`plan(47)`); both suites remain untested. Actions #42208654326 attempt 4 failed before runner assignment, so no SQL was executed.
 

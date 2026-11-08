@@ -97,7 +97,7 @@ Apply the binding free-first policy in `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_
 
 **Approval boundary:** The Founder approved these Phase 0 architecture/provider/timer/retention decisions on 2 November 2026 and subsequently approved the phased implementation plan, including Phase 1B local synthetic-only coding. This decision record does not authorise paid spending, hosted resource provisioning, real learner data or external learner-content processing, PR merge, production deployment, DNS or Cloudflare production configuration changes. Apply the free-first policy in `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`.
 
-## Current implementation-status note — 7 November 2026
+## Historical implementation-status note — 7 November 2026 (superseded by Section 9)
 
 The approved retention and deletion schedule above remains binding and unchanged. Phase 1E has only partial local implementation: request/legal-hold and account-closure/retention-inventory migrations are present, but their 35- and 47-assertion SQL tests have not run. Current code does not claim physical erasure of learner content or private Storage objects; R2 backup-object rows are metadata only and no R2 resource has been provisioned. No change is made to the existing 12-month, 24-month or 30-day periods, legal-hold exception, external-processing restrictions or real-data approval gate.
 

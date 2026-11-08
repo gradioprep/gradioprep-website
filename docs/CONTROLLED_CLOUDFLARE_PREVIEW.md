@@ -54,7 +54,7 @@ Do not connect the custom domain to each PR Preview. Keep per-PR verification on
 The earlier controlled-preview implementation was exercised by PR #15 and PR #17. PR #15's documented run #20 and Build run #251 passed at that checkpoint; PR #15's preview URL was https://pr-15-gradioprep-website.wandering-scene-1822.workers.dev. Those records prove that this workflow pattern previously succeeded, not that a current PR Preview is active today. The current PR's CI and preview result must be checked independently.
 
 
-## Current CI and Preview status — 7 November 2026
+## Historical CI and Preview status — 7 November 2026 (superseded by Current Workers Builds integration and cost-control note)
 
 The current local verification job still targets `ubuntu-latest`. Exact-head run [#42208654326](https://github.com/gradioprep/gradioprep-website/actions/runs/42208654326), attempt 4, failed before runner assignment; no build, SQL or browser step ran. WSL2 Ubuntu is installed, but Docker Desktop integration, Linux checkout and repository-scoped runner are pending. Do not expose Cloudflare Preview/deployment credentials to persistent self-hosted test execution; any future secret-bearing Preview step must remain isolated and separately permissioned. This documentation-only update does not request or create a Founder Preview.
 

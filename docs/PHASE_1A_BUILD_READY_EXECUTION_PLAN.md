@@ -486,7 +486,7 @@ This is a planning/status record only. It does not implement any downstream capa
 The closeout does not claim overall Phase 1 or real-data readiness. Phase 1D private PDF/file controls have been implemented and verified locally; Phase 1E backup/recovery/deletion and Phase 1F final synthetic security acceptance follow. Continue local-only synthetic development. PR #22 remains open, draft and unmerged. No merge, hosted resource, paid use, real learner data, external processing/email, Preview/production deployment or DNS change is authorised. Branded staging on `gradioprep.com` with an isolated hosted synthetic backend remains a separate mandatory gate before final Diagnostic/Report acceptance and requires separate approval.
 
 
-## Current local CI recovery and Phase 1E handoff — 7 November 2026
+## Historical local CI recovery and Phase 1E handoff — 7 November 2026 (superseded by Current CI and device execution decision)
 
 WSL2 Ubuntu is installed; Linux user `gradioprep`. Docker Desktop/WSL integration, private repository checkout inside Linux and repository-scoped runner remain pending. The current `.github/workflows/phase1b-verification.yml` still targets `ubuntu-latest`; it will not use a self-hosted runner until a separate security-reviewed workflow change explicitly targets its labels. See `docs/LOCAL_WINDOWS_WSL2_BUILD_ENVIRONMENT.md`.
 
@@ -494,7 +494,7 @@ Use a repository-scoped, unprivileged Linux runner, outside the checkout, and on
 
 Phase 1E is partial/unverified: the request/legal-hold and retention-plan migrations are present; the paired SQL suites plan 35 and 47 assertions and have not run. Exact-head run #42208654326 attempt 4 failed before runner assignment and ran no steps. Next implementation after runner setup is to run/fix both test files, verify local backup/restore and deletion/retention, then complete Phase 1F only after Phase 1E passes.
 
-## Current WSL2/GitHub connection checkpoint — 8 November 2026
+## Historical WSL2/GitHub connection checkpoint — 8 November 2026 (superseded by Current CI and device execution decision)
 
 Verified: Windows PC has 8 GB DDR4 RAM; WSL2 Ubuntu runs as `gradioprep`; Docker Desktop 4.98.0 integration is enabled; Docker Engine 29.9.2, Compose 5.6.1, Git 2.43.0 and GitHub CLI 2.103.3 are installed. Docker/Ubuntu currently reports about 2.8 GiB total memory, so do not start full Supabase or increase memory limits until a safe resource review is completed.
 

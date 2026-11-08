@@ -76,7 +76,7 @@ Review provider terms and usage at least quarterly, before each new hosted integ
 
 No assistant, developer or automation may infer spending authority from this plan, a listed vendor, an estimate, a quota warning or the 100-subscriber review point.
 
-## 7. Official references checked 3 November 2026
+## Official references checked 3 November 2026
 
 - Supabase pricing: https://supabase.com/pricing
 - Supabase billing and free-plan pausing: https://supabase.com/docs/guides/platform/billing-on-supabase and https://supabase.com/kb/faqs/platform/free-project-pausing
