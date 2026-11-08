@@ -2587,6 +2587,275 @@ async function uploadSubmissionPdf(
   }, 201);
 }
 
+
+type PdfTranscriptPage = {
+  page_number: number;
+  text: string;
+  status: "digital_text" | "no_text_layer";
+};
+
+function isPdfTranscriptPages(value: unknown, expectedPageCount: number): value is PdfTranscriptPage[] {
+  if (!Array.isArray(value) || value.length !== expectedPageCount) return false;
+  let totalCharacters = 0;
+  return value.every((entry, index) => {
+    if (typeof entry !== "object" || entry === null || Array.isArray(entry)) return false;
+    const page = entry as Record<string, unknown>;
+    if (Object.keys(page).length !== 3 ||
+        !["page_number", "text", "status"].every(key => key in page) ||
+        page.page_number !== index + 1 ||
+        typeof page.text !== "string" ||
+        page.text.length > 12_000 ||
+        (page.status !== "digital_text" && page.status !== "no_text_layer") ||
+        (page.status === "no_text_layer" && page.text !== "") ||
+        (page.status === "digital_text" && !page.text.trim())) return false;
+    totalCharacters += page.text.length;
+    return totalCharacters <= 120_000;
+  });
+}
+
+async function markPdfReservationForCleanup(
+  context: CallerContext,
+  reservationId: string,
+): Promise<boolean> {
+  if (!context.serviceSupabase) return false;
+  const { data, error } = await context.serviceSupabase.rpc(
+    "mark_pdf_submission_reservation_cleanup_pending",
+    { p_actor_id: context.userId, p_reservation_id: reservationId },
+  );
+  return !error && data === true;
+}
+
+async function releasePdfReservation(
+  context: CallerContext,
+  reservationId: string,
+): Promise<boolean> {
+  if (!context.serviceSupabase) return false;
+  const { data, error } = await context.serviceSupabase.rpc(
+    "release_pdf_submission_reservation",
+    { p_actor_id: context.userId, p_reservation_id: reservationId },
+  );
+  return !error && data === true;
+}
+
+async function createPdfLearnerSubmission(
+  request: Request,
+  env: WorkerEnv,
+): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const context = auth.context;
+
+  const roleDenied = await requireActiveRole(context, "student");
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditPrivilegedWriteOutcome(
+          context, "student_assessment_submission_accept", undefined, "denied",
+        )
+      : null;
+    return audit ?? roleDenied;
+  }
+  if (!context.serviceSupabase) {
+    return jsonResponse({ error: "private_file_service_unavailable" }, 503);
+  }
+
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > maxSubmissionPdfBytes + 512 * 1024) {
+    return jsonResponse({ error: "pdf_file_too_large", max_bytes: maxSubmissionPdfBytes }, 413);
+  }
+  if (!/^multipart\/form-data(?:;|$)/i.test(request.headers.get("content-type") ?? "")) {
+    return jsonResponse({ error: "multipart_pdf_required" }, 415);
+  }
+
+  let form: FormData;
+  try {
+    form = await request.formData();
+  } catch {
+    return jsonResponse({ error: "invalid_multipart_upload" }, 400);
+  }
+
+  const taskVersionId = form.get("task_version_id");
+  const idempotencyKey = form.get("idempotency_key");
+  const responseMode = form.get("response_mode");
+  const responseText = form.get("response_text");
+  const transcriptRaw = form.get("transcript_pages");
+  const submittedFile = form.get("file");
+  const modeIsValid = responseMode === "typed_pdf" || responseMode === "pdf_only";
+  const expectedKeys = responseMode === "typed_pdf"
+    ? ["task_version_id", "idempotency_key", "response_mode", "response_text", "transcript_pages", "file"]
+    : ["task_version_id", "idempotency_key", "response_mode", "transcript_pages", "file"];
+  const entries = Array.from(form.entries());
+  const keys = entries.map(([key]) => key);
+  const expectedSet = new Set(expectedKeys);
+
+  if (!modeIsValid ||
+      !isUuid(taskVersionId) ||
+      !isUuid(idempotencyKey) ||
+      !(submittedFile instanceof File) ||
+      typeof transcriptRaw !== "string" ||
+      transcriptRaw.length > 150_000 ||
+      keys.length !== expectedKeys.length ||
+      keys.some(key => !expectedSet.has(key)) ||
+      expectedKeys.some(key => keys.filter(candidate => candidate === key).length !== 1) ||
+      (responseMode === "typed_pdf" &&
+        (typeof responseText !== "string" || !responseText.trim() || responseText.length > 12_000)) ||
+      (responseMode === "pdf_only" && responseText !== null)) {
+    return jsonResponse({ error: "invalid_pdf_assessment_submission" }, 400);
+  }
+
+  const filename = submittedFile.name.split(/[\\/]/).pop() ?? "";
+  if (!/\.pdf$/i.test(filename)) return pdfRejectionResponse("invalid_extension");
+  if (submittedFile.type !== "application/pdf") return pdfRejectionResponse("invalid_mime");
+  if (submittedFile.size < 1 || submittedFile.size > maxSubmissionPdfBytes) {
+    return pdfRejectionResponse("file_too_large");
+  }
+
+  let bytes: Uint8Array;
+  try {
+    bytes = new Uint8Array(await submittedFile.arrayBuffer());
+  } catch {
+    return pdfRejectionResponse("malformed_pdf");
+  }
+  if (new TextDecoder().decode(bytes.subarray(0, 5)) !== "%PDF-") {
+    return pdfRejectionResponse("invalid_signature");
+  }
+
+  let pageCount: number;
+  try {
+    const parsedPdf = await PDFDocument.load(bytes, {
+      ignoreEncryption: false,
+      updateMetadata: false,
+      throwOnInvalidObject: true,
+    });
+    pageCount = parsedPdf.getPageCount();
+  } catch (error) {
+    const message = error instanceof Error ? (error.name + " " + error.message).toLowerCase() : "";
+    return pdfRejectionResponse(/encrypt|password/.test(message) ? "encrypted_pdf" : "malformed_pdf");
+  }
+  if (!Number.isInteger(pageCount) || pageCount < 1 || pageCount > maxSubmissionPdfPages) {
+    return pdfRejectionResponse("page_limit_exceeded");
+  }
+
+  let transcriptPages: unknown;
+  try {
+    transcriptPages = JSON.parse(transcriptRaw) as unknown;
+  } catch {
+    return jsonResponse({ error: "invalid_pdf_transcript" }, 400);
+  }
+  if (!isPdfTranscriptPages(transcriptPages, pageCount)) {
+    return jsonResponse({ error: "invalid_pdf_transcript" }, 400);
+  }
+
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const sha256 = Array.from(new Uint8Array(digest))
+    .map(value => value.toString(16).padStart(2, "0"))
+    .join("");
+
+  // Reserve queue capacity only after the original PDF and its page map have
+  // passed bounded validation. The database rechecks eligibility, enrolment,
+  // published rubric, idempotency and capacity under the singleton lock.
+  const { data: reservationData, error: reservationError } = await context.supabase.rpc(
+    "begin_pdf_assessment_submission",
+    {
+      p_task_version_id: taskVersionId,
+      p_idempotency_key: idempotencyKey,
+      p_response_mode: responseMode,
+      p_response_text: responseMode === "typed_pdf" ? (responseText as string).trim() : null,
+    },
+  );
+
+  if (reservationError) {
+    const message = reservationError.message ?? "";
+    const auditOutcome = classifyPrivilegedWriteError(reservationError);
+    const audit = await auditPrivilegedWriteOutcome(
+      context,
+      "student_assessment_submission_accept",
+      taskVersionId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
+    if (message === "assessment_submission_forbidden") return jsonResponse({ error: "assessment_submission_forbidden" }, 403);
+    if (message === "assessment_task_not_available") return jsonResponse({ error: "assessment_task_not_available" }, 404);
+    if (message === "submission_capacity_unavailable") return jsonResponse({ error: "submission_capacity_unavailable" }, 503);
+    if (message === "submission_capacity_full") return jsonResponse({ error: "submission_capacity_full" }, 409);
+    if (message === "submission_idempotency_conflict") return jsonResponse({ error: "submission_idempotency_conflict" }, 409);
+    if (message === "pdf_submission_in_progress") return jsonResponse({ error: "pdf_submission_in_progress" }, 409);
+    return jsonResponse({ error: "pdf_submission_reservation_failed" }, 500);
+  }
+
+  const reservation = asRows(reservationData)[0];
+  if (typeof reservation?.reservation_id !== "string" ||
+      typeof reservation.object_path !== "string" ||
+      typeof reservation.reservation_state !== "string") {
+    return jsonResponse({ error: "pdf_submission_reservation_unavailable" }, 503);
+  }
+
+  const reservationId = reservation.reservation_id;
+  const finalize = async () => context.serviceSupabase!.rpc("finalize_pdf_assessment_submission", {
+    p_actor_id: context.userId,
+    p_reservation_id: reservationId,
+    p_sha256: sha256,
+    p_byte_size: bytes.byteLength,
+    p_page_count: pageCount,
+    p_mime_type: "application/pdf",
+    p_transcript_pages: transcriptPages,
+  });
+
+  if (reservation.reservation_state === "accepted" && reservation.is_replay === true) {
+    // An idempotent retry must prove it is the same file and transcript; the
+    // finalizer compares both against the immutable accepted records.
+    const { data, error } = await finalize();
+    if (error) return jsonResponse({ error: "submission_idempotency_conflict" }, 409);
+    const replay = asRows(data)[0];
+    return replay
+      ? jsonResponse({ submission: replay }, 200)
+      : jsonResponse({ error: "pdf_submission_acceptance_unavailable" }, 503);
+  }
+
+  if (reservation.reservation_state !== "reserved" ||
+      typeof reservation.object_path !== "string" ||
+      typeof reservation.expires_at !== "string") {
+    return jsonResponse({ error: "pdf_submission_reservation_unavailable" }, 503);
+  }
+
+  const { error: storageError } = await context.serviceSupabase.storage
+    .from(privateSubmissionBucket)
+    .upload(reservation.object_path, bytes, {
+      cacheControl: "60",
+      contentType: "application/pdf",
+      upsert: false,
+    });
+
+  if (storageError) {
+    await markPdfReservationForCleanup(context, reservationId);
+    return jsonResponse({ error: "private_file_storage_unavailable" }, 503);
+  }
+
+  let finalResult = await finalize();
+  // Finalisation is idempotent. A retry resolves an uncertain response after
+  // a network timeout without creating a second submission or starting a new SLA.
+  if (finalResult.error) finalResult = await finalize();
+
+  const accepted = asRows(finalResult.data)[0];
+  if (finalResult.error || !accepted || accepted.response_mode !== responseMode) {
+    await markPdfReservationForCleanup(context, reservationId);
+    return jsonResponse({ error: "private_file_acceptance_unavailable" }, 503);
+  }
+
+  return jsonResponse({
+    submission: accepted,
+    transcript: {
+      method: "pdfjs",
+      state: transcriptPages.some(page => page.status === "no_text_layer")
+        ? (transcriptPages.every(page => page.status === "no_text_layer") ? "none" : "partial")
+        : "complete",
+      no_text_layer_pages: transcriptPages
+        .filter(page => page.status === "no_text_layer")
+        .map(page => page.page_number),
+    },
+  }, accepted.is_replay === true ? 200 : 201);
+}
+
 async function getAuthorizedSubmissionPdf(
   request: Request,
   env: WorkerEnv,
@@ -2763,6 +3032,10 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
 
   if (url.pathname === "/api/v1/owner/submission-files/cleanup" && request.method === "POST") {
     return cleanupExpiredSubmissionPdfs(request, env);
+  }
+
+  if (url.pathname === "/api/v1/learner/pdf-submissions" && request.method === "POST") {
+    return createPdfLearnerSubmission(request, env);
   }
 
   if (url.pathname === "/api/v1/learner/submissions" && request.method === "GET") {
