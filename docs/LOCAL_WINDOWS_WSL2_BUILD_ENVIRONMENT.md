@@ -34,7 +34,7 @@ Do not reinstall Node or dependencies. No additional local environment setup is 
 
 ## 3. Repository synchronisation checkpoint
 
-The user confirmed a clean local checkout at `1caf00e134333f7effcdaf94ac0cb233218e295b` on `feature/phase-1b-local-auth-api`. This reconciliation advanced the remote branch by two documentation-only commits (`d4ebfb114d874f2bde6dc65af2345f2ab88b30cf` and `37e279d93f0f5ad82ccfa29f51cca0031f1f806b`) after the user's confirmed local head. Before the next local repository operation, fast-forward once; do not reclone or reinstall tools. PR #22 remains open, draft and unmerged.
+The user confirmed a clean local checkout at `1caf00e134333f7effcdaf94ac0cb233218e295b` on `feature/phase-1b-local-auth-api`. The remote branch has advanced through documentation-only infrastructure/CI reconciliations after the user's confirmed local head. Before the next local repository operation, run one `git pull --ff-only origin feature/phase-1b-local-auth-api`; do not reclone or reinstall tools. PR #22 remains open, draft and unmerged.
 
 ## 4. Where database tests run
 
@@ -68,7 +68,7 @@ The selected direction is to retain this existing Git-connected Workers Builds i
 
 The repository remains private. GitHub's public-repository standard-runner allowance is not a sufficient reason to publish GradioPrep's full source and its internal strategy/security records. Public visibility would expose the complete repository history, branches, PRs, documentation, Actions logs and artifacts. Reconsider it only after a deliberate open-source/IP decision and full history/secret review.
 
-For private repositories, GitHub-hosted Actions minutes depend on the owner account's GitHub plan and included usage. The account's current plan/remaining minutes have not been verified. The latest exact-head run `#42466738041` failed without reporting job steps and its logs were unavailable. That does not establish whether the failure was caused by an included-minute limit, a runner/queue issue or another configuration problem. Do not label the cause as quota exhaustion without evidence. All five GitHub spending budgets remain blocked; do not unblock them or permit paid overage.
+For private repositories, GitHub-hosted Actions minutes depend on the owner account's GitHub plan and included usage. The account's current plan/remaining minutes have not been verified. The latest exact-head run `#42466941118` failed without reporting job steps and its logs were unavailable. That does not establish whether the failure was caused by an included-minute limit, a runner/queue issue or another configuration problem. Do not label the cause as quota exhaustion without evidence. All five GitHub spending budgets remain blocked; do not unblock them or permit paid overage.
 
 ## 7. Conditional hosted Supabase option
 
