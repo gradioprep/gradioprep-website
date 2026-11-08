@@ -1,6 +1,15 @@
 BEGIN;
 SELECT no_plan();
 
+-- Phase 2 regression fixture: a published typed-only task still needs a prompt
+-- before the learner-facing selector can offer a valid submission target.
+SELECT is(
+  (SELECT count(*)::integer FROM public.task_version_prompts
+   WHERE task_version_id = 'a3333333-3333-4333-8333-333333333333'),
+  1,
+  'the typed-only learner submission fixture includes its required prompt'
+);
+
 SET LOCAL ROLE anon;
 SELECT throws_ok($$SELECT * FROM public.assessment_submissions$$, '42501', NULL, 'anonymous cannot read accepted submissions');
 SELECT throws_ok($$SELECT * FROM public.submission_versions$$, '42501', NULL, 'anonymous cannot read submission versions');
