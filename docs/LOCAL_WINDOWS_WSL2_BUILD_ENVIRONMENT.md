@@ -6,13 +6,16 @@
 
 ## 1. Current setup checkpoint
 
-**Verified on 8 November 2026:** WSL2 Ubuntu is installed and runs as Linux user `gradioprep`. Docker Desktop 4.98.0 is integrated with Ubuntu; Docker Engine 29.9.2 and Compose 5.6.1 respond successfully to `docker version`, `docker compose version` and `docker info`. Git 2.43.0 and GitHub CLI 2.103.3 are installed. The Windows PC has 8 GB DDR4 RAM; Ubuntu/Docker reported about 2.8 GiB total memory and 2.1 GiB available at the last check, with about 955 GB free in the Linux home filesystem. GitHub CLI authentication is verified for active account `gradioprep` using HTTPS, and the private repository is accessible.
+**Verified on 8 November 2026:** WSL2 Ubuntu runs as Linux user `gradioprep`; Docker Desktop integration, Docker Engine, Compose, Git, GitHub CLI authentication and private repository access are verified. The PC has 8 GB DDR4 RAM; Docker/Ubuntu previously reported approximately 2.8 GiB total memory. Do not change memory settings or start Supabase before a reduced-service resource assessment.
 
-**Repository clone verified:** `/home/gradioprep/src/gradioprep-website` contains branch `feature/phase-1b-local-auth-api`. The local HEAD, `origin/feature/phase-1b-local-auth-api` and live PR #22 head all matched `2a582c42c071a7dda85d197672e9255398e55140` at the time of cloning; the working tree was clean and tracking origin. Subsequent documentation-only updates have advanced origin and PR #22, so the local checkout is now behind and must be fast-forwarded before npm dependency installation.
+**Node.js setup complete:** Node `v22.23.4`, npm `10.9.9`; both resolve inside `/home/gradioprep/.nvm/versions/node/v22.23.4/bin/`. Do not reinstall Node. Project requirement is Node `>=20.19.0`; the GitHub Actions workflow uses Node 22.
 
-**Current local pause point:** the WSL shell reports `node: command not found`; `npm --version` reports `11.19.0`, but the npm executable path is not yet verified. The project requires Node `>=20.19.0`; the checked-in workflow currently uses Node 22. Install a WSL-native Node 22 runtime before installing project dependencies or running scripts. Use a per-user version manager; do not rely on Windows Node/npm binaries being exposed through WSL PATH.
+**Repository status:** clone path is `/home/gradioprep/src/gradioprep-website`; last recorded local HEAD was `2a582c42c071a7dda85d197672e9255398e55140`. The live PR #22 head is currently `acfde1e9572d5149e8d4a857bfb32032db1dc45a`. The local branch, working tree and current HEAD have not yet been rechecked after the Node installation. Verify them before fast-forwarding; use `git pull --ff-only origin feature/phase-1b-local-auth-api` only if behind and clean. Do not reinstall or reclone the repository.
 
-Do not start Supabase or change WSL/Docker memory settings until the reduced-service memory requirements are reviewed.
+**Dependency installation:** pending. After the checkout is verified at the live PR head, run `npm install --no-audit --no-fund`, then check `git status --short` and confirm there are no unintended tracked changes or dependency-lock modifications.
+
+**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. Exact-head Actions run [#42461053863](https://github.com/gradioprep/gradioprep-website/actions/runs/42461053863) failed without job steps reported, so no test result is established. Earlier run [#42460447569](https://github.com/gradioprep/gradioprep-website/actions/runs/42460447569) is confirmed pre-runner-assignment (runner ID 0, zero steps).
+
 
 ## 2. Verify the WSL2 Ubuntu installation
 
