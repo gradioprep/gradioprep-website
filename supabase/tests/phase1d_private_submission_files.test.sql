@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(33);
+SELECT plan(35);
 
 SELECT is(
   (SELECT public FROM storage.buckets WHERE id = 'private-submissions'),
@@ -117,6 +117,48 @@ SELECT throws_ok(
   'assessment_submission_response_mode_change_forbidden',
   'a learner cannot claim PDF mode before an accepted private PDF exists'
 );
+
+CREATE TEMP TABLE phase1d_typed_only_context (submission_id uuid);
+GRANT SELECT, INSERT ON phase1d_typed_only_context TO authenticated, service_role;
+SET LOCAL ROLE authenticated;
+SELECT set_config(
+  'request.jwt.claims',
+  '{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal1"}',
+  true
+);
+INSERT INTO phase1d_typed_only_context
+SELECT submission_id
+FROM public.accept_assessment_submission(
+  'a2222222-2222-4222-8222-222222222222',
+  '2d111111-1111-4111-8111-111111111111',
+  'This synthetic Cambridge response is typed only because the task metadata has not enabled PDF response.'
+);
+RESET ROLE;
+
+SET LOCAL ROLE service_role;
+SELECT set_config(
+  'request.jwt.claims',
+  '{"sub":"22222222-2222-4222-8222-222222222222","role":"service_role","aal":"aal1"}',
+  true
+);
+SELECT throws_ok(
+  format(
+    'SELECT * FROM public.begin_submission_file_upload(%L,%L)',
+    '22222222-2222-4222-8222-222222222222',
+    (SELECT submission_id FROM phase1d_typed_only_context)
+  ),
+  'P0001',
+  'submission_file_pdf_not_enabled',
+  'Worker upload RPC rejects PDF attachments when task metadata is typed-only'
+);
+RESET ROLE;
+SELECT is(
+  (SELECT count(*)::integer FROM private.submission_files
+   WHERE submission_id = (SELECT submission_id FROM phase1d_typed_only_context)),
+  0,
+  'a typed-only PDF denial creates no file upload record'
+);
+
 
 -- Create a synthetic accepted file version first. The pending upload below
 -- must receive version 2; its Worker acceptance is covered end-to-end in Playwright.
