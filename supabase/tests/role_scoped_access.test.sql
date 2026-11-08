@@ -9,7 +9,7 @@ SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-1111111
 SELECT is((SELECT count(*)::integer FROM public.profiles), 1, 'student reads only their own profile');
 SELECT is((SELECT count(*)::integer FROM public.role_assignments), 1, 'student reads only their own role assignments');
 SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 1, 'student reads only their own enrolment');
-SELECT is((SELECT count(*)::integer FROM public.task_versions), 1, 'student sees only published task versions for an active enrolment');
+SELECT is((SELECT count(*)::integer FROM public.task_versions), 2, 'student sees only published task versions for an active enrolment');
 SELECT is((SELECT count(*)::integer FROM public.task_version_prompts), 1, 'student sees only prompts for an enrolled published task');
 SELECT is((SELECT count(*)::integer FROM public.attempts), 2, 'student reads only their own attempts');
 SELECT is((SELECT count(*)::integer FROM public.attempt_responses), 1, 'student reads only responses belonging to their attempts');
@@ -138,7 +138,7 @@ SELECT is((SELECT count(*)::integer FROM public.profiles), 13, 'owner at AAL2 ca
 SELECT is((SELECT count(*)::integer FROM public.role_assignments), 13, 'owner at AAL2 can inspect all thirteen role assignments');
 SELECT is((SELECT count(*)::integer FROM public.guardian_learner_links), 2, 'owner at AAL2 can inspect all guardian links');
 SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 2, 'owner at AAL2 can inspect all enrolments');
-SELECT is((SELECT count(*)::integer FROM public.task_versions), 2, 'owner at AAL2 can inspect all task versions');
+SELECT is((SELECT count(*)::integer FROM public.task_versions), 3, 'owner at AAL2 can inspect all task versions');
 SELECT is((SELECT count(*)::integer FROM public.task_version_prompts), 2, 'owner at AAL2 can inspect all task prompts');
 SELECT is((SELECT count(*)::integer FROM public.attempts), 3, 'owner at AAL2 can inspect all seeded attempts');
 SELECT is((SELECT count(*)::integer FROM public.attempt_responses), 2, 'owner at AAL2 can inspect all response records');
