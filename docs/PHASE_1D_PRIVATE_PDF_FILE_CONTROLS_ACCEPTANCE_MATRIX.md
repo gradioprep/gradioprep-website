@@ -81,7 +81,7 @@ Exact-head CI [#42484474739](https://github.com/gradioprep/gradioprep-website/ac
 
 ## 8. Phase 2 PDF-only reservation and digital transcript controls — implementation pending exact-head CI — 8 November 2026
 
-Application-code/test commits 432a0a3c4b649610f683a25da4d311480049d761 and f5e25909576ff17ac30e1c0bf4f68bcdbd39dda7 extend the Phase 1D private-PDF controls as follows:
+Application-code/test commits 432a0a3c4b649610f683a25da4d311480049d761 and f5e25909576ff17ac30e1c0bf4f68bcdbd39dda7, followed by final browser-test commit 7875b98b60ab7b8d4809c05d0a93a804b46f92a4, extend the Phase 1D private-PDF controls as follows:
 
 | Control | Implemented behavior | Current evidence status |
 |---|---|---|
@@ -97,6 +97,6 @@ Application-code/test commits 432a0a3c4b649610f683a25da4d311480049d761 and f5e25
 
 The transcript arrives from the learner's browser and is intentionally labelled unverified; this first increment does not cryptographically prove that every transcript character matches the stored PDF. Graders must inspect the original PDF. No external OCR provider is invoked and no scanned page is reconstructed from inference. A page with no digital text layer is explicitly identified for human review.
 
-The current application-code head is f5e25909576ff17ac30e1c0bf4f68bcdbd39dda7 (latest database hardening); the related UI correction is in 432a0a3. GitHub's combined-status lookup returned no check records, and the available workflow-run listing did not expose a branch-push run for this exact code. The previously passed #42498299576 predates these changes. Therefore this section records implementation presence, not a passed acceptance test. Keep the new controls pending until the exact branch-push Actions run confirms migrations, SQL/RLS, Worker build, Playwright and backup/restore all pass.
+The current application-code/test head is 7875b98b60ab7b8d4809c05d0a93a804b46f92a4 (final browser-test correction); database hardening is in f5e25909576ff17ac30e1c0bf4f68bcdbd39dda7 and the related UI correction is in 432a0a3. GitHub's combined-status lookup returned no check records, and the available workflow-run listing did not expose a branch-push run for this exact code. The previously passed #42498299576 predates these changes. Therefore this section records implementation presence, not a passed acceptance test. Keep the new controls pending until the exact branch-push Actions run confirms migrations, SQL/RLS, Worker build, Playwright and backup/restore all pass.
 
 PR #22 remains open, draft and unmerged. No hosted Storage/database, real learner data, external OCR/provider, cost, DNS change or production deployment was used or authorised. This does not establish production readiness.
