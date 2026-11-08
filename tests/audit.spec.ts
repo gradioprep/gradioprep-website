@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { assertPersistedAuditCorrelation } from "./audit-assertions";
+import { isAuditAcknowledged } from "../worker/audit-contract";
 
 const ROOT = process.cwd();
 const STUDENT_ID = "11111111-1111-4111-8111-111111111111";
@@ -18,6 +19,12 @@ const ATTEMPT_B_ID = "c2222222-2222-4222-8222-222222222222";
 const UNKNOWN_SUBMISSION_ID = "e3333333-3333-4333-8333-333333333333";
 const ASSESSMENT_VERSION_ID = "f9999999-9999-4999-8999-999999999999";
 const LOCAL_PASSWORD = ["Local-only", "GradiPrep", "2026!"].join("-");
+test("a false Worker audit RPC acknowledgement is treated as unavailable", () => {
+  expect(isAuditAcknowledged(true, null)).toBe(true);
+  expect(isAuditAcknowledged(false, null)).toBe(false);
+  expect(isAuditAcknowledged(null, new Error("synthetic audit failure"))).toBe(false);
+});
+
 
 function readLocalDevVars(): Record<string, string> {
   const source = readFileSync(join(ROOT, ".dev.vars"), "utf8");

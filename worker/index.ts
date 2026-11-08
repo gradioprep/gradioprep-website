@@ -1,5 +1,6 @@
 import { createContextClient, verifyAuth } from "@supabase/server/core";
 import { createClient } from "@supabase/supabase-js";
+import { isAuditAcknowledged } from "./audit-contract";
 import { PDFDocument } from "pdf-lib";
 
 type WorkerEnv = Env & {
@@ -981,7 +982,7 @@ async function auditPrivilegedWriteOutcome(
     p_actor_id: context.userId, p_action: action, p_target_id: targetId ?? null,
     p_outcome: outcome, p_failure_category: failureCategory ?? null,
   });
-  if (error || data !== true) {
+  if (!isAuditAcknowledged(data, error)) {
     return jsonResponse({
       error: "privileged_write_audit_unavailable",
       message: "The privileged operation could not be safely completed because its audit outcome could not be recorded.",
@@ -1063,7 +1064,7 @@ async function auditProtectedReadOutcome(
   action: ProtectedReadAuditAction,
   targetId: string | undefined,
   outcome: "success" | "denied" | "failed",
-  deniedResponse?: Response,
+  _deniedResponse?: Response,
 ): Promise<Response | null> {
   if (!context.serviceSupabase) {
     return jsonResponse({ error: "protected_read_audit_unavailable", message: "The protected read cannot be completed without its server-side audit service." }, 503);
@@ -1072,14 +1073,11 @@ async function auditProtectedReadOutcome(
     p_actor_id: context.userId, p_action: action, p_target_id: targetId ?? null,
     p_outcome: outcome, p_failure_category: null,
   });
-  if (error) {
+  if (!isAuditAcknowledged(data, error)) {
     return jsonResponse({
       error: "protected_read_audit_unavailable",
       message: "The protected read could not be safely completed because its audit outcome could not be recorded.",
     }, 503);
-  }
-  if (data !== true) {
-    return deniedResponse ?? jsonResponse({ error: "record_not_found_or_forbidden" }, 404);
   }
   return null;
 }
