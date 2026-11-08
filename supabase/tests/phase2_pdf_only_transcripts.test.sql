@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(17);
+SELECT plan(20);
 
 SELECT ok(
   (SELECT relrowsecurity FROM pg_class WHERE oid = 'private.pdf_submission_reservations'::regclass),
@@ -155,6 +155,52 @@ SELECT throws_ok(
   'P0002',
   'assessment_task_not_available',
   'PDF-disabled tasks cannot reserve queue capacity'
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT throws_ok(
+  'SELECT * FROM public.accept_assessment_submission(
+    ''a1111111-1111-4111-8111-111111111111'',
+    ''5d111111-1111-4111-8111-111111111111'',
+    ''This typed retry must not reuse an active PDF reservation idempotency key.''
+  )',
+  'P0001',
+  'submission_idempotency_conflict',
+  'the typed endpoint cannot reuse a key held by an in-progress PDF reservation'
+);
+RESET ROLE;
+
+CREATE TEMP TABLE phase2_typed_acceptance_context (submission_id uuid);
+GRANT SELECT, INSERT ON phase2_typed_acceptance_context TO authenticated, service_role;
+SET LOCAL ROLE authenticated;
+INSERT INTO phase2_typed_acceptance_context
+SELECT submission_id
+FROM public.accept_assessment_submission(
+  'a1111111-1111-4111-8111-111111111111',
+  '5d444444-4444-4444-8444-444444444444',
+  'Synthetic typed response accepted while two distinct PDF reservations hold queue capacity.'
+);
+RESET ROLE;
+
+SELECT is(
+  (SELECT count(*)::integer
+   FROM public.assessment_submissions
+   WHERE id = (SELECT submission_id FROM phase2_typed_acceptance_context)),
+  1,
+  'typed submissions continue to work while capacity accounts for active PDF reservations'
+);
+SET LOCAL ROLE authenticated;
+SELECT throws_ok(
+  'SELECT * FROM public.begin_pdf_assessment_submission(
+    ''a1111111-1111-4111-8111-111111111111'',
+    ''5d555555-5555-4555-8555-555555555555'',
+    ''pdf_only'',
+    NULL
+  )',
+  'P0001',
+  'submission_capacity_full',
+  'a further PDF reservation is refused when two holds plus one accepted submission fill the queue'
 );
 RESET ROLE;
 
