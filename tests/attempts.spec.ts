@@ -523,6 +523,78 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     });
     expect(pdfOnlyFile.transcript.text).toContain("Synthetic digital transcript text");
 
+    // PDF-only acceptance: page 1 has a digital text layer, while page 2
+    // has no extractable text. The second page must be flagged, never guessed.
+    const pdfOnlyDocument = await PDFDocument.create();
+    const digitalPage = pdfOnlyDocument.addPage();
+    digitalPage.drawText("Synthetic digital transcript text captured from the original PDF page.");
+    pdfOnlyDocument.addPage();
+    const pdfOnlyBuffer = Buffer.from(await pdfOnlyDocument.save());
+
+    await page.reload();
+    await page.getByLabel("Assessment task").selectOption(taskVersionA);
+    await page.getByLabel("Response format").selectOption("pdf_only");
+    await page.locator("#proto-learner-pdf").setInputFiles({
+      name: "synthetic-pdf-only.pdf",
+      mimeType: "application/pdf",
+      buffer: pdfOnlyBuffer,
+    });
+    await page.getByRole("button", { name: "Submit PDF response" }).click();
+    await expect(
+      page.getByRole("status").filter({ hasText: /Your PDF submission was accepted/ }),
+    ).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole("status").filter({ hasText: /page\(s\) 2/ })).toBeVisible();
+
+    const refreshedSubmissions = await page.request.get("/api/v1/learner/submissions", { headers });
+    expect(refreshedSubmissions.status()).toBe(200);
+    const refreshedBody = await refreshedSubmissions.json() as {
+      submissions: Array<{
+        id: string;
+        response_mode: string;
+        accepted_at: string;
+        grading_due_at: string;
+      }>;
+    };
+    const pdfOnlySubmission = refreshedBody.submissions.find(item => item.response_mode === "pdf_only");
+    expect(pdfOnlySubmission).toBeTruthy();
+    expect(
+      new Date(pdfOnlySubmission!.grading_due_at).getTime() -
+      new Date(pdfOnlySubmission!.accepted_at).getTime(),
+    ).toBe(86_400_000);
+
+    const pdfOnlyFileResponse = await page.request.get(
+      "/api/v1/submissions/" + pdfOnlySubmission!.id + "/file",
+      { headers },
+    );
+    expect(pdfOnlyFileResponse.status()).toBe(200);
+    const pdfOnlyFile = await pdfOnlyFileResponse.json() as {
+      transcript: {
+        version: number;
+        method: string;
+        state: string;
+        verification_state: string;
+        page_count: number;
+        pages: Array<{ page_number: number; status: string; text: string }>;
+        text: string;
+      };
+    };
+    expect(pdfOnlyFile.transcript.version).toBe(1);
+    expect(pdfOnlyFile.transcript.method).toBe("pdfjs");
+    expect(pdfOnlyFile.transcript.state).toBe("partial");
+    expect(pdfOnlyFile.transcript.verification_state).toBe("unverified");
+    expect(pdfOnlyFile.transcript.page_count).toBe(2);
+    expect(pdfOnlyFile.transcript.pages[0]).toMatchObject({
+      page_number: 1,
+      status: "digital_text",
+    });
+    expect(pdfOnlyFile.transcript.pages[0].text).toContain("Synthetic digital transcript text");
+    expect(pdfOnlyFile.transcript.pages[1]).toEqual({
+      page_number: 2,
+      text: "",
+      status: "no_text_layer",
+    });
+    expect(pdfOnlyFile.transcript.text).toContain("Synthetic digital transcript text");
+
     const graderContext = await page.context().browser()!.newContext({
       baseURL: "http://127.0.0.1:8787",
     });
