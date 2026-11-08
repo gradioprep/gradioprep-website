@@ -1,6 +1,6 @@
 # Grading Credit, Curriculum-Frequency and Remedial Access Policy
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Approved:** 4 November 2026; commercial amendment approved 6 November 2026  
 **Status:** Founder-approved product and commercial specification. Documentation-only approval; no payment service, credit ledger, entitlement service, Admin dashboard, email provider or paid integration has been provisioned or implemented.  
 **Authority:** This is the single detailed source of truth for grading-credit allocation, curriculum-frequency analysis, learner free/paid access, customer entitlements and commercial sequencing. The Master Brief records binding product decisions; DATA_MODEL records logical records; the flagship PDF/grading specification records task/PDF workflow; and the diagnostic standard governs the diagnostic/remedial cycle.
@@ -152,18 +152,22 @@ Initial Founder-as-sole-grader controls remain:
 
 ## 9. Integrated implementation order
 
-Keep the approved sequence intact; commercial implementation must not delay the permanently free Diagnostic/Report:
+Keep the approved sequence intact. The initial Diagnostic and complete Evaluation Report remain free and must not be delayed by payment implementation. The secure foundation phases are complete for their accepted local synthetic scope; continue with the shared flagship workflow:
 
-1. **Phase 1C — complete:** both synchronized Phase 1C-F races passed exact-head synthetic CI, and the final protected-table, endpoint authorization/audit and adversarial exit review is closed at the local synthetic boundary. Code/test evidence: [#42072385858](https://github.com/gradioprep/gradioprep-website/actions/runs/42072385858). Phase 1D private PDF/file controls are the next unstarted implementation phase.
-2. **Phase 1D:** implement private PDF storage/file controls, signature/MIME/size/page checks, assignment-scoped access, original-file integrity, PDF.js extraction and transcript-version controls.
-3. **Phase 1E:** implement and test database/file-object backups, restore, deletion and retention workflows.
-4. **Phase 1F:** complete synthetic-data security acceptance, threat-model closure and required runbooks.
-5. **Shared flagship submission/grading workflow:** implement typed/PDF submission, the existing grader queue with approved search/filter management, rubric-based human grading and human-only publication, the 24-hour SLA, then timer/analytics and synthetic/pilot validation.
-6. **Cycle 1 Diagnostic/Report:** after the shared flagship feature is built and pilot-validated, author and validate the approved Grade 9 / IB MYP Year 4 Diagnostic and teacher pack, build the complete permanently free Evaluation Report, and verify accessibility/calculations.
-7. **Mandatory whole-website copy cleanup:** complete the existing route/state copy sweep immediately after Diagnostic/Report validation and before remedial-content authoring.
-8. **Remedial Course:** implement the standalone ₹1,999 full course, five 60-minute sessions by default; extend to six/seven only where evaluation analytics justify it. Preserve a meaningful free starter activity.
-9. **Commercial systems:** implement versioned catalogue/campaigns, append-only credit ledger, separate course entitlements, trusted payment confirmation, idempotent fulfilment, refund/reversal and audited Admin exceptions. Only the two approved Diwali offers may be configured.
-10. **Branded staging and final acceptance:** verify the complete synthetic journey on the dedicated staging host on `gradioprep.com`, backed by an isolated hosted synthetic backend, before final Diagnostic/Report acceptance. Hosted resources, DNS/custom-domain mapping and paid usage each require separate approval.
+1. **Secure foundation — complete for accepted synthetic scope:** Phase 1C, 1D, 1E and Phase 1F technical evidence are complete for the documented scope. Phase 1F acceptance is not production readiness; hosted backups/key custody, physical deletion, monitoring, named operational contacts, provider-specific procedures and privacy/legal approval remain outstanding.
+2. **Shared flagship workflow:** complete the typed/PDF learner submission journey, PDF-only acceptance where required by the design, PDF.js digital extraction, synthetic OCR quality evaluation and any separately approved external OCR path; complete the teacher/grader split workspace, oldest-first queue/search/filter, rubric-based human grading, human-only feedback publication and the advisory timer/analytics.
+3. **Synthetic flagship validation:** exercise the complete learner → submission → original/extracted evidence → grader → human feedback → learner journey with fictional learners and synthetic task/PDF fixtures. This is the “pilot-validated” prerequisite for MYP Year 4 diagnostic item authoring. It is not a real-student pilot.
+4. **Cycle 1 Diagnostic/Report:** author and human-validate the approved Grade 9 / IB MYP Year 4 diagnostic items, answer/scoring keys and teacher/editor pack; build the Diagnostic and complete permanently free Evaluation Report; verify scoring, calculations, confidence, visuals, accessibility and academic/rights suitability.
+5. **Branded synthetic staging and Founder test:** after separate hosted-resource, DNS/custom-domain and any cost approvals, provision a dedicated staging host and isolated hosted synthetic backend. The Founder tests registration/authentication, Diagnostic start/submission, complete report generation, persistence, navigation and role restrictions before final Diagnostic/Report acceptance.
+6. **Mandatory whole-website copy cleanup:** complete the route/state copy sweep after Diagnostic/Report QA and before remedial-content authoring, as required by the diagnostic readiness standard.
+7. **Limited live participant pilot:** only after the Founder’s staging test is satisfactory and applicable privacy/legal, security, safeguarding, parent/guardian consent where applicable, provider/hosting and cost approvals are complete, invite 2–3 participants to a restricted free pilot. Resolve material findings before requesting public-release approval.
+8. **Initial public free release:** after pilot findings are resolved and separate Founder release approval is granted, open the completed free Diagnostic and Evaluation Report plus the approved free starter activity/resources. Do not claim unfinished services are available.
+9. **Remedial Course:** implement the standalone ₹1,999 full course, five 60-minute sessions by default; extend to six/seven only where evaluation analytics justify it. Preserve a meaningful free starter activity.
+10. **Commercial systems and full commercial launch:** implement versioned catalogue/campaigns, append-only credit ledger, separate course entitlements, trusted payment confirmation, idempotent fulfilment, refund/reversal and audited Admin exceptions. Only the two approved Diwali offers may be configured. Paid sales require their own acceptance and release approval.
+
+Hosted provisioning, external processing, real learner data, paid usage, DNS/custom-domain mapping, PR merge, production deployment and public launch each remain separately gated.
+
+
 
 ## 10. Recalibration and launch metrics
 
@@ -183,7 +187,7 @@ Use real pilot data only after the applicable privacy, hosted-service and limite
 
 ## 11. Explicit implementation status
 
-As at 6 November 2026, the following are **specified/approved but not yet implemented**: server-side word/time credit calculation and reservation; versioned catalogue/campaign; append-only credit ledger; purchase/checkout/payment confirmation and idempotent fulfilment; separate course entitlements; future commercial Admin exception/grant/refund console; normal learner email-confirmation delivery/configuration; queue search/filter UI; full learner PDF/typed submission and grader workflow; timer/analytics; Diagnostic/Report experience; full Remedial Course and paid/free access enforcement.
+As at 8 November 2026, the following are **specified/approved but not yet implemented**: server-side word/time credit calculation and reservation; versioned catalogue/campaign; append-only credit ledger; purchase/checkout/payment confirmation and idempotent fulfilment; separate course entitlements; future commercial Admin exception/grant/refund console; normal learner email-confirmation delivery/configuration; completed PDF extraction/OCR; full teacher/grader workspace and human feedback publication journey; timer/analytics; Diagnostic/Report experience; full Remedial Course and paid/free access enforcement. The learner typed-response/optional-PDF UI has been added but its current exact-head browser suite has one failure, so it is not yet accepted.
 
 Existing building blocks include local synthetic Auth and staff-invitation verified-email acceptance; typed-response counters and server-generated word-count metadata; conceptual required_credits in the logical data model; accepted submission and human-feedback backend records; the approved 24-hour target; and the 10 MB/10-page PDF design. Those are not proof that the commercial/credit system or PDF storage/OCR is live.
 

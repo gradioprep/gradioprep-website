@@ -1,8 +1,10 @@
 # Flagship PDF Response, Teacher Grading and Timed Analytics — Implementation Plan
 
-**Version:** 1.3
+**Version:** 1.4
 **Date:** 6 November 2026  
-**Status:** The flagship typed/PDF response, human-grading, feedback-publication and timer/analytics plan remains approved but is not implemented as a complete learner/staff workflow. Phase 1F synthetic security evidence was accepted by the Founder on 8 November 2026. The first Phase 2 backend increment is verified at code/test head `b6dc72f3534b873b63536f5a994fe5027ddcc162`, exact-head CI [#42484474739](https://github.com/gradioprep/gradioprep-website/actions/runs/42484474739): 619 PostgreSQL assertions across 17 SQL files, 32/32 Playwright tests, builds, synthetic backup/restore and cleanup. Task-level PDF opt-in and accepted `response_mode` now govern the existing typed-plus-PDF attachment path. **The learner-facing PDF choice/upload journey remains unimplemented.** PDF.js extraction, OCR, full teacher workspace, feedback UI and timer/analytics remain future work. PR #22 remains open, draft and unmerged; hosted resources, real learner data, external processing, cost, merge, production deployment and DNS require separate approval.
+**Status:** The flagship typed/PDF response, human-grading, feedback-publication and timer/analytics plan remains approved but is not implemented as a complete learner/staff workflow. Phase 1F synthetic security evidence was accepted by the Founder on 8 November 2026. The backend task-level PDF eligibility/response_mode slice passed exact-head CI at b6dc72f3534b873b63536f5a994fe5027ddcc162 / [#42484474739](https://github.com/gradioprep/gradioprep-website/actions/runs/42484474739). The learner-facing typed-response and optional-PDF selector/upload journey has since been added at 4f4be588880fd51abe628544a5af84102b5e59ca, but exact-head CI [#42490565745](https://github.com/gradioprep/gradioprep-website/actions/runs/42490565745) is not green: PostgreSQL RLS and builds passed, while Playwright finished 32/33 because the typed-only task test received HTTP 404 assessment_task_not_available instead of expected HTTP 201. Backup/restore was skipped. The UI increment is therefore not yet accepted. PDF.js extraction, scanned-page OCR, complete teacher/grader workspace, feedback publication and timer/analytics remain future work. PR #22 remains open, draft and unmerged; hosted resources, real learner data, external processing, costs, DNS, merge and production deployment require separate approval.
+
+
 
 ## 1. Approved product decisions
 
@@ -266,3 +268,20 @@ The first backend slice of the approved PDF-response pathway is implemented. Tas
 Exact-head CI [#42484474739](https://github.com/gradioprep/gradioprep-website/actions/runs/42484474739) passed 619 PostgreSQL assertions/17 SQL files, 32/32 Playwright tests, TypeScript/Worker/Vite builds, synthetic backup/restore and cleanup. The workflow skipped Preview intentionally; this was a backend-only change. No OCR or external processor was called.
 
 **Next:** implement the learner-facing optional PDF selector and upload interaction, driven by task metadata, preserving the existing typed option and clearly identifying tasks that do not permit PDF. PDF-only submission, extraction/OCR, split-screen teacher grading, feedback UI and timer/analytics follow as separate increments.
+
+
+## 20. Milestone batching, synthetic validation and staged learner testing — 8 November 2026
+
+The Founder approved implementation in coherent feature milestones instead of requesting an instruction for each small technical step. Continue the approved synthetic-only work through related implementation, automated testing and documentation batches. The current first task is to resolve the failing typed-only Playwright case on 4f4be588880fd51abe628544a5af84102b5e59ca and rerun the full pipeline. Do not weaken the database PDF-eligibility rule or role/security checks to make the test pass.
+
+Continue in this order:
+1. Complete and verify the learner typed/optional-PDF journey, then implement PDF-only acceptance where required by the approved design, PDF.js digital-text extraction and safe transcript versioning.
+2. Complete scanned-PDF OCR quality tests using synthetic fixtures. Any external OCR service, provider account, cost or transfer of real learner content requires separate approval; no OCR provider should be called by default.
+3. Complete the teacher/grader split workspace, chronological oldest-first queue and approved search/filter controls, rubric-based human grading and human-only feedback publication/versioning.
+4. Implement the advisory countdown, server-authoritative elapsed-time events and validated accuracy/speed analytics under the Phase 0 rules.
+5. Run the complete shared flagship workflow as a **synthetic pilot**: fictional learner submits typed/PDF work; teacher/grader reviews original and extracted evidence; human feedback is published; learner can view it; SLA/timer and access controls are verified. This synthetic validation is the “pilot-validated” prerequisite for actual MYP Year 4 diagnostic item authoring; it is not a 2–3 person live pilot.
+6. Author the approved MYP Year 4 diagnostic items, answer/key and teacher/editor scoring pack; implement the Diagnostic and complete free Evaluation Report; validate scoring, calculations, confidence labels, chart interpretation, responsiveness, keyboard and screen-reader accessibility, rights and academic suitability.
+7. Provision branded staging with an isolated hosted synthetic backend only after separate approval for the hosted resources, DNS/custom-domain mapping and any costs. The Founder then tests the complete synthetic journey there before final Diagnostic/Report acceptance.
+8. After the Founder’s staging test is satisfactory, a separate invitation-only, free pilot with 2–3 participants may proceed only after all required privacy/legal, security, safeguarding, parent/guardian consent where applicable, provider and cost approvals. Analyse feedback and correct material defects before public-release approval.
+
+The initial free public release (Diagnostic + complete Evaluation Report and approved free starter activity/resources) is separate from the later full commercial launch. Paid grading, credits, the Remedial Course and related entitlements/payments must not be represented as available until implemented and accepted. See the authoritative sequence in docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md and the release gates in docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md.
