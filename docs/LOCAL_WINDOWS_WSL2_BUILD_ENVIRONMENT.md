@@ -6,15 +6,17 @@
 
 ## 1. Current setup checkpoint
 
-**Verified on 8 November 2026:** WSL2 Ubuntu runs as Linux user `gradioprep`; Docker Desktop integration, Docker Engine, Compose, Git, GitHub CLI authentication and private repository access are verified. The PC has 8 GB DDR4 RAM; Docker/Ubuntu previously reported approximately 2.8 GiB total memory. Do not change memory settings or start Supabase before a reduced-service resource assessment.
+**Verified on 8 November 2026:** WSL2 Ubuntu runs as Linux user `gradioprep`; Docker Desktop integration, Docker Engine, Compose, Git, GitHub CLI authentication and private repository access are verified. The PC has 8 GB DDR4 RAM. Docker/Ubuntu previously reported approximately 2.8 GiB total memory, with about 2.1 GiB available at that earlier check. Do not change memory settings or start Supabase before a resource assessment.
 
-**Node.js setup complete:** Node `v22.23.4`, npm `10.9.9`; both resolve inside `/home/gradioprep/.nvm/versions/node/v22.23.4/bin/`. Do not reinstall Node. Project requirement is Node `>=20.19.0`; the GitHub Actions workflow uses Node 22.
+**Node installation and dependency setup complete:** Node `v22.23.4`, npm `10.9.9`; both resolve inside `/home/gradioprep/.nvm/versions/node/v22.23.4/bin/`. Do not reinstall Node. `npm install --no-audit --no-fund` completed successfully and added 130 packages. `node_modules/` is ignored by Git.
 
-**Repository status:** clone path is `/home/gradioprep/src/gradioprep-website`; last recorded local HEAD was `2a582c42c071a7dda85d197672e9255398e55140`. The live PR #22 head has advanced through this documentation-only reconciliation; retrieve its current SHA before synchronising. The local branch, working tree and current HEAD have not yet been rechecked after the Node installation. Verify them before fast-forwarding; use `git pull --ff-only origin feature/phase-1b-local-auth-api` only if behind and clean. Do not reinstall or reclone the repository.
+**Repository synchronisation:** the supplied local checks showed branch `feature/phase-1b-local-auth-api`, local HEAD `acfde1e9572d5149e8d4a857bfb32032db1dc45a`, and the direct remote ref `37888a9f2017322b462860bd20eedfa792f5f282` (13 commits ahead at that check). The working tree was clean before `npm install`; afterwards, the only status entry was `?? package-lock.json`. The remote has no `package-lock.json`, and the workflow explicitly comments that this prototype intentionally does not commit one. Remove this generated local file with `rm -f package-lock.json`; do not add or commit it. The `package.json` blob is identical at both checked commits, so the successful dependency install remains compatible with the documentation-only fast-forward.
 
-**Dependency installation:** pending. After the checkout is verified at the live PR head, run `npm install --no-audit --no-fund`, then check `git status --short` and confirm there are no unintended tracked changes or dependency-lock modifications.
+**Next:** after removing the generated lockfile, fast-forward the existing checkout with `git pull --ff-only origin feature/phase-1b-local-auth-api`. Then verify `git rev-parse HEAD` against the current remote PR head and confirm that `git status --short --branch` is clean. Do not reclone or reinstall Node.
 
-**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. Exact-head Actions run [#42461053863](https://github.com/gradioprep/gradioprep-website/actions/runs/42461053863) failed without job steps reported, so no test result is established. Earlier run [#42460447569](https://github.com/gradioprep/gradioprep-website/actions/runs/42460447569) is confirmed pre-runner-assignment (runner ID 0, zero steps).
+**Supabase resource gate:** the workflow excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor, keeping the core database, Auth, API gateway, PostgREST, Storage and Mailpit services. Supabase does not publish a minimum RAM figure for this exact reduced set. The full-stack recommendation is at least 7 GB RAM; the Docker/Ubuntu limit of approximately 2.8 GiB is therefore a constrained environment and cannot be assumed sufficient. Review Windows free memory and current Docker memory before any startup. Do not change WSL/Docker memory settings or start Supabase until the decision is made.
+
+**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. The 35- and 47-assertion SQL suites and backup/restore verifier have not passed. Exact-head Actions run [#42462285927](https://github.com/gradioprep/gradioprep-website/actions/runs/42462285927) failed with no job steps reported; logs were unavailable, so no test failure or precise runner cause is established.
 
 
 ## 2. Verify the WSL2 Ubuntu installation
@@ -72,7 +74,7 @@ git ls-remote origin refs/heads/feature/phase-1b-local-auth-api
 gh pr view 22 --repo gradioprep/gradioprep-website --json number,state,isDraft,headRefName,headRefOid,baseRefName
 ```
 
-**Next:** install a WSL-native Node 22 runtime. The project declares `"node": ">=20.19.0"` in `package.json`, while `.github/workflows/phase1b-verification.yml` uses `actions/setup-node` with `node-version: "22"`. Node 22 is therefore the local compatibility target for this checkout. Use [nvm for WSL](https://github.com/nvm-sh/nvm#installing-and-updating) so Node is installed per Linux user and does not depend on Windows PATH. The nvm project documents WSL support and its install procedure. Do not use `sudo apt install nodejs` as a shortcut for this project setup; it may not provide the workflow's required major version.
+**Node 22 setup is complete.** Do not repeat installation. Continue with the current checkout synchronisation and dependency-verification checkpoint in Section 1.
 
 ## 5. Register a repository-scoped self-hosted runner
 
@@ -112,7 +114,7 @@ References: [GitHub Actions billing concepts](https://docs.github.com/en/actions
 
 ## 8. Local synthetic verification sequence
 
-Only after the verified Linux checkout has a WSL-native Node 22 runtime:
+Node 22 and npm dependency installation are already verified on the existing checkout. The following commands are reference checks if needed; do not repeat installation unnecessarily:
 
 ```bash
 node --version
@@ -139,20 +141,20 @@ npm run supabase:stop
 
 The Supabase environment script writes ignored local-only files. Do not print or upload secret values. Confirm cleanup even after a test failure; stop the local stack and remove local-only credentials using the repository's cleanup procedure.
 
-## 9. Exact current blocker and next steps
+## 9. Superseded setup instructions and current next steps
 
-Exact-head code run [#42208654326](https://github.com/gradioprep/gradioprep-website/actions/runs/42208654326), attempt 4, failed before runner assignment. The latest documentation-head run [#42460447569](https://github.com/gradioprep/gradioprep-website/actions/runs/42460447569), job `128668398248`, also failed before runner assignment with runner ID 0, an empty runner name and zero steps. No SQL test or other workflow step executed in that latest run; this is an Actions runner-assignment failure, not a test failure. The workflow still has `runs-on: ubuntu-latest`.
+The old instructions in this section that say Node is missing or that the repository has not yet been cloned are historical and superseded. Node and dependencies are now installed, and the checkout already exists.
 
-1. **Install and verify WSL-native Node 22.** The local clone is complete. `node` is not available in the WSL shell, although `npm --version` returned `11.19.0`; confirm Node/npm resolve to the WSL nvm installation before installing dependencies. The workflow currently pins Node 22 and `package.json` requires Node `>=20.19.0`.
-2. Fast-forward the existing checkout to the latest documentation-only branch head with `git pull --ff-only origin feature/phase-1b-local-auth-api`, then verify `git status --short --branch` and `git rev-parse HEAD` against `gh pr view 22 --repo gradioprep/gradioprep-website --json headRefOid`.
-3. Install project dependencies and verify that the working tree remains clean apart from ignored local dependency files.
-4. Review available memory before starting Supabase. The PC has 8 GB physical RAM, while Docker/Ubuntu reported about 2.8 GiB total memory. Do not change WSL/Docker memory limits or start the local stack until resource requirements and a safe reduced-service plan are reviewed; Windows also needs memory.
-5. Complete a separate workflow security review and change `runs-on` only when a trusted repository-scoped runner is ready.
-6. Register/start the repository-scoped runner under the restrictions above. Runner registration alone will not redirect the current workflow.
-7. Run the Phase 1E SQL suites and local backup/restore round-trip; repair actual failures in a later implementation change, then rerun exact-head verification.
-8. Proceed to Phase 1F only after Phase 1E acceptance passes.
+1. Remove the generated, untracked `package-lock.json` from the local checkout. The GitHub Actions workflow explicitly says this file is intentionally not committed.
+2. Fast-forward the existing branch with `git pull --ff-only origin feature/phase-1b-local-auth-api`. The supplied local SHA was `acfde1e9572d5149e8d4a857bfb32032db1dc45a`; the direct remote-ref check returned `37888a9f2017322b462860bd20eedfa792f5f282`, 13 documentation-only commits ahead at that point. Verify against the live PR head after pulling.
+3. Verify `git status --short --branch` is clean and `git rev-parse HEAD` matches the live PR head.
+4. Do not reinstall Node or repeat npm dependency installation solely for this docs-only fast-forward; `package.json` is unchanged. The original `npm install` successfully added 130 packages.
+5. Assess resource feasibility before Supabase startup. The project workflow excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor. The full-stack Supabase CLI recommendation is at least 7 GB RAM, but no minimum is documented for this reduced set. The currently reported Docker/Ubuntu memory of approximately 2.8 GiB is a significant constraint. Keep Supabase stopped and do not change WSL/Docker memory settings until reviewed.
+6. Phase 1E remains unverified: run the 35- and 47-assertion SQL suites and backup/restore verifier only after the memory gate is resolved. Phase 1F follows only after Phase 1E acceptance.
 
-Phase 1C is complete; Phase 1D remains verified at its recorded checkpoint; Phase 1E is partial and unverified. No hosted Supabase provisioning, R2, real learner data, external processing, paid usage, Preview/production deployment, DNS/custom-domain change or PR merge is authorised.
+Exact-head run [#42462285927](https://github.com/gradioprep/gradioprep-website/actions/runs/42462285927) failed without job steps; its logs were unavailable. Do not classify it as a SQL/build/browser test failure or claim a specific runner cause. The workflow still uses `ubuntu-latest`; runner registration alone does not redirect it. Any self-hosted runner workflow change requires a separate security review.
+
+PR #22 remains open, draft and unmerged. No hosted provisioning, paid usage, real learner data, external processing/email, Preview/production deployment, DNS change or merge is authorised.
 
 ## 10. Historical Windows/Ubuntu setup checkpoint — 8 November 2026 (superseded by Section 1)
 
