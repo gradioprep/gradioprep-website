@@ -42,7 +42,7 @@ The checked-in `.github/workflows/phase1b-verification.yml` uses `runs-on: ubunt
 
 **This does not start Supabase on the user's computer.** The runner is hosted by GitHub and is separate from Windows, WSL and Docker Desktop on the user's machine. Keep this isolation. Never redirect the workflow to `self-hosted`, `gradioprep-wsl2` or another label referring to this computer.
 
-The workflow correction is committed as `355e1239a76e7863ae7808788141c7a57c8a2361`. The heavy verification job now runs only for same-repository PR `opened`, `synchronize` and `reopened` events to the approved base; `docs/**` and Markdown-only diffs are ignored. Feature-branch pushes and PR-description `edited` events no longer start the full suite. A per-PR concurrency group cancels superseded runs. Standard `ubuntu-latest`, dependency installation, synthetic database reset/seed, full pgTAP, Worker/browser build, Playwright, Phase 1E backup/restore and cleanup remain. The separate Build workflow also ignores docs/Markdown and cancels stale runs; it continues to skip PR #22's stacked base. A successful post-change run is not yet confirmed.
+The heavy workflow is now committed as `dc13c80`: it runs once on pushes to PR #22's dedicated `feature/phase-1b-local-auth-api` branch by owner `gradioprep`; `docs/**` and Markdown-only changes are ignored; a branch concurrency group cancels stale runs; there is no separate `pull_request` trigger or PR-description trigger. The runner remains standard `ubuntu-latest`; dependency installation, synthetic database reset/seed, full pgTAP, Worker/browser build, Playwright, Phase 1E backup/restore and cleanup remain. The separate Build workflow also ignores docs/Markdown and cancels stale runs; it continues to skip PR #22's stacked base.
 
 ## 5. Existing Cloudflare Workers Builds integration
 
@@ -80,11 +80,11 @@ A hosted test project is not needed for the current database/RLS CI tests and is
 
 - Phase 1C: complete.
 - Phase 1D: verified.
-- Phase 1E: partial/unverified. The 35- and 47-assertion SQL suites and the backup/restore verifier remain pending.
+- Phase 1E: partial/unverified. Retry attempt 2 of #42466941118 passed the 35-assertion ledger test; the 47-assertion retention test exposed a one-microsecond fixture timing defect, corrected in test-only commit `26fbea0`. Current run #42473310987 is validating the correction. Browser tests and database/private-PDF backup/restore remain pending.
 - Phase 1F: follows Phase 1E acceptance.
 - PR #22: open, draft and unmerged; no merge or production release is authorised.
 
-Next engineering sequence: (1) verify the new PR-triggered workflow and obtain one successful exact-head hosted run; (2) execute both Phase 1E SQL suites and the database/private-PDF backup/restore verifier in that run, fixing evidenced failures; (3) review Cloudflare's separate production/Preview watch paths and exclude docs-only files only if the existing settings support it without changing deployment behavior; (4) proceed to Phase 1F only after Phase 1E acceptance. Keep Worker Preview cleanup and deployment ownership unchanged until duplicate/orphan behavior has been verified.
+Next engineering sequence: (1) complete current hosted run #42473310987 and verify the 47-assertion retention suite; (2) verify the browser PDF-upload test and database/private-PDF backup/restore round trip; (3) review Cloudflare production/Preview watch paths for a separate docs-only exclusion change without changing deployment behavior; (4) proceed to Phase 1F only after Phase 1E acceptance. Keep Worker Preview cleanup and deployment ownership unchanged until duplicate/orphan behavior has been verified.
 
 ## 9. Approval boundaries
 
