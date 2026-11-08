@@ -344,6 +344,16 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     expect(acceptedPdfBody.file.page_count).toBe(1);
     expect(acceptedPdfBody.file.upload_state).toBe("accepted");
 
+    const pdfSubmissionDetail = await page.request.get(
+      "/api/v1/learner/submissions/" + submissionId,
+      { headers },
+    );
+    expect(pdfSubmissionDetail.status()).toBe(200);
+    const pdfSubmissionDetailBody = await pdfSubmissionDetail.json() as {
+      submission: { response_mode: string };
+    };
+    expect(pdfSubmissionDetailBody.submission.response_mode).toBe("typed_pdf");
+
     const fileAccess = await page.request.get(fileReadRoute, { headers });
     const fileAccessBody = await fileAccess.json() as {
       file: { signed_url: string; expires_in_seconds: number; sha256: string; page_count: number };
@@ -440,6 +450,47 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       expect(crossLearnerUpload.status()).toBe(404);
     } finally {
       await secondLearnerContext.close();
+    }
+
+    const typedOnlyContext = await page.context().browser()!.newContext({
+      baseURL: "http://127.0.0.1:8787",
+    });
+    try {
+      const typedOnlyPage = await typedOnlyContext.newPage();
+      const typedOnlyToken = await signIn(
+        typedOnlyPage,
+        "student.b@example.invalid",
+        "Synthetic Student B",
+      );
+      const typedOnlyHeaders = { Authorization: typedOnlyToken };
+      const typedOnlySubmissionResponse = await typedOnlyPage.request.post(
+        "/api/v1/learner/submissions",
+        {
+          headers: typedOnlyHeaders,
+          data: {
+            task_version_id: "a2222222-2222-4222-8222-222222222222",
+            idempotency_key: randomUUID(),
+            response_text: "This synthetic typed-only response meets the task's expected written response guidance.",
+          },
+        },
+      );
+      expect(typedOnlySubmissionResponse.status()).toBe(201);
+      const typedOnlySubmissionBody = await typedOnlySubmissionResponse.json() as {
+        submission: { submission_id: string };
+      };
+      const typedOnlyFileUpload = await typedOnlyPage.request.post(
+        "/api/v1/learner/submissions/" + typedOnlySubmissionBody.submission.submission_id + "/file",
+        {
+          headers: typedOnlyHeaders,
+          multipart: { file: { name: "not-enabled.pdf", mimeType: "application/pdf", buffer: onePagePdf } },
+        },
+      );
+      expect(typedOnlyFileUpload.status()).toBe(409);
+      await expect(typedOnlyFileUpload.json()).resolves.toMatchObject({
+        error: "pdf_response_not_enabled",
+      });
+    } finally {
+      await typedOnlyContext.close();
     }
 
     const graderContext = await page.context().browser()!.newContext({

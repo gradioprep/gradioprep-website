@@ -1417,7 +1417,7 @@ async function listLearnerSubmissions(request: Request, env: WorkerEnv): Promise
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
-    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version), submission_versions(id, version_number, word_count, created_at)")
+    .select("id, learner_id, task_version_id, rubric_version_id, response_mode, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, pdf_response_enabled, expected_min_words, ideal_words), submission_versions(id, version_number, word_count, created_at)")
     .eq("learner_id", auth.context.userId)
     .order("accepted_at", { ascending: false })
     .order("id", { ascending: false });
@@ -1515,7 +1515,7 @@ async function getLearnerSubmission(
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
-    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, expected_min_words, ideal_words), submission_versions(id, version_number, response_text, word_count, created_at), assessment_versions(id, version_number, total_points, max_points, overall_feedback, published_at, first_published_at, first_turnaround_seconds, seconds_to_due_at_first_publish, sla_met, criterion_results(id, criterion_code_snapshot, criterion_title_snapshot, descriptor_snapshot, points_awarded, max_points_snapshot, feedback))")
+    .select("id, learner_id, task_version_id, rubric_version_id, response_mode, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, expected_min_words, ideal_words, pdf_response_enabled), submission_versions(id, version_number, response_text, word_count, created_at), assessment_versions(id, version_number, total_points, max_points, overall_feedback, published_at, first_published_at, first_turnaround_seconds, seconds_to_due_at_first_publish, sla_met, criterion_results(id, criterion_code_snapshot, criterion_title_snapshot, descriptor_snapshot, points_awarded, max_points_snapshot, feedback)))
     .eq("id", submissionId)
     .eq("learner_id", auth.context.userId)
     .maybeSingle();
@@ -1875,7 +1875,7 @@ async function listAssignedAssessmentSubmissions(request: Request, env: WorkerEn
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
-    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, task_versions(task_code, title, version)")
+    .select("id, learner_id, task_version_id, rubric_version_id, response_mode, status, accepted_at, grading_due_at, sla_target_seconds, task_versions(task_code, title, version, pdf_response_enabled, expected_min_words, ideal_words)")
     .in("status", ["assigned", "grading", "feedback_published"])
     .order("accepted_at", { ascending: true })
     .order("id", { ascending: true })
@@ -1919,7 +1919,7 @@ async function getAssignedAssessmentSubmission(
 
   const { data: submission, error: submissionError } = await auth.context.supabase
     .from("assessment_submissions")
-    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, task_versions(task_code, title, version, expected_min_words, ideal_words)")
+    .select("id, learner_id, task_version_id, rubric_version_id, response_mode, status, accepted_at, grading_due_at, sla_target_seconds, task_versions(task_code, title, version, expected_min_words, ideal_words, pdf_response_enabled)")
     .eq("id", submissionId)
     .maybeSingle();
   if (submissionError) {
@@ -2143,7 +2143,7 @@ async function listAssessmentSubmissionQueue(request: Request, env: WorkerEnv): 
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
-    .select("id, learner_id, task_version_id, rubric_version_id, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version)")
+    .select("id, learner_id, task_version_id, rubric_version_id, response_mode, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, pdf_response_enabled, expected_min_words, ideal_words)")
     .in("status", ["queued", "assigned", "grading"])
     .order("accepted_at", { ascending: true })
     .order("id", { ascending: true })
@@ -2422,6 +2422,7 @@ async function uploadSubmissionPdf(
   if (startError) {
     const forbidden = startError.message === "submission_file_upload_forbidden";
     const notFound = startError.message === "submission_file_submission_not_found";
+    const pdfNotEnabled = startError.message === "submission_file_pdf_not_enabled";
     const audit = await auditPrivilegedWriteOutcome(
       context,
       "student_submission_file_upload",
@@ -2432,6 +2433,7 @@ async function uploadSubmissionPdf(
     if (audit) return audit;
     if (forbidden) return jsonResponse({ error: "submission_file_upload_forbidden" }, 403);
     if (notFound) return jsonResponse({ error: "submission_not_found" }, 404);
+    if (pdfNotEnabled) return jsonResponse({ error: "pdf_response_not_enabled" }, 409);
     return jsonResponse({ error: "submission_file_upload_unavailable" }, 409);
   }
 

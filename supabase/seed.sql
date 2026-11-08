@@ -133,6 +133,17 @@ VALUES
    'Synthetic Phase 1C response task B', 1, 'typed', 15, 80, 'published')
 ON CONFLICT (id) DO NOTHING;
 
+-- The IB fixture opts into typed-plus-optional-PDF; the Cambridge fixture is
+-- deliberately typed-only for the deny-path regression test.
+UPDATE public.task_versions
+SET pdf_response_enabled = true
+WHERE id = 'a1111111-1111-4111-8111-111111111111'
+  AND ideal_words > 20;
+
+UPDATE public.task_versions
+SET pdf_response_enabled = false
+WHERE id = 'a2222222-2222-4222-8222-222222222222';
+
 INSERT INTO public.task_version_prompts (id, task_version_id, sequence, prompt_text)
 VALUES
   ('b1111111-1111-4111-8111-111111111111', 'a1111111-1111-4111-8111-111111111111', 1,

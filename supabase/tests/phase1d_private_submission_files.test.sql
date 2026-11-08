@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(25);
+SELECT plan(33);
 
 SELECT is(
   (SELECT public FROM storage.buckets WHERE id = 'private-submissions'),
@@ -32,6 +32,35 @@ SELECT ok(
   NOT has_table_privilege('service_role', 'private.submission_files', 'SELECT'),
   'Worker service role must use the narrow file RPCs, not direct table reads'
 );
+
+SELECT has_column(
+  'public', 'task_versions', 'pdf_response_enabled',
+  'task versions carry an explicit PDF response opt-in'
+);
+SELECT has_column(
+  'public', 'assessment_submissions', 'response_mode',
+  'accepted submissions record their actual response mode'
+);
+SELECT ok(
+  (SELECT pdf_response_enabled AND ideal_words > 20
+   FROM public.task_versions
+   WHERE id = 'a1111111-1111-4111-8111-111111111111'),
+  'the synthetic IB task explicitly enables PDF because its ideal response exceeds 20 words'
+);
+SELECT ok(
+  NOT (SELECT pdf_response_enabled
+       FROM public.task_versions
+       WHERE id = 'a2222222-2222-4222-8222-222222222222'),
+  'the synthetic Cambridge task remains typed-only'
+);
+SELECT throws_ok(
+  $UPDATE public.task_versions
+    SET pdf_response_enabled = true, ideal_words = 20
+    WHERE id = 'a1111111-1111-4111-8111-111111111111'$,
+  '23514',
+  'new row for relation "task_versions" violates check constraint "task_versions_pdf_response_threshold_check"',
+  'a task at the 20-word boundary cannot enable PDF response'
+);
 SELECT ok(
   NOT has_function_privilege('anon', 'public.begin_submission_file_upload(uuid,uuid)', 'EXECUTE'),
   'anonymous users cannot begin file uploads'
@@ -62,6 +91,24 @@ FROM public.accept_assessment_submission(
   'Synthetic Phase 1D file security test response with enough words to satisfy the accepted assessment workflow.'
 );
 RESET ROLE;
+
+SELECT is(
+  (SELECT response_mode
+   FROM public.assessment_submissions
+   WHERE id = (SELECT submission_id FROM phase1d_submission_context)),
+  'typed'::text,
+  'a typed text submission starts in typed response mode'
+);
+SELECT throws_ok(
+  format(
+    'UPDATE public.assessment_submissions SET response_mode = %L WHERE id = %L',
+    'typed_pdf',
+    (SELECT submission_id FROM phase1d_submission_context)
+  ),
+  '42501',
+  'assessment_submission_response_mode_change_forbidden',
+  'a learner cannot claim PDF mode before an accepted private PDF exists'
+);
 
 -- Create a synthetic accepted file version first. The pending upload below
 -- must receive version 2; its Worker acceptance is covered end-to-end in Playwright.
