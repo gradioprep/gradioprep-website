@@ -2,7 +2,7 @@
 
 
 > **Authoritative current checkpoint — 8 November 2026:** Repository `gradioprep/gradioprep-website` is public. PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. Verified application/test head: `746727d0c103efb8ad2fa59374a9c2c5557ba1a7`; latest Phase 1F security migration head: `5011ec73669ddd3f94e4618a508e63f5ee698fc8`. Exact-head GitHub Actions run [#42479406070](https://github.com/gradioprep/gradioprep-website/actions/runs/42479406070) passed 609 PostgreSQL assertions across 17 SQL files, TypeScript/Worker/Vite builds, 32/32 Playwright tests, synthetic database/private-PDF backup and restore, restored authorization checks, corrupt-archive rejection, local Supabase shutdown, local credential cleanup and a clean credential-free asset build. The restore report recorded one restored database snapshot and one protected PDF checksum. Cloudflare Preview steps were skipped; no Preview or production deployment occurred. Seven Phase 1F runbooks are documented; Founder/security review and provider-specific activation remain outstanding. Local WSL checkout was not inspected and remains unverified. Use standard GitHub-hosted `ubuntu-latest`; do not start local Supabase/Docker or register a self-hosted runner. Hosted Supabase/R2, paid usage, real learner data, external processors, DNS/custom-domain changes, production deployment and PR merge remain separately gated.
-**Version:** 0.4-draft
+**Version:** 0.5-draft
 **Date:** 8 November 2026  
 **Status:** Phase 1F source review, implementation and exact-head synthetic CI evidence are complete for the documented scope. Formal Phase 1F acceptance is **not yet granted**; Founder/security review and explicit approval remain pending.
 
