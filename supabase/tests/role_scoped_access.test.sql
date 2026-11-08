@@ -10,7 +10,14 @@ SELECT is((SELECT count(*)::integer FROM public.profiles), 1, 'student reads onl
 SELECT is((SELECT count(*)::integer FROM public.role_assignments), 1, 'student reads only their own role assignments');
 SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 1, 'student reads only their own enrolment');
 SELECT is((SELECT count(*)::integer FROM public.task_versions), 2, 'student sees only published task versions for an active enrolment');
-SELECT is((SELECT count(*)::integer FROM public.task_version_prompts), 1, 'student sees only prompts for an enrolled published task');
+SELECT is(
+  (SELECT array_agg(id ORDER BY id) FROM public.task_version_prompts),
+  ARRAY[
+    'b1111111-1111-4111-8111-111111111111'::uuid,
+    'b3333333-3333-4333-8333-333333333333'::uuid
+  ],
+  'student sees only prompts for the two published tasks in their active IB enrolment'
+);
 SELECT is((SELECT count(*)::integer FROM public.attempts), 2, 'student reads only their own attempts');
 SELECT is((SELECT count(*)::integer FROM public.attempt_responses), 1, 'student reads only responses belonging to their attempts');
 SELECT is((SELECT count(*)::integer FROM public.grader_assignments), 0, 'student cannot read grader assignment records');
@@ -139,7 +146,7 @@ SELECT is((SELECT count(*)::integer FROM public.role_assignments), 13, 'owner at
 SELECT is((SELECT count(*)::integer FROM public.guardian_learner_links), 2, 'owner at AAL2 can inspect all guardian links');
 SELECT is((SELECT count(*)::integer FROM public.course_enrolments), 2, 'owner at AAL2 can inspect all enrolments');
 SELECT is((SELECT count(*)::integer FROM public.task_versions), 3, 'owner at AAL2 can inspect all task versions');
-SELECT is((SELECT count(*)::integer FROM public.task_version_prompts), 2, 'owner at AAL2 can inspect all task prompts');
+SELECT is((SELECT count(*)::integer FROM public.task_version_prompts), 3, 'owner at AAL2 can inspect all three published synthetic task prompts');
 SELECT is((SELECT count(*)::integer FROM public.attempts), 3, 'owner at AAL2 can inspect all seeded attempts');
 SELECT is((SELECT count(*)::integer FROM public.attempt_responses), 2, 'owner at AAL2 can inspect all response records');
 SELECT is((SELECT count(*)::integer FROM public.grader_assignments), 2, 'owner at AAL2 can inspect all grader assignments');

@@ -135,8 +135,8 @@ VALUES
    'Synthetic Phase 2 typed-only task', 1, 'typed', 15, 80, 'published')
 ON CONFLICT (id) DO NOTHING;
 
--- The IB fixture opts into typed-plus-optional-PDF; the Cambridge fixture is
--- deliberately typed-only for the deny-path regression test.
+-- The Phase 1C IB task opts into typed-plus-optional-PDF. The Cambridge and
+-- Phase 2 IB tasks remain typed-only.
 UPDATE public.task_versions
 SET pdf_response_enabled = true
 WHERE id = 'a1111111-1111-4111-8111-111111111111'
