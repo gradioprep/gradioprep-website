@@ -6,18 +6,17 @@
 
 ## 1. Current setup checkpoint
 
-**Verified on 8 November 2026:** WSL2 Ubuntu runs as Linux user `gradioprep`; Docker Desktop integration, Docker Engine, Compose, Git, GitHub CLI authentication and private repository access are verified. The PC has 8 GB DDR4 RAM. Docker/Ubuntu previously reported approximately 2.8 GiB total memory, with about 2.1 GiB available at that earlier check. Do not change memory settings or start Supabase before a resource assessment.
+**Verified on 8 November 2026:** WSL2 Ubuntu runs as Linux user gradioprep; Docker Desktop integration, Docker Engine, Compose, Git, GitHub CLI authentication and private repository access are verified. The PC has 8 GB DDR4 RAM. A previous Docker/Ubuntu reading reported approximately 2.8 GiB total memory and 2.1 GiB available; this is not a current snapshot.
 
-**Node installation and dependency setup complete:** Node `v22.23.4`, npm `10.9.9`; both resolve inside `/home/gradioprep/.nvm/versions/node/v22.23.4/bin/`. Do not reinstall Node. `npm install --no-audit --no-fund` completed successfully and added 130 packages. `node_modules/` is ignored by Git.
+**Node and dependency setup complete:** Node v22.23.4 and npm 10.9.9 both resolve inside /home/gradioprep/.nvm/versions/node/v22.23.4/bin/. npm install --no-audit --no-fund succeeded and added 130 packages. node_modules/ is ignored by Git. The workflow explicitly says package-lock.json is intentionally not committed; the user's post-fast-forward working-tree status is clean, so no generated lockfile remains in the working tree.
 
-**Repository synchronisation:** the supplied local checks showed branch `feature/phase-1b-local-auth-api`, local HEAD `acfde1e9572d5149e8d4a857bfb32032db1dc45a`, and the direct remote ref `37888a9f2017322b462860bd20eedfa792f5f282` (13 commits ahead at that check). The working tree was clean before `npm install`; afterwards, the only status entry was `?? package-lock.json`. The remote has no `package-lock.json`, and the workflow explicitly comments that this prototype intentionally does not commit one. Remove this generated local file with `rm -f package-lock.json`; do not add or commit it. The `package.json` blob is identical at both checked commits, so the successful dependency install remains compatible with the documentation-only fast-forward.
+**Repository synchronisation complete:** the user ran git pull --ff-only origin feature/phase-1b-local-auth-api. Git fast-forwarded from acfde1e9572d5149e8d4a857bfb32032db1dc45a to 39b34c9727b15b2e6a1f514d87e1676a093b217f, changing only README and four Markdown documentation files. git rev-parse HEAD and gh pr view 22 --json headRefOid both returned 39b34c9727b15b2e6a1f514d87e1676a093b217f. git status --short --branch showed only the branch/tracking line, with no modified or untracked files.
 
-**Next:** after removing the generated lockfile, fast-forward the existing checkout with `git pull --ff-only origin feature/phase-1b-local-auth-api`. Then verify `git rev-parse HEAD` against the current remote PR head and confirm that `git status --short --branch` is clean. Do not reclone or reinstall Node.
+**Supabase reduced-service configuration:** the checked-in workflow starts the local stack while excluding studio, logflare, vector, edge-runtime, postgres-meta, realtime and supavisor. This retains the required database plus Auth, Storage API, imgproxy, Kong, Mailpit and PostgREST. Supabase's CLI reference recommends at least 7 GB RAM to start all services and supports excluding unneeded containers. It does not publish a minimum-memory figure for this exact reduced combination. See the Supabase CLI start reference (https://supabase.com/docs/reference/cli/introduction) and local-development guide (https://supabase.com/docs/guides/local-development).
 
-**Supabase resource gate:** the workflow excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor, keeping the core database, Auth, API gateway, PostgREST, Storage and Mailpit services. Supabase does not publish a minimum RAM figure for this exact reduced set. The full-stack recommendation is at least 7 GB RAM; the Docker/Ubuntu limit of approximately 2.8 GiB is therefore a constrained environment and cannot be assumed sufficient. Review Windows free memory and current Docker memory before any startup. Do not change WSL/Docker memory settings or start Supabase until the decision is made.
+**Resource decision: HOLD — do not start Supabase yet.** The machine has 8 GB physical RAM; the prior Docker/Ubuntu report of 2.8 GiB total / 2.1 GiB available must be refreshed. WSL2 uses dynamic memory allocation under Docker Desktop, so capture current Windows available physical RAM, WSL free -h, Docker daemon MemTotal, and currently running container names. Do not edit .wslconfig, Docker memory/CPU/swap limits or start any containers during this assessment.
 
-**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. The 35- and 47-assertion SQL suites and backup/restore verifier have not passed. Exact-head Actions run [#42462857738](https://github.com/gradioprep/gradioprep-website/actions/runs/42462285927) failed with no job steps reported; logs were unavailable, so no test failure or precise runner cause is established.
-
+**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. Its 35- and 47-assertion SQL suites and local backup/restore verifier have not passed. Latest exact-head Actions run #42462915084 failed with no job steps reported and logs unavailable; no SQL/build/browser test failure is established.
 
 ## 2. Verify the WSL2 Ubuntu installation
 
@@ -114,7 +113,7 @@ References: [GitHub Actions billing concepts](https://docs.github.com/en/actions
 
 ## 8. Local synthetic verification sequence
 
-Node 22 and npm dependency installation are already verified on the existing checkout. The following commands are reference checks if needed; do not repeat installation unnecessarily:
+Node 22 and npm dependency installation are already verified on the synchronised checkout. The following commands are version/path verification only; do not repeat installation unnecessarily:
 
 ```bash
 node --version
@@ -140,20 +139,31 @@ npm run supabase:stop
 
 The Supabase environment script writes ignored local-only files. Do not print or upload secret values. Confirm cleanup even after a test failure; stop the local stack and remove local-only credentials using the repository's cleanup procedure.
 
-## 9. Superseded setup instructions and current next steps
+## 9. Current next step — collect memory readings (no startup)
 
-The old instructions in this section that say Node is missing or that the repository has not yet been cloned are historical and superseded. Node and dependencies are now installed, and the checkout already exists.
+Node installation, dependency installation and Git synchronisation are complete. Do not repeat them.
 
-1. Remove the generated, untracked `package-lock.json` from the local checkout. The GitHub Actions workflow explicitly says this file is intentionally not committed.
-2. Fast-forward the existing branch with `git pull --ff-only origin feature/phase-1b-local-auth-api`. The supplied local SHA was `acfde1e9572d5149e8d4a857bfb32032db1dc45a`; the direct remote-ref check returned `37888a9f2017322b462860bd20eedfa792f5f282`, 13 documentation-only commits ahead at that point. Verify against the live PR head after pulling.
-3. Verify `git status --short --branch` is clean and `git rev-parse HEAD` matches the live PR head.
-4. Do not reinstall Node or repeat npm dependency installation solely for this docs-only fast-forward; `package.json` is unchanged. The original `npm install` successfully added 130 packages.
-5. Assess resource feasibility before Supabase startup. The project workflow excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor. The full-stack Supabase CLI recommendation is at least 7 GB RAM, but no minimum is documented for this reduced set. The currently reported Docker/Ubuntu memory of approximately 2.8 GiB is a significant constraint. Keep Supabase stopped and do not change WSL/Docker memory settings until reviewed.
-6. Phase 1E remains unverified: run the 35- and 47-assertion SQL suites and backup/restore verifier only after the memory gate is resolved. Phase 1F follows only after Phase 1E acceptance.
+The current task is read-only resource assessment. Run the PowerShell readings on Windows:
 
-Exact-head run [#42462857738](https://github.com/gradioprep/gradioprep-website/actions/runs/42462285927) failed without job steps; its logs were unavailable. Do not classify it as a SQL/build/browser test failure or claim a specific runner cause. The workflow still uses `ubuntu-latest`; runner registration alone does not redirect it. Any self-hosted runner workflow change requires a separate security review.
+```powershell
+Get-CimInstance Win32_OperatingSystem | Select-Object @{Name='TotalRAM_GiB';Expression={[math]::Round($_.TotalVisibleMemorySize/1MB,2)}}, @{Name='AvailableRAM_GiB';Expression={[math]::Round($_.FreePhysicalMemory/1MB,2)}}
+```
 
-PR #22 remains open, draft and unmerged. No hosted provisioning, paid usage, real learner data, external processing/email, Preview/production deployment, DNS change or merge is authorised.
+Then in Ubuntu/WSL:
+
+```bash
+free -h
+docker info --format 'Docker daemon memory total: {{.MemTotal}} bytes; CPUs: {{.NCPU}}'
+docker ps --format 'table {{.Names}}\t{{.Status}}'
+```
+
+These commands only inspect memory and running containers. Do not run supabase start, do not change .wslconfig or Docker resource limits, and do not start additional containers during this check.
+
+The workflow retains the database plus Auth, Storage API, imgproxy, Kong, Mailpit and PostgREST; it excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor. The 7 GB Supabase recommendation is for all services. No minimum is documented for this reduced service set. Review the new readings together before deciding whether a local run is reasonable on this 8 GB PC.
+
+Phase 1E remains partial/unverified: the 35- and 47-assertion SQL suites and backup/restore verifier remain pending. The latest exact-head Actions run #42462915084 failed before reporting any job steps; logs were unavailable, so no test failure or precise runner cause is established. The workflow remains on ubuntu-latest; runner registration alone does not redirect it. Any self-hosted runner change requires a separate security review.
+
+PR #22 remains open, draft and unmerged. All existing hosted provisioning, cost, real-data, external processing/email, DNS, production deployment and merge restrictions remain in force.
 
 ## 10. Historical Windows/Ubuntu setup checkpoint — 8 November 2026 (superseded by Section 1)
 
@@ -179,4 +189,4 @@ The user completed GitHub CLI browser authentication from Ubuntu. Reported outpu
 
 The read-only repository check `gh repo view gradioprep/gradioprep-website --json nameWithOwner,isPrivate` returned `nameWithOwner: gradioprep/gradioprep-website` and `isPrivate: true`. No password, device code or token was shared in chat.
 
-**Current status — 8 November 2026:** GitHub authentication and cloning are complete. The user's supplied local checks showed local HEAD `acfde1e9572d5149e8d4a857bfb32032db1dc45a`, while the direct remote ref was `37888a9f2017322b462860bd20eedfa792f5f282`, 13 documentation-only commits ahead at that check. Node `v22.23.4` and npm `10.9.9` are installed and correctly resolve from the WSL nvm directory. `npm install --no-audit --no-fund` succeeded and added 130 packages. The only post-install status entry was an untracked `package-lock.json`; the workflow explicitly says this prototype intentionally does not commit the lockfile, so remove it rather than committing it. Fast-forward the checkout before further work. Do not reinstall Node or repeat dependency installation merely for the docs-only fast-forward. Do not start Supabase until the reduced-service resource review is complete.
+**Current status — 8 November 2026:** GitHub CLI authentication, repository clone, Node/npm setup, dependency installation and checkout synchronisation are complete. Local HEAD, origin branch and PR #22 all matched 39b34c9727b15b2e6a1f514d87e1676a093b217f after a successful fast-forward. The working tree is clean. Node v22.23.4/npm 10.9.9 are installed; npm added 130 packages. The generated lockfile is intentionally not committed under the repository's current workflow policy. The next action is only the Windows/WSL/Docker memory snapshot described in Section 9. Supabase remains stopped until that assessment supports proceeding.
