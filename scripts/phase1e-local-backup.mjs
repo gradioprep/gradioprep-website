@@ -376,9 +376,9 @@ function verifyRestoredAuthorization(container) {
     "SELECT set_config('request.jwt.claims', '{\"sub\":\"11111111-1111-4111-8111-111111111111\",\"role\":\"authenticated\",\"aal\":\"aal1\"}', true);",
     "DO $verify$ DECLARE own_attempts integer; foreign_attempts integer; visible_storage integer := 0; file_access_denied boolean := false; BEGIN " +
       "SELECT count(*)::integer INTO own_attempts FROM public.attempts; " +
-      "IF own_attempts < 2 THEN RAISE EXCEPTION 'restored RLS did not expose the learner\'s own synthetic attempts'; END IF; " +
+      "IF own_attempts < 2 THEN RAISE EXCEPTION 'restored RLS did not expose the expected own synthetic attempts'; END IF; " +
       "SELECT count(*)::integer INTO foreign_attempts FROM public.attempts WHERE id = 'c2222222-2222-4222-8222-222222222222'; " +
-      "IF foreign_attempts <> 0 THEN RAISE EXCEPTION 'restored RLS exposed another learner\'s synthetic attempt'; END IF; " +
+      "IF foreign_attempts <> 0 THEN RAISE EXCEPTION 'restored RLS exposed a foreign synthetic attempt'; END IF; " +
       "BEGIN PERFORM 1 FROM private.submission_files LIMIT 1; EXCEPTION WHEN insufficient_privilege THEN file_access_denied := true; END; " +
       "IF NOT file_access_denied THEN RAISE EXCEPTION 'authenticated browser role can read private PDF metadata directly'; END IF; " +
       "BEGIN SELECT count(*)::integer INTO visible_storage FROM storage.objects WHERE bucket_id = 'private-submissions'; " +
