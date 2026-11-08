@@ -1515,7 +1515,7 @@ async function getLearnerSubmission(
 
   const { data, error } = await auth.context.supabase
     .from("assessment_submissions")
-    .select("id, learner_id, task_version_id, rubric_version_id, response_mode, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, expected_min_words, ideal_words, pdf_response_enabled), submission_versions(id, version_number, response_text, word_count, created_at), assessment_versions(id, version_number, total_points, max_points, overall_feedback, published_at, first_published_at, first_turnaround_seconds, seconds_to_due_at_first_publish, sla_met, criterion_results(id, criterion_code_snapshot, criterion_title_snapshot, descriptor_snapshot, points_awarded, max_points_snapshot, feedback)))
+    .select("id, learner_id, task_version_id, rubric_version_id, response_mode, status, accepted_at, grading_due_at, sla_target_seconds, capacity_limit_snapshot, open_submissions_before_acceptance, task_versions(task_code, title, version, expected_min_words, ideal_words, pdf_response_enabled), submission_versions(id, version_number, response_text, word_count, created_at), assessment_versions(id, version_number, total_points, max_points, overall_feedback, published_at, first_published_at, first_turnaround_seconds, seconds_to_due_at_first_publish, sla_met, criterion_results(id, criterion_code_snapshot, criterion_title_snapshot, descriptor_snapshot, points_awarded, max_points_snapshot, feedback))")
     .eq("id", submissionId)
     .eq("learner_id", auth.context.userId)
     .maybeSingle();
