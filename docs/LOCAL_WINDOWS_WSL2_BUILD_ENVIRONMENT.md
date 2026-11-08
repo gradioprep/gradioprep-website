@@ -16,7 +16,7 @@
 
 **Supabase resource gate:** the workflow excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor, keeping the core database, Auth, API gateway, PostgREST, Storage and Mailpit services. Supabase does not publish a minimum RAM figure for this exact reduced set. The full-stack recommendation is at least 7 GB RAM; the Docker/Ubuntu limit of approximately 2.8 GiB is therefore a constrained environment and cannot be assumed sufficient. Review Windows free memory and current Docker memory before any startup. Do not change WSL/Docker memory settings or start Supabase until the decision is made.
 
-**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. The 35- and 47-assertion SQL suites and backup/restore verifier have not passed. Exact-head Actions run [#42462285927](https://github.com/gradioprep/gradioprep-website/actions/runs/42462285927) failed with no job steps reported; logs were unavailable, so no test failure or precise runner cause is established.
+**Phase status:** Phase 1C complete; Phase 1D verified; Phase 1E partial/unverified. The 35- and 47-assertion SQL suites and backup/restore verifier have not passed. Exact-head Actions run [#42462857738](https://github.com/gradioprep/gradioprep-website/actions/runs/42462285927) failed with no job steps reported; logs were unavailable, so no test failure or precise runner cause is established.
 
 
 ## 2. Verify the WSL2 Ubuntu installation
@@ -121,7 +121,6 @@ node --version
 npm --version
 command -v node
 command -v npm
-npm install --no-audit --no-fund
 ```
 
 Confirm `node --version` reports a v22 release and `command -v node` points inside `/home/gradioprep/.nvm/`. Do not continue if WSL is still resolving Node/npm from a Windows-mounted path.
@@ -152,7 +151,7 @@ The old instructions in this section that say Node is missing or that the reposi
 5. Assess resource feasibility before Supabase startup. The project workflow excludes Studio, Logflare, Vector, Edge Runtime, Postgres Meta, Realtime and Supavisor. The full-stack Supabase CLI recommendation is at least 7 GB RAM, but no minimum is documented for this reduced set. The currently reported Docker/Ubuntu memory of approximately 2.8 GiB is a significant constraint. Keep Supabase stopped and do not change WSL/Docker memory settings until reviewed.
 6. Phase 1E remains unverified: run the 35- and 47-assertion SQL suites and backup/restore verifier only after the memory gate is resolved. Phase 1F follows only after Phase 1E acceptance.
 
-Exact-head run [#42462285927](https://github.com/gradioprep/gradioprep-website/actions/runs/42462285927) failed without job steps; its logs were unavailable. Do not classify it as a SQL/build/browser test failure or claim a specific runner cause. The workflow still uses `ubuntu-latest`; runner registration alone does not redirect it. Any self-hosted runner workflow change requires a separate security review.
+Exact-head run [#42462857738](https://github.com/gradioprep/gradioprep-website/actions/runs/42462285927) failed without job steps; its logs were unavailable. Do not classify it as a SQL/build/browser test failure or claim a specific runner cause. The workflow still uses `ubuntu-latest`; runner registration alone does not redirect it. Any self-hosted runner workflow change requires a separate security review.
 
 PR #22 remains open, draft and unmerged. No hosted provisioning, paid usage, real learner data, external processing/email, Preview/production deployment, DNS change or merge is authorised.
 
@@ -180,4 +179,4 @@ The user completed GitHub CLI browser authentication from Ubuntu. Reported outpu
 
 The read-only repository check `gh repo view gradioprep/gradioprep-website --json nameWithOwner,isPrivate` returned `nameWithOwner: gradioprep/gradioprep-website` and `isPrivate: true`. No password, device code or token was shared in chat.
 
-**Current status:** authentication and cloning are complete. At clone verification, local, remote and PR #22 heads matched at `2a582c42c071a7dda85d197672e9255398e55140`. Subsequent documentation-only updates have advanced origin and PR #22. Fast-forward the local checkout before project dependency installation. The immediate setup task is to install and verify WSL-native Node 22. Do not start Supabase until the separate memory/resource review is complete.
+**Current status — 8 November 2026:** GitHub authentication and cloning are complete. The user's supplied local checks showed local HEAD `acfde1e9572d5149e8d4a857bfb32032db1dc45a`, while the direct remote ref was `37888a9f2017322b462860bd20eedfa792f5f282`, 13 documentation-only commits ahead at that check. Node `v22.23.4` and npm `10.9.9` are installed and correctly resolve from the WSL nvm directory. `npm install --no-audit --no-fund` succeeded and added 130 packages. The only post-install status entry was an untracked `package-lock.json`; the workflow explicitly says this prototype intentionally does not commit the lockfile, so remove it rather than committing it. Fast-forward the checkout before further work. Do not reinstall Node or repeat dependency installation merely for the docs-only fast-forward. Do not start Supabase until the reduced-service resource review is complete.
