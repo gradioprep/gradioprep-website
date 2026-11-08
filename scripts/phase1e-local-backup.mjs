@@ -395,7 +395,7 @@ function verifyRestoredAuthorization(container) {
     "END $verify$;",
     "RESET ROLE;",
     "ROLLBACK;",
-  ].join("\\n");
+  ].join("\n");
   dockerExec(container, [
     "psql", "-U", restoreRoleName, "-d", restoreDatabaseName,
     "-v", "ON_ERROR_STOP=1", "-c", sql,
