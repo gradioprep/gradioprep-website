@@ -2126,7 +2126,7 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   gap: 3px;
   padding: 12px;
   border-bottom: 1px solid var(--border);
-  background: var(--surface-muted);
+  background: var(--surface);
 }
 .proto-transcript-pane-heading strong {
   color: var(--text-primary);
