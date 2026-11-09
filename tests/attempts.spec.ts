@@ -1699,7 +1699,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
         actorId: "11111111-1111-4111-8111-111111111111",
         actorRole: "student",
         action: "student_timed_attempt_assessment_link",
-        targetType: "timed_attempt_assessment_link",
+        targetType: "attempt",
         targetId: primaryAttempt.attemptId,
         outcome: "failed",
         reason: "state_conflict",

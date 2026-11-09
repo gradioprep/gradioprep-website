@@ -226,7 +226,7 @@ BEGIN
   RETURNING * INTO created_link;
 
   INSERT INTO private.security_audit_events (
-    v_actor_id, action, target_type, target_id, outcome, reason_category
+    actor_id, action, target_type, target_id, outcome, reason_category
   )
   VALUES (
     v_actor_id, 'student_timed_attempt_assessment_linked',
@@ -305,7 +305,7 @@ BEGIN
     WHEN 'staff_invitation_created' THEN resource_type := 'staff_invitation'; requires_null_target := true;
     WHEN 'staff_invitation_revoked' THEN resource_type := 'staff_invitation';
     WHEN 'staff_attempt_timer_adjustment' THEN resource_type := 'attempt';
-    WHEN 'student_timed_attempt_assessment_link' THEN resource_type := 'timed_attempt_assessment_link';
+    WHEN 'student_timed_attempt_assessment_link' THEN resource_type := 'attempt';
     ELSE RETURN false;
   END CASE;
 
