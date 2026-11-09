@@ -310,6 +310,10 @@ SELECT throws_ok(
 );
 RESET ROLE;
 SET LOCAL ROLE postgres;
+-- Release the extra synthetic queue slot after the draft-rubric rejection check.
+UPDATE public.assessment_submissions
+SET status = 'withdrawn'
+WHERE id = 'd7777777-7777-4777-8777-777777777777';
 UPDATE public.task_rubric_mappings
 SET rubric_version_id = 'f1111111-1111-4111-8111-111111111111'
 WHERE task_version_id = 'a3333333-3333-4333-8333-333333333333';
