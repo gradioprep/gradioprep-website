@@ -277,23 +277,23 @@ SELECT throws_ok(
   'an in-progress attempt cannot be linked before submission'
 );
 SELECT throws_ok(
-  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+  $q$SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_other_task'),
     (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
     'a0777777-7777-4777-8777-777777777777'
-  )$,
+  )$q$,
   'P0001', 'attempt_task_version_mismatch',
   'different task versions cannot be linked'
 );
 
 SELECT lives_ok(
-  $INSERT INTO timed_link_test_results
+  $q$INSERT INTO timed_link_test_results
     SELECT 'pdf_only', link_id, attempt_id, assessment_submission_id, is_replay
     FROM public.link_timed_attempt_assessment_submission(
       (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_other_task'),
       (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_pdf_only'),
       'a0d0d0d0-0d0d-40d0-80d0-d0d0d0d0d0d0'
-    )$,
+    )$q$,
   'submitted matching attempt can link to an accepted PDF-only assessment with an original and transcript'
 );
 SELECT is(

@@ -185,6 +185,10 @@ BEGIN
     WHERE task_version.id = selected_attempt.task_version_id
       AND task_version.release_state = 'published'
       AND task_version.response_mode = 'typed'
+      AND (
+        selected_submission.response_mode = 'typed'
+        OR (task_version.pdf_response_enabled AND task_version.ideal_words > 20)
+      )
   ) THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'assessment_submission_not_linkable';
   END IF;
