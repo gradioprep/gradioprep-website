@@ -510,3 +510,18 @@ Windows reports 1.44 GiB available physical RAM. WSL reports 2.1 GiB available, 
 GitHub confirms the repository is public. Cloudflare Workers Builds remains connected; production/Preview watch-path exclusions are still empty and require a separate reviewed account-setting change. GitHub Actions uses one owner-only push trigger on the dedicated PR branch, docs/Markdown exclusions and stale-run cancellation. Run [#42473595308](https://github.com/gradioprep/gradioprep-website/actions/runs/42473595308) passed 601 PostgreSQL assertions/17 files, 31/31 Playwright tests, builds, backup/restore and cleanup. The verifier restored one DB snapshot and one private PDF checksum, and rejected a corrupt archive. Test fixture commit `26fbea0` and append-only legal-hold migration `edc3340` were validated by that run. All five spending budgets remain blocked.
 
 Phase 1E is verified complete for synthetic acceptance. The next engineering task is Phase 1F final synthetic security acceptance against the existing adversarial and endpoint authorization/audit matrices. Hosted Supabase staging, paid usage, real data, DNS, production deployment and PR merge remain separately gated. Hosted Supabase staging, paid usage, real data, DNS, production deployment and PR merge remain separately gated.
+
+## 16.14 Verified timed-attempt linkage and next flagship work — 9 November 2026
+
+The transaction-safe timed-attempt-to-human-assessment linkage milestone is implemented and verified on exact application/test snapshot `95be230d07223411538f1e90e4507a043680730e`, PR #22. GitHub Actions [#42642106215](https://github.com/gradioprep/gradioprep-website/actions/runs/42642106215) passed on GitHub-hosted `ubuntu-latest`: 721 SQL assertions across 21 files, 35/35 Playwright tests, type-check/Worker/Vite builds, synthetic backup/restore, corrupt-archive rejection, cleanup and clean credential-free Preview-assets build.
+
+The database enforces same learner and task version, submitted attempt state, published task and mapped published rubric, active enrolment, linkable assessment state, accepted response evidence, one-to-one uniqueness and exact-pair idempotency in one transaction. The Worker route is Student-authenticated; the private link record is immutable and audited. The independent Student C regression fixture now uses `cccccccc-cccc-4ccc-8ccc-cccccccccccc` consistently for temporary enrolment and cleanup. Current protected physical inventory: **29 tables (18 public, 11 private)**.
+
+**Current next work order:**
+1. Implement rubric-version-bound attainment and accuracy derivation from the immutable published human assessment, preserving score, maximum, denominator and publication/rubric references.
+2. Derive elapsed response from server timer-session and append-only adjustment history; exclude upload/OCR processing time and distinguish regular timed, extended and untimed accommodations.
+3. Define context comparability and missing-data/uncertainty handling. Never infer ability, mastery or rank from speed alone.
+4. Add SQL/Playwright regression tests for rubric version and publication mismatch, score denominators, missing/invalid timer history, adjustment labels, upload-time exclusion and incomparable task/rubric contexts.
+5. Complete end-to-end synthetic flagship validation before actual MYP Year 4 diagnostic item authoring.
+
+The linkage milestone is ready for Founder acceptance on the synthetic CI evidence; it is not production readiness. Analytics remain unimplemented at this checkpoint. PR #22 stays open, draft and unmerged. No local Supabase/Docker on the user's computer, hosted service, cost, real learner data, external processing, DNS, merge or production deployment is authorised.

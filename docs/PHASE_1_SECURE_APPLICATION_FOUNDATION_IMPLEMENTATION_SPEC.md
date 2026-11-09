@@ -768,3 +768,29 @@ Synthetic pgTAP coverage includes direct-table/RPC denial for browser roles, AAL
 This is application/test evidence on the synthetic local database only. The Actions workflow was a branch-push event; PR Preview creation/update steps were skipped. No hosted backend, branded staging, real learner data, external OCR/AI, paid usage, DNS change, PR merge or production deployment was used or authorised. The technical security evidence does not close Phase 1F operational/production approval requirements.
 
 **Next implementation increment:** chronological oldest-first Grader workspace UI around the existing assignment-scoped queue/detail, rubric, draft-save and feedback-publication APIs. Show question/prompt context and exact rubric, preserve assignment boundaries, allow a human Grader to create/edit a draft and explicitly publish only human-authored feedback as immutable versions, with learner read visibility and audit history. Then implement the approved advisory timer and validated accuracy/speed analytics before complete synthetic flagship validation.
+
+## 41. Verified Phase 2 timed-attempt-to-assessment linkage — 9 November 2026
+
+The exact application-code/test snapshot `95be230d07223411538f1e90e4507a043680730e` on PR #22 passed GitHub Actions [#42642106215](https://github.com/gradioprep/gradioprep-website/actions/runs/42642106215) on GitHub-hosted `ubuntu-latest`: **721 SQL assertions across 21 files, 35/35 Playwright tests**, TypeScript/Worker/Vite builds, synthetic database/private-PDF backup and restore, corrupt-archive rejection, local stack shutdown, credential cleanup and clean credential-free Preview-asset build.
+
+**Worker/API boundary:** `POST /api/v1/learner/attempts/:attemptId/assessment-link` is authenticated and limited to an active Student. The bounded request contains only the assessment-submission UUID and idempotency UUID. The Worker calls the authenticated caller's `link_timed_attempt_assessment_submission(uuid, uuid, uuid)` RPC; business reads/writes do not use a service-role client. Denials and failed link attempts are recorded through the metadata-only allowlisted Worker audit action. Successful linkage has a transaction-local database audit record.
+
+**Database integrity:** migration `20261109000600_phase2_timed_attempt_assessment_linkage.sql` adds composite identity uniqueness to attempts and assessment submissions, then creates `private.timed_attempt_assessment_links`. Its composite foreign keys require the attempt, assessment submission, learner and task version to agree. Unique constraints enforce one-to-one attempt/submission use and learner-scoped idempotency. RLS is enabled; direct grants are revoked from browser roles and service role. Direct update/delete is rejected while normal account-deletion cascades remain possible.
+
+The RPC is a single transaction. It takes a transaction-scoped advisory lock for the actor/idempotency key and row locks on both parent records. It verifies:
+- authenticated active Student; non-null identifiers and valid payload;
+- both parent records belong to the caller and share the exact task version;
+- attempt status is submitted, `submitted_at` exists, the timed attempt has a non-empty response and a matching learner-authored submitted timer event;
+- assessment submission is in a linkable queue/grading state and uses an accepted response mode;
+- active enrolment, published task version, typed attempt mode, exact task-to-rubric mapping and published rubric version;
+- typed response version 1, or (for PDF-backed response modes) accepted private source PDF and matching immutable transcript version 1; PDF response eligibility remains task opt-in with `ideal_words > 20`.
+
+An identical pair/key retry returns the existing immutable link with replay status. Reusing the same learner/key for a different pair or attempting a second link for either endpoint returns a conflict. Cross-learner lookups do not disclose another learner's records. The success audit record is part of the transaction; the link itself stores identity and timestamps only, never response text, marks or derived timing.
+
+**Regression evidence:** the linkage SQL suite passed as part of the full **21-file/721-assertion** database run. The Playwright scenario verifies pre-submit denial and correlated audit, concurrent exact-pair idempotency, replay identity, key-reuse conflict, one-to-one conflicts, cross-task denial, cross-learner denial, and withdrawn/non-linkable submission rejection. The independent Student C test context uses the seed UUID `cccccccc-cccc-4ccc-8ccc-cccccccccccc`; enrolment setup and cleanup both reference `studentCId`. All **35/35** browser tests passed.
+
+**Schema count:** the migration adds one private table; current protected physical inventory is **29 tables (18 public, 11 private)**.
+
+**Boundary:** this milestone creates no accuracy, attainment, elapsed-response or speed analytics. It does not change the advisory nature of the timer, and it does not establish production readiness. The branch-push run passed the clean Preview-assets build but skipped PR Preview creation/comment steps; no Preview URL is claimed.
+
+**Next implementation:** derive accuracy only from the immutable published assessment and exact rubric version; derive elapsed response only from server-recorded timer sessions and adjustment history; exclude PDF upload/OCR processing time; label timed, extended and untimed accommodations; compare only sufficiently similar task/rubric contexts; preserve missing-data and uncertainty labels; and never infer ability, mastery or rank from speed alone. Full synthetic flagship end-to-end validation remains a separate gate before MYP Year 4 item authoring.
