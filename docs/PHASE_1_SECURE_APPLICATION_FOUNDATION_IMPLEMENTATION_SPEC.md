@@ -742,7 +742,7 @@ Migration `20261108000400_phase2_optional_pdf_response_eligibility.sql` adds exp
 This is typed-plus-optional-PDF attachment only. PDF-only submission acceptance, the learner-facing PDF selector/upload journey, PDF.js extraction, scanned-page OCR, teacher workspace, feedback UI and timer/analytics are not yet implemented. The next implementation increment is the user-facing optional-PDF selection/upload interaction using existing task metadata and the verified Worker route. Synthetic data only; no external OCR/AI, hosted services or costs.
 
 
-## 39. Phase 2 PDF-only submission and transcript implementation handoff — exact-head CI pending — 8 November 2026
+## 39. Historical Phase 2 PDF-only submission and transcript implementation handoff — superseded by Section 40
 
 Application-code/test head `7875b98b60ab7b8d4809c05d0a93a804b46f92a4` includes the PDF-only/typed-plus-PDF implementation, database fail-closed hardening in `f5e25909576ff17ac30e1c0bf4f68bcdbd39dda7` and browser-test correction. It builds on the previously verified Phase 1D private-PDF controls and the Phase 2 task eligibility migration:
 

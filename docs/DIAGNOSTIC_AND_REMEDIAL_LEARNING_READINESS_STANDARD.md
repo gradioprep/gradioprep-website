@@ -1,8 +1,8 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.14
+**Version:** 2.15
 **Approved:** 31 October 2026  
-**Last updated:** 8 November 2026  
+**Last updated:** 9 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md`, `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`, `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md`, `docs/ENGLISH_CURRICULUM_GUIDES.md`, `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/DESIGN_SPEC.md`.
@@ -254,7 +254,7 @@ The approved roadmap now proceeds to the shared flagship learner submission and 
 Cycle 1 remains Grade 9 — IB MYP Year 4. Its item map is approved, but actual item authoring remains blocked until the shared flagship feature is implemented and pilot-validated. The diagnostic and Evaluation Report remain unbuilt and cannot be treated as client-ready. Branded staging under `gradioprep.com` with an isolated hosted synthetic backend remains a mandatory later gate before final Diagnostic/Report acceptance; hosting and DNS require separate approval. Cambridge Grade 6 remains blocked until Cycle 1 is complete and the Founder directs transition.
 
 
-## 19. Current MYP Year 4 dependency after Phase 2 first backend increment — 8 November 2026
+## 19. Historical MYP Year 4 dependency after Phase 2 first backend increment — superseded by Section 21
 
 The Founder accepted Phase 1F technical security evidence for the documented synthetic-data testing scope on 8 November 2026. The first Phase 2 optional-PDF eligibility increment is now implemented and passed exact-head CI [#42484474739](https://github.com/gradioprep/gradioprep-website/actions/runs/42484474739) at `b6dc72f3534b873b63536f5a994fe5027ddcc162`: 619 PostgreSQL assertions/17 SQL files, 32/32 Playwright tests, TypeScript/Worker/Vite builds and synthetic backup/restore.
 
@@ -275,3 +275,12 @@ For this standard, the following validation stages are distinct and must not be 
 4. **First public free release:** only after pilot findings are reviewed and material issues resolved, and the Founder separately approves public release, expose the completed free Diagnostic and complete Evaluation Report to the intended public audience. Do not imply that unbuilt remedial or paid services are available. Full-cycle and commercial launch gates remain separate.
 
 The earlier requirement that the flagship feature be “pilot-validated” before MYP item authoring refers to stage 1 (synthetic validation), not stage 3 (the small live participant pilot). This clarification preserves the security boundary while avoiding an unnecessary dependency on real learners before the Diagnostic has been authored and built.
+
+
+## 21. Current flagship dependency after verified PDF-only and teacher transcript review — 9 November 2026
+
+The PDF-only submission and page-aligned teacher transcript correction/verification slice is verified on exact application-code/test head `ef9dfd23e5964bb53ceb4a461beef7534449883b`, GitHub Actions [#42566527169](https://github.com/gradioprep/gradioprep-website/actions/runs/42566527169): 661 PostgreSQL assertions across 19 SQL files, 33/33 Playwright tests, builds and synthetic database/private-PDF backup/restore. Eligible learners may submit typed, typed+PDF or PDF-only work. The original private PDF remains authoritative. Active assigned Graders and Owners must use AAL2 to append immutable teacher-corrected/teacher-verified transcript versions. No external OCR provider is called.
+
+This does **not** complete the shared flagship workflow. Outstanding items are the chronological oldest-first rubric grading workspace, human-only feedback draft and publication/version history with learner visibility, approved advisory timer and validated accuracy/speed analytics, and complete end-to-end synthetic flagship validation. That full synthetic validation remains the prerequisite for actual MYP Year 4 item authoring.
+
+Cycle 1 remains Grade 9 — IB MYP Year 4; actual diagnostic item authoring is blocked pending the remaining flagship work and synthetic validation. The Diagnostic and complete Evaluation Report remain unbuilt and unavailable for subscriber or live-pilot testing. After they are built, the Founder must test the complete journey on branded staging with an isolated hosted synthetic backend, following separate hosted-resource and DNS approvals, before final Diagnostic/Report acceptance. The invitation-only, free 2–3 participant pilot remains a subsequent distinct stage and requires its own real-data privacy/legal, security, safeguarding/consent, provider and cost approvals. Cambridge Grade 6 remains blocked until Cycle 1 is complete and the Founder directs transition.

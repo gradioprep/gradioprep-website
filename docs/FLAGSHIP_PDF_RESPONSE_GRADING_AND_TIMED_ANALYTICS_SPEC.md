@@ -289,7 +289,7 @@ Continue in this order:
 The initial free public release (Diagnostic + complete Evaluation Report and approved free starter activity/resources) is separate from the later full commercial launch. Paid grading, credits, the Remedial Course and related entitlements/payments must not be represented as available until implemented and accepted. See the authoritative sequence in docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md and the release gates in docs/PUBLIC_PREVIEW_AND_CUSTOM_DOMAIN_RELEASE_PROCESS.md.
 
 
-## 21. Verified typed/optional-PDF learner journey and next implementation batch — 8 November 2026
+## 21. Historical verified typed/optional-PDF learner journey and next implementation batch — superseded by Section 23
 
 The learner-facing typed-response and optional-PDF selector/upload journey is verified within the local synthetic-data scope. Exact application-code/test revision `86c0099c4e795443342280b1c251d77c9f9f34a4` passed GitHub Actions [#42498299576](https://github.com/gradioprep/gradioprep-website/actions/runs/42498299576), including fresh local Supabase reset/seed, PostgreSQL RLS tests, TypeScript/Worker/Vite builds, **33/33 Playwright tests**, private-PDF/database backup/restore, shutdown, local credential cleanup and a clean build without local credentials. The backup verifier reported `backup_restore_verified`, restored one database snapshot and one protected-PDF checksum, and rejected a corrupt archive.
 

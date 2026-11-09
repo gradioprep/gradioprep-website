@@ -265,7 +265,7 @@ After the limited pilot and correction of its findings, a separately approved fi
 From the current implementation checkpoint, the working estimate is approximately 12–16 substantial batches to the Founder’s complete branded-staging Diagnostic/Report test; another 4–6 batches to prepare and complete the restricted 2–3 participant pilot; a further 3–5 batches may be required for pilot fixes and an initial public free release. The broader commercial launch may require 6–10 or more additional batches. These are non-binding planning ranges, not commit counts, prompts or acceptance criteria; test findings and approvals may change them.
 
 
-## 11. Verified learner typed/optional-PDF journey and Cycle 1 next gate — 8 November 2026
+## 11. Historical verified learner typed/optional-PDF journey and Cycle 1 next gate — superseded by Section 13
 
 The learner-facing typed-response and optional-PDF selector/upload journey is now verified for the documented local synthetic-data scope. Exact application-code/test revision `86c0099c4e795443342280b1c251d77c9f9f34a4` passed GitHub Actions [#42498299576](https://github.com/gradioprep/gradioprep-website/actions/runs/42498299576): fresh local synthetic Supabase reset/seed, PostgreSQL RLS tests, TypeScript/Worker/Vite builds, **33/33 Playwright tests**, private-PDF/database backup/restore, cleanup and credential-free public-Preview asset build. The verifier restored one database snapshot and one protected-PDF checksum and rejected a corrupt archive.
 
