@@ -1594,13 +1594,12 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       envValue("SUPABASE_SERVICE_ROLE_KEY"),
       { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } },
     );
-    // Obtain the second synthetic learner token directly from local Auth. This
-    // avoids a second browser navigation and keeps the test focused on API authorization.
-    const studentBAuth = createClient(
-      envValue("SUPABASE_URL"),
-      envValue("SUPABASE_PUBLISHABLE_KEY"),
-      { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } },
-    );
+    // Use the established browser sign-in helper for a second isolated learner.
+    // The explicit baseURL keeps the independent context on the local Worker origin.
+    const studentBContext = await page.context().browser()!.newContext({
+      baseURL: "http://127.0.0.1:8787",
+    });
+    const studentBPage = await studentBContext.newPage();
     const studentBId = "22222222-2222-4222-8222-222222222222";
     const mypPathwayId = "synthetic-ib-myp-year-4";
     const createdSubmissionIds: string[] = [];
@@ -1783,15 +1782,9 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       expect(crossTask.status()).toBe(409);
       await expect(crossTask.json()).resolves.toMatchObject({ error: "attempt_task_version_mismatch" });
 
-      const { data: studentBAuthResult, error: studentBAuthError } =
-        await studentBAuth.auth.signInWithPassword({
-          email: "student.b@example.invalid",
-          password: localPassword,
-        });
-      if (studentBAuthError || !studentBAuthResult.session?.access_token) {
-        throw new Error("Could not authenticate the second synthetic learner with local Auth.");
-      }
-      const learnerB = "Bearer " + studentBAuthResult.session.access_token;
+      const learnerB = await signIn(
+        studentBPage, "student.b@example.invalid", "Synthetic Student B",
+      );
       const otherLearnerSubmission = await acceptAssessment(
         learnerB, "a3333333-3333-4333-8333-333333333333",
       );
@@ -1832,7 +1825,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
         .delete()
         .eq("learner_id", studentBId)
         .eq("pathway_id", mypPathwayId);
-      await studentBAuth.auth.signOut({ scope: "local" });
+      await studentBContext.close();
     }
   });
 
