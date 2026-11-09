@@ -198,8 +198,85 @@ SELECT set_config('request.jwt.claims',
   '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
   true);
 
+-- Eligibility is rechecked during linkage, not trusted from the earlier acceptance.
+RESET ROLE;
+SET LOCAL ROLE postgres;
+UPDATE public.course_enrolments
+SET status = 'inactive'
+WHERE learner_id = '11111111-1111-4111-8111-111111111111'
+  AND pathway_id = 'synthetic-ib-myp-year-4';
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
+  true);
+SELECT throws_ok(
+  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+    (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),
+    (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
+    'a0cccccc-cccc-4ccc-8ccc-cccccccccccc'
+  )$,
+  'P0001', 'assessment_submission_not_linkable',
+  'an inactive course enrolment makes an otherwise matching attempt ineligible'
+);
+RESET ROLE;
+SET LOCAL ROLE postgres;
+UPDATE public.course_enrolments
+SET status = 'active'
+WHERE learner_id = '11111111-1111-4111-8111-111111111111'
+  AND pathway_id = 'synthetic-ib-myp-year-4';
+UPDATE public.task_versions
+SET release_state = 'retired'
+WHERE id = 'a3333333-3333-4333-8333-333333333333';
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
+  true);
+SELECT throws_ok(
+  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+    (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),
+    (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
+    'a0dddddd-dddd-4ddd-8ddd-dddddddddddd'
+  )$,
+  'P0001', 'assessment_submission_not_linkable',
+  'a retired task version cannot be linked'
+);
+RESET ROLE;
+SET LOCAL ROLE postgres;
+UPDATE public.task_versions
+SET release_state = 'published'
+WHERE id = 'a3333333-3333-4333-8333-333333333333';
+UPDATE public.rubric_versions
+SET release_state = 'retired'
+WHERE id = 'f1111111-1111-4111-8111-111111111111';
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
+  true);
+SELECT throws_ok(
+  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+    (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),
+    (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
+    'a0eeeeee-eeee-4eee-8eee-eeeeeeeeeeee'
+  )$,
+  'P0001', 'assessment_submission_not_linkable',
+  'an unpublished or retired mapped rubric cannot be linked'
+);
+RESET ROLE;
+SET LOCAL ROLE postgres;
+UPDATE public.rubric_versions
+SET release_state = 'published'
+WHERE id = 'f1111111-1111-4111-8111-111111111111';
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
+  true);
+
 SELECT lives_ok(
-  $$INSERT INTO timed_link_test_results
+  $INSERT INTO timed_link_test_results
     SELECT 'primary', link_id, attempt_id, assessment_submission_id, is_replay
     FROM public.link_timed_attempt_assessment_submission(
       (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),

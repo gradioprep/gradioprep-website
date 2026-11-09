@@ -1582,7 +1582,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
   });
 
 
-  test("timed attempts link transactionally to one matching human assessment", async ({ page, browser }) => {
+  test("timed attempts link transactionally to one matching human assessment", async ({ page }) => {
     const localEnvLines = readFileSync(".dev.vars", "utf8").split(/\r?\n/);
     const envValue = (key: string): string => {
       const value = localEnvLines.find(line => line.startsWith(key + "="))?.slice(key.length + 1).trim();
@@ -1594,12 +1594,15 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       envValue("SUPABASE_SERVICE_ROLE_KEY"),
       { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } },
     );
+    // Obtain the second synthetic learner token directly from local Auth. This
+    // avoids a second browser navigation and keeps the test focused on API authorization.
+    const studentBAuth = createClient(
+      envValue("SUPABASE_URL"),
+      envValue("SUPABASE_PUBLISHABLE_KEY"),
+      { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } },
+    );
     const studentBId = "22222222-2222-4222-8222-222222222222";
     const mypPathwayId = "synthetic-ib-myp-year-4";
-    // Raw browser.newPage() does not inherit the configured baseURL. Give the
-    // isolated second-learner context the same local-only API origin explicitly.
-    const studentBContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
-    const studentBPage = await studentBContext.newPage();
     const createdSubmissionIds: string[] = [];
 
     const acceptAssessment = async (
@@ -1780,9 +1783,15 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       expect(crossTask.status()).toBe(409);
       await expect(crossTask.json()).resolves.toMatchObject({ error: "attempt_task_version_mismatch" });
 
-      const learnerB = await signIn(
-        studentBPage, "student.b@example.invalid", "Synthetic Student B",
-      );
+      const { data: studentBAuthResult, error: studentBAuthError } =
+        await studentBAuth.auth.signInWithPassword({
+          email: "student.b@example.invalid",
+          password: localPassword,
+        });
+      if (studentBAuthError || !studentBAuthResult.session?.access_token) {
+        throw new Error("Could not authenticate the second synthetic learner with local Auth.");
+      }
+      const learnerB = "Bearer " + studentBAuthResult.session.access_token;
       const otherLearnerSubmission = await acceptAssessment(
         learnerB, "a3333333-3333-4333-8333-333333333333",
       );
@@ -1823,7 +1832,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
         .delete()
         .eq("learner_id", studentBId)
         .eq("pathway_id", mypPathwayId);
-      await studentBContext.close();
+      await studentBAuth.auth.signOut({ scope: "local" });
     }
   });
 
