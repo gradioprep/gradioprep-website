@@ -60,6 +60,41 @@ async function signIn(page: Page, email: string, heading: string): Promise<strin
   return token;
 }
 
+async function withdrawSyntheticSubmission(
+  page: Page,
+  ownerAal2Token: string,
+  submissionId: string,
+): Promise<void> {
+  const response = await page.request.post(
+    "/api/v1/owner/submissions/" + submissionId + "/transition",
+    {
+      headers: { Authorization: ownerAal2Token },
+      data: {
+        target_status: "withdrawn",
+        reason: "Synthetic Playwright queue-capacity cleanup",
+      },
+    },
+  );
+  const body = await response.json() as {
+    transition?: { submission_id?: string; status?: string };
+    error?: string;
+  };
+  expect(response.status(), JSON.stringify(body)).toBe(200);
+  expect(body.transition).toMatchObject({
+    submission_id: submissionId,
+    status: "withdrawn",
+  });
+  assertPersistedAuditCorrelation(response.headers()["x-request-id"], {
+    actorId: "88888888-8888-4888-8888-888888888888",
+    actorRole: "owner",
+    action: "owner_submission_transition",
+    targetType: "assessment_submission",
+    targetId: submissionId,
+    outcome: "success",
+    reason: "owner_withdrawal",
+  });
+}
+
 test.describe("Phase 1C typed attempts and assignment-scoped grading API", () => {
   test("student attempt reads, response versioning and submission remain caller-owned", async ({ page, request }) => {
     await expect((await request.get("/api/v1/learner/attempts")).status()).toBe(401);
@@ -577,6 +612,18 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     } finally {
       await graderContext.close();
     }
+
+    const ownerAal2Token = process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN;
+    expect(ownerAal2Token, "The preceding account spec must provide the synthetic Owner AAL2 token.")
+      .toBeTruthy();
+    const queueSubmissionIds = [
+      acceptedBody.submission.submission_id,
+      concurrentBodies[0].submission.submission_id,
+      pdfOnlySubmission!.id,
+    ];
+    for (const submissionIdToWithdraw of [...new Set(queueSubmissionIds)]) {
+      await withdrawSyntheticSubmission(page, ownerAal2Token!, submissionIdToWithdraw);
+    }
   });
 
   
@@ -609,6 +656,11 @@ test("learner task selector keeps PDF attachments disabled for typed-only tasks"
   await expect(row).toBeVisible();
   await expect(row.getByText("Typed response only")).toBeVisible();
   await expect(row.getByLabel("Attach optional PDF")).toHaveCount(0);
+
+  const ownerAal2Token = process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN;
+  expect(ownerAal2Token, "The preceding account spec must provide the synthetic Owner AAL2 token.")
+    .toBeTruthy();
+  await withdrawSyntheticSubmission(page, ownerAal2Token!, submissionId!);
 });
 
 test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {
