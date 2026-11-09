@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { Navigate } from "../App";
 import { useAuth } from "./AuthProvider";
 import LearnerSubmissionPanel from "./LearnerSubmissionPanel";
+import TranscriptReviewPanel from "./TranscriptReviewPanel";
 
 type AccountMode = "sign-in" | "sign-up" | "recovery-request";
 
@@ -129,6 +130,8 @@ export default function AccountPage({ go }: { go: Navigate }) {
   }, [auth.session?.access_token, auth.passwordRecovery, auth.mfaLoading, auth.mfaChallengeRequired, auth.mfaStatusError]);
 
   const ownerRole = account?.roles.includes("owner") ?? false;
+  const graderRole = account?.roles.includes("grader") ?? false;
+  const transcriptReviewRole = ownerRole ? "owner" : graderRole ? "grader" : null;
 
   useEffect(() => {
     const accessToken = auth.session?.access_token;
@@ -627,6 +630,13 @@ export default function AccountPage({ go }: { go: Navigate }) {
             </div>
           </>}
       </section>}
+      {transcriptReviewRole && auth.session?.access_token && (
+        <TranscriptReviewPanel
+          accessToken={auth.session.access_token}
+          role={transcriptReviewRole}
+          assuranceLevel={auth.mfaCurrentLevel}
+        />
+      )}
       <form className="proto-account-form" onSubmit={saveDisplayName}>
         <label>Display name<input value={newDisplayName} onChange={event => setNewDisplayName(event.target.value)} maxLength={80} required minLength={1} /></label>
         <button className="proto-action" type="submit" disabled={submitting || !account}>Save display name</button>
