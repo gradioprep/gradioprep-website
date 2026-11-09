@@ -247,28 +247,61 @@ SET LOCAL ROLE postgres;
 UPDATE public.task_versions
 SET release_state = 'published'
 WHERE id = 'a3333333-3333-4333-8333-333333333333';
-UPDATE public.rubric_versions
-SET release_state = 'retired'
-WHERE id = 'f1111111-1111-4111-8111-111111111111';
+-- Published rubric versions are immutable. Create a separate draft version,
+-- map the task to it and construct a synthetic accepted submission that snapshots it.
+INSERT INTO public.rubric_versions (
+  id, rubric_id, version, title, release_state
+)
+VALUES (
+  'f7777777-7777-4777-8777-777777777770',
+  'e1111111-1111-4111-8111-111111111111',
+  2,
+  'Synthetic draft rubric for linkage eligibility test',
+  'draft'
+);
+UPDATE public.task_rubric_mappings
+SET rubric_version_id = 'f7777777-7777-4777-8777-777777777770'
+WHERE task_version_id = 'a3333333-3333-4333-8333-333333333333';
+WITH accepted AS (
+  SELECT clock_timestamp() AS accepted_at
+)
+INSERT INTO public.assessment_submissions (
+  id, learner_id, task_version_id, rubric_version_id, status,
+  accepted_at, grading_due_at, sla_target_seconds,
+  capacity_config_version, capacity_limit_snapshot,
+  open_submissions_before_acceptance, idempotency_key, response_mode
+)
+SELECT
+  'd7777777-7777-4777-8777-777777777777',
+  '11111111-1111-4111-8111-111111111111',
+  'a3333333-3333-4333-8333-333333333333',
+  'f7777777-7777-4777-8777-777777777770',
+  'queued', accepted.accepted_at,
+  accepted.accepted_at + interval '24 hours', 86400,
+  capacity.config_version, capacity.max_open_submissions,
+  2, 'a0e1eeee-eeee-4eee-8eee-eeeeeeeeeeee', 'typed'
+FROM accepted
+CROSS JOIN private.grading_capacity_config AS capacity
+WHERE capacity.singleton = true;
 RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claims',
   '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
   true);
 SELECT throws_ok(
-  $$SELECT * FROM public.link_timed_attempt_assessment_submission(
+  $SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),
-    (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
+    'd7777777-7777-4777-8777-777777777777',
     'a0eeeeee-eeee-4eee-8eee-eeeeeeeeeeee'
-  )$$,
+  )$,
   'P0001', 'assessment_submission_not_linkable',
-  'an unpublished or retired mapped rubric cannot be linked'
+  'a mapped draft rubric version cannot be linked to a timed attempt'
 );
 RESET ROLE;
 SET LOCAL ROLE postgres;
-UPDATE public.rubric_versions
-SET release_state = 'published'
-WHERE id = 'f1111111-1111-4111-8111-111111111111';
+UPDATE public.task_rubric_mappings
+SET rubric_version_id = 'f1111111-1111-4111-8111-111111111111'
+WHERE task_version_id = 'a3333333-3333-4333-8333-333333333333';
 RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claims',
