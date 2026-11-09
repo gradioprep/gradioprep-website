@@ -658,50 +658,6 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       await graderContext.close();
     }
 
-    // A different Grader with a verified AAL2 session must still be unable to
-    // read this private PDF or transcript without an active assignment.
-    const unassignedAal2Context = await page.context().browser()!.newContext({
-      baseURL: "http://127.0.0.1:8787",
-    });
-    try {
-      const unassignedAal2Page = await unassignedAal2Context.newPage();
-      const unassignedFirstFactorToken = await signIn(
-        unassignedAal2Page,
-        "grader.c@example.invalid",
-        "Synthetic Grader C",
-      );
-      let unassignedAal2Token = unassignedFirstFactorToken;
-      unassignedAal2Page.on("request", request => {
-        if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
-          unassignedAal2Token = request.headers()["authorization"] ?? unassignedAal2Token;
-        }
-      });
-      await expect(unassignedAal2Page.getByRole("button", { name: "Set up authenticator app" })).toBeVisible();
-      await unassignedAal2Page.getByRole("button", { name: "Set up authenticator app" }).click();
-      await expect(unassignedAal2Page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
-      const unassignedSecret = await unassignedAal2Page.getByTestId("totp-secret").innerText();
-      await waitForTotpWindow();
-      await unassignedAal2Page.getByLabel("Authenticator code").fill(createTotpCode(unassignedSecret));
-      await unassignedAal2Page.getByRole("button", { name: "Verify and enable" }).click();
-      await expect(unassignedAal2Page.getByText("Verified authenticator", { exact: true })).toBeVisible();
-      await expect.poll(() => unassignedAal2Token !== unassignedFirstFactorToken, { timeout: 10_000 }).toBe(true);
-
-      const unassignedAal2FileResponse = await unassignedAal2Page.request.get(fileReadRoute, {
-        headers: { Authorization: unassignedAal2Token },
-      });
-      const unassignedAal2Payload = await unassignedAal2FileResponse.json() as {
-        error?: string;
-        file?: { signed_url?: string };
-        transcript?: unknown;
-      };
-      expect(unassignedAal2FileResponse.status(), JSON.stringify(unassignedAal2Payload)).toBe(404);
-      expect(unassignedAal2Payload).toMatchObject({ error: "submission_file_not_found" });
-      expect(unassignedAal2Payload.file).toBeUndefined();
-      expect(unassignedAal2Payload.transcript).toBeUndefined();
-    } finally {
-      await unassignedAal2Context.close();
-    }
-
     const ownerContext = await page.context().browser()!.newContext({
       baseURL: "http://127.0.0.1:8787",
     });
@@ -1168,6 +1124,51 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     expect(aal1PrivateFilePayload).toMatchObject({ error: "submission_file_not_found" });
     expect(aal1PrivateFilePayload.file).toBeUndefined();
     expect(aal1PrivateFilePayload.transcript).toBeUndefined();
+
+    // A different Grader with AAL2 but no active assignment must not receive
+    // either the private PDF URL or its transcript.
+    const unassignedAal2Context = await page.context().browser()!.newContext({
+      baseURL: "http://127.0.0.1:8787",
+    });
+    try {
+      const unassignedAal2Page = await unassignedAal2Context.newPage();
+      const unassignedFirstFactorToken = await signIn(
+        unassignedAal2Page,
+        "grader.c@example.invalid",
+        "Synthetic Grader C",
+      );
+      let unassignedAal2Token = unassignedFirstFactorToken;
+      unassignedAal2Page.on("request", request => {
+        if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
+          unassignedAal2Token = request.headers()["authorization"] ?? unassignedAal2Token;
+        }
+      });
+      await expect(unassignedAal2Page.getByRole("button", { name: "Set up authenticator app" })).toBeVisible();
+      await unassignedAal2Page.getByRole("button", { name: "Set up authenticator app" }).click();
+      await expect(unassignedAal2Page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
+      const unassignedSecret = await unassignedAal2Page.getByTestId("totp-secret").innerText();
+      await waitForTotpWindow();
+      await unassignedAal2Page.getByLabel("Authenticator code").fill(createTotpCode(unassignedSecret));
+      await unassignedAal2Page.getByRole("button", { name: "Verify and enable" }).click();
+      await expect(unassignedAal2Page.getByText("Verified authenticator", { exact: true })).toBeVisible();
+      await expect.poll(() => unassignedAal2Token !== unassignedFirstFactorToken, { timeout: 10_000 }).toBe(true);
+
+      const unassignedAal2Response = await unassignedAal2Page.request.get(
+        "/api/v1/submissions/" + pdfSubmissionId + "/file",
+        { headers: { Authorization: unassignedAal2Token } },
+      );
+      const unassignedAal2Payload = await unassignedAal2Response.json() as {
+        error?: string;
+        file?: { signed_url?: string };
+        transcript?: unknown;
+      };
+      expect(unassignedAal2Response.status(), JSON.stringify(unassignedAal2Payload)).toBe(404);
+      expect(unassignedAal2Payload).toMatchObject({ error: "submission_file_not_found" });
+      expect(unassignedAal2Payload.file).toBeUndefined();
+      expect(unassignedAal2Payload.transcript).toBeUndefined();
+    } finally {
+      await unassignedAal2Context.close();
+    }
 
     const assessmentQueueResponse = await page.request.get("/api/v1/grader/submissions", { headers });
     expect(assessmentQueueResponse.status()).toBe(200);
