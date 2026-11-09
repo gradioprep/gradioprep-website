@@ -1,5 +1,8 @@
 import { execFileSync } from "node:child_process";
 import { createHmac, randomUUID } from "node:crypto";
+import { unlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 import { assertPersistedAuditCorrelation, readPersistedAuditTargetId } from "./audit-assertions";
 
@@ -538,9 +541,12 @@ test.describe("Phase 1B account foundation", () => {
     await page.getByRole("button", { name: "Set up authenticator app" }).click();
     await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
     const secret = await page.getByTestId("totp-secret").innerText();
-    // Reused only by the next Playwright spec to create a fresh synthetic
-    // Owner AAL2 sign-in. Do not log or persist this local test authenticator.
-    process.env.PLAYWRIGHT_SYNTHETIC_OWNER_TOTP_SECRET = secret;
+    // Pass the synthetic authenticator to the next Playwright worker through a
+    // runner-local, permission-restricted temporary file. It is removed as soon
+    // as the next spec reads it and is never logged or uploaded as an artifact.
+    const ownerTotpSecretPath = join(tmpdir(), "gradioprep-playwright-owner-totp-secret");
+    try { unlinkSync(ownerTotpSecretPath); } catch { /* no prior test secret */ }
+    writeFileSync(ownerTotpSecretPath, secret, { encoding: "utf8", mode: 0o600 });
     await waitForTotpWindow();
     await page.getByLabel("Authenticator code").fill(createTotpCode(secret));
     await page.getByRole("button", { name: "Verify and enable" }).click();

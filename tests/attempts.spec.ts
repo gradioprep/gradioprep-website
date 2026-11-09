@@ -1,6 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import { createHmac, randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { readFileSync, unlinkSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { PDFDocument } from "pdf-lib";
 import { createClient } from "@supabase/supabase-js";
 import { actorIdFromAuthorizationHeader, assertPersistedAuditCorrelation } from "./audit-assertions";
@@ -73,8 +75,16 @@ async function signInOwnerAal2(page: Page): Promise<string> {
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page.getByRole("heading", { name: "Verify your sign-in.", exact: true })).toBeVisible();
 
-  const secret = process.env.PLAYWRIGHT_SYNTHETIC_OWNER_TOTP_SECRET;
-  if (!secret) throw new Error("The account spec did not provide the synthetic Owner authenticator secret.");
+  const ownerTotpSecretPath = join(tmpdir(), "gradioprep-playwright-owner-totp-secret");
+  let secret = "";
+  try {
+    secret = readFileSync(ownerTotpSecretPath, "utf8").trim();
+  } catch {
+    throw new Error("The account spec did not provide the synthetic Owner authenticator secret.");
+  } finally {
+    try { unlinkSync(ownerTotpSecretPath); } catch { /* already removed */ }
+  }
+  if (!secret) throw new Error("The synthetic Owner authenticator secret file was empty.");
   await waitForTotpWindow();
   await page.getByLabel("Authenticator code").fill(createTotpCode(secret));
   await page.getByRole("button", { name: "Verify code" }).click();
@@ -116,7 +126,7 @@ async function withdrawSyntheticSubmission(
   assertPersistedAuditCorrelation(response.headers()["x-request-id"], {
     actorId: "88888888-8888-4888-8888-888888888888",
     actorRole: "owner",
-    action: "owner_submission_transition",
+    action: "assessment_submission_withdrawn",
     targetType: "assessment_submission",
     targetId: submissionId,
     outcome: "success",
@@ -649,7 +659,6 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       const ownerPage = await ownerContext.newPage();
       const ownerAal2Token = await signInOwnerAal2(ownerPage);
       process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN = ownerAal2Token;
-      delete process.env.PLAYWRIGHT_SYNTHETIC_OWNER_TOTP_SECRET;
 
       const queueSubmissionIds = [
         acceptedBody.submission.submission_id,
