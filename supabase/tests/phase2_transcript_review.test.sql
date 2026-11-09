@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(18);
+SELECT plan(20);
 
 SELECT ok(
   EXISTS (
@@ -274,6 +274,36 @@ SELECT is(
   2,
   'each successful transcript version append creates a server-side audit event'
 );
+
+SET LOCAL ROLE service_role;
+SELECT set_config(
+  'request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"service_role","aal":"aal1"}',
+  true
+);
+SELECT is(
+  public.record_worker_audit_outcome(
+    '11111111-1111-4111-8111-111111111111',
+    'student_submission_file_upload',
+    (SELECT submission_id FROM phase2_review_submission_context),
+    'failed',
+    'resource_not_found'
+  ),
+  true,
+  'the legacy private-PDF upload denial action remains in the Worker audit allowlist'
+);
+SELECT is(
+  public.record_worker_audit_outcome(
+    '88888888-8888-4888-8888-888888888888',
+    'owner_submission_file_cleanup',
+    NULL,
+    'failed',
+    'operation_failed'
+  ),
+  true,
+  'the Owner private-PDF cleanup failure action remains in the Worker audit allowlist'
+);
+RESET ROLE;
 
 SELECT * FROM finish();
 ROLLBACK;

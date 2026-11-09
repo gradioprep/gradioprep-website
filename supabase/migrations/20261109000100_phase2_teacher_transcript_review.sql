@@ -70,6 +70,8 @@ BEGIN
     WHEN 'grader_assessment_draft_save' THEN resource_type := 'assessment_submission';
     WHEN 'grader_assessment_feedback_publish' THEN resource_type := 'assessment_submission';
     WHEN 'staff_submission_transcript_review' THEN resource_type := 'assessment_submission';
+    WHEN 'student_submission_file_upload' THEN resource_type := 'assessment_submission';
+    WHEN 'owner_submission_file_cleanup' THEN resource_type := 'submission_file_collection'; requires_null_target := true;
     WHEN 'student_attempt_create' THEN resource_type := 'task_version';
     WHEN 'student_attempt_response_save' THEN resource_type := 'attempt';
     WHEN 'student_attempt_submit' THEN resource_type := 'attempt';
