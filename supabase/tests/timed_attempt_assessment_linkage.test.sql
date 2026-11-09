@@ -381,6 +381,42 @@ SELECT is(
 RESET ROLE;
 SET LOCAL ROLE postgres;
 UPDATE public.assessment_submissions
+SET status = 'feedback_published'
+WHERE id = (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}', true);
+SELECT throws_ok(
+  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+    (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_secondary'),
+    (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary'),
+    'a0f0f0f0-f0f0-40f0-80f0-f0f0f0f0f0f0'
+  )$,
+  'P0001', 'assessment_submission_not_linkable',
+  'a feedback-published submission is already graded and cannot be newly linked'
+);
+RESET ROLE;
+SET LOCAL ROLE postgres;
+UPDATE public.assessment_submissions
+SET status = 'closed'
+WHERE id = (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}', true);
+SELECT throws_ok(
+  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+    (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_secondary'),
+    (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary'),
+    'a0f1f1f1-f1f1-41f1-81f1-f1f1f1f1f1f1'
+  )$,
+  'P0001', 'assessment_submission_not_linkable',
+  'a closed submission cannot be newly linked'
+);
+RESET ROLE;
+SET LOCAL ROLE postgres;
+UPDATE public.assessment_submissions
 SET status = 'withdrawn'
 WHERE id = (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary');
 RESET ROLE;

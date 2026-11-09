@@ -162,7 +162,7 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'attempt_not_submitted';
   END IF;
 
-  IF selected_submission.status = 'withdrawn'
+  IF selected_submission.status NOT IN ('queued', 'assigned', 'grading')
     OR selected_submission.response_mode NOT IN ('typed', 'typed_pdf', 'pdf_only') THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'assessment_submission_not_linkable';
   END IF;
