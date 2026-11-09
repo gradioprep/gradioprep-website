@@ -136,5 +136,76 @@ SELECT is(
 );
 RESET ROLE;
 
+
+-- Owner AAL2 can append a bounded extension, then an untimed accommodation.
+-- The original timer-session snapshot remains immutable.
+SET LOCAL ROLE postgres;
+INSERT INTO public.attempts (
+  id, learner_id, task_version_id, status, started_at, created_at, updated_at
+)
+VALUES (
+  'd4444444-4444-4444-8444-444444444444',
+  '11111111-1111-4111-8111-111111111111',
+  'a3333333-3333-4333-8333-333333333333',
+  'in_progress',
+  clock_timestamp(),
+  clock_timestamp(),
+  clock_timestamp()
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
+SELECT lives_ok(
+  $SELECT * FROM public.authorise_attempt_timer_adjustment(
+    'd4444444-4444-4444-8444-444444444444',
+    'extended', 120, 'approved_extension'
+  )$,
+  'Owner AAL2 can grant a bounded timer extension'
+);
+SELECT is(
+  (SELECT adjusted_allowance_seconds FROM private.attempt_timer_events
+   WHERE attempt_id = 'd4444444-4444-4444-8444-444444444444'
+     AND event_type = 'adjustment' ORDER BY created_at DESC LIMIT 1),
+  180,
+  'extension is added to the server-snapshotted allowance'
+);
+SELECT lives_ok(
+  $SELECT * FROM public.authorise_attempt_timer_adjustment(
+    'd4444444-4444-4444-8444-444444444444',
+    'untimed', NULL, 'accessibility_accommodation'
+  )$,
+  'Owner AAL2 can grant an untimed accommodation'
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}', true);
+SELECT is(
+  (SELECT allowance_seconds FROM public.get_learner_attempt_timer('d4444444-4444-4444-8444-444444444444')),
+  NULL::integer,
+  'learner timer reflects an authorised untimed accommodation'
+);
+RESET ROLE;
+
+SET LOCAL ROLE postgres;
+SELECT is(
+  (SELECT count(*)::integer FROM private.attempt_timer_events
+   WHERE attempt_id = 'd4444444-4444-4444-8444-444444444444'
+     AND event_type = 'adjustment' AND authorised_by = '88888888-8888-4888-8888-888888888888'),
+  2,
+  'both adjustments are attributable immutable events'
+);
+SELECT is(
+  (SELECT count(*)::integer FROM private.security_audit_events
+   WHERE target_id = 'd4444444-4444-4444-8444-444444444444'
+     AND action = 'attempt_timer_adjusted'),
+  2,
+  'both timer adjustments create audit records'
+);
+RESET ROLE;
+
 SELECT * FROM finish();
 ROLLBACK;
