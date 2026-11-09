@@ -451,7 +451,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       "/storage/v1/object/private-submissions/" + storagePath,
       signedUrl.origin,
     ).toString();
-    const localEnvLines = readFileSync(".dev.vars", "utf8").split(/\r?\n/);
+    const envLines = readFileSync(".dev.vars", "utf8").split(/\r?\n/);
     const envValue = (key: string): string => {
       const value = envLines.find(line => line.startsWith(key + "="))?.slice(key.length + 1).trim();
       if (!value) throw new Error("Missing local test environment value: " + key);
@@ -1583,7 +1583,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
 
 
   test("timed attempts link transactionally to one matching human assessment", async ({ page, browser }) => {
-    const localEnvLines = readFileSync(".dev.vars", "utf8").split(/\\r?\\n/);
+    const localEnvLines = readFileSync(".dev.vars", "utf8").split(/\r?\n/);
     const envValue = (key: string): string => {
       const value = localEnvLines.find(line => line.startsWith(key + "="))?.slice(key.length + 1).trim();
       if (!value) throw new Error("Missing local test environment value: " + key);
