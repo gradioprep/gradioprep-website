@@ -1255,7 +1255,11 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     );
     await page.getByRole("button", { name: "Save private grading draft" }).click();
     const saveResponse = await saveResponsePromise;
-    expect(saveResponse.status()).toBe(200);
+    const saveRequestBody = saveResponse.request().postDataJSON() as Record<string, unknown>;
+    expect(saveRequestBody).not.toHaveProperty("change_reason");
+    const saveResponseBody = await saveResponse.json() as { draft?: unknown; error?: string };
+    expect(saveResponse.status(), JSON.stringify(saveResponseBody)).toBe(200);
+    expect(saveResponseBody.draft).toBeTruthy();
     assertPersistedAuditCorrelation(saveResponse.headers()["x-request-id"], {
       actorId: "55555555-5555-4555-8555-555555555555",
       actorRole: "grader",
