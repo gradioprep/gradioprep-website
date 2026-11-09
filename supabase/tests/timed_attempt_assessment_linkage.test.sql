@@ -249,6 +249,11 @@ SET release_state = 'published'
 WHERE id = 'a3333333-3333-4333-8333-333333333333';
 -- Published rubric versions are immutable. Create a separate draft version,
 -- map the task to it and construct a synthetic accepted submission that snapshots it.
+-- This fourth test submission is intentionally beyond the ordinary CI queue cap;
+-- temporarily widen only this transaction's fixture capacity and restore it below.
+UPDATE private.grading_capacity_config
+SET max_open_submissions = 10, config_version = 2, updated_at = clock_timestamp()
+WHERE singleton = true;
 INSERT INTO public.rubric_versions (
   id, rubric_id, version, title, release_state
 )
@@ -279,10 +284,16 @@ SELECT
   'queued', accepted.accepted_at,
   accepted.accepted_at + interval '24 hours', 86400,
   capacity.config_version, capacity.max_open_submissions,
-  2, 'a0e1eeee-eeee-4eee-8eee-eeeeeeeeeeee', 'typed'
+  (SELECT count(*)::integer
+   FROM public.assessment_submissions
+   WHERE status IN ('queued', 'assigned', 'grading')),
+  'a0e1eeee-eeee-4eee-8eee-eeeeeeeeeeee', 'typed'
 FROM accepted
 CROSS JOIN private.grading_capacity_config AS capacity
 WHERE capacity.singleton = true;
+UPDATE private.grading_capacity_config
+SET max_open_submissions = 3, config_version = 3, updated_at = clock_timestamp()
+WHERE singleton = true;
 RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claims',
