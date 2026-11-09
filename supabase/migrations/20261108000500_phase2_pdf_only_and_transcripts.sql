@@ -148,14 +148,6 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_capacity_unavailable';
   END IF;
 
-  IF EXISTS (
-    SELECT 1 FROM public.assessment_submissions AS submission
-    WHERE submission.learner_id = actor_id
-      AND submission.idempotency_key = p_idempotency_key
-  ) THEN
-    RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_idempotency_conflict';
-  END IF;
-
   SELECT count(*)::integer INTO open_count
   FROM public.assessment_submissions AS submission
   WHERE submission.status IN ('queued', 'assigned', 'grading');
