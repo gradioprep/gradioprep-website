@@ -239,15 +239,14 @@ export default function TranscriptReviewPanel({
       }
       const normalized = normalizeReviewVersion(result.transcript);
       if (!normalized) throw new Error("The saved transcript version could not be read.");
+      const confirmation = normalized.verification_state === "teacher_corrected"
+        ? "A new corrected transcript version was saved. Earlier versions remain unchanged."
+        : "A new verified transcript version was saved. Earlier versions remain unchanged.";
       setTranscript(normalized);
       setDraftPages(normalized.pages.map(page => ({ ...page })));
       setReviewNote("");
-      setMessage(
-        normalized.verification_state === "teacher_corrected"
-          ? "A new corrected transcript version was saved. Earlier versions remain unchanged."
-          : "A new verified transcript version was saved. Earlier versions remain unchanged."
-      );
       await refreshSelectedFile();
+      setMessage(confirmation);
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The transcript review could not be saved.");
     } finally {
