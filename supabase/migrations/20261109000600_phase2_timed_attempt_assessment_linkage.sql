@@ -163,7 +163,7 @@ BEGIN
   END IF;
 
   IF selected_submission.status = 'withdrawn'
-    OR selected_submission.response_mode NOT IN ('typed', 'typed_pdf') THEN
+    OR selected_submission.response_mode NOT IN ('typed', 'typed_pdf', 'pdf_only') THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'assessment_submission_not_linkable';
   END IF;
 
@@ -189,14 +189,64 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'assessment_submission_not_linkable';
   END IF;
 
-  -- Require the immutable accepted response and the database timer's submitted
-  -- event; browser timestamps and client-supplied elapsed values are never used.
-  IF NOT EXISTS (
-    SELECT 1
-    FROM public.submission_versions AS version
-    WHERE version.submission_id = selected_submission.id
-      AND version.version_number = 1
-      AND btrim(version.response_text) <> ''
+  -- Require the appropriate immutable evidence for the accepted response mode.
+  -- Typed submissions retain response version 1. PDF-backed submissions require
+  -- an accepted private original and its immutable page-aligned transcript v1;
+  -- PDF-only submissions deliberately have no public submission_versions row.
+  -- The timed attempt independently requires a non-empty response and a
+  -- database-recorded submitted event by the learner.
+  IF NOT (
+    (
+      selected_submission.response_mode = 'typed'
+      AND EXISTS (
+        SELECT 1
+        FROM public.submission_versions AS version
+        WHERE version.submission_id = selected_submission.id
+          AND version.version_number = 1
+          AND btrim(version.response_text) <> ''
+      )
+    )
+    OR
+    (
+      selected_submission.response_mode = 'typed_pdf'
+      AND EXISTS (
+        SELECT 1
+        FROM public.submission_versions AS version
+        WHERE version.submission_id = selected_submission.id
+          AND version.version_number = 1
+          AND btrim(version.response_text) <> ''
+      )
+      AND EXISTS (
+        SELECT 1
+        FROM private.submission_files AS file_record
+        JOIN private.submission_transcript_versions AS transcript
+          ON transcript.submission_id = file_record.submission_id
+         AND transcript.source_file_id = file_record.id
+         AND transcript.version_number = 1
+        WHERE file_record.submission_id = selected_submission.id
+          AND file_record.learner_id = v_actor_id
+          AND file_record.version_number = 1
+          AND file_record.upload_state = 'accepted'
+          AND file_record.accepted_at IS NOT NULL
+      )
+    )
+    OR
+    (
+      selected_submission.response_mode = 'pdf_only'
+      AND EXISTS (
+        SELECT 1
+        FROM private.submission_files AS file_record
+        JOIN private.submission_transcript_versions AS transcript
+          ON transcript.submission_id = file_record.submission_id
+         AND transcript.source_file_id = file_record.id
+         AND transcript.version_number = 1
+        WHERE file_record.submission_id = selected_submission.id
+          AND file_record.learner_id = v_actor_id
+          AND file_record.version_number = 1
+          AND file_record.upload_state = 'accepted'
+          AND file_record.accepted_at IS NOT NULL
+      )
+    )
   ) OR NOT EXISTS (
     SELECT 1
     FROM public.attempt_responses AS response

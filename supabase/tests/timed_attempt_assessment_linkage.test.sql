@@ -132,6 +132,72 @@ FROM public.accept_assessment_submission(
   'A second synthetic human-assessment response for replay and withdrawn-state tests.'
 );
 
+RESET ROLE;
+SET LOCAL ROLE postgres;
+WITH accepted AS (
+  SELECT clock_timestamp() AS accepted_at
+)
+INSERT INTO public.assessment_submissions (
+  id, learner_id, task_version_id, rubric_version_id, status,
+  accepted_at, grading_due_at, sla_target_seconds,
+  capacity_config_version, capacity_limit_snapshot,
+  open_submissions_before_acceptance, idempotency_key, response_mode
+)
+SELECT
+  'd3333333-3333-4333-8333-333333333333',
+  '11111111-1111-4111-8111-111111111111',
+  'a1111111-1111-4111-8111-111111111111',
+  'f1111111-1111-4111-8111-111111111111',
+  'queued', accepted.accepted_at,
+  accepted.accepted_at + interval '24 hours', 86400,
+  capacity.config_version, capacity.max_open_submissions,
+  2, 'a0c0c0c0-0c0c-40c0-80c0-c0c0c0c0c0c0', 'pdf_only'
+FROM accepted
+CROSS JOIN private.grading_capacity_config AS capacity
+WHERE capacity.singleton = true;
+
+INSERT INTO timed_link_test_context (kind, submission_id, idempotency_key)
+VALUES (
+  'submission_pdf_only',
+  'd3333333-3333-4333-8333-333333333333',
+  'a0c0c0c0-0c0c-40c0-80c0-c0c0c0c0c0c0'
+);
+
+INSERT INTO private.submission_files (
+  id, submission_id, learner_id, version_number, object_path,
+  sha256, byte_size, mime_type, page_count, upload_state,
+  created_at, updated_at, expires_at, accepted_at
+)
+VALUES (
+  'd4444444-4444-4444-8444-444444444444',
+  'd3333333-3333-4333-8333-333333333333',
+  '11111111-1111-4111-8111-111111111111',
+  1,
+  'd4444444-4444-4444-8444-444444444444/d5555555-5555-4555-8555-555555555555.pdf',
+  repeat('a', 64), 256, 'application/pdf', 1, 'accepted',
+  clock_timestamp(), clock_timestamp(), clock_timestamp() + interval '100 years',
+  clock_timestamp()
+);
+
+INSERT INTO private.submission_transcript_versions (
+  id, submission_id, source_file_id, version_number, extraction_method,
+  extraction_state, verification_state, page_count, pages, content_text,
+  created_by, created_at
+)
+VALUES (
+  'd6666666-6666-4666-8666-666666666666',
+  'd3333333-3333-4333-8333-333333333333',
+  'd4444444-4444-4444-8444-444444444444',
+  1, 'pdfjs', 'none', 'unverified', 1,
+  '[{"page_number":1,"text":"","status":"no_text_layer"}]'::jsonb,
+  '', '11111111-1111-4111-8111-111111111111', clock_timestamp()
+);
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
+  true);
+
 SELECT lives_ok(
   $$INSERT INTO timed_link_test_results
     SELECT 'primary', link_id, attempt_id, assessment_submission_id, is_replay
@@ -150,7 +216,7 @@ RESET ROLE;
 SET LOCAL ROLE postgres;
 SELECT is(
   (SELECT count(*)::integer FROM private.timed_attempt_assessment_links),
-  1, 'one private link row is created (checked as database owner)'
+  1, 'one private typed-response link row is created (checked as database owner)'
 );
 RESET ROLE;
 SET LOCAL ROLE authenticated;
@@ -204,22 +270,42 @@ SELECT throws_ok(
 SELECT throws_ok(
   $$SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_pending'),
-    (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
+    (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary'),
     'a0666666-6666-4666-8666-666666666666'
   )$$,
   'P0001', 'attempt_not_submitted',
   'an in-progress attempt cannot be linked before submission'
 );
 SELECT throws_ok(
-  $$SELECT * FROM public.link_timed_attempt_assessment_submission(
+  $SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_other_task'),
     (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
     'a0777777-7777-4777-8777-777777777777'
-  )$$,
+  )$,
   'P0001', 'attempt_task_version_mismatch',
   'different task versions cannot be linked'
 );
 
+SELECT lives_ok(
+  $INSERT INTO timed_link_test_results
+    SELECT 'pdf_only', link_id, attempt_id, assessment_submission_id, is_replay
+    FROM public.link_timed_attempt_assessment_submission(
+      (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_other_task'),
+      (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_pdf_only'),
+      'a0d0d0d0-0d0d-40d0-80d0-d0d0d0d0d0d0'
+    )$,
+  'submitted matching attempt can link to an accepted PDF-only assessment with an original and transcript'
+);
+SELECT is(
+  (SELECT is_replay FROM timed_link_test_results WHERE kind = 'pdf_only'),
+  false, 'the PDF-only linkage is a first-time link'
+);
+
+RESET ROLE;
+SET LOCAL ROLE postgres;
+UPDATE public.assessment_submissions
+SET status = 'withdrawn'
+WHERE id = (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary');
 RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claims',
@@ -255,12 +341,7 @@ SELECT throws_ok(
   'a learner cannot link their attempt to another learner submission'
 );
 
-RESET ROLE;
-SET LOCAL ROLE postgres;
-UPDATE public.assessment_submissions
-SET status = 'withdrawn'
-WHERE id = (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary');
-RESET ROLE;
+
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claims',
   '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}', true);
@@ -278,7 +359,7 @@ RESET ROLE;
 SET LOCAL ROLE postgres;
 SELECT is(
   (SELECT count(*)::integer FROM private.timed_attempt_assessment_links),
-  1, 'rejected and replay-conflict requests leave only the original link'
+  2, 'only the accepted typed and PDF-only one-to-one links persist'
 );
 SELECT throws_ok(
   $$DELETE FROM private.timed_attempt_assessment_links$$,
