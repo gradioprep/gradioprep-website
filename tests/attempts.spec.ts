@@ -1378,15 +1378,18 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     await timedTask.getByRole("button", { name: "Start practice" }).click();
 
     await expect(panel.getByRole("heading", { name: "Synthetic Phase 2 typed-only task" })).toBeVisible();
-    await expect(panel.getByTestId("attempt-countdown")).toHaveText(/^\\d{2}:\\d{2}$/);
+    await expect(panel.getByTestId("attempt-countdown")).toHaveText(/^\d{2}:\d{2}$/);
+    const attemptsResponse = await page.request.get("/api/v1/learner/attempts", { headers });
+    expect(attemptsResponse.status()).toBe(200);
+    const attemptsBody = await attemptsResponse.json() as {
+      attempts: Array<{ id: string; task_version_id: string; status: string }>;
+    };
+    const timedAttempt = attemptsBody.attempts.find(item =>
+      item.task_version_id === "a3333333-3333-4333-8333-333333333333" && item.status === "in_progress"
+    );
+    expect(timedAttempt).toBeTruthy();
     const attemptRead = await page.request.get(
-      "/api/v1/learner/attempts/" + (await page.request.get("/api/v1/learner/attempts", { headers })
-        .then(async response => {
-          const body = await response.json() as { attempts: Array<{ id: string; task_version_id: string; status: string }> };
-          return body.attempts.find(item =>
-            item.task_version_id === "a3333333-3333-4333-8333-333333333333" && item.status === "in_progress"
-          )?.id ?? "";
-        })),
+      "/api/v1/learner/attempts/" + timedAttempt!.id,
       { headers },
     );
     expect(attemptRead.status()).toBe(200);

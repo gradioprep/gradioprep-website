@@ -215,8 +215,8 @@ export default function LearnerAttemptPanel({ accessToken }: { accessToken: stri
       );
       const result = await response.json() as { error?: string; message?: string };
       if (!response.ok) throw new Error(result.message ?? result.error ?? "The response could not be saved.");
-      setMessage("Response saved. The advisory countdown does not block saving.");
       await loadAttempt(detail.attempt.id);
+      setMessage("Response saved. The advisory countdown does not block saving.");
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "The response could not be saved.");
     } finally {
