@@ -1119,6 +1119,34 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
 
     const workspace = page.getByTestId("grader-workspace");
     await expect(workspace).toBeVisible();
+    const privateFileResponse = await page.request.get(
+      "/api/v1/submissions/" + pdfSubmissionId + "/file",
+      { headers },
+    );
+    const privateFilePayload = await privateFileResponse.json() as {
+      file?: { signed_url?: string };
+      transcript?: {
+        version?: number;
+        page_count?: number;
+        pages?: Array<{ page_number: number; text: string; status: string }>;
+      } | null;
+      error?: string;
+    };
+    expect(privateFileResponse.status(), JSON.stringify(privateFilePayload)).toBe(200);
+    expect(privateFilePayload.file?.signed_url).toBeTruthy();
+    expect(privateFilePayload.transcript?.pages, JSON.stringify(privateFilePayload)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          page_number: 1,
+          text: "Synthetic digital transcript text captured from the original PDF page.",
+        }),
+        expect.objectContaining({
+          page_number: 2,
+          text: "Synthetic human transcription for page two, checked against the original PDF.",
+        }),
+      ]),
+    );
+
     await page.getByLabel("Assigned submissions · oldest first").selectOption(pdfSubmissionId!);
     await expect(page.getByRole("heading", { name: "Synthetic Phase 1C response task A" })).toBeVisible();
     await expect(page.getByText(
