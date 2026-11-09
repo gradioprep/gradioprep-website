@@ -50,6 +50,7 @@ type PrivilegedWriteAuditAction =
   | "owner_private_qa_record_create"
   | "grader_assessment_draft_save"
   | "grader_assessment_feedback_publish"
+  | "staff_submission_transcript_review"
   | "student_attempt_create"
   | "student_attempt_response_save"
   | "student_attempt_submit"
@@ -921,6 +922,50 @@ function hasOnlyAssessmentDraftFields(value: unknown): value is {
   });
 }
 
+type TranscriptReviewPage = {
+  page_number: number;
+  text: string;
+  status: "digital_text" | "no_text_layer" | "teacher_transcribed";
+};
+
+function hasOnlyTranscriptReviewFields(value: unknown): value is {
+  expected_version: number;
+  pages: TranscriptReviewPage[];
+  review_note: string;
+} {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  if (Object.keys(record).length !== 3 ||
+      !["expected_version", "pages", "review_note"].every(key => key in record) ||
+      !Number.isInteger(record.expected_version) ||
+      (record.expected_version as number) < 1 ||
+      typeof record.review_note !== "string" ||
+      record.review_note.trim().length < 3 ||
+      record.review_note.trim().length > 240 ||
+      !Array.isArray(record.pages) ||
+      record.pages.length < 1 ||
+      record.pages.length > 10) return false;
+
+  let totalCharacters = 0;
+  return record.pages.every((entry: unknown, index: number) => {
+    if (typeof entry !== "object" || entry === null || Array.isArray(entry)) return false;
+    const page = entry as Record<string, unknown>;
+    if (Object.keys(page).length !== 3 ||
+        !["page_number", "text", "status"].every(key => key in page) ||
+        !Number.isInteger(page.page_number) ||
+        page.page_number !== index + 1 ||
+        typeof page.text !== "string" ||
+        page.text.length > 12_000 ||
+        (page.status !== "digital_text" &&
+         page.status !== "no_text_layer" &&
+         page.status !== "teacher_transcribed") ||
+        (page.status === "no_text_layer" && page.text !== "") ||
+        (page.status !== "no_text_layer" && !page.text.trim())) return false;
+    totalCharacters += page.text.length;
+    return totalCharacters <= 120_000;
+  });
+}
+
 function hasOnlyEmptyObject(value: unknown): boolean {
   return typeof value === "object" && value !== null && !Array.isArray(value) &&
     Object.keys(value as Record<string, unknown>).length === 0;
@@ -1036,6 +1081,8 @@ function classifyPrivilegedWriteError(error: { code?: string; message?: string }
     "attempt_not_editable",
     "attempt_response_required",
     "submission_idempotency_conflict",
+    "submission_transcript_version_conflict",
+    "assessment_submission_not_reviewable",
   ].includes(message)) {
     return { outcome: "failed", failureCategory: "state_conflict" };
   }
@@ -2844,6 +2891,96 @@ async function createPdfLearnerSubmission(
   }, accepted.is_replay === true ? 200 : 201);
 }
 
+async function appendSubmissionTranscriptReview(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 150_000);
+  if (!parsed.ok) return parsed.response;
+  if (!hasOnlyTranscriptReviewFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_submission_transcript_review" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const context = auth.context;
+
+  const graderDenied = await requireActiveRole(context, "grader");
+  const ownerDenied = await requireActiveRole(context, "owner");
+  if (graderDenied && ownerDenied) {
+    const roleError = graderDenied.status === 503 || ownerDenied.status === 503
+      ? jsonResponse({ error: "authorization_unavailable" }, 503)
+      : graderDenied;
+    const audit = roleError.status === 403
+      ? await auditPrivilegedWriteOutcome(
+          context, "staff_submission_transcript_review", submissionId, "denied",
+        )
+      : null;
+    return audit ?? roleError;
+  }
+
+  const mfaDenied = requireAal2(context);
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "staff_submission_transcript_review", submissionId, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
+  if (!context.serviceSupabase) {
+    return jsonResponse({ error: "private_transcript_service_unavailable" }, 503);
+  }
+
+  const { data, error } = await context.serviceSupabase.rpc(
+    "append_submission_transcript_version",
+    {
+      p_actor_id: context.userId,
+      p_assurance: context.assuranceLevel,
+      p_submission_id: submissionId,
+      p_expected_version: parsed.body.expected_version,
+      p_pages: parsed.body.pages,
+      p_review_note: parsed.body.review_note.trim(),
+    },
+  );
+
+  if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      context,
+      "staff_submission_transcript_review",
+      submissionId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
+    if (error.message === "submission_transcript_review_forbidden") {
+      return jsonResponse({ error: "submission_transcript_review_forbidden" }, 403);
+    }
+    if (error.message === "assessment_submission_not_reviewable") {
+      return jsonResponse({ error: "assessment_submission_not_reviewable" }, 409);
+    }
+    if (error.message === "submission_transcript_version_conflict") {
+      return jsonResponse({ error: "submission_transcript_version_conflict" }, 409);
+    }
+    if (error.message === "submission_transcript_not_found" ||
+        error.message === "submission_file_not_found" ||
+        error.message === "assessment_submission_not_found") {
+      return jsonResponse({ error: "submission_transcript_not_found" }, 404);
+    }
+    if (error.message === "invalid_submission_transcript_review" ||
+        error.message === "invalid_submission_transcript_pages" ||
+        error.message === "invalid_submission_transcript_page" ||
+        error.message === "submission_transcript_too_large") {
+      return jsonResponse({ error: "invalid_submission_transcript_review" }, 400);
+    }
+    return jsonResponse({ error: "submission_transcript_review_failed" }, 500);
+  }
+
+  const transcript = asRows(data)[0];
+  if (!transcript) return jsonResponse({ error: "submission_transcript_review_failed" }, 500);
+  return jsonResponse({ transcript }, 201);
+}
+
 async function getAuthorizedSubmissionPdf(
   request: Request,
   env: WorkerEnv,
@@ -3065,6 +3202,11 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const learnerSubmissionFileMatch = url.pathname.match(/^\/api\/v1\/learner\/submissions\/([0-9a-f-]{36})\/file$/i);
   if (learnerSubmissionFileMatch && request.method === "POST") {
     return uploadSubmissionPdf(request, env, learnerSubmissionFileMatch[1]);
+  }
+
+  const transcriptReviewMatch = url.pathname.match(/^\\/api\\/v1\\/submissions\\/([0-9a-f-]{36})\\/transcript$/i);
+  if (transcriptReviewMatch && request.method === "PUT") {
+    return appendSubmissionTranscriptReview(request, env, transcriptReviewMatch[1]);
   }
 
   const authorizedSubmissionFileMatch = url.pathname.match(/^\/api\/v1\/submissions\/([0-9a-f-]{36})\/file$/i);
