@@ -3204,7 +3204,7 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
     return uploadSubmissionPdf(request, env, learnerSubmissionFileMatch[1]);
   }
 
-  const transcriptReviewMatch = url.pathname.match(/^\\/api\\/v1\\/submissions\\/([0-9a-f-]{36})\\/transcript$/i);
+  const transcriptReviewMatch = url.pathname.match(/^\/api\/v1\/submissions\/([0-9a-f-]{36})\/transcript$/i);
   if (transcriptReviewMatch && request.method === "PUT") {
     return appendSubmissionTranscriptReview(request, env, transcriptReviewMatch[1]);
   }
