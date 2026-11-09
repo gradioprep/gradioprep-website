@@ -1140,25 +1140,59 @@ async function listLearnerAttempts(request: Request, env: WorkerEnv): Promise<Re
     return audit ?? roleDenied;
   }
 
-  const { data, error } = await auth.context.supabase
+  const { data: attempts, error: attemptsError } = await auth.context.supabase
     .from("attempts")
-    .select("id, learner_id, task_version_id, status, started_at, submitted_at, task_versions(task_code, title, version, expected_min_words, ideal_words)")
+    .select("id, learner_id, task_version_id, status, started_at, submitted_at, task_versions(task_code, title, version, expected_min_words, ideal_words, time_allowance_seconds, timer_policy_version)")
     .eq("learner_id", auth.context.userId)
     .order("created_at", { ascending: false })
     .order("id", { ascending: false });
 
-  if (error) {
+  if (attemptsError) {
     const audit = await auditProtectedReadOutcome(
       auth.context, "student_attempt_list_authorized", undefined, "failed",
     );
     if (audit) return audit;
     return jsonResponse({ error: "attempts_unavailable" }, 500);
   }
+
+  const { data: enrolments, error: enrolmentError } = await auth.context.supabase
+    .from("course_enrolments")
+    .select("pathway_id")
+    .eq("learner_id", auth.context.userId)
+    .eq("status", "active");
+  if (enrolmentError) {
+    const audit = await auditProtectedReadOutcome(
+      auth.context, "student_attempt_list_authorized", undefined, "failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "attempts_unavailable" }, 500);
+  }
+
+  const pathways = [...new Set((enrolments ?? []).map(item => item.pathway_id))];
+  let availableTasks: unknown[] = [];
+  if (pathways.length > 0) {
+    const { data: tasks, error: tasksError } = await auth.context.supabase
+      .from("task_versions")
+      .select("id, task_code, title, version, pathway_id, time_allowance_seconds, timer_policy_version, expected_min_words, ideal_words")
+      .eq("release_state", "published")
+      .eq("response_mode", "typed")
+      .in("pathway_id", pathways)
+      .order("title", { ascending: true });
+    if (tasksError) {
+      const audit = await auditProtectedReadOutcome(
+        auth.context, "student_attempt_list_authorized", undefined, "failed",
+      );
+      if (audit) return audit;
+      return jsonResponse({ error: "attempts_unavailable" }, 500);
+    }
+    availableTasks = tasks ?? [];
+  }
+
   const audit = await auditProtectedReadOutcome(
     auth.context, "student_attempt_list_authorized", undefined, "success",
   );
   if (audit) return audit;
-  return jsonResponse({ attempts: data ?? [] });
+  return jsonResponse({ attempts: attempts ?? [], available_tasks: availableTasks });
 }
 
 async function createLearnerAttempt(request: Request, env: WorkerEnv): Promise<Response> {
@@ -1262,7 +1296,7 @@ async function createLearnerAttempt(request: Request, env: WorkerEnv): Promise<R
 async function readAttemptDetails(context: CallerContext, attemptId: string) {
   const { data: attempt, error: attemptError } = await context.supabase
     .from("attempts")
-    .select("id, learner_id, task_version_id, status, started_at, submitted_at, task_versions(task_code, title, version, expected_min_words, ideal_words), attempt_responses(id, prompt_id, response_text, word_count, version, updated_at)")
+    .select("id, learner_id, task_version_id, status, started_at, submitted_at, task_versions(task_code, title, version, expected_min_words, ideal_words, time_allowance_seconds, timer_policy_version), attempt_responses(id, prompt_id, response_text, word_count, version, updated_at)")
     .eq("id", attemptId)
     .maybeSingle();
 
@@ -1279,7 +1313,21 @@ async function readAttemptDetails(context: CallerContext, attemptId: string) {
   if (promptsError) {
     return { attempt: null, prompts: null, error: promptsError };
   }
-  return { attempt, prompts: prompts ?? [], error: null };
+
+  const { data: timerData, error: timerError } = await context.supabase.rpc(
+    "get_learner_attempt_timer",
+    { p_attempt_id: attemptId },
+  );
+  const timer = asRows(timerData)[0];
+  if (timerError || !timer) {
+    return { attempt: null, prompts: null, error: timerError ?? new Error("attempt_timer_unavailable") };
+  }
+
+  return {
+    attempt: { ...attempt, timer },
+    prompts: prompts ?? [],
+    error: null,
+  };
 }
 
 async function getLearnerAttempt(request: Request, env: WorkerEnv, attemptId: string): Promise<Response> {

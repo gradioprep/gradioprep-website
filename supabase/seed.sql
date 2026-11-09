@@ -149,6 +149,13 @@ WHERE id IN (
   'a3333333-3333-4333-8333-333333333333'
 );
 
+-- One synthetic practice task exercises the advisory countdown in CI.
+-- NULL remains the default for every other task version (untimed).
+UPDATE public.task_versions
+SET time_allowance_seconds = 600,
+    timer_policy_version = 1
+WHERE id = 'a3333333-3333-4333-8333-333333333333';
+
 INSERT INTO public.task_version_prompts (id, task_version_id, sequence, prompt_text)
 VALUES
   ('b1111111-1111-4111-8111-111111111111', 'a1111111-1111-4111-8111-111111111111', 1,

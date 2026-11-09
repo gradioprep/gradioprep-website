@@ -1367,4 +1367,59 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     });
     await withdrawSyntheticSubmission(page, ownerAal2Token!, olderSubmissionId!);
   });
+  test("student can start timed practice and see the advisory countdown", async ({ page }) => {
+    const token = await signIn(page, "student.a@example.invalid", "Synthetic Student A");
+    const headers = { Authorization: token };
+    const panel = page.getByTestId("learner-attempt-panel");
+    await expect(panel).toBeVisible();
+
+    const timedTask = panel.getByTestId("practice-task-a3333333-3333-4333-8333-333333333333");
+    await expect(timedTask).toContainText("10 minutes");
+    await timedTask.getByRole("button", { name: "Start practice" }).click();
+
+    await expect(panel.getByRole("heading", { name: "Synthetic Phase 2 typed-only task" })).toBeVisible();
+    await expect(panel.getByTestId("attempt-countdown")).toHaveText(/^\\d{2}:\\d{2}$/);
+    const attemptRead = await page.request.get(
+      "/api/v1/learner/attempts/" + (await page.request.get("/api/v1/learner/attempts", { headers })
+        .then(async response => {
+          const body = await response.json() as { attempts: Array<{ id: string; task_version_id: string; status: string }> };
+          return body.attempts.find(item =>
+            item.task_version_id === "a3333333-3333-4333-8333-333333333333" && item.status === "in_progress"
+          )?.id ?? "";
+        })),
+      { headers },
+    );
+    expect(attemptRead.status()).toBe(200);
+    const attemptBody = await attemptRead.json() as {
+      attempt: {
+        started_at: string;
+        status: string;
+        timer: {
+          allowance_seconds: number;
+          timer_policy_version: number;
+          deadline_at: string;
+          server_now: string;
+          remaining_seconds: number;
+          is_expired: boolean;
+        };
+      };
+    };
+    expect(attemptBody.attempt.status).toBe("in_progress");
+    expect(attemptBody.attempt.timer).toMatchObject({
+      allowance_seconds: 600,
+      timer_policy_version: 1,
+      is_expired: false,
+    });
+    expect(new Date(attemptBody.attempt.timer.deadline_at).getTime()
+      - new Date(attemptBody.attempt.started_at).getTime()).toBe(600_000);
+    expect(attemptBody.attempt.timer.remaining_seconds).toBeGreaterThan(0);
+
+    await panel.getByLabel("Your response").fill(
+      "This synthetic practice response remains editable while the advisory task timer is running.",
+    );
+    await panel.getByRole("button", { name: "Save response" }).click();
+    await expect(panel.getByRole("status").filter({ hasText: "Response saved. The advisory countdown does not block saving." })).toBeVisible();
+    await expect(panel.getByRole("button", { name: "Submit practice" })).toBeEnabled();
+  });
+
 });

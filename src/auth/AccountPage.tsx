@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { Navigate } from "../App";
 import { useAuth } from "./AuthProvider";
 import LearnerSubmissionPanel from "./LearnerSubmissionPanel";
+import LearnerAttemptPanel from "./LearnerAttemptPanel";
 import TranscriptReviewPanel from "./TranscriptReviewPanel";
 import GraderWorkspacePanel from "./GraderWorkspacePanel";
 
@@ -551,7 +552,10 @@ export default function AccountPage({ go }: { go: Navigate }) {
         {account?.roles.length ? account.roles.map(role => <span key={role}>{role.replaceAll("_", " ")}</span>) : <em>Loading role assignment…</em>}
       </div>
       {account?.roles.includes("student") && auth.session?.access_token && (
-        <LearnerSubmissionPanel accessToken={auth.session.access_token} />
+        <>
+          <LearnerAttemptPanel accessToken={auth.session.access_token} />
+          <LearnerSubmissionPanel accessToken={auth.session.access_token} />
+        </>
       )}
       <section className="proto-account-security" aria-labelledby="proto-account-security-heading">
         <div className="proto-account-security-heading">
