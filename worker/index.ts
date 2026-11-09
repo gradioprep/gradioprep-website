@@ -3476,7 +3476,7 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   }
 
   const attemptAssessmentLinkMatch = url.pathname.match(
-    /^\\/api\\/v1\\/learner\\/attempts\\/([0-9a-f-]{36})\\/assessment-link$/i,
+    /^\/api\/v1\/learner\/attempts\/([0-9a-f-]{36})\/assessment-link$/i,
   );
   if (attemptAssessmentLinkMatch && request.method === "POST") {
     return linkTimedAttemptToAssessmentSubmission(request, env, attemptAssessmentLinkMatch[1]);
