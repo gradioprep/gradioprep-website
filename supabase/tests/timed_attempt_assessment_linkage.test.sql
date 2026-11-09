@@ -146,10 +146,14 @@ SELECT is(
   (SELECT is_replay FROM timed_link_test_results WHERE kind = 'primary'),
   false, 'the first linkage is not a replay'
 );
+RESET ROLE;
+SET LOCAL ROLE postgres;
 SELECT is(
   (SELECT count(*)::integer FROM private.timed_attempt_assessment_links),
-  1, 'one private link row is created'
+  1, 'one private link row is created (checked as database owner)'
 );
+RESET ROLE;
+SET LOCAL ROLE authenticated;
 SELECT lives_ok(
   $$INSERT INTO timed_link_test_results
     SELECT 'replay', link_id, attempt_id, assessment_submission_id, is_replay

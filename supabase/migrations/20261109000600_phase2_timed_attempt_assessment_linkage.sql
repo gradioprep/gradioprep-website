@@ -77,13 +77,13 @@ SECURITY DEFINER
 SET search_path = ''
 AS $function$
 DECLARE
-  actor_id uuid := auth.uid();
+  v_actor_id uuid := auth.uid();
   selected_attempt public.attempts%ROWTYPE;
   selected_submission public.assessment_submissions%ROWTYPE;
   existing_link private.timed_attempt_assessment_links%ROWTYPE;
   created_link private.timed_attempt_assessment_links%ROWTYPE;
 BEGIN
-  IF actor_id IS NULL
+  IF v_actor_id IS NULL
     OR NOT private.current_account_is_active()
     OR NOT private.current_user_has_role('student'::public.app_role) THEN
     RAISE EXCEPTION USING ERRCODE = '42501', MESSAGE = 'timed_attempt_assessment_link_forbidden';
@@ -97,7 +97,7 @@ BEGIN
 
   -- Serialize reuse of an idempotency key even when requests target different rows.
   PERFORM pg_catalog.pg_advisory_xact_lock(
-    pg_catalog.hashtextextended(actor_id::text || ':' || p_idempotency_key::text, 0)
+    pg_catalog.hashtextextended(v_actor_id::text || ':' || p_idempotency_key::text, 0)
   );
 
   -- Parent-row locks and unique constraints make competing link requests safe.
@@ -105,7 +105,7 @@ BEGIN
     INTO selected_attempt
   FROM public.attempts AS attempt
   WHERE attempt.id = p_attempt_id
-    AND attempt.learner_id = actor_id
+    AND attempt.learner_id = v_actor_id
   FOR UPDATE;
 
   IF NOT FOUND THEN
@@ -116,7 +116,7 @@ BEGIN
     INTO selected_submission
   FROM public.assessment_submissions AS submission
   WHERE submission.id = p_assessment_submission_id
-    AND submission.learner_id = actor_id
+    AND submission.learner_id = v_actor_id
   FOR UPDATE;
 
   IF NOT FOUND THEN
@@ -132,7 +132,7 @@ BEGIN
   SELECT link.*
     INTO existing_link
   FROM private.timed_attempt_assessment_links AS link
-  WHERE link.learner_id = actor_id
+  WHERE link.learner_id = v_actor_id
     AND link.idempotency_key = p_idempotency_key
   FOR UPDATE;
 
@@ -174,7 +174,7 @@ BEGIN
     FROM public.task_versions AS task_version
     JOIN public.course_enrolments AS enrolment
       ON enrolment.pathway_id = task_version.pathway_id
-     AND enrolment.learner_id = actor_id
+     AND enrolment.learner_id = v_actor_id
      AND enrolment.status = 'active'
     JOIN public.task_rubric_mappings AS mapping
       ON mapping.task_version_id = task_version.id
@@ -209,8 +209,9 @@ BEGIN
       ON timer_event.attempt_id = timer_session.attempt_id
      AND timer_event.event_type = 'submitted'
     WHERE timer_session.attempt_id = selected_attempt.id
-      AND timer_session.learner_id = actor_id
+      AND timer_session.learner_id = v_actor_id
       AND timer_session.task_version_id = selected_attempt.task_version_id
+      AND timer_event.actor_id = v_actor_id
   ) THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'attempt_not_linkable';
   END IF;
@@ -219,16 +220,16 @@ BEGIN
     attempt_id, assessment_submission_id, learner_id, task_version_id, idempotency_key
   )
   VALUES (
-    selected_attempt.id, selected_submission.id, actor_id,
+    selected_attempt.id, selected_submission.id, v_actor_id,
     selected_attempt.task_version_id, p_idempotency_key
   )
   RETURNING * INTO created_link;
 
   INSERT INTO private.security_audit_events (
-    actor_id, action, target_type, target_id, outcome, reason_category
+    v_actor_id, action, target_type, target_id, outcome, reason_category
   )
   VALUES (
-    actor_id, 'student_timed_attempt_assessment_linked',
+    v_actor_id, 'student_timed_attempt_assessment_linked',
     'timed_attempt_assessment_link', created_link.id, 'success', 'learner_action'
   );
 
