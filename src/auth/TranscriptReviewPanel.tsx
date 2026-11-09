@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 
 type ReviewRole = "grader" | "owner";
 
@@ -207,7 +207,7 @@ export default function TranscriptReviewPanel({
     });
   }
 
-  async function saveReview(event: React.FormEvent<HTMLFormElement>) {
+  async function saveReview(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!selectedId || !transcript || !pagesValid || reviewNote.trim().length < 3) return;
     setSaving(true);
