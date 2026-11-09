@@ -300,11 +300,11 @@ SELECT set_config('request.jwt.claims',
   '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
   true);
 SELECT throws_ok(
-  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+  $$SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),
     'd7777777-7777-4777-8777-777777777777',
     'a0eeeeee-eeee-4eee-8eee-eeeeeeeeeeee'
-  )$,
+  )$$,
   'P0001', 'assessment_submission_not_linkable',
   'a mapped draft rubric version cannot be linked to a timed attempt'
 );
