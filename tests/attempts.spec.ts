@@ -1085,6 +1085,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       prompts: Array<{ prompt_text: string }>;
     };
     expect(detailBody.attempt.attempt_responses).toHaveLength(1);
+    expect(detailBody.attempt).not.toHaveProperty("timer");
     expect(detailBody.prompts).toHaveLength(1);
 
     const unassignedToThisGrader = await page.request.get("/api/v1/grader/attempts/" + attemptB, { headers });

@@ -1293,7 +1293,11 @@ async function createLearnerAttempt(request: Request, env: WorkerEnv): Promise<R
   }, 201);
 }
 
-async function readAttemptDetails(context: CallerContext, attemptId: string) {
+async function readAttemptDetails(
+  context: CallerContext,
+  attemptId: string,
+  includeLearnerTimer = false,
+) {
   const { data: attempt, error: attemptError } = await context.supabase
     .from("attempts")
     .select("id, learner_id, task_version_id, status, started_at, submitted_at, task_versions(task_code, title, version, expected_min_words, ideal_words, time_allowance_seconds, timer_policy_version), attempt_responses(id, prompt_id, response_text, word_count, version, updated_at)")
@@ -1312,6 +1316,12 @@ async function readAttemptDetails(context: CallerContext, attemptId: string) {
 
   if (promptsError) {
     return { attempt: null, prompts: null, error: promptsError };
+  }
+
+  // Only the learner-owned route requests the timer. Assigned Graders receive
+  // their authorised attempt detail, never the learner's private timer state.
+  if (!includeLearnerTimer) {
+    return { attempt, prompts: prompts ?? [], error: null };
   }
 
   const { data: timerData, error: timerError } = await context.supabase.rpc(
@@ -1341,7 +1351,7 @@ async function getLearnerAttempt(request: Request, env: WorkerEnv, attemptId: st
     return audit ?? roleDenied;
   }
 
-  const result = await readAttemptDetails(auth.context, attemptId);
+  const result = await readAttemptDetails(auth.context, attemptId, true);
   if (result.error) {
     const audit = await auditProtectedReadOutcome(
       auth.context, "student_attempt_read_authorized", attemptId, "failed",
