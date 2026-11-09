@@ -1112,7 +1112,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       "Synthetic test prompt: explain how one selected detail shapes a reader's understanding.",
       { exact: true },
     )).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Synthetic Analytical Response Rubric A" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Synthetic Rubric A — Version 1" })).toBeVisible();
     await expect(page.getByTitle("Original grader submission PDF")).toBeVisible();
     await expect(page.getByText("Synthetic digital transcript text captured from the original PDF page.")).toBeVisible();
     await expect(page.getByText("Synthetic human transcription for page two, checked against the original PDF.")).toBeVisible();
