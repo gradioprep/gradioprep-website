@@ -1596,11 +1596,11 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     );
     // Use the established browser sign-in helper for a second isolated learner.
     // The explicit baseURL keeps the independent context on the local Worker origin.
-    const studentBContext = await page.context().browser()!.newContext({
+    const studentCContext = await page.context().browser()!.newContext({
       baseURL: "http://127.0.0.1:8787",
     });
-    const studentBPage = await studentBContext.newPage();
-    const studentBId = "22222222-2222-4222-8222-222222222222";
+    const studentCPage = await studentCContext.newPage();
+    const studentCId = "22222222-2222-4222-8222-222222222222";
     const mypPathwayId = "synthetic-ib-myp-year-4";
     const createdSubmissionIds: string[] = [];
 
@@ -1682,10 +1682,10 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     try {
       const learnerA = await signIn(page, "student.a@example.invalid", "Synthetic Student A");
       const enrolment = await localAdmin.from("course_enrolments").upsert(
-        { learner_id: studentBId, pathway_id: mypPathwayId, status: "active" },
+        { learner_id: studentCId, pathway_id: mypPathwayId, status: "active" },
         { onConflict: "learner_id,pathway_id" },
       );
-      if (enrolment.error) throw new Error("Could not prepare Student B's synthetic pathway: " + enrolment.error.message);
+      if (enrolment.error) throw new Error("Could not prepare Student C's synthetic pathway: " + enrolment.error.message);
 
       const primaryAttempt = await createAttempt(
         learnerA, "a3333333-3333-4333-8333-333333333333", "b3333333-3333-4333-8333-333333333333",
@@ -1783,7 +1783,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       await expect(crossTask.json()).resolves.toMatchObject({ error: "attempt_task_version_mismatch" });
 
       const learnerB = await signIn(
-        studentBPage, "student.b@example.invalid", "Synthetic Student B",
+        studentCPage, "student.c@example.invalid", "Synthetic Student C",
       );
       const otherLearnerSubmission = await acceptAssessment(
         learnerB, "a3333333-3333-4333-8333-333333333333",
@@ -1823,9 +1823,9 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       }
       await localAdmin.from("course_enrolments")
         .delete()
-        .eq("learner_id", studentBId)
+        .eq("learner_id", studentCId)
         .eq("pathway_id", mypPathwayId);
-      await studentBContext.close();
+      await studentCContext.close();
     }
   });
 
