@@ -32,11 +32,10 @@ export async function extractDigitalTextFromPdf(file: File): Promise<ExtractedPd
   const loadingTask = getDocument({
     data: bytes,
     useWorkerFetch: false,
-    isEvalSupported: false,
   });
 
-  const document = await loadingTask.promise;
   try {
+    const document = await loadingTask.promise;
     const pageCount = document.numPages;
     if (!Number.isInteger(pageCount) || pageCount < 1 || pageCount > maximumPages) {
       throw new Error("The PDF must contain between 1 and 10 pages.");
@@ -85,6 +84,6 @@ export async function extractDigitalTextFromPdf(file: File): Promise<ExtractedPd
       no_text_layer_pages: noTextLayerPages,
     };
   } finally {
-    await document.destroy();
+    await loadingTask.destroy();
   }
 }
