@@ -314,7 +314,7 @@ export default function GraderWorkspacePanel({
         },
         body: JSON.stringify({
           overall_feedback: overallFeedback.trim(),
-          change_reason: changeReason.trim() || null,
+          ...(changeReason.trim() ? { change_reason: changeReason.trim() } : {}),
           criterion_results: detail.criteria.map(criterion => ({
             criterion_id: criterion.id,
             points_awarded: criterionInputs[criterion.id].points_awarded,
