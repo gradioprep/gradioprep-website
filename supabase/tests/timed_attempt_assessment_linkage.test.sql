@@ -211,11 +211,11 @@ SELECT set_config('request.jwt.claims',
   '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
   true);
 SELECT throws_ok(
-  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+  $$SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),
     (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
     'a0cccccc-cccc-4ccc-8ccc-cccccccccccc'
-  )$,
+  )$$,
   'P0001', 'assessment_submission_not_linkable',
   'an inactive course enrolment makes an otherwise matching attempt ineligible'
 );
@@ -234,11 +234,11 @@ SELECT set_config('request.jwt.claims',
   '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
   true);
 SELECT throws_ok(
-  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+  $$SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),
     (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
     'a0dddddd-dddd-4ddd-8ddd-dddddddddddd'
-  )$,
+  )$$,
   'P0001', 'assessment_submission_not_linkable',
   'a retired task version cannot be linked'
 );
@@ -256,11 +256,11 @@ SELECT set_config('request.jwt.claims',
   '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',
   true);
 SELECT throws_ok(
-  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+  $$SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),
     (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_primary'),
     'a0eeeeee-eeee-4eee-8eee-eeeeeeeeeeee'
-  )$,
+  )$$,
   'P0001', 'assessment_submission_not_linkable',
   'an unpublished or retired mapped rubric cannot be linked'
 );
@@ -276,7 +276,7 @@ SELECT set_config('request.jwt.claims',
   true);
 
 SELECT lives_ok(
-  $INSERT INTO timed_link_test_results
+  $$INSERT INTO timed_link_test_results
     SELECT 'primary', link_id, attempt_id, assessment_submission_id, is_replay
     FROM public.link_timed_attempt_assessment_submission(
       (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_primary'),
@@ -388,11 +388,11 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claims',
   '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}', true);
 SELECT throws_ok(
-  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+  $$SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_secondary'),
     (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary'),
     'a0f0f0f0-f0f0-40f0-80f0-f0f0f0f0f0f0'
-  )$,
+  )$$,
   'P0001', 'assessment_submission_not_linkable',
   'a feedback-published submission is already graded and cannot be newly linked'
 );
@@ -406,11 +406,11 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claims',
   '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}', true);
 SELECT throws_ok(
-  $SELECT * FROM public.link_timed_attempt_assessment_submission(
+  $$SELECT * FROM public.link_timed_attempt_assessment_submission(
     (SELECT attempt_id FROM timed_link_test_context WHERE kind = 'attempt_secondary'),
     (SELECT submission_id FROM timed_link_test_context WHERE kind = 'submission_secondary'),
     'a0f1f1f1-f1f1-41f1-81f1-f1f1f1f1f1f1'
-  )$,
+  )$$,
   'P0001', 'assessment_submission_not_linkable',
   'a closed submission cannot be newly linked'
 );
