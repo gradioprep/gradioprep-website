@@ -282,11 +282,11 @@ export default function LearnerSubmissionPanel({ accessToken }: { accessToken: s
     <div className="proto-account-submissions-heading">
       <div>
         <p className="proto-eyebrow"><span />LEARNER SUBMISSIONS</p>
-        <h3 id="proto-account-submissions-heading">Submit a written response</h3>
+        <h3 id="proto-account-submissions-heading">Submit an assessment response</h3>
       </div>
-      <span className="proto-account-status">Typed first</span>
+      <span className="proto-account-status">Text or PDF</span>
     </div>
-    <p className="proto-account-submissions-intro">Choose an available assessment and write your response. For some longer-response tasks, you may also attach one PDF. Typing is always required; a PDF cannot be submitted on its own.</p>
+    <p className="proto-account-submissions-intro">Choose an available assessment. Depending on the task, you can type your response, add a PDF, or submit a PDF on its own for eligible longer-response tasks.</p>
 
     {loading ? <p role="status">Loading your available assessments…</p> : tasks.length === 0
       ? <p className="proto-account-submissions-empty">No published assessment tasks are currently available for your active enrolments.</p>

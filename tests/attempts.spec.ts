@@ -339,7 +339,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       mimeType: "application/pdf",
       buffer: onePagePdf,
     });
-    await expect(learnerSubmissionRow.getByText("Typed response + PDF attached")).toBeVisible();
+    await expect(learnerSubmissionRow.getByText("Typed response + PDF")).toBeVisible();
 
     const pdfSubmissionDetail = await page.request.get(
       "/api/v1/learner/submissions/" + submissionId,
