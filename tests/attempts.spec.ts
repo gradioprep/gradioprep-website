@@ -1040,7 +1040,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     await graderContext.close();
   });
 
-  test("grader AAL2 session sees only the active assigned queue and response", async ({ page }) => {
+  test("grader AAL2 session sees only the active assigned queue and response", async ({ page, browser }) => {
     test.setTimeout(150_000);
     const firstFactorToken = await signIn(page, "grader.a@example.invalid", "Synthetic Grader A");
 
@@ -1109,6 +1109,161 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     expect(pdfSubmissionId).toBeTruthy();
     expect(olderSubmissionId).toBeTruthy();
     expect(ownerAal2Token).toBeTruthy();
+
+    // Exercise the protected timer-adjustment Worker route with a separate
+    // synthetic learner attempt. The Owner token comes from the existing
+    // authenticated Owner+AAL2 setup above; no real learner information is used.
+    const timerLearnerContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
+    try {
+      const timerLearnerPage = await timerLearnerContext.newPage();
+      const timerLearnerToken = await signIn(
+        timerLearnerPage,
+        "student.a@example.invalid",
+        "Synthetic Student A",
+      );
+      const timerAttemptCreate = await timerLearnerPage.request.post(
+        "/api/v1/learner/attempts",
+        {
+          headers: { Authorization: timerLearnerToken },
+          data: { task_version_id: "a3333333-3333-4333-8333-333333333333" },
+        },
+      );
+      const timerAttemptCreateBody = await timerAttemptCreate.json() as {
+        attempt?: { id: string };
+        error?: string;
+      };
+      expect(timerAttemptCreate.status(), JSON.stringify(timerAttemptCreateBody)).toBe(201);
+      const timerAttemptId = timerAttemptCreateBody.attempt!.id;
+
+      const studentAdjustmentDenied = await timerLearnerPage.request.post(
+        "/api/v1/staff/attempts/" + timerAttemptId + "/timer-adjustments",
+        {
+          headers: { Authorization: timerLearnerToken },
+          data: {
+            mode: "extended",
+            extension_seconds: 120,
+            reason_category: "approved_extension",
+          },
+        },
+      );
+      expect(studentAdjustmentDenied.status()).toBe(403);
+      await expect(studentAdjustmentDenied.json()).resolves.toMatchObject({ error: "role_required" });
+      assertPersistedAuditCorrelation(studentAdjustmentDenied.headers()["x-request-id"], {
+        actorId: "11111111-1111-4111-8111-111111111111",
+        actorRole: "student",
+        action: "staff_attempt_timer_adjustment",
+        targetType: "attempt",
+        targetId: timerAttemptId,
+        outcome: "denied",
+        reason: "resource_scope_denied",
+      });
+
+      const extensionResponse = await timerLearnerPage.request.post(
+        "/api/v1/staff/attempts/" + timerAttemptId + "/timer-adjustments",
+        {
+          headers: { Authorization: ownerAal2Token },
+          data: {
+            mode: "extended",
+            extension_seconds: 120,
+            reason_category: "approved_extension",
+          },
+        },
+      );
+      const extensionBody = await extensionResponse.json() as {
+        adjustment?: { effective_allowance_seconds: number; accommodation_mode: string };
+        error?: string;
+      };
+      expect(extensionResponse.status(), JSON.stringify(extensionBody)).toBe(201);
+      expect(extensionBody.adjustment).toMatchObject({
+        effective_allowance_seconds: 720,
+        accommodation_mode: "extended",
+      });
+      assertPersistedAuditCorrelation(extensionResponse.headers()["x-request-id"], {
+        actorId: "88888888-8888-4888-8888-888888888888",
+        actorRole: "owner",
+        action: "attempt_timer_adjusted",
+        targetType: "attempt",
+        targetId: timerAttemptId,
+        outcome: "success",
+        reason: "approved_extension",
+      });
+
+      const extendedTimerRead = await timerLearnerPage.request.get(
+        "/api/v1/learner/attempts/" + timerAttemptId,
+        { headers: { Authorization: timerLearnerToken } },
+      );
+      expect(extendedTimerRead.status()).toBe(200);
+      const extendedTimerBody = await extendedTimerRead.json() as {
+        attempt: { timer: { allowance_seconds: number; remaining_seconds: number } };
+      };
+      expect(extendedTimerBody.attempt.timer.allowance_seconds).toBe(720);
+      expect(extendedTimerBody.attempt.timer.remaining_seconds).toBeGreaterThan(0);
+
+      const untimedResponse = await timerLearnerPage.request.post(
+        "/api/v1/staff/attempts/" + timerAttemptId + "/timer-adjustments",
+        {
+          headers: { Authorization: ownerAal2Token },
+          data: {
+            mode: "untimed",
+            reason_category: "accessibility_accommodation",
+          },
+        },
+      );
+      const untimedBody = await untimedResponse.json() as {
+        adjustment?: { effective_allowance_seconds: number | null; accommodation_mode: string };
+        error?: string;
+      };
+      expect(untimedResponse.status(), JSON.stringify(untimedBody)).toBe(201);
+      expect(untimedBody.adjustment).toMatchObject({
+        effective_allowance_seconds: null,
+        accommodation_mode: "untimed",
+      });
+      assertPersistedAuditCorrelation(untimedResponse.headers()["x-request-id"], {
+        actorId: "88888888-8888-4888-8888-888888888888",
+        actorRole: "owner",
+        action: "attempt_timer_adjusted",
+        targetType: "attempt",
+        targetId: timerAttemptId,
+        outcome: "success",
+        reason: "accessibility_accommodation",
+      });
+
+      const untimedRead = await timerLearnerPage.request.get(
+        "/api/v1/learner/attempts/" + timerAttemptId,
+        { headers: { Authorization: timerLearnerToken } },
+      );
+      expect(untimedRead.status()).toBe(200);
+      const untimedReadBody = await untimedRead.json() as {
+        attempt: {
+          timer: { allowance_seconds: number | null; remaining_seconds: number | null; is_expired: boolean };
+          attempt_responses: Array<{ prompt_id: string }>;
+        };
+        prompts: Array<{ id: string }>;
+      };
+      expect(untimedReadBody.attempt.timer).toMatchObject({
+        allowance_seconds: null,
+        remaining_seconds: null,
+        is_expired: false,
+      });
+
+      const timerPromptId = untimedReadBody.prompts[0]?.id;
+      expect(timerPromptId).toBeTruthy();
+      const timerResponseSave = await timerLearnerPage.request.put(
+        "/api/v1/learner/attempts/" + timerAttemptId + "/responses/" + timerPromptId,
+        {
+          headers: { Authorization: timerLearnerToken },
+          data: { response_text: "A synthetic response saved after an authorised untimed accommodation." },
+        },
+      );
+      expect(timerResponseSave.status()).toBe(200);
+      const timerAttemptSubmit = await timerLearnerPage.request.post(
+        "/api/v1/learner/attempts/" + timerAttemptId + "/submit",
+        { headers: { Authorization: timerLearnerToken }, data: {} },
+      );
+      expect(timerAttemptSubmit.status()).toBe(200);
+    } finally {
+      await timerLearnerContext.close();
+    }
 
     // The assigned Grader is denied private PDF/transcript retrieval at AAL1;
     // the same active assignment is tested successfully below after MFA.
