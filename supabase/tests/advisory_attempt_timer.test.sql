@@ -158,10 +158,10 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
-  $SELECT * FROM public.authorise_attempt_timer_adjustment(
+  $$SELECT * FROM public.authorise_attempt_timer_adjustment(
     'd4444444-4444-4444-8444-444444444444',
     'extended', 120, 'approved_extension'
-  )$,
+  )$$,
   'Owner AAL2 can grant a bounded timer extension'
 );
 RESET ROLE;
@@ -177,10 +177,10 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
-  $SELECT * FROM public.authorise_attempt_timer_adjustment(
+  $$SELECT * FROM public.authorise_attempt_timer_adjustment(
     'd4444444-4444-4444-8444-444444444444',
     'untimed', NULL, 'accessibility_accommodation'
-  )$,
+  )$$,
   'Owner AAL2 can grant an untimed accommodation'
 );
 RESET ROLE;
@@ -217,18 +217,18 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
 SELECT set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}', true);
 SELECT throws_ok(
-  $SELECT * FROM public.authorise_attempt_timer_adjustment(
+  $$SELECT * FROM public.authorise_attempt_timer_adjustment(
     'd4444444-4444-4444-8444-444444444444', 'extended', 120, 'approved_extension'
-  )$,
+  )$$,
   '42501', 'attempt_timer_adjustment_forbidden',
   'a student cannot grant a timer extension'
 );
 SELECT set_config('request.jwt.claim.sub', '55555555-5555-4555-8555-555555555555', true);
 SELECT set_config('request.jwt.claims', '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}', true);
 SELECT throws_ok(
-  $SELECT * FROM public.authorise_attempt_timer_adjustment(
+  $$SELECT * FROM public.authorise_attempt_timer_adjustment(
     'd4444444-4444-4444-8444-444444444444', 'extended', 120, 'approved_extension'
-  )$,
+  )$$,
   '42501', 'attempt_timer_adjustment_forbidden',
   'an unassigned Grader cannot grant a timer extension'
 );
@@ -239,9 +239,9 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
 SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT throws_ok(
-  $SELECT * FROM public.authorise_attempt_timer_adjustment(
+  $$SELECT * FROM public.authorise_attempt_timer_adjustment(
     'd4444444-4444-4444-8444-444444444444', NULL, NULL, 'approved_extension'
-  )$,
+  )$$,
   '22023', 'invalid_attempt_timer_adjustment',
   'an authorised caller cannot supply a NULL adjustment mode'
 );
