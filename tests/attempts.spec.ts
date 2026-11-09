@@ -1122,13 +1122,13 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       { headers },
     );
     expect(detailResponse.status()).toBe(200);
-    const detailBody = await detailResponse.json() as {
+    const assessmentDetailBody = await detailResponse.json() as {
       criteria: Array<{ id: string; max_points: number }>;
     };
-    expect(detailBody.criteria).toHaveLength(2);
+    expect(assessmentDetailBody.criteria).toHaveLength(2);
     await page.locator("#proto-grader-overall-feedback")
       .fill("The response selects a relevant detail and explains how it shapes a reader's understanding.");
-    for (const criterion of detailBody.criteria) {
+    for (const criterion of assessmentDetailBody.criteria) {
       await page.locator("#proto-grader-score-" + criterion.id).fill("3");
       await page.locator("#proto-grader-criterion-feedback-" + criterion.id)
         .fill("The awarded mark is supported by specific evidence from the response.");
@@ -1153,6 +1153,29 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     await expect(page.getByRole("status").filter({
       hasText: "Private grading draft saved. It has not been published",
     })).toBeVisible();
+
+    const prePublicationLearnerContext = await page.context().browser()!.newContext({
+      baseURL: "http://127.0.0.1:8787",
+    });
+    try {
+      const prePublicationLearner = await prePublicationLearnerContext.newPage();
+      const prePublicationToken = await signIn(
+        prePublicationLearner,
+        "student.a@example.invalid",
+        "Synthetic Student A",
+      );
+      const prePublicationDetail = await prePublicationLearner.request.get(
+        "/api/v1/learner/submissions/" + pdfSubmissionId,
+        { headers: { Authorization: prePublicationToken } },
+      );
+      expect(prePublicationDetail.status()).toBe(200);
+      const prePublicationBody = await prePublicationDetail.json() as {
+        submission: { assessment_versions: unknown[] };
+      };
+      expect(prePublicationBody.submission.assessment_versions).toHaveLength(0);
+    } finally {
+      await prePublicationLearnerContext.close();
+    }
 
     const publishResponsePromise = page.waitForResponse(response =>
       response.url().includes("/api/v1/grader/submissions/" + pdfSubmissionId + "/publish") &&
