@@ -949,7 +949,7 @@ BEGIN
   IF EXISTS (
     SELECT 1 FROM private.submission_files AS file_record
     WHERE file_record.submission_id = p_submission_id
-      AND file_record.upload_state IN ('pending', 'cleanup_pending', 'accepted')
+      AND file_record.upload_state IN ('pending', 'cleanup_pending')
   ) THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'submission_file_upload_in_progress';
   END IF;
