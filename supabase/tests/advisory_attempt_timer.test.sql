@@ -164,6 +164,8 @@ SELECT lives_ok(
   )$,
   'Owner AAL2 can grant a bounded timer extension'
 );
+RESET ROLE;
+SET LOCAL ROLE postgres;
 SELECT is(
   (SELECT adjusted_allowance_seconds FROM private.attempt_timer_events
    WHERE attempt_id = 'd4444444-4444-4444-8444-444444444444'
@@ -171,6 +173,9 @@ SELECT is(
   180,
   'extension is added to the server-snapshotted allowance'
 );
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '88888888-8888-4888-8888-888888888888', true);
+SELECT set_config('request.jwt.claims', '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}', true);
 SELECT lives_ok(
   $SELECT * FROM public.authorise_attempt_timer_adjustment(
     'd4444444-4444-4444-8444-444444444444',
