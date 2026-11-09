@@ -1600,7 +1600,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       baseURL: "http://127.0.0.1:8787",
     });
     const studentCPage = await studentCContext.newPage();
-    const studentCId = "22222222-2222-4222-8222-222222222222";
+    const studentCId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
     const mypPathwayId = "synthetic-ib-myp-year-4";
     const createdSubmissionIds: string[] = [];
 
