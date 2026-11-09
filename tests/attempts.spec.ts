@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { createHmac, randomUUID } from "node:crypto";
-import { readFileSync, unlinkSync } from "node:fs";
+import { readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { PDFDocument } from "pdf-lib";
@@ -659,6 +659,11 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       const ownerPage = await ownerContext.newPage();
       const ownerAal2Token = await signInOwnerAal2(ownerPage);
       process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN = ownerAal2Token;
+      writeFileSync(
+        join(tmpdir(), "gradioprep-playwright-owner-aal2-token"),
+        ownerAal2Token,
+        { mode: 0o600 },
+      );
 
       // Move the synthetic PDF-only submission into the assigned review state.
       const assignPdfForReview = await ownerPage.request.post(
@@ -1085,7 +1090,15 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
 
     const pdfSubmissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_PDF_ID;
     const olderSubmissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_OLDER_ID;
-    const ownerAal2Token = process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN;
+    const ownerAal2TokenPath = join(tmpdir(), "gradioprep-playwright-owner-aal2-token");
+    let ownerAal2Token = "";
+    try {
+      ownerAal2Token = readFileSync(ownerAal2TokenPath, "utf8").trim();
+    } catch {
+      throw new Error("The prior synthetic Owner AAL2 session was not saved for grader queue cleanup.");
+    } finally {
+      try { unlinkSync(ownerAal2TokenPath); } catch { /* already removed */ }
+    }
     expect(pdfSubmissionId).toBeTruthy();
     expect(olderSubmissionId).toBeTruthy();
     expect(ownerAal2Token).toBeTruthy();
