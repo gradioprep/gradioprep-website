@@ -538,17 +538,15 @@ test.describe("Phase 1B account foundation", () => {
     await page.getByRole("button", { name: "Set up authenticator app" }).click();
     await expect(page.getByRole("img", { name: "Authenticator app setup QR code" })).toBeVisible();
     const secret = await page.getByTestId("totp-secret").innerText();
+    // Reused only by the next Playwright spec to create a fresh synthetic
+    // Owner AAL2 sign-in. Do not log or persist this local test authenticator.
+    process.env.PLAYWRIGHT_SYNTHETIC_OWNER_TOTP_SECRET = secret;
     await waitForTotpWindow();
     await page.getByLabel("Authenticator code").fill(createTotpCode(secret));
     await page.getByRole("button", { name: "Verify and enable" }).click();
     await page.waitForTimeout(750);
     await expect(page.getByText("Verified authenticator", { exact: true })).toBeVisible();
     await expect.poll(() => ownerToken !== firstFactorToken, { timeout: 10_000 }).toBe(true);
-    // Share only this synthetic local-CI AAL2 token with the following
-    // Playwright spec so it can use the real Owner transition route to release
-    // its own queued test submissions. This process-local value is never logged
-    // or persisted outside the isolated GitHub-hosted test worker.
-    process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN = ownerToken;
 
     const verifiedAttempt = await page.request.post("/api/v1/admin/roles/revoke", {
       headers: { Authorization: ownerToken },

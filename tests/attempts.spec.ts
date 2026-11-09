@@ -60,6 +60,35 @@ async function signIn(page: Page, email: string, heading: string): Promise<strin
   return token;
 }
 
+async function signInOwnerAal2(page: Page): Promise<string> {
+  let token = "";
+  page.on("request", request => {
+    if (new URL(request.url()).pathname === "/api/v1/me" && request.method() === "GET") {
+      token = request.headers()["authorization"] ?? token;
+    }
+  });
+  await page.goto("/account");
+  await page.getByLabel("Email address").fill("owner@example.invalid");
+  await page.getByLabel("Password").fill(localPassword);
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page.getByRole("heading", { name: "Verify your sign-in.", exact: true })).toBeVisible();
+
+  const secret = process.env.PLAYWRIGHT_SYNTHETIC_OWNER_TOTP_SECRET;
+  if (!secret) throw new Error("The account spec did not provide the synthetic Owner authenticator secret.");
+  await waitForTotpWindow();
+  await page.getByLabel("Authenticator code").fill(createTotpCode(secret));
+  await page.getByRole("button", { name: "Verify code" }).click();
+  await expect(page.getByText("Verified authenticator", { exact: true })).toBeVisible();
+  await expect(page.getByText("MFA verified", { exact: true })).toBeVisible();
+  await expect.poll(() => Boolean(token)).toBe(true);
+
+  const ownerReadProbe = await page.request.get("/api/v1/admin/staff-invitations", {
+    headers: { Authorization: token },
+  });
+  expect(ownerReadProbe.status()).toBe(200);
+  return token;
+}
+
 async function withdrawSyntheticSubmission(
   page: Page,
   ownerAal2Token: string,
@@ -613,16 +642,25 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       await graderContext.close();
     }
 
-    const ownerAal2Token = process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN;
-    expect(ownerAal2Token, "The preceding account spec must provide the synthetic Owner AAL2 token.")
-      .toBeTruthy();
-    const queueSubmissionIds = [
-      acceptedBody.submission.submission_id,
-      concurrentBodies[0].submission.submission_id,
-      pdfOnlySubmission!.id,
-    ];
-    for (const submissionIdToWithdraw of [...new Set(queueSubmissionIds)]) {
-      await withdrawSyntheticSubmission(page, ownerAal2Token!, submissionIdToWithdraw);
+    const ownerContext = await page.context().browser()!.newContext({
+      baseURL: "http://127.0.0.1:8787",
+    });
+    try {
+      const ownerPage = await ownerContext.newPage();
+      const ownerAal2Token = await signInOwnerAal2(ownerPage);
+      process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN = ownerAal2Token;
+      delete process.env.PLAYWRIGHT_SYNTHETIC_OWNER_TOTP_SECRET;
+
+      const queueSubmissionIds = [
+        acceptedBody.submission.submission_id,
+        concurrentBodies[0].submission.submission_id,
+        pdfOnlySubmission!.id,
+      ];
+      for (const submissionIdToWithdraw of [...new Set(queueSubmissionIds)]) {
+        await withdrawSyntheticSubmission(ownerPage, ownerAal2Token, submissionIdToWithdraw);
+      }
+    } finally {
+      await ownerContext.close();
     }
   });
 
@@ -658,9 +696,10 @@ test("learner task selector keeps PDF attachments disabled for typed-only tasks"
   await expect(row.getByLabel("Attach optional PDF")).toHaveCount(0);
 
   const ownerAal2Token = process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN;
-  expect(ownerAal2Token, "The preceding account spec must provide the synthetic Owner AAL2 token.")
+  expect(ownerAal2Token, "The PDF submission test must provide a fresh synthetic Owner AAL2 token.")
     .toBeTruthy();
   await withdrawSyntheticSubmission(page, ownerAal2Token!, submissionId!);
+  delete process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN;
 });
 
 test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {
