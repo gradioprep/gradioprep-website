@@ -58,7 +58,8 @@ type PrivilegedWriteAuditAction =
   | "staff_invitation_created"
   | "staff_invitation_revoked"
   | "student_submission_file_upload"
-  | "owner_submission_file_cleanup";
+  | "owner_submission_file_cleanup"
+  | "staff_attempt_timer_adjustment";
 
 type PrivilegedWriteFailureCategory =
   | "resource_not_found"
@@ -971,6 +972,39 @@ function hasOnlyEmptyObject(value: unknown): boolean {
     Object.keys(value as Record<string, unknown>).length === 0;
 }
 
+type TimerAdjustmentReasonCategory =
+  | "accessibility_accommodation"
+  | "approved_extension"
+  | "verified_platform_outage";
+
+type AttemptTimerAdjustmentRequest =
+  | { mode: "extended"; extension_seconds: number; reason_category: TimerAdjustmentReasonCategory }
+  | { mode: "untimed"; reason_category: TimerAdjustmentReasonCategory };
+
+function hasOnlyAttemptTimerAdjustmentFields(
+  value: unknown,
+): value is AttemptTimerAdjustmentRequest {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  const allowedReasons: readonly string[] = [
+    "accessibility_accommodation", "approved_extension", "verified_platform_outage",
+  ];
+  if (typeof record.reason_category !== "string" || !allowedReasons.includes(record.reason_category)) return false;
+  if (record.mode === "extended") {
+    return Object.keys(record).length === 3 &&
+      Object.keys(record).every(key => ["mode", "extension_seconds", "reason_category"].includes(key)) &&
+      typeof record.extension_seconds === "number" &&
+      Number.isInteger(record.extension_seconds) &&
+      record.extension_seconds >= 60 &&
+      record.extension_seconds <= 43_200;
+  }
+  if (record.mode === "untimed") {
+    return Object.keys(record).length === 2 &&
+      Object.keys(record).every(key => ["mode", "reason_category"].includes(key));
+  }
+  return false;
+}
+
 async function authenticatedCaller(request: Request, env: WorkerEnv) {
   if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
     return {
@@ -1001,6 +1035,22 @@ async function requireActiveRole(context: CallerContext, role: AppRole): Promise
     .maybeSingle();
   if (error) return jsonResponse({ error: "authorization_unavailable" }, 503);
   if (!data) return jsonResponse({ error: "role_required" }, 403);
+  return null;
+}
+
+async function requireAnyActiveRole(
+  context: CallerContext,
+  roles: readonly AppRole[],
+): Promise<Response | null> {
+  const { data, error } = await context.supabase
+    .from("role_assignments")
+    .select("role")
+    .eq("user_id", context.userId)
+    .in("role", [...roles])
+    .is("revoked_at", null)
+    .limit(1);
+  if (error) return jsonResponse({ error: "authorization_unavailable" }, 503);
+  if (!data || data.length === 0) return jsonResponse({ error: "role_required" }, 403);
   return null;
 }
 
@@ -1060,7 +1110,7 @@ function classifyPrivilegedWriteError(error: { code?: string; message?: string }
   if (error.code === "42501" || message === "mfa_required" || message.endsWith("_forbidden")) {
     return { outcome: "denied" };
   }
-  if (error.code === "P0002" || message.endsWith("_not_found")) {
+  if (error.code === "P0002" || message.endsWith("_not_found") || message === "attempt_timer_session_missing") {
     return { outcome: "failed", failureCategory: "resource_not_found" };
   }
   if (message === "last_active_owner_protected") {
@@ -1083,6 +1133,7 @@ function classifyPrivilegedWriteError(error: { code?: string; message?: string }
     "submission_idempotency_conflict",
     "submission_transcript_version_conflict",
     "assessment_submission_not_reviewable",
+    "attempt_not_adjustable",
   ].includes(message)) {
     return { outcome: "failed", failureCategory: "state_conflict" };
   }
@@ -2394,6 +2445,80 @@ async function getGraderAttempt(request: Request, env: WorkerEnv, attemptId: str
   return jsonResponse({ attempt: result.attempt, prompts: result.prompts });
 }
 
+async function adjustAttemptTimer(
+  request: Request,
+  env: WorkerEnv,
+  attemptId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 512);
+  if (!parsed.ok) return parsed.response;
+  if (!isUuid(attemptId) || !hasOnlyAttemptTimerAdjustmentFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_attempt_timer_adjustment" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+
+  // The Worker requires an active staff role and AAL2. The database RPC
+  // independently rechecks role, assurance and active Grader assignment.
+  const roleDenied = await requireAnyActiveRole(auth.context, ["grader", "admin", "owner"]);
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditPrivilegedWriteOutcome(
+        auth.context, "staff_attempt_timer_adjustment", attemptId, "denied",
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
+
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) {
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context, "staff_attempt_timer_adjustment", attemptId, "denied",
+    );
+    return audit ?? mfaDenied;
+  }
+
+  const requestBody = parsed.body as AttemptTimerAdjustmentRequest;
+  const { data, error } = await auth.context.supabase.rpc("authorise_attempt_timer_adjustment", {
+    p_attempt_id: attemptId,
+    p_mode: requestBody.mode,
+    p_extension_seconds: requestBody.mode === "extended" ? requestBody.extension_seconds : null,
+    p_reason_category: requestBody.reason_category,
+  });
+
+  if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context,
+      "staff_attempt_timer_adjustment",
+      attemptId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
+    if (error.message === "attempt_timer_adjustment_forbidden") {
+      return jsonResponse({ error: "attempt_timer_adjustment_forbidden" }, 403);
+    }
+    if (error.message === "attempt_not_adjustable") {
+      return jsonResponse({ error: "attempt_not_adjustable" }, 409);
+    }
+    if (error.message === "attempt_timer_session_missing") {
+      return jsonResponse({ error: "attempt_not_found" }, 404);
+    }
+    if (error.message === "invalid_attempt_timer_adjustment" ||
+        error.message === "attempt_timer_extension_out_of_range") {
+      return jsonResponse({ error: "invalid_attempt_timer_adjustment" }, 400);
+    }
+    return jsonResponse({ error: "attempt_timer_adjustment_failed" }, 500);
+  }
+
+  const adjustment = asRows(data)[0];
+  if (!adjustment) return jsonResponse({ error: "attempt_timer_adjustment_failed" }, 500);
+  return jsonResponse({ adjustment }, 201);
+}
+
 async function assignAttemptToGrader(
   request: Request,
   env: WorkerEnv,
@@ -3346,6 +3471,11 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const graderAttemptMatch = url.pathname.match(/^\/api\/v1\/grader\/attempts\/([0-9a-f-]{36})$/i);
   if (graderAttemptMatch && request.method === "GET") {
     return getGraderAttempt(request, env, graderAttemptMatch[1]);
+  }
+
+  const timerAdjustmentMatch = url.pathname.match(/^\/api\/v1\/staff\/attempts\/([0-9a-f-]{36})\/timer-adjustments$/i);
+  if (timerAdjustmentMatch && request.method === "POST") {
+    return adjustAttemptTimer(request, env, timerAdjustmentMatch[1]);
   }
 
   const assignAttemptMatch = url.pathname.match(/^\/api\/v1\/admin\/attempts\/([0-9a-f-]{36})\/assign$/i);
