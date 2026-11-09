@@ -1,18 +1,13 @@
 name: Phase 1B/1C local security and feature verification
 
 on:
-  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
     branches:
-      - feature/phase-1b-local-auth-api
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - '**/*.md'
-      - '*.mdx'
-      - '**/*.mdx'
+      - docs/phase-1-secure-foundation-spec
 
 concurrency:
-  group: phase1b-verification-${{ github.ref }}
+  group: phase1b-verification-pr-${{ github.event.pull_request.number || github.ref_name }}
   cancel-in-progress: true
 
 permissions:
@@ -27,10 +22,10 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Check out exact pull request revision
+      - name: Check out the exact pull request head revision
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
