@@ -1596,7 +1596,10 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     );
     const studentBId = "22222222-2222-4222-8222-222222222222";
     const mypPathwayId = "synthetic-ib-myp-year-4";
-    const studentBPage = await browser.newPage();
+    // Raw browser.newPage() does not inherit the configured baseURL. Give the
+    // isolated second-learner context the same local-only API origin explicitly.
+    const studentBContext = await browser.newContext({ baseURL: "http://127.0.0.1:8787" });
+    const studentBPage = await studentBContext.newPage();
     const createdSubmissionIds: string[] = [];
 
     const acceptAssessment = async (
@@ -1820,7 +1823,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
         .delete()
         .eq("learner_id", studentBId)
         .eq("pathway_id", mypPathwayId);
-      await studentBPage.close();
+      await studentBContext.close();
     }
   });
 
