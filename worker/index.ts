@@ -59,7 +59,8 @@ type PrivilegedWriteAuditAction =
   | "staff_invitation_revoked"
   | "student_submission_file_upload"
   | "owner_submission_file_cleanup"
-  | "staff_attempt_timer_adjustment";
+  | "staff_attempt_timer_adjustment"
+  | "student_timed_attempt_assessment_link";
 
 type PrivilegedWriteFailureCategory =
   | "resource_not_found"
@@ -787,6 +788,22 @@ function hasOnlyAttemptResponseFields(value: unknown): value is { response_text:
     record.response_text.length <= 12_000;
 }
 
+type TimedAttemptAssessmentLinkRequest = {
+  assessment_submission_id: string;
+  idempotency_key: string;
+};
+
+function hasOnlyTimedAttemptAssessmentLinkFields(
+  value: unknown,
+): value is TimedAttemptAssessmentLinkRequest {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 2 &&
+    Object.keys(record).every(key => ["assessment_submission_id", "idempotency_key"].includes(key)) &&
+    isUuid(record.assessment_submission_id) &&
+    isUuid(record.idempotency_key);
+}
+
 function hasOnlyAttemptAssignmentFields(value: unknown): value is { grader_user_id: string; reason: string } {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
   const record = value as Record<string, unknown>;
@@ -1134,6 +1151,11 @@ function classifyPrivilegedWriteError(error: { code?: string; message?: string }
     "submission_transcript_version_conflict",
     "assessment_submission_not_reviewable",
     "attempt_not_adjustable",
+    "attempt_task_version_mismatch",
+    "timed_attempt_assessment_link_conflict",
+    "timed_attempt_assessment_link_idempotency_conflict",
+    "assessment_submission_not_linkable",
+    "attempt_not_linkable",
   ].includes(message)) {
     return { outcome: "failed", failureCategory: "state_conflict" };
   }
@@ -1558,6 +1580,82 @@ async function submitLearnerAttempt(request: Request, env: WorkerEnv, attemptId:
   const submitted = asRows(data)[0];
   if (!submitted) return jsonResponse({ error: "attempt_submission_failed" }, 500);
   return jsonResponse({ attempt: submitted });
+}
+
+async function linkTimedAttemptToAssessmentSubmission(
+  request: Request,
+  env: WorkerEnv,
+  attemptId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 1_024);
+  if (!parsed.ok) return parsed.response;
+  if (!isUuid(attemptId) || !hasOnlyTimedAttemptAssessmentLinkFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_timed_attempt_assessment_link" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) {
+    if (roleDenied.status === 403) {
+      const audit = await auditPrivilegedWriteOutcome(
+        auth.context, "student_timed_attempt_assessment_link", attemptId, "denied",
+      );
+      if (audit) return audit;
+    }
+    return roleDenied;
+  }
+
+  const requestBody = parsed.body as TimedAttemptAssessmentLinkRequest;
+  const { data, error } = await auth.context.supabase.rpc(
+    "link_timed_attempt_assessment_submission",
+    {
+      p_attempt_id: attemptId,
+      p_assessment_submission_id: requestBody.assessment_submission_id,
+      p_idempotency_key: requestBody.idempotency_key,
+    },
+  );
+
+  if (error) {
+    const auditOutcome = classifyPrivilegedWriteError(error);
+    const audit = await auditPrivilegedWriteOutcome(
+      auth.context,
+      "student_timed_attempt_assessment_link",
+      attemptId,
+      auditOutcome.outcome,
+      auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
+
+    if (error.message === "timed_attempt_assessment_link_forbidden") {
+      return jsonResponse({ error: "timed_attempt_assessment_link_forbidden" }, 403);
+    }
+    if (error.message === "attempt_not_found" ||
+        error.message === "assessment_submission_not_found") {
+      return jsonResponse({ error: error.message }, 404);
+    }
+    if ([
+      "attempt_not_submitted",
+      "attempt_task_version_mismatch",
+      "timed_attempt_assessment_link_conflict",
+      "timed_attempt_assessment_link_idempotency_conflict",
+      "assessment_submission_not_linkable",
+      "attempt_not_linkable",
+    ].includes(error.message)) {
+      return jsonResponse({ error: error.message }, 409);
+    }
+    if (error.message === "invalid_timed_attempt_assessment_link") {
+      return jsonResponse({ error: error.message }, 400);
+    }
+    return jsonResponse({ error: "timed_attempt_assessment_link_failed" }, 500);
+  }
+
+  const linked = asRows(data)[0];
+  if (!linked) return jsonResponse({ error: "timed_attempt_assessment_link_failed" }, 500);
+  return jsonResponse(
+    { link: linked },
+    linked.is_replay === true ? 200 : 201,
+  );
 }
 
 async function listLearnerSubmissions(request: Request, env: WorkerEnv): Promise<Response> {
@@ -3375,6 +3473,13 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const attemptSubmitMatch = url.pathname.match(/^\/api\/v1\/learner\/attempts\/([0-9a-f-]{36})\/submit$/i);
   if (attemptSubmitMatch && request.method === "POST") {
     return submitLearnerAttempt(request, env, attemptSubmitMatch[1]);
+  }
+
+  const attemptAssessmentLinkMatch = url.pathname.match(
+    /^\\/api\\/v1\\/learner\\/attempts\\/([0-9a-f-]{36})\\/assessment-link$/i,
+  );
+  if (attemptAssessmentLinkMatch && request.method === "POST") {
+    return linkTimedAttemptToAssessmentSubmission(request, env, attemptAssessmentLinkMatch[1]);
   }
 
   const learnerAttemptMatch = url.pathname.match(/^\/api\/v1\/learner\/attempts\/([0-9a-f-]{36})$/i);

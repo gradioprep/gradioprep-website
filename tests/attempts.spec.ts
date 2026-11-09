@@ -1581,4 +1581,247 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     await expect(panel.getByRole("button", { name: "Submit practice" })).toBeEnabled();
   });
 
+
+  test("timed attempts link transactionally to one matching human assessment", async ({ page, browser }) => {
+    const localEnvLines = readFileSync(".dev.vars", "utf8").split(/\\r?\\n/);
+    const envValue = (key: string): string => {
+      const value = localEnvLines.find(line => line.startsWith(key + "="))?.slice(key.length + 1).trim();
+      if (!value) throw new Error("Missing local test environment value: " + key);
+      return value;
+    };
+    const localAdmin = createClient(
+      envValue("SUPABASE_URL"),
+      envValue("SUPABASE_SERVICE_ROLE_KEY"),
+      { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } },
+    );
+    const studentBId = "22222222-2222-4222-8222-222222222222";
+    const mypPathwayId = "synthetic-ib-myp-year-4";
+    const studentBPage = await browser.newPage();
+    const createdSubmissionIds: string[] = [];
+
+    const acceptAssessment = async (
+      token: string,
+      taskVersionId: string,
+      idempotencyKey = randomUUID(),
+    ): Promise<string> => {
+      const response = await page.request.post("/api/v1/learner/submissions", {
+        headers: { Authorization: token },
+        data: {
+          task_version_id: taskVersionId,
+          idempotency_key: idempotencyKey,
+          response_text: "This synthetic human-assessment response explains how a selected detail supports an interpretation of the published task.",
+        },
+      });
+      const body = await response.json() as {
+        submission?: { submission_id?: string };
+        error?: string;
+      };
+      expect(response.status(), JSON.stringify(body)).toBe(201);
+      const submissionId = body.submission?.submission_id;
+      expect(submissionId).toBeTruthy();
+      createdSubmissionIds.push(submissionId!);
+      return submissionId!;
+    };
+
+    const createAttempt = async (
+      token: string,
+      taskVersionId: string,
+      promptId: string,
+    ): Promise<{ attemptId: string; submit: () => Promise<void> }> => {
+      const headers = { Authorization: token };
+      const started = await page.request.post("/api/v1/learner/attempts", {
+        headers,
+        data: { task_version_id: taskVersionId },
+      });
+      const startedBody = await started.json() as { attempt?: { id?: string }; error?: string };
+      expect(started.status(), JSON.stringify(startedBody)).toBe(201);
+      const attemptId = startedBody.attempt?.id;
+      expect(attemptId).toBeTruthy();
+
+      const saved = await page.request.put(
+        "/api/v1/learner/attempts/" + attemptId + "/responses/" + promptId,
+        {
+          headers,
+          data: {
+            response_text: "This synthetic timed response uses relevant evidence and explains how it contributes to a clear interpretation of the task.",
+          },
+        },
+      );
+      expect(saved.status()).toBe(200);
+
+      return {
+        attemptId: attemptId!,
+        submit: async () => {
+          const submitted = await page.request.post(
+            "/api/v1/learner/attempts/" + attemptId + "/submit",
+            { headers, data: {} },
+          );
+          expect(submitted.status()).toBe(200);
+        },
+      };
+    };
+
+    const linkAttempt = (
+      token: string,
+      attemptId: string,
+      assessmentSubmissionId: string,
+      idempotencyKey: string,
+    ) => page.request.post(
+      "/api/v1/learner/attempts/" + attemptId + "/assessment-link",
+      {
+        headers: { Authorization: token },
+        data: { assessment_submission_id: assessmentSubmissionId, idempotency_key: idempotencyKey },
+      },
+    );
+
+    try {
+      const learnerA = await signIn(page, "student.a@example.invalid", "Synthetic Student A");
+      const enrolment = await localAdmin.from("course_enrolments").upsert(
+        { learner_id: studentBId, pathway_id: mypPathwayId, status: "active" },
+        { onConflict: "learner_id,pathway_id" },
+      );
+      if (enrolment.error) throw new Error("Could not prepare Student B's synthetic pathway: " + enrolment.error.message);
+
+      const primaryAttempt = await createAttempt(
+        learnerA, "a3333333-3333-4333-8333-333333333333", "b3333333-3333-4333-8333-333333333333",
+      );
+      const primarySubmission = await acceptAssessment(
+        learnerA, "a3333333-3333-4333-8333-333333333333",
+      );
+      const primaryKey = randomUUID();
+
+      const preSubmit = await linkAttempt(
+        learnerA, primaryAttempt.attemptId, primarySubmission, randomUUID(),
+      );
+      expect(preSubmit.status()).toBe(409);
+      await expect(preSubmit.json()).resolves.toMatchObject({ error: "attempt_not_submitted" });
+      assertPersistedAuditCorrelation(preSubmit.headers()["x-request-id"], {
+        actorId: "11111111-1111-4111-8111-111111111111",
+        actorRole: "student",
+        action: "student_timed_attempt_assessment_link",
+        targetType: "timed_attempt_assessment_link",
+        targetId: primaryAttempt.attemptId,
+        outcome: "failed",
+        reason: "state_conflict",
+      });
+
+      await primaryAttempt.submit();
+      const concurrent = await Promise.all([
+        linkAttempt(learnerA, primaryAttempt.attemptId, primarySubmission, primaryKey),
+        linkAttempt(learnerA, primaryAttempt.attemptId, primarySubmission, primaryKey),
+      ]);
+      expect(concurrent.map(response => response.status()).sort()).toEqual([200, 201]);
+      const concurrentBodies = await Promise.all(
+        concurrent.map(response => response.json() as Promise<{
+          link?: { link_id: string; attempt_id: string; assessment_submission_id: string; is_replay: boolean };
+        }>),
+      );
+      expect(concurrentBodies[0].link?.link_id).toBe(concurrentBodies[1].link?.link_id);
+      expect(concurrentBodies.map(body => body.link?.is_replay).sort()).toEqual([false, true]);
+      const createdResponse = concurrent.find(response => response.status() === 201)!;
+      const createdBody = concurrentBodies[concurrent.indexOf(createdResponse)];
+      expect(createdBody.link).toMatchObject({
+        attempt_id: primaryAttempt.attemptId,
+        assessment_submission_id: primarySubmission,
+        is_replay: false,
+      });
+      assertPersistedAuditCorrelation(createdResponse.headers()["x-request-id"], {
+        actorId: "11111111-1111-4111-8111-111111111111",
+        actorRole: "student",
+        action: "student_timed_attempt_assessment_linked",
+        targetType: "timed_attempt_assessment_link",
+        targetId: createdBody.link!.link_id,
+        outcome: "success",
+        reason: "learner_action",
+      });
+
+      const secondAttempt = await createAttempt(
+        learnerA, "a3333333-3333-4333-8333-333333333333", "b3333333-3333-4333-8333-333333333333",
+      );
+      await secondAttempt.submit();
+      const secondSubmission = await acceptAssessment(
+        learnerA, "a3333333-3333-4333-8333-333333333333",
+      );
+
+      const reusedKey = await linkAttempt(
+        learnerA, secondAttempt.attemptId, secondSubmission, primaryKey,
+      );
+      expect(reusedKey.status()).toBe(409);
+      await expect(reusedKey.json()).resolves.toMatchObject({
+        error: "timed_attempt_assessment_link_idempotency_conflict",
+      });
+
+      const secondUseOfAttempt = await linkAttempt(
+        learnerA, primaryAttempt.attemptId, secondSubmission, randomUUID(),
+      );
+      expect(secondUseOfAttempt.status()).toBe(409);
+      await expect(secondUseOfAttempt.json()).resolves.toMatchObject({
+        error: "timed_attempt_assessment_link_conflict",
+      });
+
+      const secondUseOfSubmission = await linkAttempt(
+        learnerA, secondAttempt.attemptId, primarySubmission, randomUUID(),
+      );
+      expect(secondUseOfSubmission.status()).toBe(409);
+      await expect(secondUseOfSubmission.json()).resolves.toMatchObject({
+        error: "timed_attempt_assessment_link_conflict",
+      });
+
+      const otherTaskAttempt = await createAttempt(
+        learnerA, "a1111111-1111-4111-8111-111111111111", "b1111111-1111-4111-8111-111111111111",
+      );
+      await otherTaskAttempt.submit();
+      const crossTask = await linkAttempt(
+        learnerA, otherTaskAttempt.attemptId, primarySubmission, randomUUID(),
+      );
+      expect(crossTask.status()).toBe(409);
+      await expect(crossTask.json()).resolves.toMatchObject({ error: "attempt_task_version_mismatch" });
+
+      const learnerB = await signIn(
+        studentBPage, "student.b@example.invalid", "Synthetic Student B",
+      );
+      const otherLearnerSubmission = await acceptAssessment(
+        learnerB, "a3333333-3333-4333-8333-333333333333",
+      );
+      const crossLearnerSubmission = await linkAttempt(
+        learnerA, primaryAttempt.attemptId, otherLearnerSubmission, randomUUID(),
+      );
+      expect(crossLearnerSubmission.status()).toBe(404);
+      await expect(crossLearnerSubmission.json()).resolves.toMatchObject({
+        error: "assessment_submission_not_found",
+      });
+      const crossLearnerAttempt = await linkAttempt(
+        learnerB, primaryAttempt.attemptId, otherLearnerSubmission, randomUUID(),
+      );
+      expect(crossLearnerAttempt.status()).toBe(404);
+      await expect(crossLearnerAttempt.json()).resolves.toMatchObject({
+        error: "attempt_not_found",
+      });
+
+      const withdrawn = await localAdmin
+        .from("assessment_submissions")
+        .update({ status: "withdrawn" })
+        .eq("id", secondSubmission);
+      if (withdrawn.error) throw new Error("Could not prepare withdrawn synthetic assessment: " + withdrawn.error.message);
+      const withdrawnLink = await linkAttempt(
+        learnerA, secondAttempt.attemptId, secondSubmission, randomUUID(),
+      );
+      expect(withdrawnLink.status()).toBe(409);
+      await expect(withdrawnLink.json()).resolves.toMatchObject({
+        error: "assessment_submission_not_linkable",
+      });
+    } finally {
+      if (createdSubmissionIds.length > 0) {
+        await localAdmin.from("assessment_submissions")
+          .update({ status: "withdrawn" })
+          .in("id", createdSubmissionIds);
+      }
+      await localAdmin.from("course_enrolments")
+        .delete()
+        .eq("learner_id", studentBId)
+        .eq("pathway_id", mypPathwayId);
+      await studentBPage.close();
+    }
+  });
+
 });
