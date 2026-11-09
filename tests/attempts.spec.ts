@@ -660,6 +660,75 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       const ownerAal2Token = await signInOwnerAal2(ownerPage);
       process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN = ownerAal2Token;
 
+      // Move the synthetic PDF-only submission into the assigned review state.
+      const assignPdfForReview = await ownerPage.request.post(
+        "/api/v1/admin/submissions/" + pdfOnlySubmission!.id + "/assign",
+        {
+          headers: { Authorization: ownerAal2Token },
+          data: {
+            grader_user_id: "55555555-5555-4555-8555-555555555555",
+            reason: "Synthetic PDF transcript review exercise",
+          },
+        },
+      );
+      expect(assignPdfForReview.status()).toBe(201);
+
+      await expect(ownerPage.getByRole("heading", { name: "PDF and transcript review" })).toBeVisible();
+      await ownerPage.getByRole("button", { name: "Refresh queue" }).click();
+      await ownerPage.getByLabel("Submission queue").selectOption(pdfOnlySubmission!.id);
+      await expect(ownerPage.getByTitle("Original learner submission PDF")).toBeVisible();
+      await expect(ownerPage.getByRole("textbox", { name: "Transcript text for page 2" })).toBeVisible();
+
+      await ownerPage.getByRole("textbox", { name: "Transcript text for page 2" })
+        .fill("Synthetic human transcription for page two, checked against the original PDF.");
+      await ownerPage.getByLabel("Review note")
+        .fill("Manually transcribed page two after checking the original PDF.");
+      await ownerPage.getByRole("button", { name: "Save corrected transcript version" }).click();
+      await expect(ownerPage.getByRole("status").filter({
+        hasText: "A new corrected transcript version was saved",
+      })).toBeVisible({ timeout: 15_000 });
+
+      const correctedTranscriptResponse = await ownerPage.request.get(
+        "/api/v1/submissions/" + pdfOnlySubmission!.id + "/file",
+        { headers: { Authorization: ownerAal2Token } },
+      );
+      expect(correctedTranscriptResponse.status()).toBe(200);
+      const correctedTranscriptBody = await correctedTranscriptResponse.json() as {
+        transcript: {
+          version: number;
+          verification_state: string;
+          pages: Array<{ page_number: number; text: string; status: string }>;
+        };
+      };
+      expect(correctedTranscriptBody.transcript.version).toBe(2);
+      expect(correctedTranscriptBody.transcript.verification_state).toBe("teacher_corrected");
+      expect(correctedTranscriptBody.transcript.pages[1]).toMatchObject({
+        page_number: 2,
+        status: "teacher_transcribed",
+      });
+      expect(correctedTranscriptBody.transcript.pages[1].text)
+        .toContain("Synthetic human transcription for page two");
+
+      // A second save with no text changes records independent teacher verification.
+      await ownerPage.getByLabel("Review note")
+        .fill("Verified the corrected page-by-page transcript against the original PDF.");
+      await ownerPage.getByRole("button", { name: "Save verified transcript version" }).click();
+      await expect(ownerPage.getByRole("status").filter({
+        hasText: "A new verified transcript version was saved",
+      })).toBeVisible({ timeout: 15_000 });
+      const verifiedTranscriptResponse = await ownerPage.request.get(
+        "/api/v1/submissions/" + pdfOnlySubmission!.id + "/file",
+        { headers: { Authorization: ownerAal2Token } },
+      );
+      expect(verifiedTranscriptResponse.status()).toBe(200);
+      const verifiedTranscriptBody = await verifiedTranscriptResponse.json() as {
+        transcript: { version: number; verification_state: string };
+      };
+      expect(verifiedTranscriptBody.transcript).toMatchObject({
+        version: 3,
+        verification_state: "teacher_verified",
+      });
+
       const queueSubmissionIds = [
         acceptedBody.submission.submission_id,
         concurrentBodies[0].submission.submission_id,
@@ -753,6 +822,16 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     const anonymousChecks = await Promise.all([
       request.get("/api/v1/grader/submissions"),
       request.get("/api/v1/grader/submissions/" + submissionId),
+      request.put("/api/v1/submissions/" + submissionId + "/transcript", {
+        data: {
+          expected_version: 1,
+          pages: [
+            { page_number: 1, text: "Synthetic digital text for page one.", status: "digital_text" },
+            { page_number: 2, text: "Synthetic teacher transcription for page two.", status: "teacher_transcribed" },
+          ],
+          review_note: "Checked both pages against the original synthetic PDF.",
+        },
+      }),
       request.post("/api/v1/admin/submissions/" + submissionId + "/assign", {
         data: { grader_user_id: "55555555-5555-4555-8555-555555555555", reason: "Synthetic denial check" },
       }),
@@ -791,6 +870,17 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     const studentHeaders = { Authorization: studentToken };
     const studentChecks = await Promise.all([
       studentPage.request.get("/api/v1/grader/submissions", { headers: studentHeaders }),
+      studentPage.request.put("/api/v1/submissions/" + submissionId + "/transcript", {
+        headers: studentHeaders,
+        data: {
+          expected_version: 1,
+          pages: [
+            { page_number: 1, text: "Synthetic digital text for page one.", status: "digital_text" },
+            { page_number: 2, text: "Synthetic teacher transcription for page two.", status: "teacher_transcribed" },
+          ],
+          review_note: "Checked both pages against the original synthetic PDF.",
+        },
+      }),
       studentPage.request.get("/api/v1/grader/submissions/" + submissionId, { headers: studentHeaders }),
       studentPage.request.post("/api/v1/admin/submissions/" + submissionId + "/assign", {
         headers: studentHeaders,
@@ -848,6 +938,23 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     expect(guardianQaResponse.status()).toBe(403);
     await expect(guardianQaResponse.json()).resolves.toMatchObject({ error: "role_required" });
 
+    const guardianTranscriptReview = await guardianPage.request.put(
+      "/api/v1/submissions/" + submissionId + "/transcript",
+      {
+        headers: { Authorization: guardianToken },
+        data: {
+          expected_version: 1,
+          pages: [
+            { page_number: 1, text: "Synthetic digital text for page one.", status: "digital_text" },
+            { page_number: 2, text: "Synthetic teacher transcription for page two.", status: "teacher_transcribed" },
+          ],
+          review_note: "Checked both pages against the original synthetic PDF.",
+        },
+      },
+    );
+    expect(guardianTranscriptReview.status()).toBe(403);
+    await expect(guardianTranscriptReview.json()).resolves.toMatchObject({ error: "role_required" });
+
     const guardianResponse = await guardianPage.request.get("/api/v1/grader/submissions", {
       headers: { Authorization: guardianToken },
     });
@@ -867,6 +974,32 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     expect(graderResponse.status()).toBe(403);
     await expect(graderResponse.json()).resolves.toMatchObject({ error: "mfa_required" });
     assertPersistedAuditCorrelation(graderResponse.headers()["x-request-id"],{actorId:actorIdFromAuthorizationHeader(graderAal1),actorRole:"grader",action:"grader_submission_queue_authorized",targetType:"assessment_submission_queue",targetId:null,outcome:"denied",reason:"resource_scope_denied"});
+    const graderTranscriptReview = await graderPage.request.put(
+      "/api/v1/submissions/" + submissionId + "/transcript",
+      {
+        headers: { Authorization: graderAal1 },
+        data: {
+          expected_version: 1,
+          pages: [
+            { page_number: 1, text: "Synthetic digital text for page one.", status: "digital_text" },
+            { page_number: 2, text: "Synthetic teacher transcription for page two.", status: "teacher_transcribed" },
+          ],
+          review_note: "Checked both pages against the original synthetic PDF.",
+        },
+      },
+    );
+    expect(graderTranscriptReview.status()).toBe(403);
+    await expect(graderTranscriptReview.json()).resolves.toMatchObject({ error: "mfa_required" });
+    assertPersistedAuditCorrelation(graderTranscriptReview.headers()["x-request-id"],{
+      actorId:actorIdFromAuthorizationHeader(graderAal1),
+      actorRole:"grader",
+      action:"staff_submission_transcript_review",
+      targetType:"assessment_submission",
+      targetId:submissionId,
+      outcome:"denied",
+      reason:"resource_scope_denied"
+    });
+
     const graderQaRoute = await graderPage.request.get(
       "/api/v1/owner/assessment-versions/" + submissionId + "/private-qa",
       { headers: { Authorization: graderAal1 } },
