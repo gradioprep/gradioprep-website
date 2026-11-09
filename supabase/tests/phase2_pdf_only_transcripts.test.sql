@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(20);
+SELECT plan(21);
 
 SELECT ok(
   (SELECT relrowsecurity FROM pg_class WHERE oid = 'private.pdf_submission_reservations'::regclass),
@@ -190,6 +190,35 @@ SELECT is(
   1,
   'typed submissions continue to work while capacity accounts for active PDF reservations'
 );
+-- A second learner may use the same UUID idempotency key. That learner's
+-- reservation must still count against global capacity; only the current
+-- learner's own reservation can be excluded while converting its hold.
+INSERT INTO public.course_enrolments (learner_id, pathway_id, status)
+VALUES (
+  'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
+  'synthetic-ib-myp-year-4',
+  'active'
+)
+ON CONFLICT (learner_id, pathway_id) DO UPDATE SET status = 'active';
+
+SET LOCAL ROLE authenticated;
+SELECT set_config(
+  'request.jwt.claims',
+  '{"sub":"cccccccc-cccc-4ccc-8ccc-cccccccccccc","role":"authenticated","aal":"aal1"}',
+  true
+);
+SELECT throws_ok(
+  'SELECT * FROM public.begin_pdf_assessment_submission(
+    ''a1111111-1111-4111-8111-111111111111'',
+    ''5d111111-1111-4111-8111-111111111111'',
+    ''pdf_only'',
+    NULL
+  )',
+  'P0001',
+  'submission_capacity_full',
+  'another learner reusing the same idempotency UUID cannot make an active reservation disappear from capacity'
+);
+RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT throws_ok(
   'SELECT * FROM public.begin_pdf_assessment_submission(

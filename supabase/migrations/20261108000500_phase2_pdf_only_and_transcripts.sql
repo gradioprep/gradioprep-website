@@ -168,6 +168,7 @@ BEGIN
     AND reservation.expires_at > clock_timestamp()
     AND NOT (
       NEW.response_mode IN ('typed_pdf', 'pdf_only')
+      AND reservation.learner_id = NEW.learner_id
       AND reservation.idempotency_key = NEW.idempotency_key
     );
 
