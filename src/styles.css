@@ -2040,3 +2040,206 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   .proto-account-submission-row { flex-direction: column; }
   .proto-account-submission-attach { max-width: 100%; }
 }
+
+
+/* Private teacher transcript review */
+.proto-transcript-review {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+.proto-transcript-review-intro {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.proto-transcript-review-toolbar {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+.proto-transcript-review-toolbar label,
+.proto-transcript-review-form label {
+  display: grid;
+  flex: 1;
+  gap: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+.proto-transcript-review-toolbar select,
+.proto-transcript-review-form textarea,
+.proto-transcript-page textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-primary);
+  font: inherit;
+}
+.proto-transcript-review-toolbar select {
+  min-height: 42px;
+  padding: 8px 10px;
+}
+.proto-transcript-review-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.proto-transcript-review-meta > span {
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: var(--lilac);
+  color: var(--aubergine);
+  font-weight: 600;
+}
+.proto-transcript-review-meta button {
+  margin-left: auto;
+}
+.proto-transcript-review-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+.proto-transcript-original,
+.proto-transcript-editor {
+  display: grid;
+  grid-template-rows: auto minmax(460px, 68vh);
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.proto-transcript-editor {
+  grid-template-rows: auto minmax(0, 1fr);
+  max-height: 74vh;
+}
+.proto-transcript-pane-heading {
+  display: grid;
+  gap: 3px;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-muted);
+}
+.proto-transcript-pane-heading strong {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.proto-transcript-pane-heading small {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.proto-transcript-original iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 460px;
+  border: 0;
+  background: #f5f4f2;
+}
+.proto-transcript-editor > .proto-transcript-warning {
+  margin: 12px 12px 0;
+  padding: 9px 10px;
+  border: 1px solid #e1cda2;
+  border-radius: 8px;
+  background: #fbf5e8;
+  color: #71521f;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.proto-transcript-page {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.proto-transcript-page-heading {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.proto-transcript-page-heading strong {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.proto-transcript-page-heading span,
+.proto-transcript-page small {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.proto-transcript-page label {
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.proto-transcript-page textarea {
+  min-height: 148px;
+  padding: 9px 10px;
+  resize: vertical;
+  line-height: 1.55;
+  font-size: 12px;
+}
+.proto-transcript-page textarea:focus-visible,
+.proto-transcript-review-toolbar select:focus-visible,
+.proto-transcript-review-form textarea:focus-visible {
+  outline: 3px solid rgba(82, 115, 145, .25);
+  border-color: var(--dusty-blue);
+}
+.proto-transcript-no-text {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.proto-transcript-review-form {
+  display: grid;
+  gap: 8px;
+}
+.proto-transcript-review-form textarea {
+  min-height: 70px;
+  padding: 9px 10px;
+  resize: vertical;
+}
+.proto-transcript-review-form small {
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.proto-transcript-review-form .proto-action {
+  justify-content: center;
+  min-height: 44px;
+}
+@media (max-width: 860px) {
+  .proto-transcript-review-split {
+    grid-template-columns: 1fr;
+  }
+  .proto-transcript-original,
+  .proto-transcript-editor {
+    grid-template-rows: auto minmax(360px, 55vh);
+    max-height: none;
+  }
+  .proto-transcript-editor {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+}
+@media (max-width: 620px) {
+  .proto-transcript-review-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .proto-transcript-review-meta button {
+    margin-left: 0;
+  }
+  .proto-transcript-original,
+  .proto-transcript-editor {
+    grid-template-rows: auto minmax(320px, 50vh);
+  }
+}
