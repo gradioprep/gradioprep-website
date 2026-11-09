@@ -202,7 +202,7 @@ SELECT set_config('request.jwt.claims',
 RESET ROLE;
 SET LOCAL ROLE postgres;
 UPDATE public.course_enrolments
-SET status = 'inactive'
+SET status = 'paused'
 WHERE learner_id = '11111111-1111-4111-8111-111111111111'
   AND pathway_id = 'synthetic-ib-myp-year-4';
 RESET ROLE;
