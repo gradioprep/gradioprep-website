@@ -673,6 +673,18 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       );
       expect(assignPdfForReview.status()).toBe(201);
 
+      const assignOlderSubmissionForQueueOrder = await ownerPage.request.post(
+        "/api/v1/admin/submissions/" + acceptedBody.submission.submission_id + "/assign",
+        {
+          headers: { Authorization: ownerAal2Token },
+          data: {
+            grader_user_id: "55555555-5555-4555-8555-555555555555",
+            reason: "Synthetic oldest-first grader queue verification",
+          },
+        },
+      );
+      expect(assignOlderSubmissionForQueueOrder.status()).toBe(201);
+
       await expect(ownerPage.getByRole("heading", { name: "PDF and transcript review" })).toBeVisible();
       await ownerPage.getByRole("button", { name: "Refresh queue" }).click();
       await ownerPage.getByLabel("Submission queue").selectOption(pdfOnlySubmission!.id);
@@ -729,11 +741,9 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
         verification_state: "teacher_verified",
       });
 
-      const queueSubmissionIds = [
-        acceptedBody.submission.submission_id,
-        concurrentBodies[0].submission.submission_id,
-        pdfOnlySubmission!.id,
-      ];
+      process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_PDF_ID = pdfOnlySubmission!.id;
+      process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_OLDER_ID = acceptedBody.submission.submission_id;
+      const queueSubmissionIds = [concurrentBodies[0].submission.submission_id];
       for (const submissionIdToWithdraw of [...new Set(queueSubmissionIds)]) {
         await withdrawSyntheticSubmission(ownerPage, ownerAal2Token, submissionIdToWithdraw);
       }
@@ -1020,7 +1030,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
   });
 
   test("grader AAL2 session sees only the active assigned queue and response", async ({ page }) => {
-    test.setTimeout(60_000);
+    test.setTimeout(150_000);
     const firstFactorToken = await signIn(page, "grader.a@example.invalid", "Synthetic Grader A");
 
     const firstFactorQueue = await page.request.get("/api/v1/grader/queue", {
@@ -1072,5 +1082,147 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     const learnerRoute = await page.request.get("/api/v1/learner/attempts", { headers });
     expect(learnerRoute.status()).toBe(403);
     await expect(learnerRoute.json()).resolves.toMatchObject({ error: "role_required" });
+
+    const pdfSubmissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_PDF_ID;
+    const olderSubmissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_OLDER_ID;
+    const ownerAal2Token = process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN;
+    expect(pdfSubmissionId).toBeTruthy();
+    expect(olderSubmissionId).toBeTruthy();
+    expect(ownerAal2Token).toBeTruthy();
+
+    const assessmentQueueResponse = await page.request.get("/api/v1/grader/submissions", { headers });
+    expect(assessmentQueueResponse.status()).toBe(200);
+    const assessmentQueueBody = await assessmentQueueResponse.json() as {
+      submissions: Array<{ id: string; accepted_at: string }>;
+    };
+    const queueIdsInOrder = assessmentQueueBody.submissions.map(item => item.id);
+    const queueIdsSorted = [...assessmentQueueBody.submissions]
+      .sort((left, right) => left.accepted_at.localeCompare(right.accepted_at) || left.id.localeCompare(right.id))
+      .map(item => item.id);
+    expect(queueIdsInOrder).toEqual(queueIdsSorted);
+    expect(queueIdsInOrder).toContain(olderSubmissionId);
+    expect(queueIdsInOrder).toContain(pdfSubmissionId);
+    expect(queueIdsInOrder.indexOf(olderSubmissionId!)).toBeLessThan(queueIdsInOrder.indexOf(pdfSubmissionId!));
+
+    const workspace = page.getByTestId("grader-workspace");
+    await expect(workspace).toBeVisible();
+    await page.getByLabel("Assigned submissions · oldest first").selectOption(pdfSubmissionId!);
+    await expect(page.getByRole("heading", { name: "Synthetic Phase 1C response task A" })).toBeVisible();
+    await expect(page.getByText(
+      "Synthetic test prompt: explain how one selected detail shapes a reader's understanding.",
+      { exact: true },
+    )).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Synthetic Analytical Response Rubric A" })).toBeVisible();
+    await expect(page.getByTitle("Original grader submission PDF")).toBeVisible();
+    await expect(page.getByText("Synthetic digital transcript text captured from the original PDF page.")).toBeVisible();
+    await expect(page.getByText("Synthetic human transcription for page two, checked against the original PDF.")).toBeVisible();
+
+    const detailResponse = await page.request.get(
+      "/api/v1/grader/submissions/" + pdfSubmissionId,
+      { headers },
+    );
+    expect(detailResponse.status()).toBe(200);
+    const detailBody = await detailResponse.json() as {
+      criteria: Array<{ id: string; max_points: number }>;
+    };
+    expect(detailBody.criteria).toHaveLength(2);
+    await page.locator("#proto-grader-overall-feedback")
+      .fill("The response selects a relevant detail and explains how it shapes a reader's understanding.");
+    for (const criterion of detailBody.criteria) {
+      await page.locator("#proto-grader-score-" + criterion.id).fill("3");
+      await page.locator("#proto-grader-criterion-feedback-" + criterion.id)
+        .fill("The awarded mark is supported by specific evidence from the response.");
+    }
+
+    const saveResponsePromise = page.waitForResponse(response =>
+      response.url().includes("/api/v1/grader/submissions/" + pdfSubmissionId + "/draft") &&
+      response.request().method() === "PUT",
+    );
+    await page.getByRole("button", { name: "Save private grading draft" }).click();
+    const saveResponse = await saveResponsePromise;
+    expect(saveResponse.status()).toBe(200);
+    assertPersistedAuditCorrelation(saveResponse.headers()["x-request-id"], {
+      actorId: "55555555-5555-4555-8555-555555555555",
+      actorRole: "grader",
+      action: "assessment_draft_saved",
+      targetType: "assessment_submission",
+      targetId: pdfSubmissionId!,
+      outcome: "success",
+      reason: "grader_action",
+    });
+    await expect(page.getByRole("status").filter({
+      hasText: "Private grading draft saved. It has not been published",
+    })).toBeVisible();
+
+    const publishResponsePromise = page.waitForResponse(response =>
+      response.url().includes("/api/v1/grader/submissions/" + pdfSubmissionId + "/publish") &&
+      response.request().method() === "POST",
+    );
+    page.once("dialog", dialog => dialog.accept());
+    await page.getByRole("button", { name: "Publish feedback to learner" }).click();
+    const publishResponse = await publishResponsePromise;
+    expect(publishResponse.status()).toBe(201);
+    assertPersistedAuditCorrelation(publishResponse.headers()["x-request-id"], {
+      actorId: "55555555-5555-4555-8555-555555555555",
+      actorRole: "grader",
+      action: "assessment_feedback_published",
+      targetType: "assessment_submission",
+      targetId: pdfSubmissionId!,
+      outcome: "success",
+      reason: "human_grader_publication",
+    });
+    await expect(page.getByRole("status").filter({ hasText: "Feedback published." })).toBeVisible();
+
+    const learnerContext = await page.context().browser()!.newContext({
+      baseURL: "http://127.0.0.1:8787",
+    });
+    try {
+      const learnerPage = await learnerContext.newPage();
+      const learnerToken = await signIn(learnerPage, "student.a@example.invalid", "Synthetic Student A");
+      const learnerHeaders = { Authorization: learnerToken };
+      const learnerDetail = await learnerPage.request.get(
+        "/api/v1/learner/submissions/" + pdfSubmissionId,
+        { headers: learnerHeaders },
+      );
+      expect(learnerDetail.status()).toBe(200);
+      const learnerDetailBody = await learnerDetail.json() as {
+        submission: { assessment_versions: Array<{ version_number: number; overall_feedback: string }> };
+      };
+      expect(learnerDetailBody.submission.assessment_versions).toHaveLength(1);
+      expect(learnerDetailBody.submission.assessment_versions[0].version_number).toBe(1);
+      expect(learnerDetailBody.submission.assessment_versions[0].overall_feedback)
+        .toContain("The response selects a relevant detail");
+      const learnerRow = learnerPage.getByTestId("learner-submission-" + pdfSubmissionId);
+      await expect(learnerRow).toBeVisible();
+      await learnerRow.getByRole("button", { name: "View published feedback" }).click();
+      await expect(learnerRow.getByTestId("learner-published-feedback"))
+        .toContainText("The response selects a relevant detail");
+      await expect(learnerRow.getByTestId("learner-published-feedback"))
+        .toContainText("The awarded mark is supported by specific evidence");
+    } finally {
+      await learnerContext.close();
+    }
+
+    const closePublishedSubmission = await page.request.post(
+      "/api/v1/owner/submissions/" + pdfSubmissionId + "/transition",
+      {
+        headers: { Authorization: ownerAal2Token! },
+        data: {
+          target_status: "closed",
+          reason: "Synthetic grader workspace publication verification completed",
+        },
+      },
+    );
+    expect(closePublishedSubmission.status()).toBe(200);
+    assertPersistedAuditCorrelation(closePublishedSubmission.headers()["x-request-id"], {
+      actorId: "88888888-8888-4888-8888-888888888888",
+      actorRole: "owner",
+      action: "assessment_submission_closed",
+      targetType: "assessment_submission",
+      targetId: pdfSubmissionId!,
+      outcome: "success",
+      reason: "owner_closure",
+    });
+    await withdrawSyntheticSubmission(page, ownerAal2Token!, olderSubmissionId!);
   });
 });

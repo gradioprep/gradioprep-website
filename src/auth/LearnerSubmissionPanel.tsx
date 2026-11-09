@@ -27,6 +27,32 @@ interface LearnerSubmissionsResponse {
   message?: string;
 }
 
+interface PublishedCriterion {
+  criterion_code_snapshot: string;
+  criterion_title_snapshot: string;
+  points_awarded: number;
+  max_points_snapshot: number;
+  feedback: string;
+}
+
+interface PublishedAssessmentVersion {
+  id: string;
+  version_number: number;
+  total_points: number;
+  max_points: number;
+  overall_feedback: string;
+  published_at: string;
+  criterion_results: PublishedCriterion[];
+}
+
+interface LearnerSubmissionDetailResponse {
+  submission?: {
+    assessment_versions?: PublishedAssessmentVersion[] | PublishedAssessmentVersion | null;
+  };
+  error?: string;
+  message?: string;
+}
+
 const maximumPdfBytes = 10 * 1024 * 1024;
 
 function taskForSubmission(submission: LearnerSubmission): LearnerAssessmentTask | null {
@@ -82,6 +108,10 @@ export default function LearnerSubmissionPanel({ accessToken }: { accessToken: s
   const [uploadingSubmissionId, setUploadingSubmissionId] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [expandedFeedbackSubmissionId, setExpandedFeedbackSubmissionId] = useState("");
+  const [feedbackVersions, setFeedbackVersions] = useState<Record<string, PublishedAssessmentVersion[]>>({});
+  const [feedbackLoadingId, setFeedbackLoadingId] = useState("");
+  const [feedbackErrors, setFeedbackErrors] = useState<Record<string, string>>({});
 
   const refresh = useCallback(async () => {
     const response = await fetch("/api/v1/learner/submissions", {
@@ -276,6 +306,44 @@ export default function LearnerSubmissionPanel({ accessToken }: { accessToken: s
     }
   }
 
+  async function togglePublishedFeedback(submissionId: string) {
+    if (expandedFeedbackSubmissionId === submissionId) {
+      setExpandedFeedbackSubmissionId("");
+      return;
+    }
+    setExpandedFeedbackSubmissionId(submissionId);
+    if (Object.prototype.hasOwnProperty.call(feedbackVersions, submissionId)) return;
+
+    setFeedbackLoadingId(submissionId);
+    setFeedbackErrors(current => ({ ...current, [submissionId]: "" }));
+    try {
+      const response = await fetch("/api/v1/learner/submissions/" + encodeURIComponent(submissionId), {
+        headers: { Authorization: "Bearer " + accessToken },
+        cache: "no-store",
+      });
+      const result = await response.json() as LearnerSubmissionDetailResponse;
+      if (!response.ok || !result.submission) {
+        throw new Error(result.message ?? result.error ?? "Published feedback could not be loaded.");
+      }
+      const rawVersions = result.submission.assessment_versions;
+      const versions = Array.isArray(rawVersions)
+        ? rawVersions
+        : rawVersions ? [rawVersions] : [];
+      versions.sort((left, right) => left.version_number - right.version_number);
+      setFeedbackVersions(current => ({ ...current, [submissionId]: versions }));
+      if (versions.length === 0) {
+        setFeedbackErrors(current => ({ ...current, [submissionId]: "No published feedback is available for this submission." }));
+      }
+    } catch (requestError) {
+      setFeedbackErrors(current => ({
+        ...current,
+        [submissionId]: requestError instanceof Error ? requestError.message : "Published feedback could not be loaded.",
+      }));
+    } finally {
+      setFeedbackLoadingId("");
+    }
+  }
+
   const wordCount = responseText.trim() ? responseText.trim().split(/\s+/).length : 0;
 
   return <section className="proto-account-submissions" aria-labelledby="proto-account-submissions-heading" data-testid="learner-submissions-panel">
@@ -350,6 +418,7 @@ export default function LearnerSubmissionPanel({ accessToken }: { accessToken: s
         : submissions.map(submission => {
           const task = taskForSubmission(submission);
           const canAttachPdf = pdfEligible(task) && submission.status === "queued" && submission.response_mode === "typed";
+          const canViewPublishedFeedback = submission.status === "feedback_published" || submission.status === "closed";
           return <article className="proto-account-submission-row" key={submission.id}
             data-testid={"learner-submission-" + submission.id}>
             <div className="proto-account-submission-main">
@@ -367,6 +436,25 @@ export default function LearnerSubmissionPanel({ accessToken }: { accessToken: s
                 onChange={event => void handleExistingPdfChange(submission.id, event)}
                 disabled={Boolean(uploadingSubmissionId) || submitting} />
             </label>}
+            {canViewPublishedFeedback && <div className="proto-learner-published-feedback">
+              <button type="button" className="proto-account-toggle" aria-expanded={expandedFeedbackSubmissionId === submission.id}
+                onClick={() => void togglePublishedFeedback(submission.id)}
+                data-testid={"learner-feedback-toggle-" + submission.id}>
+                {expandedFeedbackSubmissionId === submission.id ? "Hide published feedback" : "View published feedback"}
+              </button>
+              {expandedFeedbackSubmissionId === submission.id && <div className="proto-learner-feedback-content" data-testid="learner-published-feedback">
+                {feedbackLoadingId === submission.id && <p role="status">Loading published feedback…</p>}
+                {feedbackErrors[submission.id] && <p role="alert">{feedbackErrors[submission.id]}</p>}
+                {(feedbackVersions[submission.id] ?? []).map(version => <article key={version.id}>
+                  <div><strong>Feedback version {version.version_number}</strong><span>{version.total_points} / {version.max_points} points · {new Date(version.published_at).toLocaleString()}</span></div>
+                  <p>{version.overall_feedback}</p>
+                  {version.criterion_results.map((criterion, index) => <section key={criterion.criterion_code_snapshot + "-" + index}>
+                    <strong>{criterion.criterion_title_snapshot}: {criterion.points_awarded} / {criterion.max_points_snapshot}</strong>
+                    <p>{criterion.feedback}</p>
+                  </section>)}
+                </article>)}
+              </div>}
+            </div>}
           </article>;
         })}
     </div>

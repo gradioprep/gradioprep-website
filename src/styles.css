@@ -2243,3 +2243,346 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
     grid-template-rows: auto minmax(320px, 50vh);
   }
 }
+
+
+/* Assignment-scoped oldest-first human grading workspace */
+.proto-grader-workspace {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+.proto-grader-workspace-intro,
+.proto-grader-empty,
+.proto-grader-file-note {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.proto-grader-toolbar {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+.proto-grader-toolbar label {
+  display: grid;
+  flex: 1;
+  gap: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+.proto-grader-toolbar select,
+.proto-grader-draft-form input,
+.proto-grader-draft-form textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-primary);
+  font: inherit;
+}
+.proto-grader-toolbar select,
+.proto-grader-draft-form input {
+  min-height: 42px;
+  padding: 8px 10px;
+}
+.proto-grader-context {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--paper);
+}
+.proto-grader-context h4,
+.proto-grader-block h4,
+.proto-grader-draft-form h4 {
+  margin: 3px 0 8px;
+  color: var(--text-primary);
+  font: 600 18px/1.3 var(--font-display);
+}
+.proto-grader-context p,
+.proto-grader-block > p,
+.proto-grader-draft-form > div > p:last-child {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.proto-grader-context > div:last-child {
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  min-width: 190px;
+}
+.proto-grader-context small,
+.proto-grader-block article small,
+.proto-grader-published-version > div span,
+.proto-grader-criterion-input > div span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.proto-grader-context strong {
+  margin-bottom: 5px;
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.proto-grader-block {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.proto-grader-block > article {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+.proto-grader-block > article > p,
+.proto-grader-response-version > p,
+.proto-grader-published-version > p,
+.proto-grader-published-version > div > p {
+  margin: 7px 0 0;
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.proto-grader-response-version > div,
+.proto-grader-published-version > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.proto-grader-response-version > div strong,
+.proto-grader-published-version strong,
+.proto-grader-criterion-input > div strong {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.proto-grader-document-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.proto-grader-pdf,
+.proto-grader-transcript {
+  display: grid;
+  grid-template-rows: auto minmax(360px, 58vh);
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.proto-grader-transcript {
+  grid-template-rows: auto minmax(0, 1fr);
+  max-height: 66vh;
+  overflow-y: auto;
+}
+.proto-grader-pdf > div:first-child,
+.proto-grader-transcript > div:first-child {
+  display: grid;
+  gap: 3px;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.proto-grader-pdf > div:first-child strong,
+.proto-grader-transcript > div:first-child strong {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.proto-grader-pdf > div:first-child small,
+.proto-grader-transcript > div:first-child small {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.proto-grader-pdf iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  border: 0;
+  background: #f5f4f2;
+}
+.proto-grader-transcript > article {
+  display: grid;
+  gap: 7px;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.proto-grader-transcript > article > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.proto-grader-transcript > article > div strong {
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.proto-grader-transcript pre {
+  margin: 0;
+  color: var(--text-primary);
+  font: 12px/1.6 var(--font-body);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.proto-grader-file-note {
+  padding: 12px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+.proto-grader-rubric > div:first-child p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.proto-grader-rubric > article > div,
+.proto-grader-criterion-input > div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.proto-grader-rubric > article > div strong {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.proto-grader-rubric > article > div span {
+  color: var(--aubergine);
+  font-size: 11px;
+  font-weight: 600;
+}
+.proto-grader-draft-form {
+  display: grid;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--paper);
+}
+.proto-grader-draft-form > label,
+.proto-grader-criterion-input > label {
+  display: grid;
+  gap: 6px;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.proto-grader-draft-form textarea {
+  min-height: 78px;
+  padding: 9px 10px;
+  resize: vertical;
+  line-height: 1.6;
+}
+.proto-grader-criterion-input {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+.proto-grader-criterion-input > label input {
+  max-width: 180px;
+}
+.proto-grader-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.proto-grader-actions .proto-action {
+  min-height: 44px;
+  justify-content: center;
+}
+.proto-grader-actions .proto-action:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+.proto-grader-draft-form > small {
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.55;
+}
+.proto-grader-workspace input:focus-visible,
+.proto-grader-workspace textarea:focus-visible,
+.proto-grader-workspace select:focus-visible {
+  outline: 3px solid rgba(82, 115, 145, .25);
+  border-color: var(--dusty-blue);
+}
+.proto-learner-published-feedback {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+.proto-learner-feedback-content {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+.proto-learner-feedback-content > p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.proto-learner-feedback-content > article {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--paper);
+}
+.proto-learner-feedback-content > article > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.proto-learner-feedback-content strong {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.proto-learner-feedback-content span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.proto-learner-feedback-content p {
+  margin: 7px 0;
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.proto-learner-feedback-content section {
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.proto-grader-published-version {
+  display: grid;
+  gap: 8px;
+}
+@media (max-width: 860px) {
+  .proto-grader-document-split {
+    grid-template-columns: 1fr;
+  }
+  .proto-grader-pdf,
+  .proto-grader-transcript {
+    grid-template-rows: auto minmax(320px, 50vh);
+    max-height: none;
+  }
+}
+@media (max-width: 620px) {
+  .proto-grader-toolbar,
+  .proto-grader-context {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .proto-grader-context > div:last-child {
+    min-width: 0;
+  }
+  .proto-grader-actions {
+    flex-direction: column;
+  }
+}

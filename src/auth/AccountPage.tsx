@@ -3,6 +3,7 @@ import type { Navigate } from "../App";
 import { useAuth } from "./AuthProvider";
 import LearnerSubmissionPanel from "./LearnerSubmissionPanel";
 import TranscriptReviewPanel from "./TranscriptReviewPanel";
+import GraderWorkspacePanel from "./GraderWorkspacePanel";
 
 type AccountMode = "sign-in" | "sign-up" | "recovery-request";
 
@@ -131,7 +132,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
 
   const ownerRole = account?.roles.includes("owner") ?? false;
   const graderRole = account?.roles.includes("grader") ?? false;
-  const transcriptReviewRole = ownerRole ? "owner" : graderRole ? "grader" : null;
+  const transcriptReviewRole = ownerRole ? "owner" : null;
 
   useEffect(() => {
     const accessToken = auth.session?.access_token;
@@ -630,6 +631,12 @@ export default function AccountPage({ go }: { go: Navigate }) {
             </div>
           </>}
       </section>}
+      {graderRole && auth.session?.access_token && (
+        <GraderWorkspacePanel
+          accessToken={auth.session.access_token}
+          assuranceLevel={auth.mfaCurrentLevel}
+        />
+      )}
       {transcriptReviewRole && auth.session?.access_token && (
         <TranscriptReviewPanel
           accessToken={auth.session.access_token}
