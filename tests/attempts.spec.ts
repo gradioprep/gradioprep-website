@@ -1322,6 +1322,14 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       expect(unassignedAal2Payload).toMatchObject({ error: "submission_file_not_found" });
       expect(unassignedAal2Payload.file).toBeUndefined();
       expect(unassignedAal2Payload.transcript).toBeUndefined();
+      const unassignedAnalytics = await unassignedAal2Page.request.get(
+        "/api/v1/grader/submissions/" + pdfSubmissionId + "/analytics",
+        { headers: { Authorization: unassignedAal2Token } },
+      );
+      expect(unassignedAnalytics.status()).toBe(404);
+      await expect(unassignedAnalytics.json()).resolves.toMatchObject({
+        error: "assessment_analytics_not_found",
+      });
     } finally {
       await unassignedAal2Context.close();
     }
@@ -1429,6 +1437,15 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       hasText: "Private grading draft saved. It has not been published",
     })).toBeVisible();
 
+    const unpublishedAnalytics = await page.request.get(
+      "/api/v1/grader/submissions/" + pdfSubmissionId + "/analytics",
+      { headers },
+    );
+    expect(unpublishedAnalytics.status()).toBe(404);
+    await expect(unpublishedAnalytics.json()).resolves.toMatchObject({
+      error: "assessment_analytics_not_found",
+    });
+
     const prePublicationLearnerContext = await page.context().browser()!.newContext({
       baseURL: "http://127.0.0.1:8787",
     });
@@ -1471,6 +1488,60 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     });
     await expect(page.getByRole("status").filter({ hasText: "Feedback published." })).toBeVisible();
 
+    const analyticsResponse = await page.request.get(
+      "/api/v1/grader/submissions/" + pdfSubmissionId + "/analytics",
+      { headers },
+    );
+    const analyticsPayload = await analyticsResponse.json() as {
+      analytics?: {
+        assessment_version_number: number;
+        rubric_version_id: string;
+        response_mode: string;
+        score_awarded: number;
+        score_max: number;
+        attainment_percent: number | null;
+        attainment_status: string;
+        criterion_count: number;
+        expected_criterion_count: number;
+        elapsed_response_seconds: number | null;
+        elapsed_response_status: string;
+        timer_mode: string;
+        accommodation_mode: string;
+        comparability_status: string;
+        comparison_group_key: string | null;
+        criterion_score_snapshot: Array<unknown>;
+      };
+      error?: string;
+    };
+    expect(analyticsResponse.status(), JSON.stringify(analyticsPayload)).toBe(200);
+    assertPersistedAuditCorrelation(analyticsResponse.headers()["x-request-id"], {
+      actorId: "55555555-5555-4555-8555-555555555555",
+      actorRole: "grader",
+      action: "grader_assessment_analytics_read",
+      targetType: "assessment_submission",
+      targetId: pdfSubmissionId!,
+      outcome: "success",
+      reason: "active_grader_assignment_aal2",
+    });
+    expect(analyticsPayload.analytics).toMatchObject({
+      assessment_version_number: 1,
+      rubric_version_id: "f1111111-1111-4111-8111-111111111111",
+      response_mode: "typed_pdf",
+      attainment_status: "valid",
+      criterion_count: 2,
+      expected_criterion_count: 2,
+      elapsed_response_seconds: null,
+      elapsed_response_status: "not_linked",
+      timer_mode: "not_linked",
+      accommodation_mode: "not_linked",
+      comparability_status: "excluded_unlinked",
+      comparison_group_key: null,
+    });
+    expect(analyticsPayload.analytics!.score_max).toBeGreaterThan(0);
+    expect(analyticsPayload.analytics!.attainment_percent).toBeGreaterThanOrEqual(0);
+    expect(analyticsPayload.analytics!.attainment_percent).toBeLessThanOrEqual(100);
+    expect(analyticsPayload.analytics!.criterion_score_snapshot).toHaveLength(2);
+
     const learnerContext = await page.context().browser()!.newContext({
       baseURL: "http://127.0.0.1:8787",
     });
@@ -1490,6 +1561,14 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       expect(learnerDetailBody.submission.assessment_versions[0].version_number).toBe(1);
       expect(learnerDetailBody.submission.assessment_versions[0].overall_feedback)
         .toContain("The response selects a relevant detail");
+      expect(learnerDetailBody.submission).not.toHaveProperty("analytics");
+      expect(learnerDetailBody.submission).not.toHaveProperty("assessment_response_analytics");
+      const learnerAnalytics = await learnerPage.request.get(
+        "/api/v1/grader/submissions/" + pdfSubmissionId + "/analytics",
+        { headers: learnerHeaders },
+      );
+      expect(learnerAnalytics.status()).toBe(403);
+      await expect(learnerAnalytics.json()).resolves.toMatchObject({ error: "role_required" });
       const learnerRow = learnerPage.getByTestId("learner-submission-" + pdfSubmissionId);
       await expect(learnerRow).toBeVisible();
       await learnerRow.getByRole("button", { name: "View published feedback" }).click();

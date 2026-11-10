@@ -2543,6 +2543,76 @@ async function getGraderAttempt(request: Request, env: WorkerEnv, attemptId: str
   return jsonResponse({ attempt: result.attempt, prompts: result.prompts });
 }
 
+async function recordAssessmentAnalyticsReadOutcome(
+  context: CallerContext,
+  submissionId: string,
+  outcome: "success" | "failed",
+): Promise<{ recorded: boolean; allowed: boolean }> {
+  if (!context.serviceSupabase) return { recorded: false, allowed: false };
+  const { data, error } = await context.serviceSupabase.rpc(
+    "record_worker_assessment_analytics_read",
+    {
+      p_actor_id: context.userId,
+      p_submission_id: submissionId,
+      p_assurance: context.assuranceLevel,
+      p_outcome: outcome,
+    },
+  );
+  if (error) return { recorded: false, allowed: false };
+  const result = asRows(data)[0];
+  return {
+    recorded: result?.audit_recorded === true,
+    allowed: result?.access_allowed === true,
+  };
+}
+
+async function getAssignedAssessmentResponseAnalytics(
+  request: Request,
+  env: WorkerEnv,
+  submissionId: string,
+): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  if (!isUuid(submissionId)) return jsonResponse({ error: "assessment_analytics_not_found" }, 404);
+
+  const roleDenied = await requireActiveRole(auth.context, "grader");
+  if (roleDenied) {
+    const audit = await recordAssessmentAnalyticsReadOutcome(auth.context, submissionId, "failed");
+    if (!audit.recorded) return jsonResponse({ error: "protected_read_audit_unavailable" }, 503);
+    return roleDenied;
+  }
+
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) {
+    const audit = await recordAssessmentAnalyticsReadOutcome(auth.context, submissionId, "failed");
+    if (!audit.recorded) return jsonResponse({ error: "protected_read_audit_unavailable" }, 503);
+    return mfaDenied;
+  }
+
+  const { data, error } = await auth.context.supabase.rpc(
+    "get_assigned_assessment_response_analytics",
+    { p_submission_id: submissionId },
+  );
+
+  const audit = await recordAssessmentAnalyticsReadOutcome(
+    auth.context,
+    submissionId,
+    error ? "failed" : "success",
+  );
+  if (!audit.recorded) return jsonResponse({ error: "protected_read_audit_unavailable" }, 503);
+  if (!audit.allowed) return jsonResponse({ error: "assessment_analytics_not_found" }, 404);
+  if (error) {
+    if (error.message === "published_assessment_analytics_not_found") {
+      return jsonResponse({ error: "assessment_analytics_not_found" }, 404);
+    }
+    return jsonResponse({ error: "assessment_analytics_unavailable" }, 500);
+  }
+
+  const analytics = asRows(data)[0];
+  if (!analytics) return jsonResponse({ error: "assessment_analytics_not_found" }, 404);
+  return jsonResponse({ analytics });
+}
+
 async function adjustAttemptTimer(
   request: Request,
   env: WorkerEnv,
@@ -3553,6 +3623,11 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const graderSubmissionMatch = url.pathname.match(/^\/api\/v1\/grader\/submissions\/([0-9a-f-]{36})$/i);
   if (graderSubmissionMatch && request.method === "GET") {
     return getAssignedAssessmentSubmission(request, env, graderSubmissionMatch[1]);
+  }
+
+  const graderAnalyticsMatch = url.pathname.match(/^\/api\/v1\/grader\/submissions\/([0-9a-f-]{36})\/analytics$/i);
+  if (graderAnalyticsMatch && request.method === "GET") {
+    return getAssignedAssessmentResponseAnalytics(request, env, graderAnalyticsMatch[1]);
   }
 
   const graderDraftMatch = url.pathname.match(/^\/api\/v1\/grader\/submissions\/([0-9a-f-]{36})\/draft$/i);
