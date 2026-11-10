@@ -1,6 +1,6 @@
 # Cambridge Lower Secondary English (0861) — Stages 7–9 Curriculum Guide
 
-**Document status:** Public-framework-aligned group guide v0.9. Stage 7 chapter drafted in detail; Stages 8–9 remain design chapters. Stage 7 Unit 1 is now the active production checkpoint following founder approval of MYP Unit 1 v2. A controlled preview route was added for automated interface accessibility checks, but the unit remains an unreleased draft. Cambridge's public support overview explicitly shows 7Ri.03 for explicit information, which is recorded as a limited crosswalk only. Other objective codes and the currently applicable full framework file remain unverified pending the official support site.
+**Document status:** Public-framework-aligned group guide v1.1. Stage 7 chapter is drafted; Stages 8–9 remain design chapters. MYP Year 1 Unit 1 v3 and its review checkpoint come first. Stage 7 Unit 1 v1.3 retains founder-confirmed exact-version review/verification approval; its independent Top Five, revised teacher pack and live typed-response counters remain outstanding. Its 16/221/27-word original stimuli all meet the 250-word allowance. Cambridge's public support overview evidences only 7Ri.03 for explicit information; the full current framework/version and other objective codes remain unverified.
 **Course:** Cambridge Lower Secondary English (0861), Stage 7.
 **Pathway IDs:** cambridge-ls-english-s7, cambridge-ls-english-s8, cambridge-ls-english-s9.
 **Scope:** First-language English pathway, typically for learners aged 11–14 across Stages 7–9. Do not substitute the distinct English as a Second Language (0876) curriculum.
@@ -148,7 +148,7 @@ This is not Cambridge's official achievement judgement or a proxy for a Progress
 
 ## 9. Text selection, rights and accessibility
 
-- For every reading passage/extract, including short warm-ups, use a registered excerpt from a recognised writer's verified public-domain work. Create original questions and teaching material. The former allowance for original platform-created reading passages is withdrawn. Do not copy framework-protected lesson materials, commercial textbook pages or restricted test questions into our product.
+- Platform-original reading passage bodies up to and including 250 words are permitted; existing qualifying short originals may remain. Passage bodies over 250 words must use registered excerpts from recognised writers' verified public-domain works. Create original questions and teaching material. Do not copy framework-protected lesson materials, commercial textbook pages or restricted test questions into our product. Keep photograph and documentary-asset rights checks separate.
 - Build a balanced mix of fiction, non-fiction, poetry and playscripts across the full stage guide; no single unit needs to contain every text type.
 - Check cultural suitability and avoid suggesting a single text represents a country or culture.
 - Provide readable layouts, clear instructions, keyboard accessibility, sufficient contrast and vocabulary support. Alternative response modes should preserve the intended skill.
@@ -302,8 +302,25 @@ The table is our planning model, inspired by public Cambridge progression exampl
 **v0.9 update — 26 October 2026:** The final UI-test iteration associates the exit-check question with its response field, transfers keyboard focus from the skip link to the main content, and tests layout widths of 320, 390, 768 and 1024 CSS pixels. GitHub Actions [Build check #231](https://github.com/gradioprep/gradioprep-website/actions/runs/40308612925) passed the TypeScript/Vite build and all 17 Chromium tests on commit `841c26ab5f3c0bd24d32cc88d839af015353eff9`. This remains automated smoke coverage; manual screen-reader testing and broader accessibility checks are open. The unit stays unreleased pending formal rights/originality, human academic/suitability, full currently applicable framework/version and objective mapping, and explicit release approval. The preview is unmerged and no production deployment occurred.
 
 
-## Binding excerpt and teacher-pack standard — 30 October 2026
+## Binding passage-length, teacher-pack and live-counter standard — 30 October 2026
 
-Every Stage 7 reading stimulus, including the warm-up mini-text and main passage, must be an exact, registered excerpt from a recognised writer's verified public-domain work. This supersedes the former short-original passage allowance. Complete the source/edition/territory and suitability check in `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0 and record the Excerpt ID/Source ID in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`.
+Apply docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1 and docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md v1.1 across Stages 7–9.
 
-Stage 7 Unit 1 v1.3's original warm-up and “The Rain Gauge” are legacy stimuli. Replace/recast them and revise every passage-dependent answer and question. The teacher/editor pack must contain per-option rationales, correct-answer explanations, sequence logic where applicable, expected typed-response lengths, question-specific model responses and feedback under `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`. This is the second migration step, after MYP Year 1 and before CBSE Grade 6. Earlier v1.3 review approvals apply only to that exact historical version.
+Platform-original passage bodies up to and including 250 words are permitted; existing qualifying short originals may remain unchanged. Passage bodies over 250 words must be registered excerpts from recognised writers' verified public-domain works, with the exact source/edition and intended-territory check completed before use. Do not copy third-party copyrighted passages merely because they are short. Keep visual/photo rights controls separate.
+
+For Stage 7 Unit 1 v1.3, the existing “Rain Gauge” passage and warm-up mini-text are not automatically replacement-required: word-count each body when the scheduled revision begins. Retain each unchanged if ≤250 words. If either is >250 words and remains a reading stimulus, replace it in the revised version with a public-domain excerpt and update dependent questions/answers/feedback.
+
+The Stage 7 teacher/editor pack must contain per-option rationales, correct-answer explanations, sequence logic where applicable, question-specific response ranges, ideal word targets, model responses and tailored feedback. Retrofit the live current/ideal counter to every existing typed-response field in the Stage 7 preview/learner UI. The ideal target never caps the response; above-target text remains accepted and visible.
+
+**Sequence:** Stage 7 follows the retrospective MYP v3 counter retrofit and its required review/authorization checkpoint, and precedes CBSE Grade 6. Previous Stage 7 v1.3 approval applies only to that exact version; material revision triggers the relevant fresh review.
+
+## Stage 7 Unit 1 current research/migration status — 31 October 2026
+
+The current candidate is v1.3 in draft PR #12. Founder-confirmed review/verification approval applies to that exact version; do not request those confirmations again. The route-specific Top Five for Stage 7 is pending and must be completed separately from the MYP review. Its public-source findings must be applied to this guide and the implementation structure before the research checkpoint is marked complete.
+
+The current original passage bodies are 16 words (warm-up), 221 words (“The Rain Gauge”) and 27 words (exit mini-passage). They may remain under the approved 250-word rule. The existing teacher/editor pack needs migration to standard v1.2, and each typed response needs a current/ideal live counter in the preview. This content/technical migration follows the MYP review checkpoint and precedes the CBSE Grade 6 migration.
+
+
+## Diagnostic-first sequencing clarification — 31 October 2026
+
+The new Cambridge diagnostic cycle is the founder-requested **Grade 6** target. It is not to be silently routed to Cambridge Lower Secondary Stage 7. The exact official Cambridge stage/course for Grade 6 remains a scope-lock task in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`; this Lower Secondary Stage 7–9 guide remains a separate existing curriculum record. Stage 7 Unit 1 content, its completed Top Five review and outstanding pack/counter/release tasks are preserved but deferred while the Grade 9 IB MYP and Cambridge Grade 6 diagnostic cycles are completed. No Stage 7 diagnostic research or Stage 7 content migration is authorised by this clarification.

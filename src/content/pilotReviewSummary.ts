@@ -1,67 +1,38 @@
 import type { PilotReviewSummary } from "./model";
 
-/**
- * Safe planning metadata for the Pathways screen.
- * This intentionally excludes worked explanations, model responses and answers.
- */
+/** Safe, learner-visible review metadata for the current Unit 1 candidate. */
 export const pilotReviewSummary: PilotReviewSummary = {
-  id: "review-summary-ib-myp-lal-y1-u1-v1",
+  id: "review-summary-ib-myp-lal-y1-u1-v4",
   unitId: "ib-myp-lal-y1-u1",
-  title: "How writers shape meaning",
-  proposedFocus:
-    "A starter exploration of how deliberate word and sentence choices influence a reader's understanding and response.",
+  version: 4,
+  status: "founder-approved-candidate",
+  title: "How writers and creators shape meaning",
+  proposedFocus: "Language, imagery, atmosphere and visual design choices.",
   proposedLearningObjective:
-    "Identify a writer's choice in a short text and comment on how it may shape meaning or mood, using an example to support the explanation.",
+    "Explain how a writer's language choices and a visual creator's design choices may shape atmosphere and meaning, using precise evidence and the surrounding context.",
   mappingStatus: "unverified",
   officialObjectiveCodes: [],
   reviewRecord: {
     outcome: "passed",
-    reviewedAt: "2026-10-24",
-    reviewerLabel: "Academic lead (approval confirmed by project owner; name not specified)",
+    reviewedAt: "2026-10-31",
+    reviewerLabel: "Founder / project owner",
     scopeNote:
-      "Academic content review passed for this version per project owner confirmation. This approval supports the pilot preview only; the official curriculum mapping remains unverified and release is not authorised.",
+      "Version 4 was approved by the founder / project owner on 31 October 2026 after full academic, question/answer and age/level/context review. This approval is limited to exact v4 and is not release approval. Official mapping remains unverified; unit-level rights/territory, manual accessibility and explicit release decisions remain open.",
   },
   source: {
-    title: "IB MYP Language and literature — official subject page",
+    title: "IB MYP Language and Literature public programme overview and dated subject brief; current detailed Year 1 guide edition not verified",
     url: "https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/",
-    subjectBriefUrl:
-      "https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf",
-    checkedAt: "2026-10-24",
+    subjectBriefUrl: "https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf",
+    checkedAt: "2026-10-31",
     scopeNote:
-      "The public IB subject page and its subject brief describe the programme broadly but do not themselves provide Year 1 strand descriptors. The detailed guide source is still awaiting confirmation against the edition used by the intended school.",
+      "Public programme context and the linked subject brief were rechecked on 31 October 2026; the brief is labelled From 2014. The applicable current detailed Year 1 guide and exact objective/strand mapping remain unverified. Official objective codes are intentionally blank.",
   },
-  candidateGuide: {
-    title: "IB Language and literature guide — candidate Year 1 strands",
-    url: "https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf",
-    checkedAt: "2026-10-24",
-    accessNote:
-      "A search-indexed excerpt suggests Year 1 Criterion A strands A(ii) and A(iii), but the guide opens through IB curriculum sign-in. These references are candidates only until the applicable school-guide edition is verified.",
-  },
-  candidateObjectiveMappings: [
-    {
-      criterion: "A — Analysing",
-      strand: "A(ii)",
-      descriptor: "Identify and comment upon the creator's choices.",
-      state: "candidate-unverified",
-      rationale:
-        "A plausible candidate reference for the reviewed focus; confirm the applicable guide edition before accepting it as a mapping.",
-    },
-    {
-      criterion: "A — Analysing",
-      strand: "A(iii)",
-      descriptor: "Justify opinions and ideas using examples, explanations and terminology.",
-      state: "candidate-unverified",
-      rationale:
-        "A plausible candidate reference for using evidence and explanations; confirm the applicable guide edition before accepting it as a mapping.",
-    },
-  ],
   remainingReleaseChecks: [
-    "Confirm the applicable MYP Language and literature guide/edition used by the intended school.",
-    "Verify whether candidate strands A(ii), A(iii), both or neither fit this unit, then record exact official references.",
-    "Complete and record the separate content-rights review.",
-    "Complete and record the accessibility review for the interactive lesson.",
-    "Record explicit release approval only after all required evidence is complete.",
+    "Final unit-level rights and intended-territory review for text and visual assets.",
+    "Verification of the exact current official Year 1 guide and any claimed objective/strand mapping.",
+    "Manual accessibility review, including keyboard/focus, screen reader, contrast and zoom/reflow.",
+    "Explicit founder release approval.",
   ],
   releaseNote:
-    "Academic content review passed for pilot preview version 1. Do not claim official curriculum mapping or release this as a syllabus-mapped course until the applicable guide edition/objective references and all remaining release gates are verified.",
+    "Version 4 is an unreleased founder-approved content candidate. Practice is temporary and ungraded; the teacher pack is separate from the learner-facing application. Official IB mapping remains unverified; rights/territory, manual accessibility and release approval remain open.",
 };

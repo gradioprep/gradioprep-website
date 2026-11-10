@@ -1,7 +1,7 @@
 # CBSE English Grades 6–12 — Pathway Addition and Research Brief
 
-**Version:** 1.6  
-**Status:** Approved pathway scope and authorised implementation; learner-facing Grade 6 Unit 1 v1.0 (“The Turning Sign”) has founder academic-content approval recorded 28 October 2026. Its source alignment is partial; no unit-specific official CBSE objective code is assigned. A controlled, unlinked interface preview is available in draft PR #17; manual accessibility review, current *Poorvi* reprint verification and release approval remain separate gates.  
+**Version:** 1.11  
+**Status:** Approved CBSE pathway scope and preserved Grade 6 Unit 1 v1.0 candidate. The exact learner-facing v1.0 (“The Turning Sign”) has founder approval for the academic-content gate (28 October 2026); its 165-word original remains within the 250-word allowance. The curriculum-content Top Five, teacher-pack upgrade and live-counter work remain pending but are deferred during the diagnostic-first cycles. Source alignment is partial; the current *Poorvi* reprint and unit-specific official objective code are unverified. Manual accessibility and release decisions remain open. The active Grade 6 Cambridge diagnostic cycle is separate and is not this CBSE content pathway.
 **Decision date:** 26 October 2026  
 **Scope:** CBSE English Grades 6–12  
 **Implementation status (28 October 2026):** The learner-facing v1.0 candidate was approved for the academic-content gate by the founder. The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports limited source alignment for narrative reading and event sequencing, but no unique objective code. A direct-only controlled preview is implemented in [draft PR #17](https://github.com/gradioprep/gradioprep-website/pull/17), deployed for accessibility review at [the hosted preview URL](https://pr-17-gradioprep-website.wandering-scene-1822.workers.dev/preview/cbse-grade-6/english/unit-1). No normal navigation or release is added; manual accessibility review and the separate release gate remain outstanding.
@@ -38,17 +38,16 @@ These are starting points, not a completed syllabus audit. Before developing any
 
 ## 4. Required research and design method
 
-Follow the binding IB/Cambridge curriculum research workflow, extended to CBSE by the update recorded in the workflow. For each grade and applicable course route:
+Follow the binding English Curriculum Research Workflow for each grade and applicable route:
 
 1. Identify the current official CBSE/NCERT curriculum, textbook, learning outcomes/competencies, syllabus edition and assessment rules.
 2. Trace relevant NCF-SE 2023 principles to grade-specific official sources rather than applying broad principles as if they were exact syllabus requirements.
-3. Compare relevant India-focused and international English EdTech/teaching platforms and publishers at the same age/grade band. Review only what can be verified publicly: progression, unit architecture, text types, modelling, practice, feedback, assessments, differentiation, accessibility and teacher/learner workflow.
+3. Complete a ranked Top Five review of independent websites separately for the exact CBSE grade and English route. Include relevant India-focused and international specialist teaching/EdTech providers, publishers and educator resources; inspect publicly available grade-band/course-specific material and record dates, access and evidence. Do not count CBSE/NCERT/government sources toward the five. Use the binding weighted rubric in `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A.
 4. Cross-check proposed pedagogy against reputable evidence and the public-source register. Use platform research to inform implementation quality, not to determine official CBSE requirements.
 5. Design a distinct grade-specific curriculum guide and unit sequence, with source traceability and explicit confidence/status for each mapping.
 6. Keep official codes/wording only where directly verified. Otherwise use clearly labelled internal skill outcomes and mark the official mapping unresolved.
 7. Keep academic/content review, official mapping/currency, rights/originality, accessibility, age/cultural suitability and release approval separate.
-
-## 5. Binding Grade 6-equivalent Unit 1 order
+## 5. Historical Grade 6-equivalent Unit 1 production order — superseded 31 October 2026
 
 The first cross-track cohort is fixed as follows:
 
@@ -60,7 +59,7 @@ Finish the student-facing Unit 1 content and record the required academic/conten
 
 After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 → Cambridge Lower Secondary Stage 8 → CBSE Grade 7, subject to verifying actual age/grade alignment and current sources. Continue with Unit 1 across subsequent comparable bands (for example MYP Year 3 → Cambridge Stage 9 → CBSE Grade 8). Do not start Unit 2 for the first three pathways immediately after their Unit 1s finish; Unit 2 begins only after Unit 1 is complete across all approved in-scope levels. The platform's architecture, unit structure, research method and release process do not change. Keep the exact programme/course/stage/grade identity separate for every unit; the cohort is a production order, not a claim that the curricula share objectives or content.
 
-## 6. Current status and limitations
+## 6. Historical status and limitations — see current sequence addendum below
 
 - Pathway family and implementation sequence approved.
 - Grade 6 source context checked against official NCERT/CIET public pages on 28 October 2026.
@@ -79,7 +78,7 @@ After the first cohort, the next production cohort is Unit 1 for IB MYP Year 2 �
 - Human academic-content approval for learner-facing v1.0: recorded 28 October 2026. Rights/provenance desk screen passed within its limited scope; current-textbook version, official code, controlled-preview accessibility review and release gates remain distinct.
 - Application/catalogue changes: explicitly not requested and not made.
 
-## 7. Approval interpretation
+## 7. Historical approval interpretation — exact content approval retained
 
 The founder approved the CBSE Grades 6–12 pathway scope and has now instructed implementation of the next logical step after confirming that prior verification and approvals were already given for the preceding Cambridge Stage 7 checkpoint. This authorises development of a CBSE Grade 6 Unit 1 draft candidate, not an official syllabus mapping or automatic release approval for this new unit.
 
@@ -95,7 +94,7 @@ The founder approved the CBSE Grades 6–12 pathway scope and has now instructed
 
 ### Candidate design boundary
 
-The historical learner-facing v1.0, **“The Turning Sign,”** used a short platform-original animal narrative to teach reading a story for events, clues and supported inference, plus a brief activity on prepositions of location. The founder approved that exact version for the academic-content gate on 28 October 2026. It does not reproduce the named *Poorvi* stories or their exercise wording. However, the 30 October 2026 excerpt rule now marks its original story as replacement-required; the earlier approval does not transfer to the revised passage/tasks.
+The learner-facing v1.0, **“The Turning Sign,”** uses a short platform-original animal narrative to teach reading a story for events, clues and supported inference, plus a brief activity on prepositions of location. The founder approved that exact version for the academic-content gate on 28 October 2026. It does not reproduce the named *Poorvi* stories or their exercise wording. Its story body is 165 words under the project's lexical convention, so it remains within the 250-word platform-original allowance and does not require replacement solely because of the 30 October policy. The exact v1.0 approval remains historical for that version; material content changes require a fresh review, while the teacher-pack/counter migration is still pending.
 
 **Mapping state:** partial source alignment; official code unverified. The NCERT Grade 6 English Bridge Month Programme (English R2, first edition April 2024) supports narrative-reading/event-sequencing alignment. CIET lists location-preposition activity context. The current *Poorvi* reprint/version and any unit-specific official CBSE objective code remain unverified; do not infer a code from the activity page or bridge programme.
 
@@ -116,8 +115,37 @@ The founder has reviewed and approved the exact learner-facing “The Turning Si
 No official CBSE objective code is assigned. Current *Poorvi* reprint/version verification, a controlled unlinked preview for accessibility/UI checks, and explicit release decisions remain outstanding. The learner-safe TS data is still not imported into the UI. Do not add the unit to normal navigation or release it from this documentation decision.
 
 
-## Binding literary-excerpt and teacher-pack standard — 30 October 2026
+## Binding passage-length and teacher-pack standard — updated 30 October 2026
 
-The founder's new rule applies to every CBSE Grade 6–12 reading stimulus: short and long passages, warm-ups, mini-extracts and transfer texts must come from recognised writers' verified public-domain works. The prior permission for short platform-original reading passages is withdrawn. Original prompts, instructions, explanations, model answers and feedback remain permitted. Register every extract before use in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` under `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0.
+The founder-approved passage threshold applies across CBSE English Grades 6–12:
+- Platform-original reading passage bodies up to and including 250 words are permitted; existing qualifying short originals may remain unchanged.
+- Passage bodies over 250 words must use recognised writers' verified public-domain works, with exact source/edition and intended-territory checks completed before use.
+- The threshold does not permit copying third-party copyrighted text merely because it is short. Photo/documentary-asset rights remain separate.
+- Give every passage an Excerpt ID. Short originals receive an authorship/provenance/word-count/suitability record; long public-domain excerpts receive a Source ID and full source record.
 
-The current Grade 6 Unit 1 “The Turning Sign” is a legacy platform-original passage. Its exact v1.0 founder approval remains historical but does not make the passage compliant with the new standard. It must be replaced and its question/answer guidance revised after the existing MYP Year 1 and Cambridge Stage 7 teacher packs have been migrated. Do not finalise the CBSE teacher pack or begin assessment-feature implementation ahead of those two steps. Apply `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md` to every objective and typed-response item.
+The current Grade 6 Unit 1 “The Turning Sign” is a platform-original story. At the scheduled revised-version checkpoint, audit the story-body word count. Retain it unchanged if it is 250 words or fewer. If it exceeds 250 words, use a registered public-domain excerpt in the revised version and update dependent questions/answer guidance. The exact v1.0 founder approval remains historical for the original passage/tasks only; do not change the existing v1.0 content solely because the policy has changed.
+
+The CBSE teacher/editor pack is not complete under the current teacher-pack standard. The former plan required MYP Year 1 and Cambridge Stage 7 teacher-pack revisions before CBSE; that relative order is preserved as historical planning only and is not an active queue during the diagnostic cycles. Do not finalise or build CBSE Unit 1 assessment features until the founder selects its content task after the diagnostic cycles. When selected, include AI-drafted/human-validated objective explanations, per-alternative rationales, ordering/fill-in logic, question-specific typed-response ranges and ideal targets, model responses and question-specific feedback. Apply an unrestricted live current/ideal counter to every typed-response field.
+
+## 12. Route-specific Top Five research requirement — 31 October 2026
+
+Every CBSE English grade requires its own ranked Top Five independent-source audit before that grade's curriculum guide and implementation structure are marked research-complete. A Grade 6 audit does not automatically transfer to Grades 7–12, and an international source used for MYP or Cambridge does not count automatically for CBSE. Evaluate sources for Indian grade relevance, current textbook/learning-outcome context, age suitability, pedagogical credibility, inspectable teaching/assessment examples, transparency and rights. Keep official CBSE/NCERT/National Curriculum Framework references in a separate authority register.
+
+**Grade 6 status:** the CBSE curriculum-content Top Five is **not yet completed and is deferred** while the two selected diagnostic cycles are active. When the founder resumes CBSE curriculum content, complete this separate India-relevant audit using the best available public NCERT/CBSE evidence and independent providers; label unsupported official class-specific mapping as unverified. Do not begin this audit as part of the Cambridge Grade 6 diagnostic cycle.
+
+## 13. Historical Grade 6 Unit 1 specification checkpoint — 31 October 2026 (deferred)
+
+The exact learner-facing v1.0 “The Turning Sign” remains founder-approved for the academic-content gate. Its story body is 165 words under the project's lexical convention; it qualifies as a short original and does not require replacement solely because the passage rule changed.
+
+The Grade 6 curriculum-content Top Five remains pending but is deferred during the diagnostic-first cycles. The existing v1.0 teacher/editor pack is not complete under the current teacher-pack standard; it still needs per-alternative reasoning, sequence logic, question-specific typed-response guidance/ideal targets, models and tailored feedback. The live current/ideal counter must be added to every typed response when this Unit 1 candidate is next revised. PR #17 is the earlier v1.0 interface preview and does not yet satisfy this counter requirement. Do not use the former Cambridge Stage 7 checkpoint as the current next-step trigger.
+
+The latest *Poorvi* reprint and unit-specific official CBSE objective code remain unverified. Do not reproduce NCERT material or invent objective codes. The absence of a current exact official descriptor does not block the independent Top Five or a clearly labelled internal guide. The cross-route sequence and release boundaries are controlled by `docs/UNIT_1_COHORT_STATUS_AND_RECONCILIATION.md`.
+
+
+## 11. Diagnostic-first sequencing addendum — 31 October 2026
+
+The former cross-track Unit 1 rotation in Section 5 is a historical product-production decision and is not the active work order. The founder has approved two pre-curriculum diagnostic-readiness cycles in this order: (1) Grade 9 IB MYP Language and Literature (MYP Year 4 working assumption, school placement to verify); (2) Cambridge Grade 6 English (exact Cambridge stage/course and language route to verify; do not substitute Lower Secondary Stage 7).
+
+CBSE English Grades 6–12 remains an approved product-scope addition. The existing CBSE Grade 6 Unit 1 v1.0 learner content and its exact-version academic-content approval are preserved. All further CBSE curriculum-content research, Top Five audit, teacher-pack/counter migration and release work are deferred while the two diagnostic cycles run. This does not cancel or modify the CBSE pathway, approve any new content or close any existing review gate. After both diagnostic cycles are complete, the founder will specify the next curriculum-content order.
+
+The new diagnostic Top Five is a separate product-landscape audit of diagnostic/evaluation providers for the exact age/level. It must not be confused with the existing curriculum-content Top Five requirement in this brief or copied from another curriculum/grade.

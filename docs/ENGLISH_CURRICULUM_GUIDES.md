@@ -1,12 +1,12 @@
 # English Curriculum Guides — Year/Stage Framework and Pathway Implementation Plan
 
-**Status:** Internal guide register v1.3. The original 12 planned year/stage/delivery entries across four curriculum groups remain under versioned development; the separately approved CBSE English Grades 6–12 pathway is recorded in its research brief and the Unit Production Register, with class-wise research/guides still pending. Exact official objective maps remain unverified where current descriptors are not directly available.
+**Status:** Internal guide register v1.5. The guide architecture and curriculum-specific research controls remain unchanged. The current work order is the diagnostic-first register: Grade 9 IB MYP, then Cambridge Grade 6 (exact stage/course to be scope-locked; do not substitute Stage 7). All former cross-track guide/unit rotations are historical and inactive while those cycles run. Existing guides and unit candidates are preserved; no new year/stage curriculum content work is active. Exact official objective maps remain unverified where current descriptors are not directly available.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`, `ENGLISH_STAGE_1_ROADMAP.md`, `ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`, and `ENGLISH_PUBLIC_SOURCE_REGISTER.md`.
 **Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences.
 
 ## 1. Document architecture decision
 
-Use **one independently reviewable guide per curriculum-year/stage track**, plus one shared research/pedagogy standard and a compact register. Finish a guide and implementation structure, record founder approval, then produce and review the relevant unit within the binding Unit 1 rotation. The active second item is Cambridge Stage 7 Unit 1 v1.3 in draft PR #12; its learner-facing content has an isolated controlled UI preview in draft PR #15, and latest build/18-test CI passed. Founder human review is approved and the short-original-text internal originality/provenance screen has passed; full framework/version and mapping, manual accessibility/hosted visual review and release remain pending. This keeps approval, source editions, changes and completion status unambiguous; a single large group document can hide unfinished year-level work.
+Use **one independently reviewable guide per curriculum-year/stage track**, plus one shared research/pedagogy standard and a compact register. This document remains the guide architecture/source register; however, no guide or unit rotation is currently active. The diagnostic-first layer takes precedence and uses the founder-selected order in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`. Existing guides, Stage 7 records and Unit 1 candidates are preserved but deferred until both diagnostic cycles are complete and the founder sets the next content order. This keeps approval, source editions, changes and completion status unambiguous; a single large group document can hide unfinished year-level work.
 
 Use a separate implementation-plan document for each curriculum-year/stage track. Keep shared research methods, evidence standards, source-access limits and the rubric in the central research standard/register.
 
@@ -14,7 +14,7 @@ Canonical guide files:
 - `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_YEAR_1_GUIDE.md` — **public-framework-aligned guide v1.1; founder-approved 26 October 2026; current official objective mapping remains unverified**.
 - `docs/curriculum/IB_MYP_YEAR_1_PATHWAY_IMPLEMENTATION.md` — **implementation structure v1.2; guide/structure founder-approved; Unit 1 v2 remains an unmerged candidate with separate review and release gates open**.
 - `docs/curriculum/IB_MYP_LANGUAGE_AND_LITERATURE_GUIDE.md` — legacy group draft with Years 1–5 chapters; Year 1 is superseded by the standalone guide. Years 2–5 remain drafts, not completed/approved guides.
-- `docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md` — group guide v0.5; Stage 7 Unit 1 v1.3 is the active draft review candidate. Founder human review of exact v1.3 was approved 28 October 2026; full current framework/version and objective codes beyond 7Ri.03 explicit-information items remain unverified.
+- `docs/curriculum/CAMBRIDGE_LOWER_SECONDARY_ENGLISH_0861_GUIDE.md` — group guide v1.2; Stage 7 Unit 1 v1.3 is a preserved draft candidate and its further pack/counter migration is deferred during the diagnostic-first cycles. Founder review of exact v1.3 was approved 28 October 2026 and the Stage 7 curriculum-content Top Five is complete; full current framework/version and objective codes beyond 7Ri.03 explicit-information items remain unverified.
 - `docs/curriculum/IB_DP_LANGUAGE_A_LANGUAGE_AND_LITERATURE_GUIDE.md` — existing group draft; review/split DP Year 1 as its own guide when it reaches the approved rotation.
 - `docs/curriculum/CAMBRIDGE_IGCSE_FIRST_LANGUAGE_ENGLISH_0500_GUIDE.md` — syllabus-wide 0500 source/assessment register. Delivery phases are platform conventions, not official syllabus years.
 - `docs/curriculum/UNIT_PRODUCTION_REGISTER.md` — source, completion checkpoint, Unit 1 rotation and release-gate register.
@@ -79,7 +79,7 @@ For each year/stage chapter, complete all sections below. If a field is not yet 
    - Do not promise automatic grading or official grades.
 7. **Text and rights plan**
    - Genre/text-type range and rationale.
-   - Every reading passage/extract must be a registered excerpt from a recognised writer's verified public-domain work; original writing is permitted for prompts, teaching notes, questions, explanations, models and feedback, not as a replacement reading passage.
+   - Platform-original reading passage bodies up to and including 250 words are allowed; existing qualifying short originals may remain unchanged. Passage bodies over 250 words must use a recognised writer's verified public-domain work. Record every passage under the correct short-original provenance or long-public-domain source record. Do not use third-party copyrighted text merely because it is short. Preserve separate visual/photo rights controls.
    - Cultural breadth, age suitability and sensitive-content review.
 8. **Inclusive teaching and access**
    - Vocabulary/pre-teaching, scaffolded and stretch pathways, accessibility, assistive technology and readable formats.
@@ -107,9 +107,9 @@ For each pathway, show:
 
 The pathway's unit order is our recommended learning sequence unless the official source explicitly prescribes one. Never imply that IB or Cambridge endorsed our unit design.
 
-## 5. Rotation rules: guide creation first, then unit content
+## 5. Historical rotation rules: guide creation first, then unit content (superseded 31 October 2026)
 
-**Binding founder instruction:** complete a year/stage curriculum-guide chapter in a cross-track rotation. Only after the guide cycle has been completed should new learner-facing unit content be produced, also in a cross-track rotation. Do not complete an entire curriculum group before starting the others. The sequence below is our production order, not official IB/Cambridge curriculum order.
+**Historical policy only — no longer the active production order.** The cross-track guide and unit rotations recorded below are retained as historical decisions and are not to be followed while the diagnostic-first cycles are active. The binding current sequence is in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`. The founder will set the next curriculum-content order after the selected diagnostic cycles; do not restart these lists automatically.
 
 ### A. Curriculum-guide creation rotation
 
@@ -181,7 +181,7 @@ The current pilot **How writers shape meaning** remains academic-review passed f
 
 The v1.0 guide's research scope was too narrow for the founder's request to assess MYP-focused EdTech platforms. Version 1.1 now includes a dedicated comparative audit of InThinking/ThinkIB, ASJ Learning, Hachette Learning/MYP by Concept, ManageBac+, Toddle, My IB Hub and lower-confidence marketplace sources, alongside current public IB pages and the indexed 2014/15 detailed guide reference.
 
-The old detailed guide is treated as a **legacy reference, not verified current edition**. Enhanced MYP beta guidance remains a separate transition watch. Year 1 is now six proposed units plus shared time for diagnostics, language support, retrieval, revision and transfer, totaling at least 50 planned teaching hours. These unit names/order are platform decisions, not IB-prescribed structure. The MYP guide and implementation structure have founder approval, while MYP Unit 1 v2 remains subject to separate review and release gates. Stage 7 Unit 1 v1.3 is the active draft in PR #12 with controlled preview UI testing in PR #15; automated interface checks passed, while human academic/suitability, formal rights, current framework/version/mapping, manual accessibility and release gates remain open. The later production rotation remains blocked until the required gate records are complete.
+The old detailed guide is treated as a **legacy reference, not verified current edition**. Enhanced MYP beta guidance remains a separate transition watch. Year 1 is now six proposed units plus shared time for diagnostics, language support, retrieval, revision and transfer, totaling at least 50 planned teaching hours. These unit names/order are platform decisions, not IB-prescribed structure. Historical status snapshot from 26 October 2026, superseded by the current registers: the MYP guide and implementation structure had founder approval; MYP Year 1 Unit 1 has since advanced to v4 and exact content/human academic/age suitability are approved, with rights/accessibility/release gates still open. Cambridge Stage 7 remains an existing candidate with its own preserved gates and completed Top Five audit. Neither Stage 7 nor any other Unit 1 is the active next task. All curriculum content work is deferred during the diagnostic-first cycles.
 
 
 ## Controlled preview test checkpoint — 26 October 2026
@@ -200,15 +200,33 @@ The Cambridge Stage 7 Unit 1 v1.3 preview now associates the exit-check prompt w
 
 ## Stage 7 Unit 1 v1.3 status and source rule — 28 October 2026
 
-Historical review record for Cambridge v1.3: the founder confirmed human review/approval of the exact learner content, and the short platform-original passage passed the limited internal originality/provenance screen under the rules then in force. That finding remains a historical fact for v1.3 only; under the 30 October 2026 public-domain excerpt rule, the original passage is now replacement-required. It is not a current source-compliance pass, and the revised version must be re-reviewed.
+Historical review record for Cambridge v1.3: the founder confirmed human review/approval of the exact learner content, and the short platform-original passage passed the limited internal originality/provenance screen under the rules then in force. That finding remains a historical fact for v1.3 only. Under the later 250-word threshold, audit the exact passage body when the unit is revised: retain it if it is 250 words or fewer; if it is longer, use a recognised writer's verified public-domain excerpt in the revised version and re-review the affected tasks.
 
 Do not describe the unit as released/student-ready. Its current full Cambridge framework/version and further objective mapping, manual accessibility/hosted visual review, and explicit release approval remain open. For future longer passages or visual/document-based tasks, verify the exact public-domain/open-licence source and intended-use terms before selection/embedding.
 
 
-## Binding literary-excerpt and teacher-pack requirements — 30 October 2026
+## Binding passage-length, teacher-pack and live-counter requirements — 30 October 2026
 
-All curriculum guides must use the new common rules in `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` v2.0 and `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`. Every short and long reading stimulus—including warm-ups, mini-extracts, transfer passages and assessment extracts—must come from a recognised writer's verified public-domain work and must be recorded in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md` before use. The former short platform-original passage allowance is withdrawn. Original supporting pedagogy, tasks and model/feedback material remain permitted.
+All curriculum guides and unit production must follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1, docs/LITERARY_EXCERPT_SOURCE_REGISTER.md v1.1 and docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md v1.1.
 
-Every objective question requires answer reasoning and a rationale for each alternative; every typed response requires a question-specific expected length, model response and feedback. Keep these common standards separate from each curriculum's own assessment model, official mapping and criteria.
+- Project-original reading passage bodies up to and including 250 words are permitted; qualifying existing short originals may remain unchanged.
+- Passage bodies over 250 words must use recognised writers' verified public-domain works. Check the exact work/edition and intended territories before use.
+- A short length does not permit copying third-party copyrighted text. Visual/documentary/photo rights remain independently controlled.
+- Every passage receives an Excerpt ID. Short originals require authorship/provenance/word-count/suitability evidence; longer public-domain excerpts require a Source ID and complete edition/location/territory record.
+- Objective items require correct-answer reasoning and a separate rationale for each alternative. Typed responses require a question-specific expected range, an ideal target, a model response and question-specific feedback.
+- Every typed-response field must show a real-time current/ideal word counter. The denominator is a guide, not a limit; learners may type and retain responses above it. Apply the counter retrospectively to every existing field and from first integration to every future field.
 
-The existing first-cohort materials must be revised in this order: **IB MYP Year 1 Unit 1 → Cambridge Lower Secondary Stage 7 Unit 1 → CBSE Grade 6 Unit 1**. This sequence applies to teacher/editor packs and associated passages, not only learner-facing files. Do not complete the CBSE Unit 1 teacher pack before both IB and Cambridge revisions have passed their content/consistency checks. Existing approval states remain limited to the exact earlier versions. Later IB DP and Cambridge IGCSE guides/content must follow the new source standard from first draft.
+**Historical first-cohort integration sequence — deferred and superseded:** (1) MYP Year 1 Unit 1 counter/pack work; (2) Cambridge Stage 7 teacher/editor pack and counters; (3) CBSE Grade 6 pack and counters. This is no longer an active queue. The approved MYP v4 content/counter state and all existing candidate statuses are recorded in the current source-of-truth register. Do not resume these items automatically after the diagnostic cycles; wait for the founder's explicit content order.
+
+Existing MYP v3 content is not changed by this policy update. Founder content approval does not substitute for fresh human academic review, official mapping, rights, suitability, accessibility or release approval.
+
+
+
+## 7. Diagnostic-first sequencing overlay — 31 October 2026
+
+The curriculum-guide architecture and source-verification rules in this document remain in force. The old cross-track guide and unit rotations in Section 5 are historical only. Current active work is restricted to the level-by-level diagnostic readiness cycles in `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`:
+
+1. Grade 9 IB MYP Language and Literature — MYP Year 4 is a working assumption; confirm actual school placement.
+2. Cambridge Grade 6 English — confirm the official stage/course and language route; do not substitute Stage 7.
+
+Each level requires a separately researched diagnostic-provider Top Five, a skills-based diagnostic, detailed analytics report and a personalised five-day remedial course before moving to the next level. No curriculum guide, new unit or teacher-pack migration for other levels is to be started during these cycles. The next content order after both cycles is reserved for the founder. Existing guide versions, unit candidates, approvals and release gates are not modified by this overlay.

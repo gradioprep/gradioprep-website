@@ -11,7 +11,7 @@ const directRouteChecks: Array<{ path: string; heading: RegExp }> = [
     heading: /Language and Literature pathway/i,
   },
   { path: ibYearOne, heading: /Year 1 learning plan/i },
-  { path: ibUnitOne, heading: /How writers shape meaning.*pilot preview/i },
+  { path: ibUnitOne, heading: /How writers and creators shape meaning.*review candidate/i },
   { path: pilotLesson, heading: /Notice the choice\. Explain the effect\./i },
   {
     path: "/pathways/cambridge-igcse/first-language-english/grade-9-equivalent-band",
@@ -48,7 +48,7 @@ test.describe("curriculum pathway URLs", () => {
 
     await page.getByRole("button", { name: /Continue to Unit 1/ }).click();
     await expect(page).toHaveURL(new RegExp(`${ibUnitOne}$`));
-    await expect(page.getByRole("heading", { name: /How writers shape meaning.*pilot preview/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /How writers and creators shape meaning.*review candidate/i })).toBeVisible();
 
     await page.getByRole("button", { name: /Continue to pilot lesson preview/ }).click();
     await expect(page).toHaveURL(new RegExp(`${pilotLesson}$`));
@@ -56,7 +56,7 @@ test.describe("curriculum pathway URLs", () => {
 
     await page.goBack();
     await expect(page).toHaveURL(new RegExp(`${ibUnitOne}$`));
-    await expect(page.getByRole("heading", { name: /How writers shape meaning.*pilot preview/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /How writers and creators shape meaning.*review candidate/i })).toBeVisible();
 
     await page.goBack();
     await expect(page).toHaveURL(new RegExp(`${ibYearOne}$`));
@@ -116,4 +116,38 @@ test.describe("curriculum pathway URLs", () => {
     await expect(page.getByRole("button", { name: /Continue to/ })).toHaveCount(0);
   });
 
+});
+
+
+test.describe("IB MYP Year 1 Unit 1 version 4 learner guidance", () => {
+  test("shows both registered literary extracts and question-specific response ranges", async ({ page }) => {
+    await page.goto(pilotLesson);
+    await expect(page.getByText(/The city clocks had only just gone three/)).toBeVisible();
+    await expect(page.getByText(/The rabbit-hole went straight on like a tunnel/)).toBeVisible();
+    await expect(page.getByText(/orange-lit platform/i)).toBeVisible();
+    await expect(page.getByText(/bright shelter/i)).toHaveCount(0);
+    await expect(page.getByText(/Expected response: 15–25 words/)).toBeVisible();
+    await expect(page.getByText(/Expected response: 40–55 words/)).toBeVisible();
+    await expect(page.getByText(/Expected response: 65–85 words/)).toBeVisible();
+    await expect(page.getByText(/Expected response: 45–65 words/)).toHaveCount(2);
+    await expect(page.getByText(/Expected response: 45–60 words/)).toBeVisible();
+    await expect(page.getByText(/At the edge of the field, the last bus sighed/)).toHaveCount(0);
+    await expect(page.getByText(/Shone silver/)).toHaveCount(0);
+    await expect(page.getByText(/REVISED CONTENT CANDIDATE/)).toBeVisible();
+    await expect(page.getByText(/not graded/i).first()).toBeVisible();
+  });
+
+  test("keeps response guidance visible without horizontal overflow at desktop and mobile widths", async ({ page }) => {
+    for (const width of [360, 390, 768, 1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(pilotLesson);
+      await expect(page.getByText(/Expected response: 15–25 words/)).toBeVisible();
+      await expect(page.getByText(/Expected response: 40–55 words/)).toBeVisible();
+      const dimensions = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        content: document.documentElement.scrollWidth,
+      }));
+      expect(dimensions.content, `horizontal overflow at ${width}px viewport`).toBeLessThanOrEqual(dimensions.viewport);
+    }
+  });
 });

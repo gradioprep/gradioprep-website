@@ -1,8 +1,8 @@
 # Criterion Lab — Design Specification
 
-**Version:** 1.9  
-**Status:** Approved design system; curriculum-first navigation implemented and live-verified in the Cloudflare Workers preview; Cambridge Stage 7 Unit 1 has an isolated, unreleased interface-testing preview in draft PR #15  
-**Last updated:** 27 October 2026  
+**Version:** 2.3  
+**Status:** Approved design system and curriculum-first navigation; the diagnostic/report experience is specified to use a predominantly white/cool-white canvas, accessible high-quality charts and minimal tables/data blocks. Existing MYP Year 1 live counters remain documented; diagnostic analytics are not yet implemented.  
+**Last updated:** 31 October 2026  
 **Product name:** “Criterion Lab” is a working name only. Final brand and domain are not approved.  
 **Source of truth:** [`PROJECT_MASTER_BRIEF.md`](PROJECT_MASTER_BRIEF.md)
 
@@ -305,7 +305,11 @@ Keep the reading column comfortable on desktop and remove side-by-side distracti
 
 ### Practice interaction
 
-- Each question must have its task context, instructions and response format, including a question-specific expected word count/range for every typed response.
+- Each question must have its task context, instructions and response format, including a question-specific expected word count/range and ideal target for every typed response.
+- Each typed-response field must display a real-time current/ideal counter (for example 38/50, then 59/50 when the learner goes over). Update on typing, paste, edit, deletion and clear-all.
+- The denominator is an ideal target, not a maximum. Never truncate/reject text, disable the field, block submission or set maxLength based on the target. Preserve the entire learner response above the target.
+- Apply the counter retrospectively to every existing typed-response field and to every new field from first integration. This is a client-side writing aid, not a grade, score, save or submission feature.
+- Count lexical words consistently: letters/digits form words, punctuation-only tokens do not count, and contractions/hyphenated compounds count as one. Expose the changing count accessibly without disrupting typing.
 - For objective/closed questions, provide immediate question-specific feedback after the learner checks/submits: the correct answer, the reasoning that makes it correct, and why each alternative does not fit. Ordering tasks must explain the chronological, causal, referential or logical sequence.
 - For typed responses configured for AI-assisted practice feedback, provide immediate feedback grounded in the learner's actual answer, the exact excerpt and the item's approved criteria. Identify a supported strength, a specific missing/weak link and one useful next step.
 - Reveal model responses and full marking guidance only in the intended post-attempt state. Never reveal answer keys or hidden criteria before the learner's attempt.
@@ -404,7 +408,7 @@ At initial launch, label the founder “Founding Academic Lead.” Do not manufa
 
 ### Answer-key and feedback security
 
-- Learner-facing bundles may contain only the selected public-domain excerpt, question, instructions and fields needed to attempt the task.
+- Learner-facing bundles may contain only the selected task stimulus (a verified public-domain excerpt when it exceeds 250 words, or an approved platform-original passage of 250 words or fewer), question, instructions and fields needed to attempt the task. Do not include teacher-only answers or rationales.
 - Correct-answer IDs, full answer keys, per-option rationale, model responses, private rubrics and teacher notes stay server-side behind access controls when live marking is introduced.
 - The server returns only the feedback authorised for the current attempt/reveal state; never send the full teacher pack to the browser.
 - Do not describe the current preview/self-check interactions as automated grading. A secure Worker endpoint, validation, rate limiting and privacy design are required before live AI-assisted evaluation.
@@ -468,3 +472,51 @@ Cloudflare's Preview API confirmed the isolated `pr-15` URL [https://pr-15-gradi
 
 
 **Version 1.9 change note — 30 October 2026:** Added mandatory question-specific length, objective answer reasoning, distractor/sequence explanation, immediate item-specific formative feedback and server-side answer-key boundaries. See `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`. This documents the approved target behaviour; it does not claim the current preview screens implement automatic marking or AI feedback.
+
+
+**Version 2.1 change note — 30 October 2026:** Implemented the typed-response counter interaction on the MYP Year 1 Unit 1 v3 lesson. All six textareas use the shared `ResponseWordCountTextarea` component and one lexical counter helper; each shows the approved current/ideal count, including values above the target. Ideal targets are 20, 50, 75, 55, 55 and 50 words in entry/Q2/Q3/Q4/Q5/exit order. Existing expected ranges, prompts and content remain unchanged. The counter is visually secondary, uses existing design-system typography and colour tokens, is programmatically associated with its textarea and updates through a polite assistive-technology status. There is no cap, `maxLength`, grading, persistence or submission behavior. Automated checks are in `tests/word-counter.spec.ts`; CI verification for the latest commit is pending.
+
+**Version 2.2 change note — 31 October 2026:** The shared MYP response textarea now associates the learner's response field with its task/entry/exit prompt, the expected response-range guidance and the live current/ideal count through `aria-describedby`. The browser test checks all three ID references, the visible prompt/range and the accessible name. This supplements (and does not replace) the polite live counter status. CI run #295 passed 16/16 Chromium tests. Manual screen-reader, keyboard/focus, zoom/reflow, contrast and cross-browser checks remain required before release.
+
+
+**Version 2.3 change note — 31 October 2026:** Added a feature-specific design specification for the pre-curriculum diagnostic, evaluation report and remedial analytics. The report canvas is predominantly white/cool white, with restrained approved Palette B accents and accessible chart-first presentation. This does not change the global palette, typography, navigation or application architecture and does not claim any diagnostic feature is implemented.
+
+## 16. Diagnostic, evaluation and remedial analytics experience
+
+### 16.1 Visual direction
+
+Use a predominantly **white/cool-white background** for the diagnostic flow, evaluation report and analytics. The experience should feel like a premium, high-end EdTech assessment product: calm, spacious, precise and easy to interpret. Do not use a black or dark dashboard theme.
+
+- Keep large report surfaces white/cool white; use existing cards, borders and semantic surface tokens.
+- Use aubergine for primary headings/actions and dusty blue for secondary navigation, chart series or comparisons.
+- Use soft lilac and pale blue-grey sparingly for grouped learning panels or chart annotations.
+- Reserve muted amber for constructive next steps and areas requiring attention; it must not imply failure or punishment.
+- Use deep blue for strengths/positive findings only with explicit labels; never encode meaning with colour alone.
+- Do not alter fonts, typography sizes, spacing scale, global palette tokens or existing page/navigation architecture.
+
+### 16.2 Analytics layout and visual hierarchy
+
+The evaluation report should prioritise, in order:
+
+1. A concise learning-readiness overview with an explanation of what the result means.
+2. A clear skill-profile visual with direct labels and readable scales.
+3. A small number of skill-level bar/radar or other meaningful charts, accompanied by short explanations.
+4. Evidence-backed strengths and improvement priorities, each linked to the remedial course.
+5. The personalised five-day remedial plan and its daily objectives/time allocations.
+
+Minimise tables and dense data blocks. Avoid repeating the same score in several visual forms. Use a table only where comparison truly requires rows/columns. Provide concise explanatory text beside a chart rather than expecting students to infer meaning from colours or labels alone.
+
+### 16.3 Chart selection and accuracy
+
+- Use horizontal bars for comparable skill or sub-skill results; label the scale, skill and available evidence.
+- Use a radar/spider chart only where a small set of comparable dimensions can be read without overlap or distortion.
+- Use a circle/donut/proportion chart only when the displayed categories form a meaningful whole and denominators are clear.
+- Use line graphs only for at least two valid measurements over time (for example diagnostic baseline and a genuinely comparable post-course check); never invent a trend from one test.
+- Use explicit chart titles, labels, units/scale and explanatory annotations. Include a text equivalent for assistive technology and ensure contrast in actual data marks and labels.
+- Avoid false precision, unvalidated norm comparisons, arbitrary percentages and misleading axis scales. Where evidence is limited, show that limitation visibly.
+
+The chart calculation and displayed figure must be traceable to the underlying diagnostic responses and approved scoring rules. An attractive visual is not a substitute for measurement validity.
+
+### 16.4 Responsive and accessible presentation
+
+Charts must remain understandable on narrow screens, at 200%/400% zoom and with keyboard/screen-reader use. Do not use colour as the only indicator of strength, status or priority. Supply readable text summaries/labels; make tooltips optional rather than the sole source of information. Keep the same semantic heading hierarchy and focus order as the existing site.

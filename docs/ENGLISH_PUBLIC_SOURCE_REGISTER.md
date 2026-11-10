@@ -1,11 +1,11 @@
 # English Curriculum Public-Source Register and Currency Protocol
 
-**Version:** 2.6  
-**Research checked:** 30 October 2026; literary excerpt requirements updated 30 October 2026  
+**Version:** 3.1  
+**Research checked:** 31 October 2026; MYP Year 1 and Cambridge Stage 7 curriculum-content Top Fives complete; CBSE Grade 6 curriculum-content Top Five remains pending but is deferred during the diagnostic-first cycles
 **Purpose:** Establish a reproducible, publicly usable source base for IB MYP Language and Literature, IB DP Language A: Language and Literature, Cambridge Lower Secondary English 0861, Cambridge IGCSE First Language English 0500, and CBSE English Grades 6–12.  
 **Scope note:** This is not an IB/Cambridge endorsement, nor does it make an independently designed unit an official syllabus map.
 
-**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.0. Every short or long reading passage/extract, including warm-ups and transfer texts, must come from a recognised writer's verified public-domain work. The former short platform-original passage allowance is withdrawn. Register every excerpt in docs/LITERARY_EXCERPT_SOURCE_REGISTER.md before use. Original instructions, questions, explanations, model responses and feedback remain allowed. The stricter photograph rule remains binding: the exact file page must confirm CC0/public-domain status before a photograph is selected or embedded.
+**Content-rights rule:** Follow docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md v2.1. Project-original reading passage bodies up to and including 250 words are allowed and existing qualifying short originals may remain. Reading passages over 250 words must use a recognised writer's verified public-domain work. External third-party copyrighted text is not permitted merely because it is short. Give every passage an Excerpt ID and the appropriate authorship/provenance or public-domain source record in docs/LITERARY_EXCERPT_SOURCE_REGISTER.md. Original instructions, questions, explanations, model responses and feedback remain allowed. The stricter photograph rule remains binding: the exact file page must confirm CC0/public-domain status before a photograph is selected or embedded.
 
 ## 1. Decision in response to access constraints
 
@@ -42,9 +42,9 @@ The CBSE pathway is newly approved for product scope. This register entry is a s
 
 **Candidate mapping boundary:** describe the work as an independently designed, public-source-aligned CBSE Grade 6 practice unit. No official class-specific objective code is assigned in the absence of an exact current Grade 6 English descriptor. The exact NCERT edition/reprint should be checked again before any publication decision.
 
-## 2. Core five-source set
+## 2. Shared cross-track source starters — not the route-specific Top Five
 
-These are the five cross-track core website/source families selected for relevance, traceability, currency and transparency—not a popularity ranking or a claim that they are the five best sites for every course. They do not form an exhaustive MYP-specific EdTech review. For MYP Year 1, use the additional dedicated landscape audit in docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md.
+This is a shared cross-track discovery/reference set selected for relevance, traceability, currency and transparency. It is **not** the five independent websites required for any individual course or level. Official awarding-body sources do not count toward a route's independent Top Five. Each exact IB, Cambridge and CBSE route must have its own ranked, evidence-based Top Five comparison under `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A. For MYP Year 1, that completed audit is recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1.
 
 ### Source 1 — International Baccalaureate public resources
 **Domains:** ibo.org and ibpublishing.ibo.org.  
@@ -143,7 +143,7 @@ For exams 2027–2029, use the official Version 1 syllabus and current public sp
 - [Cambridge International, Implementing the Curriculum with Cambridge](https://www.cambridgeinternational.org/Images/134557-implementing-the-curriculum-with-cambridge.pdf) — provides example school structures in which Stage 7 can correspond to Grade 6 or another year/grade depending on the national context. Treat these as contextual examples, not a universal conversion table.
 - [Cambridge support: age group for Lower Secondary Checkpoint](https://help.cambridgeinternational.org/hc/en-gb/articles/23411513050770-Which-age-group-of-learners-is-the-Cambridge-Lower-Secondary-Checkpoint-for) — states Stages 7–9 cover approximately ages 11–14.
 
-**Production rule:** IB MYP Year 1, Cambridge Lower Secondary Stage 7 and CBSE Grade 6 form the first internal Grade 6-equivalent Unit 1 cohort. This is a workflow grouping only; keep the official curriculum/level names separate and verify each level's actual learner context. Complete all three before older-level Unit 1 or Unit 2 work.
+**Historical production rule (superseded 31 October 2026):** IB MYP Year 1, Cambridge Lower Secondary Stage 7 and CBSE Grade 6 were formerly grouped as an internal Grade 6-equivalent Unit 1 cohort. This was a workflow grouping only, not an official equivalence. It is no longer the active production order; see the diagnostic-first cycle register.
 
 
 | Curriculum/track | Public evidence available | Evidence gap | What we may do now | What we must not claim yet |
@@ -241,8 +241,9 @@ A second limited search pass queried eight additional distinctive sentence fragm
 
 The content source register governs curriculum/source research; the separate content originality and rights protocol governs rights evidence. These controls are intentionally proportionate:
 
-- Original platform content is limited to short, task-purposeful passages/excerpts and the brief instructional/assessment material around them. Record provenance, proportionate phrase-screen scope/result, and human approval. If no specific concern is identified, the internal originality/provenance screen may be marked passed; formal legal review is not a blanket prerequisite for every unchanged short original passage.
-- Longer passages/excerpts and source artefacts for tasks—including images, posters, notices, adverts, infographics and book/document images—should be drawn from verified public-domain works or licences that permit the exact intended commercial/online use and any edits. Identify the exact work/file, edition/translation where relevant, source URL, licence/version, permitted uses, attribution, modifications and date checked before selection/embedding.
+- Platform-original reading passage bodies may be up to and including 250 words. Record exact word count, authorship/version and proportionate phrase-screen scope/result, plus suitability. Existing qualifying short originals may remain; a material rewrite receives the relevant new review. This internal provenance screen is not a legal opinion.
+- Passage bodies over 250 words must be excerpts from recognised writers' verified public-domain works. Record exact work, edition/transcription, source URL, location, applicable territory term check and date in the literary source register before selection/embedding.
+- Visual/documentary artefacts—including photographs, posters, notices, adverts, infographics and book/document images—remain subject to their own asset-specific rights/licence rules. Their rights do not follow the passage word-count threshold.
 - Public availability, a “copyright free” label, search-result text, attribution alone, or an educational use case is not proof of rights. If terms are ambiguous, select a clearer source. Use permission or an explicitly documented legal basis for copyrighted content outside the reusable-source route.
 - Do not confuse an internal originality/provenance pass with a verified third-party licence or a formal legal opinion. Escalate only when a concrete concern remains unresolved; do not repeat broad searches on unchanged text without a reason.
 
@@ -271,6 +272,48 @@ The programme's holistic-assessment section states a major learning outcome: rea
 
 ## Literary excerpt source register — binding companion record (30 October 2026)
 
-This curriculum/source register remains the record for official curriculum references, specialist resources and sample-paper currency. It is not the per-excerpt provenance ledger. Every learner reading passage, short warm-up, mini-extract and transfer passage must also have an Excerpt ID and exact Source ID in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. The excerpt register records the work, author, exact edition/transcription, URL, public-domain basis and territory check, precise location, question/unit use and replacement history. Complete it before adopting the passage.
+This curriculum/source register remains the record for official curriculum references, specialist resources and sample-paper currency. It is not the per-excerpt provenance ledger. Every learner reading passage, short warm-up, mini-extract and transfer passage must have a stable Excerpt ID in `docs/LITERARY_EXCERPT_SOURCE_REGISTER.md`. A platform-original passage ≤250 words receives an authorship/provenance and word-count record; a public-domain passage >250 words receives an exact Source ID, edition, location and territory record. The excerpt register records the work, author, exact edition/transcription, URL, public-domain basis and territory check, precise location, question/unit use and replacement history. Complete it before adopting the passage.
 
-The prior source records for original platform-created passages are historical only and do not satisfy the new literary-source standard. Existing MYP Year 1, Cambridge Stage 7 and CBSE Grade 6 passage stimuli are marked replacement-required and must be revised sequentially under the English Stage 1 roadmap.
+The MYP v3 passages already use registered Dickens and Carroll public-domain sources and remain unchanged. For the existing Cambridge Stage 7 and CBSE Grade 6 originals, audit exact passage-body word counts during each unit's scheduled revision: retain unchanged if 250 words or fewer; use public-domain excerpts for passages over 250 words. Do not mark every short original as replacement-required.
+
+## 7. MYP Year 1 current public-source currency check — 31 October 2026
+
+### Current official public pages
+
+- [MYP Language and Literature](https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/) — page displays last updated 19 February 2026. It identifies listening, speaking, reading, writing, viewing and presenting as the six skill areas and describes inquiry, literary/non-literary text variety, context, audience, purpose and linguistic/literary choices.
+- [MYP assessment and exams](https://www.ibo.org/programmes/middle-years-programme/assessment-and-exams/) — page displays last updated 19 February 2026. It states school-based assessment uses tasks created and marked by classroom teachers against prescribed subject-group objectives and criteria; optional external eAssessment is distinct.
+- [MYP curriculum](https://www.ibo.org/programmes/middle-years-programme/curriculum/) — page displays last updated 19 February 2026 and states at least 50 hours of teaching time per subject group in each MYP year.
+- [Public MYP Language and Literature subject brief](https://www.ibo.org/globalassets/new-structure/brochures-and-infographics/pdfs/myp-brief-language-literature-en.pdf) — the publicly linked brief is labelled “From 2014”; use as a broad historical course outline only.
+- [Detailed Language and literature guide reference](https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf) — indexed as the guide for use from September 2014 or January 2015. It provides legacy A–D/Year 1 reference material; it does not prove that those descriptors are the currently applicable detailed guide.
+- [Enhanced MYP beta unit-planning guidance](https://pds.ibo.org/Prototype10MYPBeta-EN/course/en/assets/6752a5296bbe08d1d82df1c6/file.pdf) — states full release is scheduled for 2027. Treat beta planner guidance as transition information, not finalized subject-objective wording.
+
+### Mapping consequence
+
+These public sources support the platform's broad, independently designed learning focus and the need to gather task evidence. They do not expose a verified current detailed Year 1 subject guide/strand map for this candidate. Leave the MYP v3 `mappingStatus` as `unverified` and `officialObjectiveCodes` as an empty array until the applicable school guide is verified through an authorized/current source. Do not map to legacy A–D codes simply because they appear in the 2014/15 reference.
+
+## 9. Curriculum-content route-specific Top Five audit — 31 October 2026
+
+The MYP Year 1 route-specific Top Five is complete and recorded in `docs/curriculum/IB_MYP_YEAR_1_RESOURCE_LANDSCAPE_REVIEW.md` v1.1. It ranks five independent providers after inspecting public MYP-specific content: InThinking/ThinkIB, ASJ Learning, ManageBac+, Hachette Learning and Toddle. The source register's shared five cross-track starters are not a substitute for this audit.
+
+**Current curriculum-content audit status:** Cambridge Lower Secondary English 0861 Stage 7's Top Five is complete and recorded in `docs/curriculum/CAMBRIDGE_LS_S7_RESOURCE_LANDSCAPE_REVIEW.md` v1.0. CBSE Grade 6's curriculum-content Top Five remains pending and is deferred during the diagnostic-first cycles. The same route-specific rule applies to other approved years/stages/grades when content production is next selected. Absence of a detailed official guide does not block the public-source audit or an accurately labelled independent design; it leaves only unsupported official mapping unverified.
+
+## 10. Historical first-cohort curriculum-content research and passage-status record — 31 October 2026 (deferred)
+
+| Route | Independent Top Five state | Application to guide/implementation | Passage inventory relevant to current Unit 1 |
+|---|---|---|---|
+| IB MYP Language and Literature Year 1 | **Complete** — five providers individually ranked and evidence-inspected in the dedicated MYP landscape review v1.1 | Applied in Year 1 guide v1.5 and implementation plan v1.5 | Current MYP Year 1 Unit 1 v4 uses registered Dickens/Carroll public-domain extracts (95/129 words) |
+| Cambridge Lower Secondary English 0861 Stage 7 | **Complete** — five ranked and evidence-inspected providers in `CAMBRIDGE_LS_S7_RESOURCE_LANDSCAPE_REVIEW.md` v1.0 | Applied in the Stage 7 group guide v1.2; unsupported official mapping remains unverified | Current original warm-up/main/exit bodies: 16/221/27 words; all within threshold |
+| CBSE English Grade 6 | **Pending/deferred** — its curriculum-content Top Five is not active during diagnostic cycles | Apply only after the audit when the founder resumes CBSE content work; keep outcomes distinct | Current original “The Turning Sign” body: 165 words; within threshold |
+
+The counts follow the project's lexical convention and refer to the exact learner candidates recorded on 31 October 2026. Recount after any text edit. A qualifying short original may remain; the length rule never permits copying a short third-party copyrighted work.
+
+The five cross-track discovery starters elsewhere in this register are not the Top Five for any exact route. Official IB/Cambridge/CBSE/NCERT sources remain in a separate authority register and do not count toward the independent Top Five. Use the weighted rubric and required evidence record in `docs/IB_CAMBRIDGE_CURRICULUM_RESEARCH_WORKFLOW.md` Section 2A.
+
+**No-source bottleneck:** unavailable/gated official detailed guides do not block the Top Five, a clearly labelled internal curriculum guide or its implementation structure. They block only unsupported official mapping claims. Do not ask the founder again for authorised IB PRC access; no such access is available.
+
+
+## 11. Diagnostic-provider research is a separate evidence stream — 31 October 2026
+
+This register's Top Five rules concern **curriculum-content providers and learning resources**. They are not the new diagnostic/evaluation-product Top Five. The diagnostic cycle requires five products selected for the quality of their diagnostic tests, skill/sub-skill reporting, analytics, evidence and remediation linkage for the exact learner level. Use the separate weighted rubric and per-cycle requirements in `docs/DIAGNOSTIC_AND_REMEDIAL_LEARNING_READINESS_STANDARD.md`. Do not reuse a curriculum-content Top Five as diagnostic evidence or vice versa.
+
+The current diagnostic sequence is Grade 9 IB MYP first (MYP Year 4 working assumption, verify the actual school placement), followed by Cambridge Grade 6 (exact course/stage and English route to be scoped; do not substitute Stage 7). No diagnostic-provider research has started. The CBSE curriculum-content audit remains deferred until both selected cycles finish and the founder sets the next content order.

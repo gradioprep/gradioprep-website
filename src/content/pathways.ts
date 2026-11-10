@@ -4,8 +4,8 @@ const unitSequences: readonly UnitSequence[] = [1, 2, 3];
 
 /**
  * Create planned catalogue slots. Most remain empty; the first IB MYP Year 1
- * slot points to reviewed pilot-preview content. Neither the slot nor preview
- * implies official syllabus coverage or a production release.
+ * slot points to the founder-approved version 4 content candidate; separate release gates remain open. Neither the
+ * candidate nor its preview implies official syllabus coverage or release.
  */
 function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
   return unitSequences.map((sequence) => {
@@ -14,13 +14,13 @@ function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
       id: `${pathwayId}-u${sequence}`,
       pathwayId,
       sequence,
-      title: isPilotPreview ? "Pilot preview — How writers shape meaning" : "Unit focus to be confirmed",
+      title: isPilotPreview ? "Revised candidate — How writers and creators shape meaning" : "Unit focus to be confirmed",
       learningObjective: null,
       officialObjectiveCodes: [],
       mappingStatus: "unverified",
       releaseStatus: "planned",
       reviewNote: isPilotPreview
-        ? "Academic content review passed for pilot preview version 1; official Year 1 objective mapping remains unverified and this unit is not released."
+        ? "Version 4 is founder-approved for content, human academic review and age/level/context suitability (31 October 2026). Official Year 1 mapping remains unverified; unit-level rights/territory, manual accessibility and release approval remain open. This unit is not released."
         : "Planning slot only. Add a skill focus and official objective references after academic review.",
     };
   });
