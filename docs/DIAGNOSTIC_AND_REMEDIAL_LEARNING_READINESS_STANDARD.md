@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.19
+**Version:** 2.20
 **Approved:** 31 October 2026  
 **Last updated:** 10 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
@@ -341,3 +341,12 @@ The next step is consolidated human academic review and validation of all Cycle 
 The Founder has reviewed and approved the five Cycle 1 v0.1 learner-content files and their companion restricted teacher/editor packs, covering the six mapped task groups. This is exact-version approval; material revisions require version-specific review. Teacher-only keys, model responses, scoring anchors and private feedback remain restricted. The approval does not remove the standard's existing evidence calibration, scoring, accessibility, timing, accommodation, administration, staging, pilot or release controls.
 
 Terminology is explicit: the **Diagnostic** is the assessment the student takes; the **Evaluation Report** is the separate combined output of analytics, AI-generated feedback and the final teacher-generated report after teacher review and approval. The existing cycle order and implementation process are unchanged.
+
+
+## 29. Verified first Diagnostic delivery slice — 10 November 2026
+
+The current PR #22 synthetic implementation has a verified first learner-delivery slice on exact application/test HEAD `12b0a4d47dedb2bd0fc7396cc36824145d437e21`, exact-head CI [#42814204466](https://github.com/gradioprep/gradioprep-website/actions/runs/42814204466). The full run passed **825 SQL assertions across 23 files and 36/36 Playwright tests**, TypeScript/Worker/Vite builds, synthetic database/private-PDF backup and restore, shutdown, credential cleanup and clean credential-free Preview-assets build.
+
+The learner-facing implementation captures ten Read & View observations and five Language in Context observations in one learner-owned, unscored Diagnostic attempt. It verifies caller/enrolment boundaries, strict bounded response validation, append-only revisions, metadata-only audit, all-enabled-observation completeness before submission, and read-only restoration after submission. It adds no scoring, answer-key access, marks, AI feedback, automated grading, learner percentile or Evaluation Report. This is partial engineering delivery evidence, not a calibrated full Diagnostic, a release approval or the three-stage cycle's completion.
+
+Listening L01–L05 remains a content asset gate, not permission to use a script-only scored task. The current authoring script has no recording. A human performer/producer must create a standardised recording and complete quality/intelligibility/pace/delivery review before Listening is implemented for scored learner use. The single-play/replay administration policy remains a pilot decision, and the transcript must not be exposed during scoring except under an approved access arrangement. The remaining task groups, human academic calibration, accepted-response/rubric anchors, accessibility/accommodations, timing/administration validation, calibrated scoring/confidence, Evaluation Report, whole-site learner-facing copy cleanup, branded staging and participant pilot remain separate gates.
