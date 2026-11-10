@@ -2825,7 +2825,7 @@ async function uploadSubmissionPdf(
   }
 
   const contentLength = Number(request.headers.get("content-length") ?? "0");
-  if (Number.isFinite(contentLength) && contentLength > maxSubmissionPdfBytes + 128 * 1024) {
+  if (Number.isFinite(contentLength) && contentLength > maxSubmissionPdfBytes + 256 * 1024) {
     const audit = await auditPrivilegedWriteOutcome(
       context, "student_submission_file_upload", submissionId, "failed", "validation_failed",
     );
@@ -2852,11 +2852,21 @@ async function uploadSubmissionPdf(
 
   const entries = Array.from(form.entries());
   const submittedFile = form.get("file");
-  if (entries.length !== 1 || entries[0]?.[0] !== "file" || !(submittedFile instanceof File)) {
+  const transcriptRaw = form.get("transcript_pages");
+  const keys = entries.map(([key]) => key);
+  if (
+    entries.length !== 2 ||
+    keys.filter(key => key === "file").length !== 1 ||
+    keys.filter(key => key === "transcript_pages").length !== 1 ||
+    keys.some(key => key !== "file" && key !== "transcript_pages") ||
+    !(submittedFile instanceof File) ||
+    typeof transcriptRaw !== "string" ||
+    transcriptRaw.length > 150_000
+  ) {
     const audit = await auditPrivilegedWriteOutcome(
       context, "student_submission_file_upload", submissionId, "failed", "validation_failed",
     );
-    return audit ?? jsonResponse({ error: "single_pdf_file_required" }, 400);
+    return audit ?? jsonResponse({ error: "invalid_pdf_upload_payload" }, 400);
   }
 
   const { data: started, error: startError } = await context.serviceSupabase.rpc(
@@ -2935,6 +2945,22 @@ async function uploadSubmissionPdf(
     return reject("page_limit_exceeded");
   }
 
+  let transcriptPages: unknown;
+  try {
+    transcriptPages = JSON.parse(transcriptRaw) as unknown;
+  } catch {
+    const acknowledged = await rejectPendingSubmissionPdf(context, fileId, "malformed_pdf");
+    return acknowledged
+      ? jsonResponse({ error: "invalid_pdf_transcript" }, 400)
+      : jsonResponse({ error: "submission_file_audit_unavailable" }, 503);
+  }
+  if (!isPdfTranscriptPages(transcriptPages, pageCount)) {
+    const acknowledged = await rejectPendingSubmissionPdf(context, fileId, "malformed_pdf");
+    return acknowledged
+      ? jsonResponse({ error: "invalid_pdf_transcript" }, 400)
+      : jsonResponse({ error: "submission_file_audit_unavailable" }, 503);
+  }
+
   const digest = await crypto.subtle.digest("SHA-256", bytes);
   const sha256 = Array.from(new Uint8Array(digest))
     .map(value => value.toString(16).padStart(2, "0"))
@@ -2962,6 +2988,7 @@ async function uploadSubmissionPdf(
       p_byte_size: bytes.byteLength,
       p_page_count: pageCount,
       p_mime_type: "application/pdf",
+      p_transcript_pages: transcriptPages,
     },
   );
   const fileRecord = asRows(finalized)[0];

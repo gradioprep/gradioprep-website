@@ -146,7 +146,11 @@ export default function LearnerSubmissionPanel({ accessToken }: { accessToken: s
   const selectedTask = tasks.find(task => task.id === selectedTaskId) ?? null;
 
   async function uploadPdf(submissionId: string, file: File): Promise<void> {
+    // Optional attachments use the same page-aligned PDF.js transcript contract
+    // as a PDF supplied with the original assessment response.
+    const transcript = await extractDigitalTextFromPdf(file);
     const form = new FormData();
+    form.append("transcript_pages", JSON.stringify(transcript.pages));
     form.append("file", file, file.name);
     const response = await fetch("/api/v1/learner/submissions/" + encodeURIComponent(submissionId) + "/file", {
       method: "POST",

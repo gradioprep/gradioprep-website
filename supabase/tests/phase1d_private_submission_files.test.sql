@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(35);
+SELECT plan(38);
 
 SELECT is(
   (SELECT public FROM storage.buckets WHERE id = 'private-submissions'),
@@ -80,6 +80,31 @@ SELECT ok(
 SELECT ok(
   has_function_privilege('service_role', 'public.begin_submission_file_upload(uuid,uuid)', 'EXECUTE'),
   'only the trusted Worker role can begin an upload'
+);
+SELECT ok(
+  to_regprocedure('public.finalize_submission_file_upload(uuid,uuid,text,bigint,integer,text,jsonb)') IS NOT NULL
+  AND has_function_privilege(
+    'service_role',
+    'public.finalize_submission_file_upload(uuid,uuid,text,bigint,integer,text,jsonb)',
+    'EXECUTE'
+  ),
+  'only the trusted Worker can call the transcript-aware file finalizer'
+);
+SELECT ok(
+  NOT has_function_privilege(
+    'authenticated',
+    'public.finalize_submission_file_upload(uuid,uuid,text,bigint,integer,text,jsonb)',
+    'EXECUTE'
+  ) AND NOT has_function_privilege(
+    'anon',
+    'public.finalize_submission_file_upload(uuid,uuid,text,bigint,integer,text,jsonb)',
+    'EXECUTE'
+  ),
+  'browser roles cannot bypass Worker validation or transcript persistence'
+);
+SELECT ok(
+  to_regprocedure('public.finalize_submission_file_upload(uuid,uuid,text,bigint,integer,text)') IS NULL,
+  'the transcript-free legacy finalizer is not callable'
 );
 
 CREATE TEMP TABLE phase1d_submission_context (submission_id uuid);
@@ -354,13 +379,14 @@ SELECT set_config(
 );
 SELECT throws_ok(
   format(
-    'SELECT * FROM public.finalize_submission_file_upload(%L,%L,%L,%s,%s,%L)',
+    'SELECT * FROM public.finalize_submission_file_upload(%L,%L,%L,%s,%s,%L,%L)',
     '11111111-1111-4111-8111-111111111111',
     (SELECT file_id FROM phase1d_pending_context),
     repeat('c', 64),
     1024,
     1,
-    'application/pdf'
+    'application/pdf',
+    '[{"page_number":1,"text":"Synthetic transcript text","status":"digital_text"}]'
   ),
   'P0001',
   'submission_file_upload_expired',

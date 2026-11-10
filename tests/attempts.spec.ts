@@ -373,13 +373,25 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     ) => {
       const response = await page.request.post(fileUploadRoute, {
         headers,
-        multipart: { file: { name, mimeType, buffer } },
+        multipart: {
+          file: { name, mimeType, buffer },
+          transcript_pages: JSON.stringify([{
+            page_number: 1,
+            text: "Synthetic digital text for the optional PDF transcript regression.",
+            status: "digital_text",
+          }]),
+        },
       });
       expect(response.status(), name).toBe(status);
       await expect(response.json()).resolves.toMatchObject({ error });
     };
 
-    const onePagePdf = await createPdf(1);
+    const onePageDocument = await PDFDocument.create();
+    onePageDocument.addPage().drawText(
+      "Synthetic digital text captured from the optional PDF attachment.",
+      { size: 12, x: 50, y: 700 },
+    );
+    const onePagePdf = Buffer.from(await onePageDocument.save());
     await expectRejectedUpload("response.txt", "application/pdf", onePagePdf, 400, "pdf_extension_required");
     await expectRejectedUpload("response.pdf", "application/octet-stream", onePagePdf, 415, "pdf_mime_type_required");
     await expectRejectedUpload("response.pdf", "application/pdf", Buffer.from("not a PDF"), 400, "invalid_pdf_signature");
@@ -430,6 +442,15 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     const fileAccess = await page.request.get(fileReadRoute, { headers });
     const fileAccessBody = await fileAccess.json() as {
       file: { signed_url: string; expires_in_seconds: number; sha256: string; page_count: number };
+      transcript: {
+        version: number;
+        method: string;
+        state: string;
+        verification_state: string;
+        page_count: number;
+        pages: Array<{ page_number: number; text: string; status: string }>;
+        text: string;
+      };
     };
     expect(fileAccess.status()).toBe(200);
     expect(fileAccessBody.file.expires_in_seconds).toBe(60);
@@ -437,6 +458,23 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     expect(fileAccessBody.file.byte_size).toBe(onePagePdf.byteLength);
     expect(fileAccessBody.file.mime_type).toBe("application/pdf");
     expect(fileAccessBody.file.page_count).toBe(1);
+    expect(fileAccessBody.transcript).toMatchObject({
+      version: 1,
+      method: "pdfjs",
+      state: "complete",
+      verification_state: "unverified",
+      page_count: 1,
+    });
+    expect(fileAccessBody.transcript.pages[0]).toMatchObject({
+      page_number: 1,
+      status: "digital_text",
+    });
+    expect(fileAccessBody.transcript.pages[0].text).toContain(
+      "Synthetic digital text captured from the optional PDF attachment.",
+    );
+    expect(fileAccessBody.transcript.text).toContain(
+      "Synthetic digital text captured from the optional PDF attachment.",
+    );
     const downloadedPdf = await page.request.get(fileAccessBody.file.signed_url);
     expect(downloadedPdf.status()).toBe(200);
     expect((await downloadedPdf.body()).byteLength).toBe(onePagePdf.byteLength);
@@ -565,7 +603,14 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       expect(crossLearnerRead.status()).toBe(404);
       const crossLearnerUpload = await secondLearnerPage.request.post(fileUploadRoute, {
         headers: secondLearnerHeaders,
-        multipart: { file: { name: "other-learner.pdf", mimeType: "application/pdf", buffer: onePagePdf } },
+        multipart: {
+          file: { name: "other-learner.pdf", mimeType: "application/pdf", buffer: onePagePdf },
+          transcript_pages: JSON.stringify([{
+            page_number: 1,
+            text: "Synthetic digital text captured from the optional PDF attachment.",
+            status: "digital_text",
+          }]),
+        },
       });
       expect(crossLearnerUpload.status()).toBe(404);
     } finally {
