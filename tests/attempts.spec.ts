@@ -425,6 +425,51 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     };
     expect(pdfSubmissionDetailBody.submission.response_mode).toBe("typed_pdf");
 
+    // A typed-plus-PDF response must also link to the learner's submitted
+    // practice attempt for the exact same task version.
+    const typedPdfAttemptCreate = await page.request.post("/api/v1/learner/attempts", {
+      headers,
+      data: { task_version_id: taskVersionA },
+    });
+    const typedPdfAttemptCreateBody = await typedPdfAttemptCreate.json() as { attempt?: { id?: string }; error?: string };
+    expect(typedPdfAttemptCreate.status(), JSON.stringify(typedPdfAttemptCreateBody)).toBe(201);
+    const typedPdfAttemptId = typedPdfAttemptCreateBody.attempt?.id;
+    expect(typedPdfAttemptId).toBeTruthy();
+    const typedPdfAttemptSave = await page.request.put(
+      "/api/v1/learner/attempts/" + typedPdfAttemptId + "/responses/" + promptA,
+      { headers, data: { response_text: "This synthetic typed-plus-PDF practice response links the selected evidence to a coherent interpretation of the task." } },
+    );
+    expect(typedPdfAttemptSave.status()).toBe(200);
+    const typedPdfAttemptSubmit = await page.request.post(
+      "/api/v1/learner/attempts/" + typedPdfAttemptId + "/submit",
+      { headers, data: {} },
+    );
+    expect(typedPdfAttemptSubmit.status()).toBe(200);
+    const typedPdfLink = await page.request.post(
+      "/api/v1/learner/attempts/" + typedPdfAttemptId + "/assessment-link",
+      {
+        headers,
+        data: { assessment_submission_id: acceptedBody.submission.submission_id, idempotency_key: randomUUID() },
+      },
+    );
+    const typedPdfLinkBody = await typedPdfLink.json() as { link?: { attempt_id: string; assessment_submission_id: string; link_id: string }; error?: string };
+    expect(typedPdfLink.status(), JSON.stringify(typedPdfLinkBody)).toBe(201);
+    expect(typedPdfLinkBody.link).toMatchObject({
+      attempt_id: typedPdfAttemptId,
+      assessment_submission_id: acceptedBody.submission.submission_id,
+    });
+    assertPersistedAuditCorrelation(typedPdfLink.headers()["x-request-id"], {
+      actorId: "11111111-1111-4111-8111-111111111111",
+      actorRole: "student",
+      action: "student_timed_attempt_assessment_linked",
+      targetType: "timed_attempt_assessment_link",
+      targetId: typedPdfLinkBody.link!.link_id,
+      outcome: "success",
+      reason: "learner_action",
+    });
+    process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TYPED_PDF_ATTEMPT_ID = typedPdfAttemptId!;
+
+
     const fileAccess = await page.request.get(fileReadRoute, { headers });
     const fileAccessBody = await fileAccess.json() as {
       file: { signed_url: string; expires_in_seconds: number; sha256: string; page_count: number };
@@ -826,6 +871,79 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       for (const submissionIdToWithdraw of [...new Set(queueSubmissionIds)]) {
         await withdrawSyntheticSubmission(ownerPage, ownerAal2Token, submissionIdToWithdraw);
       }
+
+      // Add a genuinely timed, typed-only assessment after freeing the
+      // duplicate idempotency fixture above. This completes the third mode
+      // through linkage, human publication and analytics.
+      const timedTypedAttemptCreate = await page.request.post("/api/v1/learner/attempts", {
+        headers,
+        data: { task_version_id: "a3333333-3333-4333-8333-333333333333" },
+      });
+      const timedTypedAttemptCreateBody = await timedTypedAttemptCreate.json() as { attempt?: { id?: string }; error?: string };
+      expect(timedTypedAttemptCreate.status(), JSON.stringify(timedTypedAttemptCreateBody)).toBe(201);
+      const timedTypedAttemptId = timedTypedAttemptCreateBody.attempt?.id;
+      expect(timedTypedAttemptId).toBeTruthy();
+      const timedTypedAttemptSave = await page.request.put(
+        "/api/v1/learner/attempts/" + timedTypedAttemptId + "/responses/b3333333-3333-4333-8333-333333333333",
+        {
+          headers,
+          data: { response_text: "This synthetic timed typed-only response selects a relevant detail and explains how it supports a clear interpretation." },
+        },
+      );
+      expect(timedTypedAttemptSave.status()).toBe(200);
+      const timedTypedAssessment = await page.request.post("/api/v1/learner/submissions", {
+        headers,
+        data: {
+          task_version_id: "a3333333-3333-4333-8333-333333333333",
+          idempotency_key: randomUUID(),
+          response_text: "This synthetic timed typed-only assessment explains how a selected textual detail supports an interpretation with relevant evidence.",
+        },
+      });
+      const timedTypedAssessmentBody = await timedTypedAssessment.json() as { submission?: { submission_id?: string; response_mode?: string }; error?: string };
+      expect(timedTypedAssessment.status(), JSON.stringify(timedTypedAssessmentBody)).toBe(201);
+      const timedTypedSubmissionId = timedTypedAssessmentBody.submission?.submission_id;
+      expect(timedTypedSubmissionId).toBeTruthy();
+      expect(timedTypedAssessmentBody.submission?.response_mode).toBe("typed");
+      const timedTypedAttemptSubmit = await page.request.post(
+        "/api/v1/learner/attempts/" + timedTypedAttemptId + "/submit",
+        { headers, data: {} },
+      );
+      expect(timedTypedAttemptSubmit.status()).toBe(200);
+      const timedTypedLink = await page.request.post(
+        "/api/v1/learner/attempts/" + timedTypedAttemptId + "/assessment-link",
+        {
+          headers,
+          data: { assessment_submission_id: timedTypedSubmissionId, idempotency_key: randomUUID() },
+        },
+      );
+      const timedTypedLinkBody = await timedTypedLink.json() as { link?: { link_id: string; attempt_id: string; assessment_submission_id: string }; error?: string };
+      expect(timedTypedLink.status(), JSON.stringify(timedTypedLinkBody)).toBe(201);
+      expect(timedTypedLinkBody.link).toMatchObject({
+        attempt_id: timedTypedAttemptId,
+        assessment_submission_id: timedTypedSubmissionId,
+      });
+      assertPersistedAuditCorrelation(timedTypedLink.headers()["x-request-id"], {
+        actorId: "11111111-1111-4111-8111-111111111111",
+        actorRole: "student",
+        action: "student_timed_attempt_assessment_linked",
+        targetType: "timed_attempt_assessment_link",
+        targetId: timedTypedLinkBody.link!.link_id,
+        outcome: "success",
+        reason: "learner_action",
+      });
+      process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TYPED_SUBMISSION_ID = timedTypedSubmissionId!;
+      process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TYPED_ATTEMPT_ID = timedTypedAttemptId!;
+      const assignTimedTypedForReview = await ownerPage.request.post(
+        "/api/v1/admin/submissions/" + timedTypedSubmissionId + "/assign",
+        {
+          headers: { Authorization: ownerAal2Token },
+          data: {
+            grader_user_id: "55555555-5555-4555-8555-555555555555",
+            reason: "Synthetic timed typed-only grading and analytics journey",
+          },
+        },
+      );
+      expect(assignTimedTypedForReview.status()).toBe(201);
     } finally {
       await ownerContext.close();
     }
@@ -1166,6 +1284,9 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     const pdfSubmissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_PDF_ID;
     const linkedAttemptId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TIMED_ATTEMPT_ID;
     const olderSubmissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_OLDER_ID;
+    const typedPdfAttemptId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TYPED_PDF_ATTEMPT_ID;
+    const typedSubmissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TYPED_SUBMISSION_ID;
+    const typedAttemptId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TYPED_ATTEMPT_ID;
     const ownerAal2TokenPath = join(tmpdir(), "gradioprep-playwright-owner-aal2-token");
     let ownerAal2Token = "";
     try {
@@ -1178,6 +1299,9 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     expect(pdfSubmissionId).toBeTruthy();
     expect(linkedAttemptId).toBeTruthy();
     expect(olderSubmissionId).toBeTruthy();
+    expect(typedPdfAttemptId).toBeTruthy();
+    expect(typedSubmissionId).toBeTruthy();
+    expect(typedAttemptId).toBeTruthy();
     expect(ownerAal2Token).toBeTruthy();
 
     // Exercise the protected timer-adjustment Worker route with a separate
@@ -1417,6 +1541,8 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     expect(queueIdsInOrder).toContain(olderSubmissionId);
     expect(queueIdsInOrder).toContain(pdfSubmissionId);
     expect(queueIdsInOrder.indexOf(olderSubmissionId!)).toBeLessThan(queueIdsInOrder.indexOf(pdfSubmissionId!));
+    expect(queueIdsInOrder).toContain(typedSubmissionId);
+    expect(queueIdsInOrder.indexOf(pdfSubmissionId!)).toBeLessThan(queueIdsInOrder.indexOf(typedSubmissionId!));
 
     const workspace = page.getByTestId("grader-workspace");
     await expect(workspace).toBeVisible();
@@ -1682,7 +1808,162 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       outcome: "success",
       reason: "owner_closure",
     });
-    await withdrawSyntheticSubmission(page, ownerAal2Token!, olderSubmissionId!);
+    // Complete the remaining response-mode publication paths through the same
+    // assigned AAL2 Grader, while keeping the private analytics read server-side.
+    const publishLinkedMode = async (args: {
+      submissionId: string;
+      attemptId: string;
+      responseMode: "typed" | "typed_pdf";
+      timerMode: "timed" | "untimed";
+      baseAllowance: number | null;
+      effectiveAllowance: number | null;
+      feedback: string;
+    }): Promise<void> => {
+      const detail = await page.request.get(
+        "/api/v1/grader/submissions/" + args.submissionId,
+        { headers },
+      );
+      const detailBody = await detail.json() as {
+        submission?: { response_mode: string };
+        criteria?: Array<{ id: string; max_points: number }>;
+        error?: string;
+      };
+      expect(detail.status(), JSON.stringify(detailBody)).toBe(200);
+      expect(detailBody.submission?.response_mode).toBe(args.responseMode);
+      expect(detailBody.criteria).toHaveLength(2);
+      const draft = await page.request.put(
+        "/api/v1/grader/submissions/" + args.submissionId + "/draft",
+        {
+          headers,
+          data: {
+            overall_feedback: args.feedback,
+            criterion_results: detailBody.criteria!.map(criterion => ({
+              criterion_id: criterion.id,
+              points_awarded: 3,
+              feedback: "The awarded mark is supported by specific evidence and the published rubric descriptor.",
+            })),
+          },
+        },
+      );
+      const draftBody = await draft.json() as { draft?: unknown; error?: string };
+      expect(draft.status(), JSON.stringify(draftBody)).toBe(200);
+      assertPersistedAuditCorrelation(draft.headers()["x-request-id"], {
+        actorId: "55555555-5555-4555-8555-555555555555",
+        actorRole: "grader",
+        action: "assessment_draft_saved",
+        targetType: "assessment_submission",
+        targetId: args.submissionId,
+        outcome: "success",
+        reason: "grader_action",
+      });
+      const publish = await page.request.post(
+        "/api/v1/grader/submissions/" + args.submissionId + "/publish",
+        { headers, data: {} },
+      );
+      expect(publish.status()).toBe(201);
+      assertPersistedAuditCorrelation(publish.headers()["x-request-id"], {
+        actorId: "55555555-5555-4555-8555-555555555555",
+        actorRole: "grader",
+        action: "assessment_feedback_published",
+        targetType: "assessment_submission",
+        targetId: args.submissionId,
+        outcome: "success",
+        reason: "human_grader_publication",
+      });
+      const analytics = await page.request.get(
+        "/api/v1/grader/submissions/" + args.submissionId + "/analytics",
+        { headers },
+      );
+      const analyticsBody = await analytics.json() as {
+        analytics?: {
+          attempt_id: string | null;
+          response_mode: string;
+          elapsed_response_seconds: number | null;
+          elapsed_response_status: string;
+          timer_mode: string;
+          accommodation_mode: string;
+          timer_policy_version: number | null;
+          base_allowance_seconds: number | null;
+          effective_allowance_seconds: number | null;
+          adjustment_count: number;
+          comparability_status: string;
+          comparison_group_key: string | null;
+        };
+        error?: string;
+      };
+      expect(analytics.status(), JSON.stringify(analyticsBody)).toBe(200);
+      expect(analyticsBody.analytics).toMatchObject({
+        attempt_id: args.attemptId,
+        response_mode: args.responseMode,
+        elapsed_response_status: "valid",
+        timer_mode: args.timerMode,
+        accommodation_mode: "none",
+        timer_policy_version: 1,
+        base_allowance_seconds: args.baseAllowance,
+        effective_allowance_seconds: args.effectiveAllowance,
+        adjustment_count: 0,
+        comparability_status: "eligible",
+      });
+      expect(analyticsBody.analytics!.elapsed_response_seconds).toEqual(expect.any(Number));
+      expect(analyticsBody.analytics!.elapsed_response_seconds).toBeGreaterThanOrEqual(0);
+      expect(analyticsBody.analytics!.comparison_group_key).toBeTruthy();
+      const learnerContext = await page.context().browser()!.newContext({ baseURL: "http://127.0.0.1:8787" });
+      try {
+        const learnerPage = await learnerContext.newPage();
+        const learnerToken = await signIn(learnerPage, "student.a@example.invalid", "Synthetic Student A");
+        const learnerDetail = await learnerPage.request.get(
+          "/api/v1/learner/submissions/" + args.submissionId,
+          { headers: { Authorization: learnerToken } },
+        );
+        const learnerBody = await learnerDetail.json() as {
+          submission?: {
+            assessment_versions: Array<{ overall_feedback: string }>;
+            analytics?: unknown;
+            assessment_response_analytics?: unknown;
+          };
+          error?: string;
+        };
+        expect(learnerDetail.status(), JSON.stringify(learnerBody)).toBe(200);
+        expect(learnerBody.submission?.assessment_versions).toHaveLength(1);
+        expect(learnerBody.submission?.assessment_versions[0].overall_feedback).toBe(args.feedback);
+        expect(learnerBody.submission).not.toHaveProperty("analytics");
+        expect(learnerBody.submission).not.toHaveProperty("assessment_response_analytics");
+        const learnerAnalytics = await learnerPage.request.get(
+          "/api/v1/grader/submissions/" + args.submissionId + "/analytics",
+          { headers: { Authorization: learnerToken } },
+        );
+        expect(learnerAnalytics.status()).toBe(403);
+      } finally {
+        await learnerContext.close();
+      }
+      const close = await page.request.post(
+        "/api/v1/owner/submissions/" + args.submissionId + "/transition",
+        {
+          headers: { Authorization: ownerAal2Token! },
+          data: { target_status: "closed", reason: "Synthetic response-mode publication verification completed" },
+        },
+      );
+      expect(close.status()).toBe(200);
+    };
+
+    await publishLinkedMode({
+      submissionId: olderSubmissionId!,
+      attemptId: typedPdfAttemptId!,
+      responseMode: "typed_pdf",
+      timerMode: "untimed",
+      baseAllowance: null,
+      effectiveAllowance: null,
+      feedback: "Synthetic typed-plus-PDF feedback published after linked attempt and rubric review.",
+    });
+    await publishLinkedMode({
+      submissionId: typedSubmissionId!,
+      attemptId: typedAttemptId!,
+      responseMode: "typed",
+      timerMode: "timed",
+      baseAllowance: 600,
+      effectiveAllowance: 600,
+      feedback: "Synthetic timed typed-only feedback published after linked attempt and rubric review.",
+    });
   });
   test("student can start timed practice and see the advisory countdown", async ({ page }) => {
     const token = await signIn(page, "student.a@example.invalid", "Synthetic Student A");
