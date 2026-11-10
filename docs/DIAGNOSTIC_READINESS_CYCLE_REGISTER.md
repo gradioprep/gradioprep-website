@@ -13,7 +13,7 @@
 
 Grade 9 = MYP Year 4 is a Founder-confirmed placement for Cycle 1, not an unresolved mapping. Cambridge Grade 6 remains a requested school-grade label whose exact official stage/course must be established during Cycle 2 scope lock. Never substitute Cambridge Lower Secondary Stage 7 for Grade 6.
 
-**Current Cycle 1 authoring status — 10 November 2026:** Draft learner-content batches now cover Read & View, Listening, Language in Context, Analytical Writing, Creative/Purposeful Production and Speaking/Presenting. Analytical Writing v0.1 alone has exact-version Founder/content-owner adoption approval; all other batch content remains draft-only. Restricted keys, model responses, scoring anchors and private feedback guidance are kept outside the public learner-content files.
+**Current Cycle 1 content approval status — 10 November 2026:** The Founder has reviewed and approved all five v0.1 learner-content files and their companion restricted teacher/editor packs, covering all six mapped task groups. Approval applies to the exact versions reviewed. Restricted keys, model responses, scoring anchors, rationales and private feedback guidance remain outside the public learner-content files. Existing scoring/calibration, accessibility, timing, administration and release gates remain in force.
 
 ## 2. Official context checks for planning only
 
@@ -63,8 +63,8 @@ Each cycle follows the requirements and approval gates in `docs/DIAGNOSTIC_AND_R
 | Skill taxonomy and high-level blueprint approved | Complete; Founder-approved 1 Nov 2026 | Blocked |
 | Detailed task-level item map and scoring specification | Complete; Founder-approved 2 Nov 2026 | Blocked |
 | Flagship PDF response, teacher grading and timed analytics plan | Complete; phased plan and 24-hour grading target approved 2 Nov 2026 | Blocked |
-| Flagship feature implementation and pilot QA | Phase 1B and Phase 1C-A/B/C/D are verified with local synthetic data; both synchronized Phase 1C-F races pass. Phase 1C-E correlation remains representative per distinct action, not exhaustive outcome coverage. The Phase 2 learner PDF-only flow, digital-text transcript, AAL2 assigned-Grader private access, teacher transcript review, assigned-Grader workflow, private rubric drafts and human feedback publication/readback have synthetic CI evidence. The advisory timer and staff AAL2 extension/untimed-accommodation API passed exact-code-head CI #42591455986. Timed-attempt linkage to the matching human-scored submission, rubric-version accuracy/elapsed-response analytics and full synthetic end-to-end flagship validation remain outstanding. MYP Year 4 diagnostic item authoring remains blocked until that flagship validation passes. Branded staging on `gradioprep.com` with an isolated hosted synthetic backend remains mandatory before final Diagnostic/Evaluation Report acceptance and requires separate approvals. | Blocked |
-| Actual diagnostic item authoring and teacher/editor scoring pack | Paused until the shared response/task metadata and core feature are implemented and validated | Blocked |
+| Flagship feature implementation and pilot QA | Complete for the approved synthetic scope: exact-head CI #42770920114 passed 776 SQL/pgTAP assertions across 22 files, 35/35 Playwright tests, TypeScript/Worker/Vite builds and synthetic database/private-PDF backup-and-restore checks across typed, typed-plus-PDF and PDF-only workflows, including human feedback publication and assigned-Grader analytics. Branded staging on `gradioprep.com` remains after the Diagnostic build and requires separate hosted-resource/DNS approval. | Blocked |
+| Actual diagnostic item authoring and teacher/editor scoring pack | Complete for the five exact v0.1 learner-content files and companion restricted packs; Founder review/approval recorded 10 Nov 2026. Final scoring calibration, administration validation and other existing gates remain. | Blocked |
 | Diagnostic built and validated | Not started | Blocked |
 | Evaluation report and analytics built/validated | Not started | Blocked |
 | Whole-site learner-facing copy cleanup after diagnostic/report QA and before remedial authoring | Not started; mandatory before remedial work | Blocked |
@@ -404,3 +404,12 @@ The learner-safe public draft contains only the scenario, instructions and evide
 
 **Next:** conduct consolidated human academic review of all Cycle 1 learner drafts and restricted teacher/editor packs. Validate age/level demand, ambiguity, task/stimulus suitability, accepted alternatives, rubric anchors, feedback, accessibility/accommodations, timing and assessor consistency. Only then finalise calibrated evidence/scoring and proceed through the remaining cycle-completion gates. The complete Diagnostic/Evaluation Report remains unbuilt, uncalibrated, unapproved and unreleased; branded staging and the later invitation-only pilot remain separate approval gates. Cambridge Grade 6 remains blocked until Cycle 1 is complete and the Founder directs transition.
 
+
+
+## 25. Founder approval of Cycle 1 learner content and teacher packs; Diagnostic terminology — 10 November 2026
+
+The Founder has reviewed and approved all five Cycle 1 v0.1 learner-content files and their companion restricted teacher/editor packs. The files cover six mapped task groups: Read & View, Listening, Language in Context, Analytical Writing, Creative/Purposeful Production and Speaking/Presenting. Approval is exact-version only. Restricted scoring keys, model responses, rationales, anchors and private feedback remain outside the public learner bundle.
+
+The **Diagnostic** is the student assessment. The **Evaluation Report** is a separate output combining analytics, AI-generated feedback and the final teacher-generated report after teacher review and approval. Do not use “Diagnostic/Evaluation Report” as though it were one assessment or one interchangeable deliverable.
+
+This is a terminology/status correction only. The approved blueprint and implementation sequence remain unchanged. Proceed with the next Diagnostic build phase—secure learner assessment delivery and evidence capture—while retaining the already-documented scoring, timing, accessibility, report, staging, pilot and release gates. AI-service/external-processing and hosted-resource approvals remain separate.

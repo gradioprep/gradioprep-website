@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.18
+**Version:** 2.19
 **Approved:** 31 October 2026  
 **Last updated:** 10 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
@@ -9,7 +9,7 @@
 
 ## 1. Purpose and governing decision
 
-The diagnostic, evaluation report with analytics, and remedial course form one **pre-curriculum learning-readiness layer**. It identifies a learner's current underlying skills, explains the evidence, prioritises improvement and teaches the required skills before the learner is exposed to the selected curriculum's units.
+The **Diagnostic** is the assessment the student takes to gather evidence of current underlying skills and prerequisites. The **Evaluation Report** is a separate product generated from that assessment; it combines analytics derived from the evidence, AI-generated feedback, and the final teacher-generated report after review and approval by the responsible teacher. The personalised remedial course follows from the approved report. Together, these form the **pre-curriculum learning-readiness layer**: the Diagnostic gathers evidence, the Evaluation Report interprets it and prioritises improvement, and the remedial course teaches the required skills before the learner is exposed to the selected curriculum's units.
 
 This is not a curriculum-unit test, mock examination, official board assessment or replacement for the existing curriculum. It assesses transferable and prerequisite skills that help students learn, interpret, reason, communicate and perform successfully within the selected course.
 
@@ -68,7 +68,7 @@ Balance item types and performance evidence. Avoid allowing reading load, unfami
 
 ## 6. Evaluation report and analytics
 
-The report is a central learning product, not a score sheet. It must translate diagnostic evidence into an accurate, understandable and actionable profile. Include:
+The Evaluation Report is a central learning product, not a score sheet or the assessment itself. It combines (1) analytics derived from the student's Diagnostic responses and observed evidence, (2) AI-generated feedback grounded in that evidence, and (3) the final teacher-generated report after the responsible teacher has reviewed and approved it. AI-generated feedback does not replace the teacher's final report or approval. The combined output must translate evidence into an accurate, understandable and actionable profile. Include:
 
 - A concise learning-readiness overview and an explanation of what results do and do not mean.
 - Skill/sub-skill performance with plain-language definitions.
@@ -334,3 +334,10 @@ The public learner draft contains only learner-facing task material and the evid
 
 The next step is consolidated human academic review and validation of all Cycle 1 learner drafts and restricted teacher/editor packs. Review MYP Year 4 demand, fairness, ambiguity, accepted alternatives, response evidence, task feasibility/timing, accessibility/accommodations, question-specific feedback and assessor consistency. Complete calibrated scoring/confidence and the other cycle completion gates before accepting the Diagnostic/Evaluation Report or integrating/releasing the assessment. No numerical scoring, weights, thresholds, composite score, official IB conversion, automatic speech assessment or learner release is approved.
 
+
+
+## 28. Founder approval of Cycle 1 learner content and Evaluation Report definition — 10 November 2026
+
+The Founder has reviewed and approved the five Cycle 1 v0.1 learner-content files and their companion restricted teacher/editor packs, covering the six mapped task groups. This is exact-version approval; material revisions require version-specific review. Teacher-only keys, model responses, scoring anchors and private feedback remain restricted. The approval does not remove the standard's existing evidence calibration, scoring, accessibility, timing, accommodation, administration, staging, pilot or release controls.
+
+Terminology is explicit: the **Diagnostic** is the assessment the student takes; the **Evaluation Report** is the separate combined output of analytics, AI-generated feedback and the final teacher-generated report after teacher review and approval. The existing cycle order and implementation process are unchanged.

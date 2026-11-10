@@ -479,3 +479,12 @@ Exact application-code/test head `ef9dfd23e5964bb53ceb4a461beef7534449883b` pass
 This milestone does not yet provide the complete grader workflow. The next roadmap dependency is chronological oldest-first Grader workspace implementation with task/question and rubric context, human grading drafts and immutable human feedback publication/version history; then advisory countdown/timer events, accuracy/speed analytics and end-to-end synthetic flagship validation. The diagnostic-first order is unchanged: MYP Year 4 is Cycle 1; actual item authoring remains blocked until the shared flagship workflow passes synthetic validation. Cambridge Grade 6 remains blocked.
 
 The Diagnostic and complete Evaluation Report are not yet built or accepted. After building them, the Founder must test the full journey on branded staging with isolated hosted synthetic Auth/database/storage, only after separate hosted-resource/DNS approval. A later 2–3 participant live pilot requires its own approvals and must not be conflated with synthetic CI or the Founder staging test. No real learner data, external OCR/AI, hosted learner backend, cost, DNS change, merge or production deployment was involved in this milestone.
+
+
+## 30. Current Cycle 1 content approval and Diagnostic build handoff — 10 November 2026
+
+The Founder has reviewed and approved all five Cycle 1 v0.1 learner-content files and their companion restricted teacher/editor packs, covering the six mapped task groups. The approval is exact-version only. Preserve the approved blueprint and all existing accessibility, timing, scoring/calibration, administration and release gates; keep teacher-only material out of the public learner bundle.
+
+The **Diagnostic** is the assessment students take. The **Evaluation Report** is a separate output combining analytics, AI-generated feedback and the final teacher-generated report after teacher review and approval. This corrects terminology only and does not change the existing sequence or approval process.
+
+The next build phase is the Diagnostic assessment delivery and evidence-capture workflow, using synthetic data in CI. Report assembly follows the existing process after the Diagnostic evidence and scoring/calibration gates. External AI/processing, hosted resources, real learner data, branded-domain/DNS changes, cost, merge and production deployment remain separately gated.
