@@ -3,6 +3,7 @@ import type { Navigate } from "../App";
 import { useAuth } from "./AuthProvider";
 import LearnerSubmissionPanel from "./LearnerSubmissionPanel";
 import LearnerAttemptPanel from "./LearnerAttemptPanel";
+import DiagnosticPanel from "./DiagnosticPanel";
 import TranscriptReviewPanel from "./TranscriptReviewPanel";
 import GraderWorkspacePanel from "./GraderWorkspacePanel";
 
@@ -553,6 +554,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
       </div>
       {account?.roles.includes("student") && auth.session?.access_token && (
         <>
+          <DiagnosticPanel accessToken={auth.session.access_token} />
           <LearnerAttemptPanel accessToken={auth.session.access_token} />
           <LearnerSubmissionPanel accessToken={auth.session.access_token} />
         </>

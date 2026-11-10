@@ -2749,3 +2749,60 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   }
   .proto-attempt-clock { justify-items: start; }
 }
+
+
+/* Cycle 1 Diagnostic learner evidence capture. */
+.proto-diagnostic { display: grid; gap: 20px; margin-top: 20px; }
+.proto-diagnostic-heading { align-items: flex-start; }
+.proto-diagnostic-heading h2 { margin: 3px 0 4px; font: 700 20px "Manrope",sans-serif; color: var(--text-primary); }
+.proto-diagnostic-heading p:not(.proto-eyebrow) { margin: 0; color: var(--text-secondary); font-size: 13px; }
+.proto-diagnostic-intro { display: grid; gap: 12px; max-width: 760px; }
+.proto-diagnostic-intro p { margin: 0; line-height: 1.65; }
+.proto-diagnostic-notice { display: grid; gap: 4px; padding: 13px 15px; border-left: 3px solid var(--dusty-blue, #7D91B5); background: #F3F4F8; color: var(--text-primary); }
+.proto-diagnostic-notice strong { font-size: 13px; }
+.proto-diagnostic-notice span { color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+.proto-diagnostic-stimulus { padding: 18px; border: 1px solid #E4DFEA; background: #FCFBFD; }
+.proto-diagnostic-stimulus h3 { margin: 0 0 14px; font: 700 17px "Manrope",sans-serif; }
+.proto-diagnostic-stimulus p { margin: 0 0 11px; color: var(--text-primary); font-size: 14px; line-height: 1.75; }
+.proto-diagnostic-stimulus p:last-child { margin-bottom: 0; }
+.proto-diagnostic-poster { border-color: #DDD5E4; background: #FAF8FB; }
+.proto-diagnostic-poster-brand { color: #51445F !important; font: 700 11px "DM Mono",monospace; letter-spacing: .12em; }
+.proto-diagnostic-poster h3 { margin-bottom: 2px; font-size: 22px; text-transform: uppercase; }
+.proto-diagnostic-tagline { color: #60536D !important; font-style: italic; }
+.proto-diagnostic-chart { display: grid; gap: 11px; margin: 16px 0; padding: 15px; background: #F0ECF4; }
+.proto-diagnostic-chart-row { display: grid; grid-template-columns: minmax(140px, 1fr) 32px minmax(120px, 1.7fr); align-items: center; gap: 10px; font-size: 12px; }
+.proto-diagnostic-chart-row strong { font: 700 13px "DM Mono",monospace; }
+.proto-diagnostic-bar { height: 11px; overflow: hidden; background: #DAD5E0; }
+.proto-diagnostic-bar span { display: block; height: 100%; background: #786489; }
+.proto-diagnostic-chart figcaption { margin-top: 2px; color: var(--text-secondary); font-size: 11px; line-height: 1.5; }
+.proto-diagnostic-accessible { font-size: 12px !important; color: #51445F !important; }
+.proto-diagnostic-question { display: grid; gap: 13px; padding: 18px 0; border-top: 1px solid #E9E2F0; }
+.proto-diagnostic-question > h3 { margin: 0; font: 700 15px "Manrope",sans-serif; color: var(--text-primary); }
+.proto-diagnostic-question > p { margin: 0; color: var(--text-primary); font-size: 13.5px; line-height: 1.65; }
+.proto-diagnostic-fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.proto-diagnostic-fieldset legend { margin-bottom: 10px; font-size: 13px; font-weight: 700; line-height: 1.55; }
+.proto-diagnostic-options { display: grid; gap: 8px; }
+.proto-diagnostic-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid #E5DFEA; background: #FFFFFF; font-size: 13px; line-height: 1.55; cursor: pointer; }
+.proto-diagnostic-option:has(input:checked) { border-color: #786489; background: #F6F2F8; }
+.proto-diagnostic-option input { flex: 0 0 auto; margin-top: 3px; accent-color: #695378; }
+.proto-diagnostic-option strong { margin-right: 4px; }
+.proto-diagnostic-text-field { display: grid; gap: 6px; font-size: 13px; font-weight: 700; }
+.proto-diagnostic-text-field small { color: var(--text-secondary); font-size: 12px; font-weight: 400; line-height: 1.5; }
+.proto-diagnostic-text-field textarea { width: 100%; min-height: 105px; resize: vertical; border: 1px solid #D8D1E0; border-radius: 2px; padding: 11px 12px; color: var(--text-primary); background: #FFFFFF; font: 14px/1.6 "DM Sans",sans-serif; }
+.proto-diagnostic-text-field textarea:focus-visible,.proto-diagnostic-sequence select:focus-visible { outline: 2px solid #786489; outline-offset: 2px; }
+.proto-diagnostic-sequence { display: grid; gap: 9px; }
+.proto-diagnostic-sequence label { display: grid; grid-template-columns: minmax(0, 1fr) 145px; gap: 12px; align-items: center; font-size: 13px; line-height: 1.5; }
+.proto-diagnostic-sequence select { min-height: 39px; border: 1px solid #D8D1E0; padding: 6px 9px; background: #FFFFFF; color: var(--text-primary); font: 13px "DM Sans",sans-serif; }
+.proto-diagnostic-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 15px; border-top: 1px solid #E9E2F0; }
+.proto-diagnostic-footer p { flex: 1 1 100%; margin: 0; color: var(--text-secondary); font-size: 12px; }
+.proto-diagnostic-footer button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.proto-diagnostic-error,.proto-diagnostic-message { margin: 0; font-size: 13px; line-height: 1.5; }
+.proto-diagnostic-error { color: #8B3342; }
+.proto-diagnostic-message { color: #51445F; }
+@media (max-width: 620px) {
+  .proto-diagnostic-stimulus { padding: 14px; }
+  .proto-diagnostic-chart-row { grid-template-columns: minmax(0, 1fr) 26px minmax(70px, 1fr); gap: 7px; font-size: 11px; }
+  .proto-diagnostic-sequence label { grid-template-columns: 1fr; gap: 5px; }
+  .proto-diagnostic-sequence select { width: 100%; }
+  .proto-diagnostic-footer button { flex: 1 1 100%; }
+}

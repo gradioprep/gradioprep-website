@@ -1,0 +1,450 @@
+import { useState } from "react";
+
+type ResponseValue = {
+  a?: string;
+  b?: string[];
+  text?: string;
+  choice?: string;
+  order?: string[];
+  explanation?: string;
+};
+
+type DiagnosticResponseMap = Record<string, ResponseValue>;
+
+interface StartedDiagnostic {
+  diagnostic: { diagnostic_code: string; title: string; version: number; total_minutes: number; sitting_count: number };
+  attempt: { id: string; status: "in_progress" | "submitted" | "withdrawn"; is_replay: boolean };
+  responses: Record<string, { response: ResponseValue; revision_number: number }>;
+  section_status: string;
+}
+
+const stimulusA = [
+  "When the hall doors opened, the folding table was already crowded with objects that had stopped working: a lamp with a stubborn switch, a clock that lost five minutes every hour, and a blue bicycle with a loose bell. Nia had come to help, but she kept looking at the pile of things waiting on the floor.",
+  "“We can repair all of them,” she said.",
+  "Mr Sen, who ran the weekly repair afternoon, did not answer at once. He checked the lamp’s label, then set it aside. “Not safely today,” he said. “We need the right part and someone qualified to fit it.”",
+  "Nia frowned. The clock, however, was simple: its loose back had let the battery slide out of place. She held the torch while Mr Sen fitted the cover. The hands began moving again, first with a small jump, then steadily.",
+  "At the far end of the table, a child rang the bicycle bell. Its bright note crossed the hall and made two waiting people laugh. Nia looked back at the lamp. It was still broken, but it no longer seemed like proof that the afternoon had failed.",
+  "On a card, she wrote: “Fixed today: one clock, one bell. Next time: the lamp.” Then she placed the card beside the waiting pile, where everyone could see what had happened—and what had not.",
+];
+
+const stimulusB = [
+  "Bring one small household object to the community hall. You do not need to know how to repair it: volunteers will explain what can be checked safely.",
+  "The chart shows the outcome for every object checked. “Waiting for parts” means the team has not yet completed the repair. “Not safe to repair” means the object needs a different service or should not be handled at this event.",
+  "You can watch, ask questions or help with a simple task chosen by a volunteer. The team will not promise that every object can be fixed.",
+];
+
+const sequenceEvents = [
+  "Nia writes a card recording what was fixed and what remains for another time.",
+  "Nia arrives and sees objects waiting on the floor.",
+  "Mr Sen sets the lamp aside because it cannot safely be repaired at the event.",
+  "The clock is repaired.",
+  "The bicycle bell rings and makes people laugh.",
+];
+
+const textOptions = (values: string[]) => values.map((value, index) => ({ value: String.fromCharCode(65 + index), label: value }));
+
+function ChoiceField({
+  legend, value, onChange, options, name, multiple = false,
+}: {
+  legend: string;
+  value: string | string[];
+  onChange: (next: string | string[]) => void;
+  options: Array<{ value: string; label: string }>;
+  name: string;
+  multiple?: boolean;
+}) {
+  return <fieldset className="proto-diagnostic-fieldset">
+    <legend>{legend}</legend>
+    <div className="proto-diagnostic-options">
+      {options.map(option => {
+        const checked = multiple
+          ? (value as string[]).includes(option.value)
+          : value === option.value;
+        return <label className="proto-diagnostic-option" key={option.value}>
+          <input
+            type={multiple ? "checkbox" : "radio"}
+            name={name}
+            value={option.value}
+            checked={checked}
+            onChange={event => {
+              if (!multiple) onChange(option.value);
+              else {
+                const current = value as string[];
+                onChange(event.target.checked
+                  ? [...current, option.value]
+                  : current.filter(item => item !== option.value));
+              }
+            }}
+          />
+          <span><strong>{option.value}.</strong> {option.label}</span>
+        </label>;
+      })}
+    </div>
+  </fieldset>;
+}
+
+function TextField({
+  label, guidance, value, onChange,
+}: {
+  label: string;
+  guidance?: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return <label className="proto-diagnostic-text-field">
+    <span>{label}</span>
+    {guidance && <small>{guidance}</small>}
+    <textarea rows={4} maxLength={12000} value={value} onChange={event => onChange(event.target.value)} />
+  </label>;
+}
+
+export default function DiagnosticPanel({ accessToken }: { accessToken: string }) {
+  const [attemptId, setAttemptId] = useState("");
+  const [attemptStatus, setAttemptStatus] = useState<"not_started" | "in_progress" | "submitted">("not_started");
+  const [responses, setResponses] = useState<DiagnosticResponseMap>({});
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  const update = (code: string, key: keyof ResponseValue, value: string | string[]) => {
+    setResponses(current => ({
+      ...current,
+      [code]: { ...(current[code] ?? {}), [key]: value },
+    }));
+  };
+
+  const current = (code: string): ResponseValue => responses[code] ?? {};
+  const nonEmpty = (value?: string) => typeof value === "string" && value.trim().length >= 5;
+
+  function payloads(): Array<{ code: string; response: ResponseValue }> {
+    const output: Array<{ code: string; response: ResponseValue }> = [];
+    const rv01 = current("RV01");
+    if (rv01.a && ["A", "B", "C", "D"].includes(rv01.a) &&
+        Array.isArray(rv01.b) && rv01.b.length === 2 && new Set(rv01.b).size === 2) {
+      output.push({ code: "RV01", response: { a: rv01.a, b: rv01.b } });
+    }
+    for (const code of ["RV02", "RV03", "RV06", "RV07a", "RV07b"]) {
+      if (nonEmpty(current(code).text)) output.push({ code, response: { text: current(code).text } });
+    }
+    for (const code of ["RV04", "RV05"]) {
+      if (current(code).choice && ["A", "B", "C", "D"].includes(current(code).choice!)) {
+        output.push({ code, response: { choice: current(code).choice } });
+      }
+    }
+    const rv08 = current("RV08");
+    if (Array.isArray(rv08.order) && rv08.order.length === 5 &&
+        new Set(rv08.order).size === 5 && rv08.order.every(value => ["1", "2", "3", "4", "5"].includes(value)) &&
+        nonEmpty(rv08.explanation)) {
+      output.push({ code: "RV08", response: { order: rv08.order, explanation: rv08.explanation } });
+    }
+    const rv09 = current("RV09");
+    if (rv09.choice && ["A", "B", "C", "D"].includes(rv09.choice) && nonEmpty(rv09.explanation)) {
+      output.push({ code: "RV09", response: { choice: rv09.choice, explanation: rv09.explanation } });
+    }
+    return output;
+  }
+
+  const savedCodes = payloads().map(item => item.code);
+  const complete = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09"]
+    .every(code => savedCodes.includes(code));
+
+  async function startOrResume() {
+    setLoading(true);
+    setError("");
+    setMessage("");
+    try {
+      const response = await fetch("/api/v1/learner/diagnostics/ib-myp-g9-cycle1/start", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" },
+        body: JSON.stringify({ idempotency_key: crypto.randomUUID() }),
+      });
+      const result = await response.json() as StartedDiagnostic & { error?: string };
+      if (!response.ok || !result.attempt?.id) throw new Error(result.error ?? "The Diagnostic could not be opened.");
+      setAttemptId(result.attempt.id);
+      setAttemptStatus(result.attempt.status === "submitted" ? "submitted" : "in_progress");
+      const restored: DiagnosticResponseMap = {};
+      for (const [code, value] of Object.entries(result.responses ?? {})) {
+        restored[code] = value.response ?? {};
+      }
+      setResponses(restored);
+      setMessage(result.attempt.status === "submitted"
+        ? "Your Read & View evidence was submitted. It is now read-only."
+        : result.attempt.is_replay ? "Your saved Read & View attempt has been restored." : "Your Read & View attempt has started.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "The Diagnostic could not be opened.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function saveAll(): Promise<boolean> {
+    if (!attemptId) return false;
+    setSaving(true);
+    setError("");
+    setMessage("");
+    try {
+      for (const item of payloads()) {
+        const response = await fetch(
+          "/api/v1/learner/diagnostic-attempts/" + attemptId + "/responses/" + item.code,
+          {
+            method: "PUT",
+            headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" },
+            body: JSON.stringify({ response: item.response }),
+          },
+        );
+        const result = await response.json() as { error?: string };
+        if (!response.ok) throw new Error(result.error ?? "A response could not be saved.");
+      }
+      setMessage("Your completed answers have been saved.");
+      return true;
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "Your responses could not be saved.");
+      return false;
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function submitDiagnostic() {
+    if (!complete || !attemptId) return;
+    setSaving(true);
+    setError("");
+    setMessage("");
+    try {
+      for (const item of payloads()) {
+        const response = await fetch(
+          "/api/v1/learner/diagnostic-attempts/" + attemptId + "/responses/" + item.code,
+          {
+            method: "PUT",
+            headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" },
+            body: JSON.stringify({ response: item.response }),
+          },
+        );
+        if (!response.ok) {
+          const result = await response.json() as { error?: string };
+          throw new Error(result.error ?? "A response could not be saved.");
+        }
+      }
+      const submitted = await fetch(
+        "/api/v1/learner/diagnostic-attempts/" + attemptId + "/submit",
+        {
+          method: "POST",
+          headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" },
+          body: "{}",
+        },
+      );
+      const result = await submitted.json() as { attempt?: { status: string }; error?: string };
+      if (!submitted.ok || result.attempt?.status !== "submitted") {
+        throw new Error(result.error ?? "The Diagnostic could not be submitted.");
+      }
+      setAttemptStatus("submitted");
+      setMessage("Your Read & View evidence has been submitted. Your responses are now read-only.");
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "The Diagnostic could not be submitted.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const readOnly = attemptStatus === "submitted";
+  const buttonDisabled = loading || saving || readOnly;
+
+  return <section className="proto-panel proto-diagnostic" aria-labelledby="proto-diagnostic-heading">
+    <div className="proto-panel-heading proto-diagnostic-heading">
+      <div>
+        <p className="proto-eyebrow"><span />CYCLE 1 · IB MYP YEAR 4 / GRADE 9</p>
+        <h2 id="proto-diagnostic-heading">Diagnostic assessment</h2>
+        <p>Read & View · first task group</p>
+      </div>
+      <span className="proto-account-status">{attemptStatus === "submitted" ? "Submitted" : attemptStatus === "in_progress" ? "In progress" : "Not started"}</span>
+    </div>
+
+    {attemptStatus === "not_started" ? <div className="proto-diagnostic-intro">
+      <p>This is the first section of the Diagnostic assessment. Start or continue your saved attempt to answer the Read & View questions.</p>
+      <p>The other task groups will appear as their assessment delivery is implemented. No marks, score or Evaluation Report are generated in this section.</p>
+      <button className="proto-action" type="button" onClick={() => void startOrResume()} disabled={loading}>
+        {loading ? "Opening assessment…" : "Start / continue Diagnostic"}
+      </button>
+    </div> : <>
+      <div className="proto-diagnostic-notice" role="note">
+        <strong>{readOnly ? "Submission complete" : "Read & View section only"}</strong>
+        <span>{readOnly
+          ? "Your submitted responses are displayed without scores or marking feedback."
+          : "This assessment is not yet complete. Your work is saved when you choose Save progress or Submit."}</span>
+      </div>
+
+      <div className="proto-diagnostic-stimulus">
+        <h3>Stimulus A · The Repair Table</h3>
+        {stimulusA.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+      </div>
+
+      <div className="proto-diagnostic-stimulus proto-diagnostic-poster">
+        <p className="proto-diagnostic-poster-brand">NORTHBANK LIBRARY</p>
+        <h3>Fix-It Afternoon</h3>
+        <p className="proto-diagnostic-tagline">Small repairs. Shared skills.</p>
+        {stimulusB.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+        <figure className="proto-diagnostic-chart" aria-labelledby="proto-diagnostic-chart-caption">
+          <div className="proto-diagnostic-chart-row">
+            <span>Repaired on the day</span><strong>31</strong><div className="proto-diagnostic-bar"><span style={{ width: "64.6%" }} /></div>
+          </div>
+          <div className="proto-diagnostic-chart-row">
+            <span>Waiting for parts</span><strong>9</strong><div className="proto-diagnostic-bar"><span style={{ width: "18.75%" }} /></div>
+          </div>
+          <div className="proto-diagnostic-chart-row">
+            <span>Not safe to repair here</span><strong>8</strong><div className="proto-diagnostic-bar"><span style={{ width: "16.67%" }} /></div>
+          </div>
+          <figcaption id="proto-diagnostic-chart-caption">This month’s record · 48 objects checked. The three categories account for all 48 objects.</figcaption>
+        </figure>
+        <p>You can watch, ask questions or help with a simple task chosen by a volunteer. The team will not promise that every object can be fixed.</p>
+        <p className="proto-diagnostic-accessible">Accessible chart text: 31 objects were repaired that day, 9 were waiting for parts and 8 were not safe to repair at this event.</p>
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV01 · Main idea and explicit detail</h3>
+        <ChoiceField
+          legend="RV01a. Which statement best expresses the central idea of Stimulus A?"
+          name="rv01a"
+          value={current("RV01").a ?? ""}
+          onChange={value => update("RV01", "a", value as string)}
+          options={textOptions([
+            "The group proves that careful planning makes every object repairable.",
+            "Nia learns that a useful repair afternoon can include honest limits and small successes.",
+            "Mr Sen discourages visitors from asking questions about repairs.",
+            "The bicycle bell is the main reason visitors attend the event.",
+          ])}
+        />
+        <ChoiceField
+          legend="RV01b. Select two details from Stimulus A that show that some work could not be completed that afternoon."
+          name="rv01b"
+          multiple
+          value={current("RV01").b ?? []}
+          onChange={value => update("RV01", "b", value as string[])}
+          options={textOptions([
+            "Mr Sen sets the lamp aside because the right part and a qualified person are needed.",
+            "The clock begins moving after Mr Sen fits its cover.",
+            "Nia writes “Next time: the lamp” on the card.",
+            "A child rings the bicycle bell.",
+          ])}
+        />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV02 · Inference and interpretation</h3>
+        <p>Why does Nia place the card beside the waiting pile at the end of Stimulus A? Explain what this action suggests about how her view of the afternoon has changed.</p>
+        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV02").text ?? ""} onChange={value => update("RV02", "text", value)} />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV03 · Creator’s choice</h3>
+        <p>Explain how the phrase “Its bright note crossed the hall” shapes the atmosphere at that moment and contributes to the reader’s understanding of Nia’s response.</p>
+        <TextField label="Your response" guidance="Response guidance: 35–50 words. Ideal target: 45 words; this is guidance, not a limit." value={current("RV03").text ?? ""} onChange={value => update("RV03", "text", value)} />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV04 · Context, audience and purpose</h3>
+        <ChoiceField
+          legend="Who is the most likely audience for Stimulus B, and what is the poster mainly designed to do?"
+          name="rv04"
+          value={current("RV04").choice ?? ""}
+          onChange={value => update("RV04", "choice", value as string)}
+          options={textOptions([
+            "Local residents who may bring an object; invite participation while explaining the event’s results and safety limits.",
+            "Professional technicians; provide a detailed training manual for replacing parts.",
+            "Children attending a music performance; advertise a concert.",
+            "Collectors; prove that every household object can be repaired.",
+          ])}
+        />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV05 · Visual and verbal interpretation</h3>
+        <ChoiceField
+          legend="Which statement accurately interprets the outcome graphic in Stimulus B?"
+          name="rv05"
+          value={current("RV05").choice ?? ""}
+          onChange={value => update("RV05", "choice", value as string)}
+          options={textOptions([
+            "31 objects were repaired that day; 17 were not completed that day because 9 were waiting for parts and 8 were not safe to repair at this event.",
+            "31 objects were waiting for parts; 17 were repaired that day.",
+            "All 48 objects were repaired that day.",
+            "Only 8 objects were checked.",
+          ])}
+        />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV06 · Critical perspective and representation</h3>
+        <p>A volunteer says: “The team fixed almost every object on the day.” Is that a fair description of the poster’s results? Use at least one figure from the graphic and explain one limitation in the statement.</p>
+        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV06").text ?? ""} onChange={value => update("RV06", "text", value)} />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV07a · Compare perspectives</h3>
+        <p>How do Nia in Stimulus A and the poster in Stimulus B present what counts as a successful repair afternoon? Use relevant evidence from both stimuli.</p>
+        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07a").text ?? ""} onChange={value => update("RV07a", "text", value)} />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV07b · Compare form, structure and creator choices</h3>
+        <p>How do the story’s sequence and the poster’s visual categories guide the reader in different ways? Refer to one specific choice in each stimulus.</p>
+        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07b").text ?? ""} onChange={value => update("RV07b", "text", value)} />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV08 · Sequence and structural development</h3>
+        <p>Number these events from 1 to 5 in the order they occur in Stimulus A.</p>
+        <div className="proto-diagnostic-sequence">
+          {sequenceEvents.map((event, index) => <label key={index}>
+            <span>{event}</span>
+            <select
+              value={current("RV08").order?.[index] ?? ""}
+              onChange={e => {
+                const next = [...(current("RV08").order ?? ["", "", "", "", ""])];
+                next[index] = e.target.value;
+                update("RV08", "order", next);
+              }}
+              disabled={readOnly}
+              aria-label={"Position for event " + (index + 1)}
+            >
+              <option value="">Choose order</option>
+              {[1,2,3,4,5].map(number => <option key={number} value={String(number)}>{number}</option>)}
+            </select>
+          </label>)}
+        </div>
+        <TextField label="Then explain in one sentence how this sequence helps the reader understand the change in Nia’s view." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV08").explanation ?? ""} onChange={value => update("RV08", "explanation", value)} />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>RV09 · Evidence selection and reasoning</h3>
+        <ChoiceField
+          legend="Which part of Stimulus B is the strongest evidence for the claim that the poster reports both completed and unfinished outcomes?"
+          name="rv09"
+          value={current("RV09").choice ?? ""}
+          onChange={value => update("RV09", "choice", value as string)}
+          options={textOptions([
+            "“Small repairs. Shared skills.”",
+            "“31 repaired on the day; 9 waiting for parts; 8 not safe to repair at this event.”",
+            "“Bring one small household object to the community hall.”",
+            "“You do not need to know how to repair it.”",
+          ])}
+        />
+        <TextField label="Explain briefly why this information is stronger evidence than one of the other statements." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV09").explanation ?? ""} onChange={value => update("RV09", "explanation", value)} />
+      </div>
+
+      <div className="proto-diagnostic-footer">
+        <p>{savedCodes.length} of 10 observations have response-ready answers. Response guidance is not a hard word limit.</p>
+        {!readOnly && <>
+          <button className="proto-action secondary" type="button" onClick={() => void saveAll()} disabled={buttonDisabled || savedCodes.length === 0}>
+            {saving ? "Saving…" : "Save progress"}
+          </button>
+          <button className="proto-action" type="button" onClick={() => void submitDiagnostic()} disabled={buttonDisabled || !complete}>
+            {saving ? "Please wait…" : "Submit Read & View"}
+          </button>
+        </>}
+      </div>
+    </>}
+    {error && <p className="proto-diagnostic-error" role="alert">{error}</p>}
+    {message && <p className="proto-diagnostic-message" role="status">{message}</p>}
+  </section>;
+}
