@@ -41,21 +41,21 @@ SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_
 SELECT is((SELECT count(DISTINCT observation_id)::integer FROM public.diagnostic_response_versions WHERE attempt_id=(SELECT attempt_id FROM diagnostic_test_state)),
  9,'nine of ten observations are saved before completion');
 
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A"}'::jsonb)$,'saves LC01 contextual vocabulary choice');
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC02','{"choice":"A"}'::jsonb)$,'saves LC02 sentence-focus choice');
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC03','{"choice":"B"}'::jsonb)$,'saves LC03 grammar and usage choice');
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC04','{"choice":"A"}'::jsonb)$,'saves LC04 punctuation choice');
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC05','{"text":"Please place bags on the shelves beside the entrance so that the stairs and walkway remain clear for everyone."}'::jsonb)$,'saves LC05 audience and register response');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A"}'::jsonb)$$,'saves LC01 contextual vocabulary choice');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC02','{"choice":"A"}'::jsonb)$$,'saves LC02 sentence-focus choice');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC03','{"choice":"B"}'::jsonb)$$,'saves LC03 grammar and usage choice');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC04','{"choice":"A"}'::jsonb)$$,'saves LC04 punctuation choice');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC05','{"text":"Please place bags on the shelves beside the entrance so that the stairs and walkway remain clear for everyone."}'::jsonb)$$,'saves LC05 audience and register response');
 SELECT is((SELECT count(DISTINCT observation_id)::integer FROM public.diagnostic_response_versions WHERE attempt_id=(SELECT attempt_id FROM diagnostic_test_state)),
  14,'fourteen of fifteen observations are saved before completion');
 SELECT throws_ok($$SELECT * FROM public.submit_diagnostic_attempt((SELECT attempt_id FROM diagnostic_test_state))$$,
  'P0001','diagnostic_responses_incomplete','submission is blocked while an observation is unanswered');
 
-SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV01','{"a":"B","b":["A","A"]}'::jsonb)$,
+SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV01','{"a":"B","b":["A","A"]}'::jsonb)$$,
  '22023','invalid_diagnostic_response','duplicate multiple-choice selections are rejected');
-SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A","extra":"forged"}'::jsonb)$,
+SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A","extra":"forged"}'::jsonb)$$,
  '22023','invalid_diagnostic_response','LC choice rejects unrecognised response fields');
-SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC05','{"text":null}'::jsonb)$,
+SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC05','{"text":null}'::jsonb)$$,
  '22023','invalid_diagnostic_response','LC05 rejects a null text value');
 SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'AW01','{"text":"An observation outside the enabled Read & View section."}'::jsonb)$$,
  '22023','invalid_diagnostic_response','other task groups cannot be written through the first-slice API');
