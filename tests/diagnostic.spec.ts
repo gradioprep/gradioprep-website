@@ -45,7 +45,7 @@ test.describe("Cycle 1 Diagnostic — Read & View evidence API", () => {
     expect(startedBody.attempt.is_replay).toBe(false);
     expect(startedBody.section_status).toBe("read_view_only");
 
-    const resumed = await page.request.post(startPath, {
+    const resumed = await request.post(startPath, {
       headers,
       data: { idempotency_key: randomUUID() },
     });
@@ -54,7 +54,7 @@ test.describe("Cycle 1 Diagnostic — Read & View evidence API", () => {
     expect(resumedBody.attempt.id).toBe(startedBody.attempt.id);
     expect(resumedBody.attempt.is_replay).toBe(true);
 
-    const invalidResponse = await page.request.put(
+    const invalidResponse = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/RV01",
       { headers, data: { response: { a: "B", b: ["A", "A"] } } },
     );
@@ -74,7 +74,7 @@ test.describe("Cycle 1 Diagnostic — Read & View evidence API", () => {
     ];
 
     for (const [code, response] of responses) {
-      const saved = await page.request.put(
+      const saved = await request.put(
         "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/" + code,
         { headers, data: { response } },
       );
@@ -83,7 +83,7 @@ test.describe("Cycle 1 Diagnostic — Read & View evidence API", () => {
       expect(savedBody.response).toMatchObject({ observation_code: code, revision_number: 1 });
     }
 
-    const submitted = await page.request.post(
+    const submitted = await request.post(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/submit",
       { headers, data: {} },
     );
@@ -99,7 +99,7 @@ test.describe("Cycle 1 Diagnostic — Read & View evidence API", () => {
       expected_observations: 10,
     });
 
-    const lateEdit = await page.request.put(
+    const lateEdit = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/RV02",
       { headers, data: { response: { text: "Submitted evidence cannot be changed." } } },
     );
