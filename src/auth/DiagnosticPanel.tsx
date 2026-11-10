@@ -44,7 +44,7 @@ const sequenceEvents = [
 const textOptions = (values: string[]) => values.map((value, index) => ({ value: String.fromCharCode(65 + index), label: value }));
 
 function ChoiceField({
-  legend, value, onChange, options, name, multiple = false,
+  legend, value, onChange, options, name, multiple = false, disabled = false,
 }: {
   legend: string;
   value: string | string[];
@@ -52,6 +52,7 @@ function ChoiceField({
   options: Array<{ value: string; label: string }>;
   name: string;
   multiple?: boolean;
+  disabled?: boolean;
 }) {
   return <fieldset className="proto-diagnostic-fieldset">
     <legend>{legend}</legend>
