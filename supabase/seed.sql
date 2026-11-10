@@ -258,3 +258,34 @@ ON CONFLICT (id) DO NOTHING;
 UPDATE public.profiles
 SET account_status = 'suspended'
 WHERE user_id = '99999999-9999-4999-8999-999999999999';
+
+
+-- Synthetic-only Cycle 1 Diagnostic fixture; no live learners or hosted services.
+INSERT INTO public.diagnostic_versions (
+  id, diagnostic_code, pathway_id, title, version, release_state, total_minutes, sitting_count
+)
+VALUES (
+  'ed111111-1111-4111-8111-111111111111',
+  'ib-myp-g9-cycle1',
+  'synthetic-ib-myp-year-4',
+  'IB MYP Year 4 Diagnostic — Read & View first section',
+  1, 'published', 90, 2
+)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.diagnostic_observations (
+  id, diagnostic_version_id, observation_code, group_code,
+  sitting_number, sequence_number, response_kind, learner_capture_enabled
+)
+VALUES
+  ('ee000001-0000-4000-8000-000000000001','ed111111-1111-4111-8111-111111111111','RV01','RV',1,1,'structured_selection',true),
+  ('ee000002-0000-4000-8000-000000000002','ed111111-1111-4111-8111-111111111111','RV02','RV',1,2,'text',true),
+  ('ee000003-0000-4000-8000-000000000003','ed111111-1111-4111-8111-111111111111','RV03','RV',1,3,'text',true),
+  ('ee000004-0000-4000-8000-000000000004','ed111111-1111-4111-8111-111111111111','RV04','RV',1,4,'single_choice',true),
+  ('ee000005-0000-4000-8000-000000000005','ed111111-1111-4111-8111-111111111111','RV05','RV',1,5,'single_choice',true),
+  ('ee000006-0000-4000-8000-000000000006','ed111111-1111-4111-8111-111111111111','RV06','RV',1,6,'text',true),
+  ('ee000007-0000-4000-8000-000000000007','ed111111-1111-4111-8111-111111111111','RV07a','RV',1,7,'text',true),
+  ('ee000008-0000-4000-8000-000000000008','ed111111-1111-4111-8111-111111111111','RV07b','RV',1,8,'text',true),
+  ('ee000009-0000-4000-8000-000000000009','ed111111-1111-4111-8111-111111111111','RV08','RV',1,9,'ordered_sequence',true),
+  ('ee000010-0000-4000-8000-000000000010','ed111111-1111-4111-8111-111111111111','RV09','RV',1,10,'choice_and_text',true)
+ON CONFLICT (id) DO NOTHING;

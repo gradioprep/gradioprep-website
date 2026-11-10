@@ -137,6 +137,7 @@ BEGIN
         AND p_value->'b'->>0 <> p_value->'b'->>1;
     WHEN 'RV02','RV03','RV06','RV07a','RV07b' THEN
       RETURN jsonb_object_length(p_value)=1 AND p_value ? 'text'
+        AND jsonb_typeof(p_value->'text')='string'
         AND char_length(btrim(p_value->>'text')) BETWEEN 5 AND 12000;
     WHEN 'RV04','RV05' THEN
       RETURN jsonb_object_length(p_value)=1 AND p_value ? 'choice'
@@ -145,12 +146,16 @@ BEGIN
       RETURN jsonb_object_length(p_value)=2 AND p_value ?& ARRAY['order','explanation']
         AND jsonb_typeof(p_value->'order')='array'
         AND jsonb_array_length(p_value->'order')=5
-        AND (SELECT count(DISTINCT x)::integer FROM jsonb_array_elements_text(p_value->'order') x
-             WHERE x IN ('1','2','3','4','5'))=5
+        AND (SELECT count(*)::integer FROM jsonb_array_elements(p_value->'order') AS item(value)
+             WHERE jsonb_typeof(item.value)='string' AND item.value #>> '{}' IN ('1','2','3','4','5'))=5
+        AND (SELECT count(DISTINCT item.value #>> '{}')::integer FROM jsonb_array_elements(p_value->'order') AS item(value)
+             WHERE jsonb_typeof(item.value)='string' AND item.value #>> '{}' IN ('1','2','3','4','5'))=5
+        AND jsonb_typeof(p_value->'explanation')='string'
         AND char_length(btrim(p_value->>'explanation')) BETWEEN 5 AND 12000;
     WHEN 'RV09' THEN
       RETURN jsonb_object_length(p_value)=2 AND p_value ?& ARRAY['choice','explanation']
-        AND p_value->>'choice' IN ('A','B','C','D')
+        AND jsonb_typeof(p_value->'choice')='string' AND p_value->>'choice' IN ('A','B','C','D')
+        AND jsonb_typeof(p_value->'explanation')='string'
         AND char_length(btrim(p_value->>'explanation')) BETWEEN 5 AND 12000;
     ELSE RETURN false;
   END CASE;
