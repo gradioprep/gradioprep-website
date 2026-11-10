@@ -1,8 +1,8 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.15
+**Version:** 2.16
 **Approved:** 31 October 2026  
-**Last updated:** 9 November 2026  
+**Last updated:** 10 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
 **Applies to:** Each curriculum/grade/stage cycle only when selected by the Founder / project owner.  
 **Related records:** `docs/PROJECT_MASTER_BRIEF.md`, `docs/DIAGNOSTIC_READINESS_CYCLE_REGISTER.md`, `docs/ENGLISH_STAGE_1_ROADMAP.md`, `docs/FREE_FIRST_INFRASTRUCTURE_AND_COST_POLICY.md`, `docs/GRADING_CREDIT_AND_REMEDIAL_ACCESS_POLICY.md`, `docs/ENGLISH_CURRICULUM_GUIDES.md`, `docs/TEACHER_PACK_AND_FEEDBACK_STANDARD.md`, `docs/CONTENT_ORIGINALITY_AND_RIGHTS_PROTOCOL.md` and `docs/DESIGN_SPEC.md`.
@@ -303,3 +303,10 @@ Next authoring batches: Listening and Language in Context; then Analytical Writi
 The next ten evidence observations are authored as unapproved drafts in `docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_LISTENING_LANGUAGE_CONTEXT_DRAFT_v0.1.md`: Listening L01–L05 and Language in Context LC01–LC05. The Listening authoring script is original and 197 words; an actual recording has not been created. Before scored use, a human performer/producer must record and quality-check intelligibility, pace, sound and delivery cues. The operational single-play/replay policy remains a pilot decision; do not expose the transcript in the scored learner path except under an approved access arrangement.
 
 The Language-in-Context microtasks remain tied to contextual meaning, sentence focus, accurate usage, punctuation and register—not decontextualised grammar drilling. Stable Excerpt IDs and public-safe provenance are in the excerpt register. The private teacher/editor key is kept outside the public repository. All items remain subject to human academic validation, Year 4 demand calibration, item ambiguity review, accessible administration, accepted-answer review and timing pilot. No final cut scores, criterion weighting, official IB mapping, learner release or report logic is approved.
+
+
+## 24. Analytical Writing draft authoring — 10 November 2026
+
+The third Cycle 1 authoring batch is recorded at docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_ANALYTICAL_WRITING_DRAFT_v0.1.md. It covers AW01–AW05 in one focused extended response linked to a new 214-word project-original stimulus. The task retains the approved 20-minute Sitting 2 envelope and 150–200-word guidance with an ideal target of 180; the task timing and response range remain subject to pilot validation.
+
+The public learner-content file contains no model response, answer key or private scoring anchors. The restricted teacher/editor pack is kept outside the public repository. Human academic validation, Year 4 demand calibration, item ambiguity, response guidance, question-specific feedback, accessibility and timing remain open. No numerical scoring, criterion weights, cut scores, composite score, official IB grade conversion, automated marking or learner release is approved. The next authoring batch is Creative/Purposeful Production, followed by Speaking/Presenting.
