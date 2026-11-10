@@ -27,16 +27,19 @@ test.describe("Cycle 1 Diagnostic — Read & View evidence API", () => {
     await expect.poll(() => Boolean(accessToken)).toBe(true);
 
     const headers = { Authorization: accessToken };
-    const started = await page.request.post(startPath, {
-      headers,
-      data: { idempotency_key: randomUUID() },
-    });
+    const startedResponsePromise = page.waitForResponse(response =>
+      new URL(response.url()).pathname === startPath && response.request().method() === "POST",
+    );
+    await page.getByRole("button", { name: "Start / continue Diagnostic" }).click();
+    const started = await startedResponsePromise;
     const startedBody = await started.json() as {
       diagnostic: { diagnostic_code: string; version: number };
       attempt: { id: string; status: string; is_replay: boolean };
       section_status: string;
     };
     expect(started.status(), JSON.stringify(startedBody)).toBe(201);
+    await expect(page.getByRole("heading", { name: "The Repair Table", exact: true })).toBeVisible();
+    await expect(page.getByText("Read & View section only", { exact: true })).toBeVisible();
     expect(startedBody.diagnostic).toMatchObject({ diagnostic_code: "ib-myp-g9-cycle1", version: 1 });
     expect(startedBody.attempt.status).toBe("in_progress");
     expect(startedBody.attempt.is_replay).toBe(false);

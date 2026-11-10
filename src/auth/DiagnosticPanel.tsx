@@ -64,6 +64,7 @@ function ChoiceField({
           <input
             type={multiple ? "checkbox" : "radio"}
             name={name}
+            disabled={disabled}
             value={option.value}
             checked={checked}
             onChange={event => {
@@ -84,17 +85,18 @@ function ChoiceField({
 }
 
 function TextField({
-  label, guidance, value, onChange,
+  label, guidance, value, onChange, disabled = false,
 }: {
   label: string;
   guidance?: string;
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }) {
   return <label className="proto-diagnostic-text-field">
     <span>{label}</span>
     {guidance && <small>{guidance}</small>}
-    <textarea rows={4} maxLength={12000} value={value} onChange={event => onChange(event.target.value)} />
+    <textarea rows={4} maxLength={12000} value={value} onChange={event => onChange(event.target.value)} disabled={disabled} />
   </label>;
 }
 
@@ -305,6 +307,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         <ChoiceField
           legend="RV01a. Which statement best expresses the central idea of Stimulus A?"
           name="rv01a"
+          disabled={readOnly}
           value={current("RV01").a ?? ""}
           onChange={value => update("RV01", "a", value as string)}
           options={textOptions([
@@ -317,6 +320,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         <ChoiceField
           legend="RV01b. Select two details from Stimulus A that show that some work could not be completed that afternoon."
           name="rv01b"
+          disabled={readOnly}
           multiple
           value={current("RV01").b ?? []}
           onChange={value => update("RV01", "b", value as string[])}
@@ -332,13 +336,13 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       <div className="proto-diagnostic-question">
         <h3>RV02 · Inference and interpretation</h3>
         <p>Why does Nia place the card beside the waiting pile at the end of Stimulus A? Explain what this action suggests about how her view of the afternoon has changed.</p>
-        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV02").text ?? ""} onChange={value => update("RV02", "text", value)} />
+        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV02").text ?? ""} onChange={value => update("RV02", "text", value)}  disabled={readOnly} />
       </div>
 
       <div className="proto-diagnostic-question">
         <h3>RV03 · Creator’s choice</h3>
         <p>Explain how the phrase “Its bright note crossed the hall” shapes the atmosphere at that moment and contributes to the reader’s understanding of Nia’s response.</p>
-        <TextField label="Your response" guidance="Response guidance: 35–50 words. Ideal target: 45 words; this is guidance, not a limit." value={current("RV03").text ?? ""} onChange={value => update("RV03", "text", value)} />
+        <TextField label="Your response" guidance="Response guidance: 35–50 words. Ideal target: 45 words; this is guidance, not a limit." value={current("RV03").text ?? ""} onChange={value => update("RV03", "text", value)}  disabled={readOnly} />
       </div>
 
       <div className="proto-diagnostic-question">
@@ -346,6 +350,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         <ChoiceField
           legend="Who is the most likely audience for Stimulus B, and what is the poster mainly designed to do?"
           name="rv04"
+          disabled={readOnly}
           value={current("RV04").choice ?? ""}
           onChange={value => update("RV04", "choice", value as string)}
           options={textOptions([
@@ -362,6 +367,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         <ChoiceField
           legend="Which statement accurately interprets the outcome graphic in Stimulus B?"
           name="rv05"
+          disabled={readOnly}
           value={current("RV05").choice ?? ""}
           onChange={value => update("RV05", "choice", value as string)}
           options={textOptions([
@@ -382,7 +388,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       <div className="proto-diagnostic-question">
         <h3>RV07a · Compare perspectives</h3>
         <p>How do Nia in Stimulus A and the poster in Stimulus B present what counts as a successful repair afternoon? Use relevant evidence from both stimuli.</p>
-        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07a").text ?? ""} onChange={value => update("RV07a", "text", value)} />
+        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07a").text ?? ""} onChange={value => update("RV07a", "text", value)}  disabled={readOnly} />
       </div>
 
       <div className="proto-diagnostic-question">
@@ -395,8 +401,8 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         <h3>RV08 · Sequence and structural development</h3>
         <p>Number these events from 1 to 5 in the order they occur in Stimulus A.</p>
         <div className="proto-diagnostic-sequence">
-          {sequenceEvents.map((event, index) => <label key={index}>
-            <span>{event}</span>
+          {[1, 2, 3, 4, 5].map((position, index) => <label key={position}>
+            <span>Event in position {position}</span>
             <select
               value={current("RV08").order?.[index] ?? ""}
               onChange={e => {
@@ -405,14 +411,14 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
                 update("RV08", "order", next);
               }}
               disabled={readOnly}
-              aria-label={"Position for event " + (index + 1)}
+              aria-label={"Event in position " + position}
             >
-              <option value="">Choose order</option>
-              {[1,2,3,4,5].map(number => <option key={number} value={String(number)}>{number}</option>)}
+              <option value="">Choose an event</option>
+              {sequenceEvents.map((event, eventIndex) => <option key={eventIndex} value={String(eventIndex + 1)}>{event}</option>)}
             </select>
           </label>)}
         </div>
-        <TextField label="Then explain in one sentence how this sequence helps the reader understand the change in Nia’s view." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV08").explanation ?? ""} onChange={value => update("RV08", "explanation", value)} />
+        <TextField label="Then explain in one sentence how this sequence helps the reader understand the change in Nia’s view." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV08").explanation ?? ""} onChange={value => update("RV08", "explanation", value)}  disabled={readOnly} />
       </div>
 
       <div className="proto-diagnostic-question">
@@ -420,6 +426,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         <ChoiceField
           legend="Which part of Stimulus B is the strongest evidence for the claim that the poster reports both completed and unfinished outcomes?"
           name="rv09"
+          disabled={readOnly}
           value={current("RV09").choice ?? ""}
           onChange={value => update("RV09", "choice", value as string)}
           options={textOptions([
@@ -429,7 +436,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
             "“You do not need to know how to repair it.”",
           ])}
         />
-        <TextField label="Explain briefly why this information is stronger evidence than one of the other statements." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV09").explanation ?? ""} onChange={value => update("RV09", "explanation", value)} />
+        <TextField label="Explain briefly why this information is stronger evidence than one of the other statements." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV09").explanation ?? ""} onChange={value => update("RV09", "explanation", value)}  disabled={readOnly} />
       </div>
 
       <div className="proto-diagnostic-footer">
