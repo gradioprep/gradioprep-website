@@ -1011,30 +1011,23 @@ test("learner task selector keeps PDF attachments disabled for typed-only tasks"
   )).toBeVisible();
   await expect(panel.getByLabel("Optional PDF attachment")).toHaveCount(0);
 
-  const accepted = await page.request.post("/api/v1/learner/submissions", {
+  // The integrated PDF/grading journey already creates and retains a typed-only
+  // assessment for the grader workspace. Reuse that row here rather than
+  // consuming another global queue slot in a UI-only selector regression.
+  const submissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TYPED_SUBMISSION_ID;
+  expect(submissionId, "The integrated workflow must provide its typed-only assessment ID.").toBeTruthy();
+  const detail = await page.request.get("/api/v1/learner/submissions/" + submissionId, {
     headers: { Authorization: token },
-    data: {
-      task_version_id: typedOnlyTaskId,
-      idempotency_key: randomUUID(),
-      response_text: "This synthetic written response verifies a typed-only assessment submission without an optional PDF.",
-    },
   });
-  const body = await accepted.json() as { submission?: { submission_id?: string }; error?: string };
-  expect(accepted.status(), JSON.stringify(body)).toBe(201);
-  const submissionId = body.submission?.submission_id;
-  expect(submissionId).toBeTruthy();
+  expect(detail.status()).toBe(200);
+  const detailBody = await detail.json() as { submission?: { response_mode?: string } };
+  expect(detailBody.submission?.response_mode).toBe("typed");
 
   await page.reload();
   const row = page.getByTestId("learner-submission-" + submissionId);
   await expect(row).toBeVisible();
   await expect(row.getByText("Typed response only")).toBeVisible();
   await expect(row.getByLabel("Attach optional PDF")).toHaveCount(0);
-
-  const ownerAal2Token = process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN;
-  expect(ownerAal2Token, "The PDF submission test must provide a fresh synthetic Owner AAL2 token.")
-    .toBeTruthy();
-  await withdrawSyntheticSubmission(page, ownerAal2Token!, submissionId!);
-  delete process.env.PLAYWRIGHT_SYNTHETIC_OWNER_AAL2_TOKEN;
 });
 
 test("guardian cannot accept a human-assessment submission or use staff assessment APIs", async ({ page }) => {

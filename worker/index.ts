@@ -1792,8 +1792,10 @@ async function acceptLearnerSubmission(request: Request, env: WorkerEnv): Promis
 
   const accepted = asRows(data)[0];
   if (!accepted) return jsonResponse({ error: "assessment_submission_failed" }, 500);
+  // This route only accepts the typed mode; return it explicitly so callers
+  // receive the same response contract as optional-PDF and PDF-only routes.
   return jsonResponse(
-    { submission: accepted },
+    { submission: { ...accepted, response_mode: "typed" } },
     accepted.is_replay === true ? 200 : 201,
   );
 }
