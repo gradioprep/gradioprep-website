@@ -1,8 +1,8 @@
-# Phase 1A — Build-Ready Execution Plan
+> **Current execution checkpoint — 10 November 2026:** PR #22 remains open, draft and unmerged on feature/phase-1b-local-auth-api. Exact application/test commit 363608c1c449a46388a7f14862021f2782f49cd0 passed GitHub Actions [#42756087000](https://github.com/gradioprep/gradioprep-website/actions/runs/42756087000): **776 SQL assertions across 22 files, 35/35 Playwright tests**, TypeScript/Worker/Vite builds, synthetic database/private-PDF backup/restore (one database snapshot, two PDF checksums restored; corrupt archive rejected), shutdown, local credential cleanup and clean credential-free Preview-assets build. Analytics now derive only from published human assessment versions and private server timer history. Inventory: **30 protected tables (18 public, 12 private)**. No hosted provisioning, real learner data, external processing, costs, DNS, merge or production deployment. WSL/local Supabase/Docker are not part of this run.
 
 > **Current execution checkpoint — 9 November 2026:** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`; GitHub confirms the repository is public. Exact application-code/test head `5df10f70c23a35bdf1759fcec8b12a36fca1a9c9` passed [GitHub Actions #42579642253](https://github.com/gradioprep/gradioprep-website/actions/runs/42579642253): all 19 PostgreSQL/RLS SQL test files, 33/33 Playwright tests, TypeScript/Worker/Vite builds, synthetic database/private-PDF backup/restore (one DB snapshot and two PDF checksums; corrupt archive rejected), Supabase shutdown, local credential cleanup and clean credential-free build. This is the exact application/test revision; later docs-only commits are distinct. Phase 1F synthetic technical evidence remains accepted only for its documented test scope. Phase 2 PDF-only submission, transcript review, AAL2 Grader private-file retrieval and human grading draft/publication are verified synthetic workflows. Next is the server-authoritative advisory timer and timing/accuracy analytics. Do not run local Supabase/Docker, create a hosted service, incur cost, use real learner data, change DNS, merge or deploy to production without separate approval. Local WSL checkout remains unverified.
-**Version:** 0.36-draft
-**Date:** 8 November 2026
+**Version:** 0.37-draft
+**Date:** 10 November 2026
 **Status:** Phase 1C, Phase 1D, Phase 1E and Phase 1F technical evidence are verified for their accepted synthetic-only scopes. Local WSL synchronization is not verified. Do not run local Supabase/Docker or a self-hosted runner. Current exact application/test head `5df10f70c23a35bdf1759fcec8b12a36fca1a9c9` passed [#42579642253](https://github.com/gradioprep/gradioprep-website/actions/runs/42579642253): all 19 PostgreSQL/RLS SQL test files, 33/33 Playwright, TypeScript/Worker/Vite builds, private database/PDF backup/restore, shutdown, local credential cleanup and credential-free build. Cloudflare Workers Builds also reported a successful branch Preview build; the Actions PR Preview handoff was skipped for the push event. Timer persistence/UI and validated accuracy/elapsed-response analytics are the next implementation milestone.
 
 **Parent:** `docs/PHASE_1_SECURE_APPLICATION_FOUNDATION_IMPLEMENTATION_SPEC.md`  
@@ -525,3 +525,20 @@ The database enforces same learner and task version, submitted attempt state, pu
 5. Complete end-to-end synthetic flagship validation before actual MYP Year 4 diagnostic item authoring.
 
 The linkage milestone is ready for Founder acceptance on the synthetic CI evidence; it is not production readiness. Analytics remain unimplemented at this checkpoint. PR #22 stays open, draft and unmerged. No local Supabase/Docker on the user's computer, hosted service, cost, real learner data, external processing, DNS, merge or production deployment is authorised.
+
+
+## 16.15 Verified rubric-version-bound attainment and server-derived elapsed-response analytics — 10 November 2026
+
+The analytics milestone is implemented and verified on exact application/test snapshot 363608c1c449a46388a7f14862021f2782f49cd0, PR #22. GitHub Actions [#42756087000](https://github.com/gradioprep/gradioprep-website/actions/runs/42756087000) passed on GitHub-hosted ubuntu-latest: 776 SQL assertions across 22 files, 35/35 Playwright tests, TypeScript/Worker/Vite builds, synthetic backup/restore, corrupt-archive rejection, cleanup and clean credential-free Preview-assets build.
+
+The immutable publication-derived analytics record validates the exact published rubric version, complete criterion snapshots, awarded score, maximum denominator and percentage. It is derived only after human feedback publication; private drafts never generate a record. Elapsed response uses only the linked attempt's server-recorded start and submitted timestamps plus required submitted-event/identity checks. PDF upload and text extraction/OCR time are excluded. Regular, extended and untimed accommodation results remain distinct; missing/invalid evidence is explicitly labelled. Exact-context grouping binds task, rubric, response mode, timer policy and accommodation/allowance settings. No speed rank, cohort percentile or learner-facing analytics is produced.
+
+The new relation raises the protected physical inventory to **30 tables (18 public, 12 private)**. The read API is limited to the latest published version and an active AAL2 assigned Grader; learner endpoints remain unchanged and analytics reads are audited.
+
+**Next implementation order:**
+1. Complete the synthetic end-to-end flagship journey from learner typed/PDF-only submission through original-PDF/transcript review, human grading, publication, learner feedback visibility and linked analytics.
+2. Verify timing and accommodation edge cases, privacy, access revocation and audit correlation across the complete journey.
+3. Obtain Founder review of the complete synthetic evidence, then proceed only through separately approved branded synthetic staging and later invitation-only pilot gates.
+4. Keep actual MYP Year 4 diagnostic item authoring blocked until the full flagship workflow has passed the approved synthetic and pilot validation stages.
+
+This analytics milestone is not production readiness. No real learner data, hosted provisioning, external processing, cost, DNS change, merge or production deployment was included or authorised.
