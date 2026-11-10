@@ -47,7 +47,17 @@ SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt
 SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'AW01','{"text":"An observation outside the enabled Read & View section."}'::jsonb)$$,
  '22023','invalid_diagnostic_response','other task groups cannot be written through the first-slice API');
 
-SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV09','{"choice":"B","explanation":"The figures list completed and unfinished outcomes, unlike the tagline or invitation."}'::jsonb)$$,
+
+SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV01','{"a":null,"b":["A","C"]}'::jsonb)$,
+ '22023','invalid_diagnostic_response','null main-choice value is rejected');
+SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV04','{"choice":null}'::jsonb)$,
+ '22023','invalid_diagnostic_response','null single-choice value is rejected');
+SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV08','{"order":["1","2","3","4","5"],"explanation":null}'::jsonb)$,
+ '22023','invalid_diagnostic_response','null sequence explanation is rejected');
+SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV09','{"choice":"B","explanation":null}'::jsonb)$,
+ '22023','invalid_diagnostic_response','null evidence explanation is rejected');
+
+SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV09','{"choice":"B","explanation":"The figures list completed and unfinished outcomes, unlike the tagline or invitation."}'::jsonb)$$,
  'saves final RV09 evidence');
 SELECT is((SELECT count(DISTINCT observation_id)::integer FROM public.diagnostic_response_versions WHERE attempt_id=(SELECT attempt_id FROM diagnostic_test_state)),
  10,'all ten Read & View observations have evidence');
@@ -84,7 +94,7 @@ RESET ROLE;
 
 SELECT is((SELECT count(*)::integer FROM private.security_audit_events
  WHERE action='diagnostic_response_saved' AND target_type='diagnostic_attempt'
- AND target_id=(SELECT attempt_id FROM diagnostic_test_state)),10,
+ AND target_id=(SELECT attempt_id FROM diagnostic_test_state)),11,
  'successful response saves write metadata-only audit events');
 SELECT ok(NOT EXISTS(
  SELECT 1 FROM private.security_audit_events
