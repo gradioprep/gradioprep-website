@@ -3817,7 +3817,7 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
     return startLearnerDiagnostic(request, env);
   }
   const diagnosticResponseMatch = url.pathname.match(
-    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/(?:RV(?:0[1-6]|07[ab]|0[89])|LC0[1-5])$/i,
+    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/((?:RV(?:0[1-6]|07[ab]|0[89])|LC0[1-5]))$/i,
   );
   if (diagnosticResponseMatch && request.method === "PUT") {
     return saveLearnerDiagnosticResponse(request, env, diagnosticResponseMatch[1], diagnosticResponseMatch[2]);
