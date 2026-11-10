@@ -36,7 +36,7 @@ On a card, she wrote: â€œFixed today: one clock, one bell. Next time: the lamp.â
 
 **Excerpt ID:** `MYP4-RV-EX-002`
 **Working title:** Fix-It Afternoon
-**Body length:** 124 words (all visible poster copy, title/headings included for this count; the text-body rights count excluding headings is lower).
+**Rights-count body length:** 117 words (tagline and data labels included; institution name, main title and section heading excluded). All visible text, including those headings, is 124 words.
 **Response task links:** RV04, RV05, RV06, RV07a, RV07b, RV09.
 
 ### Poster copy
