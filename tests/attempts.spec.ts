@@ -1526,7 +1526,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     expect(analyticsPayload.analytics).toMatchObject({
       assessment_version_number: 1,
       rubric_version_id: "f1111111-1111-4111-8111-111111111111",
-      response_mode: "typed_pdf",
+      response_mode: "pdf_only",
       attainment_status: "valid",
       criterion_count: 2,
       expected_criterion_count: 2,
