@@ -382,7 +382,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       <div className="proto-diagnostic-question">
         <h3>RV06 · Critical perspective and representation</h3>
         <p>A volunteer says: “The team fixed almost every object on the day.” Is that a fair description of the poster’s results? Use at least one figure from the graphic and explain one limitation in the statement.</p>
-        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV06").text ?? ""} onChange={value => update("RV06", "text", value)} />
+        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV06").text ?? ""} onChange={value => update("RV06", "text", value)} disabled={readOnly}  />
       </div>
 
       <div className="proto-diagnostic-question">
@@ -394,7 +394,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       <div className="proto-diagnostic-question">
         <h3>RV07b · Compare form, structure and creator choices</h3>
         <p>How do the story’s sequence and the poster’s visual categories guide the reader in different ways? Refer to one specific choice in each stimulus.</p>
-        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07b").text ?? ""} onChange={value => update("RV07b", "text", value)} />
+        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07b").text ?? ""} onChange={value => update("RV07b", "text", value)} disabled={readOnly}  />
       </div>
 
       <div className="proto-diagnostic-question">
