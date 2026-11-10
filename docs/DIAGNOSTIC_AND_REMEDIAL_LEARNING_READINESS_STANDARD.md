@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.17
+**Version:** 2.18
 **Approved:** 31 October 2026  
 **Last updated:** 10 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
@@ -321,3 +321,16 @@ The Founder reviewed and approved the exact Analytical Writing v0.1 content pack
 The fourth Cycle 1 content batch is recorded at `docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_CREATIVE_PURPOSEFUL_PRODUCTION_DRAFT_v0.1.md`. It authors one short realistic narrative-scene task covering CW01–CW05: idea development, form control, audience impact, perspective/originality and a directly evidenced revision. The prompt states the school-magazine audience and purpose and requires a brief plan plus retained before/after revision trace. The proposed task remains within the approved 15-minute Sitting 2 envelope and 100–150-word response guidance (ideal target 125); pilot validation remains outstanding.
 
 The learner-safe draft contains no model response, private answer guidance or scoring anchors. The restricted teacher/editor pack is kept outside the public repository. Human MYP Year 4 demand/suitability review, narrative-form decision, task feasibility, accessibility, draft/trace retention and question-specific feedback validation remain open. No numerical rubric, score weighting, cut score, composite score, official IB conversion, app integration or learner release is approved. The next authoring batch is Speaking/Presenting (SP01–SP05).
+
+## 27. Speaking / Presenting draft authoring — 10 November 2026
+
+The fifth Cycle 1 learner-content batch is recorded in `docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_SPEAKING_PRESENTING_DRAFT_v0.1.md`, covering SP01–SP05 in one standardised oral proposal task. The learner prepares a short outline card, presents to a stated student-council audience and answers one common follow-up. The task maps directly to the approved evidence for presentation conventions/structure, sequence/coherence/development, audience and purpose, considered viewpoint, and oral/non-verbal communication.
+
+The task retains the approved 10-minute Sitting 2 planning envelope: 2 minutes to prepare, up to 3 minutes to present, up to 2 minutes for the follow-up and 3 minutes for transition/assessor notes. It does not require slides, an external stimulus, audio/video recording, upload or external speech processing. The outline card is a speaking aid, not a separately scored typed response. Timing and administration remain subject to pilot validation.
+
+The public learner draft contains only learner-facing task material and the evidence crosswalk. The restricted teacher/editor pack is maintained outside the public repository and contains accepted-response guidance, an illustrative model performance, dimension-specific provisional anchors, misconceptions and tailored feedback. The package remains an unapproved draft. Human Year 4 demand/suitability review, task fairness, accessibility and access-arrangement review, timing, assessor consistency and validation of the model/anchors/feedback remain open.
+
+**Cycle 1 authoring status:** all six skill-area task groups in the 35-observation map now have draft learner-content batches: Read & View, Listening, Language in Context, Analytical Writing, Creative/Purposeful Production and Speaking/Presenting. Listening and Language in Context share one file but retain their separate L01–L05 and LC01–LC05 observations. Analytical Writing v0.1 alone has Founder/content-owner adoption approval for that exact package; no other batch is approved by implication. All restricted teacher/editor keys, exemplars, anchors and private scoring/feedback guidance remain outside the public learner bundle.
+
+The next step is consolidated human academic review and validation of all Cycle 1 learner drafts and restricted teacher/editor packs. Review MYP Year 4 demand, fairness, ambiguity, accepted alternatives, response evidence, task feasibility/timing, accessibility/accommodations, question-specific feedback and assessor consistency. Complete calibrated scoring/confidence and the other cycle completion gates before accepting the Diagnostic/Evaluation Report or integrating/releasing the assessment. No numerical scoring, weights, thresholds, composite score, official IB conversion, automatic speech assessment or learner release is approved.
+

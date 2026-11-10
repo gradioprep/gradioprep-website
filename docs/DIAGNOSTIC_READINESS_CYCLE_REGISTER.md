@@ -13,6 +13,8 @@
 
 Grade 9 = MYP Year 4 is a Founder-confirmed placement for Cycle 1, not an unresolved mapping. Cambridge Grade 6 remains a requested school-grade label whose exact official stage/course must be established during Cycle 2 scope lock. Never substitute Cambridge Lower Secondary Stage 7 for Grade 6.
 
+**Current Cycle 1 authoring status — 10 November 2026:** Draft learner-content batches now cover Read & View, Listening, Language in Context, Analytical Writing, Creative/Purposeful Production and Speaking/Presenting. Analytical Writing v0.1 alone has exact-version Founder/content-owner adoption approval; all other batch content remains draft-only. Restricted keys, model responses, scoring anchors and private feedback guidance are kept outside the public learner-content files.
+
 ## 2. Official context checks for planning only
 
 ### IB MYP Grade 9 / Year 4 — Founder-confirmed
@@ -389,3 +391,16 @@ The Founder reviewed and approved the exact Analytical Writing v0.1 content pack
 The fourth Cycle 1 authoring batch is recorded at `docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_CREATIVE_PURPOSEFUL_PRODUCTION_DRAFT_v0.1.md`. It drafts CW01–CW05 in one short realistic narrative-scene response for the stated school-magazine audience and purpose. The learner records a brief three-part plan, retains the first draft, and makes a meaningful before/after edit so CW05 can be judged from direct evidence. The proposed 15-minute task uses 100–150-word guidance and an ideal target of 125; neither timing nor response range is pilot-validated, and the target is not a cap.
 
 The learner-safe public draft contains no model response or private scoring anchors. Its restricted teacher/editor pack is stored outside the public repository. Human Year 4 academic review, suitability of the narrative form, task feasibility, accessibility, revision-trace capture and question-specific anchor/feedback validation remain open. No numerical scoring, criterion weights, cut scores, composite score, official IB grade conversion, automated marking or learner release is approved. The next authoring batch is Speaking/Presenting, followed by review of the complete Cycle 1 content and teacher/editor materials.
+
+## 24. Speaking / Presenting draft authoring — 10 November 2026
+
+The fifth Cycle 1 authoring batch is recorded at `docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_SPEAKING_PRESENTING_DRAFT_v0.1.md`. It covers SP01–SP05 in one standardised oral proposal task for the student council, supported by a brief outline card and one common follow-up question. The task assesses presentation structure/conventions, sequence and development, audience/purpose, considered viewpoint, and oral/non-verbal communication.
+
+The approved 10-minute Sitting 2 envelope is retained: 2 minutes to prepare the card, up to 3 minutes to present, up to 2 minutes for the follow-up, and 3 minutes for transition and assessor notes. It needs no slide, external stimulus, recording, upload or speech-processing service. The card is a planning aid, not a separately scored written response. Timing and administration remain subject to pilot validation.
+
+The learner-safe public draft contains only the scenario, instructions and evidence crosswalk. The restricted teacher/editor pack contains accepted-response guidance, a model performance, provisional dimension anchors, misconceptions and tailored assessor feedback; it is maintained outside the public repository. This batch is an unapproved draft. Human Year 4 demand/suitability review, prompt fairness, accessibility/access arrangements, task feasibility, timing, assessor consistency and question-specific anchor/feedback validation remain open. No numerical scoring, weights, thresholds, app integration, speech recording/automated assessment or learner release is approved.
+
+**Cycle 1 authoring status:** all six mapped task groups now have draft learner-content batches across five authoring files: Read & View (RV01–RV09, with RV07a/RV07b distinct), Listening (L01–L05), Language in Context (LC01–LC05), Analytical Writing (AW01–AW05), Creative/Purposeful Production (CW01–CW05) and Speaking/Presenting (SP01–SP05). Analytical Writing v0.1 alone has exact-version Founder/content-owner adoption approval. Restricted answer keys, model responses, scoring anchors and feedback guidance remain outside the public learner-content files.
+
+**Next:** conduct consolidated human academic review of all Cycle 1 learner drafts and restricted teacher/editor packs. Validate age/level demand, ambiguity, task/stimulus suitability, accepted alternatives, rubric anchors, feedback, accessibility/accommodations, timing and assessor consistency. Only then finalise calibrated evidence/scoring and proceed through the remaining cycle-completion gates. The complete Diagnostic/Evaluation Report remains unbuilt, uncalibrated, unapproved and unreleased; branded staging and the later invitation-only pilot remain separate approval gates. Cambridge Grade 6 remains blocked until Cycle 1 is complete and the Founder directs transition.
+
