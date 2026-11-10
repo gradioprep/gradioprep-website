@@ -425,6 +425,23 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     };
     expect(pdfSubmissionDetailBody.submission.response_mode).toBe("typed_pdf");
 
+
+
+    const fileAccess = await page.request.get(fileReadRoute, { headers });
+    const fileAccessBody = await fileAccess.json() as {
+      file: { signed_url: string; expires_in_seconds: number; sha256: string; page_count: number };
+    };
+    expect(fileAccess.status()).toBe(200);
+    expect(fileAccessBody.file.expires_in_seconds).toBe(60);
+    expect(fileAccessBody.file.sha256).toMatch(/^[a-f0-9]{64}$/);
+    expect(fileAccessBody.file.byte_size).toBe(onePagePdf.byteLength);
+    expect(fileAccessBody.file.mime_type).toBe("application/pdf");
+    expect(fileAccessBody.file.page_count).toBe(1);
+    const downloadedPdf = await page.request.get(fileAccessBody.file.signed_url);
+    expect(downloadedPdf.status()).toBe(200);
+    expect((await downloadedPdf.body()).byteLength).toBe(onePagePdf.byteLength);
+
+    // Link only after the server has accepted and served the private PDF evidence.
     // A typed-plus-PDF response must also link to the learner's submitted
     // practice attempt for the exact same task version.
     const typedPdfAttemptCreate = await page.request.post("/api/v1/learner/attempts", {
@@ -468,21 +485,6 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
       reason: "learner_action",
     });
     process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TYPED_PDF_ATTEMPT_ID = typedPdfAttemptId!;
-
-
-    const fileAccess = await page.request.get(fileReadRoute, { headers });
-    const fileAccessBody = await fileAccess.json() as {
-      file: { signed_url: string; expires_in_seconds: number; sha256: string; page_count: number };
-    };
-    expect(fileAccess.status()).toBe(200);
-    expect(fileAccessBody.file.expires_in_seconds).toBe(60);
-    expect(fileAccessBody.file.sha256).toMatch(/^[a-f0-9]{64}$/);
-    expect(fileAccessBody.file.byte_size).toBe(onePagePdf.byteLength);
-    expect(fileAccessBody.file.mime_type).toBe("application/pdf");
-    expect(fileAccessBody.file.page_count).toBe(1);
-    const downloadedPdf = await page.request.get(fileAccessBody.file.signed_url);
-    expect(downloadedPdf.status()).toBe(200);
-    expect((await downloadedPdf.body()).byteLength).toBe(onePagePdf.byteLength);
 
     // The object path is visible only inside the short-lived signed URL. The
     // ordinary private-object endpoint remains inaccessible to anonymous and
