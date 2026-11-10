@@ -441,7 +441,7 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
 
     const fileAccess = await page.request.get(fileReadRoute, { headers });
     const fileAccessBody = await fileAccess.json() as {
-      file: { signed_url: string; expires_in_seconds: number; sha256: string; page_count: number };
+      file: { version: number; signed_url: string; expires_in_seconds: number; sha256: string; page_count: number };
       transcript: {
         version: number;
         method: string;
@@ -454,6 +454,9 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     };
     expect(fileAccess.status()).toBe(200);
     expect(fileAccessBody.file.expires_in_seconds).toBe(60);
+    // Rejected uploads reserve immutable file versions; the accepted transcript
+    // must be linked to its source file rather than assume the first file version.
+    expect(fileAccessBody.file.version).toBeGreaterThan(1);
     expect(fileAccessBody.file.sha256).toMatch(/^[a-f0-9]{64}$/);
     expect(fileAccessBody.file.byte_size).toBe(onePagePdf.byteLength);
     expect(fileAccessBody.file.mime_type).toBe("application/pdf");
