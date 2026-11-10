@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="430" viewBox="0 0 760 430" role="img" aria-labelledby="chart-title chart-desc">
+  <title id="chart-title">Fix-It Afternoon outcomes: 48 objects checked</title>
+  <desc id="chart-desc">A horizontal bar chart shows 31 objects repaired on the day, 9 waiting for parts, and 8 not safe to repair at this event. The three bars sum to 48 objects.</desc>
+  <rect x="0" y="0" width="760" height="430" rx="18" fill="#F7F5F1"/>
+  <text x="42" y="54" font-family="Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="2" fill="#4A3045">NORTHBANK LIBRARY</text>
+  <text x="42" y="96" font-family="Arial, sans-serif" font-size="31" font-weight="700" fill="#342331">Fix-It Afternoon</text>
+  <text x="42" y="127" font-family="Arial, sans-serif" font-size="17" fill="#4C4A50">Outcome for every object checked this month</text>
+  <rect x="42" y="151" width="676" height="2" fill="#D8D2CC"/>
+  <text x="42" y="194" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#4C4A50">48 OBJECTS CHECKED</text>
+  <text x="42" y="241" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#342331">Repaired on the day</text>
+  <rect x="280" y="219" width="350" height="30" rx="7" fill="#E3DFDA"/>
+  <rect x="280" y="219" width="226" height="30" rx="7" fill="#4A3045"/>
+  <text x="648" y="242" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#342331">31</text>
+  <text x="42" y="302" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#342331">Waiting for parts</text>
+  <rect x="280" y="280" width="350" height="30" rx="7" fill="#E3DFDA"/>
+  <rect x="280" y="280" width="66" height="30" rx="7" fill="#657F96"/>
+  <text x="648" y="303" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#342331">9</text>
+  <text x="42" y="363" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#342331">Not safe at this event</text>
+  <rect x="280" y="341" width="350" height="30" rx="7" fill="#E3DFDA"/>
+  <rect x="280" y="341" width="58" height="30" rx="7" fill="#B07B39"/>
+  <text x="648" y="364" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#342331">8</text>
+  <text x="42" y="405" font-family="Arial, sans-serif" font-size="13" fill="#55515A">Counts are categories of the 48 objects checked; unfinished outcomes are included.</text>
+</svg>

@@ -85,7 +85,7 @@ For a platform-original passage of 250 words or fewer, also record author/owner,
 
 For a passage over 250 words, also record the separate Source ID, work title, author, relevant author/work dates and original language; exact edition/transcription/editor/translator; repository/publisher and URL; public-domain basis and territory/territories checked; exact chapter/section/page and opening/closing words or text fingerprint; exact stored-text pointer; omissions/formatting changes; suitability note; reviewer/check date; approval state and replacement history.
 
-The private register is maintained at docs/LITERARY_EXCERPT_SOURCE_REGISTER.md. Complete the relevant provenance/source record before a passage is inserted into a learner or teacher pack.
+The excerpt provenance register is maintained at docs/LITERARY_EXCERPT_SOURCE_REGISTER.md. The GitHub repository is public, so that file must contain public-safe provenance metadata only; do not store confidential permissions, private legal advice, credentials or teacher-only answer keys there. Keep restricted evidence in an approved private store. Complete the relevant provenance/source record before a passage is inserted into a learner or teacher pack.
 
 
 ## 7. Existing content and migration baseline — 30 October 2026

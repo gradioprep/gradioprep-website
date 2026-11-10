@@ -250,3 +250,16 @@ The workflow was branch-push triggered. The clean asset build is evidence that t
 The synthetic Student C regression used the correct seeded UUID and temporary enrolment cleanup. No actual account, learner data or hosted backend was involved. A docs-only reconciliation does not qualify for a Founder Preview handoff. Continue to reserve Founder-facing Preview reviews for a new substantial visible feature after a qualifying Preview URL is actually created and verified.
 
 Branded staging on `gradioprep.com`, an isolated hosted synthetic backend and DNS mapping remain separate explicit approval gates, mandatory before final Diagnostic/Evaluation Report acceptance. Production custom-domain cutover, real learner data, invitation-only pilot, public release, merge and production deployment remain separate later gates.
+
+
+## 14. Exact-head tri-mode flagship CI checkpoint and content-authoring boundary — 10 November 2026
+
+PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. Exact application/test HEAD `51fdde6d3191054b34f3ad0f8d141cbc99d233e6` passed GitHub Actions [#42770920114](https://github.com/gradioprep/gradioprep-website/actions/runs/42770920114), run attempt 1, on GitHub-hosted `ubuntu-latest`.
+
+The full synthetic workflow passed 776 SQL/pgTAP assertions across 22 files, 35/35 Playwright tests, TypeScript/Worker/Vite builds, database/private-PDF backup and restore (one database snapshot, two PDF checksums; corrupt archive rejected), local Supabase shutdown, local credential-file cleanup and clean public-Preview asset build without local credentials.
+
+The Playwright set covers accepted typed, typed-plus-PDF and PDF-only paths through matching attempt linkage, human publication, learner feedback readback and assigned-AAL2-Grader analytics. The PDF-only branch additionally checks AAL2 transcript correction/verification. The accepted-file/transcript link for typed-plus-PDF uses `source_file_id`; file/transcript version-1 assumptions were removed because rejected uploads may consume prior versions. The typed response route now returns `response_mode: "typed"` consistently. No physical table/column was added; inventory remains 30 (18 public, 12 private).
+
+**Deployment boundary:** this was a `push` run. PR Preview creation/update and PR-comment steps were skipped. The credential-free asset build is not a deployment; no Preview URL, independent Cloudflare Workers Builds deployment, hosted backend or production deployment is claimed.
+
+Cycle 1 MYP Year 4 / Grade 9 authoring may proceed as unapproved drafts after this synthetic gate. The Read & View v0.1 draft is recorded in `docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_READ_VIEW_DRAFT_v0.1.md`. It is not a learner release. Founder branded staging on `gradioprep.com`, isolated hosted synthetic backend and DNS mapping remain separate approval gates after the Diagnostic and complete Evaluation Report are built and mandatory before final acceptance. Production custom-domain cutover, real learner data, the invitation-only pilot, public release, merge and production deployment remain later separate gates.
