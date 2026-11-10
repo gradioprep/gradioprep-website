@@ -1103,6 +1103,243 @@ async function auditPrivilegedWriteOutcome(
   return null;
 }
 
+async function auditDiagnosticWriteFailure(
+  context: CallerContext,
+  action: "student_diagnostic_attempt_start" | "student_diagnostic_response_save" | "student_diagnostic_attempt_submit",
+  targetId: string | undefined,
+  outcome: "denied" | "failed",
+  failureCategory?: PrivilegedWriteFailureCategory,
+): Promise<Response | null> {
+  if (!context.serviceSupabase) return jsonResponse({ error: "diagnostic_audit_unavailable" }, 503);
+  const { data, error } = await context.serviceSupabase.rpc("record_worker_diagnostic_failure", {
+    p_actor_id: context.userId,
+    p_action: action,
+    p_target_id: targetId ?? null,
+    p_outcome: outcome,
+    p_failure_category: failureCategory ?? null,
+  });
+  if (!isAuditAcknowledged(data, error)) {
+    return jsonResponse({ error: "diagnostic_audit_unavailable" }, 503);
+  }
+  return null;
+}
+
+function diagnosticFailure(error: { code?: string; message?: string }): {
+  outcome: "denied" | "failed";
+  category?: PrivilegedWriteFailureCategory;
+} {
+  const message = error.message ?? "";
+  if (error.code === "42501" || message.endsWith("_forbidden")) return { outcome: "denied" };
+  if (message.endsWith("_not_found") || message === "diagnostic_not_available") {
+    return { outcome: "failed", category: "resource_not_found" };
+  }
+  if (message.endsWith("_not_editable") || message === "diagnostic_responses_incomplete") {
+    return { outcome: "failed", category: "state_conflict" };
+  }
+  if (error.code === "22023" || message.startsWith("invalid_")) {
+    return { outcome: "failed", category: "validation_failed" };
+  }
+  return { outcome: "failed", category: "operation_failed" };
+}
+
+function isValidDiagnosticResponse(observationCode: string, response: unknown): response is Record<string, unknown> {
+  if (typeof response !== "object" || response === null || Array.isArray(response)) return false;
+  const value = response as Record<string, unknown>;
+  const keys = Object.keys(value);
+  const only = (expected: string[]) => keys.length === expected.length && expected.every(key => Object.hasOwn(value, key));
+  const choice = (item: unknown) => typeof item === "string" && ["A", "B", "C", "D"].includes(item);
+  const text = (item: unknown) => typeof item === "string" && item.trim().length >= 5 && item.length <= 12_000;
+
+  if (observationCode === "RV01") {
+    return only(["a", "b"]) && choice(value.a) && Array.isArray(value.b) &&
+      value.b.length === 2 && value.b.every(choice) && new Set(value.b).size === 2;
+  }
+  if (["RV02", "RV03", "RV06", "RV07a", "RV07b"].includes(observationCode)) {
+    return only(["text"]) && text(value.text);
+  }
+  if (["RV04", "RV05"].includes(observationCode)) return only(["choice"]) && choice(value.choice);
+  if (observationCode === "RV08") {
+    return only(["order", "explanation"]) && Array.isArray(value.order) &&
+      value.order.length === 5 && value.order.every(item => ["1", "2", "3", "4", "5"].includes(String(item))) &&
+      new Set(value.order.map(String)).size === 5 && text(value.explanation);
+  }
+  if (observationCode === "RV09") {
+    return only(["choice", "explanation"]) && choice(value.choice) && text(value.explanation);
+  }
+  return false;
+}
+
+async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise<Response> {
+  const parsed = await readBoundedJson(request, 512);
+  if (!parsed.ok) return parsed.response;
+  if (Object.keys(parsed.body).length !== 1 || typeof parsed.body.idempotency_key !== "string" ||
+      !isUuid(parsed.body.idempotency_key)) {
+    return jsonResponse({ error: "invalid_diagnostic_start" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditDiagnosticWriteFailure(auth.context, "student_diagnostic_attempt_start", undefined, "denied")
+      : null;
+    return audit ?? roleDenied;
+  }
+
+  const { data: version, error: versionError } = await auth.context.supabase
+    .from("diagnostic_versions")
+    .select("id, diagnostic_code, pathway_id, title, version, total_minutes, sitting_count")
+    .eq("diagnostic_code", "ib-myp-g9-cycle1")
+    .eq("version", 1)
+    .eq("release_state", "published")
+    .maybeSingle();
+  if (versionError || !version) {
+    const audit = await auditDiagnosticWriteFailure(
+      auth.context, "student_diagnostic_attempt_start", undefined,
+      "failed", versionError ? "operation_failed" : "resource_not_found",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: versionError ? "diagnostic_unavailable" : "diagnostic_not_available" },
+      versionError ? 500 : 404);
+  }
+
+  const { data, error } = await auth.context.supabase.rpc("create_diagnostic_attempt", {
+    p_version_id: version.id,
+    p_idempotency_key: parsed.body.idempotency_key,
+  });
+  if (error) {
+    const failure = diagnosticFailure(error);
+    const audit = await auditDiagnosticWriteFailure(
+      auth.context, "student_diagnostic_attempt_start", version.id, failure.outcome, failure.category,
+    );
+    if (audit) return audit;
+    if (failure.outcome === "denied") return jsonResponse({ error: "diagnostic_attempt_forbidden" }, 403);
+    if (failure.category === "resource_not_found") return jsonResponse({ error: "diagnostic_not_available" }, 404);
+    return jsonResponse({ error: "diagnostic_attempt_start_failed" }, 500);
+  }
+
+  const created = asRows(data)[0];
+  if (!created) return jsonResponse({ error: "diagnostic_attempt_start_failed" }, 500);
+  const [{ data: attempt, error: attemptError }, { data: responseRows, error: responsesError }] = await Promise.all([
+    auth.context.supabase.from("diagnostic_attempts")
+      .select("id, diagnostic_version_id, status, started_at, submitted_at")
+      .eq("id", created.attempt_id).maybeSingle(),
+    auth.context.supabase.from("diagnostic_response_versions")
+      .select("revision_number, response_json, saved_at, diagnostic_observations(observation_code)")
+      .eq("attempt_id", created.attempt_id)
+      .order("revision_number", { ascending: false }),
+  ]);
+  if (attemptError || responsesError || !attempt) {
+    const audit = await auditDiagnosticWriteFailure(
+      auth.context, "student_diagnostic_attempt_start", version.id, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "diagnostic_attempt_readback_failed" }, 500);
+  }
+
+  const responses: Record<string, { response: unknown; revision_number: number; saved_at: string }> = {};
+  for (const row of responseRows ?? []) {
+    const nested = row.diagnostic_observations;
+    const observation = Array.isArray(nested) ? nested[0] : nested;
+    const code = observation && typeof observation === "object"
+      ? (observation as { observation_code?: string }).observation_code
+      : undefined;
+    if (code && !responses[code]) {
+      responses[code] = {
+        response: row.response_json,
+        revision_number: row.revision_number,
+        saved_at: row.saved_at,
+      };
+    }
+  }
+
+  return jsonResponse({
+    diagnostic: version,
+    attempt: { ...attempt, is_replay: created.is_replay === true },
+    responses,
+    section_status: "read_view_only",
+  }, created.is_replay === true ? 200 : 201);
+}
+
+async function saveLearnerDiagnosticResponse(
+  request: Request, env: WorkerEnv, attemptId: string, observationCode: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 16_384);
+  if (!parsed.ok) return parsed.response;
+  if (!isUuid(attemptId) || Object.keys(parsed.body).length !== 1 ||
+      !Object.hasOwn(parsed.body, "response") ||
+      !isValidDiagnosticResponse(observationCode, parsed.body.response)) {
+    return jsonResponse({ error: "invalid_diagnostic_response" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditDiagnosticWriteFailure(auth.context, "student_diagnostic_response_save", attemptId, "denied")
+      : null;
+    return audit ?? roleDenied;
+  }
+
+  const { data, error } = await auth.context.supabase.rpc("save_diagnostic_response", {
+    p_attempt_id: attemptId,
+    p_observation_code: observationCode,
+    p_response: parsed.body.response,
+  });
+  if (error) {
+    const failure = diagnosticFailure(error);
+    const audit = await auditDiagnosticWriteFailure(
+      auth.context, "student_diagnostic_response_save", attemptId, failure.outcome, failure.category,
+    );
+    if (audit) return audit;
+    if (failure.outcome === "denied") return jsonResponse({ error: "diagnostic_response_forbidden" }, 403);
+    if (failure.category === "resource_not_found") return jsonResponse({ error: "diagnostic_attempt_not_found" }, 404);
+    if (failure.category === "state_conflict") return jsonResponse({ error: "diagnostic_attempt_not_editable" }, 409);
+    if (failure.category === "validation_failed") return jsonResponse({ error: "invalid_diagnostic_response" }, 400);
+    return jsonResponse({ error: "diagnostic_response_save_failed" }, 500);
+  }
+  const saved = asRows(data)[0];
+  return saved ? jsonResponse({ response: saved }) : jsonResponse({ error: "diagnostic_response_save_failed" }, 500);
+}
+
+async function submitLearnerDiagnostic(request: Request, env: WorkerEnv, attemptId: string): Promise<Response> {
+  const parsed = await readBoundedJson(request, 128);
+  if (!parsed.ok) return parsed.response;
+  if (!isUuid(attemptId) || !hasOnlyEmptyObject(parsed.body)) {
+    return jsonResponse({ error: "invalid_diagnostic_submission" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditDiagnosticWriteFailure(auth.context, "student_diagnostic_attempt_submit", attemptId, "denied")
+      : null;
+    return audit ?? roleDenied;
+  }
+
+  const { data, error } = await auth.context.supabase.rpc("submit_diagnostic_attempt", {
+    p_attempt_id: attemptId,
+  });
+  if (error) {
+    const failure = diagnosticFailure(error);
+    const audit = await auditDiagnosticWriteFailure(
+      auth.context, "student_diagnostic_attempt_submit", attemptId, failure.outcome, failure.category,
+    );
+    if (audit) return audit;
+    if (failure.outcome === "denied") return jsonResponse({ error: "diagnostic_attempt_forbidden" }, 403);
+    if (failure.category === "resource_not_found") return jsonResponse({ error: "diagnostic_attempt_not_found" }, 404);
+    if (failure.category === "state_conflict") return jsonResponse({
+      error: error.message === "diagnostic_responses_incomplete"
+        ? "diagnostic_responses_incomplete" : "diagnostic_attempt_not_editable",
+    }, 409);
+    return jsonResponse({ error: "diagnostic_submission_failed" }, 500);
+  }
+  const submitted = asRows(data)[0];
+  return submitted ? jsonResponse({ attempt: submitted }) : jsonResponse({ error: "diagnostic_submission_failed" }, 500);
+}
+
 async function auditStaffInvitationAcceptanceFailure(
   context: CallerContext,
   tokenHash: string,
@@ -3554,6 +3791,22 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
 
   if (url.pathname === "/api/v1/staff-invitations/accept" && request.method === "POST") {
     return acceptStaffInvitation(request, env);
+  }
+
+  if (url.pathname === "/api/v1/learner/diagnostics/ib-myp-g9-cycle1/start" && request.method === "POST") {
+    return startLearnerDiagnostic(request, env);
+  }
+  const diagnosticResponseMatch = url.pathname.match(
+    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/(RV(?:0[1-6]|07[ab]|0[89]))$/i,
+  );
+  if (diagnosticResponseMatch && request.method === "PUT") {
+    return saveLearnerDiagnosticResponse(request, env, diagnosticResponseMatch[1], diagnosticResponseMatch[2]);
+  }
+  const diagnosticSubmitMatch = url.pathname.match(
+    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/submit$/i,
+  );
+  if (diagnosticSubmitMatch && request.method === "POST") {
+    return submitLearnerDiagnostic(request, env, diagnosticSubmitMatch[1]);
   }
 
   if (url.pathname === "/api/v1/learner/attempts" && request.method === "GET") {
