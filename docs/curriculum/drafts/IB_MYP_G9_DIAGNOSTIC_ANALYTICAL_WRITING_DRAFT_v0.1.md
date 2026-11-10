@@ -1,6 +1,6 @@
 # IB MYP Year 4 / Grade 9 Diagnostic — Analytical Writing draft v0.1
 
-**Status:** Learner-content authoring draft for human academic review. Not calibrated, approved, implemented in the learner app or released.
+**Status:** Founder/content-owner approved for adoption as the exact v0.1 content package on 10 November 2026. It is not pilot-calibrated, learner-integrated or released; final scoring and release gates remain separate.
 **Target:** Founder-confirmed Grade 9 — IB MYP Year 4, Language and Literature.
 **Item map:** Founder-approved v0.1; Analytical Writing observations AW01–AW05 (one focused extended response, five separately judged evidence dimensions).
 **Sitting:** Sitting 2 — Analytical Writing, proposed 20-minute task.
@@ -68,12 +68,13 @@ One response supplies the five mapped observations; they are not five separate l
 ## Review status and open gates
 
 - Originality/provenance: limited exact-phrase checks recorded in the public-safe excerpt register. No exact matching passage surfaced in the results returned by those searches. This is not a comprehensive originality screen, legal opinion or rights clearance.
-- Human academic review and independent MYP Year 4 demand calibration: **pending**.
+- Founder/content-owner adoption of this exact stimulus and prompt: **approved 10 November 2026**.
+- Independent MYP Year 4 demand calibration and any second-reader suitability check: **pending**.
 - Prompt and stimulus ambiguity, cultural/context suitability and age-level review: **pending**.
-- Human validation of model response, alternative interpretations, dimension anchors and question-specific feedback: **pending** in the restricted teacher/editor pack.
+- Founder review/adoption of the v0.1 teacher/editor content package: **approved 10 November 2026**. Independent validation of the model response, alternative interpretations, dimension anchors and question-specific feedback: **pending** in the restricted teacher/editor pack.
 - Accessibility review: **pending**, including reading order, contrast, response editor, counter announcement and equivalent typed/PDF administration.
 - Timing pilot: **pending**; the proposed 20-minute envelope is not validated.
 - Final rubric language, numerical scoring, weights, aggregation, thresholds and cut scores: **not set or approved**.
 - App integration, learner release and automated marking: **not approved**.
 
-The Founder-approved 35-observation map, six skill areas and four criterion profiles remain unchanged. No official IB mapping, IB 1–7 conversion, composite score, percentile or learner ranking is implied.
+The Founder-approved 35-observation map, six skill areas and four criterion profiles remain unchanged. This content-owner approval is limited to exact content version v0.1; it does not approve final scoring, numerical rubrics, weights, aggregation, diagnostic/report acceptance, app integration or learner release. No official IB mapping, IB 1–7 conversion, composite score, percentile or learner ranking is implied.

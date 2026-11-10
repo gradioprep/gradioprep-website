@@ -1,6 +1,6 @@
 # Diagnostic Assessment, Evaluation Analytics and Remedial Course Standard
 
-**Version:** 2.16
+**Version:** 2.17
 **Approved:** 31 October 2026  
 **Last updated:** 10 November 2026  
 **Status:** Binding process standard for the diagnostic-first learning-readiness layer.  
@@ -310,3 +310,14 @@ The Language-in-Context microtasks remain tied to contextual meaning, sentence f
 The third Cycle 1 authoring batch is recorded at docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_ANALYTICAL_WRITING_DRAFT_v0.1.md. It covers AW01–AW05 in one focused extended response linked to a new 214-word project-original stimulus. The task retains the approved 20-minute Sitting 2 envelope and 150–200-word guidance with an ideal target of 180; the task timing and response range remain subject to pilot validation.
 
 The public learner-content file contains no model response, answer key or private scoring anchors. The restricted teacher/editor pack is kept outside the public repository. Human academic validation, Year 4 demand calibration, item ambiguity, response guidance, question-specific feedback, accessibility and timing remain open. No numerical scoring, criterion weights, cut scores, composite score, official IB grade conversion, automated marking or learner release is approved. The next authoring batch is Creative/Purposeful Production, followed by Speaking/Presenting.
+
+
+## 25. Founder approval of Analytical Writing v0.1 content — 10 November 2026
+
+The Founder reviewed and approved the exact Analytical Writing v0.1 content package on 10 November 2026, including the learner-facing stimulus/prompt and companion restricted teacher/editor draft pack. The approval records content-owner adoption of this exact version only. It does not approve final numerical scoring, criterion weights, aggregation, cut scores, IB grade conversion, automated marking, learner-app integration, Diagnostic/Evaluation Report acceptance or learner release. Independent Year 4 demand/suitability calibration, accessibility and timing checks remain open; materially revised content requires version-specific review. The 35-observation map, six skill areas and four criterion profiles remain unchanged.
+
+## 26. Creative / Purposeful Production draft authoring — 10 November 2026
+
+The fourth Cycle 1 content batch is recorded at \`docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_CREATIVE_PURPOSEFUL_PRODUCTION_DRAFT_v0.1.md\`. It authors one short realistic narrative-scene task covering CW01–CW05: idea development, form control, audience impact, perspective/originality and a directly evidenced revision. The prompt states the school-magazine audience and purpose and requires a brief plan plus retained before/after revision trace. The proposed task remains within the approved 15-minute Sitting 2 envelope and 100–150-word response guidance (ideal target 125); pilot validation remains outstanding.
+
+The learner-safe draft contains no model response, private answer guidance or scoring anchors. The restricted teacher/editor pack is kept outside the public repository. Human MYP Year 4 demand/suitability review, narrative-form decision, task feasibility, accessibility, draft/trace retention and question-specific feedback validation remain open. No numerical rubric, score weighting, cut score, composite score, official IB conversion, app integration or learner release is approved. The next authoring batch is Speaking/Presenting (SP01–SP05).
