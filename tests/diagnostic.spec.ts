@@ -38,7 +38,7 @@ test.describe("Cycle 1 Diagnostic — Read & View evidence API", () => {
       section_status: string;
     };
     expect(started.status(), JSON.stringify(startedBody)).toBe(201);
-    await expect(page.getByRole("heading", { name: "The Repair Table", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Stimulus A · The Repair Table", exact: true })).toBeVisible();
     await expect(page.getByText("Read & View section only", { exact: true })).toBeVisible();
     expect(startedBody.diagnostic).toMatchObject({ diagnostic_code: "ib-myp-g9-cycle1", version: 1 });
     expect(startedBody.attempt.status).toBe("in_progress");
@@ -105,5 +105,14 @@ test.describe("Cycle 1 Diagnostic — Read & View evidence API", () => {
     );
     expect(lateEdit.status()).toBe(409);
     await expect(lateEdit.json()).resolves.toMatchObject({ error: "diagnostic_attempt_not_editable" });
+
+    // Reload and resume the submitted attempt to verify the learner UI restores it read-only.
+    await page.reload();
+    await expect(page.getByRole("heading", { name: "Synthetic Student A", exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Start / continue Diagnostic" }).click();
+    await expect(page.getByRole("heading", { name: "Stimulus A · The Repair Table", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Submit Read & View" })).toHaveCount(0);
+    await expect(page.locator('input[type="radio"]').first()).toBeDisabled();
+    await expect(page.locator("textarea").first()).toBeDisabled();
   });
 });
