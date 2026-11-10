@@ -644,6 +644,74 @@ test.describe("Phase 1C typed attempts and assignment-scoped grading API", () =>
     });
     expect(pdfOnlyFile.transcript.text).toContain("Synthetic digital transcript text");
 
+    // Link a submitted practice attempt to this exact accepted PDF-only assessment.
+    // The timer starts after PDF acceptance, excluding upload and extraction time.
+    const linkedAttemptCreate = await page.request.post("/api/v1/learner/attempts", {
+      headers,
+      data: { task_version_id: taskVersionA },
+    });
+    const linkedAttemptCreateBody = await linkedAttemptCreate.json() as {
+      attempt?: { id?: string; status?: string };
+      error?: string;
+    };
+    expect(linkedAttemptCreate.status(), JSON.stringify(linkedAttemptCreateBody)).toBe(201);
+    expect(linkedAttemptCreateBody.attempt?.id).toBeTruthy();
+    const linkedAttemptId = linkedAttemptCreateBody.attempt!.id!;
+
+    const linkedAttemptResponseSave = await page.request.put(
+      "/api/v1/learner/attempts/" + linkedAttemptId + "/responses/" + promptA,
+      {
+        headers,
+        data: {
+          response_text: "This synthetic practice response selects relevant evidence and explains how it supports a clear interpretation of the published task.",
+        },
+      },
+    );
+    expect(linkedAttemptResponseSave.status()).toBe(200);
+
+    const linkedAttemptSubmit = await page.request.post(
+      "/api/v1/learner/attempts/" + linkedAttemptId + "/submit",
+      { headers, data: {} },
+    );
+    const linkedAttemptSubmitBody = await linkedAttemptSubmit.json() as {
+      attempt?: { status?: string; submitted_at?: string };
+      error?: string;
+    };
+    expect(linkedAttemptSubmit.status(), JSON.stringify(linkedAttemptSubmitBody)).toBe(200);
+    expect(linkedAttemptSubmitBody.attempt).toMatchObject({ status: "submitted" });
+    expect(linkedAttemptSubmitBody.attempt?.submitted_at).toBeTruthy();
+
+    const timedAssessmentLink = await page.request.post(
+      "/api/v1/learner/attempts/" + linkedAttemptId + "/assessment-link",
+      {
+        headers,
+        data: {
+          assessment_submission_id: pdfOnlySubmission!.id,
+          idempotency_key: randomUUID(),
+        },
+      },
+    );
+    const timedAssessmentLinkBody = await timedAssessmentLink.json() as {
+      link?: { link_id: string; attempt_id: string; assessment_submission_id: string; is_replay: boolean };
+      error?: string;
+    };
+    expect(timedAssessmentLink.status(), JSON.stringify(timedAssessmentLinkBody)).toBe(201);
+    expect(timedAssessmentLinkBody.link).toMatchObject({
+      attempt_id: linkedAttemptId,
+      assessment_submission_id: pdfOnlySubmission!.id,
+      is_replay: false,
+    });
+    assertPersistedAuditCorrelation(timedAssessmentLink.headers()["x-request-id"], {
+      actorId: "11111111-1111-4111-8111-111111111111",
+      actorRole: "student",
+      action: "student_timed_attempt_assessment_linked",
+      targetType: "timed_attempt_assessment_link",
+      targetId: timedAssessmentLinkBody.link!.link_id,
+      outcome: "success",
+      reason: "learner_action",
+    });
+    process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TIMED_ATTEMPT_ID = linkedAttemptId;
+
     const graderContext = await page.context().browser()!.newContext({
       baseURL: "http://127.0.0.1:8787",
     });
@@ -1096,6 +1164,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     await expect(learnerRoute.json()).resolves.toMatchObject({ error: "role_required" });
 
     const pdfSubmissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_PDF_ID;
+    const linkedAttemptId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_TIMED_ATTEMPT_ID;
     const olderSubmissionId = process.env.PLAYWRIGHT_SYNTHETIC_GRADER_WORKSPACE_OLDER_ID;
     const ownerAal2TokenPath = join(tmpdir(), "gradioprep-playwright-owner-aal2-token");
     let ownerAal2Token = "";
@@ -1107,6 +1176,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
       try { unlinkSync(ownerAal2TokenPath); } catch { /* already removed */ }
     }
     expect(pdfSubmissionId).toBeTruthy();
+    expect(linkedAttemptId).toBeTruthy();
     expect(olderSubmissionId).toBeTruthy();
     expect(ownerAal2Token).toBeTruthy();
 
@@ -1495,6 +1565,7 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     const analyticsPayload = await analyticsResponse.json() as {
       analytics?: {
         assessment_version_number: number;
+        attempt_id: string | null;
         rubric_version_id: string;
         response_mode: string;
         score_awarded: number;
@@ -1507,6 +1578,10 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
         elapsed_response_status: string;
         timer_mode: string;
         accommodation_mode: string;
+        timer_policy_version: number | null;
+        base_allowance_seconds: number | null;
+        effective_allowance_seconds: number | null;
+        adjustment_count: number;
         comparability_status: string;
         comparison_group_key: string | null;
         criterion_score_snapshot: Array<unknown>;
@@ -1525,18 +1600,25 @@ test("guardian cannot accept a human-assessment submission or use staff assessme
     });
     expect(analyticsPayload.analytics).toMatchObject({
       assessment_version_number: 1,
+      attempt_id: linkedAttemptId,
       rubric_version_id: "f1111111-1111-4111-8111-111111111111",
       response_mode: "pdf_only",
       attainment_status: "valid",
       criterion_count: 2,
       expected_criterion_count: 2,
-      elapsed_response_seconds: null,
-      elapsed_response_status: "not_linked",
-      timer_mode: "not_linked",
-      accommodation_mode: "not_linked",
-      comparability_status: "excluded_unlinked",
-      comparison_group_key: null,
+      elapsed_response_status: "valid",
+      timer_mode: "untimed",
+      accommodation_mode: "none",
+      timer_policy_version: 1,
+      base_allowance_seconds: null,
+      effective_allowance_seconds: null,
+      adjustment_count: 0,
+      comparability_status: "eligible",
     });
+    expect(analyticsPayload.analytics!.attempt_id).toBe(linkedAttemptId);
+    expect(analyticsPayload.analytics!.elapsed_response_seconds).toEqual(expect.any(Number));
+    expect(analyticsPayload.analytics!.elapsed_response_seconds).toBeGreaterThanOrEqual(0);
+    expect(analyticsPayload.analytics!.comparison_group_key).toBeTruthy();
     expect(analyticsPayload.analytics!.score_max).toBeGreaterThan(0);
     expect(analyticsPayload.analytics!.attainment_percent).toBeGreaterThanOrEqual(0);
     expect(analyticsPayload.analytics!.attainment_percent).toBeLessThanOrEqual(100);
