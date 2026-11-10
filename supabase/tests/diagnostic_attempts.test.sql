@@ -16,6 +16,7 @@ SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-11111111
 
 SELECT is((SELECT count(*)::integer FROM public.diagnostic_versions),1,'enrolled synthetic MYP student sees the published version');
 SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations WHERE group_code='RV'),10,'Read & View version exposes ten evidence observations');
+SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations WHERE group_code='LC'),5,'Language in Context exposes five evidence observations');
 
 INSERT INTO diagnostic_test_state
 SELECT attempt_id FROM public.create_diagnostic_attempt(
@@ -39,11 +40,23 @@ SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_
 
 SELECT is((SELECT count(DISTINCT observation_id)::integer FROM public.diagnostic_response_versions WHERE attempt_id=(SELECT attempt_id FROM diagnostic_test_state)),
  9,'nine of ten observations are saved before completion');
+
+SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A"}'::jsonb)$,'saves LC01 contextual vocabulary choice');
+SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC02','{"choice":"A"}'::jsonb)$,'saves LC02 sentence-focus choice');
+SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC03','{"choice":"B"}'::jsonb)$,'saves LC03 grammar and usage choice');
+SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC04','{"choice":"A"}'::jsonb)$,'saves LC04 punctuation choice');
+SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC05','{"text":"Please place bags on the shelves beside the entrance so that the stairs and walkway remain clear for everyone."}'::jsonb)$,'saves LC05 audience and register response');
+SELECT is((SELECT count(DISTINCT observation_id)::integer FROM public.diagnostic_response_versions WHERE attempt_id=(SELECT attempt_id FROM diagnostic_test_state)),
+ 14,'fourteen of fifteen observations are saved before completion');
 SELECT throws_ok($$SELECT * FROM public.submit_diagnostic_attempt((SELECT attempt_id FROM diagnostic_test_state))$$,
  'P0001','diagnostic_responses_incomplete','submission is blocked while an observation is unanswered');
 
-SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV01','{"a":"B","b":["A","A"]}'::jsonb)$$,
+SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV01','{"a":"B","b":["A","A"]}'::jsonb)$,
  '22023','invalid_diagnostic_response','duplicate multiple-choice selections are rejected');
+SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A","extra":"forged"}'::jsonb)$,
+ '22023','invalid_diagnostic_response','LC choice rejects unrecognised response fields');
+SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC05','{"text":null}'::jsonb)$,
+ '22023','invalid_diagnostic_response','LC05 rejects a null text value');
 SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'AW01','{"text":"An observation outside the enabled Read & View section."}'::jsonb)$$,
  '22023','invalid_diagnostic_response','other task groups cannot be written through the first-slice API');
 
@@ -60,7 +73,7 @@ SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt
 SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV09','{"choice":"B","explanation":"The figures list completed and unfinished outcomes, unlike the tagline or invitation."}'::jsonb)$$,
  'saves final RV09 evidence');
 SELECT is((SELECT count(DISTINCT observation_id)::integer FROM public.diagnostic_response_versions WHERE attempt_id=(SELECT attempt_id FROM diagnostic_test_state)),
- 10,'all ten Read & View observations have evidence');
+ 15,'all fifteen enabled Read & View and Language in Context observations have evidence');
 SELECT is((SELECT revision_number FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV02',
  '{"text":"Nia records the completed work and what must wait, showing a balanced view of the afternoon."}'::jsonb)),2,
  'changed response is appended as a new revision');
@@ -94,7 +107,7 @@ RESET ROLE;
 
 SELECT is((SELECT count(*)::integer FROM private.security_audit_events
  WHERE action='diagnostic_response_saved' AND target_type='diagnostic_attempt'
- AND target_id=(SELECT attempt_id FROM diagnostic_test_state)),11,
+ AND target_id=(SELECT attempt_id FROM diagnostic_test_state)),16,
  'successful response saves write metadata-only audit events');
 SELECT ok(NOT EXISTS(
  SELECT 1 FROM private.security_audit_events

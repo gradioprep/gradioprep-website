@@ -130,7 +130,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
     for (const code of ["RV02", "RV03", "RV06", "RV07a", "RV07b"]) {
       if (nonEmpty(current(code).text)) output.push({ code, response: { text: current(code).text } });
     }
-    for (const code of ["RV04", "RV05"]) {
+    for (const code of ["RV04", "RV05", "LC01", "LC02", "LC03", "LC04"]) {
       if (current(code).choice && ["A", "B", "C", "D"].includes(current(code).choice!)) {
         output.push({ code, response: { choice: current(code).choice } });
       }
@@ -145,11 +145,13 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
     if (rv09.choice && ["A", "B", "C", "D"].includes(rv09.choice) && nonEmpty(rv09.explanation)) {
       output.push({ code: "RV09", response: { choice: rv09.choice, explanation: rv09.explanation } });
     }
+    const lc05 = current("LC05");
+    if (nonEmpty(lc05.text)) output.push({ code: "LC05", response: { text: lc05.text } });
     return output;
   }
 
   const savedCodes = payloads().map(item => item.code);
-  const complete = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09"]
+  const complete = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "LC01", "LC02", "LC03", "LC04", "LC05"]
     .every(code => savedCodes.includes(code));
 
   async function startOrResume() {
@@ -172,8 +174,8 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       }
       setResponses(restored);
       setMessage(result.attempt.status === "submitted"
-        ? "Your Read & View evidence was submitted. It is now read-only."
-        : result.attempt.is_replay ? "Your saved Read & View attempt has been restored." : "Your Read & View attempt has started.");
+        ? "Your Read & View and Language in Context evidence was submitted. This section is now read-only."
+        : result.attempt.is_replay ? "Your saved Diagnostic section has been restored." : "Your Diagnostic section has started.");
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The Diagnostic could not be opened.");
     } finally {
@@ -242,7 +244,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         throw new Error(result.error ?? "The Diagnostic could not be submitted.");
       }
       setAttemptStatus("submitted");
-      setMessage("Your Read & View evidence has been submitted. Your responses are now read-only.");
+      setMessage("Your Read & View and Language in Context evidence has been submitted. These responses are now read-only.");
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The Diagnostic could not be submitted.");
     } finally {
@@ -258,23 +260,23 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       <div>
         <p className="proto-eyebrow"><span />CYCLE 1 · IB MYP YEAR 4 / GRADE 9</p>
         <h2 id="proto-diagnostic-heading">Diagnostic assessment</h2>
-        <p>Read & View · first task group</p>
+        <p>Read & View + Language in Context · initial delivery slice</p>
       </div>
       <span className="proto-account-status">{attemptStatus === "submitted" ? "Submitted" : attemptStatus === "in_progress" ? "In progress" : "Not started"}</span>
     </div>
 
     {attemptStatus === "not_started" ? <div className="proto-diagnostic-intro">
-      <p>This is the first section of the Diagnostic assessment. Start or continue your saved attempt to answer the Read & View questions.</p>
-      <p>The other task groups will appear as their assessment delivery is implemented. No marks, score or Evaluation Report are generated in this section.</p>
+      <p>This build contains the Read & View and Language in Context tasks from Sitting 1. Start or continue your saved attempt to answer the fifteen enabled observations.</p>
+      <p>Listening and the remaining task groups are not included in this implementation slice. No marks, score or Evaluation Report are generated here.</p>
       <button className="proto-action" type="button" onClick={() => void startOrResume()} disabled={loading}>
         {loading ? "Opening assessment…" : "Start / continue Diagnostic"}
       </button>
     </div> : <>
       <div className="proto-diagnostic-notice" role="note">
-        <strong>{readOnly ? "Submission complete" : "Read & View section only"}</strong>
+        <strong>{readOnly ? "Current section submitted" : "Read & View + Language in Context only"}</strong>
         <span>{readOnly
           ? "Your submitted responses are displayed without scores or marking feedback."
-          : "This assessment is not yet complete. Your work is saved when you choose Save progress or Submit."}</span>
+          : "This is a partial implementation of the approved Diagnostic. Listening and the other task groups are not included yet. Your work is saved when you choose Save progress or Submit."}</span>
       </div>
 
       <div className="proto-diagnostic-stimulus">
@@ -440,14 +442,113 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         <TextField label="Explain briefly why this information is stronger evidence than one of the other statements." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV09").explanation ?? ""} onChange={value => update("RV09", "explanation", value)}  disabled={readOnly} />
       </div>
 
+
+      <div className="proto-diagnostic-stimulus">
+        <h3>Language in Context</h3>
+        <p>Use the short original contexts below. Select or edit language in a way that preserves meaning and suits the stated situation.</p>
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>LC01 · Vocabulary in context</h3>
+        <p>During the planning meeting, the proposal was described as <strong>modest</strong>: it involved one narrow shelf, not a new room.</p>
+        <ChoiceField
+          legend="In this context, what does “modest” most nearly mean?"
+          name="lc01"
+          disabled={readOnly}
+          value={current("LC01").choice ?? ""}
+          onChange={value => update("LC01", "choice", value as string)}
+          options={textOptions([
+            "Limited in scale or ambition.",
+            "Expensive to maintain.",
+            "Uncertain to succeed.",
+            "Disrespectful to the people involved.",
+          ])}
+        />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>LC02 · Sentence structure and emphasis</h3>
+        <p>Compare the two versions:</p>
+        <ol>
+          <li>The group will review the space after four weeks.</li>
+          <li>After four weeks, the group will review the space.</li>
+        </ol>
+        <ChoiceField
+          legend="What is the main effect of placing “After four weeks” at the beginning of Version 2?"
+          name="lc02"
+          disabled={readOnly}
+          value={current("LC02").choice ?? ""}
+          onChange={value => update("LC02", "choice", value as string)}
+          options={textOptions([
+            "It brings the timing of the review to the foreground.",
+            "It changes the review so that it happens before the trial.",
+            "It suggests that the group will review only the physical space, not feedback.",
+            "It removes the group as the people responsible for the review.",
+          ])}
+        />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>LC03 · Grammar and usage</h3>
+        <p>A draft notice contains this sentence:</p>
+        <blockquote>“The list of suggested books are on the shelf.”</blockquote>
+        <p>The notice describes the current location of one list. Select the edited sentence that corrects subject–verb agreement while keeping the present-time meaning.</p>
+        <ChoiceField
+          legend="Which sentence is correct?"
+          name="lc03"
+          disabled={readOnly}
+          value={current("LC03").choice ?? ""}
+          onChange={value => update("LC03", "choice", value as string)}
+          options={textOptions([
+            "The list of suggested books are on the shelf.",
+            "The list of suggested books is on the shelf.",
+            "The lists of suggested books is on the shelf.",
+            "The list of suggested books be on the shelf.",
+          ])}
+        />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>LC04 · Punctuation and sentence boundaries</h3>
+        <p>A writer wants to show that the volunteers checked the shelf’s position after it arrived:</p>
+        <blockquote>“The shelf had arrived the volunteers checked its position.”</blockquote>
+        <ChoiceField
+          legend="Which edit makes the relationship between the two clauses clear?"
+          name="lc04"
+          disabled={readOnly}
+          value={current("LC04").choice ?? ""}
+          onChange={value => update("LC04", "choice", value as string)}
+          options={textOptions([
+            "The shelf had arrived, so the volunteers checked its position.",
+            "The shelf had arrived, the volunteers checked its position.",
+            "The shelf had arrived so, the volunteers checked its position.",
+            "The shelf had arrived the volunteers, checked its position.",
+          ])}
+        />
+      </div>
+
+      <div className="proto-diagnostic-question">
+        <h3>LC05 · Audience, purpose and register</h3>
+        <p>A hurried note says:</p>
+        <blockquote>“Don’t leave bags by the stairs. People need to walk through. Move them somewhere else.”</blockquote>
+        <p>Rewrite the note as a short, respectful notice for students and visitors. Keep the request clear and tell readers where to place their bags.</p>
+        <TextField
+          label="Your notice"
+          guidance="Response guidance: 30–40 words. Ideal target: 35 words; this is guidance, not a limit."
+          value={current("LC05").text ?? ""}
+          onChange={value => update("LC05", "text", value)}
+          disabled={readOnly}
+        />
+      </div>
+
       <div className="proto-diagnostic-footer">
-        <p>{savedCodes.length} of 10 observations have response-ready answers. Response guidance is not a hard word limit.</p>
+        <p>{savedCodes.length} of 15 observations have response-ready answers. Response guidance is not a hard word limit.</p>
         {!readOnly && <>
           <button className="proto-action secondary" type="button" onClick={() => void saveAll()} disabled={buttonDisabled || savedCodes.length === 0}>
             {saving ? "Saving…" : "Save progress"}
           </button>
           <button className="proto-action" type="button" onClick={() => void submitDiagnostic()} disabled={buttonDisabled || !complete}>
-            {saving ? "Please wait…" : "Submit Read & View"}
+            {saving ? "Please wait…" : "Submit Read & View + Language in Context"}
           </button>
         </>}
       </div>
