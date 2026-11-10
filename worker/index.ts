@@ -1142,6 +1142,26 @@ function diagnosticFailure(error: { code?: string; message?: string }): {
   return { outcome: "failed", category: "operation_failed" };
 }
 
+function hasOnlyDiagnosticStartFields(value: unknown): value is { idempotency_key: string } {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 1 &&
+    Object.hasOwn(record, "idempotency_key") &&
+    typeof record.idempotency_key === "string" &&
+    isUuid(record.idempotency_key);
+}
+
+function hasOnlyDiagnosticResponseFields(
+  observationCode: string,
+  value: unknown,
+): value is { response: Record<string, unknown> } {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 1 &&
+    Object.hasOwn(record, "response") &&
+    isValidDiagnosticResponse(observationCode, record.response);
+}
+
 function isValidDiagnosticResponse(observationCode: string, response: unknown): response is Record<string, unknown> {
   if (typeof response !== "object" || response === null || Array.isArray(response)) return false;
   const value = response as Record<string, unknown>;
@@ -1172,8 +1192,7 @@ function isValidDiagnosticResponse(observationCode: string, response: unknown): 
 async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise<Response> {
   const parsed = await readBoundedJson(request, 512);
   if (!parsed.ok) return parsed.response;
-  if (Object.keys(parsed.body).length !== 1 || typeof parsed.body.idempotency_key !== "string" ||
-      !isUuid(parsed.body.idempotency_key)) {
+  if (!hasOnlyDiagnosticStartFields(parsed.body)) {
     return jsonResponse({ error: "invalid_diagnostic_start" }, 400);
   }
 
@@ -1267,9 +1286,7 @@ async function saveLearnerDiagnosticResponse(
 ): Promise<Response> {
   const parsed = await readBoundedJson(request, 16_384);
   if (!parsed.ok) return parsed.response;
-  if (!isUuid(attemptId) || Object.keys(parsed.body).length !== 1 ||
-      !Object.hasOwn(parsed.body, "response") ||
-      !isValidDiagnosticResponse(observationCode, parsed.body.response)) {
+  if (!isUuid(attemptId) || !hasOnlyDiagnosticResponseFields(observationCode, parsed.body)) {
     return jsonResponse({ error: "invalid_diagnostic_response" }, 400);
   }
   const auth = await authenticatedCaller(request, env);
