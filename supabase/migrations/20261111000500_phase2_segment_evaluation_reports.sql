@@ -7,6 +7,10 @@ ALTER TABLE public.milestone_assessment_task_mappings
 ALTER TABLE public.diagnostic_versions
   ADD COLUMN route_version_id uuid REFERENCES public.curriculum_route_versions(id) ON DELETE RESTRICT;
 
+ALTER TABLE public.curriculum_unit_outcome_mappings
+  ADD CONSTRAINT curriculum_unit_outcome_mappings_id_unit_unique
+  UNIQUE (id, curriculum_unit_version_id);
+
 CREATE OR REPLACE FUNCTION private.validate_diagnostic_route_lineage()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = ''
 AS $function$
@@ -61,7 +65,7 @@ RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = ''
 AS $$
 DECLARE
   selected_pathway text; route_key text; route_state text; unit_route_id uuid; unit_state text;
-  outcome_state text; outcome_reviewer uuid; outcome_reviewed_at timestamptz; listening_outcome boolean;
+  outcome_state text; outcome_reviewer uuid; outcome_reviewed_at timestamptz; listening_observation boolean;
 BEGIN
   IF TG_OP = 'DELETE' THEN
     IF OLD.mapping_status IN ('direct', 'unmapped') THEN
@@ -74,7 +78,7 @@ BEGIN
   END IF;
   SELECT diagnostic.pathway_id, route.route_key, route.review_state, unit.route_version_id,
          unit.release_state, outcome.mapping_status, outcome.reviewed_by, outcome.reviewed_at,
-         outcome.is_listening_outcome
+         (observation.group_code = 'L')
     INTO selected_pathway, route_key, route_state, unit_route_id, unit_state,
          outcome_state, outcome_reviewer, outcome_reviewed_at, listening_outcome
   FROM public.diagnostic_versions AS diagnostic
@@ -83,6 +87,9 @@ BEGIN
   JOIN public.curriculum_unit_outcome_mappings AS outcome
     ON outcome.id = NEW.curriculum_unit_outcome_mapping_id
    AND outcome.curriculum_unit_version_id = unit.id
+  JOIN public.diagnostic_observations AS observation
+    ON observation.id = NEW.diagnostic_observation_id
+   AND observation.diagnostic_version_id = NEW.diagnostic_version_id
   WHERE diagnostic.id = NEW.diagnostic_version_id;
   IF NOT FOUND OR selected_pathway IS DISTINCT FROM route_key OR unit_route_id IS DISTINCT FROM NEW.route_version_id THEN
     RAISE EXCEPTION USING ERRCODE = '23514', MESSAGE = 'diagnostic_outcome_mapping_route_mismatch';
@@ -90,7 +97,7 @@ BEGIN
   IF NEW.mapping_status = 'direct' AND (
     route_state <> 'verified' OR unit_state <> 'published' OR outcome_state <> 'direct'
     OR outcome_reviewer IS NULL OR outcome_reviewed_at IS NULL
-    OR NEW.reviewed_by IS NULL OR NEW.reviewed_at IS NULL OR coalesce(listening_outcome, false)
+    OR NEW.reviewed_by IS NULL OR NEW.reviewed_at IS NULL OR coalesce(listening_observation, false)
   ) THEN
     RAISE EXCEPTION USING ERRCODE = '55000', MESSAGE = 'diagnostic_outcome_mapping_requires_direct_non_listening_outcome';
   END IF;

@@ -24,13 +24,16 @@ INSERT INTO public.curriculum_unit_outcome_mappings (
 )
 VALUES ('1d000000-0000-4000-8000-000000000201','1d000000-0000-4000-8000-000000000101',
   'SYN-PA-OUTCOME','Synthetic outcome','No official locator — synthetic only',
-  'direct','Synthetic test fixture only.','88888888-8888-4888-8888-888888888888',clock_timestamp());
+  'pending','Synthetic test fixture only.',NULL,NULL);
 
 UPDATE public.curriculum_route_versions
 SET review_state='verified',verified_by='88888888-8888-4888-8888-888888888888',verified_at=clock_timestamp()
 WHERE id='1d000000-0000-4000-8000-000000000001';
 UPDATE public.curriculum_unit_versions SET release_state='published'
 WHERE id='1d000000-0000-4000-8000-000000000101';
+UPDATE public.curriculum_unit_outcome_mappings
+SET mapping_status='direct',reviewed_by='88888888-8888-4888-8888-888888888888',reviewed_at=clock_timestamp()
+WHERE id='1d000000-0000-4000-8000-000000000201';
 
 INSERT INTO public.diagnostic_versions (
   id,diagnostic_code,pathway_id,title,version,release_state,total_minutes,sitting_count,route_version_id
