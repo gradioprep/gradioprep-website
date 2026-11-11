@@ -3,6 +3,7 @@ SELECT no_plan();
 
 -- Temporary fixture state for report-specific grader-access grant/revocation assertions.
 CREATE TEMP TABLE report_access_test_state (grant_id uuid PRIMARY KEY);
+GRANT SELECT, INSERT ON report_access_test_state TO authenticated;
 
 -- Synthetic-only PA baseline report fixture. No curriculum outcome is inferred.
 INSERT INTO public.curriculum_route_versions (
