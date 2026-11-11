@@ -74,7 +74,7 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
 
-SELECT throws_ok($SELECT * FROM public.evaluation_report_records$,'42501',NULL,
+SELECT throws_ok($q$SELECT * FROM public.evaluation_report_records$q$,'42501',NULL,
   'learner cannot bypass the audited report-read RPC with direct table access');
 SELECT throws_ok(
   $$INSERT INTO public.evaluation_report_records(report_scope,learner_id,course_enrolment_id,route_version_id,diagnostic_attempt_id)
@@ -130,15 +130,14 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','33333333-3333-4333-8333-333333333333',true);
 SELECT set_config('request.jwt.claims','{"sub":"33333333-3333-4333-8333-333333333333","role":"authenticated","aal":"aal1"}',true);
 SELECT is((SELECT count(*)::integer FROM public.get_evaluation_report(
-  (SELECT id FROM public.evaluation_report_records WHERE diagnostic_attempt_id='1d000000-0000-4000-8000-000000000301'),NULL)),1,
+  '1d000000-0000-4000-8000-000000000401',NULL)),1,
   'verified guardian with progress consent can read the linked learner report through the audited RPC');
 RESET ROLE;
 
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
 SELECT set_config('request.jwt.claims','{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal1"}',true);
-SELECT throws_ok($SELECT * FROM public.get_evaluation_report(
-  (SELECT id FROM public.evaluation_report_records WHERE diagnostic_attempt_id='1d000000-0000-4000-8000-000000000301'),NULL)$,
+SELECT throws_ok($q$SELECT * FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)$q$,
   '42501','evaluation_report_read_forbidden','unrelated learner cannot read another learner report');
 RESET ROLE;
 
@@ -146,7 +145,7 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
 SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
 SELECT is((SELECT count(*) FROM public.get_evaluation_report(
-  (SELECT id FROM public.evaluation_report_records WHERE diagnostic_attempt_id='1d000000-0000-4000-8000-000000000301'),NULL)),1,
+  '1d000000-0000-4000-8000-000000000401',NULL)),1,
   'Owner at AAL2 can inspect the report through the audited RPC');
 SELECT throws_ok(
   $$SELECT * FROM public.create_preliminary_evaluation_report(
