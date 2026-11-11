@@ -50,6 +50,27 @@ SELECT '1d000000-0000-4000-8000-000000000501',observation_code,group_code,sittin
 FROM public.diagnostic_observations
 WHERE diagnostic_version_id='ed111111-1111-4111-8111-111111111111';
 
+INSERT INTO public.diagnostic_observation_outcome_mappings (
+  diagnostic_version_id,diagnostic_observation_id,route_version_id,curriculum_unit_version_id,
+  curriculum_unit_outcome_mapping_id,mapping_status,mapping_rationale,reviewed_by,reviewed_at
+)
+SELECT '1d000000-0000-4000-8000-000000000501',observation.id,
+  '1d000000-0000-4000-8000-000000000001','1d000000-0000-4000-8000-000000000101',
+  '1d000000-0000-4000-8000-000000000201','direct','Synthetic direct mapping for regression only.',
+  '88888888-8888-4888-8888-888888888888',clock_timestamp()
+FROM public.diagnostic_observations AS observation
+WHERE observation.diagnostic_version_id='1d000000-0000-4000-8000-000000000501'
+  AND observation.sequence_number=1;
+
+SELECT throws_ok($q$UPDATE public.diagnostic_observation_outcome_mappings
+  SET mapping_rationale='attempt to rewrite reviewed mapping'
+  WHERE diagnostic_version_id='1d000000-0000-4000-8000-000000000501'$q$,
+  '55000','diagnostic_outcome_mapping_immutable','reviewed direct PA mappings cannot be changed');
+
+SELECT throws_ok($q$UPDATE public.diagnostic_versions SET route_version_id=NULL
+  WHERE id='1d000000-0000-4000-8000-000000000501'$q$,
+  '55000','published_diagnostic_route_immutable','published Diagnostic route lineage cannot be changed');
+
 INSERT INTO public.diagnostic_attempts (
   id,learner_id,diagnostic_version_id,status,idempotency_key,submitted_at
 )
