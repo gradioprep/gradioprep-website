@@ -1,8 +1,8 @@
 # IB MYP Year 4 / Grade 9 Diagnostic — Listening source and learner-item draft v0.2
 
-**Status:** Provisional learner-content draft. Not yet human-academically approved, calibrated, piloted or released.
+**Status:** Withdrawn from Preliminary Assessment. Deferred M3/SA3 candidate only; not approved for SA3, not calibrated or piloted, and not learner-release content. Re-evaluate against the M3 unit set and exact authorised MYP Year 4 criterion/strand mapping before any reuse.
 **Prepared:** 11 November 2026
-**Replaces as the current candidate:** v0.1's original-script/human-recording acquisition route. The v0.1 document remains historical.
+**History:** This v0.2 source and question draft was briefly considered for the PA, but the Founder subsequently excluded standalone Listening from PA, SA1 and SA2. The file is retained as a possible M3/SA3 source candidate only.
 
 ## 1. Proposed stimulus
 
@@ -108,3 +108,9 @@ A listener concludes: “Because SolarSPELL has helped students in Vanuatu, the 
 This GitHub repository is public. Do not place answer keys, model responses, private rubrics or grader prompts in this repository, even in a directory named “restricted”. Keep those materials in a genuinely private, access-controlled location before integrating a teacher/grader product. AI grading or external processing requires separate approval.
 
 **Current decision:** use this source as the preferred no-upload candidate, subject to the review gates above. A physical upload or newly commissioned recording is a fallback only when no suitable and reliable external source exists, and only after explicit Founder approval.
+
+## 8. Deferred placement decision — M3 / SA3 only
+
+This candidate must not be included in the Preliminary Assessment or SA1/SA2. It may be considered only after the exact M3 unit set is complete and a human reviewer confirms a direct official MYP Year 4 criterion/strand mapping for Listening evidence taught in those units. The broad MYP listing of Listening as a skill area is not enough to establish a separate SA3 task. The same direct-mapping gate applies to Cambridge and CBSE; do not transfer this MYP asset or task to those boards without their own exact route mapping.
+
+The 4:10 audio, open licence, five draft questions and timing do not constitute SA3 approval. Recheck construct, M3 lesson coverage, question alignment, accessibility/accommodations, playback/replay, suitability and timing. No task is active in the learner app.
