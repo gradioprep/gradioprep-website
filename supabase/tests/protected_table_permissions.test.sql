@@ -37,7 +37,7 @@ SELECT is(
         'criterion_results',
         'assessment_drafts',
         'assessment_draft_history',
-        'private_qa_records'
+        'private_qa_records',
         'curriculum_route_versions',
         'curriculum_unit_versions',
         'curriculum_unit_outcome_mappings',
