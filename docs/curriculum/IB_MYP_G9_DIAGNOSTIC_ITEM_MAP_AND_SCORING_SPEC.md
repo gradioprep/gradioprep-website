@@ -232,11 +232,11 @@ Keep this pack separate from learner-safe task content. Internal provider rankin
 
 ## 8. Accessibility, fairness and rights controls
 
-- Check passage, visual and audio rights/licences before selecting or using any stimulus. Record source, author/creator, licence/territory, date checked and permitted uses.
+- Check passage and visual rights/licences before selecting or using PA stimuli. Record source, author/creator, licence/territory, date checked and permitted uses. No separate Listening audio stimulus is part of this PA.
 - Keep original passage bodies within 250 words unless the approved public-domain excerpt process is followed for a longer work. The text-length allowance does not authorise third-party visual/audio use.
 - Provide clear instructions, readable layout, keyboard-operable response modes and accessible equivalents where they do not invalidate the construct.
 - Predefine accommodations and document whether each changes the construct being assessed. Never interpret an inaccessible task as a learner skill deficit.
-- Check audio pace, volume, accent intelligibility and playback controls; check visual contrast, alt text and meaningful non-colour cues.
+- Check text readability, visual contrast, alt text and meaningful non-colour cues. For live Speaking/Presenting, review fair access and communication accommodations without turning accent conformity or speech recording into an extra tested skill.
 - Avoid culturally narrow assumptions, unnecessary idioms, specialist background knowledge and prompts that advantage one social or language background without relevance to the target construct.
 - For oral performance, judge communication rather than personality, extroversion, accent conformity or culturally specific presentation habits.
 
