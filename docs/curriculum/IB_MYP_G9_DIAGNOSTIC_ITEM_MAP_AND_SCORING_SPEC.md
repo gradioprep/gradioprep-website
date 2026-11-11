@@ -1,8 +1,8 @@
-# Grade 9 IB MYP Year 4 — Diagnostic Item Map and Scoring Specification
+# Grade 9 IB MYP Year 4 — Preliminary Assessment Item Map and Scoring Specification
 
-**Version:** 0.1  
-**Date:** 2 November 2026  
-**Status:** Founder-approved task-level item map and draft scoring specification (2 November 2026). This approval covers the evidence map, 35 observations, task modes/timing and provisional scoring/confidence safeguards; it does not approve actual question wording, final cut scores, calibrated rubrics, code or learner release. Actual item authoring is sequenced after the approved flagship PDF-response/grading/timer feature is implemented and its shared task metadata is validated.  
+**Version:** 0.2  
+**Date:** 11 November 2026  
+**Status:** Founder-directed PA scope correction. The earlier 35-observation plan contained a separate Listening section, which is withdrawn from the PA. This revised map contains 30 evidence observations across Read & View, Language in Context, Analytical Writing, Creative / Purposeful Production and Speaking / Presenting. Listening is deferred to Milestone 3 / SA3 only, subject to direct mapping to the learner's exact curriculum route. The crosswalk below is a proposed MYP Year 4 mapping pending item-by-item human academic verification; it does not approve wording, calibrated scoring, code or learner release.  
 **Target:** Grade 9 — IB MYP Language and Literature (Founder-confirmed MYP Year 4)  
 **Parent specification:** IB_MYP_G9_DIAGNOSTIC_SKILL_TAXONOMY_AND_BLUEPRINT.md v0.2 (Founder-approved)
 
@@ -10,27 +10,22 @@
 
 This document converts the approved taxonomy and high-level blueprint into a task-level evidence plan. It identifies the evidence each task must collect, the direct and supporting subskills, response modes, timing, scoring approach and evidence-confidence controls.
 
-This is a GradiPrep learning-readiness diagnostic, not an IB examination, official MYP assessment, eAssessment replica or official IB criterion grade. The four MYP criteria and six skill areas guide coverage; they do not authorise an IB grade conversion, a single composite score or a claim of official IB moderation.
+This is GradiPrep's Preliminary Assessment (PA), not an IB examination, official MYP assessment, eAssessment replica or official IB criterion grade. The PA samples only question types and skills directly mapped to MYP Language and Literature criteria/strands. The six broad MYP skill areas are not a requirement for six standalone PA sections. The four MYP criteria inform the evidence map; they do not authorise an IB grade conversion, a single composite score or a claim of official IB moderation.
 
-**This stage does not contain actual question wording, answer keys, distractors, audio scripts, literary/non-literary passages, visual assets or scored exemplars.** Those are the next authoring stage and must be separately reviewed. It also does not set final numerical cut scores, weighting, learner priority thresholds or automated grading logic.
+Question and stimulus wording remains subject to exact-version academic review. The PA excludes Listening L01–L05. A separate Listening task is reserved for M3/SA3, never PA, SA1 or SA2. Correct answers, distractor rationales, ideal responses and private scoring anchors belong in a genuinely private, access-controlled teacher system, not this public GitHub repository. This document does not set final numerical cut scores, weighting, learner priority thresholds or automated grading logic.
 
 ## 2. Assessment envelope and administration
 
 | Sitting / task | Learner time | Evidence mode | Proposed observations |
 |---|---:|---|---:|
 | Sitting 1 — Read and view (RV) | 25 min | Literary and non-literary/multimodal stimuli; selected and short constructed responses | 10 |
-| Sitting 1 — Listen (L) | 10 min | Original/licensed spoken stimulus; selected and short constructed responses | 5 |
 | Sitting 1 — Language in context (LC) | 10 min | Short contextual language decisions and edits | 5 |
 | Sitting 2 — Analytical writing (AW) | 20 min | One focused analytical response, scored by analytic dimensions | 5 |
 | Sitting 2 — Creative/purposeful production (CW) | 15 min | One short, purposeful text with a visible planning/editing trace | 5 |
 | Sitting 2 — Speaking/presenting (SP) | 10 min | Prepared outline card, brief presentation and follow-up interaction | 5 |
-| **Total** | **90 min** | **Two 45-minute sittings** | **35** |
+| **Total** | **80 min** | **Sitting 1: 35 min; Sitting 2: 45 min** | **30** |
 
-The 35 entries are scoring/evidence observations, not 35 independent long questions. Several observations are rubric dimensions within one extended response or performance. The proposed count and timing are design targets to validate in a small, age/level-appropriate pilot; do not add items merely to fill the time.
-
-**Sitting 1:** 25 + 10 + 10 = 45 minutes.  
-**Sitting 2:** 20 + 15 + 10 = 45 minutes.  
-A break between sittings is outside the 90 learner-minutes. A school may schedule the sittings separately; record any material interval or administration difference in the test record.
+The 30 entries are evidence observations, not 30 independent long questions. Several observations are rubric dimensions within one extended response or performance. The revised PA envelope is 80 learner-minutes: Sitting 1 = 25 + 10 = 35 minutes; Sitting 2 = 20 + 15 + 10 = 45 minutes. Validate timing, accessibility and evidence sufficiency in the appropriate pilot; do not add items merely to fill the time. A break between sittings is outside the 80 learner-minutes. Record any material interval or administration difference.
 
 ## 3. Task-level item map
 
@@ -53,21 +48,7 @@ Use two contrasting stimuli: (a) an age-appropriate literary text and (b) a non-
 
 Do not let one stimulus dominate all nine observations. RV01–RV03 should not all depend on the same small passage detail; RV04–RV06 should be anchored in the non-literary/multimodal stimulus; RV07 should use a genuinely comparable pair or two well-defined features. RV08 may use either stimulus if the structural evidence is clear.
 
-### 3.2 Listen — 10 minutes
-
-Use one short, clearly intelligible original or appropriately licensed spoken stimulus. The recording must be checked for sound quality, accent intelligibility, pace and age/context suitability before use. The stimulus should include enough contextual information to interpret speaker purpose and tone without relying on obscure cultural references.
-
-| ID | Intended evidence / response | Direct subskills | Supporting evidence | Draft scoring |
-|---|---|---|---|---|
-| L01 | Identify the central message and accurate explicitly stated information from the spoken stimulus. | A1 | — | Keyed response; accept only details supported by the audio |
-| L02 | Infer a speaker's viewpoint, intention, attitude or implication and identify the cue that supports it. | A2 | A5 | Short constructed response |
-| L03 | Identify the likely audience, context and purpose, using audible/contextual evidence. | A3 | A1 | Keyed or short constructed response |
-| L04 | Explain how a spoken language choice or delivery feature contributes to tone or effect; distinguish the words from the way they are delivered. | A4 | D5 as observed only if the learner's own oral response is involved; normally no D5 score here | Short constructed response |
-| L05 | Judge whether a conclusion about the speaker is supported, exaggerated or incomplete; identify relevant evidence and a possible omission or limitation. | A7, A5 | A2 | Short constructed response with explicit evidence/qualification anchors |
-
-**Playback and access control:** The pilot should compare a standardised single play with one permitted replay and choose a consistent policy before operational use. A transcript must not be provided during the scored listening task unless an approved access arrangement requires it; where an accommodation changes the listening construct, record the adjustment and interpret that evidence cautiously. Never penalise a learner for an access barrier unrelated to the intended skill.
-
-### 3.3 Language in context — 10 minutes
+### 3.2 Language in context — 10 minutes
 
 Use brief, meaningful sentences or micro-contexts drawn from original diagnostic material. Do not turn this section into a decontextualised grammar drill. Each task must test a decision that affects meaning, clarity or suitability.
 
@@ -79,7 +60,7 @@ Use brief, meaningful sentences or micro-contexts drawn from original diagnostic
 | LC04 | Use punctuation and sentence boundaries to make relationships and meaning clear. | D3 | D2 | Keyed edit or selection; do not score a stylistic preference as an error |
 | LC05 | Adapt a short message to a specified audience, purpose and context, maintaining an appropriate register and tone. | D4 | D1, D2, D3 | Brief rewrite scored against task-specific register and meaning anchors |
 
-### 3.4 Analytical writing — 20 minutes
+### 3.3 Analytical writing — 20 minutes
 
 Use one unseen, focused analytical prompt linked to a diagnostic stimulus, not to an existing curriculum unit. The proposed response guidance is **150–200 words, ideal target 180 words**, subject to pilot timing and academic review. The word target is guidance, not a maximum; do not truncate, reject or block an over-target response. Provide the visible current/ideal word counter if the task is implemented in the interface.
 
@@ -93,7 +74,7 @@ Use one unseen, focused analytical prompt linked to a diagnostic stimulus, not t
 
 A strong response is not defined by length alone, and a learner should not be rewarded for padding. Score what the response demonstrates in each dimension. A grammatical slip should not erase a strong interpretation; do not double-penalise one error across unrelated dimensions.
 
-### 3.5 Creative / purposeful production — 15 minutes
+### 3.4 Creative / purposeful production — 15 minutes
 
 Use one original prompt with a clearly stated audience and purpose and one controlled form/genre. A short narrative scene is a workable pilot candidate; the final genre and prompt remain to be reviewed. The proposed response guidance is **100–150 words, ideal target 125 words**, subject to pilot timing and academic review. Allow brief planning and a visible edit/revision step. Word count is guidance only and must not restrict entry.
 
@@ -107,7 +88,7 @@ Use one original prompt with a clearly stated audience and purpose and one contr
 
 The CW05 trace is essential: without an observable draft-to-revision change or documented revision decision, the task cannot support a confident judgement about C5. Do not infer revision skill from the polished final text alone.
 
-### 3.6 Speaking / presenting — 10 minutes
+### 3.5 Speaking / presenting — 10 minutes
 
 The task should assess purposeful oral communication without requiring recording, upload, paid services or an external API. Use a standardised prompt and a simple outline/presentation card prepared during the task. The card contains a title, a short sequence of points and an appropriate visual/signposting cue; it is not a slide-design exercise.
 
@@ -125,13 +106,13 @@ The task should assess purposeful oral communication without requiring recording
 
 | Taxonomy ID | Subskill | Direct evidence | Supporting / integrated evidence |
 |---|---|---|---|
-| A1 | Explicit comprehension | RV01, RV05, RV08, L01 | RV09, L03 |
-| A2 | Inference and interpretation | RV02, RV05, L02, AW01 | RV06, RV07, L05 |
-| A3 | Context, audience and purpose | RV04, L03 | LC05, SP03 |
-| A4 | Creator's choices | RV03, RV05, L04, AW02 | RV08 |
-| A5 | Evidence-based reasoning | RV02, RV03, RV07, RV09, L02, L05, AW03 | RV01, RV06 |
+| A1 | Explicit comprehension | RV01, RV05, RV08 | RV09, RV04 |
+| A2 | Inference and interpretation | RV02, RV05, AW01 | RV06, RV07 |
+| A3 | Context, audience and purpose | RV04 | LC05, SP03 |
+| A4 | Creator's choices | RV03, RV05, AW02 | RV08 |
+| A5 | Evidence-based reasoning | RV02, RV03, RV07, RV09, AW03 | RV01, RV06 |
 | A6 | Comparison and connections | RV07a, RV07b | — |
-| A7 | Critical perspective | RV06, L05 | — |
+| A7 | Critical perspective | RV06 | — |
 | B1 | Purposeful structure | AW04, SP01 | CW02 |
 | B2 | Logical sequencing | RV08 (supporting), AW04, SP02 | CW02 |
 | B3 | Coherence and cohesion | AW04, SP02 | CW production evidence |
@@ -149,24 +130,64 @@ The task should assess purposeful oral communication without requiring recording
 | D5 | Oral language | SP05 | — |
 | D6 | Non-verbal communication | SP05 | — |
 
-**Coverage check:** All 23 proposed subskills have at least one direct evidence source. All six MYP skill areas have an observable task. A1–A7 are sampled across more than one task/mode where feasible; B5/C5/D5/D6 have deliberately specific performance evidence. No subskill is considered secure from a single selected-response answer.
+**Internal taxonomy coverage check:** All 23 proposed GradiPrep subskills have at least one evidence source across the programme-level plan. This PA does not claim to test all six broad MYP skill areas and contains no standalone Listening section. Listening is deferred to M3/SA3. A1–D6 are GradiPrep taxonomy labels, not official IB objective codes.
 
-## 5. Scoring specification — draft, not calibrated
 
-### 5.1 Response-level scoring
+## 5. Direct IB MYP curriculum crosswalk for the PA
+
+The following crosswalk maps PA task evidence to the MYP Language and Literature criterion/strand structure described in the public *Language and literature guide*. The current applicable guide edition and exact Year 4 progression must be checked against authorised school materials. This is a traceable candidate mapping for human academic review, not a claim that all descriptors are calibrated to Year 4.
+
+| PA item/dimension | Official MYP criterion/strand(s) | Direct evidence collected |
+|---|---|---|
+| RV01 | A.i | Identify explicit content and central meaning in literary/non-literary stimuli. |
+| RV02 | A.i, A.iii | Interpret implied meaning and justify it with relevant stimulus evidence. |
+| RV03 | A.ii | Explain the effect of a creator's language choice in context. |
+| RV04 | A.i | Interpret context, audience and purpose in the non-literary text. |
+| RV05 | A.i, A.ii | Interpret visual/verbal content and explain how the visual layer contributes to meaning. |
+| RV06 | A.iii | Test an interpretation against the graphic's evidence and qualify the claim. |
+| RV07a | A.iv | Compare perspectives/ideas across the literary and non-literary stimuli. |
+| RV07b | A.ii, A.iv | Compare how form/structure/creator choices shape meaning across the stimuli. |
+| RV08 | A.i | Analyse sequence and structural development in the literary text. |
+| RV09 | A.iii | Select a relevant example and justify why it supports an interpretation better than a weaker detail. |
+| LC01 | A.i | Interpret vocabulary in context as part of analysing language. |
+| LC02 | A.i, A.ii | Explain how sentence structure/emphasis contributes to meaning or effect. |
+| LC03 | D.iii | Edit grammar/usage while preserving meaning. |
+| LC04 | D.iii | Use punctuation/sentence boundaries to make relationships clear. |
+| LC05 | C.ii, D.ii | Produce a short message using stylistic choices and register suited to audience/context. |
+| AW01 | A.i, A.iii | Develop an interpretation and justify it with examples/explanations. |
+| AW02 | A.ii | Analyse creator choices and their effects. |
+| AW03 | A.iii | Select and explain relevant textual/visual evidence. |
+| AW04 | B.i, B.ii | Select an appropriate organisational structure and develop ideas logically/coherently. |
+| AW05 | D.i–D.iv | Demonstrate vocabulary, register/style, grammar/syntax/punctuation and spelling in the learner's own analytical text. |
+| CW01 | C.i | Develop ideas and a purposeful new text. |
+| CW02 | B.i, C.i | Select a form/structure suited to context and produce a text in that form. |
+| CW03 | C.ii, D.ii | Make stylistic and register choices for audience/effect. |
+| CW04 | C.i | Produce a considered perspective or imaginative treatment. |
+| CW05 | B.ii, C.i | Revise the text to strengthen organisation and the produced text's effect. |
+| SP01 | B.i, B.iii | Organise a presentation and use appropriate presentation conventions. |
+| SP02 | B.ii | Sequence and connect oral ideas coherently. |
+| SP03 | C.ii | Adapt delivery and choices to audience and intended effect. |
+| SP04 | C.i | Communicate a considered perspective. |
+| SP05 | D.v | Use relevant non-verbal techniques purposefully in oral communication. |
+
+Official strand labels are MYP criterion/strand references, not GradiPrep taxonomy codes. Verify each against the current authorised guide and local Year 4 expectations. If a reviewer cannot establish a direct link for an item, mark it UNMAPPED and exclude/defer it rather than broadening its skill label. The same item-to-curriculum source record must appear in the PA Evaluation Report.
+
+## 6. Scoring specification — draft, not calibrated
+
+### 6.1 Response-level scoring
 
 - **Selected-response items:** score against a pre-validated key. Use full credit for the correct answer and no credit for an incorrect answer unless the item has an explicitly documented partial-credit structure. Do not infer a misconception from a distractor alone.
 - **Short constructed responses:** use task-specific analytic anchors. Award credit for valid, source-supported reasoning, not exact model wording. Document acceptable alternatives and the evidence that distinguishes a supported inference from an unsupported guess.
 - **Extended writing and oral performance:** score each listed dimension separately. Do not allow fluency, length, spelling or confidence to inflate an unrelated analysis/production dimension. Record evidence excerpts/observations for each judgement.
 - **Language-in-context edits:** distinguish an objectively incorrect form from a defensible stylistic choice. Preserve meaning and accepted variants in the key.
 
-### 5.2 Provisional descriptive bands
+### 6.2 Provisional descriptive bands
 
 For pilot scoring discussion only, consider four developmental descriptions for each analytic dimension: **Emerging**, **Developing**, **Secure in this task**, and **Strong / transferable evidence**. Add a separate **Insufficient evidence** state. These labels are a proposed working vocabulary, not IB criterion levels, not a validated numeric scale and not approved learner-facing report wording.
 
 Do not assign numerical thresholds, percentages, criterion weights, a combined score, a grade prediction or an IB 1–7 conversion at this stage. The Founder must approve the rubric language and aggregation approach after reviewing the complete scoring pack and pilot evidence. Criterion A, B, C and D profiles must have equal visual prominence in any future report; this visual decision does not imply a single equally weighted diagnostic total.
 
-### 5.3 Evidence confidence and sufficiency
+### 6.3 Evidence confidence and sufficiency
 
 Record each observation as **direct**, **supporting/indirect**, or **not observed**. For each subskill retain the evidence IDs, response mode, scorer note and any contradiction.
 
@@ -180,7 +201,7 @@ Proposed conservative rules for pilot validation:
 
 Do not average contradictory evidence into false precision. Where a judgement is uncertain, record the conflict, use cautious report wording and recommend a targeted follow-up probe rather than forcing a category.
 
-### 5.4 Remediation routing
+### 6.4 Remediation routing
 
 Do not yet set numerical Priority 5–1 thresholds. Once the rubric and evidence sufficiency rules are validated, map each confirmed improvement area to:
 - evidence IDs and confidence;
@@ -191,7 +212,7 @@ Do not yet set numerical Priority 5–1 thresholds. Once the rubric and evidence
 
 Prefer five 60-minute sessions where they can comprehensively address all evidenced needs. Extend to six or seven only when the coverage analysis justifies it; seven is the strict maximum. Do not author remedial lessons during this item-map stage.
 
-## 6. Teacher/editor scoring-pack fields
+## 7. Teacher/editor scoring-pack fields
 
 For every eventual item/task record:
 
@@ -209,7 +230,7 @@ For every eventual item/task record:
 
 Keep this pack separate from learner-safe task content. Internal provider rankings, percentiles, ordinal positions, test-taker counts and their calculation methodology must not enter the teacher pack's learner-exportable payload, reports, client bundle or logged-in learner/parent views.
 
-## 7. Accessibility, fairness and rights controls
+## 8. Accessibility, fairness and rights controls
 
 - Check passage, visual and audio rights/licences before selecting or using any stimulus. Record source, author/creator, licence/territory, date checked and permitted uses.
 - Keep original passage bodies within 250 words unless the approved public-domain excerpt process is followed for a longer work. The text-length allowance does not authorise third-party visual/audio use.
@@ -219,7 +240,7 @@ Keep this pack separate from learner-safe task content. Internal provider rankin
 - Avoid culturally narrow assumptions, unnecessary idioms, specialist background knowledge and prompts that advantage one social or language background without relevance to the target construct.
 - For oral performance, judge communication rather than personality, extroversion, accent conformity or culturally specific presentation habits.
 
-## 8. Pilot validation plan
+## 9. Pilot validation plan
 
 Before fixing scoring rules or implementing:
 
@@ -230,9 +251,9 @@ Before fixing scoring rules or implementing:
 5. Check item difficulty, distractor performance, omissions, completion time, response burden and possible stimulus dependence. Do not claim psychometric validity from a small pilot.
 6. Revise the map and blueprint if the pilot shows under-representation, overloading, construct contamination or unreliable scoring.
 
-## 9. Founder approval and next step
+## 10. Founder approval and next step
 
-The Founder approved this item map and scoring specification on 2 November 2026, including all 23 subskill mappings, 35 evidence observations, the two-sitting timing, oral/presentation feasibility, provisional response guidance and evidence-confidence safeguards.
+The Founder approved the original v0.1 map on 2 November 2026. On 11 November 2026, the Founder directed removal of Listening from the PA and made direct curriculum mapping a hard requirement. This v0.2 revision records 30 proposed observations, 80 minutes and five non-Listening task groups. The official-strand crosswalk below remains subject to human MYP academic verification against current authorised Year 4 descriptors before the PA is accepted.
 
 The next project prerequisite is the shared PDF-response, teacher-grading and timed-analytics feature recorded in docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md. The phased plan and 24-hour grading target are approved; actual implementation has not started. Actual diagnostic item authoring is paused until the shared task metadata, response modes and timer configuration can be authored against the approved feature design.
 
