@@ -51,7 +51,6 @@ const courseChoices = [
     title: "English",
     levelSummary: "Stages 7–9",
     description: "Build core English skills through the Cambridge Lower Secondary route, kept distinct from IGCSE.",
-    caveat: "Applicable curriculum framework and official learning-objective references remain to be verified.",
     groupClass: "taxonomy-lower-secondary",
   },
   {

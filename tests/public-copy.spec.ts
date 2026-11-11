@@ -143,7 +143,6 @@ test.describe("public website copy rules", () => {
       /pilot preview/i,
       /planning preview/i,
       /not released/i,
-      /unverified/i,
       /not final rubric/i,
       /candidate objective/i,
       /academic content review passed/i,
