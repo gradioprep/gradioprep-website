@@ -245,5 +245,34 @@ SELECT is((SELECT count(*)::integer FROM private.security_audit_events
     AND outcome IN ('failed','denied')),2,
   'Worker report failure audit writes only allowlisted metadata events');
 
+SELECT ok(public.record_worker_audit_outcome(
+  '11111111-1111-4111-8111-111111111111','staff_submission_transcript_review',
+  '1d000000-0000-4000-8000-000000000401','failed','operation_failed'
+),'existing transcript-review audit action remains allowlisted');
+SELECT ok(public.record_worker_audit_outcome(
+  '11111111-1111-4111-8111-111111111111','student_submission_file_upload',
+  '1d000000-0000-4000-8000-000000000401','failed','operation_failed'
+),'existing private-file upload audit action remains allowlisted');
+SELECT ok(public.record_worker_audit_outcome(
+  '11111111-1111-4111-8111-111111111111','owner_submission_file_cleanup',
+  NULL,'failed','operation_failed'
+),'existing file-cleanup collection audit action remains allowlisted');
+SELECT ok(public.record_worker_audit_outcome(
+  '11111111-1111-4111-8111-111111111111','staff_attempt_timer_adjustment',
+  '1d000000-0000-4000-8000-000000000401','failed','operation_failed'
+),'existing timer-adjustment audit action remains allowlisted');
+SELECT ok(public.record_worker_audit_outcome(
+  '11111111-1111-4111-8111-111111111111','student_timed_attempt_assessment_link',
+  '1d000000-0000-4000-8000-000000000401','failed','operation_failed'
+),'existing timed-assessment linkage audit action remains allowlisted');
+RESET ROLE;
+
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+  WHERE actor_id='11111111-1111-4111-8111-111111111111'
+    AND action IN ('staff_submission_transcript_review','student_submission_file_upload',
+      'owner_submission_file_cleanup','staff_attempt_timer_adjustment','student_timed_attempt_assessment_link')
+    AND outcome='failed'),5,
+  'legacy allowlisted Worker actions remain operational after report audit extension');
+
 SELECT * FROM finish();
 ROLLBACK;
