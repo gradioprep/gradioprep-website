@@ -250,7 +250,7 @@ RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = ''
-AS $
+AS $$
 DECLARE
   route_state text;
 BEGIN
@@ -277,7 +277,7 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$;
+$$;
 
 ALTER FUNCTION private.validate_curriculum_unit_release() OWNER TO postgres;
 REVOKE ALL ON FUNCTION private.validate_curriculum_unit_release() FROM PUBLIC, anon, authenticated;
@@ -291,7 +291,7 @@ RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = ''
-AS $
+AS $$
 DECLARE
   route_state text;
 BEGIN
@@ -304,7 +304,7 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$;
+$$;
 
 ALTER FUNCTION private.prevent_unit_insert_after_route_verification() OWNER TO postgres;
 REVOKE ALL ON FUNCTION private.prevent_unit_insert_after_route_verification() FROM PUBLIC, anon, authenticated;
@@ -326,7 +326,7 @@ RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = ''
-AS $
+AS $$
 DECLARE
   route_state text;
   segment_count integer;
@@ -384,7 +384,7 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$;
+$$;
 
 ALTER FUNCTION private.validate_milestone_cycle_release() OWNER TO postgres;
 REVOKE ALL ON FUNCTION private.validate_milestone_cycle_release() FROM PUBLIC, anon, authenticated;
