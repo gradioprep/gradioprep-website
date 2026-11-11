@@ -149,3 +149,12 @@ The PA map must preserve the revised 80-minute/two-sitting envelope, the four MY
 
 
 **Founder decision update — 2 November 2026:** The detailed MYP Year 4 item map/scoring specification is approved. The flagship PDF-response, teacher-grading and timed-analytics plan is now the active platform prerequisite before actual diagnostic item authoring. No existing task content or application code was changed by this approval.
+
+## 10. Year 4 direct-mapping audit status — 11 November 2026
+
+The item-level public-strand audit for all 30 planned MYP Year 4 PA observations is authoritative in `IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md` §5.1. Use that audit for candidate criterion/strand fit, prompt refinements, conditional evidence rules and exclusions.
+
+**Important limitation:** the publicly accessible IB Language and literature guide provides year-specific objectives/descriptors for Years 1, 3 and 5, not a standalone exact Year 4 descriptor set. Therefore the candidate mappings are not final Year 4 approval. All 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`; obtain the authorised school progression/task expectations and human MYP academic sign-off before release. An item that cannot be tied directly to an official criterion/strand and an approved Year 4 expectation must be marked `UNMAPPED` and excluded.
+
+The six skill areas in this taxonomy are broad curriculum-planning categories, not a requirement to place six separate sections in the Preliminary Assessment. The PA's five segments remain subject to the direct-mapping rule; Listening remains excluded from PA, SA1 and SA2 and is conditional for M3/SA3 only. Internal taxonomy labels A1–D6 must not be represented as official IB codes.
+
