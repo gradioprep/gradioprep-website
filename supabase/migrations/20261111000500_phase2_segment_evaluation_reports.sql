@@ -9,7 +9,7 @@ ALTER TABLE public.diagnostic_versions
 
 CREATE OR REPLACE FUNCTION private.validate_diagnostic_route_lineage()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = ''
-AS $
+AS $function$
 DECLARE selected_route_key text;
 BEGIN
   IF TG_OP = 'UPDATE' AND OLD.release_state IN ('published','retired')
@@ -25,11 +25,11 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$;
+$function$;
 ALTER FUNCTION private.validate_diagnostic_route_lineage() OWNER TO postgres;
 REVOKE ALL ON FUNCTION private.validate_diagnostic_route_lineage() FROM PUBLIC,anon,authenticated,service_role;
 CREATE TRIGGER diagnostic_versions_route_lineage
-  BEFORE INSERT OR UPDATE OF route_version_id,pathway_id,release_state ON public.diagnostic_versions
+  BEFORE INSERT OR UPDATE ON public.diagnostic_versions
   FOR EACH ROW EXECUTE FUNCTION private.validate_diagnostic_route_lineage();
 
 CREATE TABLE public.diagnostic_observation_outcome_mappings (
