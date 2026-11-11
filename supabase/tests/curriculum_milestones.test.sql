@@ -204,7 +204,12 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
 
-SELECT is((SELECT count(*)::integer FROM public.curriculum_route_versions),1,'student sees only verified route versions');
+SELECT is((SELECT count(*)::integer FROM public.curriculum_route_versions),2,'student sees only the two verified TEST route versions');
+SELECT is((SELECT count(*)::integer FROM public.curriculum_route_versions
+  WHERE route_key IN ('synthetic-route-only','synthetic-ib-myp-year-4')),2,
+  'student can see the verified curriculum fixture and verified PA report fixture');
+SELECT is((SELECT count(*)::integer FROM public.curriculum_route_versions WHERE review_state <> 'verified'),0,
+  'student cannot see pending curriculum route versions');
 SELECT is((SELECT count(*)::integer FROM public.curriculum_unit_versions),3,'student sees only published units from a verified route');
 SELECT is((SELECT count(*)::integer FROM public.curriculum_unit_outcome_mappings),3,'student sees only reviewed route-specific outcome mappings');
 SELECT is((SELECT count(*)::integer FROM public.milestone_cycle_versions),1,'student sees only published M1-M3 cycle versions');
