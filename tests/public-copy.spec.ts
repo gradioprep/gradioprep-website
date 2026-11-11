@@ -132,7 +132,20 @@ test.describe("public website copy rules", () => {
     }
     const bundleText = downloadedAssets.join("\\n");
     const internalAssetPatterns = [
-      /\bprototype\b/i,
+      /(?:["'\`])\s*prototype\s*(?:["'\`])/i,
+      /assessment feedback prototype/i,
+      /design prototype/i,
+      /early build/i,
+      /working name/i,
+      /\bdemonstration dashboard\b/i,
+      /\bdemo\b/i,
+      /fictional/i,
+      /pilot preview/i,
+      /planning preview/i,
+      /not released/i,
+      /unverified/i,
+      /not final rubric/i,
+      /candidate objective/i,
       /academic content review passed/i,
       /academic review passed for the content preview/i,
       /academic lead \(approval confirmed by project owner/i,
