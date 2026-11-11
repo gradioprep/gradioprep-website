@@ -42,15 +42,15 @@ SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_
 SELECT is((SELECT count(DISTINCT observation_id)::integer FROM public.diagnostic_response_versions WHERE attempt_id=(SELECT attempt_id FROM diagnostic_test_state)),
  9,'nine of ten observations are saved before completion');
 
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L01','{"a":"A","b":["A","B"]}'::jsonb)$,'saves L01 central-message and explicit-detail evidence');
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L02','{"text":"Cullen is concerned that limited educational access can restrict opportunities to learn and participate in wider society."}'::jsonb)$,'saves L02 inference and viewpoint evidence');
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L03','{"choice":"A"}'::jsonb)$,'saves L03 audience and purpose choice');
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L04','{"text":"The phrase criticises a universal solution; the report shows that technology must be adapted to each community’s needs."}'::jsonb)$,'saves L04 spoken language-choice evidence');
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L05','{"text":"The conclusion is exaggerated: the report describes use in Vanuatu, but Krieshok warns that one solution cannot suit every community."}'::jsonb)$,'saves L05 evaluation evidence');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L01','{"a":"A","b":["A","B"]}'::jsonb)$$,'saves L01 central-message and explicit-detail evidence');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L02','{"text":"Cullen is concerned that limited educational access can restrict opportunities to learn and participate in wider society."}'::jsonb)$$,'saves L02 inference and viewpoint evidence');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L03','{"choice":"A"}'::jsonb)$$,'saves L03 audience and purpose choice');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L04','{"text":"The phrase criticises a universal solution; the report shows that technology must be adapted to each community’s needs."}'::jsonb)$$,'saves L04 spoken language-choice evidence');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L05','{"text":"The conclusion is exaggerated: the report describes use in Vanuatu, but Krieshok warns that one solution cannot suit every community."}'::jsonb)$$,'saves L05 evaluation evidence');
 SELECT is((SELECT count(DISTINCT observation_id)::integer FROM public.diagnostic_response_versions WHERE attempt_id=(SELECT attempt_id FROM diagnostic_test_state)),
  14,'fourteen observations saved before Language in Context completion');
 
-SELECT lives_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A"}'::jsonb)$,'saves LC01 contextual vocabulary choice');
+SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A"}'::jsonb)$$,'saves LC01 contextual vocabulary choice');
 SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC02','{"choice":"A"}'::jsonb)$$,'saves LC02 sentence-focus choice');
 SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC03','{"choice":"B"}'::jsonb)$$,'saves LC03 grammar and usage choice');
 SELECT lives_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC04','{"choice":"A"}'::jsonb)$$,'saves LC04 punctuation choice');
@@ -62,9 +62,9 @@ SELECT throws_ok($$SELECT * FROM public.submit_diagnostic_attempt((SELECT attemp
 
 SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV01','{"a":"B","b":["A","A"]}'::jsonb)$$,
  '22023','invalid_diagnostic_response','duplicate multiple-choice selections are rejected');
-SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L01','{"a":"A","b":["A","B"],"extra":"forged"}'::jsonb)$,
+SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L01','{"a":"A","b":["A","B"],"extra":"forged"}'::jsonb)$$,
  '22023','invalid_diagnostic_response','Listening compound selection rejects unrecognised fields');
-SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A","extra":"forged"}'::jsonb)$,
+SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A","extra":"forged"}'::jsonb)$$,
  '22023','invalid_diagnostic_response','LC choice rejects unrecognised response fields');
 SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC05','{"text":null}'::jsonb)$$,
  '22023','invalid_diagnostic_response','LC05 rejects a null text value');
