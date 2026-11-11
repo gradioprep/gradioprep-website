@@ -96,8 +96,6 @@ SELECT is((SELECT is_replay FROM public.create_preliminary_evaluation_report(
   '1d000000-0000-4000-8000-000000000303'
 )),true,'same PA report idempotency key returns the immutable original version');
 
-RESET ROLE;
-
 SELECT is((SELECT count(*)::integer FROM public.evaluation_report_versions),1,
   'one immutable PA report version is created');
 SELECT is((SELECT curriculum_mapping_status FROM public.evaluation_report_versions),'contains_unmapped',
@@ -147,6 +145,33 @@ SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-88888888
 SELECT is((SELECT count(*) FROM public.get_evaluation_report(
   '1d000000-0000-4000-8000-000000000401',NULL)),1,
   'Owner at AAL2 can inspect the report through the audited RPC');
+
+INSERT INTO report_access_test_state
+SELECT access_grant_id FROM public.grant_evaluation_report_teacher_access(
+  '1d000000-0000-4000-8000-000000000401','55555555-5555-4555-8555-555555555555','Synthetic report-specific teacher grant'
+);
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','55555555-5555-4555-8555-555555555555',true);
+SELECT set_config('request.jwt.claims','{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT count(*) FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)),1,
+  'AAL2 Grader with an active report-specific grant can read the report');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is(public.revoke_evaluation_report_teacher_access((SELECT grant_id FROM report_access_test_state),'Synthetic access review complete'),true,
+  'Owner at AAL2 can revoke a report-specific teacher grant');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','55555555-5555-4555-8555-555555555555',true);
+SELECT set_config('request.jwt.claims','{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}',true);
+SELECT throws_ok($q$SELECT * FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)$q$,
+  '42501','evaluation_report_read_forbidden','revoked teacher grant immediately denies report access');
+RESET ROLE;
 SELECT throws_ok(
   $$SELECT * FROM public.create_preliminary_evaluation_report(
     '1d000000-0000-4000-8000-000000000301',
