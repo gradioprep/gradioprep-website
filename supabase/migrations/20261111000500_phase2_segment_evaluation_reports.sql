@@ -95,7 +95,7 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = '23514', MESSAGE = 'diagnostic_outcome_mapping_route_mismatch';
   END IF;
   IF NEW.mapping_status = 'direct' AND (
-    route_state <> 'verified' OR unit_state <> 'published' OR outcome_state <> 'direct'
+    route_state <> 'verified' OR outcome_state <> 'direct'
     OR outcome_reviewer IS NULL OR outcome_reviewed_at IS NULL
     OR NEW.reviewed_by IS NULL OR NEW.reviewed_at IS NULL OR coalesce(listening_observation, false)
   ) THEN
@@ -288,9 +288,10 @@ BEGIN
   SELECT count(*)::integer INTO directly_mapped_observations FROM public.diagnostic_observations AS o
     WHERE o.diagnostic_version_id = selected_version.id AND o.learner_capture_enabled
       AND EXISTS (SELECT 1 FROM public.diagnostic_observation_outcome_mappings AS m
+        JOIN public.curriculum_unit_versions AS unit ON unit.id=m.curriculum_unit_version_id
         WHERE m.diagnostic_observation_id = o.id AND m.diagnostic_version_id = selected_version.id
           AND m.route_version_id = selected_route.id AND m.mapping_status = 'direct'
-          AND m.reviewed_by IS NOT NULL AND m.reviewed_at IS NOT NULL);
+          AND unit.release_state='published' AND m.reviewed_by IS NOT NULL AND m.reviewed_at IS NOT NULL);
   SELECT count(*)::integer INTO pending_observations FROM public.diagnostic_observations AS o
     WHERE o.diagnostic_version_id = selected_version.id AND o.learner_capture_enabled
       AND EXISTS (SELECT 1 FROM public.diagnostic_observation_outcome_mappings AS m
@@ -314,7 +315,9 @@ BEGIN
   SELECT coalesce(jsonb_agg(jsonb_build_object(
     'observation_id', o.id, 'observation_code', o.observation_code,
     'mapping_status', CASE WHEN EXISTS (SELECT 1 FROM public.diagnostic_observation_outcome_mappings AS m
-      WHERE m.diagnostic_observation_id=o.id AND m.route_version_id=selected_route.id AND m.mapping_status='direct') THEN 'direct'
+      JOIN public.curriculum_unit_versions AS unit ON unit.id=m.curriculum_unit_version_id
+      WHERE m.diagnostic_observation_id=o.id AND m.route_version_id=selected_route.id AND m.mapping_status='direct'
+        AND unit.release_state='published') THEN 'direct'
       WHEN EXISTS (SELECT 1 FROM public.diagnostic_observation_outcome_mappings AS m
       WHERE m.diagnostic_observation_id=o.id AND m.route_version_id=selected_route.id AND m.mapping_status='pending_review') THEN 'pending_review'
       ELSE 'unmapped' END,
@@ -326,7 +329,7 @@ BEGIN
       JOIN public.curriculum_unit_versions AS u ON u.id=m.curriculum_unit_version_id
       JOIN public.curriculum_unit_outcome_mappings AS outcome ON outcome.id=m.curriculum_unit_outcome_mapping_id
       WHERE m.diagnostic_observation_id=o.id AND m.route_version_id=selected_route.id AND m.mapping_status='direct'
-        AND m.reviewed_by IS NOT NULL AND m.reviewed_at IS NOT NULL),'[]'::jsonb)
+        AND u.release_state='published' AND m.reviewed_by IS NOT NULL AND m.reviewed_at IS NOT NULL),'[]'::jsonb)
   ) ORDER BY o.sequence_number),'[]'::jsonb) INTO mapping_snapshot
   FROM public.diagnostic_observations AS o WHERE o.diagnostic_version_id=selected_version.id AND o.learner_capture_enabled;
   SELECT coalesce(jsonb_agg(jsonb_build_object('observation_id',o.id,'observation_code',o.observation_code,
