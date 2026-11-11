@@ -541,7 +541,7 @@ An optional typed-plus-PDF upload creates an immutable pending file-version reco
 
 The PDF-only reservation/finalization path remains separately validated. Typed-only submissions still require their immutable original response version. No table, column, key or physical relation was added by this correction; protected inventory remains **30 tables (18 public, 12 private)**. This update clarifies existing record/version semantics only and is backed by synthetic CI, not hosted backup or production acceptance.
 
-## 6.20 Phase 2 Diagnostic attempt and first-section evidence capture — verified synthetic schema increment — 10 November 2026
+## 6.20 Historical Phase 2 Diagnostic attempt and 15-observation baseline — 10 November 2026 (superseded for Listening by Section 6.21)
 
 Exact application/test HEAD `12b0a4d47dedb2bd0fc7396cc36824145d437e21` passed [GitHub Actions #42814204466](https://github.com/gradioprep/gradioprep-website/actions/runs/42814204466): **825 SQL assertions across 23 test files, 36/36 Playwright tests**, TypeScript/Worker/Vite builds, synthetic database/private-PDF backup and restore (one database snapshot and two private-PDF checksums; corrupt archive rejected), shutdown, local credential cleanup and clean credential-free Preview-assets build.
 
