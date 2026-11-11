@@ -213,5 +213,37 @@ SELECT throws_ok(
   '42501','preliminary_evaluation_report_forbidden','Owner cannot impersonate learner to create a PA report');
 RESET ROLE;
 
+-- The trusted Worker may record only report-operation failure outcomes.
+SET LOCAL ROLE service_role;
+SELECT set_config('request.jwt.claims','{"role":"service_role"}',true);
+SELECT ok(public.record_worker_audit_outcome(
+  '11111111-1111-4111-8111-111111111111',
+  'evaluation_report_create',
+  '1d000000-0000-4000-8000-000000000401',
+  'failed',
+  'operation_failed'
+),'service-role Worker can record an allowlisted PA report-creation failure');
+SELECT ok(public.record_worker_audit_outcome(
+  '11111111-1111-4111-8111-111111111111',
+  'evaluation_report_read_authorized',
+  '1d000000-0000-4000-8000-000000000401',
+  'denied',
+  NULL
+),'service-role Worker can record a scoped PA report-read denial');
+SELECT ok(NOT public.record_worker_audit_outcome(
+  '11111111-1111-4111-8111-111111111111',
+  'arbitrary_report_action',
+  '1d000000-0000-4000-8000-000000000401',
+  'failed',
+  'operation_failed'
+),'unlisted report audit actions are rejected');
+RESET ROLE;
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+  WHERE actor_id='11111111-1111-4111-8111-111111111111'
+    AND target_id='1d000000-0000-4000-8000-000000000401'
+    AND action IN ('evaluation_report_create','evaluation_report_read_authorized')
+    AND outcome IN ('failed','denied')),2,
+  'Worker report failure audit writes only allowlisted metadata events');
+
 SELECT * FROM finish();
 ROLLBACK;
