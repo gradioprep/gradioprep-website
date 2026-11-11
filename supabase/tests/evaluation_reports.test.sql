@@ -168,7 +168,7 @@ RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
 SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
-SELECT is((SELECT count(*) FROM public.get_evaluation_report(
+SELECT is((SELECT count(*)::integer FROM public.get_evaluation_report(
   '1d000000-0000-4000-8000-000000000401',NULL)),1,
   'Owner at AAL2 can inspect the report through the audited RPC');
 
@@ -181,7 +181,7 @@ RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','55555555-5555-4555-8555-555555555555',true);
 SELECT set_config('request.jwt.claims','{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}',true);
-SELECT is((SELECT count(*) FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)),1,
+SELECT is((SELECT count(*)::integer FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)),1,
   'AAL2 Grader with an active report-specific grant can read the report');
 RESET ROLE;
 
