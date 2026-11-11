@@ -1,9 +1,9 @@
 # IB MYP Year 4 / Grade 9 Diagnostic — Listening and Language in Context draft v0.1
 
-**Status:** Authoring draft for human academic review. Not calibrated, approved, implemented in the learner app or released.
+**Status:** Historical combined Listening / Language in Context authoring draft. The Listening portion is withdrawn from PA, SA1 and SA2 and deferred to M3/SA3 only if directly mapped to M3 units and the exact MYP Year 4 course. The Language in Context portion remains a separate PA candidate. This v0.1 file is not a current learner-app specification.
 **Target:** Founder-confirmed Grade 9 — IB MYP Year 4, Language and Literature.
-**Item map:** Founder-approved v0.1; Listening L01–L05 (10 minutes) and Language in Context LC01–LC05 (10 minutes).
-**Sitting:** Sitting 1, Listening then Language in Context, 20 minutes total.
+**Historical item map:** v0.1 bundled Listening L01–L05 and Language in Context LC01–LC05. Current PA scope retains LC01–LC05 only; Listening L01–L05 is deferred to M3/SA3 and must pass the direct curriculum mapping gate.
+**Historical sitting:** Sitting 1 previously placed Listening and Language in Context together. The current PA contains Language in Context only (10 minutes in the approved revised PA map); Listening is not part of Sitting 1 PA.
 **Content version:** 0.1-draft, created 10 November 2026.
 **Answer-key boundary:** This public authoring draft contains learner-facing instructions, an original recording script and questions only. Correct answers, distractor rationales, model responses and private scoring notes are held in a separate internal teacher/editor pack.
 
