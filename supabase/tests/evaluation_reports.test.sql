@@ -117,6 +117,11 @@ SELECT is((SELECT is_replay FROM public.create_preliminary_evaluation_report(
   '1d000000-0000-4000-8000-000000000303'
 )),true,'same PA report idempotency key returns the immutable original version');
 
+SELECT is((SELECT count(*)::integer FROM public.get_evaluation_report(
+  '1d000000-0000-4000-8000-000000000401',NULL)),1,
+  'learner can read own PA baseline through the audited report-read RPC');
+RESET ROLE;
+
 SELECT is((SELECT count(*)::integer FROM public.evaluation_report_versions),1,
   'one immutable PA report version is created');
 SELECT is((SELECT curriculum_mapping_status FROM public.evaluation_report_versions),'contains_unmapped',
