@@ -79,8 +79,50 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-playwright-
 
-      - name: Install Playwright system dependencies
-        run: npx playwright install-deps chromium
+      - name: Ensure Playwright Chromium system libraries
+        shell: bash
+        run: |
+          set -euo pipefail
+          required_libraries=(
+            "libasound.so.2"
+            "libatk-1.0.so.0"
+            "libatk-bridge-2.0.so.0"
+            "libatspi.so.0"
+            "libcairo.so.2"
+            "libcups.so.2"
+            "libdbus-1.so.3"
+            "libdrm.so.2"
+            "libgbm.so.1"
+            "libglib-2.0.so.0"
+            "libnspr4.so"
+            "libnss3.so"
+            "libpango-1.0.so.0"
+            "libX11.so.6"
+            "libX11-xcb.so.1"
+            "libxcb.so.1"
+            "libXcomposite.so.1"
+            "libXdamage.so.1"
+            "libXext.so.6"
+            "libXfixes.so.3"
+            "libxkbcommon.so.0"
+            "libXrandr.so.2"
+            "libXrender.so.1"
+            "libXtst.so.6"
+            "libfontconfig.so.1"
+            "libfreetype.so.6"
+          )
+          missing=()
+          for library in "${required_libraries[@]}"; do
+            if ! ldconfig -p | grep -Fq "$library"; then
+              missing+=("$library")
+            fi
+          done
+          if (( ${#missing[@]} )); then
+            printf 'Installing missing Chromium libraries: %s\\n' "${missing[*]}"
+            npx playwright install-deps chromium
+          else
+            echo "GitHub-hosted Ubuntu already provides the Playwright Chromium system libraries."
+          fi
 
       - name: Install Playwright Chromium on cache miss
         if: steps.playwright-cache.outputs.cache-hit != 'true'
