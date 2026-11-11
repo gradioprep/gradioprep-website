@@ -4,7 +4,7 @@ import type {
   UnitReadinessGate,
 } from "./model";
 import { englishPathways } from "./pathways";
-import { pilotReviewSummary } from "./pilotReviewSummary";
+import { pilotReviewRecord } from "./pilotReviewRecord";
 import { pilotLearnerLesson } from "./pilotLearnerLesson";
 
 /**
@@ -23,16 +23,16 @@ export const unitContentPlans: UnitContentPlan[] = englishPathways.flatMap(pathw
       title: isPilotUnit ? pilotLearnerLesson.title : unit.title,
       releaseStatus: "planned",
       syllabusEditionCode: null,
-      officialSourceUrl: isPilotUnit ? pilotReviewSummary.source.url : null,
-      officialSourceCheckedAt: isPilotUnit ? pilotReviewSummary.source.checkedAt : null,
-      officialSourceNote: isPilotUnit ? pilotReviewSummary.source.scopeNote : null,
-      officialObjectiveCodes: isPilotUnit ? pilotReviewSummary.officialObjectiveCodes : [],
+      officialSourceUrl: isPilotUnit ? pilotReviewRecord.sourceUrl : null,
+      officialSourceCheckedAt: isPilotUnit ? pilotReviewRecord.sourceCheckedAt : null,
+      officialSourceNote: isPilotUnit ? pilotReviewRecord.sourceScopeNote : null,
+      officialObjectiveCodes: isPilotUnit ? pilotReviewRecord.officialObjectiveCodes : [],
       learningObjective: isPilotUnit ? pilotLearnerLesson.proposedLearningObjective : null,
       lessonIds: isPilotUnit ? [pilotLearnerLesson.id] : [],
       practiceQuestionIds: isPilotUnit ? pilotLearnerLesson.practiceItems.map(item => item.id) : [],
       answerKeyReviewState: isPilotUnit ? "passed" : "not-started",
-      academicReviewer: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewerLabel : null,
-      academicReviewedAt: isPilotUnit ? pilotLearnerLesson.reviewRecord.reviewedAt : null,
+      academicReviewer: isPilotUnit ? pilotReviewRecord.reviewer : null,
+      academicReviewedAt: isPilotUnit ? pilotReviewRecord.reviewedAt : null,
       contentRightsNote: null,
       accessibilityReviewState: "not-started",
       releaseApprovedBy: null,

@@ -1,31 +1,14 @@
 import type { PilotLearnerLesson } from "./model";
 
-/**
- * Learner-safe content for the reviewed pilot preview.
- *
- * This file contains no correct-answer IDs, answer explanations, or model
- * answers. Those remain in pilotLessonPack.ts and are not imported by the
- * client UI. The static interactions below do not score or persist responses.
- */
+/** Learner-facing English lesson content. */
 export const pilotLearnerLesson: PilotLearnerLesson = {
   id: "pilot-lesson-how-writers-shape-meaning-v1",
   version: 1,
   unitId: "ib-myp-lal-y1-u1",
-  status: "approved-for-pilot-preview",
-  reviewRecord: {
-    outcome: "passed",
-    reviewedAt: "2026-10-24",
-    reviewerLabel: "Academic lead (approval confirmed by project owner; name not specified)",
-    scopeNote:
-      "Academic review passed for the content preview. The official IB syllabus/guide edition and objective mapping remain unverified; this is not approval to claim official curriculum alignment or release a syllabus-mapped course.",
-  },
   title: "How writers shape meaning",
   estimatedMinutes: 25,
-  audienceNote:
-    "Pilot preview for early MYP learners. Age/level fit and official Year 1 mapping remain subject to the applicable school guide.",
   proposedLearningObjective:
     "Identify a deliberate word or phrase choice and explain how it may shape meaning or mood, supporting the interpretation with precise evidence.",
-  mappingStatus: "unverified",
   successCriteria: [
     "I can select a precise word or phrase rather than describe the whole passage generally.",
     "I can explain a plausible association or effect instead of only naming a technique.",
@@ -35,8 +18,6 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     label: "Original practice passage",
     text:
       "At the edge of the field, the last bus sighed, its headlights shrinking into the rain. Mara held her ticket beneath the shelter, smoothing its damp corners. Above her, the station clock clicked on. Across the road, the bakery's sign turned from OPEN to CLOSED. When the bus finally arrived, warm light spilled across the wet pavement. Mara took one step forward, then stopped.",
-    rightsNote:
-      "Original draft passage written for this project. This preview does not use a copied examination passage.",
   },
   keyIdea: {
     label: "The evidence chain",
@@ -162,13 +143,4 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
       "Connect the effect to the context of the passage.",
     ],
   },
-  accessibilitySupports: [
-    "The passage is rendered as selectable text; do not rely on colour alone to identify evidence.",
-    "The three-part evidence chain can be used as a planning frame before writing.",
-    "Keep task instructions visible while a learner drafts a response.",
-    "Accept different interpretations when they are supported by textual evidence.",
-    "Review vocabulary, reading load and age/level fit again before formal course release.",
-  ],
-  learnerNote:
-    "Your responses on this page are not saved. Keep a copy of any work you wish to revisit.",
 };

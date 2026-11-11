@@ -84,4 +84,33 @@ test.describe("public website copy rules", () => {
     await expect(page.getByText("Your learning insights will appear here.")).toBeVisible();
     await expect(page.getByText(/not final rubric|placeholder criterion|illustrative excerpts/i)).toHaveCount(0);
   });
+
+  test("learner JavaScript bundles exclude internal academic review and release notes", async ({ page }) => {
+    await page.goto("/pathways/ib-myp/language-and-literature/year-1/units/unit-1/lesson");
+    const scriptUrls = await page.locator("script[src]").evaluateAll(nodes =>
+      nodes.map(node => (node as HTMLScriptElement).src).filter(Boolean)
+    );
+    expect(scriptUrls.length).toBeGreaterThan(0);
+    const downloadedScripts: string[] = [];
+    for (const url of scriptUrls) {
+      const response = await page.request.get(url);
+      expect(response.ok(), `public script asset should load: ${url}`).toBeTruthy();
+      downloadedScripts.push(await response.text());
+    }
+    const bundleText = downloadedScripts.join("\\n");
+    const internalPatterns = [
+      /Academic content review passed/i,
+      /Academic review passed for the content preview/i,
+      /candidate-unverified/i,
+      /Candidate Year 1 strands/i,
+      /Pilot preview for early MYP learners/i,
+      /Planning slot only/i,
+      /verify programme documents and approve unit sequence before release/i,
+      /Do not claim official curriculum mapping or release/i,
+      /remainingReleaseChecks/i,
+    ];
+    for (const pattern of internalPatterns) {
+      expect(bundleText, `internal metadata ${pattern} must not be shipped in learner assets`).not.toMatch(pattern);
+    }
+  });
 });

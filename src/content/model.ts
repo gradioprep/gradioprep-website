@@ -48,11 +48,6 @@ export interface PlannedUnitSlot {
   pathwayId: string;
   sequence: UnitSequence;
   title: string;
-  learningObjective: null;
-  officialObjectiveCodes: string[];
-  mappingStatus: "unverified";
-  releaseStatus: "planned";
-  reviewNote: string;
 }
 
 /**
@@ -69,11 +64,6 @@ export interface CurriculumPathway {
   levelCode: string;
   levelLabel: string;
   levelKind: PathwayLevelKind;
-  gradeEquivalentLabel: string | null;
-  syllabusEditionCode: null;
-  mappingStatus: "unverified";
-  releaseStatus: "planned";
-  reviewNote: string;
   unitSlots: PlannedUnitSlot[];
 }
 
