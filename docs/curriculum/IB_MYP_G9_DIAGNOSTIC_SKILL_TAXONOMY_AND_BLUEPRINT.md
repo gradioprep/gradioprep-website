@@ -1,14 +1,14 @@
 # Grade 9 IB MYP Year 4 — Diagnostic Skill Taxonomy and Blueprint
 
-**Version:** 0.2  
-**Date:** 2 November 2026  
-**Status:** Founder-approved taxonomy and high-level 90-minute blueprint (1 November 2026); the detailed task-level item map and scoring specification was approved on 2 November 2026. Actual question/stimulus authoring is sequenced after the approved flagship PDF-response/grading/timer feature is implemented and its task metadata is validated. No actual questions, item keys, final scoring thresholds, diagnostic code or learner release are approved.  
+**Version:** 0.3  
+**Date:** 11 November 2026  
+**Status:** Founder-directed correction to the PA task blueprint and curriculum-mapping process. The original six-skill-area / 90-minute plan is retained as a historical design baseline only. The current PA blueprint excludes standalone Listening and contains 30 planned evidence observations across five task segments in 80 minutes. Listening is reserved for M3/SA3 only, subject to direct route-specific mapping. The four criteria and six broad skill areas remain curriculum context; they do not require six standalone PA sections. Item-level mapping must pass the hard gate in `docs/ASSESSMENT_CURRICULUM_MAPPING_AND_MILESTONE_STANDARD.md`. Actual question, scoring, calibration and release approvals remain separate.  
 **Target:** Grade 9 — IB MYP Language and Literature (Founder-confirmed MYP Year 4)  
 **Purpose:** Specify the transferable language-and-literature skills to diagnose before curriculum-unit learning, and propose an evidence-balanced assessment blueprint.
 
 ## 1. Design principles and official alignment
 
-This is a GradiPrep diagnostic-readiness instrument, not an IB examination, a unit test, an MYP eAssessment replica or an official IB criterion grade.
+This is GradiPrep's Preliminary Assessment (PA), not an IB examination, a unit test, an MYP eAssessment replica or an official IB criterion grade. The PA includes only question types and skills directly mapped to MYP Language and Literature criteria/strands. A broad curriculum skill area does not by itself require a standalone PA section.
 
 The public IB MYP Language and Literature framework identifies six skill areas: **listening, speaking, reading, writing, viewing and presenting**. It expects engagement with a range of literary and non-literary text types, styles and techniques, including analysis of context, audience, purpose and linguistic/literary devices. The subject is organised through four criteria: **A Analysing, B Organising, C Producing text and D Using language**. The public IB guide describes the four criteria as equally weighted for MYP subject assessment; this does not automatically authorise a GradiPrep diagnostic composite score or official MYP grade conversion.
 
@@ -75,28 +75,27 @@ Sources:
 | Speaking | Structured oral response and short follow-up interaction | C and D; supporting A and B |
 | Presenting | Purposeful oral/multimodal communication, organisation and audience awareness | B, C and D |
 
-All six skill areas must receive observable evidence. A written multiple-choice test alone cannot be reported as a complete MYP Language and Literature diagnostic.
+The six skill areas describe the wider MYP Language and Literature curriculum; they do not require a standalone task for each area in every PA. This PA does not assess Listening. Listening is deferred to Milestone 3 / SA3, never PA, SA1 or SA2, and is included in SA3 only when the learner's exact route has a directly mapped Listening outcome. A PA report must state its actual item-to-criterion/strand coverage and must not claim complete programme-wide skill coverage.
 
 ## 4. Founder-approved assessment blueprint
 
-**Approved planning envelope:** 90 learner-minutes, split into two 45-minute sittings to reduce fatigue. This is the approved blueprint structure; pilot validation must still confirm timing, accessibility and evidence sufficiency before implementation.
+**Revised PA planning envelope:** 80 learner-minutes, split into Sitting 1 (35 minutes) and Sitting 2 (45 minutes). This replaces the original 90-minute/two-equal-sitting planning envelope for the PA; pilot validation must still confirm timing, accessibility and evidence sufficiency.
 
 | Part | Approx. time | Proposed task / evidence | Main skill and criterion coverage |
 |---|---:|---|---|
 | Sitting 1 — Part 1. Read and view | 25 min | Two short, contrasting stimuli (one literary and one non-literary/multimodal); selected-response and short constructed-response prompts. | Reading, viewing; A1–A7, with B/D evidence where observable |
-| Sitting 1 — Part 2. Listen | 10 min | One short, clearly recorded spoken stimulus; selected and brief constructed responses on meaning, inference, purpose and tone. | Listening; A1–A4 |
 | Sitting 1 — Part 3. Language in context | 10 min | Short, context-rich tasks sampling vocabulary, sentence meaning, grammar, punctuation and register without turning the diagnostic into a decontextualised grammar drill. | D1–D4; supporting A and B |
 | Sitting 2 — Part 4. Analytical writing | 20 min | A focused response analysing an unseen text or paired text features, requiring claims, evidence, explanation and coherent structure. | Writing; A, B and D |
 | Sitting 2 — Part 5. Creative / purposeful production | 15 min | A fresh short text based on an original prompt or rights-cleared visual/text stimulus; learner chooses from a small set of age-appropriate forms. | Writing; B, C and D |
 | Sitting 2 — Part 6. Speaking / presenting | 10 min | Brief preparation, a 2–3 minute oral response and a short follow-up prompt; assess delivery and audience awareness. | Speaking, presenting; B, C and D |
 
-**Total planned time:** 90 minutes across two 45-minute sittings. Sitting 1 = 25 + 10 + 10 minutes; Sitting 2 = 20 + 15 + 10 minutes. Do not silently increase timed task demands to fill the envelope.
+**Total planned PA time:** 80 minutes. Sitting 1 = 25 + 10 = 35 minutes; Sitting 2 = 20 + 15 + 10 = 45 minutes. Do not silently increase timed task demands to fill the envelope.
 
 ### Proposed stimulus and task balance
 
 - Include at least one literary and one non-literary text; choose unfamiliar but age-appropriate contexts and avoid requiring specialist background knowledge.
 - Use a visual/multimodal stimulus only after copyright/licence and accessibility checks are completed before selection. A project-original visual is preferred where it meets the task purpose.
-- Listening audio must be original or appropriately licensed, intelligible and quality-checked; provide documented access arrangements without unintentionally changing the construct being measured.
+- Do not place a standalone Listening task in the PA. Listening is reserved for M3/SA3 after the completed unit set, and only if the exact official course route directly maps the skill. Apply the separate asset, accessibility, timing and academic review gates at that stage.
 - Avoid basing several items on one narrow skill or one stimulus. Each high-impact skill judgement should draw on more than one observable response where feasible.
 - Do not reuse existing curriculum-unit passages, questions or model answers as diagnostic items. This is a separate pre-curriculum readiness assessment.
 - Keep original passage bodies within the project's existing 250-word rule; longer excerpts must follow the approved public-domain source protocol. Do not assume a visual/audio asset is rights-cleared merely because the text is original.
@@ -106,7 +105,6 @@ All six skill areas must receive observable evidence. A written multiple-choice 
 The following is a draft coverage target for blueprint development, not a final item count:
 
 - Reading/viewing: approximately 8–10 scored observations across selected response and short constructed response.
-- Listening: approximately 4–5 scored observations, including at least one inference/purpose item.
 - Language in context: approximately 4–5 scored observations embedded in meaningful sentences and short texts.
 - Analytical writing: one extended constructed response scored across analysis, organisation and language evidence.
 - Creative/purposeful writing: one constructed response scored across production, organisation and language evidence.
@@ -143,11 +141,11 @@ The future teacher/editor pack must include, for each improvement area: diagnost
 
 ## 9. Approval status and next gate
 
-The Founder approved the taxonomy and high-level blueprint on 1 November 2026, including all 23 proposed subskills, the six MYP skill areas, four criterion-aligned profiles and the 90-minute/two-sitting task structure. This approval does not make the GradiPrep taxonomy an official IB Year 4 descriptor set; the Year 4 progression caveat in Section 1 remains binding.
+The Founder approved the original taxonomy and six-skill-area / 90-minute blueprint on 1 November 2026. That original timing and separate Listening PA segment are historical and have been superseded by this v0.3 PA scope correction. The 23 GradiPrep subskills remain internal taxonomy labels, not official IB codes. The Year 4 progression caveat in Section 1 remains binding.
 
-The detailed task-level item map and scoring specification is recorded in docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md v0.1 and was approved by the Founder on 2 November 2026. Actual item wording, stimulus authoring, answer keys, distractors, model responses, final rubric anchors and scoring calibration are sequenced after the approved flagship PDF-response/grading/timer feature is implemented and pilot-validated. Code implementation and learner release remain separate approval gates.
+The revised PA task-level item map is `docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md` v0.2. It contains 30 planned evidence observations across Read & View (10), Language in Context (5), Analytical Writing (5), Creative / Purposeful Production (5) and Speaking / Presenting (5). The standalone Listening segment is deferred to M3/SA3, never PA, SA1 or SA2. Each item requires a direct official MYP criterion/strand mapping, subject to human verification of current Year 4 expectations.
 
-The detailed map must preserve the proposed two 45-minute sittings, all six MYP skill areas and all four criterion profiles. It must not imply official IB grades, create unsupported score thresholds, use provider rankings in learner-facing data, or relax the existing rights, accessibility, human-review or release controls. No student-facing diagnostic, report UI, remedial lessons, integration, merge or release is authorised by approval of the taxonomy/blueprint alone.
+The PA map must preserve the revised 80-minute/two-sitting envelope, the four MYP criterion profiles and only directly mapped PA task types. It does not need to test all six broad skill areas. The MYP strand mapping must be explicit in the item map and PA Evaluation Report; internal A1–D6 labels must never be presented as official IB codes. Listening belongs only in M3/SA3 after direct route-specific mapping and unit completion. No unsupported IB grade, cut score or conversion is authorised.
 
 
 **Founder decision update — 2 November 2026:** The detailed MYP Year 4 item map/scoring specification is approved. The flagship PDF-response, teacher-grading and timed-analytics plan is now the active platform prerequisite before actual diagnostic item authoring. No existing task content or application code was changed by this approval.
