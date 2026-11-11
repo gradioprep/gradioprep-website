@@ -109,7 +109,7 @@ test.describe("public website copy rules", () => {
 
   test("Evaluation Report screen requires the submitting learner to sign in", async ({ page }) => {
     await page.goto("/assessment");
-    await expect(page.getByRole("heading", { name: "Your Evaluation Report." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Your Evaluation Report.", exact: true })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Sign in to view your Evaluation Report." })).toBeVisible();
     await expect(page.getByText(/not final rubric|placeholder criterion|illustrative excerpts/i)).toHaveCount(0);
   });
