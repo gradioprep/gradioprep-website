@@ -80,7 +80,7 @@ BEGIN
          unit.release_state, outcome.mapping_status, outcome.reviewed_by, outcome.reviewed_at,
          (observation.group_code = 'L')
     INTO selected_pathway, route_key, route_state, unit_route_id, unit_state,
-         outcome_state, outcome_reviewer, outcome_reviewed_at, listening_outcome
+         outcome_state, outcome_reviewer, outcome_reviewed_at, listening_observation
   FROM public.diagnostic_versions AS diagnostic
   JOIN public.curriculum_route_versions AS route ON route.id = NEW.route_version_id
   JOIN public.curriculum_unit_versions AS unit ON unit.id = NEW.curriculum_unit_version_id
