@@ -10,6 +10,8 @@ const publicRoutes = [
   "/pathways/ib-myp/language-and-literature/year-1/units/unit-1/lesson",
   "/pathways/cambridge-lower-secondary/english",
   "/pathways/cambridge-igcse/first-language-english",
+  "/pathways/cambridge-igcse/first-language-english/grade-9-equivalent-band",
+  "/pathways/cambridge-igcse/first-language-english/grade-10-equivalent-band",
   "/questions",
   "/assessment",
   "/account",
@@ -42,6 +44,14 @@ const internalCopyPatterns = [
   /internal review/i,
   /editor note/i,
   /development environment/i,
+  /approval confirmed by project owner/i,
+  /academic (?:content )?review (?:passed|pending|complete)/i,
+  /candidate(?:[- ]unverified)? (?:year|objective|mapping|strand)/i,
+  /internal (?:comment|note|review|status)/i,
+  /test (?:environment|account|data)/i,
+  /synthetic (?:student|learner|test) (?:account|data)/i,
+  /development (?:environment|status)/i,
+  /release (?:status|gate|candidate)/i,
 ];
 
 test.describe("public website copy rules", () => {
@@ -108,6 +118,14 @@ test.describe("public website copy rules", () => {
       /verify programme documents and approve unit sequence before release/i,
       /Do not claim official curriculum mapping or release/i,
       /remainingReleaseChecks/i,
+      /Academic lead \(approval confirmed by project owner/i,
+      /sourceScopeNote/i,
+      /sourceBriefUrl/i,
+      /officialObjectiveCodes/i,
+      /candidateObjectiveMappings/i,
+      /reviewerLabel/i,
+      /unitContentPlans/i,
+      /getUnitReadinessGates/i,
     ];
     for (const pattern of internalPatterns) {
       expect(bundleText, `internal metadata ${pattern} must not be shipped in learner assets`).not.toMatch(pattern);
