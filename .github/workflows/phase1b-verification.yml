@@ -61,6 +61,7 @@ jobs:
       - name: Reset local database and load synthetic fixtures
         run: npx supabase db reset --local
 
+      # Includes the PA scope regression: no Listening observations are enabled or writable in the PA.
       - name: Run PostgreSQL Row Level Security tests
         run: npx supabase test db --local
 
