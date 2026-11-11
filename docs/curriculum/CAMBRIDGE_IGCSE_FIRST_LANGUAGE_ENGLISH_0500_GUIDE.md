@@ -196,3 +196,12 @@ The platform should create original texts and original questions. Do not copy or
 - Verified product-market fit: 2/5 — teaching proposition remains untested with local learners/families.
 
 **Current status:** A syllabus-sensitive 0500 guide is drafted for exams 2027–2029. Confirm the exact candidate route and verify every task against the current syllabus/specimen before creating scored mocks or making grade predictions.
+
+
+## 9. Binding PA/SA mapping and Speaking/Listening route control — 11 November 2026
+
+Apply `docs/ASSESSMENT_CURRICULUM_MAPPING_AND_MILESTONE_STANDARD.md` to every PA/SA and report item. For 0500, map each question and skill claim to the applicable 2027–2029 (or candidate-specific current) official assessment objective and the candidate's confirmed examination series/component route. Record the official source/version, AO, paper/component, task type, response evidence and reviewer. Do not treat a broad programme skill or a common 0500 task format as sufficient evidence of direct mapping.
+
+The official 0500 syllabus separates AO1 Reading, AO2 Writing and AO3 Speaking and Listening. Component 4 Speaking and Listening is optional and separately endorsed. Confirm the candidate's route before creating any AO3 task; do not add a Listening section to a learner whose selected route does not include it. For GradioPrep's product sequence, Listening is excluded from PA, SA1 and SA2; it may be included in SA3 only where that exact learner route includes and directly maps the relevant AO3/listening outcome and the M3 units teach it. Do not assume that the IB MYP M3 rule transfers mechanically to 0500; retain exact syllabus/route specificity.
+
+Milestone means the set of units completed in the segment; SA1/SA2/SA3 assess only their matching unit sets. Each segment has its own versioned Evaluation Report in analytics with explicit AO/item mapping and evidence. The Overall Progress Tracker is a separate cumulative view linking to segment reports. Unmapped or route-inapplicable tasks are excluded.
