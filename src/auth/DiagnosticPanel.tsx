@@ -11,8 +11,6 @@ type ResponseValue = {
 
 type DiagnosticResponseMap = Record<string, ResponseValue>;
 
-const listeningAudioUrl = "https://voa-audio.voanews.eu/vle/2016/03/17/f6b24592-2626-4dd4-9250-718b8fc96d8f.mp3?download=1";
-
 interface StartedDiagnostic {
   diagnostic: { diagnostic_code: string; title: string; version: number; total_minutes: number; sitting_count: number };
   attempt: { id: string; status: "in_progress" | "submitted" | "withdrawn"; is_replay: boolean };
@@ -129,16 +127,10 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         Array.isArray(rv01.b) && rv01.b.length === 2 && new Set(rv01.b).size === 2) {
       output.push({ code: "RV01", response: { a: rv01.a, b: rv01.b } });
     }
-    const listening01 = current("L01");
-    if (listening01.a && ["A", "B", "C", "D"].includes(listening01.a) &&
-        Array.isArray(listening01.b) && listening01.b.length === 2 &&
-        new Set(listening01.b).size === 2 && listening01.b.every(value => ["A", "B", "C", "D"].includes(value))) {
-      output.push({ code: "L01", response: { a: listening01.a, b: listening01.b } });
-    }
-    for (const code of ["RV02", "RV03", "RV06", "RV07a", "RV07b", "L02", "L04", "L05"]) {
+    for (const code of ["RV02", "RV03", "RV06", "RV07a", "RV07b"]) {
       if (nonEmpty(current(code).text)) output.push({ code, response: { text: current(code).text } });
     }
-    for (const code of ["RV04", "RV05", "L03", "LC01", "LC02", "LC03", "LC04"]) {
+    for (const code of ["RV04", "RV05", "LC01", "LC02", "LC03", "LC04"]) {
       if (current(code).choice && ["A", "B", "C", "D"].includes(current(code).choice!)) {
         output.push({ code, response: { choice: current(code).choice } });
       }
@@ -159,7 +151,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
   }
 
   const savedCodes = payloads().map(item => item.code);
-  const complete = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "L01", "L02", "L03", "L04", "L05", "LC01", "LC02", "LC03", "LC04", "LC05"]
+  const complete = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "LC01", "LC02", "LC03", "LC04", "LC05"]
     .every(code => savedCodes.includes(code));
 
   async function startOrResume() {
@@ -182,7 +174,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       }
       setResponses(restored);
       setMessage(result.attempt.status === "submitted"
-        ? "Your Read & View, Listening and Language in Context evidence was submitted. This section is now read-only."
+        ? "Your Preliminary Assessment responses were submitted. This section is now read-only."
         : result.attempt.is_replay ? "Your saved Diagnostic section has been restored." : "Your Diagnostic section has started.");
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The Diagnostic could not be opened.");
@@ -252,7 +244,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         throw new Error(result.error ?? "The Diagnostic could not be submitted.");
       }
       setAttemptStatus("submitted");
-      setMessage("Your Read & View, Listening and Language in Context evidence has been submitted. These responses are now read-only.");
+      setMessage("Your Preliminary Assessment responses have been submitted. These responses are now read-only.");
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The Diagnostic could not be submitted.");
     } finally {
@@ -267,24 +259,24 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
     <div className="proto-panel-heading proto-diagnostic-heading">
       <div>
         <p className="proto-eyebrow"><span />CYCLE 1 · IB MYP YEAR 4 / GRADE 9</p>
-        <h2 id="proto-diagnostic-heading">Diagnostic assessment</h2>
-        <p>Read & View + Listening + Language in Context · initial delivery slice</p>
+        <h2 id="proto-diagnostic-heading">Preliminary Assessment</h2>
+        <p>Read & View + Language in Context · initial PA delivery slice</p>
       </div>
       <span className="proto-account-status">{attemptStatus === "submitted" ? "Submitted" : attemptStatus === "in_progress" ? "In progress" : "Not started"}</span>
     </div>
 
     {attemptStatus === "not_started" ? <div className="proto-diagnostic-intro">
-      <p>This build contains the Read & View, Listening and Language in Context tasks from Sitting 1. Start or continue your saved attempt to answer the twenty enabled observations.</p>
+      <p>This build contains the Read & View and Language in Context tasks from Sitting 1. Start or continue your saved attempt to answer the fifteen enabled observations.</p>
       <p>Analytical Writing, Creative / Purposeful Production and Speaking / Presenting are not included in this implementation slice. No marks, score or Evaluation Report are generated here.</p>
       <button className="proto-action" type="button" onClick={() => void startOrResume()} disabled={loading}>
         {loading ? "Opening assessment…" : "Start / continue Diagnostic"}
       </button>
     </div> : <>
       <div className="proto-diagnostic-notice" role="note">
-        <strong>{readOnly ? "Current section submitted" : "Read & View + Listening + Language in Context only"}</strong>
+        <strong>{readOnly ? "Current section submitted" : "Read & View + Language in Context only"}</strong>
         <span>{readOnly
           ? "Your submitted responses are displayed without scores or marking feedback."
-          : "This is a partial, unscored Diagnostic implementation. Analytical Writing, Creative / Purposeful Production and Speaking / Presenting are not included yet. Your work is saved when you choose Save progress or Submit."}</span>
+          : "This is a partial, unscored Preliminary Assessment implementation. Analytical Writing, Creative / Purposeful Production and Speaking / Presenting are not included yet. Your work is saved when you choose Save progress or Submit."}</span>
       </div>
 
       <div className="proto-diagnostic-stimulus">
@@ -451,88 +443,6 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       </div>
 
 
-      <div className="proto-diagnostic-stimulus proto-diagnostic-listening" aria-labelledby="diagnostic-listening-heading">
-        <h3 id="diagnostic-listening-heading">Listening · Solar Powered Library Helps Remote Students</h3>
-        <p>Listen to the complete report (4 minutes 10 seconds). The transcript is not displayed during this assessment.</p>
-        <audio
-          data-testid="diagnostic-listening-audio"
-          aria-label="VOA Learning English: Solar Powered Library Helps Remote Students"
-          src={listeningAudioUrl}
-          controls
-          preload="none"
-          style={{ width: "100%" }}
-        >
-          Your browser does not support audio playback. <a href={listeningAudioUrl}>Open the audio recording</a>.
-        </audio>
-        <p className="proto-diagnostic-attribution">Audio: VOA Learning English, “Solar Powered Library Helps Remote Students” (23 March 2016). Original VOA audio reused under its public-domain notice with attribution to Voice of America.</p>
-      </div>
-
-      <div className="proto-diagnostic-question">
-        <h3>L01 · Central message and explicit information</h3>
-        <ChoiceField
-          legend="L01a. Which statement best expresses the report’s central message?"
-          name="l01a"
-          disabled={readOnly}
-          value={current("L01").a ?? ""}
-          onChange={value => update("L01", "a", value as string)}
-          options={textOptions([
-            "SolarSPELL is a solar-powered offline digital library designed to widen access to educational content in remote communities.",
-            "SolarSPELL connects remote communities to the full public internet through satellite service.",
-            "SolarSPELL replaces classroom teachers with online courses.",
-            "SolarSPELL supplies electricity to entire villages.",
-          ])}
-        />
-        <ChoiceField
-          legend="L01b. Select two details that the report gives about the SolarSPELL project."
-          name="l01b"
-          disabled={readOnly}
-          multiple
-          value={current("L01").b ?? []}
-          onChange={value => update("L01", "b", value as string[])}
-          options={textOptions([
-            "The solar-powered unit creates a WiFi hotspot without needing an internet connection.",
-            "The Peace Corps has used about 50 SolarSPELL units.",
-            "Each unit depends on permanent power cables and a live internet connection.",
-            "The units are available only to university students in the United States.",
-          ])}
-        />
-      </div>
-
-      <div className="proto-diagnostic-question">
-        <h3>L02 · Inference and speaker viewpoint</h3>
-        <p>Why does Alexis Cullen worry that communities without internet access may fall further behind? What wider concern about education and participation is she expressing?</p>
-        <TextField label="Your response" guidance="Response guidance: 25–35 words. Ideal target: 30 words; this is guidance, not a limit." value={current("L02").text ?? ""} onChange={value => update("L02", "text", value)} disabled={readOnly} />
-      </div>
-
-      <div className="proto-diagnostic-question">
-        <h3>L03 · Audience, context and purpose</h3>
-        <ChoiceField
-          legend="Who is the report’s most likely audience, and what is its main purpose?"
-          name="l03"
-          disabled={readOnly}
-          value={current("L03").choice ?? ""}
-          onChange={value => update("L03", "choice", value as string)}
-          options={textOptions([
-            "General listeners interested in education and technology; to explain an offline-learning initiative while considering its benefits and limits.",
-            "Engineers at the university; to provide a technical construction manual for the device.",
-            "Residents of Naviso; to ask them to purchase a SolarSPELL unit.",
-            "Peace Corps staff; to instruct them to stop using community learning programmes.",
-          ])}
-        />
-      </div>
-
-      <div className="proto-diagnostic-question">
-        <h3>L04 · Spoken language choice and emphasis</h3>
-        <p>Gabriel Krieshok describes a universal approach as a “one size-fits-all solution” and says that it “never works”. Explain how this wording communicates his concern about using the same technology in different communities.</p>
-        <TextField label="Your response" guidance="Response guidance: 25–35 words. Ideal target: 30 words; this is guidance, not a limit." value={current("L04").text ?? ""} onChange={value => update("L04", "text", value)} disabled={readOnly} />
-      </div>
-
-      <div className="proto-diagnostic-question">
-        <h3>L05 · Evaluate a conclusion</h3>
-        <p>A listener concludes: “Because SolarSPELL has helped students in Vanuatu, the same technology will solve the lack of educational access in every remote community.” Is this conclusion fully supported, partly supported or exaggerated? Use evidence from the report and identify one limitation.</p>
-        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("L05").text ?? ""} onChange={value => update("L05", "text", value)} disabled={readOnly} />
-      </div>
-
       <div className="proto-diagnostic-stimulus">
         <h3>Language in Context</h3>
         <p>Use the short original contexts below. Select or edit language in a way that preserves meaning and suits the stated situation.</p>
@@ -638,7 +548,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
             {saving ? "Saving…" : "Save progress"}
           </button>
           <button className="proto-action" type="button" onClick={() => void submitDiagnostic()} disabled={buttonDisabled || !complete}>
-            {saving ? "Please wait…" : "Submit Diagnostic section"}
+            {saving ? "Please wait…" : "Submit Preliminary Assessment section"}
           </button>
         </>}
       </div>
