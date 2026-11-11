@@ -107,6 +107,10 @@ Reports are immutable/versioned snapshots of the content, mapping and assessment
 
 The Overall Progress Tracker is a separate longitudinal view. It shows cumulative progress through Milestones 1–3 and the units within them, with links to each segment's separate Evaluation Report. It is not a substitute for the report and must not collapse three segment assessments into an unsupported single board grade. Any cumulative summary must identify its method, evidence scope and limitations.
 
+### 6.1 Current record-reuse finding — 11 November 2026
+
+The read-only physical-record audit is recorded in `docs/DATA_MODEL.md` §6.23. Existing versioned rubric, task-level assessment/submission, criterion-result, published-feedback and private analytics records are reusable as evidence inputs. The inspected migrations do not provide persisted curriculum-unit membership/progression or composite segment Evaluation Report snapshots. Do not treat the static frontend pathway slots as learner progression records. Before adding schema, lock exact board/course/session/syllabus routes and approved unit sets; then add only the missing versioned milestone/unit-set and report relations. Preserve separate PA/SA segment reports and the longitudinal Overall Progress Tracker.
+
 ## 7. Release gates and enforcement
 
 An assessment cannot be marked ready until:
