@@ -274,8 +274,8 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
     </div>
 
     {attemptStatus === "not_started" ? <div className="proto-diagnostic-intro">
-      <p>This build contains the Read & View and Language in Context tasks from Sitting 1. Start or continue your saved attempt to answer the twenty enabled observations.</p>
-      <p>Listening and the remaining task groups are not included in this implementation slice. No marks, score or Evaluation Report are generated here.</p>
+      <p>This build contains the Read & View, Listening and Language in Context tasks from Sitting 1. Start or continue your saved attempt to answer the twenty enabled observations.</p>
+      <p>Analytical Writing, Creative / Purposeful Production and Speaking / Presenting are not included in this implementation slice. No marks, score or Evaluation Report are generated here.</p>
       <button className="proto-action" type="button" onClick={() => void startOrResume()} disabled={loading}>
         {loading ? "Opening assessment…" : "Start / continue Diagnostic"}
       </button>
@@ -453,17 +453,18 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
 
       <div className="proto-diagnostic-stimulus proto-diagnostic-listening" aria-labelledby="diagnostic-listening-heading">
         <h3 id="diagnostic-listening-heading">Listening · Solar Powered Library Helps Remote Students</h3>
-        <p>Listen to the complete VOA Learning English report (4 minutes 10 seconds). The report includes narration and interview excerpts from people involved in the SolarSPELL project.</p>
+        <p>Listen to the complete report (4 minutes 10 seconds). The transcript is not displayed during this assessment.</p>
         <audio
           data-testid="diagnostic-listening-audio"
           aria-label="VOA Learning English: Solar Powered Library Helps Remote Students"
           src={listeningAudioUrl}
           controls
           preload="none"
+          style={{ width: "100%" }}
         >
           Your browser does not support audio playback. <a href={listeningAudioUrl}>Open the audio recording</a>.
         </audio>
-        <p className="proto-diagnostic-attribution">Audio: Voice of America Learning English, “Solar Powered Library Helps Remote Students” (23 March 2016). Public-domain VOA Learning English MP3; reused with credit to learningenglish.voanews.com. <a href="https://learningenglish.voanews.com/a/solar-powered-library-helps-remote-students/3240836.html" target="_blank" rel="noreferrer">Original source and transcript</a>.</p>
+        <p className="proto-diagnostic-attribution">Audio: VOA Learning English, “Solar Powered Library Helps Remote Students” (23 March 2016). Original VOA audio reused under its public-domain notice with attribution to Voice of America.</p>
       </div>
 
       <div className="proto-diagnostic-question">
@@ -490,7 +491,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
           onChange={value => update("L01", "b", value as string[])}
           options={textOptions([
             "The solar-powered unit creates a WiFi hotspot without needing an internet connection.",
-            "The Peace Corps has used about 50 units, and one unit in Naviso had been used by about 200 students.",
+            "The Peace Corps has used about 50 SolarSPELL units.",
             "Each unit depends on permanent power cables and a live internet connection.",
             "The units are available only to university students in the United States.",
           ])}
