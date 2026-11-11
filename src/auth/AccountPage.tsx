@@ -214,7 +214,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
         }
         const confirmationRequired = await auth.signUp(displayName, email, password, staffInviteToken || undefined);
         setMessage(confirmationRequired
-          ? "Account created. Check the local test inbox for the confirmation message, then return here to sign in."
+          ? "Account created. Check your email for the confirmation message, then return here to sign in."
           : "Account created. Your default Student access is ready.");
       } else {
         await auth.signIn(email, password);
@@ -235,7 +235,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
     try {
       await auth.requestPasswordReset(email);
       // Keep the response identical for known and unknown addresses.
-      setMessage("If an account matches that email address, a recovery link has been sent to the local test inbox.");
+      setMessage("If an account matches that email address, a password recovery link has been sent.");
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "We could not request a password reset.");
     } finally {
@@ -490,16 +490,16 @@ export default function AccountPage({ go }: { go: Navigate }) {
 
   return <div className="proto-account-page">
     <div className="proto-account-intro">
-      <p className="proto-eyebrow"><span />SECURE ACCOUNT FOUNDATION · PHASE 1B</p>
+      <p className="proto-eyebrow"><span />YOUR ACCOUNT</p>
       <h1>Your account, <em>with care.</em></h1>
-      <p>Sign in to view your account profile. This early build uses a local synthetic database; it is not connected to the official live website or real learner records.</p>
+      <p>Sign in to view your account profile and manage your learning information.</p>
     </div>
 
     {!auth.configured ? <section className="proto-panel proto-account-card">
       <span className="proto-account-icon">i</span>
-      <h2>Account sign-in is not connected on this public preview.</h2>
-      <p>This is an intentional safety state. The public preview can show the real website interface, while account authentication and permission tests run against the local synthetic database in the development environment.</p>
-      <p>No password or account details should be entered here.</p>
+      <h2>Account access is currently unavailable.</h2>
+      <p>Please return to the homepage and try again later.</p>
+      <p></p>
       <button className="proto-action secondary" type="button" onClick={() => go("home")}>← Back to homepage</button>
     </section> : auth.loading ? <section className="proto-panel proto-account-card" role="status">Checking your sign-in status…</section> : auth.session && auth.mfaLoading ? <section className="proto-panel proto-account-card" role="status">Checking account security…</section> : auth.session && auth.mfaStatusError ? <section className="proto-panel proto-account-card">
       <h2>Account security is unavailable.</h2>
@@ -598,7 +598,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
         {auth.mfaCurrentLevel !== "aal2"
           ? <p>Verify your authenticator app before creating, viewing or revoking staff invitations.</p>
           : <>
-            <p>Invite an existing team member as a Grader or Admin. Each link is single-use, expires after seven days and must be accepted with the matching verified email and authenticator check. This local build does not send email.</p>
+            <p>Invite an existing team member as a Grader or Admin. Each link is single-use, expires after seven days and must be accepted with the matching verified email and authenticator check. Create a secure invitation link here, then share it directly with the intended team member.</p>
             <form className="proto-account-invite-form" onSubmit={createStaffInvitation}>
               <label>Staff email address
                 <input type="email" autoComplete="off" value={staffInviteEmail} onChange={event => setStaffInviteEmail(event.target.value)} maxLength={320} required />
@@ -617,7 +617,7 @@ export default function AccountPage({ go }: { go: Navigate }) {
               <label htmlFor="proto-staff-invite-url">One-time invitation link</label>
               <input id="proto-staff-invite-url" data-testid="staff-invite-url" type="url" value={newStaffInviteUrl} readOnly onFocus={event => event.currentTarget.select()} />
               <button className="proto-account-toggle" type="button" onClick={() => void copyStaffInvitationLink()}>Copy link</button>
-              <small>Copy and share only with the intended synthetic test account. The token is shown once and is not stored in the database.</small>
+              <small>Share this invitation only with the team member it was created for.</small>
             </div>}
             <div className="proto-account-invitation-list" aria-label="Staff invitation list">
               <h4>Recent invitations</h4>
@@ -668,8 +668,8 @@ export default function AccountPage({ go }: { go: Navigate }) {
       <button className="proto-account-toggle" type="button" onClick={() => { setMode("sign-in"); setError(""); setMessage(""); }}>Back to sign in</button>
     </section> : <section className="proto-panel proto-account-card">
       <div className="proto-account-card-heading">
-        <div><p className="proto-eyebrow"><span />LOCAL AUTHENTICATION</p><h2>{mode === "sign-in" ? "Welcome back." : "Create a student account."}</h2></div>
-        <span className="proto-account-status">Synthetic data</span>
+        <div><p className="proto-eyebrow"><span />ACCOUNT ACCESS</p><h2>{mode === "sign-in" ? "Welcome back." : "Create a student account."}</h2></div>
+        <span className="proto-account-status"></span>
       </div>
       <p className="proto-account-description">New sign-ups receive Student access only. Guardian, Grader, Admin and Owner roles cannot be selected here.</p>
       {staffInviteToken && <p className="proto-account-invitation-note">This is a staff invitation. Sign in or create an account using the invited email address, verify that email, then set up an authenticator app. No staff role is assigned until the server confirms every check.</p>}
@@ -677,17 +677,17 @@ export default function AccountPage({ go }: { go: Navigate }) {
         {mode === "sign-up" && <label>Display name<input autoComplete="name" value={displayName} onChange={event => setDisplayName(event.target.value)} maxLength={80} required minLength={2} /></label>}
         <label>Email address<input type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} required /></label>
         <label>Password<input type="password" autoComplete={mode === "sign-in" ? "current-password" : "new-password"} value={password} onChange={event => setPassword(event.target.value)} minLength={mode === "sign-up" ? 12 : 1} required /></label>
-        {mode === "sign-up" && <small className="proto-account-hint">Use at least 12 characters. This local-only test setup does not send real email.</small>}
+        {mode === "sign-up" && <small className="proto-account-hint">Use at least 12 characters.</small>}
         <button className="proto-action" type="submit" disabled={submitting}>{submitting ? "Please wait…" : mode === "sign-in" ? "Sign in" : "Create account"}</button>
       </form>
       {mode === "sign-in" && <button className="proto-account-toggle" type="button" onClick={() => { setMode("recovery-request"); setError(""); setMessage(""); }}>Forgot password?</button>}
       <button className="proto-account-toggle" type="button" onClick={() => { setMode(mode === "sign-in" ? "sign-up" : "sign-in"); setError(""); setMessage(""); setPassword(""); }}>
-        {mode === "sign-in" ? "New to the local test? Create a synthetic student account." : "Already have a local test account? Sign in."}
+        {mode === "sign-in" ? "New to GradioPrep? Create a student account." : "Already have an account? Sign in."}
       </button>
     </section>}
 
     {error && <p className="proto-account-feedback error" role="alert">{error}</p>}
     {message && <p className="proto-account-feedback success" role="status">{message}</p>}
-    <p className="proto-account-footnote">Prototype security boundary: account access is verified by the server and database. A role label or hidden button in the page is never used as a security check.</p>
+    <p className="proto-account-footnote">Your account access and permissions are protected.</p>
   </div>;
 }

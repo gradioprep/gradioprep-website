@@ -241,12 +241,12 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       );
       const result = await submitted.json() as { attempt?: { status: string }; error?: string };
       if (!submitted.ok || result.attempt?.status !== "submitted") {
-        throw new Error(result.error ?? "The Diagnostic could not be submitted.");
+        throw new Error(result.error ?? "The Preliminary Assessment could not be submitted.");
       }
       setAttemptStatus("submitted");
       setMessage("Your Preliminary Assessment responses have been submitted. These responses are now read-only.");
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "The Diagnostic could not be submitted.");
+      setError(requestError instanceof Error ? requestError.message : "The Preliminary Assessment could not be submitted.");
     } finally {
       setSaving(false);
     }
@@ -258,25 +258,25 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
   return <section className="proto-panel proto-diagnostic" aria-labelledby="proto-diagnostic-heading">
     <div className="proto-panel-heading proto-diagnostic-heading">
       <div>
-        <p className="proto-eyebrow"><span />CYCLE 1 · IB MYP YEAR 4 / GRADE 9</p>
+        <p className="proto-eyebrow"><span />IB MYP YEAR 4 · GRADE 9</p>
         <h2 id="proto-diagnostic-heading">Preliminary Assessment</h2>
-        <p>Read & View + Language in Context · initial PA delivery slice</p>
+        <p>Reading comprehension and language use</p>
       </div>
       <span className="proto-account-status">{attemptStatus === "submitted" ? "Submitted" : attemptStatus === "in_progress" ? "In progress" : "Not started"}</span>
     </div>
 
     {attemptStatus === "not_started" ? <div className="proto-diagnostic-intro">
-      <p>This build contains the Read & View and Language in Context tasks from Sitting 1. Start or continue your saved attempt to answer the fifteen enabled observations.</p>
-      <p>Analytical Writing, Creative / Purposeful Production and Speaking / Presenting are not included in this implementation slice. No marks, score or Evaluation Report are generated here.</p>
+      <p>This section explores how you interpret texts, use evidence and make language choices. Start or continue your saved attempt.</p>
+      <p>Your responses are saved with your assessment. Your Evaluation Report will be available after the assessment is complete.</p>
       <button className="proto-action" type="button" onClick={() => void startOrResume()} disabled={loading}>
-        {loading ? "Opening assessment…" : "Start / continue Diagnostic"}
+        {loading ? "Opening assessment…" : "Start / continue Preliminary Assessment"}
       </button>
     </div> : <>
       <div className="proto-diagnostic-notice" role="note">
-        <strong>{readOnly ? "Current section submitted" : "Read & View + Language in Context only"}</strong>
+        <strong>{readOnly ? "Current section submitted" : "Reading and language tasks"}</strong>
         <span>{readOnly
           ? "Your submitted responses are displayed without scores or marking feedback."
-          : "This is a partial, unscored Preliminary Assessment implementation. Analytical Writing, Creative / Purposeful Production and Speaking / Presenting are not included yet. Your work is saved when you choose Save progress or Submit."}</span>
+          : "Your responses are saved when you choose Save progress. Submit when you have completed this section."}</span>
       </div>
 
       <div className="proto-diagnostic-stimulus">
@@ -542,7 +542,7 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
       </div>
 
       <div className="proto-diagnostic-footer">
-        <p>{savedCodes.length} of 20 observations have response-ready answers. Response guidance is not a hard word limit.</p>
+        <p>{savedCodes.length} of 15 questions have response-ready answers. Response guidance is not a hard word limit.</p>
         {!readOnly && <>
           <button className="proto-action secondary" type="button" onClick={() => void saveAll()} disabled={buttonDisabled || savedCodes.length === 0}>
             {saving ? "Saving…" : "Save progress"}

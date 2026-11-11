@@ -11,7 +11,7 @@ const directRouteChecks: Array<{ path: string; heading: RegExp }> = [
     heading: /Language and Literature pathway/i,
   },
   { path: ibYearOne, heading: /Year 1 learning plan/i },
-  { path: ibUnitOne, heading: /How writers shape meaning.*pilot preview/i },
+  { path: ibUnitOne, heading: /How writers shape meaning/i },
   { path: pilotLesson, heading: /Notice the choice\. Explain the effect\./i },
   {
     path: "/pathways/cambridge-igcse/first-language-english/grade-9-equivalent-band",
@@ -58,15 +58,15 @@ test.describe("curriculum pathway URLs", () => {
 
     await page.getByRole("button", { name: /Continue to Unit 1/ }).click();
     await expect(page).toHaveURL(new RegExp(`${ibUnitOne}$`));
-    await expect(page.getByRole("heading", { name: /How writers shape meaning.*pilot preview/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /How writers shape meaning/i })).toBeVisible();
 
-    await page.getByRole("button", { name: /Continue to pilot lesson preview/ }).click();
+    await page.getByRole("button", { name: /Continue to Lesson/ }).click();
     await expect(page).toHaveURL(new RegExp(`${pilotLesson}$`));
     await expect(page.getByRole("heading", { name: /Notice the choice\. Explain the effect\./i })).toBeVisible();
 
     await page.goBack();
     await expect(page).toHaveURL(new RegExp(`${ibUnitOne}$`));
-    await expect(page.getByRole("heading", { name: /How writers shape meaning.*pilot preview/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /How writers shape meaning/i })).toBeVisible();
 
     await page.goBack();
     await expect(page).toHaveURL(new RegExp(`${ibYearOne}$`));
@@ -111,18 +111,18 @@ test.describe("curriculum pathway URLs", () => {
     await page.getByRole("button", { name: /Continue to Unit 2/ }).click();
     await page.getByRole("button", { name: /Continue to Unit 3/ }).click();
     await expect(page).toHaveURL(new RegExp(`${unitThree}$`));
-    await expect(page.getByText("No further unit is planned")).toBeVisible();
-    await expect(page.getByText(/There are no additional unit slots/)).toBeVisible();
+    await expect(page.getByText("Next learning step")).toBeVisible();
+    await expect(page.getByText(/Your next learning activity will appear here/)).toBeVisible();
 
     await page.getByRole("button", { name: /Back to Unit 2/ }).click();
     await expect(page).toHaveURL(new RegExp(`${unitTwo}$`));
   });
 
-  test("IGCSE offers a clear back button but never links to an unverified level", async ({ page }) => {
+  test("IGCSE offers a clear back button and learner-friendly level guidance", async ({ page }) => {
     await page.goto("/pathways/cambridge-igcse/first-language-english");
     await expect(page.getByRole("button", { name: /Back to Pathways catalogue/ })).toBeVisible();
-    await expect(page.getByText("Levels are not available yet")).toBeVisible();
-    await expect(page.getByText(/applicable IGCSE syllabus edition and level structure must be confirmed/)).toBeVisible();
+    await expect(page.getByText("Your level choices will appear here.")).toBeVisible();
+    await expect(page.getByRole("button", { name: /Choose another pathway/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Continue to/ })).toHaveCount(0);
   });
 

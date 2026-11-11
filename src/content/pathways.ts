@@ -14,7 +14,7 @@ function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
       id: `${pathwayId}-u${sequence}`,
       pathwayId,
       sequence,
-      title: isPilotPreview ? "Pilot preview — How writers shape meaning" : "Unit focus to be confirmed",
+      title: isPilotPreview ? "How writers shape meaning" : "Your next unit is being prepared",
       learningObjective: null,
       officialObjectiveCodes: [],
       mappingStatus: "unverified",

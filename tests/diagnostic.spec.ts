@@ -30,7 +30,7 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     const startedResponsePromise = page.waitForResponse(response =>
       new URL(response.url()).pathname === startPath && response.request().method() === "POST",
     );
-    await page.getByRole("button", { name: "Start / continue Diagnostic" }).click();
+    await page.getByRole("button", { name: "Start / continue Preliminary Assessment" }).click();
     const started = await startedResponsePromise;
     const startedBody = await started.json() as {
       diagnostic: { diagnostic_code: string; version: number };
@@ -39,7 +39,7 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     };
     expect(started.status(), JSON.stringify(startedBody)).toBe(201);
     await expect(page.getByRole("heading", { name: "Stimulus A · The Repair Table", exact: true })).toBeVisible();
-    await expect(page.getByText("Read & View + Language in Context only", { exact: true })).toBeVisible();
+    await expect(page.getByText("Reading and language tasks", { exact: true })).toBeVisible();
     expect(startedBody.diagnostic).toMatchObject({ diagnostic_code: "ib-myp-g9-cycle1", version: 1 });
     expect(startedBody.attempt.status).toBe("in_progress");
     expect(startedBody.attempt.is_replay).toBe(false);
@@ -127,7 +127,7 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     // Reload and resume the submitted attempt to verify the learner UI restores it read-only.
     await page.reload();
     await expect(page.getByRole("heading", { name: "Synthetic Student A", exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "Start / continue Diagnostic" }).click();
+    await page.getByRole("button", { name: "Start / continue Preliminary Assessment" }).click();
     await expect(page.getByRole("heading", { name: "Stimulus A · The Repair Table", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Submit Preliminary Assessment section" })).toHaveCount(0);
     await expect(page.locator('input[type="radio"]').first()).toBeDisabled();

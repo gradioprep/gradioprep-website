@@ -115,7 +115,7 @@ test.describe("Phase 1B account foundation", () => {
 
     await page.goto("/account");
     await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible();
-    await page.getByRole("button", { name: /create a synthetic student account/i }).click();
+    await page.getByRole("button", { name: /create a student account/i }).click();
     await expect(page.getByRole("heading", { name: /create a student account/i })).toBeVisible();
 
     const uniqueEmail = `phase1b-${crypto.randomUUID()}@example.invalid`;

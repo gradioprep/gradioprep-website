@@ -170,5 +170,5 @@ export const pilotLearnerLesson: PilotLearnerLesson = {
     "Review vocabulary, reading load and age/level fit again before formal course release.",
   ],
   learnerNote:
-    "Academic content review passed for this preview. Curriculum mapping is still unverified. Responses only exist in this open preview; they are not saved to an account, graded, or sent anywhere.",
+    "Your responses on this page are not saved. Keep a copy of any work you wish to revisit.",
 };
