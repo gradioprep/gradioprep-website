@@ -422,7 +422,7 @@ The current synthetic attempt covers 15 enabled observations: ten Read & View (R
 
 The UI explicitly states that only Read & View and Language in Context are included. No scores, marks, answer-key access, automated grading, AI output, Evaluation Report or learner release are enabled. The published version used by CI is a synthetic fixture to test the enrollment/RLS route, not a real learner release.
 
-**Next gate:** produce the approved Listening script as a standardised human recording and complete human review of sound quality, intelligibility, pace, marked delivery cues and learner suitability before implementing L01–L05 capture. Do not substitute the script or a plain transcript for a scored Listening stimulus; provide a transcript only for an approved access arrangement. The rest of the 35-observation Diagnostic, calibration, accessibility/timing administration, scoring/confidence, Evaluation Report, full-cycle QA, branded staging and pilot gates remain open. Cycle 2 Cambridge Grade 6 remains blocked.
+**Historical next gate as of 10 November 2026:** produce a standardised human recording and complete human quality review before implementing L01–L05. This recording-only requirement was superseded by the open-licence-first source and capture candidate in Section 27. Do not substitute the script or a plain transcript for a scored Listening stimulus; provide a transcript only for an approved access arrangement. The rest of the 35-observation Diagnostic, calibration, accessibility/timing administration, scoring/confidence, Evaluation Report, full-cycle QA, branded staging and pilot gates remain open. Cycle 2 Cambridge Grade 6 remains blocked.
 
 
 ## 27. Open-licence Listening source and secure capture candidate — 11 November 2026
