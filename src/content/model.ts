@@ -210,43 +210,13 @@ export interface PilotUnitDraft {
   releaseNote: string;
 }
 
-/** Non-answer review metadata safe to show in the public prototype. */
+/** Learner-facing pathway summary data only. */
 export interface PilotReviewSummary {
   id: string;
   unitId: string;
   title: string;
   proposedFocus: string;
   proposedLearningObjective: string;
-  mappingStatus: "unverified";
-  officialObjectiveCodes: string[];
-  reviewRecord: {
-    outcome: "passed";
-    reviewedAt: string;
-    reviewerLabel: string;
-    scopeNote: string;
-  };
-  source: {
-    title: string;
-    url: string;
-    subjectBriefUrl: string;
-    checkedAt: string;
-    scopeNote: string;
-  };
-  candidateGuide: {
-    title: string;
-    url: string;
-    checkedAt: string;
-    accessNote: string;
-  };
-  candidateObjectiveMappings: {
-    criterion: "A — Analysing";
-    strand: "A(ii)" | "A(iii)";
-    descriptor: string;
-    state: "candidate-unverified";
-    rationale: string;
-  }[];
-  remainingReleaseChecks: string[];
-  releaseNote: string;
 }
 
 /** One teacher-facing teaching step in an unreleased pilot lesson. */
@@ -328,28 +298,18 @@ export interface PilotLessonPack {
   releaseNote: string;
 }
 
-/** The learner-facing version deliberately excludes answer keys and model answers. */
+/** Learner-facing lesson data only; internal review and release metadata is kept out of the client model. */
 export interface PilotLearnerLesson {
   id: string;
   version: 1;
   unitId: string;
-  status: "approved-for-pilot-preview";
-  reviewRecord: {
-    outcome: "passed";
-    reviewedAt: string;
-    reviewerLabel: string;
-    scopeNote: string;
-  };
   title: string;
   estimatedMinutes: number;
-  audienceNote: string;
   proposedLearningObjective: string;
-  mappingStatus: "unverified";
   successCriteria: string[];
   passage: {
     label: string;
     text: string;
-    rightsNote: string;
   };
   keyIdea: {
     label: string;
@@ -380,8 +340,6 @@ export interface PilotLearnerLesson {
     prompt: string;
     successIndicators: string[];
   };
-  accessibilitySupports: string[];
-  learnerNote: string;
 }
 
 export interface UnitContentPlan {
