@@ -343,7 +343,7 @@ The Founder has reviewed and approved the five Cycle 1 v0.1 learner-content file
 Terminology is explicit: the **Diagnostic** is the assessment the student takes; the **Evaluation Report** is the separate combined output of analytics, AI-generated feedback and the final teacher-generated report after teacher review and approval. The existing cycle order and implementation process are unchanged.
 
 
-## 29. Verified first Diagnostic delivery slice — 10 November 2026
+## 29. Historical first Diagnostic delivery slice — Read & View and Language in Context — 10 November 2026 (superseded by Section 30)
 
 The current PR #22 synthetic implementation has a verified first learner-delivery slice on exact application/test HEAD `12b0a4d47dedb2bd0fc7396cc36824145d437e21`, exact-head CI [#42814204466](https://github.com/gradioprep/gradioprep-website/actions/runs/42814204466). The full run passed **825 SQL assertions across 23 files and 36/36 Playwright tests**, TypeScript/Worker/Vite builds, synthetic database/private-PDF backup and restore, shutdown, credential cleanup and clean credential-free Preview-assets build.
 
