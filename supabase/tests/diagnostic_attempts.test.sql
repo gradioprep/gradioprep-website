@@ -59,7 +59,7 @@ SELECT throws_ok($$SELECT * FROM public.submit_diagnostic_attempt((SELECT attemp
 
 SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'RV01','{"a":"B","b":["A","A"]}'::jsonb)$$,
  '22023','invalid_diagnostic_response','duplicate multiple-choice selections are rejected');
-SELECT throws_ok($SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L01','{"a":"A","b":["A","B"]}'::jsonb)$,
+SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'L01','{"a":"A","b":["A","B"]}'::jsonb)$$,
  '22023','invalid_diagnostic_response','Listening evidence cannot be saved in the Preliminary Assessment');
 SELECT throws_ok($$SELECT * FROM public.save_diagnostic_response((SELECT attempt_id FROM diagnostic_test_state),'LC01','{"choice":"A","extra":"forged"}'::jsonb)$$,
  '22023','invalid_diagnostic_response','LC choice rejects unrecognised response fields');
