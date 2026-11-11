@@ -5,8 +5,8 @@ const learnerEmail = "student.a@example.invalid";
 const learnerPassword = ["Local-only", "GradiPrep", "2026!"].join("-");
 const startPath = "/api/v1/learner/diagnostics/ib-myp-g9-cycle1/start";
 
-test.describe("Cycle 1 Diagnostic — Read & View and Language in Context evidence API", () => {
-  test("student starts, saves, resumes and submits the unscored Read & View and Language in Context slice", async ({ page, request }) => {
+test.describe("Cycle 1 Diagnostic — Read & View, Listening and Language in Context evidence API", () => {
+  test("student starts, saves, resumes and submits the unscored Read & View, Listening and Language in Context slice", async ({ page, request }) => {
     const unauthenticatedStart = await request.post(startPath, {
       data: { idempotency_key: randomUUID() },
     });
@@ -39,7 +39,7 @@ test.describe("Cycle 1 Diagnostic — Read & View and Language in Context eviden
     };
     expect(started.status(), JSON.stringify(startedBody)).toBe(201);
     await expect(page.getByRole("heading", { name: "Stimulus A · The Repair Table", exact: true })).toBeVisible();
-    await expect(page.getByText("Read & View + Language in Context only", { exact: true })).toBeVisible();
+    await expect(page.getByText("Read & View + Listening + Language in Context only", { exact: true })).toBeVisible();
     expect(startedBody.diagnostic).toMatchObject({ diagnostic_code: "ib-myp-g9-cycle1", version: 1 });
     expect(startedBody.attempt.status).toBe("in_progress");
     expect(startedBody.attempt.is_replay).toBe(false);
@@ -64,6 +64,12 @@ test.describe("Cycle 1 Diagnostic — Read & View and Language in Context eviden
       { headers, data: { response: { a: "B", b: ["A", "A"] } } },
     );
     expect(invalidResponse.status()).toBe(400);
+
+    const invalidListening = await request.put(
+      "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/L01",
+      { headers, data: { response: { a: "A", b: ["A", "A"] } } },
+    );
+    expect(invalidListening.status()).toBe(400);
 
     const invalidLanguageContext = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/LC01",
