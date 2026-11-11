@@ -23,15 +23,9 @@ function curriculumConnection(status: string): { heading: string; description: s
       description: "The assessment tasks are connected to verified curriculum outcomes.",
     };
   }
-  if (status === "pending_review") {
-    return {
-      heading: "Being confirmed",
-      description: "Some curriculum connections are still being confirmed.",
-    };
-  }
   return {
     heading: "Not complete",
-    description: "Some assessment tasks do not yet have verified curriculum connections.",
+    description: "Some assessment tasks cannot yet be linked to a verified curriculum outcome.",
   };
 }
 
@@ -43,8 +37,8 @@ function responseEvidence(status: string): { heading: string; description: strin
     };
   }
   return {
-    heading: "More evidence needed",
-    description: "The current report does not yet contain enough mapped evidence for a complete evaluation.",
+    heading: "Not yet sufficient",
+    description: "The report does not yet meet the combined checks for response evidence and verified curriculum connections.",
   };
 }
 
@@ -71,6 +65,7 @@ export default function EvaluationReportPanel({
     }
     let active = true;
     setLoading(true);
+    setReport(null);
     setError("");
     fetch("/api/v1/learner/evaluation-reports/" + reportRecordId, {
       headers: { Authorization: "Bearer " + accessToken },
@@ -116,7 +111,7 @@ export default function EvaluationReportPanel({
     </section>;
   }
 
-  if (loading) {
+  if (loading || (!report && !error)) {
     return <section className="proto-panel proto-evaluation-empty" role="status">Loading your Evaluation Report…</section>;
   }
 
@@ -171,7 +166,7 @@ export default function EvaluationReportPanel({
 
     <div className="proto-panel proto-evaluation-note">
       <h3>Using your report</h3>
-      <p>Scores, grade comparisons and personalised next steps will appear only when the available evidence and curriculum connections can support them.</p>
+      <p>Scores, grade comparisons and personalised next steps are not part of this starting report.</p>
     </div>
   </section>;
 }

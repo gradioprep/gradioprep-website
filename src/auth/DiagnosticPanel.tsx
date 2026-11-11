@@ -231,7 +231,7 @@ export default function DiagnosticPanel({
         body: JSON.stringify({ idempotency_key: crypto.randomUUID() }),
       });
       const result = await response.json() as StartedDiagnostic & { error?: string };
-      if (!response.ok || !result.attempt?.id) throw new Error(result.error ?? "The Diagnostic could not be opened.");
+      if (!response.ok || !result.attempt?.id) throw new Error(result.error ?? "The Preliminary Assessment could not be opened.");
       setAttemptId(result.attempt.id);
       setAttemptStatus(result.attempt.status === "submitted" ? "submitted" : "in_progress");
       const restored: DiagnosticResponseMap = {};
@@ -248,7 +248,7 @@ export default function DiagnosticPanel({
           : "Your Preliminary Assessment section has started.");
       }
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "The Diagnostic could not be opened.");
+      setError(requestError instanceof Error ? requestError.message : "The Preliminary Assessment could not be opened.");
     } finally {
       setLoading(false);
     }
