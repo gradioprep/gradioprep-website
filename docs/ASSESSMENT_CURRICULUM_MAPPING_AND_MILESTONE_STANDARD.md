@@ -45,7 +45,7 @@ Do not create one generic English assessment and relabel it for three boards.
 
 For IB MYP Language and Literature, distinguish the six broad skill areas (listening, speaking, reading, writing, viewing and presenting) from the four subject criteria (A Analysing, B Organising, C Producing text and D Using language) and their strands. The six skill areas are not six mandatory standalone PA sections. Each PA/SA item must map to the relevant criterion/strand and to the exact course/year context.
 
-For MYP Year 4, the Founder-confirmed school placement is Grade 9 / MYP Year 4. Do not treat a Year 3 or Year 5 descriptor as an exact Year 4 descriptor. Where the current authorised Year 4 progression cannot be independently verified from public material, record the specific mapping as pending academic confirmation; do not make an unsupported official claim. This standard does not claim that GradioPrep tasks are official IB assessments or that its internal profiles convert to IB grades.
+For MYP Year 4, the Founder-confirmed school placement is Grade 9 / MYP Year 4. The public Language and Literature guide describes the criteria as applying to all programme years but its detailed year-specific descriptors are supplied for Years 1, 3 and 5; do not treat a Year 3 or Year 5 descriptor as an exact Year 4 descriptor. Obtain/verify the current authorised Year 4 progression with the school/IB materials. Until then, record exact Year 4 mapping as pending human academic confirmation and do not claim the PA has been officially calibrated to Year 4. This standard does not claim that GradioPrep tasks are official IB assessments or that its internal profiles convert to IB grades.
 
 For IB DP Language A: Language and Literature, use the current DP course guide and the applicable assessment component/criterion requirements. Do not borrow MYP criteria or task forms merely because the subject family has a similar name.
 
@@ -128,6 +128,7 @@ When a mapping cannot be verified, the correct action is to remove/defer the ite
 - Cambridge IGCSE First Language English 0500: https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-english-first-language-0500/
 - Cambridge 0500 syllabus 2027–2029: https://www.cambridgeinternational.org/Images/718783-2027-2029-syllabus.pdf
 - CBSE Curriculum 2026–27: https://cbseacademic.nic.in/curriculum_2027.html
+- CBSE Notification 40/2026 (9 April 2026), Class IX–X language-route transition: https://cbseacademic.nic.in/web_material/Notifications/2026/40_Notification_2026.pdf
 - NCERT textbook portal: https://ncert.nic.in/textbook.php
 
 These links are entry points, not proof that a specific item is mapped. Record the exact source/edition used for each learner route.
