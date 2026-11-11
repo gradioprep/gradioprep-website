@@ -11,6 +11,15 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
       data: { idempotency_key: randomUUID() },
     });
     expect(unauthenticatedStart.status()).toBe(401);
+    const unauthenticatedReportCreate = await request.post(
+      "/api/v1/learner/diagnostic-attempts/eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee/evaluation-report",
+      { data: { idempotency_key: randomUUID() } },
+    );
+    expect(unauthenticatedReportCreate.status()).toBe(401);
+    const unauthenticatedReportRead = await request.get(
+      "/api/v1/learner/evaluation-reports/eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+    );
+    expect(unauthenticatedReportRead.status()).toBe(401);
 
     let accessToken = "";
     page.on("request", outgoing => {
@@ -116,6 +125,99 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
       saved_observations: 15,
       expected_observations: 15,
     });
+
+    const reportCreatePath =
+      "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/evaluation-report";
+    const reportIdempotencyKey = randomUUID();
+    const invalidReportCreate = await request.post(reportCreatePath, {
+      headers,
+      data: { idempotency_key: reportIdempotencyKey, route_version_id: "caller-controlled" },
+    });
+    expect(invalidReportCreate.status()).toBe(400);
+
+    const createdReportResponse = await request.post(reportCreatePath, {
+      headers,
+      data: { idempotency_key: reportIdempotencyKey },
+    });
+    const createdReportBody = await createdReportResponse.json() as {
+      report?: {
+        report_record_id: string;
+        report_version_id: string;
+        version_number: number;
+        curriculum_mapping_status: string;
+        evidence_sufficiency_status: string;
+      };
+      is_replay?: boolean;
+      error?: string;
+    };
+    expect(createdReportResponse.status(), JSON.stringify(createdReportBody)).toBe(201);
+    expect(createdReportBody.report).toMatchObject({
+      version_number: 1,
+      curriculum_mapping_status: "contains_unmapped",
+      evidence_sufficiency_status: "insufficient",
+    });
+    expect(createdReportBody.is_replay).toBe(false);
+
+    const replayedReportResponse = await request.post(reportCreatePath, {
+      headers,
+      data: { idempotency_key: reportIdempotencyKey },
+    });
+    const replayedReportBody = await replayedReportResponse.json() as typeof createdReportBody;
+    expect(replayedReportResponse.status(), JSON.stringify(replayedReportBody)).toBe(200);
+    expect(replayedReportBody.report?.report_record_id).toBe(createdReportBody.report?.report_record_id);
+    expect(replayedReportBody.report?.report_version_id).toBe(createdReportBody.report?.report_version_id);
+    expect(replayedReportBody.is_replay).toBe(true);
+
+    const reportRecordId = createdReportBody.report?.report_record_id;
+    expect(reportRecordId).toBeTruthy();
+    const reportReadPath = "/api/v1/learner/evaluation-reports/" + reportRecordId;
+    const invalidReportVersion = await request.get(reportReadPath + "?version=0", { headers });
+    expect(invalidReportVersion.status()).toBe(400);
+
+    const reportReadResponse = await request.get(reportReadPath + "?version=1", { headers });
+    const reportReadBody = await reportReadResponse.json() as {
+      report?: {
+        report_record_id: string;
+        report_version_id: string;
+        report_scope: string;
+        version_number: number;
+        curriculum_mapping_status: string;
+        evidence_sufficiency_status: string;
+        scope_snapshot: Record<string, unknown>;
+        eligible_analytics_snapshot: Record<string, unknown>;
+        curriculum_mapping_snapshot: unknown[];
+        learner_evidence_snapshot: Array<Record<string, unknown>>;
+        [key: string]: unknown;
+      };
+      error?: string;
+    };
+    expect(reportReadResponse.status(), JSON.stringify(reportReadBody)).toBe(200);
+    const report = reportReadBody.report;
+    expect(report).toMatchObject({
+      report_record_id: reportRecordId,
+      report_version_id: createdReportBody.report?.report_version_id,
+      report_scope: "pa_baseline",
+      version_number: 1,
+      curriculum_mapping_status: "contains_unmapped",
+      evidence_sufficiency_status: "insufficient",
+    });
+    expect(report?.scope_snapshot).toMatchObject({
+      report_scoring_state: "unscored_baseline",
+      official_grade_conversion: "not_applicable",
+    });
+    expect(report?.eligible_analytics_snapshot).toMatchObject({
+      status: "not_available_for_unscored_preliminary_assessment",
+      score: null,
+      official_grade: null,
+      percentile_or_rank: null,
+    });
+    expect(report?.curriculum_mapping_snapshot).toHaveLength(15);
+    expect(report?.learner_evidence_snapshot).toHaveLength(15);
+    expect(report?.learner_evidence_snapshot[0]).toHaveProperty("response_sha256");
+    expect(report?.learner_evidence_snapshot[0]).not.toHaveProperty("response_text");
+    expect(report).not.toHaveProperty("learner_id");
+    expect(report).not.toHaveProperty("created_by");
+    expect(report).not.toHaveProperty("idempotency_key");
 
     const lateEdit = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/RV02",
