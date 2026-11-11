@@ -43,7 +43,12 @@ test.describe("Cycle 1 Diagnostic — Read & View and Language in Context eviden
     expect(startedBody.diagnostic).toMatchObject({ diagnostic_code: "ib-myp-g9-cycle1", version: 1 });
     expect(startedBody.attempt.status).toBe("in_progress");
     expect(startedBody.attempt.is_replay).toBe(false);
-    expect(startedBody.section_status).toBe("read_view_language_context_only");
+    expect(startedBody.section_status).toBe("read_view_listening_language_context_only");
+    await expect(page.getByRole("heading", { name: "Listening · Solar Powered Library Helps Remote Students", exact: true })).toBeVisible();
+    const listeningAudio = page.getByTestId("diagnostic-listening-audio");
+    await expect(listeningAudio).toHaveAttribute("src", "https://voa-audio.voanews.eu/vle/2016/03/17/f6b24592-2626-4dd4-9250-718b8fc96d8f.mp3?download=1");
+    await expect(listeningAudio).toHaveAttribute("preload", "none");
+    await expect(listeningAudio).toHaveAttribute("controls", "");
 
     const resumed = await request.post(startPath, {
       headers,
@@ -77,6 +82,11 @@ test.describe("Cycle 1 Diagnostic — Read & View and Language in Context eviden
       ["RV07b", { text: "The story uses a sequence of events, while the poster groups results into clear visual categories." }],
       ["RV08", { order: ["2", "3", "4", "5", "1"], explanation: "The sequence moves from uncertainty to small success and then an honest record of what remains." }],
       ["RV09", { choice: "B", explanation: "The figures list completed and unfinished outcomes, unlike the tagline or invitation." }],
+      ["L01", { a: "A", b: ["A", "B"] }],
+      ["L02", { text: "Cullen is concerned that limited educational access can restrict opportunities to learn and participate in wider society." }],
+      ["L03", { choice: "A" }],
+      ["L04", { text: "The phrase criticises a universal solution; the report shows that technology must be adapted to each community’s needs." }],
+      ["L05", { text: "The conclusion is exaggerated: the report describes use in Vanuatu, but Krieshok warns that one solution cannot suit every community." }],
       ["LC01", { choice: "A" }],
       ["LC02", { choice: "A" }],
       ["LC03", { choice: "B" }],
@@ -106,8 +116,8 @@ test.describe("Cycle 1 Diagnostic — Read & View and Language in Context eviden
     expect(submittedBody.attempt).toMatchObject({
       attempt_id: startedBody.attempt.id,
       status: "submitted",
-      saved_observations: 15,
-      expected_observations: 15,
+      saved_observations: 20,
+      expected_observations: 20,
     });
 
     const lateEdit = await request.put(
@@ -122,7 +132,7 @@ test.describe("Cycle 1 Diagnostic — Read & View and Language in Context eviden
     await expect(page.getByRole("heading", { name: "Synthetic Student A", exact: true })).toBeVisible();
     await page.getByRole("button", { name: "Start / continue Diagnostic" }).click();
     await expect(page.getByRole("heading", { name: "Stimulus A · The Repair Table", exact: true })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Submit Read & View" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Submit Diagnostic section" })).toHaveCount(0);
     await expect(page.locator('input[type="radio"]').first()).toBeDisabled();
     await expect(page.locator("textarea").first()).toBeDisabled();
   });
