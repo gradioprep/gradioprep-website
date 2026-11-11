@@ -33,6 +33,7 @@ BEGIN
     WHEN 'staff_invitations_listed' THEN resource_type := 'staff_invitation_collection'; success_reason := 'owner_aal2'; requires_null_target := true; is_protected_read := true;
     WHEN 'private_qa_records_read' THEN resource_type := 'assessment_version'; success_reason := 'owner_qa_review'; is_protected_read := true;
     WHEN 'evaluation_report_read_authorized' THEN resource_type := 'evaluation_report'; success_reason := 'scoped_report_reader'; is_protected_read := true;
+    WHEN 'evaluation_report_read_authorized' THEN resource_type := 'evaluation_report'; success_reason := 'scoped_report_reader'; is_protected_read := true;
     WHEN 'owner_role_revocation' THEN resource_type := 'role_assignment_subject';
     WHEN 'owner_attempt_assignment' THEN resource_type := 'attempt';
     WHEN 'owner_submission_assignment' THEN resource_type := 'assessment_submission';
@@ -41,12 +42,17 @@ BEGIN
     WHEN 'owner_private_qa_record_create' THEN resource_type := 'assessment_version';
     WHEN 'grader_assessment_draft_save' THEN resource_type := 'assessment_submission';
     WHEN 'grader_assessment_feedback_publish' THEN resource_type := 'assessment_submission';
+    WHEN 'staff_submission_transcript_review' THEN resource_type := 'assessment_submission';
+    WHEN 'student_submission_file_upload' THEN resource_type := 'assessment_submission';
+    WHEN 'owner_submission_file_cleanup' THEN resource_type := 'submission_file_collection'; requires_null_target := true;
     WHEN 'student_attempt_create' THEN resource_type := 'task_version';
     WHEN 'student_attempt_response_save' THEN resource_type := 'attempt';
     WHEN 'student_attempt_submit' THEN resource_type := 'attempt';
     WHEN 'student_assessment_submission_accept' THEN resource_type := 'task_version';
     WHEN 'staff_invitation_created' THEN resource_type := 'staff_invitation'; requires_null_target := true;
     WHEN 'staff_invitation_revoked' THEN resource_type := 'staff_invitation';
+    WHEN 'staff_attempt_timer_adjustment' THEN resource_type := 'attempt';
+    WHEN 'student_timed_attempt_assessment_link' THEN resource_type := 'attempt';
     WHEN 'evaluation_report_create' THEN resource_type := 'evaluation_report';
     ELSE RETURN false;
   END CASE;
