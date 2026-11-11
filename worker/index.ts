@@ -1170,14 +1170,14 @@ function isValidDiagnosticResponse(observationCode: string, response: unknown): 
   const choice = (item: unknown) => typeof item === "string" && ["A", "B", "C", "D"].includes(item);
   const text = (item: unknown) => typeof item === "string" && item.trim().length >= 5 && item.length <= 12_000;
 
-  if (observationCode === "RV01" || observationCode === "L01") {
+  if (observationCode === "RV01") {
     return only(["a", "b"]) && choice(value.a) && Array.isArray(value.b) &&
       value.b.length === 2 && value.b.every(choice) && new Set(value.b).size === 2;
   }
-  if (["RV02", "RV03", "RV06", "RV07a", "RV07b", "L02", "L04", "L05"].includes(observationCode)) {
+  if (["RV02", "RV03", "RV06", "RV07a", "RV07b"].includes(observationCode)) {
     return only(["text"]) && text(value.text);
   }
-  if (["RV04", "RV05", "L03", "LC01", "LC02", "LC03", "LC04"].includes(observationCode)) {
+  if (["RV04", "RV05", "LC01", "LC02", "LC03", "LC04"].includes(observationCode)) {
     return only(["choice"]) && choice(value.choice);
   }
   if (observationCode === "LC05") return only(["text"]) && text(value.text);
@@ -1280,7 +1280,7 @@ async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise
     diagnostic: version,
     attempt: { ...attempt, is_replay: created.is_replay === true },
     responses,
-    section_status: "read_view_listening_language_context_only",
+    section_status: "read_view_language_context_only",
   }, created.is_replay === true ? 200 : 201);
 }
 
@@ -3817,7 +3817,7 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
     return startLearnerDiagnostic(request, env);
   }
   const diagnosticResponseMatch = url.pathname.match(
-    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/((?:RV(?:0[1-6]|07[ab]|0[89])|L0[1-5]|LC0[1-5]))$/i,
+    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/((?:RV(?:0[1-6]|07[ab]|0[89])|LC0[1-5]))$/i,
   );
   if (diagnosticResponseMatch && request.method === "PUT") {
     return saveLearnerDiagnosticResponse(request, env, diagnosticResponseMatch[1], diagnosticResponseMatch[2]);
