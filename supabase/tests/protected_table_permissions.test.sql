@@ -47,11 +47,15 @@ SELECT is(
         'learner_unit_progress',
         'milestone_assessment_task_mappings',
         'milestone_assessment_prompt_outcome_mappings',
-        'milestone_assessment_attempt_links'
+        'milestone_assessment_attempt_links',
+        'diagnostic_observation_outcome_mappings',
+        'evaluation_report_records',
+        'evaluation_report_versions',
+        'evaluation_report_teacher_access_grants'
       )
   ),
-  35,
-  'all thirty-five protected application tables in the baseline inventory are present'
+  39,
+  'all thirty-nine protected application tables in the current report inventory are present'
 );
 
 SELECT is(
@@ -96,12 +100,16 @@ SELECT is(
         'learner_unit_progress',
         'milestone_assessment_task_mappings',
         'milestone_assessment_prompt_outcome_mappings',
-        'milestone_assessment_attempt_links'
+        'milestone_assessment_attempt_links',
+        'diagnostic_observation_outcome_mappings',
+        'evaluation_report_records',
+        'evaluation_report_versions',
+        'evaluation_report_teacher_access_grants'
       )
       AND relation.relrowsecurity
   ),
-  35,
-  'RLS is enabled on all thirty-five protected application tables in the baseline inventory'
+  39,
+  'RLS is enabled on all thirty-nine protected application tables in the current report inventory'
 );
 
 SELECT ok(
@@ -167,7 +175,11 @@ SELECT ok(
         'learner_unit_progress',
         'milestone_assessment_task_mappings',
         'milestone_assessment_prompt_outcome_mappings',
-        'milestone_assessment_attempt_links'
+        'milestone_assessment_attempt_links',
+        'diagnostic_observation_outcome_mappings',
+        'evaluation_report_records',
+        'evaluation_report_versions',
+        'evaluation_report_teacher_access_grants'
       )
   ),
   'anonymous has no direct read or write privilege on any protected table'
@@ -215,7 +227,9 @@ SELECT ok(
         'assessment_drafts',
         'assessment_draft_history',
         'private_qa_records',
-        'milestone_assessment_attempt_links'
+        'milestone_assessment_attempt_links',
+        'evaluation_report_teacher_access_grants',
+        'evaluation_report_teacher_access_grants'
       )
   ),
   'authenticated has no direct table privilege on private audit, invitation, response-history, capacity, draft and academic-QA records'

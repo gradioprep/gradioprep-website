@@ -1,0 +1,160 @@
+BEGIN;
+SELECT no_plan();
+
+-- Synthetic-only PA baseline report fixture. No curriculum outcome is inferred.
+INSERT INTO public.curriculum_route_versions (
+  id,route_key,version,awarding_body,programme_code,subject_code,course_code,level_code,level_label,
+  academic_session,syllabus_edition,official_source_title,official_source_url,source_checked_at,review_state
+)
+VALUES (
+  '1d000000-0000-4000-8000-000000000001','synthetic-ib-myp-year-4',99,'TEST','SYNTHETIC','ENGLISH',
+  'SYNTHETIC-PA','SYNTHETIC-Y4','Synthetic only','synthetic-session','synthetic-edition',
+  'Synthetic test fixture — not an official source','https://example.invalid/pa-report-fixture',clock_timestamp(),'pending_review'
+);
+
+INSERT INTO public.curriculum_unit_versions (
+  id,route_version_id,unit_code,version,sequence_number,title,learning_objective_summary,release_state
+)
+VALUES ('1d000000-0000-4000-8000-000000000101','1d000000-0000-4000-8000-000000000001',
+  'SYN-PA-UNIT',1,1,'Synthetic PA unit','Synthetic test-only unit.','draft');
+
+INSERT INTO public.curriculum_unit_outcome_mappings (
+  id,curriculum_unit_version_id,outcome_reference,outcome_title,source_locator,
+  mapping_status,mapping_rationale,reviewed_by,reviewed_at
+)
+VALUES ('1d000000-0000-4000-8000-000000000201','1d000000-0000-4000-8000-000000000101',
+  'SYN-PA-OUTCOME','Synthetic outcome','No official locator — synthetic only',
+  'direct','Synthetic test fixture only.','88888888-8888-4888-8888-888888888888',clock_timestamp());
+
+UPDATE public.curriculum_route_versions
+SET review_state='verified',verified_by='88888888-8888-4888-8888-888888888888',verified_at=clock_timestamp()
+WHERE id='1d000000-0000-4000-8000-000000000001';
+UPDATE public.curriculum_unit_versions SET release_state='published'
+WHERE id='1d000000-0000-4000-8000-000000000101';
+
+INSERT INTO public.diagnostic_versions (
+  id,diagnostic_code,pathway_id,title,version,release_state,total_minutes,sitting_count,route_version_id
+)
+VALUES (
+  '1d000000-0000-4000-8000-000000000501','synthetic-pa-report','synthetic-ib-myp-year-4',
+  'Synthetic PA report fixture',99,'published',80,2,'1d000000-0000-4000-8000-000000000001'
+);
+INSERT INTO public.diagnostic_observations (
+  diagnostic_version_id,observation_code,group_code,sitting_number,sequence_number,response_kind,learner_capture_enabled
+)
+SELECT '1d000000-0000-4000-8000-000000000501',observation_code,group_code,sitting_number,
+  sequence_number,response_kind,learner_capture_enabled
+FROM public.diagnostic_observations
+WHERE diagnostic_version_id='ed111111-1111-4111-8111-111111111111';
+
+INSERT INTO public.diagnostic_attempts (
+  id,learner_id,diagnostic_version_id,status,idempotency_key,submitted_at
+)
+VALUES (
+  '1d000000-0000-4000-8000-000000000301','11111111-1111-4111-8111-111111111111',
+  '1d000000-0000-4000-8000-000000000501','submitted',
+  '1d000000-0000-4000-8000-000000000302',clock_timestamp()
+);
+
+-- The test deliberately supplies no PA observation mapping or response evidence.
+INSERT INTO public.evaluation_report_records (
+  id,report_scope,learner_id,course_enrolment_id,route_version_id,diagnostic_attempt_id
+)
+VALUES (
+  '1d000000-0000-4000-8000-000000000401','pa_baseline','11111111-1111-4111-8111-111111111111',
+  (SELECT id FROM public.course_enrolments WHERE learner_id='11111111-1111-4111-8111-111111111111'
+    AND pathway_id='synthetic-ib-myp-year-4'),
+  '1d000000-0000-4000-8000-000000000001','1d000000-0000-4000-8000-000000000301'
+);
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+
+SELECT throws_ok($SELECT * FROM public.evaluation_report_records$,'42501',NULL,
+  'learner cannot bypass the audited report-read RPC with direct table access');
+SELECT throws_ok(
+  $$INSERT INTO public.evaluation_report_records(report_scope,learner_id,course_enrolment_id,route_version_id,diagnostic_attempt_id)
+    VALUES('pa_baseline',auth.uid(),'00000000-0000-0000-0000-000000000000','1d000000-0000-4000-8000-000000000001','1d000000-0000-4000-8000-000000000301')$$,
+  '42501',NULL,'learner cannot directly create report records');
+
+SELECT * FROM public.create_preliminary_evaluation_report(
+  '1d000000-0000-4000-8000-000000000301',
+  (SELECT id FROM public.course_enrolments WHERE learner_id='11111111-1111-4111-8111-111111111111'
+    AND pathway_id='synthetic-ib-myp-year-4'),
+  '1d000000-0000-4000-8000-000000000001',
+  '1d000000-0000-4000-8000-000000000303'
+);
+SELECT is((SELECT is_replay FROM public.create_preliminary_evaluation_report(
+  '1d000000-0000-4000-8000-000000000301',
+  (SELECT id FROM public.course_enrolments WHERE learner_id='11111111-1111-4111-8111-111111111111'
+    AND pathway_id='synthetic-ib-myp-year-4'),
+  '1d000000-0000-4000-8000-000000000001',
+  '1d000000-0000-4000-8000-000000000303'
+)),true,'same PA report idempotency key returns the immutable original version');
+
+RESET ROLE;
+
+SELECT is((SELECT count(*)::integer FROM public.evaluation_report_versions),1,
+  'one immutable PA report version is created');
+SELECT is((SELECT curriculum_mapping_status FROM public.evaluation_report_versions),'contains_unmapped',
+  'PA report records missing direct mappings instead of inventing curriculum claims');
+SELECT is((SELECT evidence_sufficiency_status FROM public.evaluation_report_versions),'insufficient',
+  'PA report labels missing response and mapping evidence insufficient');
+SELECT is((SELECT scope_snapshot->>'report_scoring_state' FROM public.evaluation_report_versions),'unscored_baseline',
+  'PA baseline is explicitly unscored');
+SELECT ok((SELECT eligible_analytics_snapshot->>'score' IS NULL
+  AND eligible_analytics_snapshot->>'official_grade' IS NULL
+  AND eligible_analytics_snapshot->>'percentile_or_rank' IS NULL
+  FROM public.evaluation_report_versions),
+  'PA report contains no invented score, grade or rank');
+SELECT ok((SELECT jsonb_array_length(curriculum_mapping_snapshot)=15
+  AND jsonb_array_length(learner_evidence_snapshot)=15
+  FROM public.evaluation_report_versions),
+  'PA snapshot preserves all fifteen enabled observation slots and their missing-evidence states');
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+  WHERE action='evaluation_report_created' AND target_type='evaluation_report_version'),1,
+  'report creation writes one metadata-only audit event');
+
+SELECT throws_ok(
+  $$UPDATE public.evaluation_report_versions SET evidence_sufficiency_status='sufficient'$$,
+  '42501','evaluation_report_immutable','published report versions cannot be changed');
+SELECT throws_ok(
+  $$UPDATE public.evaluation_report_records SET route_version_id='1d000000-0000-4000-8000-000000000001'$$,
+  '42501','evaluation_report_immutable','report-series lineage cannot be changed');
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','33333333-3333-4333-8333-333333333333',true);
+SELECT set_config('request.jwt.claims','{"sub":"33333333-3333-4333-8333-333333333333","role":"authenticated","aal":"aal1"}',true);
+SELECT is((SELECT count(*)::integer FROM public.get_evaluation_report(
+  (SELECT id FROM public.evaluation_report_records WHERE diagnostic_attempt_id='1d000000-0000-4000-8000-000000000301'),NULL)),1,
+  'verified guardian with progress consent can read the linked learner report through the audited RPC');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+SELECT set_config('request.jwt.claims','{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($SELECT * FROM public.get_evaluation_report(
+  (SELECT id FROM public.evaluation_report_records WHERE diagnostic_attempt_id='1d000000-0000-4000-8000-000000000301'),NULL)$,
+  '42501','evaluation_report_read_forbidden','unrelated learner cannot read another learner report');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT count(*) FROM public.get_evaluation_report(
+  (SELECT id FROM public.evaluation_report_records WHERE diagnostic_attempt_id='1d000000-0000-4000-8000-000000000301'),NULL)),1,
+  'Owner at AAL2 can inspect the report through the audited RPC');
+SELECT throws_ok(
+  $$SELECT * FROM public.create_preliminary_evaluation_report(
+    '1d000000-0000-4000-8000-000000000301',
+    (SELECT id FROM public.course_enrolments WHERE learner_id='11111111-1111-4111-8111-111111111111'
+      AND pathway_id='synthetic-ib-myp-year-4'),
+    '1d000000-0000-4000-8000-000000000001',
+    '1d000000-0000-4000-8000-000000000304'
+  )$$,
+  '42501','preliminary_evaluation_report_forbidden','Owner cannot impersonate learner to create a PA report');
+RESET ROLE;
+
+SELECT * FROM finish();
+ROLLBACK;
