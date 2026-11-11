@@ -1,21 +1,36 @@
 import { expect, test } from "@playwright/test";
 
-const publicRoutes = [
+const ibCourse = "/pathways/ib-myp/language-and-literature";
+const lowerSecondaryCourse = "/pathways/cambridge-lower-secondary/english";
+const plannedUnits = [1, 2, 3];
+
+const allConfiguredCurriculumRoutes = [
+  ...["year-1", "year-2", "year-3", "year-4", "year-5"].flatMap(level => [
+    `${ibCourse}/${level}`,
+    ...plannedUnits.map(unit => `${ibCourse}/${level}/units/unit-${unit}`),
+  ]),
+  ...["stage-7", "stage-8", "stage-9"].flatMap(stage => [
+    `${lowerSecondaryCourse}/${stage}`,
+    ...plannedUnits.map(unit => `${lowerSecondaryCourse}/${stage}/units/unit-${unit}`),
+  ]),
+];
+
+const publicRoutes = [...new Set([
   "/",
   "/dashboard",
   "/pathways",
-  "/pathways/ib-myp/language-and-literature",
-  "/pathways/ib-myp/language-and-literature/year-1",
-  "/pathways/ib-myp/language-and-literature/year-1/units/unit-1",
-  "/pathways/ib-myp/language-and-literature/year-1/units/unit-1/lesson",
-  "/pathways/cambridge-lower-secondary/english",
+  ibCourse,
+  ...allConfiguredCurriculumRoutes,
+  `${ibCourse}/year-1/units/unit-1/lesson`,
+  "/lesson",
+  lowerSecondaryCourse,
   "/pathways/cambridge-igcse/first-language-english",
   "/pathways/cambridge-igcse/first-language-english/grade-9-equivalent-band",
   "/pathways/cambridge-igcse/first-language-english/grade-10-equivalent-band",
   "/questions",
   "/assessment",
   "/account",
-];
+])];
 
 const internalCopyPatterns = [
   /\bprototype\b/i,
@@ -47,7 +62,7 @@ const internalCopyPatterns = [
   /approval confirmed by project owner/i,
   /academic (?:content )?review (?:passed|pending|complete)/i,
   /candidate(?:[- ]unverified)? (?:year|objective|mapping|strand)/i,
-  /internal (?:comment|note|review|status)/i,
+  /internal (?:comment|note|review|status|instruction)/i,
   /test (?:environment|account|data)/i,
   /synthetic (?:student|learner|test) (?:account|data)/i,
   /development (?:environment|status)/i,
@@ -59,7 +74,7 @@ test.describe("public website copy rules", () => {
     { name: "desktop", width: 1440, height: 1000 },
     { name: "mobile", width: 390, height: 844 },
   ]) {
-    test(`public routes contain no internal notes at ${viewport.name} width`, async ({ page }) => {
+    test(`all configured public routes contain no internal notes at ${viewport.name} width`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       for (const route of publicRoutes) {
         await page.goto(route);
@@ -68,10 +83,14 @@ test.describe("public website copy rules", () => {
         const title = await page.title();
         const accessibleText = await page.locator("body *").evaluateAll(nodes =>
           nodes.flatMap(node =>
-            ["aria-label", "title", "placeholder"].map(name => node.getAttribute(name)).filter(Boolean)
+            ["aria-label", "aria-description", "title", "placeholder", "alt", "value"]
+              .map(name => node.getAttribute(name))
+              .filter((value): value is string => Boolean(value))
           )
         );
-        const renderedCopy = [title, text, ...accessibleText].join("\n");
+        const metadataText = await page.locator('meta[name="description"], meta[property^="og:"]')
+          .evaluateAll(nodes => nodes.map(node => node.getAttribute("content")).filter(Boolean));
+        const renderedCopy = [title, text, ...accessibleText, ...metadataText].join("\n");
         for (const pattern of internalCopyPatterns) {
           expect(renderedCopy, `${pattern} found on ${route} at ${viewport.name} width`).not.toMatch(pattern);
         }
@@ -79,7 +98,7 @@ test.describe("public website copy rules", () => {
     });
   }
 
-  test("dashboard shows empty states instead of fictional learner activity", async ({ page }) => {
+  test("dashboard shows useful empty states instead of fictional learner activity", async ({ page }) => {
     await page.goto("/dashboard");
     await expect(page.getByText("Your completed work will appear here.")).toBeVisible();
     await expect(page.getByText("Complete your first Preliminary Assessment or practice activity to start building your learning record.")).toBeVisible();
@@ -95,40 +114,55 @@ test.describe("public website copy rules", () => {
     await expect(page.getByText(/not final rubric|placeholder criterion|illustrative excerpts/i)).toHaveCount(0);
   });
 
-  test("learner JavaScript bundles exclude internal academic review and release notes", async ({ page }) => {
-    await page.goto("/pathways/ib-myp/language-and-literature/year-1/units/unit-1/lesson");
-    const scriptUrls = await page.locator("script[src]").evaluateAll(nodes =>
-      nodes.map(node => (node as HTMLScriptElement).src).filter(Boolean)
+  test("all shipped JavaScript and CSS assets exclude internal academic and development material", async ({ page }) => {
+    await page.goto(`${ibCourse}/year-1/units/unit-1/lesson`);
+    const assetUrls = await page.locator("script[src], link[rel~='stylesheet'][href]").evaluateAll(nodes =>
+      nodes.map(node => node instanceof HTMLScriptElement ? node.src : (node as HTMLLinkElement).href).filter(Boolean)
     );
-    expect(scriptUrls.length).toBeGreaterThan(0);
-    const downloadedScripts: string[] = [];
-    for (const url of scriptUrls) {
+    const scriptUrls = assetUrls.filter(url => /\.m?js(?:$|\?)/i.test(new URL(url).pathname));
+    const stylesheetUrls = assetUrls.filter(url => /\.css(?:$|\?)/i.test(new URL(url).pathname));
+    expect(scriptUrls.length, "the public learner route should load its JavaScript bundle").toBeGreaterThan(0);
+    expect(stylesheetUrls.length, "the public learner route should load its stylesheet").toBeGreaterThan(0);
+
+    const downloadedAssets: string[] = [];
+    for (const url of assetUrls) {
       const response = await page.request.get(url);
-      expect(response.ok(), `public script asset should load: ${url}`).toBeTruthy();
-      downloadedScripts.push(await response.text());
+      expect(response.ok(), `public client asset should load: ${url}`).toBeTruthy();
+      downloadedAssets.push(await response.text());
     }
-    const bundleText = downloadedScripts.join("\\n");
-    const internalPatterns = [
-      /Academic content review passed/i,
-      /Academic review passed for the content preview/i,
+    const bundleText = downloadedAssets.join("\\n");
+    const internalAssetPatterns = [
+      /\bprototype\b/i,
+      /academic content review passed/i,
+      /academic review passed for the content preview/i,
+      /academic lead \(approval confirmed by project owner/i,
       /candidate-unverified/i,
-      /Candidate Year 1 strands/i,
-      /Pilot preview for early MYP learners/i,
-      /Planning slot only/i,
+      /candidate year 1 strands/i,
+      /pilot preview for early myp learners/i,
+      /planning slot only/i,
       /verify programme documents and approve unit sequence before release/i,
-      /Do not claim official curriculum mapping or release/i,
+      /do not claim official curriculum mapping or release/i,
       /remainingReleaseChecks/i,
-      /Academic lead \(approval confirmed by project owner/i,
       /sourceScopeNote/i,
       /sourceBriefUrl/i,
       /officialObjectiveCodes/i,
       /candidateObjectiveMappings/i,
       /reviewerLabel/i,
+      /academicReviewer/i,
+      /academicReviewedAt/i,
+      /releaseApprovedBy/i,
+      /contentRightsNote/i,
       /unitContentPlans/i,
       /getUnitReadinessGates/i,
+      /\bphase 1[abcde]\b/i,
+      /development environment/i,
+      /test environment/i,
+      /synthetic data/i,
+      /TODO:/i,
+      /TEMP_COPY_/i,
     ];
-    for (const pattern of internalPatterns) {
-      expect(bundleText, `internal metadata ${pattern} must not be shipped in learner assets`).not.toMatch(pattern);
+    for (const pattern of internalAssetPatterns) {
+      expect(bundleText, `internal content or metadata ${pattern} must not be shipped in client assets`).not.toMatch(pattern);
     }
   });
 });
