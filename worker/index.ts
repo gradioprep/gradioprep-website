@@ -39,7 +39,8 @@ type ProtectedReadAuditAction =
   | "grader_submission_read_authorized"
   | "owner_submission_queue_authorized"
   | "staff_invitations_listed"
-  | "private_qa_records_read";
+  | "private_qa_records_read"
+  | "evaluation_report_read_authorized";
 
 type PrivilegedWriteAuditAction =
   | "owner_role_revocation"
@@ -60,7 +61,8 @@ type PrivilegedWriteAuditAction =
   | "student_submission_file_upload"
   | "owner_submission_file_cleanup"
   | "staff_attempt_timer_adjustment"
-  | "student_timed_attempt_assessment_link";
+  | "student_timed_attempt_assessment_link"
+  | "evaluation_report_create";
 
 type PrivilegedWriteFailureCategory =
   | "resource_not_found"
@@ -1360,6 +1362,257 @@ async function submitLearnerDiagnostic(request: Request, env: WorkerEnv, attempt
   return submitted ? jsonResponse({ attempt: submitted }) : jsonResponse({ error: "diagnostic_submission_failed" }, 500);
 }
 
+type EvaluationReportCreateRequest = { idempotency_key: string };
+
+function hasOnlyEvaluationReportCreateFields(value: unknown): value is EvaluationReportCreateRequest {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === 1 &&
+    Object.keys(record)[0] === "idempotency_key" &&
+    isUuid(record.idempotency_key);
+}
+
+async function createLearnerEvaluationReport(
+  request: Request,
+  env: WorkerEnv,
+  attemptId: string,
+): Promise<Response> {
+  const parsed = await readBoundedJson(request, 256);
+  if (!parsed.ok) return parsed.response;
+  if (!isUuid(attemptId) || !hasOnlyEvaluationReportCreateFields(parsed.body)) {
+    return jsonResponse({ error: "invalid_evaluation_report_request" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const context = auth.context;
+  const roleDenied = await requireActiveRole(context, "student");
+  if (roleDenied) {
+    const audit = roleDenied.status === 403
+      ? await auditPrivilegedWriteOutcome(context, "evaluation_report_create", attemptId, "denied")
+      : null;
+    return audit ?? roleDenied;
+  }
+
+  // Derive all lineage identifiers from caller-scoped records. The browser
+  // supplies only the attempt and idempotency key; it cannot choose an
+  // enrolment or curriculum route for the report.
+  const { data: attempt, error: attemptError } = await context.supabase
+    .from("diagnostic_attempts")
+    .select("id, diagnostic_version_id, status")
+    .eq("id", attemptId)
+    .maybeSingle();
+  if (attemptError) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "evaluation_report_unavailable" }, 500);
+  }
+  if (!attempt) {
+    const audit = await auditPrivilegedWriteOutcome(context, "evaluation_report_create", attemptId, "denied");
+    if (audit) return audit;
+    return jsonResponse({ error: "preliminary_assessment_not_found" }, 404);
+  }
+  if (attempt.status !== "submitted") {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "state_conflict",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "preliminary_assessment_not_submitted" }, 409);
+  }
+
+  const { data: diagnosticVersion, error: diagnosticVersionError } = await context.supabase
+    .from("diagnostic_versions")
+    .select("id, pathway_id, route_version_id")
+    .eq("id", attempt.diagnostic_version_id)
+    .maybeSingle();
+  if (diagnosticVersionError) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "evaluation_report_unavailable" }, 500);
+  }
+  if (!diagnosticVersion) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "resource_not_found",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "preliminary_assessment_not_found" }, 404);
+  }
+  if (!diagnosticVersion.route_version_id) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "state_conflict",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "evaluation_report_not_ready" }, 409);
+  }
+
+  const { data: route, error: routeError } = await context.supabase
+    .from("curriculum_route_versions")
+    .select("id, route_key")
+    .eq("id", diagnosticVersion.route_version_id)
+    .eq("review_state", "verified")
+    .maybeSingle();
+  if (routeError) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "evaluation_report_unavailable" }, 500);
+  }
+  if (!route || route.route_key !== diagnosticVersion.pathway_id) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "state_conflict",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "evaluation_report_not_ready" }, 409);
+  }
+
+  const { data: enrolment, error: enrolmentError } = await context.supabase
+    .from("course_enrolments")
+    .select("id, pathway_id")
+    .eq("learner_id", context.userId)
+    .eq("pathway_id", route.route_key)
+    .eq("status", "active")
+    .maybeSingle();
+  if (enrolmentError) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "evaluation_report_unavailable" }, 500);
+  }
+  if (!enrolment || enrolment.pathway_id !== route.route_key) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "state_conflict",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "evaluation_report_not_ready" }, 409);
+  }
+
+  const { data, error: createError } = await context.supabase.rpc("create_preliminary_evaluation_report", {
+    p_diagnostic_attempt_id: attemptId,
+    p_course_enrolment_id: enrolment.id,
+    p_route_version_id: route.id,
+    p_idempotency_key: parsed.body.idempotency_key,
+  });
+  if (createError) {
+    const auditOutcome = classifyPrivilegedWriteError(createError);
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId,
+      auditOutcome.outcome, auditOutcome.failureCategory,
+    );
+    if (audit) return audit;
+    if (auditOutcome.outcome === "denied") {
+      return jsonResponse({ error: "preliminary_assessment_not_found" }, 404);
+    }
+    if (createError.message === "evaluation_report_idempotency_conflict") {
+      return jsonResponse({ error: "evaluation_report_idempotency_conflict" }, 409);
+    }
+    if (createError.code === "P0002") {
+      return jsonResponse({ error: "preliminary_assessment_not_found" }, 404);
+    }
+    return jsonResponse({ error: "evaluation_report_creation_failed" }, 500);
+  }
+
+  const created = asRows(data)[0];
+  if (!created) {
+    const audit = await auditPrivilegedWriteOutcome(
+      context, "evaluation_report_create", attemptId, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "evaluation_report_creation_failed" }, 500);
+  }
+
+  return jsonResponse({
+    report: {
+      report_record_id: created.report_record_id,
+      report_version_id: created.report_version_id,
+      version_number: created.version_number,
+      curriculum_mapping_status: created.curriculum_mapping_status,
+      evidence_sufficiency_status: created.evidence_sufficiency_status,
+    },
+    is_replay: created.is_replay === true,
+  }, created.is_replay === true ? 200 : 201);
+}
+
+async function getLearnerEvaluationReport(
+  request: Request,
+  env: WorkerEnv,
+  reportRecordId: string,
+): Promise<Response> {
+  if (!isUuid(reportRecordId)) return jsonResponse({ error: "invalid_evaluation_report_id" }, 400);
+  const url = new URL(request.url);
+  const versionValues = url.searchParams.getAll("version");
+  let invalidQueryParameter = false;
+  url.searchParams.forEach((_value, key) => {
+    if (key !== "version") invalidQueryParameter = true;
+  });
+  if (invalidQueryParameter || versionValues.length > 1) {
+    return jsonResponse({ error: "invalid_evaluation_report_query" }, 400);
+  }
+  let versionNumber: number | null = null;
+  if (versionValues.length === 1) {
+    if (!/^\d+$/.test(versionValues[0])) return jsonResponse({ error: "invalid_evaluation_report_version" }, 400);
+    versionNumber = Number(versionValues[0]);
+    if (!Number.isSafeInteger(versionNumber) || versionNumber < 1 || versionNumber > 2_147_483_647) {
+      return jsonResponse({ error: "invalid_evaluation_report_version" }, 400);
+    }
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+
+  const { data, error } = await auth.context.supabase.rpc("get_evaluation_report", {
+    p_report_record_id: reportRecordId,
+    p_version_number: versionNumber,
+  });
+  if (error) {
+    const denied = error.code === "42501" || (error.message ?? "").endsWith("_forbidden");
+    const audit = await auditProtectedReadOutcome(
+      auth.context, "evaluation_report_read_authorized", reportRecordId, denied ? "denied" : "failed",
+    );
+    if (audit) return audit;
+    if (denied || error.code === "P0002") {
+      // Do not reveal whether a report exists outside the caller's permitted scope.
+      return jsonResponse({ error: "evaluation_report_not_found" }, 404);
+    }
+    return jsonResponse({ error: "evaluation_report_unavailable" }, 500);
+  }
+
+  const row = asRows(data)[0];
+  if (!row) {
+    const audit = await auditProtectedReadOutcome(
+      auth.context, "evaluation_report_read_authorized", reportRecordId, "failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "evaluation_report_not_found" }, 404);
+  }
+
+  // Explicit response allowlist: never return database actor IDs, the
+  // idempotency key, or private teacher-access grants to the browser.
+  return jsonResponse({
+    report: {
+      report_record_id: row.report_record_id,
+      report_version_id: row.id,
+      report_scope: row.report_scope,
+      version_number: row.version_number,
+      curriculum_mapping_status: row.curriculum_mapping_status,
+      evidence_sufficiency_status: row.evidence_sufficiency_status,
+      scope_snapshot: row.scope_snapshot,
+      content_snapshot: row.content_snapshot,
+      unit_set_snapshot: row.unit_set_snapshot,
+      curriculum_mapping_snapshot: row.curriculum_mapping_snapshot,
+      learner_evidence_snapshot: row.learner_evidence_snapshot,
+      published_feedback_snapshot: row.published_feedback_snapshot,
+      eligible_analytics_snapshot: row.eligible_analytics_snapshot,
+      created_at: row.created_at,
+    },
+  });
+}
+
 async function auditStaffInvitationAcceptanceFailure(
   context: CallerContext,
   tokenHash: string,
@@ -1411,6 +1664,7 @@ function classifyPrivilegedWriteError(error: { code?: string; message?: string }
     "attempt_task_version_mismatch",
     "timed_attempt_assessment_link_conflict",
     "timed_attempt_assessment_link_idempotency_conflict",
+    "evaluation_report_idempotency_conflict",
     "assessment_submission_not_linkable",
     "attempt_not_linkable",
   ].includes(message)) {
@@ -3815,6 +4069,18 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
 
   if (url.pathname === "/api/v1/learner/diagnostics/ib-myp-g9-cycle1/start" && request.method === "POST") {
     return startLearnerDiagnostic(request, env);
+  }
+  const diagnosticReportMatch = url.pathname.match(
+    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/evaluation-report$/i,
+  );
+  if (diagnosticReportMatch && request.method === "POST") {
+    return createLearnerEvaluationReport(request, env, diagnosticReportMatch[1]);
+  }
+  const evaluationReportMatch = url.pathname.match(
+    /^\/api\/v1\/learner\/evaluation-reports\/([0-9a-f-]{36})$/i,
+  );
+  if (evaluationReportMatch && request.method === "GET") {
+    return getLearnerEvaluationReport(request, env, evaluationReportMatch[1]);
   }
   const diagnosticResponseMatch = url.pathname.match(
     /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/((?:RV(?:0[1-6]|07[ab]|0[89])|LC0[1-5]))$/i,
