@@ -133,7 +133,7 @@ The task should assess purposeful oral communication without requiring recording
 **Internal taxonomy coverage check:** All 23 proposed GradiPrep subskills have at least one evidence source across the programme-level plan. This PA does not claim to test all six broad MYP skill areas and contains no standalone Listening section. Listening is deferred to M3/SA3. A1–D6 are GradiPrep taxonomy labels, not official IB objective codes.
 
 
-## 5. Direct IB MYP curriculum crosswalk for the PA
+## 5. Candidate IB MYP criterion/strand crosswalk for the PA — Year 4 review pending
 
 The following crosswalk maps PA task evidence to the MYP Language and Literature criterion/strand structure described in the public *Language and literature guide*. The current applicable guide edition and exact Year 4 progression must be checked against authorised school materials. This is a traceable candidate mapping for human academic review, not a claim that all descriptors are calibrated to Year 4.
 
@@ -171,6 +171,49 @@ The following crosswalk maps PA task evidence to the MYP Language and Literature
 | SP05 | D.v | Use relevant non-verbal techniques purposefully in oral communication. |
 
 Official strand labels are MYP criterion/strand references, not GradiPrep taxonomy codes. Verify each against the current authorised guide and local Year 4 expectations. If a reviewer cannot establish a direct link for an item, mark it UNMAPPED and exclude/defer it rather than broadening its skill label. The same item-to-curriculum source record must appear in the PA Evaluation Report.
+
+## 5.1 Item-by-item public-strand audit — 11 November 2026
+
+**Audit status: provisional subject-strand fit only; exact MYP Year 4 progression is not verified.** The publicly accessible IB *Language and literature guide* describes the four criteria and their strands, but its year-specific objectives/descriptors are for Years 1, 3 and 5. It does not publish an exact Year 4 descriptor set. The guide also says that schools must use the objectives provided for Years 1, 3 and 5. Accordingly, no item below is approved as a calibrated Year 4 item merely because its proposed criterion/strand label appears plausible. Obtain the current authorised school Year 4 progression/task-specific clarification and obtain human MYP academic sign-off before enabling any of the 30 planned observations.
+
+Sources checked:
+- IB, *Language and literature guide*, published May 2014, updates listed through April 2023; objectives and progression, pp. 7–10; assessed criteria, pp. 27 onward: https://resources.ibo.org/data/m_1_langa_guu_1405_8_e.pdf
+- IB official MYP Language and Literature course description, page updated 19 February 2026: https://www.ibo.org/programmes/middle-years-programme/curriculum/language-and-literature/
+
+| Planned observation | Candidate criterion/strand fit in the public guide | Audit finding and required treatment |
+|---|---|---|
+| RV01 | A.i | Retain as a candidate: explicit content/central meaning can evidence analysis of text content. Year 4 demand and stimulus complexity remain pending. |
+| RV02 | A.i, A.iii | Retain as a candidate: interpretation must analyse the text and justify the inference with a relevant example/explanation. |
+| RV03 | A.ii | Retain as a candidate: the response must explain the effect of a creator's choice on an audience, not merely identify a feature. |
+| RV04 | A.i; add A.ii only where audience effect is analysed | Refine the prompt so context, audience and purpose are connected to textual choices and meaning. Identifying a presumed purpose alone is insufficient. |
+| RV05 | A.i, A.ii | Retain as a candidate when the visual/multimodal layer is analysed as text evidence and its creator choices/effects are explained. “Viewing” is not a separate criterion code. |
+| RV06 | A.i, A.iii | **Revise before use.** Narrow to analysis of how the text represents a claim/perspective and the evidence supporting an interpretation. Do not test external-source credibility or general media reliability as a separate skill; exclude if the prompt still requires that unsupported construct. |
+| RV07a | A.iii, A.iv | Add A.iii to the current A.iv mapping: the comparison must be justified with examples/explanations as well as evaluating similarities/differences across texts. |
+| RV07b | A.i, A.ii, A.iv | Add A.i: the item compares structure/technique as well as effects and similarities/differences. Keep only if learners explain the relationship and effect, not feature-spot. |
+| RV08 | A.i, A.ii | Add A.ii where the learner explains how sequence/arrangement affects an audience; structural identification alone does not evidence that effect. |
+| RV09 | A.iii | Retain as a candidate: evidence selection must be justified through an explanation of how the example supports the interpretation. |
+| LC01 | A.i, conditional | **Revise before use:** require a brief contextual explanation/clue. A stand-alone vocabulary selection without analysis of language in context is not sufficient evidence for A.i. |
+| LC02 | A.i, A.ii | Retain as a candidate when the learner explains how syntax/emphasis contributes to meaning or audience effect. |
+| LC03 | D.iii | Retain as a candidate: the learner must demonstrate correct grammar/usage while preserving intended meaning. |
+| LC04 | D.iii | Retain as a candidate: punctuation and sentence-boundary decisions must demonstrate correct punctuation/syntax, not merely a stylistic preference. |
+| LC05 | C.ii, D.ii | Retain as a candidate: the produced message must show deliberate stylistic choices and a register/style suited to context and intention. |
+| AW01 | A.i, A.iii | Retain as a candidate: require an interpretation of the text plus a reasoned claim supported by relevant examples/explanations. |
+| AW02 | A.ii | Retain as a candidate: analyse the effect of specific creator choices on an audience. |
+| AW03 | A.iii | Retain as a candidate: evidence must be relevant and the reasoning link to the claim explicit. |
+| AW04 | B.i, B.ii | Retain as a candidate: the response must use a structure suited to context/intention and organise ideas coherently and logically. Do not claim B.iii unless referencing/formatting evidence is actually assessed. |
+| AW05 | D.i, D.ii, D.iii, D.iv | Retain as a candidate: score only observable vocabulary, expression, register, grammar/syntax/punctuation and spelling evidence; avoid double-penalising one error across dimensions. |
+| CW01 | C.i | **Rename the dimension** to “development of ideas/perspectives in the produced text.” Do not claim to assess hidden idea-generation or planning processes from a final text alone. |
+| CW02 | B.i, C.ii | **Correct the current mapping:** replace C.i with C.ii. Genre/form control must be evidenced through an appropriate organisational structure and deliberate stylistic choices, not genre labelling alone. |
+| CW03 | C.ii, D.ii | Retain as a candidate: audience effect and appropriate register/style must be visible in the produced text. |
+| CW04 | C.i | **Rename the dimension** to “purposeful perspective and imaginative development.” Do not score novelty/originality as an independent official objective. |
+| CW05 | B.ii, C.i | Conditional candidate: preserve the before/after revision trace. C.i may be judged as creative-process evidence only from the visible trace; organisation in the final text may inform B.ii. The polished final product alone cannot prove revision. |
+| SP01 | B.i, B.iii | Conditional candidate: B.i requires purposeful structure; B.iii requires actual formatting/presentation-style evidence. A title alone is not enough to claim B.iii or referencing. |
+| SP02 | B.ii | Retain as a candidate: assess coherent, logical organisation of the learner's spoken ideas. |
+| SP03 | C.ii, D.ii | Add D.ii to the current C.ii mapping where spoken register/style is scored; C.ii covers deliberate stylistic choices and audience impact. |
+| SP04 | C.i | Conditional candidate: the spoken text must demonstrate purposeful imaginative engagement with a perspective/idea, not merely state an unsupported opinion. |
+| SP05 | D.ii, D.iv, D.v | **Correct the current D.v-only mapping.** D.ii covers spoken register/style; D.iv covers pronunciation; D.v covers non-verbal communication. Remove “interaction” as a separate scored claim unless an explicit direct mapping is established. Do not score accent conformity, extroversion or culturally specific eye-contact norms. |
+
+**Release disposition:** All 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`. The “candidate fit” column is not formal acceptance. Apply the listed revisions to the item map/teacher pack before use. Any observation whose revised prompt cannot be tied to a direct official strand and an authorised Year 4 task-specific expectation must be marked `UNMAPPED` and excluded. No PA score, criterion profile, skill claim or Evaluation Report may imply Year 4 validation before this review is complete.
 
 ## 6. Scoring specification — draft, not calibrated
 
