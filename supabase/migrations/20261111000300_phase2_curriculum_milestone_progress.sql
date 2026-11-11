@@ -533,14 +533,15 @@ CREATE POLICY milestone_unit_memberships_select_published
         SELECT 1
         FROM public.milestone_cycle_versions AS cycle
         JOIN public.curriculum_unit_versions AS unit
-          ON unit.id = curriculum_unit_version_id
-         AND unit.route_version_id = route_version_id
-        WHERE cycle.id = milestone_cycle_version_id
+          ON unit.id = public.milestone_unit_memberships.curriculum_unit_version_id
+         AND unit.route_version_id = public.milestone_unit_memberships.route_version_id
+        WHERE cycle.id = public.milestone_unit_memberships.milestone_cycle_version_id
           AND cycle.release_state = 'published'
           AND unit.release_state = 'published'
           AND EXISTS (
             SELECT 1 FROM public.curriculum_route_versions AS route
-            WHERE route.id = route_version_id AND route.review_state = 'verified'
+            WHERE route.id = public.milestone_unit_memberships.route_version_id
+              AND route.review_state = 'verified'
           )
       )
       AND private.current_account_is_active()
