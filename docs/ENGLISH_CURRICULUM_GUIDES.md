@@ -2,7 +2,7 @@
 
 **Status:** Internal guide register v1.5. The guide architecture and curriculum-specific research controls remain unchanged. The current work order is the diagnostic-first register: Grade 9 IB MYP, then Cambridge Grade 6 (exact stage/course to be scope-locked; do not substitute Stage 7). All former cross-track guide/unit rotations are historical and inactive while those cycles run. Existing guides and unit candidates are preserved; no new year/stage curriculum content work is active. Exact official objective maps remain unverified where current descriptors are not directly available.
 **Source of truth:** `PROJECT_MASTER_BRIEF.md`, `ENGLISH_STAGE_1_ROADMAP.md`, `ENGLISH_CURRICULUM_RESEARCH_AND_DESIGN_STANDARD.md`, and `ENGLISH_PUBLIC_SOURCE_REGISTER.md`.
-**Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences.
+**Purpose:** Provide a maintainable guide structure for each approved year/stage without inventing official syllabus objectives or unit sequences. All PA/SA assessment design is additionally governed by `docs/ASSESSMENT_CURRICULUM_MAPPING_AND_MILESTONE_STANDARD.md`; no generic or tangential English skill may be tested without a direct route-specific official mapping.
 
 ## 1. Document architecture decision
 
@@ -230,3 +230,12 @@ The curriculum-guide architecture and source-verification rules in this document
 2. Cambridge Grade 6 English — confirm the official stage/course and language route; do not substitute Stage 7.
 
 Each level requires a separately researched diagnostic-provider Top Five, a skills-based diagnostic, detailed analytics report and a personalised five-day remedial course before moving to the next level. No curriculum guide, new unit or teacher-pack migration for other levels is to be started during these cycles. The next content order after both cycles is reserved for the founder. Existing guide versions, unit candidates, approvals and release gates are not modified by this overlay.
+
+
+## 6. Binding assessment mapping and milestone handoff — 11 November 2026
+
+For every IB, Cambridge and CBSE route, map each PA/SA question, task, segment and Evaluation Report skill claim directly to the exact official criterion/strand/AO/competency for that programme/course/class/year/stage/session/edition. Use the hard gate in `docs/ASSESSMENT_CURRICULUM_MAPPING_AND_MILESTONE_STANDARD.md`. A shared taxonomy or common item template does not establish cross-board equivalence. Unmapped, peripheral or tangential tasks remain out of assessments.
+
+A Milestone is the set of units completed in a progress segment. SA1 assesses the M1 unit set, SA2 assesses M2, and SA3 assesses M3. The SA must test only outcomes taught in its corresponding unit set and necessary taught prerequisites. Listening is not a compulsory standalone PA task: it is excluded from PA, SA1 and SA2, and may appear in SA3 only for the exact course/session/component with a direct official Listening mapping taught in M3.
+
+Each PA/SA produces a separate versioned Evaluation Report inside that segment's analytics, with explicit official curriculum mappings and evidence. The Overall Progress Tracker is a separate cumulative view of unit/milestone progress linking to each report. Reuse existing assessment, rubric, feedback and analytics structures where possible; perform a read-only reuse/gap audit before adding schema.
