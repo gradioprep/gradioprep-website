@@ -130,7 +130,11 @@ test.describe("public website copy rules", () => {
       expect(response.ok(), `public client asset should load: ${url}`).toBeTruthy();
       downloadedAssets.push(await response.text());
     }
-    const bundleText = downloadedAssets.join("\\n");
+    // PDF.js includes one upstream runtime diagnostic in its renderer; it is not
+    // GradioPrep copy or an application TODO marker. Keep this precise exception
+    // while rejecting project-internal TODOs and TEMP_COPY markers in shipped code.
+    const bundleText = downloadedAssets.join("\\n")
+      .replace("TODO: Fully support non-isolated non-knockout groups.", "");
     const internalAssetPatterns = [
       /(?:["'\`])\s*prototype\s*(?:["'\`])/i,
       /assessment feedback prototype/i,
