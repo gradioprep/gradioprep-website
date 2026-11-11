@@ -261,15 +261,32 @@ WHERE user_id = '99999999-9999-4999-8999-999999999999';
 
 
 -- Synthetic-only Cycle 1 Diagnostic fixture; no live learners or hosted services.
+-- The TEST route exists solely to exercise secure Evaluation Report lineage in CI.
+-- It is not an official IB route, syllabus edition, unit set or curriculum mapping.
+INSERT INTO public.curriculum_route_versions (
+  id, route_key, version, awarding_body, programme_code, subject_code, course_code,
+  level_code, level_label, academic_session, syllabus_edition, official_source_title,
+  official_source_url, source_checked_at, review_state, verified_by, verified_at
+)
+VALUES (
+  'ea111111-1111-4111-8111-111111111111', 'synthetic-ib-myp-year-4', 1, 'TEST',
+  'SYNTHETIC', 'ENGLISH', 'SYNTHETIC-PA', 'SYNTHETIC-Y4', 'Synthetic test route',
+  'synthetic-ci', 'synthetic-only', 'Synthetic route fixture — not an official curriculum source',
+  'https://example.invalid/synthetic-pa-route', now(), 'verified',
+  '88888888-8888-4888-8888-888888888888', now()
+)
+ON CONFLICT (id) DO NOTHING;
+
 INSERT INTO public.diagnostic_versions (
-  id, diagnostic_code, pathway_id, title, version, release_state, total_minutes, sitting_count
+  id, diagnostic_code, pathway_id, title, version, release_state, total_minutes, sitting_count,
+  route_version_id
 )
 VALUES (
   'ed111111-1111-4111-8111-111111111111',
   'ib-myp-g9-cycle1',
   'synthetic-ib-myp-year-4',
   'IB MYP Year 4 Preliminary Assessment — Read & View and Language in Context (synthetic partial slice)',
-  1, 'published', 80, 2
+  1, 'published', 80, 2, 'ea111111-1111-4111-8111-111111111111'
 )
 ON CONFLICT (id) DO NOTHING;
 
