@@ -38,6 +38,13 @@ SELECT is(
         'assessment_drafts',
         'assessment_draft_history',
         'private_qa_records'
+        'curriculum_route_versions',
+        'curriculum_unit_versions',
+        'curriculum_unit_outcome_mappings',
+        'milestone_cycle_versions',
+        'milestone_segments',
+        'milestone_unit_memberships',
+        'learner_unit_progress'
       )
   ),
   32,
@@ -198,7 +205,7 @@ SELECT ok(
         'submission_versions',
         'assessment_drafts',
         'assessment_draft_history',
-        'private_qa_records',
+        'private_qa_records'
       )
   ),
   'authenticated has no direct table privilege on private audit, invitation, response-history, capacity, draft and academic-QA records'

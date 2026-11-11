@@ -64,7 +64,7 @@ WHERE id='0c000000-0000-4000-8000-000000000001';
 
 
 SELECT throws_ok(
-  $
+  $$
     INSERT INTO public.curriculum_unit_versions (
       route_version_id, unit_code, version, sequence_number, title,
       learning_objective_summary, release_state
@@ -73,7 +73,7 @@ SELECT throws_ok(
       '0c000000-0000-4000-8000-000000000001',
       'SYN-LATE-UNIT',1,5,'Late unit','Requires a new route version.','draft'
     )
-  $,
+  $$,
   '55000',
   'curriculum_route_units_locked',
   'verified route content cannot be extended without a new route version'
@@ -133,7 +133,7 @@ SET release_state='published'
 WHERE id='0c000000-0000-4000-8000-000000000301';
 
 SELECT throws_ok(
-  $
+  $$
     INSERT INTO public.milestone_unit_memberships (
       id, milestone_cycle_version_id, milestone_segment_id,
       curriculum_unit_version_id, route_version_id, sequence_number
@@ -145,7 +145,7 @@ SELECT throws_ok(
       '0c000000-0000-4000-8000-000000000101',
       '0c000000-0000-4000-8000-000000000001', 2
     )
-  $,
+  $$,
   '55000',
   'published_curriculum_snapshot_immutable',
   'a published milestone cycle cannot gain new unit memberships'
@@ -165,21 +165,21 @@ SELECT is(
 
 
 SELECT throws_ok(
-  $UPDATE public.curriculum_unit_versions SET release_state='published' WHERE id='0c000000-0000-4000-8000-000000000105'$,
+  $$UPDATE public.curriculum_unit_versions SET release_state='published' WHERE id='0c000000-0000-4000-8000-000000000105'$$,
   '55000',
   'curriculum_unit_requires_direct_outcome',
   'a unit cannot be published without at least one reviewed DIRECT outcome mapping'
 );
 
 SELECT throws_ok(
-  $UPDATE public.curriculum_unit_versions SET release_state='published' WHERE id='0c000000-0000-4000-8000-000000000104'$,
+  $$UPDATE public.curriculum_unit_versions SET release_state='published' WHERE id='0c000000-0000-4000-8000-000000000104'$$,
   '55000',
   'curriculum_unit_requires_verified_route',
   'a unit cannot be published against an unverified curriculum route'
 );
 
 SELECT throws_ok(
-  $UPDATE public.curriculum_unit_versions SET title='tampered published version' WHERE id='0c000000-0000-4000-8000-000000000101'$,
+  $$UPDATE public.curriculum_unit_versions SET title='tampered published version' WHERE id='0c000000-0000-4000-8000-000000000101'$$,
   '55000',
   'published_curriculum_snapshot_immutable',
   'published unit versions are immutable; publish a new version instead'
