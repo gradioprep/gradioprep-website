@@ -149,3 +149,12 @@ The former cross-track Unit 1 rotation in Section 5 is a historical product-prod
 CBSE English Grades 6–12 remains an approved product-scope addition. The existing CBSE Grade 6 Unit 1 v1.0 learner content and its exact-version academic-content approval are preserved. All further CBSE curriculum-content research, Top Five audit, teacher-pack/counter migration and release work are deferred while the two diagnostic cycles run. This does not cancel or modify the CBSE pathway, approve any new content or close any existing review gate. After both diagnostic cycles are complete, the founder will specify the next curriculum-content order.
 
 The new diagnostic Top Five is a separate product-landscape audit of diagnostic/evaluation providers for the exact age/level. It must not be confused with the existing curriculum-content Top Five requirement in this brief or copied from another curriculum/grade.
+
+
+## 14. Binding PA/SA curriculum mapping and segment reporting — 11 November 2026
+
+All CBSE PA/SA items must directly map to a current official outcome/competency/assessment objective for the exact class, academic session, English course option, textbook/syllabus source and learner route. Apply `docs/ASSESSMENT_CURRICULUM_MAPPING_AND_MILESTONE_STANDARD.md`. The Grades 6–12 pathway label is not one common syllabus: never transfer item types, skills, objective codes or assessment formats between classes or English course options without direct official support. A broad skill statement, adjacent literacy skill or popular provider question format is not enough. Mark unresolved outcomes UNMAPPED and exclude them from the scored assessment until verified.
+
+A Milestone is the set of units completed in one progress segment; SA1/SA2/SA3 assesses only its corresponding M1/M2/M3 units and necessary taught prerequisites. Listening is excluded from PA, SA1 and SA2. It may be used in SA3 only if the current official CBSE/NCERT class/session/course route contains a direct Listening outcome taught in the M3 unit set. Do not assume that listening is a compulsory standalone summative section in every CBSE English route.
+
+Create a separate versioned Evaluation Report for the PA baseline and each completed SA segment, showing the exact class/session/source, item-to-outcome mapping, learner evidence, rubric version, confidence/limitations and teacher-reviewed feedback. Keep the Overall Progress Tracker as a separate cumulative unit/milestone view linking to each report. Reuse existing assessment and analytics records before proposing new schema.
