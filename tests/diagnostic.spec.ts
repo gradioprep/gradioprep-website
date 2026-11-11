@@ -275,6 +275,11 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     await expect(page.getByRole("heading", { name: "Your starting point is recorded." })).toBeVisible();
     await expect(page.getByText(/initial record of your work, not a scored evaluation/i)).toBeVisible();
     await expect(page.getByText("Not yet sufficient", { exact: true })).toBeVisible();
+    await expect(page.locator(".proto-evaluation-coverage")).toContainText("15");
+    await expect(page.locator(".proto-evaluation-coverage")).toContainText("15 / 15");
+    await expect(page.locator(".proto-evaluation-coverage")).toContainText("0 / 15");
+    await expect(page.locator(".proto-evaluation-coverage")).toContainText("2 sittings");
+    await expect(page.locator(".proto-evaluation-coverage")).toContainText("80 planned minutes");
     await expect(page.getByText("Not scored", { exact: true })).toBeVisible();
     await expect(page.getByText(/does not contain a score, grade or percentile comparison/i)).toBeVisible();
   });

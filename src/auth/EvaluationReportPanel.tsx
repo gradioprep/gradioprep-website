@@ -1,6 +1,23 @@
 import { useEffect, useState } from "react";
 import type { Navigate } from "../App";
 
+interface ObservationSnapshot {
+  observation_code?: string;
+  group_code?: string;
+  sitting_number?: number;
+}
+
+interface MappingSnapshotEntry {
+  observation_code?: string;
+  mapping_status?: string;
+  direct_outcomes?: unknown[];
+}
+
+interface LearnerEvidenceEntry {
+  observation_code?: string;
+  response_sha256?: string | null;
+}
+
 interface EvaluationReport {
   report_record_id: string;
   report_version_id: string;
@@ -8,6 +25,13 @@ interface EvaluationReport {
   version_number: number;
   curriculum_mapping_status: string;
   evidence_sufficiency_status: string;
+  content_snapshot?: {
+    total_minutes?: number;
+    sitting_count?: number;
+    observations?: ObservationSnapshot[];
+  };
+  curriculum_mapping_snapshot?: MappingSnapshotEntry[];
+  learner_evidence_snapshot?: LearnerEvidenceEntry[];
   created_at: string;
 }
 
@@ -125,6 +149,17 @@ export default function EvaluationReportPanel({
 
   const mapping = curriculumConnection(report.curriculum_mapping_status);
   const evidence = responseEvidence(report.evidence_sufficiency_status);
+  const observations = report.content_snapshot?.observations ?? [];
+  const totalItems = observations.length;
+  const responseRecords = (report.learner_evidence_snapshot ?? []).filter(
+    entry => typeof entry.response_sha256 === "string" && /^[a-f0-9]{64}$/i.test(entry.response_sha256),
+  ).length;
+  const verifiedLinks = (report.curriculum_mapping_snapshot ?? []).filter(
+    entry => entry.mapping_status === "direct" &&
+      Array.isArray(entry.direct_outcomes) && entry.direct_outcomes.length > 0,
+  ).length;
+  const sittingCount = report.content_snapshot?.sitting_count;
+  const totalMinutes = report.content_snapshot?.total_minutes;
   const createdAt = new Date(report.created_at);
   const createdLabel = Number.isNaN(createdAt.getTime())
     ? "Date unavailable"
@@ -134,23 +169,48 @@ export default function EvaluationReportPanel({
     <div className="proto-panel proto-evaluation-hero">
       <div className="proto-evaluation-meta">
         <p className="proto-eyebrow"><span />PRELIMINARY ASSESSMENT</p>
-        <span className="proto-evaluation-status">Submitted</span>
+        <span className="proto-evaluation-status">Submitted · Version {report.version_number}</span>
       </div>
       <h2 id="proto-evaluation-report-heading">Your starting point is recorded.</h2>
       <p>This report records the evidence saved with your submitted Preliminary Assessment. It is an initial record of your work, not a scored evaluation.</p>
       <small>Created {createdLabel}</small>
     </div>
 
+    <section className="proto-panel proto-evaluation-coverage" aria-label="Assessment evidence summary">
+      <div>
+        <p className="proto-eyebrow">ASSESSMENT ITEMS</p>
+        <strong>{totalItems || "—"}</strong>
+        <span>Included in this report</span>
+      </div>
+      <div>
+        <p className="proto-eyebrow">RESPONSES RECORDED</p>
+        <strong>{responseRecords} <small>/ {totalItems || "—"}</small></strong>
+        <span>Saved response records referenced</span>
+      </div>
+      <div>
+        <p className="proto-eyebrow">CURRICULUM LINKS</p>
+        <strong>{verifiedLinks} <small>/ {totalItems || "—"}</small></strong>
+        <span>Items linked to verified outcomes</span>
+      </div>
+      <div>
+        <p className="proto-eyebrow">ASSESSMENT PLAN</p>
+        <strong>{sittingCount && totalMinutes ? sittingCount + " sittings" : "—"}</strong>
+        <span>{totalMinutes ? totalMinutes + " planned minutes" : "Timing not recorded"}</span>
+      </div>
+    </section>
+
     <div className="proto-evaluation-grid">
       <article className="proto-panel proto-evaluation-card">
         <p className="proto-eyebrow">CURRICULUM CONNECTIONS</p>
         <h3>{mapping.heading}</h3>
         <p>{mapping.description}</p>
+        <p className="proto-evaluation-detail">{verifiedLinks} of {totalItems || "the recorded"} items have a verified curriculum outcome link.</p>
       </article>
       <article className="proto-panel proto-evaluation-card">
         <p className="proto-eyebrow">RESPONSE EVIDENCE</p>
         <h3>{evidence.heading}</h3>
         <p>{evidence.description}</p>
+        <p className="proto-evaluation-detail">{responseRecords} of {totalItems || "the recorded"} response records are referenced in this report. Your answer text is not copied into this summary.</p>
       </article>
       <article className="proto-panel proto-evaluation-card">
         <p className="proto-eyebrow">PERSONALISED FEEDBACK</p>
@@ -165,8 +225,8 @@ export default function EvaluationReportPanel({
     </div>
 
     <div className="proto-panel proto-evaluation-note">
-      <h3>Using your report</h3>
-      <p>Scores, grade comparisons and personalised next steps are not part of this starting report.</p>
+      <h3>What this report contains</h3>
+      <p>This report summarises the submitted assessment scope and the evidence records available to it. It does not contain a score, grade, percentile comparison, personalised feedback or recommended learning plan.</p>
     </div>
   </section>;
 }
