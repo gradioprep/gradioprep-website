@@ -44,11 +44,14 @@ SELECT is(
         'milestone_cycle_versions',
         'milestone_segments',
         'milestone_unit_memberships',
-        'learner_unit_progress'
+        'learner_unit_progress',
+        'milestone_assessment_task_mappings',
+        'milestone_assessment_prompt_outcome_mappings',
+        'milestone_assessment_attempt_links'
       )
   ),
-  32,
-  'all thirty-two protected application tables in the baseline inventory are present'
+  35,
+  'all thirty-five protected application tables in the baseline inventory are present'
 );
 
 SELECT is(
@@ -90,12 +93,15 @@ SELECT is(
         'milestone_cycle_versions',
         'milestone_segments',
         'milestone_unit_memberships',
-        'learner_unit_progress'
+        'learner_unit_progress',
+        'milestone_assessment_task_mappings',
+        'milestone_assessment_prompt_outcome_mappings',
+        'milestone_assessment_attempt_links'
       )
       AND relation.relrowsecurity
   ),
-  32,
-  'RLS is enabled on every protected application table in the baseline inventory'
+  35,
+  'RLS is enabled on all thirty-five protected application tables in the baseline inventory'
 );
 
 SELECT ok(
@@ -158,7 +164,10 @@ SELECT ok(
         'milestone_cycle_versions',
         'milestone_segments',
         'milestone_unit_memberships',
-        'learner_unit_progress'
+        'learner_unit_progress',
+        'milestone_assessment_task_mappings',
+        'milestone_assessment_prompt_outcome_mappings',
+        'milestone_assessment_attempt_links'
       )
   ),
   'anonymous has no direct read or write privilege on any protected table'
@@ -205,7 +214,8 @@ SELECT ok(
         'submission_versions',
         'assessment_drafts',
         'assessment_draft_history',
-        'private_qa_records'
+        'private_qa_records',
+        'milestone_assessment_attempt_links'
       )
   ),
   'authenticated has no direct table privilege on private audit, invitation, response-history, capacity, draft and academic-QA records'
@@ -285,7 +295,13 @@ SELECT ok(
   AND NOT has_table_privilege('authenticated', 'public.milestone_unit_memberships', 'DELETE')
   AND NOT has_table_privilege('authenticated', 'public.learner_unit_progress', 'INSERT')
   AND NOT has_table_privilege('authenticated', 'public.learner_unit_progress', 'UPDATE')
-  AND NOT has_table_privilege('authenticated', 'public.learner_unit_progress', 'DELETE'),
+  AND NOT has_table_privilege('authenticated', 'public.learner_unit_progress', 'DELETE')
+  AND NOT has_table_privilege('authenticated', 'public.milestone_assessment_task_mappings', 'INSERT')
+  AND NOT has_table_privilege('authenticated', 'public.milestone_assessment_task_mappings', 'UPDATE')
+  AND NOT has_table_privilege('authenticated', 'public.milestone_assessment_task_mappings', 'DELETE')
+  AND NOT has_table_privilege('authenticated', 'public.milestone_assessment_prompt_outcome_mappings', 'INSERT')
+  AND NOT has_table_privilege('authenticated', 'public.milestone_assessment_prompt_outcome_mappings', 'UPDATE')
+  AND NOT has_table_privilege('authenticated', 'public.milestone_assessment_prompt_outcome_mappings', 'DELETE'),
   'authenticated can read published progress rows but cannot directly mutate the curriculum catalogue or progress'
 );
 
@@ -314,7 +330,9 @@ SELECT ok(
   AND has_table_privilege('authenticated', 'public.milestone_cycle_versions', 'SELECT')
   AND has_table_privilege('authenticated', 'public.milestone_segments', 'SELECT')
   AND has_table_privilege('authenticated', 'public.milestone_unit_memberships', 'SELECT')
-  AND has_table_privilege('authenticated', 'public.learner_unit_progress', 'SELECT'),
+  AND has_table_privilege('authenticated', 'public.learner_unit_progress', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.milestone_assessment_task_mappings', 'SELECT')
+  AND has_table_privilege('authenticated', 'public.milestone_assessment_prompt_outcome_mappings', 'SELECT'),
   'authenticated SELECT grants exist only as the starting point for row-scoped RLS reads'
 );
 

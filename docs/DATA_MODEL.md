@@ -1,4 +1,4 @@
-> **Authoritative current checkpoint — 11 November 2026:** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. The PA Listening rollback commit `bc6efdaee987110acd55cdc1ed655a4676e01ec2` passed exact-head GitHub Actions #42956397671. A separate versioned curriculum-route/unit, M1–M3 membership and learner-progress migration/test increment is added to this branch; its exact-head GitHub Actions run is pending. No live IB/Cambridge/CBSE curriculum route or unit membership is seeded. Protected physical inventory is now **41 tables (29 public, 12 private)**. Current PA capture remains 15 unscored RV/LC observations; Listening is excluded from PA, SA1 and SA2. See §6.23 for read-only reuse findings and §6.24 for the new schema foundation.
+> **Authoritative current checkpoint — 11 November 2026:** PR #22 remains open, draft and unmerged on `feature/phase-1b-local-auth-api`. The PA Listening rollback commit `bc6efdaee987110acd55cdc1ed655a4676e01ec2` passed exact-head GitHub Actions #42956397671. A separate versioned curriculum-route/unit, M1–M3 membership and learner-progress migration/test increment is added to this branch; its exact-head GitHub Actions run is pending. No live IB/Cambridge/CBSE curriculum route or unit membership is seeded. Protected physical inventory is now **44 tables (31 public, 13 private)**. Current PA capture remains 15 unscored RV/LC observations; Listening is excluded from PA, SA1 and SA2. See §6.23 for read-only reuse findings and §6.24 for the new schema foundation.
 
 
 **Status:** Phase 1C, Phase 1D, Phase 1E and Phase 1F technical synthetic evidence remain verified for their accepted scope. Phase 2 submission, transcript review, timer/accommodation, immutable attempt linkage, published-assessment analytics and the first unscored Diagnostic evidence-capture slice have exact-head synthetic CI evidence. Diagnostic response content remains outside score/report processing; no final scoring or Evaluation Report is produced by the current delivery. Hosted backup, deletion/retention operational activation, monitoring, external processing, commercial ledger/entitlements and production-readiness gates remain separate.
@@ -612,7 +612,7 @@ The current implementation reuses the four existing public RLS-protected Diagnos
 
 ## 6.24 Versioned curriculum-unit, M1–M3 membership and learner progression foundation — 11 November 2026
 
-**Verification status:** the migration and synthetic regression tests have been added to PR #22; exact-head GitHub Actions acceptance is pending. Treat the increment as implementation-in-progress until the full run passes.
+**Verification status:** this seven-table curriculum/milestone foundation passed exact-head GitHub Actions [#42965214608](https://github.com/gradioprep/gradioprep-website/actions/runs/42965214608) on commit `9c32653c63342e576aa6654274a93e1e44ca53f1`, including database/RLS tests, TypeScript/Worker build, Playwright and backup/restore. The later SA-mapping increment is separate and awaits its own exact-head CI.
 
 The exact-route and progression foundation is physically implemented in migration `20261111000300_phase2_curriculum_milestone_progress.sql`, with synthetic regression coverage in `supabase/tests/curriculum_milestones.test.sql`.
 
@@ -634,3 +634,22 @@ The existing `course_enrolments.pathway_id` is matched to `curriculum_route_vers
 
 **Inventory:** protected physical inventory increases from 34 to **41 tables (29 public, 12 private)**. This increment adds seven public tables and no private table. No hosted provisioning, learner data, paid service, external processing, merge, Preview or production deployment is involved.
 
+## 6.25 Prompt-level SA outcome mapping and immutable attempt-to-milestone linkage — 11 November 2026
+
+**Verification status:** migration and synthetic regression tests have been prepared for PR #22. Exact-head GitHub Actions verification is pending; do not mark this increment accepted until full CI passes.
+
+Migration `20261111000400_phase2_milestone_assessment_attempt_linkage.sql` adds two public and one private table:
+
+- `public.milestone_assessment_task_mappings`: binds one exact task version to SA1, SA2 or SA3 and one exact published route/cycle/segment. The assessment code must agree with the segment number, and the task's pathway must match the exact route.
+- `public.milestone_assessment_prompt_outcome_mappings`: maps each task prompt to a specific milestone unit membership and reviewed DIRECT official outcome. Composite foreign keys prevent prompt, unit, outcome, route, cycle or segment identities from drifting apart. A task mapping cannot be approved unless every prompt has at least one reviewed DIRECT outcome mapping.
+- `private.milestone_assessment_attempt_links`: immutable private lineage from a learner-owned attempt to its approved task mapping, active enrolment, exact route version, cycle and segment. One attempt can have one link; a learner-scoped idempotency key cannot be reused for a different request.
+
+The route-outcome catalogue gains `is_listening_outcome`. A database trigger rejects direct Listening prompt mappings for SA1 and SA2; only SA3 is permitted, and the assessment-code trigger binds SA3 to segment 3 / M3. An outcome still needs its own reviewed DIRECT route-specific mapping and a published M3 unit membership. This generic database gate does **not** approve any actual Listening curriculum route, recording, item or SA3 design. The PA uses the separate Diagnostic schema and remains Listening-free.
+
+The protected `public.link_milestone_assessment_attempt(...)` RPC requires an active student, own in-progress attempt, active enrolment for the exact verified route, approved task/prompt mappings, matching task version and completion of every required unit in that exact milestone segment. It stores one private immutable link and one metadata-only audit event. Exact retries return the original link; conflicting retries and attempts without completed required units are rejected.
+
+The synthetic fixture uses only fabricated TEST route, units, outcomes, tasks, prompts, users and enrolment. It includes a negative M1 Listening mapping and a positive M3 Listening mapping to exercise the stage gate. No live IB/Cambridge/CBSE curriculum rows, SA content or learner data are added.
+
+**Not yet implemented:** immutable segment Evaluation Report snapshots and the separate Overall Progress Tracker. The next report increment should use the linked attempt/task/unit mapping lineage with existing immutable assessment/rubric/criterion/published-feedback versions and eligible private analytics. Keep the PA baseline report and each SA segment report separate; the cumulative Overall Progress Tracker remains a different longitudinal view.
+
+**Inventory:** this increment adds two public and one private table. Protected physical inventory becomes **44 tables (31 public, 13 private)**. No hosted provisioning, paid service, external AI processing, DNS change, Preview deployment, merge or production deployment is involved.

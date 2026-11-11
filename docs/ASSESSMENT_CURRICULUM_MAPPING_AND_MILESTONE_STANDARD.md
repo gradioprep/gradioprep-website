@@ -111,6 +111,12 @@ The Overall Progress Tracker is a separate longitudinal view. It shows cumulativ
 
 The read-only physical-record audit is recorded in `docs/DATA_MODEL.md` §6.23. Existing versioned rubric, task-level assessment/submission, criterion-result, published-feedback and private analytics records are reusable as evidence inputs. The inspected migrations do not provide persisted curriculum-unit membership/progression or composite segment Evaluation Report snapshots. Do not treat the static frontend pathway slots as learner progression records. Before adding schema, lock exact board/course/session/syllabus routes and approved unit sets; then add only the missing versioned milestone/unit-set and report relations. Preserve separate PA/SA segment reports and the longitudinal Overall Progress Tracker.
 
+### 6.2 Prompt-level SA mapping and milestone eligibility — 11 November 2026
+
+The generic data model records an exact task-to-SA segment and a separate mapping for every task prompt to a reviewed DIRECT outcome from a unit in that same published segment. An SA task mapping cannot be approved while any prompt lacks a DIRECT mapping. Learner SA-attempt linkage is permitted only for the learner's own active route enrolment and after every required unit in the matching milestone segment is recorded complete. The link is immutable and private. See `docs/DATA_MODEL.md` §6.25. This application increment awaits exact-head CI and contains no live curriculum or SA content.
+
+Listening remains excluded from PA, SA1 and SA2. The outcome catalogue now has an explicit Listening marker and the database rejects direct Listening prompt mapping for SA1/SA2. SA3 Listening is structurally possible only against segment 3/M3, but still requires an actual direct official outcome for the learner's exact route and evidence that M3 teaches it. This structural gate is not academic approval.
+
 ## 7. Release gates and enforcement
 
 An assessment cannot be marked ready until:
