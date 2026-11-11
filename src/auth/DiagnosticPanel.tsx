@@ -101,7 +101,15 @@ function TextField({
   </label>;
 }
 
-export default function DiagnosticPanel({ accessToken }: { accessToken: string }) {
+export default function DiagnosticPanel({
+  accessToken,
+  onEvaluationReportReady,
+  onOpenEvaluationReport,
+}: {
+  accessToken: string;
+  onEvaluationReportReady: (reportRecordId: string) => void;
+  onOpenEvaluationReport: () => void;
+}) {
   const [attemptId, setAttemptId] = useState("");
   const [attemptStatus, setAttemptStatus] = useState<"not_started" | "in_progress" | "submitted">("not_started");
   const [responses, setResponses] = useState<DiagnosticResponseMap>({});
@@ -109,6 +117,10 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [reportRecordId, setReportRecordId] = useState("");
+  const [reportError, setReportError] = useState("");
+  const [reportLoading, setReportLoading] = useState(false);
+  const [reportIdempotencyKeys, setReportIdempotencyKeys] = useState<Record<string, string>>({});
 
   const update = (code: string, key: keyof ResponseValue, value: string | string[]) => {
     setResponses(current => ({
@@ -154,6 +166,60 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
   const complete = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "LC01", "LC02", "LC03", "LC04", "LC05"]
     .every(code => savedCodes.includes(code));
 
+  function reportIdempotencyKeyFor(targetAttemptId: string): string {
+    const cached = reportIdempotencyKeys[targetAttemptId];
+    if (cached) return cached;
+
+    const storageKey = "gradioprep.evaluation-report.idempotency:" + targetAttemptId;
+    let key = "";
+    try {
+      key = window.localStorage.getItem(storageKey) ?? "";
+    } catch {
+      // Continue with an in-memory key when browser storage is unavailable.
+    }
+    if (!key) {
+      key = crypto.randomUUID();
+      try {
+        window.localStorage.setItem(storageKey, key);
+      } catch {
+        // The component state below keeps retries idempotent during this visit.
+      }
+    }
+    setReportIdempotencyKeys(current => ({ ...current, [targetAttemptId]: key }));
+    return key;
+  }
+
+  async function prepareEvaluationReport(targetAttemptId: string): Promise<void> {
+    setReportLoading(true);
+    setReportError("");
+    try {
+      const response = await fetch(
+        "/api/v1/learner/diagnostic-attempts/" + targetAttemptId + "/evaluation-report",
+        {
+          method: "POST",
+          headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" },
+          body: JSON.stringify({ idempotency_key: reportIdempotencyKeyFor(targetAttemptId) }),
+        },
+      );
+      const result = await response.json() as {
+        report?: { report_record_id: string };
+        error?: string;
+      };
+      if (!response.ok || !result.report?.report_record_id) {
+        throw new Error("The Evaluation Report could not be prepared.");
+      }
+      setReportRecordId(result.report.report_record_id);
+      onEvaluationReportReady(result.report.report_record_id);
+      setMessage("Your Evaluation Report is ready to view.");
+    } catch {
+      setReportError(
+        "Your Preliminary Assessment was submitted, but your Evaluation Report could not be prepared. You can try again here.",
+      );
+    } finally {
+      setReportLoading(false);
+    }
+  }
+
   async function startOrResume() {
     setLoading(true);
     setError("");
@@ -173,9 +239,14 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         restored[code] = value.response ?? {};
       }
       setResponses(restored);
-      setMessage(result.attempt.status === "submitted"
-        ? "Your Preliminary Assessment responses were submitted. This section is now read-only."
-        : result.attempt.is_replay ? "Your saved Diagnostic section has been restored." : "Your Diagnostic section has started.");
+      if (result.attempt.status === "submitted") {
+        setMessage("Your submitted Preliminary Assessment responses are read-only.");
+        await prepareEvaluationReport(result.attempt.id);
+      } else {
+        setMessage(result.attempt.is_replay
+          ? "Your saved Preliminary Assessment section has been restored."
+          : "Your Preliminary Assessment section has started.");
+      }
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The Diagnostic could not be opened.");
     } finally {
@@ -244,7 +315,8 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
         throw new Error(result.error ?? "The Preliminary Assessment could not be submitted.");
       }
       setAttemptStatus("submitted");
-      setMessage("Your Preliminary Assessment responses have been submitted. These responses are now read-only.");
+      setMessage("Your Preliminary Assessment responses have been submitted and are now read-only.");
+      await prepareEvaluationReport(attemptId);
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The Preliminary Assessment could not be submitted.");
     } finally {
@@ -555,5 +627,24 @@ export default function DiagnosticPanel({ accessToken }: { accessToken: string }
     </>}
     {error && <p className="proto-diagnostic-error" role="alert">{error}</p>}
     {message && <p className="proto-diagnostic-message" role="status">{message}</p>}
+    {reportLoading && readOnly && <p className="proto-diagnostic-message" role="status">Preparing your Evaluation Report…</p>}
+    {reportError && readOnly && <>
+      <p className="proto-diagnostic-error" role="alert">{reportError}</p>
+      <button
+        className="proto-action secondary"
+        type="button"
+        onClick={() => void prepareEvaluationReport(attemptId)}
+        disabled={reportLoading}
+      >
+        {reportLoading ? "Please wait…" : "Try again"}
+      </button>
+    </>}
+    {reportRecordId && readOnly && <button
+      className="proto-action"
+      type="button"
+      onClick={onOpenEvaluationReport}
+    >
+      View your Evaluation Report →
+    </button>}
   </section>;
 }

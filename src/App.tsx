@@ -1,5 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import AccountPage from "./auth/AccountPage";
+import EvaluationReportPanel from "./auth/EvaluationReportPanel";
+import { useAuth } from "./auth/AuthProvider";
 import { englishPathways } from "./content/pathways";
 import { pilotReviewSummary } from "./content/pilotReviewSummary";
 import { pilotLearnerLesson } from "./content/pilotLearnerLesson";
@@ -266,8 +268,23 @@ function Questions({ go }: { go: Navigate }) {
  return <Shell page="questions" go={go}><PageIntro eyebrow="PRACTISE WITH PURPOSE" title={<>A better question can<br/>unlock <em>a new idea.</em></>} subtitle="Find focused activities that help you strengthen the skills you are learning."/><section className="proto-panel proto-results"><div className="proto-empty"><span>⌕</span><h2>Your practice activities will appear here.</h2><p>Choose your curriculum pathway to find activities connected to your learning goals.</p><Action secondary onClick={()=>go("pathways")}>Explore pathways →</Action></div></section></Shell>;
 }
 
-function Assessment({ go }: { go: Navigate }) {
- return <Shell page="assessment" go={go}><PageIntro eyebrow="YOUR LEARNING REPORT" title={<>Your <em>Evaluation Report.</em></>} subtitle="Bring together your learning evidence, assessment insights and feedback to guide your next steps."/><section className="proto-panel proto-assess-summary"><div><small>YOUR REPORT</small><h2>Your learning insights will appear here.</h2><p>After your Preliminary Assessment is complete and feedback is ready, this space will bring your results and next steps together.</p></div><div><small>REPORT CONTENT</small><b>Learning analytics</b><small>PERSONALISED FEEDBACK</small><b>Recommended next steps</b></div></section><div className="proto-assess-grid"><section className="proto-panel"><div className="proto-feedback-title"><div><Label>LEARNING INSIGHTS</Label><h2>Understand what you have learned.</h2></div><span>✳</span></div><p className="proto-feedback-body">Your assessment evidence and skill insights will appear here when your report is ready.</p></section><section className="proto-panel"><div className="proto-feedback-title"><div><Label>FEEDBACK</Label><h2>See what to build on next.</h2></div><span>↗</span></div><p className="proto-feedback-body">Clear, evidence-based feedback will help you recognise strengths and choose useful next steps.</p></section></div><div className="proto-bottom-actions"><Action secondary onClick={()=>go("dashboard")}>← Back to overview</Action><Action onClick={()=>go("pathways")}>Explore pathways →</Action></div></Shell>;
+function Assessment({ go, accessToken, reportRecordId }: {
+  go: Navigate;
+  accessToken: string;
+  reportRecordId: string;
+}) {
+  return <Shell page="assessment" go={go}>
+    <PageIntro
+      eyebrow="YOUR LEARNING REPORT"
+      title={<>Your <em>Evaluation Report.</em></>}
+      subtitle="Review the evidence recorded from your Preliminary Assessment and understand what it can support."
+    />
+    <EvaluationReportPanel accessToken={accessToken} reportRecordId={reportRecordId} go={go} />
+    <div className="proto-bottom-actions">
+      <Action secondary onClick={() => go("dashboard")}>← Back to overview</Action>
+      <Action onClick={() => go("pathways")}>Explore pathways →</Action>
+    </div>
+  </Shell>;
 }
 
 function NotFound({ go }: { go: Navigate }) {
@@ -275,7 +292,9 @@ function NotFound({ go }: { go: Navigate }) {
 }
 
 export default function App() {
+  const auth = useAuth();
   const [pathname, setPathname] = useState(() => window.location.pathname);
+  const [evaluationReportId, setEvaluationReportId] = useState("");
 
   useEffect(() => {
     const handlePopState = () => {
@@ -285,6 +304,21 @@ export default function App() {
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
+
+  useEffect(() => {
+    const userId = auth.session?.user.id;
+    if (!userId) {
+      setEvaluationReportId("");
+      return;
+    }
+    try {
+      setEvaluationReportId(
+        window.localStorage.getItem("gradioprep.evaluation-report.record:" + userId) ?? "",
+      );
+    } catch {
+      setEvaluationReportId("");
+    }
+  }, [auth.session?.user.id]);
 
   const navigatePath: NavigatePath = path => {
     const normalizedPath = `/${path.split("/").filter(Boolean).join("/")}`;
@@ -301,9 +335,32 @@ export default function App() {
   if (route.type === "home") return <Home go={go} />;
   if (route.type === "page") {
     if (route.page === "dashboard") return <Dashboard go={go} />;
-    if (route.page === "account") return <Shell page="account" go={go}><AccountPage go={go} /></Shell>;
+    if (route.page === "account") return <Shell page="account" go={go}>
+      <AccountPage
+        go={go}
+        onEvaluationReportReady={reportRecordId => {
+          setEvaluationReportId(reportRecordId);
+          const userId = auth.session?.user.id;
+          if (userId) {
+            try {
+              window.localStorage.setItem(
+                "gradioprep.evaluation-report.record:" + userId,
+                reportRecordId,
+              );
+            } catch {
+              // The current page state still keeps the report available for this visit.
+            }
+          }
+        }}
+        onOpenEvaluationReport={() => navigatePath("/assessment")}
+      />
+    </Shell>;
     if (route.page === "questions") return <Questions go={go} />;
-    return <Assessment go={go} />;
+    return <Assessment
+      go={go}
+      accessToken={auth.session?.access_token ?? ""}
+      reportRecordId={evaluationReportId}
+    />;
   }
   if (route.type === "pathways") return <Pathways go={go} route={route} navigatePath={navigatePath} />;
   if (route.type === "lesson") return <Lesson go={go} navigatePath={navigatePath} pathwayId={route.pathwayId} unitId={route.unitId} />;

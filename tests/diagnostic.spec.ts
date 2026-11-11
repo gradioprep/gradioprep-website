@@ -5,6 +5,15 @@ const learnerEmail = "student.a@example.invalid";
 const learnerPassword = ["Local-only", "GradiPrep", "2026!"].join("-");
 const startPath = "/api/v1/learner/diagnostics/ib-myp-g9-cycle1/start";
 
+function userIdFromAuthorization(authorization: string): string {
+  const token = authorization.replace(/^Bearer\s+/i, "");
+  const payload = token.split(".")[1];
+  if (!payload) throw new Error("The authenticated test session did not contain a JWT payload.");
+  const claims = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { sub?: string };
+  if (!claims.sub) throw new Error("The authenticated test session did not contain a user ID.");
+  return claims.sub;
+}
+
 test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Context evidence API", () => {
   test("student starts, saves, resumes and submits the unscored Read & View and Language in Context slice", async ({ page, request }) => {
     const unauthenticatedStart = await request.post(startPath, {
@@ -36,6 +45,7 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     await expect.poll(() => Boolean(accessToken)).toBe(true);
 
     const headers = { Authorization: accessToken };
+    const learnerUserId = userIdFromAuthorization(accessToken);
     const startedResponsePromise = page.waitForResponse(response =>
       new URL(response.url()).pathname === startPath && response.request().method() === "POST",
     );
@@ -219,6 +229,16 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     expect(report).not.toHaveProperty("created_by");
     expect(report).not.toHaveProperty("idempotency_key");
 
+    await page.evaluate(({ learnerUserId, attemptId, reportRecordId, idempotencyKey }) => {
+      localStorage.setItem("gradioprep.evaluation-report.record:" + learnerUserId, reportRecordId);
+      localStorage.setItem("gradioprep.evaluation-report.idempotency:" + attemptId, idempotencyKey);
+    }, {
+      learnerUserId,
+      attemptId: startedBody.attempt.id,
+      reportRecordId: reportRecordId!,
+      idempotencyKey: reportIdempotencyKey,
+    });
+
     const lateEdit = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/RV02",
       { headers, data: { response: { text: "Submitted evidence cannot be changed." } } },
@@ -226,13 +246,36 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     expect(lateEdit.status()).toBe(409);
     await expect(lateEdit.json()).resolves.toMatchObject({ error: "diagnostic_attempt_not_editable" });
 
-    // Reload and resume the submitted attempt to verify the learner UI restores it read-only.
+    // Reload and resume the submitted attempt. The UI must reuse the report's
+    // idempotency key, restore the submitted section read-only, and show the report.
     await page.reload();
     await expect(page.getByRole("heading", { name: "Synthetic Student A", exact: true })).toBeVisible();
+    const uiReportReplayPromise = page.waitForResponse(response =>
+      new URL(response.url()).pathname === reportCreatePath && response.request().method() === "POST",
+    );
     await page.getByRole("button", { name: "Start / continue Preliminary Assessment" }).click();
+    const uiReportReplay = await uiReportReplayPromise;
+    const uiReportReplayBody = await uiReportReplay.json() as {
+      report?: { report_record_id: string; version_number: number };
+      is_replay?: boolean;
+    };
+    expect(uiReportReplay.status(), JSON.stringify(uiReportReplayBody)).toBe(200);
+    expect(uiReportReplayBody.report).toMatchObject({
+      report_record_id: reportRecordId,
+      version_number: 1,
+    });
+    expect(uiReportReplayBody.is_replay).toBe(true);
     await expect(page.getByRole("heading", { name: "Stimulus A · The Repair Table", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Submit Preliminary Assessment section" })).toHaveCount(0);
     await expect(page.locator('input[type="radio"]').first()).toBeDisabled();
     await expect(page.locator("textarea").first()).toBeDisabled();
+    await expect(page.getByRole("button", { name: "View your Evaluation Report →" })).toBeVisible();
+
+    await page.getByRole("button", { name: "View your Evaluation Report →" }).click();
+    await expect(page.getByRole("heading", { name: "Your starting point is recorded." })).toBeVisible();
+    await expect(page.getByText(/initial record of your work, not a scored evaluation/i)).toBeVisible();
+    await expect(page.getByText("More evidence needed", { exact: true })).toBeVisible();
+    await expect(page.getByText("Not scored", { exact: true })).toBeVisible();
+    await expect(page.getByText(/does not contain a score, grade or percentile comparison/i)).toBeVisible();
   });
 });

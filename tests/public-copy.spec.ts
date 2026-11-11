@@ -107,10 +107,10 @@ test.describe("public website copy rules", () => {
     await expect(page.getByText("28", { exact: true })).toHaveCount(0);
   });
 
-  test("Evaluation Report screen does not show example marks or an illustrative rubric", async ({ page }) => {
+  test("Evaluation Report screen requires the submitting learner to sign in", async ({ page }) => {
     await page.goto("/assessment");
     await expect(page.getByRole("heading", { name: "Your Evaluation Report." })).toBeVisible();
-    await expect(page.getByText("Your learning insights will appear here.")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Sign in to view your Evaluation Report." })).toBeVisible();
     await expect(page.getByText(/not final rubric|placeholder criterion|illustrative excerpts/i)).toHaveCount(0);
   });
 

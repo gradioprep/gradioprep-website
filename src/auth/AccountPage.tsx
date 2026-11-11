@@ -39,7 +39,15 @@ interface CreatedStaffInvitation {
   expires_at: string;
 }
 
-export default function AccountPage({ go }: { go: Navigate }) {
+export default function AccountPage({
+  go,
+  onEvaluationReportReady,
+  onOpenEvaluationReport,
+}: {
+  go: Navigate;
+  onEvaluationReportReady: (reportRecordId: string) => void;
+  onOpenEvaluationReport: () => void;
+}) {
   const auth = useAuth();
   const [mode, setMode] = useState<AccountMode>("sign-in");
   const [displayName, setDisplayName] = useState("");
@@ -554,7 +562,11 @@ export default function AccountPage({ go }: { go: Navigate }) {
       </div>
       {account?.roles.includes("student") && auth.session?.access_token && (
         <>
-          <DiagnosticPanel accessToken={auth.session.access_token} />
+          <DiagnosticPanel
+            accessToken={auth.session.access_token}
+            onEvaluationReportReady={onEvaluationReportReady}
+            onOpenEvaluationReport={onOpenEvaluationReport}
+          />
           <LearnerAttemptPanel accessToken={auth.session.access_token} />
           <LearnerSubmissionPanel accessToken={auth.session.access_token} />
         </>
