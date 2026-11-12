@@ -1538,6 +1538,48 @@ async function createLearnerEvaluationReport(
   }, created.is_replay === true ? 200 : 201);
 }
 
+async function publishOwnerPaEvaluationFeedback(request: Request, env: WorkerEnv): Promise<Response> {
+  const parsed = await readBoundedJson(request, 256);
+  if (!parsed.ok) return parsed.response;
+  const body = parsed.body;
+  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+    return jsonResponse({ error: "invalid_pa_feedback_publication" }, 400);
+  }
+  const fields = body as Record<string, unknown>;
+  if (Object.keys(fields).length !== 2 ||
+      !Object.keys(fields).every(key => ["review_id", "idempotency_key"].includes(key)) ||
+      !isUuid(fields.review_id) || !isUuid(fields.idempotency_key)) {
+    return jsonResponse({ error: "invalid_pa_feedback_publication" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const assuranceDenied = requireAal2(auth.context);
+  if (assuranceDenied) return assuranceDenied;
+
+  const { data, error } = await auth.context.supabase.rpc("publish_pa_evaluation_feedback", {
+    p_review_id: fields.review_id,
+    p_idempotency_key: fields.idempotency_key,
+  });
+  if (error) {
+    if (error.code === "42501") return jsonResponse({ error: "pa_feedback_publication_forbidden" }, 403);
+    if (error.code === "55000" || error.code === "P0001") {
+      return jsonResponse({ error: "pa_feedback_not_publishable" }, 409);
+    }
+    return jsonResponse({ error: "pa_feedback_publication_unavailable" }, 503);
+  }
+  const result = asRows(data)[0];
+  if (!result) return jsonResponse({ error: "pa_feedback_publication_unavailable" }, 503);
+  return jsonResponse({
+    report_record_id: result.report_record_id,
+    report_version_id: result.report_version_id,
+    version_number: result.version_number,
+    is_replay: result.is_replay,
+  }, result.is_replay ? 200 : 201);
+}
+
 async function getLearnerEvaluationReport(
   request: Request,
   env: WorkerEnv,
@@ -4075,6 +4117,9 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   );
   if (diagnosticReportMatch && request.method === "POST") {
     return createLearnerEvaluationReport(request, env, diagnosticReportMatch[1]);
+  }
+  if (url.pathname === "/api/v1/admin/pa-feedback/publish" && request.method === "POST") {
+    return publishOwnerPaEvaluationFeedback(request, env);
   }
   const evaluationReportMatch = url.pathname.match(
     /^\/api\/v1\/learner\/evaluation-reports\/([0-9a-f-]{36})$/i,
