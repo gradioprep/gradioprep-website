@@ -290,6 +290,28 @@ VALUES (
 )
 ON CONFLICT (id) DO NOTHING;
 
+INSERT INTO public.diagnostic_observations (
+  id, diagnostic_version_id, observation_code, group_code,
+  sitting_number, sequence_number, response_kind, learner_capture_enabled
+)
+VALUES
+  ('ee000001-0000-4000-8000-000000000001','ed111111-1111-4111-8111-111111111111','RV01','RV',1,1,'structured_selection',true),
+  ('ee000002-0000-4000-8000-000000000002','ed111111-1111-4111-8111-111111111111','RV02','RV',1,2,'text',true),
+  ('ee000003-0000-4000-8000-000000000003','ed111111-1111-4111-8111-111111111111','RV03','RV',1,3,'text',true),
+  ('ee000004-0000-4000-8000-000000000004','ed111111-1111-4111-8111-111111111111','RV04','RV',1,4,'single_choice',true),
+  ('ee000005-0000-4000-8000-000000000005','ed111111-1111-4111-8111-111111111111','RV05','RV',1,5,'single_choice',true),
+  ('ee000006-0000-4000-8000-000000000006','ed111111-1111-4111-8111-111111111111','RV06','RV',1,6,'text',true),
+  ('ee000007-0000-4000-8000-000000000007','ed111111-1111-4111-8111-111111111111','RV07a','RV',1,7,'text',true),
+  ('ee000008-0000-4000-8000-000000000008','ed111111-1111-4111-8111-111111111111','RV07b','RV',1,8,'text',true),
+  ('ee000009-0000-4000-8000-000000000009','ed111111-1111-4111-8111-111111111111','RV08','RV',1,9,'ordered_sequence',true),
+  ('ee000010-0000-4000-8000-000000000010','ed111111-1111-4111-8111-111111111111','RV09','RV',1,10,'choice_and_text',true),
+  ('ee000016-0000-4000-8000-000000000016','ed111111-1111-4111-8111-111111111111','LC01','LC',1,11,'single_choice',true),
+  ('ee000017-0000-4000-8000-000000000017','ed111111-1111-4111-8111-111111111111','LC02','LC',1,12,'single_choice',true),
+  ('ee000018-0000-4000-8000-000000000018','ed111111-1111-4111-8111-111111111111','LC03','LC',1,13,'single_choice',true),
+  ('ee000019-0000-4000-8000-000000000019','ed111111-1111-4111-8111-111111111111','LC04','LC',1,14,'single_choice',true),
+  ('ee000020-0000-4000-8000-000000000020','ed111111-1111-4111-8111-111111111111','LC05','LC',1,15,'text',true)
+ON CONFLICT (id) DO NOTHING;
+
 -- Synthetic-only full-instrument authoring blueprint. Draft v2 is deliberately NOT
 -- published and has NO enabled learner capture, mapping, scoring or teacher approval.
 -- Five AW/CW/SP observations each represent one common performance, not five essays.
@@ -332,25 +354,3 @@ FROM (VALUES
   ('SP01','SP',26),('SP02','SP',27),('SP03','SP',28),('SP04','SP',29),('SP05','SP',30)
 ) AS proposed(code, group_code, seq)
 ON CONFLICT (diagnostic_version_id, observation_code) DO NOTHING;
-
-INSERT INTO public.diagnostic_observations (
-  id, diagnostic_version_id, observation_code, group_code,
-  sitting_number, sequence_number, response_kind, learner_capture_enabled
-)
-VALUES
-  ('ee000001-0000-4000-8000-000000000001','ed111111-1111-4111-8111-111111111111','RV01','RV',1,1,'structured_selection',true),
-  ('ee000002-0000-4000-8000-000000000002','ed111111-1111-4111-8111-111111111111','RV02','RV',1,2,'text',true),
-  ('ee000003-0000-4000-8000-000000000003','ed111111-1111-4111-8111-111111111111','RV03','RV',1,3,'text',true),
-  ('ee000004-0000-4000-8000-000000000004','ed111111-1111-4111-8111-111111111111','RV04','RV',1,4,'single_choice',true),
-  ('ee000005-0000-4000-8000-000000000005','ed111111-1111-4111-8111-111111111111','RV05','RV',1,5,'single_choice',true),
-  ('ee000006-0000-4000-8000-000000000006','ed111111-1111-4111-8111-111111111111','RV06','RV',1,6,'text',true),
-  ('ee000007-0000-4000-8000-000000000007','ed111111-1111-4111-8111-111111111111','RV07a','RV',1,7,'text',true),
-  ('ee000008-0000-4000-8000-000000000008','ed111111-1111-4111-8111-111111111111','RV07b','RV',1,8,'text',true),
-  ('ee000009-0000-4000-8000-000000000009','ed111111-1111-4111-8111-111111111111','RV08','RV',1,9,'ordered_sequence',true),
-  ('ee000010-0000-4000-8000-000000000010','ed111111-1111-4111-8111-111111111111','RV09','RV',1,10,'choice_and_text',true),
-  ('ee000016-0000-4000-8000-000000000016','ed111111-1111-4111-8111-111111111111','LC01','LC',1,11,'single_choice',true),
-  ('ee000017-0000-4000-8000-000000000017','ed111111-1111-4111-8111-111111111111','LC02','LC',1,12,'single_choice',true),
-  ('ee000018-0000-4000-8000-000000000018','ed111111-1111-4111-8111-111111111111','LC03','LC',1,13,'single_choice',true),
-  ('ee000019-0000-4000-8000-000000000019','ed111111-1111-4111-8111-111111111111','LC04','LC',1,14,'single_choice',true),
-  ('ee000020-0000-4000-8000-000000000020','ed111111-1111-4111-8111-111111111111','LC05','LC',1,15,'text',true)
-ON CONFLICT (id) DO NOTHING;
