@@ -1539,8 +1539,6 @@ async function createLearnerEvaluationReport(
 }
 
 
-type PaFeedbackRequest = { report_record_id?: string; report_version_id?: string; draft_text?: string; draft_id?: string; decision?: string; reviewer_note?: string };
-
 async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts" | "reviews" | "review", reportRecordId?: string): Promise<Response> {
   let fields: Record<string, unknown> = {};
   if (request.method === "POST") {
