@@ -2947,3 +2947,13 @@ a:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
   .proto-evaluation-coverage > div:nth-child(odd) { border-left: 0; padding-left: 0; }
   .proto-evaluation-coverage strong { font-size: 19px; }
 }
+
+
+.proto-pa-report-evidence { margin: 16px 0; padding: 16px; border: 1px solid var(--proto-border, #d5d0dd); border-radius: 12px; }
+.proto-pa-report-evidence > p { margin: 8px 0 12px; }
+.proto-pa-evidence-group { margin-top: 16px; }
+.proto-pa-evidence-group h5 { margin: 0 0 8px; font-size: 0.98rem; }
+.proto-pa-evidence-group > ul { display: grid; gap: 8px; list-style: none; padding: 0; margin: 0; }
+.proto-pa-evidence-group > ul > li { padding: 10px 12px; border-radius: 8px; background: rgba(102, 100, 141, 0.07); display: flex; gap: 8px; flex-wrap: wrap; align-items: baseline; }
+.proto-pa-evidence-group > ul > li > ul { width: 100%; margin-top: 4px; }
+.proto-pa-evidence-group > ul > li > ul li { margin: 4px 0; }
