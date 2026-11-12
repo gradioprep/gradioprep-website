@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+type ReviewerGrant = { access_grant_id: string; teacher_user_id: string; granted_at: string };
 type QueueEntry = {
   report_record_id: string; created_at: string; version_number: number;
   curriculum_mapping_status: string; evidence_sufficiency_status: string;
@@ -22,6 +23,9 @@ export default function PaFeedbackWorkspacePanel({
   const [report, setReport] = useState<Report | null>(null);
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviewerGrants, setReviewerGrants] = useState<ReviewerGrant[]>([]);
+  const [teacherUserId, setTeacherUserId] = useState("");
+  const [assignmentReason, setAssignmentReason] = useState("");
   const [draftText, setDraftText] = useState("");
   const [reviewNotes, setReviewNotes] = useState("");
   const [selectedDraft, setSelectedDraft] = useState("");
@@ -55,19 +59,21 @@ export default function PaFeedbackWorkspacePanel({
   async function openReport(targetId: string) {
     setRecordId(targetId);
     setReport(null); setDrafts([]); setReviews([]);
-    setSelectedDraft(""); setSelectedReview("");
+    setSelectedDraft(""); setSelectedReview(""); setReviewerGrants([]);
     await refresh(targetId);
   }
 
   async function refresh(targetId = recordId) {
-    const [reportResult, draftResult, reviewResult] = await Promise.all([
+    const [reportResult, draftResult, reviewResult, grantsResult] = await Promise.all([
       request("/api/v1/learner/evaluation-reports/" + targetId),
       request("/api/v1/staff/pa-feedback/" + targetId + "/drafts"),
       request("/api/v1/staff/pa-feedback/" + targetId + "/reviews"),
+      owner ? request("/api/v1/admin/pa-feedback/" + targetId + "/reviewers") : Promise.resolve(null),
     ]);
     setReport(reportResult.report as Report);
     setDrafts((draftResult.items as Draft[]) ?? []);
     setReviews((reviewResult.items as Review[]) ?? []);
+    setReviewerGrants(owner && grantsResult ? ((grantsResult.grants as ReviewerGrant[]) ?? []) : []);
   }
 
   async function perform(action: () => Promise<void>, success: string) {
@@ -112,12 +118,45 @@ export default function PaFeedbackWorkspacePanel({
       <label>Evaluation Report record ID
         <input value={recordId} onChange={event => {
           setRecordId(event.target.value.trim()); setReport(null); setDrafts([]); setReviews([]);
-          setSelectedDraft(""); setSelectedReview("");
+          setSelectedDraft(""); setSelectedReview(""); setReviewerGrants([]);
         }} placeholder="Report UUID" aria-label="Evaluation Report record ID" />
       </label>
       <button className="proto-action secondary" disabled={busy || !/^[0-9a-f-]{36}$/i.test(recordId)}
         onClick={() => void perform(() => refresh(), "Report records loaded.")}>Open report</button>
       {report && <>
+        {owner && <section aria-label="Assigned report reviewers" className="proto-pa-reviewer-assignments">
+          <h4>Assigned report reviewers</h4>
+          {reviewerGrants.length === 0 ? <p>No Grader is currently assigned.</p> : <ul>
+            {reviewerGrants.map(grant => <li key={grant.access_grant_id}>
+              <span>Grader ID: {grant.teacher_user_id}</span>
+              <button type="button" className="proto-action secondary"
+                disabled={busy || assignmentReason.trim().length < 3}
+                onClick={() => void perform(async () => {
+                  await request("/api/v1/admin/pa-feedback/reviewers/revoke", {
+                    access_grant_id: grant.access_grant_id, reason: assignmentReason.trim(),
+                  });
+                  await refresh();
+                }, "Reviewer access revoked.")}>Revoke access</button>
+            </li>)}
+          </ul>}
+          <label>Grader user ID
+            <input value={teacherUserId} onChange={event => setTeacherUserId(event.target.value.trim())}
+              placeholder="Grader UUID" />
+          </label>
+          <label>Assignment or revocation reason
+            <input value={assignmentReason} maxLength={240}
+              onChange={event => setAssignmentReason(event.target.value)} />
+          </label>
+          <button type="button" className="proto-action secondary"
+            disabled={busy || !/^[0-9a-f-]{36}$/i.test(teacherUserId) || assignmentReason.trim().length < 3}
+            onClick={() => void perform(async () => {
+              await request("/api/v1/admin/pa-feedback/reviewers/grant", {
+                report_record_id: report.report_record_id, teacher_user_id: teacherUserId,
+                reason: assignmentReason.trim(),
+              });
+              setTeacherUserId(""); await refresh();
+            }, "Reviewer access assigned.")}>Assign Grader</button>
+        </section>}
         <p><strong>Report version:</strong> {report.version_number}</p>
         <p><strong>Assessment items:</strong> {report.content_snapshot?.observations?.length ?? 0}</p>
         <p><strong>Curriculum connections:</strong> {report.curriculum_mapping_status === "complete_direct" ? "Verified" : "Not complete"}</p>
