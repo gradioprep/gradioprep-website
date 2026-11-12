@@ -1538,6 +1538,66 @@ async function createLearnerEvaluationReport(
   }, created.is_replay === true ? 200 : 201);
 }
 
+
+type PaFeedbackRequest = { report_record_id?: string; report_version_id?: string; draft_text?: string; draft_id?: string; decision?: string; reviewer_note?: string };
+
+async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts" | "reviews" | "review", reportRecordId?: string): Promise<Response> {
+  let fields: Record<string, unknown> = {};
+  if (request.method === "POST") {
+    const parsed = await readBoundedJson(request, 6200);
+    if (!parsed.ok) return parsed.response;
+    if (typeof parsed.body !== "object" || parsed.body === null || Array.isArray(parsed.body)) {
+      return jsonResponse({ error: "invalid_pa_feedback_request" }, 400);
+    }
+    fields = parsed.body as Record<string, unknown>;
+  }
+  const keys = Object.keys(fields);
+  const allowed = action === "drafts" ? ["report_version_id", "draft_text"] :
+    ["draft_id", "decision", "reviewer_note"];
+  if (request.method === "POST" && (
+    keys.length !== allowed.length || !keys.every(key => allowed.includes(key)) ||
+    (action === "drafts"
+      ? !isUuid(fields.report_version_id) || typeof fields.draft_text !== "string" ||
+        fields.draft_text.trim().length < 20 || fields.draft_text.trim().length > 5000
+      : !isUuid(fields.draft_id) ||
+        !["changes_requested", "approved_for_publication"].includes(String(fields.decision)) ||
+        typeof fields.reviewer_note !== "string" ||
+        fields.reviewer_note.trim().length < 10 || fields.reviewer_note.trim().length > 1000)
+  )) return jsonResponse({ error: "invalid_pa_feedback_request" }, 400);
+  if (request.method === "GET" && (!reportRecordId || !isUuid(reportRecordId))) {
+    return jsonResponse({ error: "invalid_pa_feedback_report" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const assuranceDenied = requireAal2(auth.context);
+  if (assuranceDenied) return assuranceDenied;
+  if (action === "review") {
+    const roleDenied = await requireActiveRole(auth.context, "owner");
+    if (roleDenied) return roleDenied;
+  }
+  const rpc = action === "drafts"
+    ? request.method === "GET" ? "get_pa_evaluation_feedback_drafts" : "create_pa_evaluation_feedback_draft"
+    : action === "reviews" ? "get_pa_evaluation_feedback_reviews" : "review_pa_evaluation_feedback_draft";
+  const args = action === "drafts"
+    ? request.method === "GET" ? { p_report_record_id: reportRecordId }
+      : { p_report_version_id: fields.report_version_id, p_draft_text: fields.draft_text.trim() }
+    : action === "reviews" ? { p_report_record_id: reportRecordId }
+      : { p_draft_id: fields.draft_id, p_decision: fields.decision, p_reviewer_note: fields.reviewer_note.trim() };
+  const { data, error } = await auth.context.supabase.rpc(rpc, args);
+  if (error) {
+    if (error.code === "42501" || error.code === "P0002") return jsonResponse({ error: "pa_feedback_not_found" }, 404);
+    if (["55000", "23514", "23505", "P0001"].includes(error.code)) {
+      return jsonResponse({ error: "pa_feedback_state_conflict" }, 409);
+    }
+    if (error.code === "22023") return jsonResponse({ error: "invalid_pa_feedback_request" }, 400);
+    return jsonResponse({ error: "pa_feedback_unavailable" }, 503);
+  }
+  if (request.method === "GET") {
+    return jsonResponse({ items: asRows(data) }, 200, { "Cache-Control": "no-store" });
+  }
+  return jsonResponse(action === "drafts" ? { draft_id: data } : { review_id: data }, 201);
+}
+
 async function publishOwnerPaEvaluationFeedback(request: Request, env: WorkerEnv): Promise<Response> {
   const parsed = await readBoundedJson(request, 256);
   if (!parsed.ok) return parsed.response;
@@ -4117,6 +4177,16 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   );
   if (diagnosticReportMatch && request.method === "POST") {
     return createLearnerEvaluationReport(request, env, diagnosticReportMatch[1]);
+  }
+  const staffDraftMatch = url.pathname.match(/^\\/api\\/v1\\/staff\\/pa-feedback\\/([0-9a-f-]{36})\\/drafts$/i);
+  if (staffDraftMatch && request.method === "GET") return staffPaFeedback(request, env, "drafts", staffDraftMatch[1]);
+  if (url.pathname === "/api/v1/staff/pa-feedback/drafts" && request.method === "POST") {
+    return staffPaFeedback(request, env, "drafts");
+  }
+  const staffReviewMatch = url.pathname.match(/^\\/api\\/v1\\/staff\\/pa-feedback\\/([0-9a-f-]{36})\\/reviews$/i);
+  if (staffReviewMatch && request.method === "GET") return staffPaFeedback(request, env, "reviews", staffReviewMatch[1]);
+  if (url.pathname === "/api/v1/admin/pa-feedback/review" && request.method === "POST") {
+    return staffPaFeedback(request, env, "review");
   }
   if (url.pathname === "/api/v1/admin/pa-feedback/publish" && request.method === "POST") {
     return publishOwnerPaEvaluationFeedback(request, env);
