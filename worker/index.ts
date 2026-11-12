@@ -1580,9 +1580,9 @@ async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts
     : action === "reviews" ? "get_pa_evaluation_feedback_reviews" : "review_pa_evaluation_feedback_draft";
   const args = action === "drafts"
     ? request.method === "GET" ? { p_report_record_id: reportRecordId }
-      : { p_report_version_id: fields.report_version_id, p_draft_text: fields.draft_text.trim() }
+      : { p_report_version_id: fields.report_version_id, p_draft_text: String(fields.draft_text).trim() }
     : action === "reviews" ? { p_report_record_id: reportRecordId }
-      : { p_draft_id: fields.draft_id, p_decision: fields.decision, p_reviewer_note: fields.reviewer_note.trim() };
+      : { p_draft_id: fields.draft_id, p_decision: fields.decision, p_reviewer_note: String(fields.reviewer_note).trim() };
   const { data, error } = await auth.context.supabase.rpc(rpc, args);
   if (error) {
     if (error.code === "42501" || error.code === "P0002") return jsonResponse({ error: "pa_feedback_not_found" }, 404);
