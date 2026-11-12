@@ -204,15 +204,12 @@ export default function EvaluationReportPanel({
 
     <section className="proto-panel proto-evaluation-note" aria-labelledby="proto-evaluation-scope-heading">
       <h3 id="proto-evaluation-scope-heading">Assessment scope and source</h3>
-      <p><strong>Programme and course:</strong> {routeLabel || "Verified course details not available in this snapshot"}</p>
+      <p><strong>Programme and course:</strong> {routeLabel || "Course details not available in this snapshot"}</p>
       <p><strong>Session and source edition:</strong> {editionLabel || "Not recorded"}</p>
       <p><strong>Curriculum source:</strong> {scope?.official_source_title || "Not recorded"}</p>
       <p><strong>Assessment record:</strong> {report.content_snapshot?.diagnostic_title || "Preliminary Assessment"} · Report version {report.version_number}</p>
       <p>The details above come from the saved report version. They are not independently verified by this page.</p>
     </section>
-
-    <div className="proto-panel proto-evaluation-hero-continuation" hidden>
-    </div>
 
     <section className="proto-panel proto-evaluation-coverage" aria-label="Assessment evidence summary">
       <div>
