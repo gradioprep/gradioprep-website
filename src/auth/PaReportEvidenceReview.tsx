@@ -60,7 +60,7 @@ export default function PaReportEvidenceReview({ report }: { report: PaReportEvi
     && rows.every(item => item.saved && item.mapped);
   return <section aria-label="Report evidence review" className="proto-pa-report-evidence">
     <h4>Assessment evidence by segment</h4>
-    <p>{rows.length} observations · {saved} responses recorded · {mapped} verified direct curriculum links</p>
+    <p>{rows.length} observations · {saved}/{rows.length} responses recorded · {mapped}/{rows.length} verified direct curriculum links</p>
     <p role="status">{ready
       ? "Saved evidence and curriculum connections meet the recorded report checks. Human academic review is still required."
       : "Review cannot be completed from these records yet. Missing responses or direct curriculum connections must be resolved."}</p>
