@@ -132,6 +132,19 @@ SELECT is((SELECT curriculum_mapping_status FROM public.evaluation_report_versio
   'PA report records missing direct mappings instead of inventing curriculum claims');
 SELECT is((SELECT evidence_sufficiency_status FROM public.evaluation_report_versions),'insufficient',
   'PA report labels missing response and mapping evidence insufficient');
+SELECT is((SELECT curriculum_mapping_snapshot->0->>'mapping_status'
+  FROM public.evaluation_report_versions),'direct',
+  'synthetic reviewed direct mapping is captured for the corresponding PA observation');
+SELECT is((SELECT curriculum_mapping_snapshot->0->'direct_outcomes'->0->>'outcome_reference'
+  FROM public.evaluation_report_versions),'SYN-PA-OUTCOME',
+  'report includes the actual mapped outcome reference from the reviewed synthetic record');
+SELECT ok((SELECT NOT EXISTS (
+  SELECT 1 FROM jsonb_array_elements(curriculum_mapping_snapshot) AS entry
+  WHERE entry->>'observation_code' <> 'RV01'
+    AND jsonb_array_length(entry->'direct_outcomes') <> 0
+) FROM public.evaluation_report_versions),
+  'unmapped observations expose no fabricated curriculum outcome references');
+
 SELECT is((SELECT scope_snapshot->>'report_scoring_state' FROM public.evaluation_report_versions),'unscored_baseline',
   'PA baseline is explicitly unscored');
 SELECT ok((SELECT eligible_analytics_snapshot->>'score' IS NULL
