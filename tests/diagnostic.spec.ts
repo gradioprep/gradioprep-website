@@ -20,6 +20,11 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
       data: { idempotency_key: randomUUID() },
     });
     expect(unauthenticatedStart.status()).toBe(401);
+    const unauthenticatedPublication = await request.post("/api/v1/admin/pa-feedback/publish", {
+      data: { review_id: randomUUID(), idempotency_key: randomUUID() },
+    });
+    expect(unauthenticatedPublication.status()).toBe(401);
+
     const unauthenticatedReportCreate = await request.post(
       "/api/v1/learner/diagnostic-attempts/eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee/evaluation-report",
       { data: { idempotency_key: randomUUID() } },
@@ -305,5 +310,6 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     await expect(itemEvidence.last()).toContainText("Response saved");
     await expect(page.getByText("Not scored", { exact: true })).toBeVisible();
     await expect(page.getByText(/does not contain a score, grade or percentile comparison/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Teacher-reviewed feedback" })).toHaveCount(0);
   });
 });
