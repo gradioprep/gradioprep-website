@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PaReportEvidenceReview, { type PaReportEvidenceSnapshot } from "./PaReportEvidenceReview";
 
 type ReviewerGrant = { access_grant_id: string; teacher_user_id: string; granted_at: string };
 type QueueEntry = {
@@ -7,7 +8,7 @@ type QueueEntry = {
 };
 type Draft = { draft_id: string; report_version_id: string; draft_text: string; created_at: string };
 type Review = { review_id: string; draft_id: string; decision: string; reviewer_note: string; decided_at: string };
-type Report = {
+type Report = PaReportEvidenceSnapshot & {
   report_record_id: string; report_version_id: string; version_number: number;
   curriculum_mapping_status: string; evidence_sufficiency_status: string;
   content_snapshot?: { observations?: Array<{ observation_code?: string }> };
@@ -161,6 +162,7 @@ export default function PaFeedbackWorkspacePanel({
         <p><strong>Assessment items:</strong> {report.content_snapshot?.observations?.length ?? 0}</p>
         <p><strong>Curriculum connections:</strong> {report.curriculum_mapping_status === "complete_direct" ? "Verified" : "Not complete"}</p>
         <p><strong>Evidence:</strong> {report.evidence_sufficiency_status === "sufficient" ? "Sufficient" : "Not yet sufficient"}</p>
+        <PaReportEvidenceReview report={report} />
         <p><strong>Feedback:</strong> {report.published_feedback_snapshot?.status === "human_approved_published"
           ? "Published in this version" : "No approved feedback in this version"}</p>
         <p>Only reviewed feedback can be published when the curriculum links and response evidence meet the required checks.</p>
