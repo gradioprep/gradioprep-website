@@ -198,6 +198,8 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     const invalidReportVersion = await request.get(reportReadPath + "?version=0", { headers });
     expect(invalidReportVersion.status()).toBe(400);
 
+    const unavailableReportVersion = await request.get(reportReadPath + "?version=2", { headers });
+    expect(unavailableReportVersion.status()).toBe(404);
     const reportReadResponse = await request.get(reportReadPath + "?version=1", { headers });
     const reportReadBody = await reportReadResponse.json() as {
       report?: {
@@ -288,6 +290,17 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     await page.getByRole("button", { name: "View your Evaluation Report →" }).click();
     await expect(page.getByRole("heading", { name: "Your starting point is recorded." })).toBeVisible();
     await expect(page.getByText(/initial record of your work, not a scored evaluation/i)).toBeVisible();
+    await expect(page.getByRole("group", { name: "Evaluation Report versions" })).toContainText("Viewing version 1 · Latest");
+    await expect(page.getByRole("button", { name: "Previous version" })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Next version" })).toBeDisabled();
+    const latestRefresh = page.waitForResponse(response =>
+      new URL(response.url()).pathname === reportReadPath && response.request().method() === "GET",
+    );
+    await page.getByRole("button", { name: "Check latest report" }).click();
+    const refreshedReport = await latestRefresh;
+    expect(refreshedReport.status()).toBe(200);
+    expect(new URL(refreshedReport.url()).searchParams.has("version")).toBe(false);
+    await expect(page.getByRole("group", { name: "Evaluation Report versions" })).toContainText("Viewing version 1 · Latest");
     await expect(page.getByText("Not yet sufficient", { exact: true })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Assessment scope and source" })).toBeVisible();
     const scopePanel = page.getByRole("region", { name: "Assessment scope and source" });
