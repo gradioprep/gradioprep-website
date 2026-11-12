@@ -413,5 +413,89 @@ SELECT is((SELECT count(*)::integer FROM private.security_audit_events
   WHERE action='pa_feedback_review_decided' AND reason_category='changes_requested_private'),1,
   'review decision emits one metadata-only audit event');
 
+
+-- Entirely synthetic positive publication regression; no real curriculum approval or learner data.
+-- Create a separate TEST-only version of the existing report, with synthetic complete evidence.
+INSERT INTO public.evaluation_report_versions(
+  report_record_id,report_scope,learner_id,version_number,idempotency_key,supersedes_version_id,
+  curriculum_mapping_status,evidence_sufficiency_status,scope_snapshot,content_snapshot,
+  unit_set_snapshot,curriculum_mapping_snapshot,learner_evidence_snapshot,
+  published_feedback_snapshot,eligible_analytics_snapshot,created_by)
+SELECT v.report_record_id,v.report_scope,v.learner_id,2,
+  '1d000000-0000-4000-8000-000000000611',v.id,
+  'complete_direct','sufficient',v.scope_snapshot,v.content_snapshot,v.unit_set_snapshot,
+  (SELECT jsonb_agg(jsonb_set(jsonb_set(m.value,'{mapping_status}','"direct"'::jsonb),
+    '{direct_outcomes}',jsonb_build_array(jsonb_build_object('outcome_reference','SYN-ONLY-TEST')))
+    ORDER BY m.ordinality)
+    FROM jsonb_array_elements(v.curriculum_mapping_snapshot) WITH ORDINALITY AS m(value,ordinality)),
+  (SELECT jsonb_agg(jsonb_set(e.value,'{response_sha256}',to_jsonb(repeat('a',64))) ORDER BY e.ordinality)
+    FROM jsonb_array_elements(v.learner_evidence_snapshot) WITH ORDINALITY AS e(value,ordinality)),
+  v.published_feedback_snapshot,v.eligible_analytics_snapshot,'88888888-8888-4888-8888-888888888888'
+FROM public.evaluation_report_versions AS v WHERE v.version_number=1;
+
+CREATE TEMP TABLE pa_publication_test_state(report_version_id uuid,draft_id uuid,review_id uuid);
+GRANT SELECT ON pa_publication_test_state TO authenticated;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+INSERT INTO pa_publication_test_state(report_version_id,draft_id)
+SELECT v.id,public.create_pa_evaluation_feedback_draft(v.id,
+  'Synthetic teacher-approved text for the publication-path regression only.')
+FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',2) AS v;
+UPDATE pa_publication_test_state
+SET review_id=public.review_pa_evaluation_feedback_draft(draft_id,'approved_for_publication',
+  'Synthetic positive decision for regression only; not a real academic approval.');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT * FROM public.publish_pa_evaluation_feedback(
+  (SELECT review_id FROM pa_publication_test_state),'1d000000-0000-4000-8000-000000000612')$q$,
+  '42501','pa_feedback_publication_forbidden','learner cannot publish an approved private review');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT version_number FROM public.publish_pa_evaluation_feedback(
+  (SELECT review_id FROM pa_publication_test_state),'1d000000-0000-4000-8000-000000000612')),3,
+  'Founder publishes a new immutable report version after exact review');
+SELECT is((SELECT is_replay FROM public.publish_pa_evaluation_feedback(
+  (SELECT review_id FROM pa_publication_test_state),'1d000000-0000-4000-8000-000000000612')),true,
+  'publication retries are idempotent');
+SELECT throws_ok($q$SELECT * FROM public.publish_pa_evaluation_feedback(
+  (SELECT review_id FROM pa_publication_test_state),'1d000000-0000-4000-8000-000000000613')$q$,
+  '55000','pa_feedback_publication_requirements_not_met',
+  'same review cannot be published as a second new report version');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT is((SELECT version_number FROM public.get_evaluation_report(
+  '1d000000-0000-4000-8000-000000000401',NULL)),3,
+  'learner sees newest published report version through existing read API');
+SELECT is((SELECT published_feedback_snapshot->>'status' FROM public.get_evaluation_report(
+  '1d000000-0000-4000-8000-000000000401',NULL)),'human_approved_published',
+  'learner report contains only explicitly approved published text');
+SELECT ok((SELECT published_feedback_snapshot->>'feedback_text' LIKE 'Synthetic teacher-approved%'
+  FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)),
+  'learner can see published feedback but no private reviewer note');
+RESET ROLE;
+
+SELECT is((SELECT count(*)::integer FROM public.evaluation_report_versions),3,
+  'publication added exactly one report version without changing prior versions');
+SELECT is((SELECT published_feedback_snapshot->>'status'
+  FROM public.evaluation_report_versions WHERE version_number=1),
+  'not_applicable_unscored_preliminary_assessment','original learner report remains unchanged');
+SELECT ok((SELECT published_feedback_snapshot->>'reviewer_note' IS NULL
+  FROM public.evaluation_report_versions WHERE version_number=3),
+  'private reviewer note never enters published report');
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+  WHERE action='pa_feedback_published' AND reason_category='owner_approved_report'),1,
+  'exactly one publication audit event despite replay');
+
 SELECT * FROM finish();
 ROLLBACK;
