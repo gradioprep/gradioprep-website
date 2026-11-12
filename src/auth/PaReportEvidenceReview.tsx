@@ -53,17 +53,31 @@ export function paEvidenceRows(report: PaReportEvidenceSnapshot) {
 export default function PaReportEvidenceReview({ report }: { report: PaReportEvidenceSnapshot }) {
   const rows = paEvidenceRows(report);
   const groups = Array.from(new Set(rows.map(item => item.group)));
+  const codes = rows.map(item => item.code);
+  const evidenceCodes = (report.learner_evidence_snapshot ?? []).map(entry => entry.observation_code ?? "");
+  const mappingCodes = (report.curriculum_mapping_snapshot ?? []).map(entry => entry.observation_code ?? "");
+  const integrityIssues = [
+    ...codes.filter((code, index) => codes.indexOf(code) !== index).map(code => "Repeated observation code: " + code),
+    ...evidenceCodes.filter(code => !codes.includes(code)).map(code => "Response outside this report instrument: " + (code || "unknown")),
+    ...mappingCodes.filter(code => !codes.includes(code)).map(code => "Curriculum link outside this report instrument: " + (code || "unknown")),
+    ...evidenceCodes.filter((code, index) => evidenceCodes.indexOf(code) !== index).map(code => "Conflicting response entries: " + (code || "unknown")),
+    ...mappingCodes.filter((code, index) => mappingCodes.indexOf(code) !== index).map(code => "Conflicting curriculum entries: " + (code || "unknown")),
+  ];
   const saved = rows.filter(item => item.saved).length;
   const mapped = rows.filter(item => item.mapped).length;
   const ready = report.curriculum_mapping_status === "complete_direct"
     && report.evidence_sufficiency_status === "sufficient" && rows.length > 0
-    && rows.every(item => item.saved && item.mapped);
+    && integrityIssues.length === 0 && rows.every(item => item.saved && item.mapped);
   return <section aria-label="Report evidence review" className="proto-pa-report-evidence">
     <h4>Assessment evidence by segment</h4>
     <p>{rows.length} observations · {saved}/{rows.length} responses recorded · {mapped}/{rows.length} verified direct curriculum links</p>
     <p role="status">{ready
       ? "Saved evidence and curriculum connections meet the recorded report checks. Human academic review is still required."
       : "Review cannot be completed from these records yet. Missing responses or direct curriculum connections must be resolved."}</p>
+    {integrityIssues.length > 0 && <div role="alert" aria-label="Report evidence integrity issues">
+      <p>Report record inconsistencies require staff review before feedback approval.</p>
+      <ul>{integrityIssues.map((issue, index) => <li key={index}>{issue}</li>)}</ul>
+    </div>}
     {groups.map(group => {
       const items = rows.filter(item => item.group === group);
       return <div key={group} className="proto-pa-evidence-group">
