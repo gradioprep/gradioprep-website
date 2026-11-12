@@ -59,3 +59,34 @@ test("staff evidence review never equates complete snapshot checks to a grade or
   expect(html).toContain("&lt;script&gt;");
   expect(html).not.toContain("<script>");
 });
+
+test("apparently complete but inconsistent report snapshots are flagged for staff review", () => {
+  const report: PaReportEvidenceSnapshot = {
+    curriculum_mapping_status: "complete_direct",
+    evidence_sufficiency_status: "sufficient",
+    content_snapshot: { observations: [
+      { observation_code: "RV01", group_code: "RV" },
+      { observation_code: "RV01", group_code: "RV" },
+    ] },
+    learner_evidence_snapshot: [
+      { observation_code: "RV01", response_sha256: sha },
+      { observation_code: "RV01", response_sha256: sha },
+      { observation_code: "L01", response_sha256: sha },
+    ],
+    curriculum_mapping_snapshot: [
+      { observation_code: "RV01", mapping_status: "direct", direct_outcomes: [{ outcome_reference: "A.i" }] },
+      { observation_code: "RV01", mapping_status: "direct", direct_outcomes: [{ outcome_reference: "A.i" }] },
+      { observation_code: "L01", mapping_status: "direct", direct_outcomes: [{ outcome_reference: "A.i" }] },
+    ],
+  };
+  const html = renderToStaticMarkup(<PaReportEvidenceReview report={report} />);
+  for (const warning of [
+    "Repeated observation code: RV01",
+    "Response outside this report instrument: L01",
+    "Curriculum link outside this report instrument: L01",
+    "Conflicting response entries: RV01",
+    "Conflicting curriculum entries: RV01",
+  ]) expect(html).toContain(warning);
+  expect(html).toContain("Report record inconsistencies require staff review");
+  expect(html).not.toContain("Saved evidence and curriculum connections meet");
+});
