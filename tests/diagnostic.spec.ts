@@ -60,6 +60,7 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
       diagnostic: { diagnostic_code: string; version: number };
       attempt: { id: string; status: string; is_replay: boolean };
       section_status: string;
+      available_observation_codes: string[];
     };
     expect(started.status(), JSON.stringify(startedBody)).toBe(201);
     await expect(page.getByRole("heading", { name: "Stimulus A · The Repair Table", exact: true })).toBeVisible();
@@ -68,6 +69,9 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     expect(startedBody.attempt.status).toBe("in_progress");
     expect(startedBody.attempt.is_replay).toBe(false);
     expect(startedBody.section_status).toBe("read_view_language_context_only");
+    expect(startedBody.available_observation_codes).toHaveLength(15);
+    expect(startedBody.available_observation_codes).not.toContain("AW01");
+    await expect(page.getByRole("heading", { name: /Analytical Writing · The Unfinished Label/ })).toHaveCount(0);
     await expect(page.locator("audio")).toHaveCount(0);
     const firstWrittenResponse = page.locator(".proto-diagnostic-text-field").first();
     await expect(firstWrittenResponse.locator(".proto-diagnostic-word-count")).toHaveText("0 / 40 words");
