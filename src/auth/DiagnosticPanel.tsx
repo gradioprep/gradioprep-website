@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PaAnalyticalWritingTask, { isPaAnalyticalWritingResponse } from "./PaAnalyticalWritingTask";
+import PaCreativeWritingTask, { emptyCreativeWritingResponse, isPaCreativeWritingResponse, type PaCreativeWritingResponse } from "./PaCreativeWritingTask";
 
 type ResponseValue = {
   a?: string;
@@ -8,6 +9,12 @@ type ResponseValue = {
   choice?: string;
   order?: string[];
   explanation?: string;
+  plan?: string;
+  initial_draft?: string;
+  final_text?: string;
+  revision_before?: string;
+  revision_after?: string;
+  revision_note?: string;
 };
 
 type DiagnosticResponseMap = Record<string, ResponseValue>;
@@ -121,6 +128,7 @@ export default function DiagnosticPanel({
   const [attemptStatus, setAttemptStatus] = useState<"not_started" | "in_progress" | "submitted">("not_started");
   const [responses, setResponses] = useState<DiagnosticResponseMap>({});
   const [availableCodes, setAvailableCodes] = useState<string[]>([]);
+  const [creativeDraft, setCreativeDraft] = useState<PaCreativeWritingResponse>(emptyCreativeWritingResponse);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -171,12 +179,17 @@ export default function DiagnosticPanel({
     if (availableCodes.includes("AW01") && isPaAnalyticalWritingResponse(current("AW01").text ?? "")) {
       output.push({ code: "AW01", response: { text: current("AW01").text } });
     }
+    // CW01–CW05 are dimensions of one completed plan/draft/revision performance.
+    if (availableCodes.includes("CW01") && isPaCreativeWritingResponse(creativeDraft)) {
+      output.push({ code: "CW01", response: { ...creativeDraft } });
+    }
     return output;
   }
 
   const savedCodes = payloads().map(item => item.code);
   const requiredCodes = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "LC01", "LC02", "LC03", "LC04", "LC05",
-    ...(availableCodes.includes("AW01") ? ["AW01"] : [])];
+    ...(availableCodes.includes("AW01") ? ["AW01"] : []),
+    ...(availableCodes.includes("CW01") ? ["CW01"] : [])];
   const complete = requiredCodes.every(code => savedCodes.includes(code));
 
   function reportIdempotencyKeyFor(targetAttemptId: string): string {
@@ -252,6 +265,17 @@ export default function DiagnosticPanel({
         restored[code] = value.response ?? {};
       }
       setResponses(restored);
+      const savedCreative = restored.CW01;
+      setCreativeDraft(savedCreative
+        ? {
+            plan: savedCreative.plan ?? "",
+            initial_draft: savedCreative.initial_draft ?? "",
+            final_text: savedCreative.final_text ?? "",
+            revision_before: savedCreative.revision_before ?? "",
+            revision_after: savedCreative.revision_after ?? "",
+            revision_note: savedCreative.revision_note ?? "",
+          }
+        : { ...emptyCreativeWritingResponse });
       setAvailableCodes(Array.isArray(result.available_observation_codes)
         ? result.available_observation_codes.filter((code): code is string => typeof code === "string")
         : []);
@@ -632,6 +656,12 @@ export default function DiagnosticPanel({
       {availableCodes.includes("AW01") && <PaAnalyticalWritingTask
         value={current("AW01").text ?? ""}
         onChange={value => update("AW01", "text", value)}
+        readOnly={readOnly || saving}
+      />}
+
+      {availableCodes.includes("CW01") && <PaCreativeWritingTask
+        value={creativeDraft}
+        onChange={setCreativeDraft}
         readOnly={readOnly || saving}
       />}
 

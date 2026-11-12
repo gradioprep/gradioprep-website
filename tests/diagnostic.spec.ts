@@ -71,6 +71,8 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     expect(startedBody.section_status).toBe("read_view_language_context_only");
     expect(startedBody.available_observation_codes).toHaveLength(15);
     expect(startedBody.available_observation_codes).not.toContain("AW01");
+    expect(startedBody.available_observation_codes).not.toContain("CW01");
+    await expect(page.getByRole("heading", { name: /Creative\/Purposeful Production · The Book Swap/ })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /Analytical Writing · The Unfinished Label/ })).toHaveCount(0);
     await expect(page.locator("audio")).toHaveCount(0);
     const firstWrittenResponse = page.locator(".proto-diagnostic-text-field").first();
@@ -114,6 +116,19 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     expect(await unreleasedAnalyticalWriting.json()).toMatchObject({
       error: "invalid_diagnostic_response",
     });
+    const unreleasedCreative = await request.put(
+      "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/CW01",
+      { headers, data: { response: {
+        plan: "A viewpoint, surprise, and ending.",
+        initial_draft: "The first sentence of the scene.",
+        final_text: "The finished school magazine scene.",
+        revision_before: "A quiet room",
+        revision_after: "A bright hall",
+        revision_note: "The revision strengthens atmosphere.",
+      } } },
+    );
+    expect(unreleasedCreative.status()).toBe(400);
+    expect(await unreleasedCreative.json()).toMatchObject({ error: "invalid_diagnostic_response" });
     const injectedAnalyticalScore = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/AW01",
       { headers, data: { response: { text: "A reasoned interpretation supported by evidence.", score: 7 } } },
