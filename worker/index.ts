@@ -3517,7 +3517,7 @@ async function uploadSubmissionPdf(
   }
 
   const fileId = upload.file_id;
-  const filename = submittedFile.name.split(/[\\/]/).pop() ?? "";
+  const filename = submittedFile.name.split(/[\/]/).pop() ?? "";
   const reject = async (reason: string): Promise<Response> => {
     const acknowledged = await rejectPendingSubmissionPdf(context, fileId, reason);
     if (!acknowledged) {
@@ -3730,7 +3730,7 @@ async function createPdfLearnerSubmission(
     return jsonResponse({ error: "invalid_pdf_assessment_submission" }, 400);
   }
 
-  const filename = submittedFile.name.split(/[\\/]/).pop() ?? "";
+  const filename = submittedFile.name.split(/[\/]/).pop() ?? "";
   if (!/\.pdf$/i.test(filename)) return pdfRejectionResponse("invalid_extension");
   if (submittedFile.type !== "application/pdf") return pdfRejectionResponse("invalid_mime");
   if (submittedFile.size < 1 || submittedFile.size > maxSubmissionPdfBytes) {
@@ -4178,12 +4178,12 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   if (diagnosticReportMatch && request.method === "POST") {
     return createLearnerEvaluationReport(request, env, diagnosticReportMatch[1]);
   }
-  const staffDraftMatch = url.pathname.match(/^\\/api\\/v1\\/staff\\/pa-feedback\\/([0-9a-f-]{36})\\/drafts$/i);
+  const staffDraftMatch = url.pathname.match(/^\/api\/v1\/staff\/pa-feedback\/([0-9a-f-]{36})\/drafts$/i);
   if (staffDraftMatch && request.method === "GET") return staffPaFeedback(request, env, "drafts", staffDraftMatch[1]);
   if (url.pathname === "/api/v1/staff/pa-feedback/drafts" && request.method === "POST") {
     return staffPaFeedback(request, env, "drafts");
   }
-  const staffReviewMatch = url.pathname.match(/^\\/api\\/v1\\/staff\\/pa-feedback\\/([0-9a-f-]{36})\\/reviews$/i);
+  const staffReviewMatch = url.pathname.match(/^\/api\/v1\/staff\/pa-feedback\/([0-9a-f-]{36})\/reviews$/i);
   if (staffReviewMatch && request.method === "GET") return staffPaFeedback(request, env, "reviews", staffReviewMatch[1]);
   if (url.pathname === "/api/v1/admin/pa-feedback/review" && request.method === "POST") {
     return staffPaFeedback(request, env, "review");
