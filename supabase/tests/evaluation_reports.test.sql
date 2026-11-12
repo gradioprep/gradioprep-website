@@ -180,6 +180,9 @@ SELECT set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222'
 SELECT set_config('request.jwt.claims','{"sub":"22222222-2222-4222-8222-222222222222","role":"authenticated","aal":"aal1"}',true);
 SELECT throws_ok($q$SELECT * FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)$q$,
   '42501','evaluation_report_read_forbidden','unrelated learner cannot read another learner report');
+
+SELECT throws_ok($q$SELECT * FROM public.list_pa_evaluation_review_queue()$q$,
+  '42501','pa_report_queue_forbidden','unrelated learner cannot enumerate private PA staff review queue');
 RESET ROLE;
 
 SET LOCAL ROLE authenticated;
@@ -188,6 +191,14 @@ SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-88888888
 SELECT is((SELECT count(*)::integer FROM public.get_evaluation_report(
   '1d000000-0000-4000-8000-000000000401',NULL)),1,
   'Owner at AAL2 can inspect the report through the audited RPC');
+
+SELECT is((SELECT count(*)::integer FROM public.list_pa_evaluation_review_queue()),1,
+  'AAL2 Owner can discover the synthetic PA report oldest-first');
+SELECT is((SELECT report_record_id FROM public.list_pa_evaluation_review_queue(1)),
+  '1d000000-0000-4000-8000-000000000401'::uuid,
+  'Owner queue returns exact report record identity, not learner personal data');
+SELECT throws_ok($q$SELECT * FROM public.list_pa_evaluation_review_queue(51)$q$,
+  '22023','invalid_pa_report_queue_limit','staff queue rejects limits over fifty');
 
 INSERT INTO report_access_test_state
 SELECT access_grant_id FROM public.grant_evaluation_report_teacher_access(
@@ -200,6 +211,9 @@ SELECT set_config('request.jwt.claim.sub','55555555-5555-4555-8555-555555555555'
 SELECT set_config('request.jwt.claims','{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}',true);
 SELECT is((SELECT count(*)::integer FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)),1,
   'AAL2 Grader with an active report-specific grant can read the report');
+
+SELECT is((SELECT count(*)::integer FROM public.list_pa_evaluation_review_queue()),1,
+  'AAL2 Grader queue lists only report-specific active grants');
 RESET ROLE;
 
 SET LOCAL ROLE authenticated;
@@ -214,6 +228,9 @@ SELECT set_config('request.jwt.claim.sub','55555555-5555-4555-8555-555555555555'
 SELECT set_config('request.jwt.claims','{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}',true);
 SELECT throws_ok($q$SELECT * FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)$q$,
   '42501','evaluation_report_read_forbidden','revoked teacher grant immediately denies report access');
+
+SELECT is((SELECT count(*)::integer FROM public.list_pa_evaluation_review_queue()),0,
+  'revoked Grader queue access disappears immediately');
 RESET ROLE;
 SELECT throws_ok(
   $$SELECT * FROM public.create_preliminary_evaluation_report(
@@ -496,6 +513,13 @@ SELECT ok((SELECT published_feedback_snapshot->>'reviewer_note' IS NULL
 SELECT is((SELECT count(*)::integer FROM private.security_audit_events
   WHERE action='pa_feedback_published' AND reason_category='owner_approved_report'),1,
   'exactly one publication audit event despite replay');
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT * FROM public.list_pa_evaluation_review_queue()$q$,
+  '42501','pa_report_queue_forbidden','Owner at AAL1 cannot enumerate PA feedback queue');
+RESET ROLE;
 
 SELECT * FROM finish();
 ROLLBACK;
