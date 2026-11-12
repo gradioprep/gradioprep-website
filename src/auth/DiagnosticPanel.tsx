@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PaAnalyticalWritingTask, { isPaAnalyticalWritingResponse } from "./PaAnalyticalWritingTask";
 
 type ResponseValue = {
   a?: string;
@@ -16,6 +17,7 @@ interface StartedDiagnostic {
   attempt: { id: string; status: "in_progress" | "submitted" | "withdrawn"; is_replay: boolean };
   responses: Record<string, { response: ResponseValue; revision_number: number }>;
   section_status: string;
+  available_observation_codes: string[];
 }
 
 const stimulusA = [
@@ -118,6 +120,7 @@ export default function DiagnosticPanel({
   const [attemptId, setAttemptId] = useState("");
   const [attemptStatus, setAttemptStatus] = useState<"not_started" | "in_progress" | "submitted">("not_started");
   const [responses, setResponses] = useState<DiagnosticResponseMap>({});
+  const [availableCodes, setAvailableCodes] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -164,12 +167,17 @@ export default function DiagnosticPanel({
     }
     const lc05 = current("LC05");
     if (nonEmpty(lc05.text)) output.push({ code: "LC05", response: { text: lc05.text } });
+    // AW02–AW05 are evaluation dimensions of AW01, not extra learner responses.
+    if (availableCodes.includes("AW01") && isPaAnalyticalWritingResponse(current("AW01").text ?? "")) {
+      output.push({ code: "AW01", response: { text: current("AW01").text } });
+    }
     return output;
   }
 
   const savedCodes = payloads().map(item => item.code);
-  const complete = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "LC01", "LC02", "LC03", "LC04", "LC05"]
-    .every(code => savedCodes.includes(code));
+  const requiredCodes = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "LC01", "LC02", "LC03", "LC04", "LC05",
+    ...(availableCodes.includes("AW01") ? ["AW01"] : [])];
+  const complete = requiredCodes.every(code => savedCodes.includes(code));
 
   function reportIdempotencyKeyFor(targetAttemptId: string): string {
     const cached = reportIdempotencyKeys[targetAttemptId];
@@ -244,6 +252,9 @@ export default function DiagnosticPanel({
         restored[code] = value.response ?? {};
       }
       setResponses(restored);
+      setAvailableCodes(Array.isArray(result.available_observation_codes)
+        ? result.available_observation_codes.filter((code): code is string => typeof code === "string")
+        : []);
       if (result.attempt.status === "submitted") {
         setMessage("Your submitted Preliminary Assessment responses are read-only.");
         await prepareEvaluationReport(result.attempt.id);
@@ -618,8 +629,14 @@ export default function DiagnosticPanel({
         />
       </div>
 
+      {availableCodes.includes("AW01") && <PaAnalyticalWritingTask
+        value={current("AW01").text ?? ""}
+        onChange={value => update("AW01", "text", value)}
+        readOnly={readOnly || saving}
+      />}
+
       <div className="proto-diagnostic-footer">
-        <p>{savedCodes.length} of 15 questions have response-ready answers. Response guidance is not a hard word limit.</p>
+        <p>{savedCodes.filter(code => requiredCodes.includes(code)).length} of {requiredCodes.length} questions have response-ready answers. Response guidance is not a hard word limit.</p>
         {!readOnly && <>
           <button className="proto-action secondary" type="button" onClick={() => void saveAll()} disabled={buttonDisabled || savedCodes.length === 0}>
             {saving ? "Saving…" : "Save progress"}

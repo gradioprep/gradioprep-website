@@ -1262,6 +1262,21 @@ async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise
     return jsonResponse({ error: "diagnostic_attempt_readback_failed" }, 500);
   }
 
+  // Only advertise capture permissions for the exact published instrument opened here.
+  // The separate thirty-observation authoring blueprint is never exposed.
+  const { data: enabledRows, error: enabledError } = await auth.context.supabase
+    .from("diagnostic_observations")
+    .select("observation_code")
+    .eq("diagnostic_version_id", version.id)
+    .eq("learner_capture_enabled", true);
+  if (enabledError || !enabledRows) {
+    const audit = await auditDiagnosticWriteFailure(
+      auth.context, "student_diagnostic_attempt_start", version.id, "failed", "operation_failed",
+    );
+    if (audit) return audit;
+    return jsonResponse({ error: "diagnostic_observations_unavailable" }, 500);
+  }
+
   const responses: Record<string, { response: unknown; revision_number: number; saved_at: string }> = {};
   for (const row of responseRows ?? []) {
     const nested = row.diagnostic_observations;
@@ -1282,6 +1297,7 @@ async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise
     diagnostic: version,
     attempt: { ...attempt, is_replay: created.is_replay === true },
     responses,
+    available_observation_codes: enabledRows.map(row => row.observation_code),
     section_status: "read_view_language_context_only",
   }, created.is_replay === true ? 200 : 201);
 }

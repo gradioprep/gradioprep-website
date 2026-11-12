@@ -31,3 +31,16 @@ test("word guidance never rejects a valid over-target typed response", () => {
   const readOnly = renderToStaticMarkup(<PaAnalyticalWritingTask value={longAnswer} readOnly onChange={() => {}} />);
   expect(readOnly).toContain("disabled=\"\"");
 });
+
+test("AW capture is available only through the server-authorised PA instrument", async () => {
+  const fs = await import("node:fs/promises");
+  const panel = await fs.readFile(new URL("../src/auth/DiagnosticPanel.tsx", import.meta.url), "utf8");
+  const worker = await fs.readFile(new URL("../worker/index.ts", import.meta.url), "utf8");
+  expect(panel).toContain('availableCodes.includes("AW01") && <PaAnalyticalWritingTask');
+  expect(panel).toContain('isPaAnalyticalWritingResponse(current("AW01").text ?? "")');
+  expect(panel).toContain('onChange={value => update("AW01", "text", value)}');
+  expect(panel).toContain('readOnly={readOnly || saving}');
+  expect(worker).toContain('.eq("diagnostic_version_id", version.id)');
+  expect(worker).toContain('.eq("learner_capture_enabled", true)');
+  expect(worker).toContain("available_observation_codes: enabledRows.map");
+});
