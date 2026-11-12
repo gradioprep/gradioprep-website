@@ -36,7 +36,7 @@ test("staff evidence review reports only saved responses and verified direct lin
     ["AW01", false, false],
   ]);
   const html = renderToStaticMarkup(<PaReportEvidenceReview report={fixture} />);
-  expect(html).toContain("3 observations · 1 responses recorded · 1 verified direct curriculum links");
+  expect(html).toContain("3 observations · 1/3 responses recorded · 1/3 verified direct curriculum links");
   expect(html).toContain("Review cannot be completed from these records yet");
   expect(html).toContain("Fixture page 1");
   expect(html).not.toContain("Not actually verified");
