@@ -280,6 +280,13 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     await expect(page.locator(".proto-evaluation-coverage")).toContainText("0 / 15");
     await expect(page.locator(".proto-evaluation-coverage")).toContainText("2 sittings");
     await expect(page.locator(".proto-evaluation-coverage")).toContainText("80 planned minutes");
+    const itemEvidence = page.locator(".proto-evaluation-observations li");
+    await expect(itemEvidence).toHaveCount(15);
+    await expect(itemEvidence.first()).toContainText("RV01");
+    await expect(itemEvidence.first()).toContainText("Response saved");
+    await expect(itemEvidence.first()).toContainText("Curriculum connection unavailable");
+    await expect(itemEvidence.last()).toContainText("LC05");
+    await expect(itemEvidence.last()).toContainText("Response saved");
     await expect(page.getByText("Not scored", { exact: true })).toBeVisible();
     await expect(page.getByText(/does not contain a score, grade or percentile comparison/i)).toBeVisible();
   });
