@@ -1593,7 +1593,9 @@ async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts
     return jsonResponse({ error: "pa_feedback_unavailable" }, 503);
   }
   if (request.method === "GET") {
-    return jsonResponse({ items: asRows(data) }, 200, { "Cache-Control": "no-store" });
+    return new Response(JSON.stringify({ items: asRows(data) }), {
+      status: 200, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
+    });
   }
   return jsonResponse(action === "drafts" ? { draft_id: data } : { review_id: data }, 201);
 }
