@@ -1182,7 +1182,7 @@ function isValidDiagnosticResponse(observationCode: string, response: unknown): 
   if (["RV04", "RV05", "LC01", "LC02", "LC03", "LC04"].includes(observationCode)) {
     return only(["choice"]) && choice(value.choice);
   }
-  if (observationCode === "LC05") return only(["text"]) && text(value.text);
+  if (observationCode === "LC05" || observationCode === "AW01") return only(["text"]) && text(value.text);
   if (observationCode === "RV08") {
     return only(["order", "explanation"]) && Array.isArray(value.order) &&
       value.order.length === 5 && value.order.every(item => ["1", "2", "3", "4", "5"].includes(String(item))) &&
@@ -4305,7 +4305,7 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
     return getLearnerEvaluationReport(request, env, evaluationReportMatch[1]);
   }
   const diagnosticResponseMatch = url.pathname.match(
-    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/((?:RV(?:0[1-6]|07[ab]|0[89])|LC0[1-5]))$/i,
+    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/((?:RV(?:0[1-6]|07[ab]|0[89])|LC0[1-5]|AW01))$/i,
   );
   if (diagnosticResponseMatch && request.method === "PUT") {
     return saveLearnerDiagnosticResponse(request, env, diagnosticResponseMatch[1], diagnosticResponseMatch[2]);
