@@ -127,8 +127,10 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
         revision_note: "The revision strengthens atmosphere.",
       } } },
     );
-    expect(unreleasedCreative.status()).toBe(400);
-    expect(await unreleasedCreative.json()).toMatchObject({ error: "invalid_diagnostic_response" });
+    // Valid CW shape is refused because the current published fixture has no
+    // learner-capturable CW observation. The SQL save RPC returns not-found.
+    expect(unreleasedCreative.status()).toBe(404);
+    expect(await unreleasedCreative.json()).toMatchObject({ error: "diagnostic_attempt_not_found" });
     const injectedAnalyticalScore = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/AW01",
       { headers, data: { response: { text: "A reasoned interpretation supported by evidence.", score: 7 } } },
