@@ -290,6 +290,49 @@ VALUES (
 )
 ON CONFLICT (id) DO NOTHING;
 
+-- Synthetic-only full-instrument authoring blueprint. Draft v2 is deliberately NOT
+-- published and has NO enabled learner capture, mapping, scoring or teacher approval.
+-- Five AW/CW/SP observations each represent one common performance, not five essays.
+INSERT INTO public.diagnostic_versions (
+  id, diagnostic_code, pathway_id, title, version, release_state, total_minutes, sitting_count, route_version_id
+)
+VALUES (
+  'ed222222-2222-4222-8222-222222222222',
+  'ib-myp-g9-cycle1',
+  'synthetic-ib-myp-year-4',
+  'IB MYP Year 4 Preliminary Assessment — full evidence blueprint (synthetic draft)',
+  2, 'draft', 80, 2, 'ea111111-1111-4111-8111-111111111111'
+)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.diagnostic_observations (
+  diagnostic_version_id, observation_code, group_code, sitting_number,
+  sequence_number, response_kind, learner_capture_enabled
+)
+SELECT
+  'ed222222-2222-4222-8222-222222222222'::uuid, observation_code, group_code, sitting_number,
+  sequence_number, response_kind, false
+FROM public.diagnostic_observations
+WHERE diagnostic_version_id = 'ed111111-1111-4111-8111-111111111111'
+  AND group_code IN ('RV', 'LC')
+ON CONFLICT (diagnostic_version_id, observation_code) DO NOTHING;
+
+-- One AW analytical response, one CW narrative + revision record and one SP
+-- presentation/assessor record each provide evidence for five rubric dimensions.
+-- These draft observation slots have no active capture endpoint or approved mappings.
+INSERT INTO public.diagnostic_observations (
+  diagnostic_version_id, observation_code, group_code, sitting_number,
+  sequence_number, response_kind, learner_capture_enabled
+)
+SELECT 'ed222222-2222-4222-8222-222222222222'::uuid, proposed.code, proposed.group_code,
+  2, proposed.seq, 'text', false
+FROM (VALUES
+  ('AW01','AW',16),('AW02','AW',17),('AW03','AW',18),('AW04','AW',19),('AW05','AW',20),
+  ('CW01','CW',21),('CW02','CW',22),('CW03','CW',23),('CW04','CW',24),('CW05','CW',25),
+  ('SP01','SP',26),('SP02','SP',27),('SP03','SP',28),('SP04','SP',29),('SP05','SP',30)
+) AS proposed(code, group_code, seq)
+ON CONFLICT (diagnostic_version_id, observation_code) DO NOTHING;
+
 INSERT INTO public.diagnostic_observations (
   id, diagnostic_version_id, observation_code, group_code,
   sitting_number, sequence_number, response_kind, learner_capture_enabled
