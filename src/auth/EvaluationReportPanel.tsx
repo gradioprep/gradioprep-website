@@ -31,7 +31,19 @@ interface EvaluationReport {
   version_number: number;
   curriculum_mapping_status: string;
   evidence_sufficiency_status: string;
+  scope_snapshot?: {
+    awarding_body?: string;
+    programme_code?: string;
+    subject_code?: string;
+    course_code?: string;
+    level_code?: string;
+    academic_session?: string;
+    syllabus_edition?: string;
+    official_source_title?: string;
+    report_scoring_state?: string;
+  };
   content_snapshot?: {
+    diagnostic_title?: string;
     total_minutes?: number;
     sitting_count?: number;
     observations?: ObservationSnapshot[];
@@ -156,6 +168,12 @@ export default function EvaluationReportPanel({
   const mapping = curriculumConnection(report.curriculum_mapping_status);
   const evidence = responseEvidence(report.evidence_sufficiency_status);
   const observations = report.content_snapshot?.observations ?? [];
+  const scope = report.scope_snapshot;
+  const routeParts = [scope?.awarding_body, scope?.programme_code, scope?.subject_code, scope?.course_code, scope?.level_code]
+    .filter((part): part is string => typeof part === "string" && part.trim().length > 0);
+  const routeLabel = routeParts.join(" · ");
+  const editionLabel = [scope?.academic_session, scope?.syllabus_edition]
+    .filter((part): part is string => typeof part === "string" && part.trim().length > 0).join(" · ");
   const totalItems = observations.length;
   const responseRecords = (report.learner_evidence_snapshot ?? []).filter(
     entry => typeof entry.response_sha256 === "string" && /^[a-f0-9]{64}$/i.test(entry.response_sha256),
@@ -182,6 +200,18 @@ export default function EvaluationReportPanel({
       <h2 id="proto-evaluation-report-heading">Your starting point is recorded.</h2>
       <p>This report records the evidence saved with your submitted Preliminary Assessment. It is an initial record of your work, not a scored evaluation.</p>
       <small>Created {createdLabel}</small>
+    </div>
+
+    <section className="proto-panel proto-evaluation-note" aria-labelledby="proto-evaluation-scope-heading">
+      <h3 id="proto-evaluation-scope-heading">Assessment scope and source</h3>
+      <p><strong>Programme and course:</strong> {routeLabel || "Verified course details not available in this snapshot"}</p>
+      <p><strong>Session and source edition:</strong> {editionLabel || "Not recorded"}</p>
+      <p><strong>Curriculum source:</strong> {scope?.official_source_title || "Not recorded"}</p>
+      <p><strong>Assessment record:</strong> {report.content_snapshot?.diagnostic_title || "Preliminary Assessment"} · Report version {report.version_number}</p>
+      <p>The details above come from the saved report version. They are not independently verified by this page.</p>
+    </section>
+
+    <div className="proto-panel proto-evaluation-hero-continuation" hidden>
     </div>
 
     <section className="proto-panel proto-evaluation-coverage" aria-label="Assessment evidence summary">
@@ -222,13 +252,13 @@ export default function EvaluationReportPanel({
       </article>
       <article className="proto-panel proto-evaluation-card">
         <p className="proto-eyebrow">PERSONALISED FEEDBACK</p>
-        <h3>Not included</h3>
-        <p>This starting report does not include personalised feedback.</p>
+        <h3>Awaiting reviewed feedback</h3>
+        <p>No teacher-approved personalised feedback is included in this report version. Response coverage alone is not a skill judgement.</p>
       </article>
       <article className="proto-panel proto-evaluation-card">
         <p className="proto-eyebrow">ASSESSMENT RESULTS</p>
         <h3>Not scored</h3>
-        <p>This report does not contain a score, grade or percentile comparison.</p>
+        <p>This report does not contain a score, grade or percentile comparison. The report scoring state is {scope?.report_scoring_state === "unscored_baseline" ? "unscored baseline" : "not confirmed"}.</p>
       </article>
     </div>
 
@@ -267,7 +297,7 @@ export default function EvaluationReportPanel({
 
     <div className="proto-panel proto-evaluation-note">
       <h3>What this report contains</h3>
-      <p>This report summarises the submitted assessment scope and the evidence records available to it. It does not contain a score, grade, percentile comparison, personalised feedback or recommended learning plan.</p>
+      <p>This immutable report version summarises submitted evidence and curriculum link checks. It is not a final teacher-approved Evaluation Report and does not contain a score, grade, percentile comparison, personalised feedback or recommended learning plan.</p>
     </div>
   </section>;
 }
