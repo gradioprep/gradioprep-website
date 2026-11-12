@@ -86,6 +86,41 @@ test.describe("Phase 1B account foundation", () => {
     expect(response.headers()["cache-control"]).toBe("no-store");
   });
 
+  test("PA feedback API enforces validation and authentication without revealing drafts", async ({ request }) => {
+    const reportId = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+    const versionId = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
+    const draftId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
+    const reviewId = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
+
+    const invalidDraft = await request.post("/api/v1/staff/pa-feedback/drafts", {
+      data: { report_version_id: versionId, draft_text: "short" },
+    });
+    expect(invalidDraft.status()).toBe(400);
+
+    const anonymousDraft = await request.post("/api/v1/staff/pa-feedback/drafts", {
+      data: { report_version_id: versionId, draft_text: "Teacher feedback draft for a fully reviewed submission." },
+    });
+    expect(anonymousDraft.status()).toBe(401);
+
+    const anonymousDraftHistory = await request.get("/api/v1/staff/pa-feedback/" + reportId + "/drafts");
+    expect(anonymousDraftHistory.status()).toBe(401);
+    const anonymousReviews = await request.get("/api/v1/staff/pa-feedback/" + reportId + "/reviews");
+    expect(anonymousReviews.status()).toBe(401);
+
+    const invalidReview = await request.post("/api/v1/admin/pa-feedback/review", {
+      data: { draft_id: draftId, decision: "approved_for_publication", reviewer_note: "short" },
+    });
+    expect(invalidReview.status()).toBe(400);
+    const anonymousReview = await request.post("/api/v1/admin/pa-feedback/review", {
+      data: { draft_id: draftId, decision: "changes_requested", reviewer_note: "Please review all relevant curriculum links." },
+    });
+    expect(anonymousReview.status()).toBe(401);
+    const anonymousPublication = await request.post("/api/v1/admin/pa-feedback/publish", {
+      data: { review_id: reviewId, idempotency_key: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee" },
+    });
+    expect(anonymousPublication.status()).toBe(401);
+  });
+
   test("current-account endpoint rejects anonymous requests", async ({ request }) => {
     const response = await request.get("/api/v1/me");
     expect(response.status()).toBe(401);
