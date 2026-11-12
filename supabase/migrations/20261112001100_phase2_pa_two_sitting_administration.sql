@@ -80,7 +80,7 @@ BEGIN
     ELSE (assessment.total_minutes*60/assessment.sitting_count) END;
   INSERT INTO private.pa_sitting_sessions(attempt_id,sitting_number,duration_seconds)
     VALUES(p_attempt_id,p_sitting_number,duration)
-    ON CONFLICT(attempt_id,sitting_number) DO NOTHING;
+    ON CONFLICT ON CONSTRAINT pa_sitting_sessions_pkey DO NOTHING;
   RETURN QUERY SELECT * FROM public.get_pa_sitting_state(p_attempt_id) AS state
     WHERE state.sitting_number=p_sitting_number;
 END;
