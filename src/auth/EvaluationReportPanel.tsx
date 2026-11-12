@@ -8,10 +8,15 @@ interface ObservationSnapshot {
   sequence_number?: number;
 }
 
+interface VerifiedOutcome {
+  outcome_reference?: string;
+  outcome_title?: string;
+}
+
 interface MappingSnapshotEntry {
   observation_code?: string;
   mapping_status?: string;
-  direct_outcomes?: unknown[];
+  direct_outcomes?: VerifiedOutcome[];
 }
 
 interface LearnerEvidenceEntry {
@@ -237,12 +242,23 @@ export default function EvaluationReportPanel({
             const response = evidenceByCode.get(code);
             const mappingEntry = mappingsByCode.get(code);
             const saved = typeof response?.response_sha256 === "string" && /^[a-f0-9]{64}$/i.test(response.response_sha256);
-            const linked = mappingEntry?.mapping_status === "direct"
-              && Array.isArray(mappingEntry.direct_outcomes) && mappingEntry.direct_outcomes.length > 0;
+            const verifiedOutcomes = mappingEntry?.mapping_status === "direct"
+              && Array.isArray(mappingEntry.direct_outcomes)
+              ? mappingEntry.direct_outcomes.filter(outcome =>
+                typeof outcome.outcome_reference === "string" && outcome.outcome_reference.trim().length > 0)
+              : [];
+            const linked = verifiedOutcomes.length > 0;
             return <li key={code || index}>
               <strong>{code || `Item ${index + 1}`}</strong>
               <span>{saved ? "Response saved" : "No saved response"}</span>
               <span>{linked ? "Curriculum connection verified" : "Curriculum connection unavailable"}</span>
+              {linked && <ul aria-label={`Verified curriculum outcomes for ${code || `item ${index + 1}`}`}>
+                {verifiedOutcomes.map((outcome, outcomeIndex) =>
+                  <li key={outcome.outcome_reference + outcomeIndex}>
+                    <strong>{outcome.outcome_reference}</strong>
+                    {outcome.outcome_title ? ` — ${outcome.outcome_title}` : ""}
+                  </li>)}
+              </ul>}
             </li>;
           })}
         </ul>
