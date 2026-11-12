@@ -51,10 +51,10 @@ SELECT is(public.adjust_pa_sitting_access(
  'MFA-verified owner grants untimed accommodation');
 -- Authorised roles do not get direct access to private session rows.
 -- The private state is inspected below after resetting the test role.
+RESET ROLE;
 SELECT is((SELECT count(*)::integer FROM private.security_audit_events
  WHERE action='pa_sitting_adjusted' AND reason_category='owner_accommodation'),2,
  'both arrangements are audit recorded');
-RESET ROLE;
 SELECT is((SELECT extra_seconds FROM private.pa_sitting_sessions),300,
  'an untimed adjustment never removes an earlier extension');
 SELECT is((SELECT untimed FROM private.pa_sitting_sessions),true,
