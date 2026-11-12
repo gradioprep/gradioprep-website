@@ -1539,6 +1539,39 @@ async function createLearnerEvaluationReport(
 }
 
 
+async function listStaffPaEvaluationReports(request: Request, env: WorkerEnv): Promise<Response> {
+  const url = new URL(request.url);
+  const values = url.searchParams.getAll("limit");
+  if (Array.from(url.searchParams.keys()).some(key => key !== "limit") ||
+      values.length > 1 || (values.length === 1 && !/^(?:[1-9]|[1-4][0-9]|50)$/.test(values[0]))) {
+    return jsonResponse({ error: "invalid_pa_report_queue_limit" }, 400);
+  }
+
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const assuranceDenied = requireAal2(auth.context);
+  if (assuranceDenied) return assuranceDenied;
+  const { data, error } = await auth.context.supabase.rpc("list_pa_evaluation_review_queue", {
+    p_limit: values.length === 1 ? Number(values[0]) : 25,
+  });
+  if (error) {
+    if (error.code === "42501") return jsonResponse({ error: "pa_report_queue_forbidden" }, 403);
+    if (error.code === "22023") return jsonResponse({ error: "invalid_pa_report_queue_limit" }, 400);
+    return jsonResponse({ error: "pa_report_queue_unavailable" }, 503);
+  }
+  const reports = asRows(data).map(item => ({
+    report_record_id: item.report_record_id,
+    created_at: item.created_at,
+    version_number: item.version_number,
+    curriculum_mapping_status: item.curriculum_mapping_status,
+    evidence_sufficiency_status: item.evidence_sufficiency_status,
+  }));
+  return new Response(JSON.stringify({ reports }), {
+    status: 200,
+    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
+  });
+}
+
 async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts" | "reviews" | "review", reportRecordId?: string): Promise<Response> {
   let fields: Record<string, unknown> = {};
   if (request.method === "POST") {
@@ -4177,6 +4210,9 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   );
   if (diagnosticReportMatch && request.method === "POST") {
     return createLearnerEvaluationReport(request, env, diagnosticReportMatch[1]);
+  }
+  if (url.pathname === "/api/v1/staff/pa-feedback/queue" && request.method === "GET") {
+    return listStaffPaEvaluationReports(request, env);
   }
   const staffDraftMatch = url.pathname.match(/^\/api\/v1\/staff\/pa-feedback\/([0-9a-f-]{36})\/drafts$/i);
   if (staffDraftMatch && request.method === "GET") return staffPaFeedback(request, env, "drafts", staffDraftMatch[1]);
