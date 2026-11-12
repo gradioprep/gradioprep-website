@@ -348,5 +348,70 @@ SELECT throws_ok($q$UPDATE private.pa_evaluation_feedback_drafts
   '42501','pa_feedback_draft_immutable','private draft revisions must be append-only');
 
 
+
+-- Review decisions remain private and cannot make an unverified baseline publishable.
+CREATE TEMP TABLE pa_feedback_review_test_state AS
+  SELECT id AS draft_id FROM private.pa_evaluation_feedback_drafts LIMIT 1;
+GRANT SELECT ON pa_feedback_review_test_state TO authenticated;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.review_pa_evaluation_feedback_draft(
+  (SELECT draft_id FROM pa_feedback_review_test_state),'changes_requested','More evidence needed.')$q$,
+  '42501','pa_feedback_review_forbidden','student cannot decide feedback review');
+SELECT throws_ok($q$SELECT * FROM public.get_pa_evaluation_feedback_reviews(
+  '1d000000-0000-4000-8000-000000000401')$q$,
+  '42501','pa_feedback_review_read_forbidden','student cannot read private review decisions');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.review_pa_evaluation_feedback_draft(
+  (SELECT draft_id FROM pa_feedback_review_test_state),'changes_requested','More evidence needed.')$q$,
+  '42501','pa_feedback_review_forbidden','Owner AAL1 cannot make review decisions');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','55555555-5555-4555-8555-555555555555',true);
+SELECT set_config('request.jwt.claims','{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}',true);
+SELECT throws_ok($q$SELECT public.review_pa_evaluation_feedback_draft(
+  (SELECT draft_id FROM pa_feedback_review_test_state),'changes_requested','More evidence needed.')$q$,
+  '42501','pa_feedback_review_forbidden','Grader AAL2 cannot impersonate Founder reviewer');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT throws_ok($q$SELECT public.review_pa_evaluation_feedback_draft(
+  (SELECT draft_id FROM pa_feedback_review_test_state),'approved_for_publication','Approved with missing official evidence.')$q$,
+  '55000','pa_feedback_review_requires_complete_verified_evidence',
+  'Owner cannot approve feedback for a mapped-incomplete and evidence-insufficient PA');
+SELECT ok(public.review_pa_evaluation_feedback_draft(
+  (SELECT draft_id FROM pa_feedback_review_test_state),'changes_requested',
+  'Provide reviewed curriculum links and actual response evidence before approval.') IS NOT NULL,
+  'Founder can request changes to a private report draft');
+SELECT is((SELECT count(*)::integer FROM public.get_pa_evaluation_feedback_reviews(
+  '1d000000-0000-4000-8000-000000000401')),1,
+  'Owner can inspect private review decisions through scoped RPC');
+SELECT throws_ok($q$SELECT public.review_pa_evaluation_feedback_draft(
+  (SELECT draft_id FROM pa_feedback_review_test_state),'changes_requested','Do the revisions again.')$q$,
+  '23505',NULL,'same draft cannot receive a contradictory second decision');
+RESET ROLE;
+
+SELECT is((SELECT count(*)::integer FROM private.pa_evaluation_feedback_reviews
+  WHERE decision='approved_for_publication'),0,
+  'no human approval is fabricated for the insufficient synthetic report');
+SELECT is((SELECT published_feedback_snapshot->>'status'
+  FROM public.evaluation_report_versions LIMIT 1),'not_applicable_unscored_preliminary_assessment',
+  'private review decision does not alter immutable learner report');
+SELECT throws_ok($q$UPDATE private.pa_evaluation_feedback_reviews
+  SET decision='approved_for_publication'$q$,'42501','pa_feedback_draft_immutable',
+  'private review decisions are immutable');
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+  WHERE action='pa_feedback_review_decided' AND reason_category='changes_requested_private'),1,
+  'review decision emits one metadata-only audit event');
+
 SELECT * FROM finish();
 ROLLBACK;
