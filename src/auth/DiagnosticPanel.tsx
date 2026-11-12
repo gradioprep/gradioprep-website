@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PaAnalyticalWritingTask, { isPaAnalyticalWritingResponse } from "./PaAnalyticalWritingTask";
 import PaCreativeWritingTask, { emptyCreativeWritingResponse, isPaCreativeWritingResponse, type PaCreativeWritingResponse } from "./PaCreativeWritingTask";
 import PaSpeakingOutlineTask, { emptySpeakingOutline, isPaSpeakingOutline, type PaSpeakingOutline } from "./PaSpeakingOutlineTask";
@@ -31,6 +31,7 @@ interface StartedDiagnostic {
   responses: Record<string, { response: ResponseValue; revision_number: number }>;
   section_status: string;
   available_observation_codes: string[];
+  available_sittings: Array<{ observation_code: string; sitting_number: number }>;
 }
 
 const stimulusA = [
@@ -134,6 +135,17 @@ export default function DiagnosticPanel({
   const [attemptStatus, setAttemptStatus] = useState<"not_started" | "in_progress" | "submitted">("not_started");
   const [responses, setResponses] = useState<DiagnosticResponseMap>({});
   const [availableCodes, setAvailableCodes] = useState<string[]>([]);
+  const [availableSittings, setAvailableSittings] = useState<Record<string, number>>({});
+  const [sittingSessions, setSittingSessions] = useState<Array<{
+    sitting_number: number; started_at: string; completed_at: string | null;
+    duration_seconds: number; extra_seconds: number; untimed: boolean; remaining_seconds: number | null;
+  }>>([]);
+  const [activeSitting, setActiveSitting] = useState(0);
+  const [clockTick, setClockTick] = useState(0);
+  useEffect(() => {
+    const interval = window.setInterval(() => setClockTick(value => value + 1), 1000);
+    return () => window.clearInterval(interval);
+  }, []);
   const [creativeDraft, setCreativeDraft] = useState<PaCreativeWritingResponse>(emptyCreativeWritingResponse);
   const [speakingOutline, setSpeakingOutline] = useState<PaSpeakingOutline>(emptySpeakingOutline);
   const [loading, setLoading] = useState(false);
@@ -197,6 +209,19 @@ export default function DiagnosticPanel({
     return output;
   }
 
+  const twoSitting = Object.values(availableSittings).includes(2);
+  const currentSittingCodes = (codes: string[], sitting: number) =>
+    codes.filter(code => availableSittings[code] === sitting);
+  const pendingForSitting = (sitting: number) =>
+    currentSittingCodes(requiredCodes, sitting).every(code => savedCodes.includes(code));
+  const session = sittingSessions.find(s => s.sitting_number === activeSitting);
+  const secondsLeft = session && !session.untimed
+    ? Math.max(0, Math.ceil((new Date(session.started_at).getTime()
+      + (session.duration_seconds + session.extra_seconds) * 1000 - Date.now()) / 1000))
+    : null;
+  void clockTick;
+  const sittingExpired = twoSitting && !!session && secondsLeft === 0;
+  const finishedSittings = sittingSessions.filter(s => s.completed_at !== null).map(s => s.sitting_number);
   const savedCodes = payloads().map(item => item.code);
   const requiredCodes = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "LC01", "LC02", "LC03", "LC04", "LC05",
     ...(availableCodes.includes("AW01") ? ["AW01"] : []),
@@ -296,6 +321,20 @@ export default function DiagnosticPanel({
         consideration: savedSpeaking.consideration ?? "",
         closing: savedSpeaking.closing ?? "",
       } : { ...emptySpeakingOutline });
+      setAvailableSittings(Object.fromEntries(
+        (result.available_sittings ?? []).filter(item =>
+          typeof item.observation_code === "string" && [1,2].includes(item.sitting_number))
+          .map(item => [item.observation_code,item.sitting_number]),
+      ));
+      const statesResponse = await fetch(
+        "/api/v1/learner/diagnostic-attempts/" + result.attempt.id + "/sittings",
+        { headers: { Authorization: "Bearer " + accessToken } },
+      );
+      if (!statesResponse.ok) throw new Error("Your sitting schedule could not be loaded.");
+      const states = await statesResponse.json() as { sittings: typeof sittingSessions };
+      setSittingSessions(states.sittings ?? []);
+      const current = (states.sittings ?? []).find(item => !item.completed_at);
+      setActiveSitting(current?.sitting_number ?? 0);
       setAvailableCodes(Array.isArray(result.available_observation_codes)
         ? result.available_observation_codes.filter((code): code is string => typeof code === "string")
         : []);
@@ -314,13 +353,41 @@ export default function DiagnosticPanel({
     }
   }
 
+  async function sittingAction(sitting: number, action: "start" | "complete") {
+    if (!attemptId) return;
+    setLoading(true); setError(""); setMessage("");
+    try {
+      if (action === "complete") {
+        if (!(await saveAll())) return;
+      }
+      const response = await fetch(
+        "/api/v1/learner/diagnostic-attempts/" + attemptId + "/sittings/" + sitting + "/" + action,
+        { method: "POST", headers: { Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/json" }, body: "{}" },
+      );
+      const body = await response.json() as { error?: string; sittings?: typeof sittingSessions };
+      if (!response.ok) throw new Error(body.error ?? "This sitting could not be updated.");
+      const refreshed = await fetch("/api/v1/learner/diagnostic-attempts/" + attemptId + "/sittings",
+        { headers: { Authorization: "Bearer " + accessToken } });
+      if (!refreshed.ok) throw new Error("Your sitting schedule could not be refreshed.");
+      const status = await refreshed.json() as { sittings: typeof sittingSessions };
+      setSittingSessions(status.sittings ?? []);
+      setActiveSitting(action === "start" ? sitting : 0);
+      setMessage(action === "start" ? "Your assessment sitting is ready."
+        : "This sitting is complete. Your saved responses cannot be changed.");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Your sitting could not be updated.");
+    } finally { setLoading(false); }
+  }
+
   async function saveAll(): Promise<boolean> {
     if (!attemptId) return false;
     setSaving(true);
     setError("");
     setMessage("");
     try {
-      for (const item of payloads()) {
+      for (const item of payloads().filter(item => !twoSitting ||
+        availableSittings[item.code] === activeSitting)) {
         const response = await fetch(
           "/api/v1/learner/diagnostic-attempts/" + attemptId + "/responses/" + item.code,
           {
@@ -343,12 +410,12 @@ export default function DiagnosticPanel({
   }
 
   async function submitDiagnostic() {
-    if (!complete || !attemptId) return;
+    if (!complete || !attemptId || (twoSitting && finishedSittings.length !== 2)) return;
     setSaving(true);
     setError("");
     setMessage("");
     try {
-      for (const item of payloads()) {
+      for (const item of payloads().filter(item => !twoSitting)) {
         const response = await fetch(
           "/api/v1/learner/diagnostic-attempts/" + attemptId + "/responses/" + item.code,
           {
@@ -385,7 +452,7 @@ export default function DiagnosticPanel({
   }
 
   const readOnly = attemptStatus === "submitted";
-  const buttonDisabled = loading || saving || readOnly;
+  const buttonDisabled = loading || saving || readOnly || sittingExpired;
 
   return <section className="proto-panel proto-diagnostic" aria-labelledby="proto-diagnostic-heading">
     <div className="proto-panel-heading proto-diagnostic-heading">
@@ -411,6 +478,22 @@ export default function DiagnosticPanel({
           : "Your responses are saved when you choose Save progress. Submit when you have completed this section."}</span>
       </div>
 
+      {twoSitting && <section className="proto-diagnostic-notice" aria-label="Assessment sitting schedule">
+        <strong>Two assessment sittings</strong>
+        <p>Sitting 1: 35 minutes · Sitting 2: 45 minutes. Complete Sitting 1 before starting Sitting 2.</p>
+        {session && <p role="timer" aria-live="off">Sitting {activeSitting}: {
+          session.untimed ? "Untimed arrangement" :
+          Math.floor((secondsLeft ?? 0) / 60) + ":" + String((secondsLeft ?? 0) % 60).padStart(2,"0")
+        } remaining</p>}
+        {sittingExpired && <p role="alert">This sitting's time has ended. You can finish it after reviewing saved answers, but no further changes can be saved.</p>}
+        {!readOnly && activeSitting === 0 && !finishedSittings.includes(1) &&
+          <button className="proto-action" type="button" disabled={loading}
+            onClick={() => void sittingAction(1,"start")}>Start Sitting 1</button>}
+        {!readOnly && activeSitting === 0 && finishedSittings.includes(1) && !finishedSittings.includes(2) &&
+          <button className="proto-action" type="button" disabled={loading}
+            onClick={() => void sittingAction(2,"start")}>Start Sitting 2</button>}
+      </section>}
+      {(!twoSitting || readOnly || activeSitting === 1) && <>
       <div className="proto-diagnostic-stimulus">
         <h3>Stimulus A · The Repair Table</h3>
         {stimulusA.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
@@ -673,6 +756,8 @@ export default function DiagnosticPanel({
         />
       </div>
 
+      </>}
+      {(!twoSitting || readOnly || activeSitting === 2) && <>
       {availableCodes.includes("AW01") && <PaAnalyticalWritingTask
         value={current("AW01").text ?? ""}
         onChange={value => update("AW01", "text", value)}
@@ -691,13 +776,19 @@ export default function DiagnosticPanel({
         readOnly={readOnly || saving}
       />}
 
+      </>}
       <div className="proto-diagnostic-footer">
         <p>{savedCodes.filter(code => requiredCodes.includes(code)).length} of {requiredCodes.length} questions have response-ready answers. Response guidance is not a hard word limit.</p>
         {!readOnly && <>
-          <button className="proto-action secondary" type="button" onClick={() => void saveAll()} disabled={buttonDisabled || savedCodes.length === 0}>
+          {twoSitting && activeSitting > 0 && <button className="proto-action"
+            type="button" disabled={buttonDisabled || !pendingForSitting(activeSitting)}
+            onClick={() => void sittingAction(activeSitting,"complete")}>
+            Finish Sitting {activeSitting}
+          </button>}
+          <button className="proto-action secondary" type="button" onClick={() => void saveAll()} disabled={buttonDisabled || savedCodes.length === 0 || (twoSitting && activeSitting === 0)}>
             {saving ? "Saving…" : "Save progress"}
           </button>
-          <button className="proto-action" type="button" onClick={() => void submitDiagnostic()} disabled={buttonDisabled || !complete}>
+          <button className="proto-action" type="button" onClick={() => void submitDiagnostic()} disabled={buttonDisabled || !complete || (twoSitting && finishedSittings.length !== 2)}>
             {saving ? "Please wait…" : "Submit Preliminary Assessment section"}
           </button>
         </>}

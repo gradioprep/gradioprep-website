@@ -1214,6 +1214,71 @@ function isValidDiagnosticResponse(observationCode: string, response: unknown): 
   return false;
 }
 
+async function paSittingRequest(
+  request: Request, env: WorkerEnv, attemptId: string,
+  sittingNumber?: number, action?: "start" | "complete",
+): Promise<Response> {
+  if (!isUuid(attemptId) || (sittingNumber !== undefined && ![1, 2].includes(sittingNumber))) {
+    return jsonResponse({ error: "invalid_pa_sitting" }, 400);
+  }
+  if (request.method === "POST") {
+    const parsed = await readBoundedJson(request, 128);
+    if (!parsed.ok) return parsed.response;
+    if (!hasOnlyEmptyObject(parsed.body)) return jsonResponse({ error: "invalid_pa_sitting" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "student");
+  if (roleDenied) return roleDenied;
+  const rpc = request.method === "GET" ? "get_pa_sitting_state"
+    : action === "start" ? "start_pa_sitting" : "complete_pa_sitting";
+  const params = request.method === "GET" ? { p_attempt_id: attemptId }
+    : { p_attempt_id: attemptId, p_sitting_number: sittingNumber };
+  const { data, error } = await auth.context.supabase.rpc(rpc, params);
+  if (error) {
+    if (error.code === "42501" || error.code === "P0002") return jsonResponse({ error: "pa_sitting_not_found" }, 404);
+    if (error.code === "P0001") return jsonResponse({ error: error.message }, 409);
+    return jsonResponse({ error: "pa_sitting_unavailable" }, 503);
+  }
+  return jsonResponse(request.method === "POST" && action === "complete"
+    ? { completed: data === true } : { sittings: asRows(data) });
+}
+
+async function ownerPaSittingAdjustment(request: Request, env: WorkerEnv): Promise<Response> {
+  const parsed = await readBoundedJson(request, 700);
+  if (!parsed.ok) return parsed.response;
+  const body = parsed.body;
+  if (typeof body !== "object" || !body || Array.isArray(body)) {
+    return jsonResponse({ error: "invalid_pa_sitting_adjustment" }, 400);
+  }
+  const f = body as Record<string,unknown>;
+  if (Object.keys(f).length !== 5 ||
+    !["attempt_id","sitting_number","extra_minutes","untimed","reason"].every(k=>Object.hasOwn(f,k)) ||
+    !isUuid(f.attempt_id) || ![1,2].includes(Number(f.sitting_number)) ||
+    !Number.isInteger(f.extra_minutes) || Number(f.extra_minutes)<0 || Number(f.extra_minutes)>120 ||
+    typeof f.untimed !== "boolean" || typeof f.reason !== "string" ||
+    f.reason.trim().length<10 || f.reason.trim().length>240) {
+    return jsonResponse({ error: "invalid_pa_sitting_adjustment" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const assuranceDenied = requireAal2(auth.context);
+  if (assuranceDenied) return assuranceDenied;
+  const { data, error } = await auth.context.supabase.rpc("adjust_pa_sitting_access",{
+    p_attempt_id: f.attempt_id, p_sitting_number: f.sitting_number,
+    p_extra_minutes: f.extra_minutes, p_untimed: f.untimed, p_reason: f.reason,
+  });
+  if (error) {
+    if (error.code === "42501") return jsonResponse({ error: "pa_sitting_adjust_forbidden" }, 403);
+    if (error.code === "P0001") return jsonResponse({ error: "pa_sitting_adjust_unavailable" }, 409);
+    if (error.code === "22023") return jsonResponse({ error: "invalid_pa_sitting_adjustment" }, 400);
+    return jsonResponse({ error: "pa_sitting_adjust_unavailable" }, 503);
+  }
+  return jsonResponse({ adjusted: data === true });
+}
+
 async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise<Response> {
   const parsed = await readBoundedJson(request, 512);
   if (!parsed.ok) return parsed.response;
@@ -1286,7 +1351,7 @@ async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise
   // The separate thirty-observation authoring blueprint is never exposed.
   const { data: enabledRows, error: enabledError } = await auth.context.supabase
     .from("diagnostic_observations")
-    .select("observation_code")
+    .select("observation_code, sitting_number")
     .eq("diagnostic_version_id", version.id)
     .eq("learner_capture_enabled", true);
   if (enabledError || !enabledRows) {
@@ -1318,6 +1383,9 @@ async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise
     attempt: { ...attempt, is_replay: created.is_replay === true },
     responses,
     available_observation_codes: enabledRows.map(row => row.observation_code),
+    available_sittings: enabledRows.map(row => ({
+      observation_code: row.observation_code, sitting_number: row.sitting_number,
+    })),
     section_status: "read_view_language_context_only",
   }, created.is_replay === true ? 200 : 201);
 }
@@ -4395,6 +4463,18 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   );
   if (evaluationReportMatch && request.method === "GET") {
     return getLearnerEvaluationReport(request, env, evaluationReportMatch[1]);
+  }
+  const paSittingMatch = url.pathname.match(
+    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/sittings(?:\/([12])\/(start|complete))?$/i,
+  );
+  if (paSittingMatch && (request.method === "GET" && !paSittingMatch[2] ||
+    request.method === "POST" && Boolean(paSittingMatch[2]))) {
+    return paSittingRequest(request, env, paSittingMatch[1],
+      paSittingMatch[2] ? Number(paSittingMatch[2]) : undefined,
+      paSittingMatch[3] as "start" | "complete" | undefined);
+  }
+  if (url.pathname === "/api/v1/admin/pa-sittings/adjust" && request.method === "POST") {
+    return ownerPaSittingAdjustment(request, env);
   }
   const diagnosticResponseMatch = url.pathname.match(
     /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/((?:RV(?:0[1-6]|07[ab]|0[89])|LC0[1-5]|AW01|CW01|SP01))$/i,

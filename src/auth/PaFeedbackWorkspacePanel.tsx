@@ -39,6 +39,11 @@ export default function PaFeedbackWorkspacePanel({
   const [reviewNotes, setReviewNotes] = useState("");
   const [selectedDraft, setSelectedDraft] = useState("");
   const [selectedReview, setSelectedReview] = useState("");
+  const [paAttemptId, setPaAttemptId] = useState("");
+  const [paSittingNumber, setPaSittingNumber] = useState("1");
+  const [extraMinutes, setExtraMinutes] = useState("0");
+  const [untimedAccess, setUntimedAccess] = useState(false);
+  const [accommodationReason, setAccommodationReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -108,6 +113,32 @@ export default function PaFeedbackWorkspacePanel({
         <p>Prepare feedback and review its evidence before publication.</p></div>
     </div>
     {assuranceLevel !== "aal2" ? <p role="status">Verify your authenticator to access report review.</p> : <>
+      {owner && <section aria-label="PA sitting access arrangements">
+        <h4>Preliminary Assessment timing arrangements</h4>
+        <p>Apply an approved extension or untimed arrangement to an active sitting. Changes are audited and cannot reduce an existing allowance.</p>
+        <label>PA attempt ID <input value={paAttemptId} onChange={e=>setPaAttemptId(e.target.value.trim())}/></label>
+        <label>Sitting <select value={paSittingNumber} onChange={e=>setPaSittingNumber(e.target.value)}>
+          <option value="1">Sitting 1</option><option value="2">Sitting 2</option>
+        </select></label>
+        <label>Extra minutes (0–120)<input type="number" min="0" max="120"
+          value={extraMinutes} onChange={e=>setExtraMinutes(e.target.value)}/></label>
+        <label><input type="checkbox" checked={untimedAccess}
+          onChange={e=>setUntimedAccess(e.target.checked)}/> Untimed arrangement</label>
+        <label>Approval reason <input maxLength={240} value={accommodationReason}
+          onChange={e=>setAccommodationReason(e.target.value)}/></label>
+        <button type="button" className="proto-action secondary"
+          disabled={busy || !/^[0-9a-f-]{36}$/i.test(paAttemptId) ||
+            !Number.isInteger(Number(extraMinutes)) || Number(extraMinutes)<0 ||
+            Number(extraMinutes)>120 || (!untimedAccess && Number(extraMinutes)===0) ||
+            accommodationReason.trim().length<10}
+          onClick={()=>void perform(async()=>{
+            await request("/api/v1/admin/pa-sittings/adjust",{
+              attempt_id:paAttemptId,sitting_number:Number(paSittingNumber),
+              extra_minutes:Number(extraMinutes),untimed:untimedAccess,
+              reason:accommodationReason.trim(),
+            });
+          },"Timing arrangement applied.")}>Apply arrangement</button>
+      </section>}
       <div className="proto-pa-review-queue">
         <button className="proto-action secondary" disabled={busy}
           onClick={() => void perform(loadQueue, "Review queue updated.")}>Load review queue</button>

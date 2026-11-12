@@ -70,6 +70,7 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     expect(startedBody.attempt.is_replay).toBe(false);
     expect(startedBody.section_status).toBe("read_view_language_context_only");
     expect(startedBody.available_observation_codes).toHaveLength(15);
+    await expect(page.getByRole("button",{name:"Start Sitting 1"})).toHaveCount(0);
     expect(startedBody.available_observation_codes).not.toContain("AW01");
     expect(startedBody.available_observation_codes).not.toContain("CW01");
     expect(startedBody.available_observation_codes).not.toContain("SP01");
@@ -96,6 +97,11 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     expect(resumedBody.attempt.id).toBe(startedBody.attempt.id);
     expect(resumedBody.attempt.is_replay).toBe(true);
 
+    const sittingState = await request.get(
+      "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/sittings",{ headers },
+    );
+    expect(sittingState.status()).toBe(200);
+    expect(await sittingState.json()).toMatchObject({ sittings: [] });
     const invalidResponse = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/RV01",
       { headers, data: { response: { a: "B", b: ["A", "A"] } } },
