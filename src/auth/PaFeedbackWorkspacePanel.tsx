@@ -8,6 +8,10 @@ type QueueEntry = {
 };
 type Draft = { draft_id: string; report_version_id: string; draft_text: string; created_at: string };
 type Review = { review_id: string; draft_id: string; decision: string; reviewer_note: string; decided_at: string };
+type SpokenEvidence = {
+  evidence_id: string; assessor_id: string; report_version_id: string;
+  presentation_observation: string; followup_observation: string; recorded_at: string;
+};
 type Report = PaReportEvidenceSnapshot & {
   report_record_id: string; report_version_id: string; version_number: number;
   curriculum_mapping_status: string; evidence_sufficiency_status: string;
@@ -24,6 +28,10 @@ export default function PaFeedbackWorkspacePanel({
   const [report, setReport] = useState<Report | null>(null);
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [spokenEvidence, setSpokenEvidence] = useState<SpokenEvidence[]>([]);
+  const [presentationObservation, setPresentationObservation] = useState("");
+  const [followupObservation, setFollowupObservation] = useState("");
+  const [witnessedLive, setWitnessedLive] = useState(false);
   const [reviewerGrants, setReviewerGrants] = useState<ReviewerGrant[]>([]);
   const [teacherUserId, setTeacherUserId] = useState("");
   const [assignmentReason, setAssignmentReason] = useState("");
@@ -59,21 +67,23 @@ export default function PaFeedbackWorkspacePanel({
 
   async function openReport(targetId: string) {
     setRecordId(targetId);
-    setReport(null); setDrafts([]); setReviews([]);
+    setReport(null); setDrafts([]); setReviews([]); setSpokenEvidence([]);
     setSelectedDraft(""); setSelectedReview(""); setReviewerGrants([]);
     await refresh(targetId);
   }
 
   async function refresh(targetId = recordId) {
-    const [reportResult, draftResult, reviewResult, grantsResult] = await Promise.all([
+    const [reportResult, draftResult, reviewResult, grantsResult, spokenResult] = await Promise.all([
       request("/api/v1/learner/evaluation-reports/" + targetId),
       request("/api/v1/staff/pa-feedback/" + targetId + "/drafts"),
       request("/api/v1/staff/pa-feedback/" + targetId + "/reviews"),
       owner ? request("/api/v1/admin/pa-feedback/" + targetId + "/reviewers") : Promise.resolve(null),
+      request("/api/v1/staff/pa-feedback/" + targetId + "/spoken-evidence"),
     ]);
     setReport(reportResult.report as Report);
     setDrafts((draftResult.items as Draft[]) ?? []);
     setReviews((reviewResult.items as Review[]) ?? []);
+    setSpokenEvidence((spokenResult.items as SpokenEvidence[]) ?? []);
     setReviewerGrants(owner && grantsResult ? ((grantsResult.grants as ReviewerGrant[]) ?? []) : []);
   }
 
@@ -119,7 +129,7 @@ export default function PaFeedbackWorkspacePanel({
       <label>Evaluation Report record ID
         <input value={recordId} onChange={event => {
           setRecordId(event.target.value.trim()); setReport(null); setDrafts([]); setReviews([]);
-          setSelectedDraft(""); setSelectedReview(""); setReviewerGrants([]);
+          setSelectedDraft(""); setSelectedReview(""); setReviewerGrants([]); setSpokenEvidence([]);
         }} placeholder="Report UUID" aria-label="Evaluation Report record ID" />
       </label>
       <button className="proto-action secondary" disabled={busy || !/^[0-9a-f-]{36}$/i.test(recordId)}
@@ -163,6 +173,39 @@ export default function PaFeedbackWorkspacePanel({
         <p><strong>Curriculum connections:</strong> {report.curriculum_mapping_status === "complete_direct" ? "Verified" : "Not complete"}</p>
         <p><strong>Evidence:</strong> {report.evidence_sufficiency_status === "sufficient" ? "Sufficient" : "Not yet sufficient"}</p>
         <PaReportEvidenceReview report={report} />
+        <section aria-label="Speaking and presentation observations">
+          <h4>Speaking/Presenting · Live observation record</h4>
+          <p>Record only what you personally witnessed during the presentation and standard follow-up. The learner's outline card is preparation, not evidence of spoken delivery. No recordings or automated marks are created.</p>
+          <p>{spokenEvidence.length} assessor observation record{spokenEvidence.length === 1 ? "" : "s"} retained.</p>
+          {spokenEvidence.map(entry => <article key={entry.evidence_id}>
+            <p><strong>Assessor observation</strong> · {new Date(entry.recorded_at).toLocaleString()}</p>
+            <p><strong>Presentation:</strong> {entry.presentation_observation}</p>
+            <p><strong>Follow-up:</strong> {entry.followup_observation}</p>
+          </article>)}
+          <label>Observed presentation evidence
+            <textarea rows={4} maxLength={2000} value={presentationObservation}
+              onChange={event => setPresentationObservation(event.target.value)} />
+          </label>
+          <label>Observed response to the standard follow-up
+            <textarea rows={4} maxLength={2000} value={followupObservation}
+              onChange={event => setFollowupObservation(event.target.value)} />
+          </label>
+          <label><input type="checkbox" checked={witnessedLive}
+            onChange={event => setWitnessedLive(event.target.checked)} />
+            I personally witnessed the live presentation and standard follow-up.</label>
+          <button type="button" className="proto-action secondary" disabled={busy ||
+            !witnessedLive || presentationObservation.trim().length < 20 ||
+            followupObservation.trim().length < 20}
+            onClick={() => void perform(async () => {
+              await request("/api/v1/staff/pa-feedback/" + report.report_record_id + "/spoken-evidence", {
+                report_version_id: report.report_version_id,
+                presentation_observation: presentationObservation.trim(),
+                followup_observation: followupObservation.trim(), observed_live: true,
+              });
+              setPresentationObservation(""); setFollowupObservation(""); setWitnessedLive(false);
+              await refresh();
+            }, "Live assessment observations recorded privately.")}>Record witnessed assessment</button>
+        </section>
         <p><strong>Feedback:</strong> {report.published_feedback_snapshot?.status === "human_approved_published"
           ? "Published in this version" : "No approved feedback in this version"}</p>
         <p>Only reviewed feedback can be published when the curriculum links and response evidence meet the required checks.</p>

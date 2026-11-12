@@ -131,8 +131,8 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     );
     // A valid CW shape is refused by the existing route's generic not-found
     // response because the released fixture has no learner-capturable CW item.
-    expect(unreleasedCreative.status()).toBe(404);
-    expect(await unreleasedCreative.json()).toMatchObject({ error: "not_found" });
+    expect(unreleasedCreative.status()).toBe(400);
+    expect(await unreleasedCreative.json()).toMatchObject({ error: "invalid_diagnostic_response" });
     const unreleasedSpeakingOutline = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/SP01",
       { headers, data: { response: {
@@ -142,8 +142,16 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
         closing: "Please trial the corner for a month.",
       } } },
     );
-    expect(unreleasedSpeakingOutline.status()).toBe(404);
-    expect(await unreleasedSpeakingOutline.json()).toMatchObject({ error: "not_found" });
+    expect(unreleasedSpeakingOutline.status()).toBe(400);
+    expect(await unreleasedSpeakingOutline.json()).toMatchObject({ error: "invalid_diagnostic_response" });
+    const unauthenticatedSpokenRecord = await request.post(
+      "/api/v1/staff/pa-feedback/" + startedBody.attempt.id + "/spoken-evidence",
+      { data: {
+        report_version_id: randomUUID(), presentation_observation: "Observed a coherent spoken presentation.",
+        followup_observation: "Observed a considered reply to the challenge.", observed_live: true,
+      } },
+    );
+    expect(unauthenticatedSpokenRecord.status()).toBe(401);
     const injectedAnalyticalScore = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/AW01",
       { headers, data: { response: { text: "A reasoned interpretation supported by evidence.", score: 7 } } },

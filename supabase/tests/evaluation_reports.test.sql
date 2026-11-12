@@ -537,5 +537,73 @@ SELECT throws_ok($q$SELECT * FROM public.list_pa_evaluation_review_queue()$q$,
   '42501','pa_report_queue_forbidden','Owner at AAL1 cannot enumerate PA feedback queue');
 RESET ROLE;
 
+-- Scoped private oral performance tests. All identities and content are synthetic.
+INSERT INTO public.diagnostic_observations(
+  id,diagnostic_version_id,observation_code,group_code,sitting_number,
+  sequence_number,response_kind,learner_capture_enabled
+) VALUES (
+  '1d000000-0000-4000-8000-000000000721',
+  '1d000000-0000-4000-8000-000000000501',
+  'SP01','SP',2,60,'text',false
+);
+INSERT INTO public.diagnostic_response_versions(
+  attempt_id,observation_id,revision_number,response_json
+) VALUES (
+  '1d000000-0000-4000-8000-000000000301',
+  '1d000000-0000-4000-8000-000000000721',1,
+  '{"title":"Synthetic speaking outline","opening":"Recommendation","development":"Example","consideration":"Concern","closing":"Next step"}'::jsonb
+);
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.record_pa_spoken_performance(
+  '1d000000-0000-4000-8000-000000000401',
+  (SELECT id FROM public.evaluation_report_versions WHERE version_number=3),
+  'This is a fake learner claim of presenting the plan.',
+  'This is a fake learner claim of answering the question.',true)$q$,
+  '42501','pa_spoken_evidence_forbidden','learner cannot self-certify oral evidence');
+SELECT throws_ok($q$SELECT * FROM public.get_pa_spoken_performance(
+  '1d000000-0000-4000-8000-000000000401')$q$,
+  '42501','pa_spoken_evidence_forbidden','learner cannot read private assessor notes');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.record_pa_spoken_performance(
+  '1d000000-0000-4000-8000-000000000401',
+  (SELECT id FROM public.evaluation_report_versions WHERE version_number=3),
+  'Observed a clear presentation developing the proposal.',
+  'Observed a response addressing the standard concern.',true)$q$,
+  '42501','pa_spoken_evidence_forbidden','Owner without MFA cannot record oral evidence');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT throws_ok($q$SELECT public.record_pa_spoken_performance(
+  '1d000000-0000-4000-8000-000000000401',
+  (SELECT id FROM public.evaluation_report_versions WHERE version_number=3),
+  'Observed a clear presentation developing the proposal.',
+  'Observed a response addressing the standard concern.',false)$q$,
+  '22023','invalid_pa_spoken_evidence','assessor must attest to witnessing live speech');
+SELECT ok(public.record_pa_spoken_performance(
+  '1d000000-0000-4000-8000-000000000401',
+  (SELECT id FROM public.evaluation_report_versions WHERE version_number=3),
+  'Observed coherent explanation and a practical example.',
+  'Observed a reasoned response to another preference.',true) IS NOT NULL,
+  'Owner at MFA may append witnessed evidence to the exact PA report version');
+SELECT is((SELECT count(*)::integer FROM public.get_pa_spoken_performance(
+  '1d000000-0000-4000-8000-000000000401')),1,
+  'Owner may read private observed performance');
+RESET ROLE;
+SELECT throws_ok($q$UPDATE private.pa_spoken_performance_evidence
+  SET presentation_observation='changed'$q$,'42501','pa_feedback_draft_immutable',
+  'human oral observation records cannot be changed');
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+  WHERE action='pa_spoken_evidence_recorded' AND reason_category='private_human_observation'),1,
+  'successful oral performance evidence creation emits metadata-only audit');
+SELECT is((SELECT count(*)::integer FROM public.evaluation_report_versions),3,
+  'private speaking observations do not fabricate a new learner report');
+SELECT is((SELECT count(*)::integer FROM private.pa_spoken_performance_evidence),1,
+  'one witnessed performance record remains private');
 SELECT * FROM finish();
 ROLLBACK;

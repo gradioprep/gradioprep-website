@@ -1669,6 +1669,58 @@ async function ownerPaReviewerAccess(
     : jsonResponse({ error: "pa_reviewer_unavailable" }, 503);
 }
 
+async function staffPaSpokenEvidence(request: Request, env: WorkerEnv, reportRecordId: string): Promise<Response> {
+  if (!isUuid(reportRecordId)) return jsonResponse({ error: "invalid_pa_spoken_report" }, 400);
+  let fields: Record<string, unknown> = {};
+  if (request.method === "POST") {
+    const parsed = await readBoundedJson(request, 4600);
+    if (!parsed.ok) return parsed.response;
+    if (typeof parsed.body !== "object" || parsed.body === null || Array.isArray(parsed.body)) {
+      return jsonResponse({ error: "invalid_pa_spoken_evidence" }, 400);
+    }
+    fields = parsed.body as Record<string, unknown>;
+    const keys = Object.keys(fields);
+    if (keys.length !== 4 ||
+      !["report_version_id", "presentation_observation", "followup_observation", "observed_live"]
+        .every(key => Object.hasOwn(fields, key)) ||
+      !isUuid(fields.report_version_id) ||
+      fields.observed_live !== true ||
+      !["presentation_observation", "followup_observation"].every(key =>
+        typeof fields[key] === "string" &&
+        (fields[key] as string).trim().length >= 20 &&
+        (fields[key] as string).trim().length <= 2000)) {
+      return jsonResponse({ error: "invalid_pa_spoken_evidence" }, 400);
+    }
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const assuranceDenied = requireAal2(auth.context);
+  if (assuranceDenied) return assuranceDenied;
+  const roleDenied = await requireAnyActiveRole(auth.context, ["owner", "grader"]);
+  if (roleDenied) return roleDenied;
+  const rpc = request.method === "POST"
+    ? "record_pa_spoken_performance" : "get_pa_spoken_performance";
+  const args = request.method === "POST" ? {
+    p_report_record_id: reportRecordId,
+    p_report_version_id: fields.report_version_id,
+    p_presentation_observation: (fields.presentation_observation as string).trim(),
+    p_followup_observation: (fields.followup_observation as string).trim(),
+    p_observed_live: true,
+  } : { p_report_record_id: reportRecordId };
+  const { data, error } = await auth.context.supabase.rpc(rpc, args);
+  if (error) {
+    if (error.code === "42501" || error.code === "P0002")
+      return jsonResponse({ error: "pa_spoken_evidence_not_found" }, 404);
+    if (error.code === "55000") return jsonResponse({ error: "pa_spoken_evidence_state_conflict" }, 409);
+    if (error.code === "22023") return jsonResponse({ error: "invalid_pa_spoken_evidence" }, 400);
+    return jsonResponse({ error: "pa_spoken_evidence_unavailable" }, 503);
+  }
+  return request.method === "POST" ? jsonResponse({ evidence_id: data }, 201)
+    : new Response(JSON.stringify({ items: asRows(data) }), {
+      status: 200, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
+    });
+}
+
 async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts" | "reviews" | "review", reportRecordId?: string): Promise<Response> {
   let fields: Record<string, unknown> = {};
   if (request.method === "POST") {
@@ -4321,6 +4373,10 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   if (url.pathname === "/api/v1/staff/pa-feedback/queue" && request.method === "GET") {
     return listStaffPaEvaluationReports(request, env);
   }
+  const staffSpeakingMatch = url.pathname.match(/^\/api\/v1\/staff\/pa-feedback\/([0-9a-f-]{36})\/spoken-evidence$/i);
+  if (staffSpeakingMatch && (request.method === "GET" || request.method === "POST")) {
+    return staffPaSpokenEvidence(request, env, staffSpeakingMatch[1]);
+  }
   const staffDraftMatch = url.pathname.match(/^\/api\/v1\/staff\/pa-feedback\/([0-9a-f-]{36})\/drafts$/i);
   if (staffDraftMatch && request.method === "GET") return staffPaFeedback(request, env, "drafts", staffDraftMatch[1]);
   if (url.pathname === "/api/v1/staff/pa-feedback/drafts" && request.method === "POST") {
@@ -4341,7 +4397,7 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
     return getLearnerEvaluationReport(request, env, evaluationReportMatch[1]);
   }
   const diagnosticResponseMatch = url.pathname.match(
-    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/((?:RV(?:0[1-6]|07[ab]|0[89])|LC0[1-5]|AW01))$/i,
+    /^\/api\/v1\/learner\/diagnostic-attempts\/([0-9a-f-]{36})\/responses\/((?:RV(?:0[1-6]|07[ab]|0[89])|LC0[1-5]|AW01|CW01|SP01))$/i,
   );
   if (diagnosticResponseMatch && request.method === "PUT") {
     return saveLearnerDiagnosticResponse(request, env, diagnosticResponseMatch[1], diagnosticResponseMatch[2]);
