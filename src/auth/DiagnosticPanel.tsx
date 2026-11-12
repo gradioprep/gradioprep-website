@@ -415,7 +415,7 @@ export default function DiagnosticPanel({
     setError("");
     setMessage("");
     try {
-      for (const item of payloads().filter(item => !twoSitting)) {
+      for (const item of payloads().filter(() => !twoSitting)) {
         const response = await fetch(
           "/api/v1/learner/diagnostic-attempts/" + attemptId + "/responses/" + item.code,
           {
