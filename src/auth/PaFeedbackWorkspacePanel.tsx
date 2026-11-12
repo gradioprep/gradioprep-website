@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+type QueueEntry = {
+  report_record_id: string; created_at: string; version_number: number;
+  curriculum_mapping_status: string; evidence_sufficiency_status: string;
+};
 type Draft = { draft_id: string; report_version_id: string; draft_text: string; created_at: string };
 type Review = { review_id: string; draft_id: string; decision: string; reviewer_note: string; decided_at: string };
 type Report = {
@@ -13,6 +17,8 @@ export default function PaFeedbackWorkspacePanel({
   accessToken, owner, assuranceLevel,
 }: { accessToken: string; owner: boolean; assuranceLevel: string }) {
   const [recordId, setRecordId] = useState("");
+  const [queue, setQueue] = useState<QueueEntry[]>([]);
+  const [queueLoaded, setQueueLoaded] = useState(false);
   const [report, setReport] = useState<Report | null>(null);
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -38,6 +44,19 @@ export default function PaFeedbackWorkspacePanel({
         ? "This report or action is unavailable for your account."
         : "The request could not be completed.");
     return data;
+  }
+
+  async function loadQueue() {
+    const result = await request("/api/v1/staff/pa-feedback/queue");
+    setQueue((result.reports as QueueEntry[]) ?? []);
+    setQueueLoaded(true);
+  }
+
+  async function openReport(targetId: string) {
+    setRecordId(targetId);
+    setReport(null); setDrafts([]); setReviews([]);
+    setSelectedDraft(""); setSelectedReview("");
+    await refresh(targetId);
   }
 
   async function refresh(targetId = recordId) {
@@ -72,6 +91,24 @@ export default function PaFeedbackWorkspacePanel({
         <p>Prepare feedback and review its evidence before publication.</p></div>
     </div>
     {assuranceLevel !== "aal2" ? <p role="status">Verify your authenticator to access report review.</p> : <>
+      <div className="proto-pa-review-queue">
+        <button className="proto-action secondary" disabled={busy}
+          onClick={() => void perform(loadQueue, "Review queue updated.")}>Load review queue</button>
+        {queueLoaded && (queue.length === 0 ? <p>No Evaluation Reports are currently assigned to your account.</p> :
+          <ul aria-label="Evaluation Reports available for review">
+            {queue.map(entry => <li key={entry.report_record_id}>
+              <div>
+                <strong>Evaluation Report · Version {entry.version_number}</strong>
+                <p>Received {new Date(entry.created_at).toLocaleString()}</p>
+                <p>{entry.curriculum_mapping_status === "complete_direct" ? "Curriculum links verified" : "Curriculum review incomplete"} · {entry.evidence_sufficiency_status === "sufficient" ? "Evidence sufficient" : "Evidence incomplete"}</p>
+              </div>
+              <button className="proto-action secondary" type="button" disabled={busy}
+                onClick={() => void perform(() => openReport(entry.report_record_id), "Report loaded for review.")}>
+                Open report
+              </button>
+            </li>)}
+          </ul>)}
+      </div>
       <label>Evaluation Report record ID
         <input value={recordId} onChange={event => {
           setRecordId(event.target.value.trim()); setReport(null); setDrafts([]); setReviews([]);
