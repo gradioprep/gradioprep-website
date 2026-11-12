@@ -1,6 +1,6 @@
 # IB MYP Year 4 / Grade 9 Diagnostic — Speaking / Presenting draft v0.1
 
-**Status:** Learner-facing authoring draft for human academic review. Not Founder-approved for content adoption, calibrated, implemented in the learner app or released.
+**Status:** Founder approved the exact learner-facing task content on 12 November 2026. Independent MYP Year 4 academic mapping, assessor calibration and final release remain pending. A secure private assessor-observation workflow is implemented separately from learner outline capture.
 **Target:** Founder-confirmed Grade 9 — IB MYP Year 4, Language and Literature.
 **Task ID:** MYP4-SP-T01 (proposed stable task identifier).
 **Item map:** Founder-approved v0.1; Speaking / Presenting observations SP01–SP05 (one prepared oral presentation and one standardised follow-up).
@@ -72,13 +72,13 @@ One prepared presentation and the follow-up provide evidence for the five observ
 ## Review status and open gates
 
 - Scenario and prompt: project-original authoring; no third-party passage, image, recording or quotation is used.
-- Human academic review and independent MYP Year 4 demand/suitability calibration: **pending**.
+- Founder/content-owner learner prompt review: **approved 12 November 2026**. Independent MYP Year 4 demand/suitability calibration: **pending**.
 - Clarity of the prompt, fairness of the school-context assumptions and acceptability of alternative proposals: **pending**.
 - Review of the 10-minute administration envelope, presentation duration and follow-up feasibility: **pending pilot validation**.
 - Human validation of accepted-response guidance, model performance, provisional dimension anchors and question-specific assessor feedback: **pending** in the restricted teacher/editor pack.
 - Accessibility and access-arrangement review: **pending**, including equivalent ways to demonstrate oral communication where needed, clear timing cues, outline-card usability and fair treatment of speech or non-verbal differences.
 - Assessor consistency and double-scoring plan: **pending**; no reliability claim is made.
 - Final rubric language, numerical scoring, weights, aggregation, thresholds and cut scores: **not set or approved**.
-- Recording, speech-to-text, automated speech assessment, app integration, learner release and automated marking: **not approved**.
+- Recording, speech-to-text, automated speech assessment, learner release and automated marking: **not approved**. An unreleased app outline and private AAL2 human-witnessed observation path are implemented for synthetic tests only; academic release remains blocked.
 
 The Founder-approved 35-observation map, six skill areas and four criterion profiles remain unchanged. No official IB mapping, IB 1–7 conversion, composite score, percentile or learner ranking is implied.
