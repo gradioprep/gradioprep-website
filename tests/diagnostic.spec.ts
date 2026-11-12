@@ -285,6 +285,7 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     await expect(itemEvidence.first()).toContainText("RV01");
     await expect(itemEvidence.first()).toContainText("Response saved");
     await expect(itemEvidence.first()).toContainText("Curriculum connection unavailable");
+    await expect(page.getByRole("list", { name: /Verified curriculum outcomes for/ })).toHaveCount(0);
     await expect(itemEvidence.last()).toContainText("LC05");
     await expect(itemEvidence.last()).toContainText("Response saved");
     await expect(page.getByText("Not scored", { exact: true })).toBeVisible();
