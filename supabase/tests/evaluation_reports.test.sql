@@ -434,7 +434,7 @@ SELECT v.report_record_id,v.report_scope,v.learner_id,2,
 FROM public.evaluation_report_versions AS v WHERE v.version_number=1;
 
 CREATE TEMP TABLE pa_publication_test_state(report_version_id uuid,draft_id uuid,review_id uuid);
-GRANT SELECT ON pa_publication_test_state TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON pa_publication_test_state TO authenticated;
 
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
