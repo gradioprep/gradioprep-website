@@ -100,6 +100,27 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     );
     expect(outOfScopeObservation.status()).toBe(404);
 
+    // The AW01 format is recognised, but the current fifteen-observation
+    // published fixture must never accept an AW draft response.
+    const unreleasedAnalyticalWriting = await request.put(
+      "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/AW01",
+      { headers, data: { response: { text: "A reasoned interpretation supported by clear textual evidence." } } },
+    );
+    expect(unreleasedAnalyticalWriting.status()).toBe(400);
+    expect(await unreleasedAnalyticalWriting.json()).toMatchObject({
+      error: "invalid_diagnostic_response",
+    });
+    const injectedAnalyticalScore = await request.put(
+      "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/AW01",
+      { headers, data: { response: { text: "A reasoned interpretation supported by evidence.", score: 7 } } },
+    );
+    expect(injectedAnalyticalScore.status()).toBe(400);
+    const standaloneRubricDimension = await request.put(
+      "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/AW02",
+      { headers, data: { response: { text: "A second essay is not an assessment dimension." } } },
+    );
+    expect(standaloneRubricDimension.status()).toBe(404);
+
     const invalidLanguageContext = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/LC01",
       { headers, data: { response: { choice: "A", extra: "must be rejected" } } },
