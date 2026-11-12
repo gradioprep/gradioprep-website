@@ -1572,6 +1572,67 @@ async function listStaffPaEvaluationReports(request: Request, env: WorkerEnv): P
   });
 }
 
+async function ownerPaReviewerAccess(
+  request: Request, env: WorkerEnv, action: "list" | "grant" | "revoke", reportId?: string,
+): Promise<Response> {
+  let fields: Record<string, unknown> = {};
+  if (request.method === "POST") {
+    const parsed = await readBoundedJson(request, 512);
+    if (!parsed.ok) return parsed.response;
+    if (typeof parsed.body !== "object" || parsed.body === null || Array.isArray(parsed.body)) {
+      return jsonResponse({ error: "invalid_pa_reviewer_request" }, 400);
+    }
+    fields = parsed.body as Record<string, unknown>;
+    const keys = Object.keys(fields);
+    const allowed = action === "grant"
+      ? ["report_record_id", "teacher_user_id", "reason"] : ["access_grant_id", "reason"];
+    if (keys.length !== allowed.length || !keys.every(key => allowed.includes(key)) ||
+        (action === "grant"
+          ? !isUuid(fields.report_record_id) || !isUuid(fields.teacher_user_id)
+          : !isUuid(fields.access_grant_id)) ||
+        typeof fields.reason !== "string" || fields.reason.trim().length < 3 ||
+        fields.reason.trim().length > 240) {
+      return jsonResponse({ error: "invalid_pa_reviewer_request" }, 400);
+    }
+  } else if (!reportId || !isUuid(reportId) || new URL(request.url).search) {
+    return jsonResponse({ error: "invalid_pa_reviewer_request" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const denied = await requireActiveRole(auth.context, "owner");
+  if (denied) return denied;
+  const mfaDenied = requireAal2(auth.context);
+  if (mfaDenied) return mfaDenied;
+  // All grant/revoke authorization and report/grader eligibility checks are
+  // enforced again inside the existing transaction-safe database operations.
+  const rpc = action === "list" ? "list_pa_evaluation_teacher_grants"
+    : action === "grant" ? "grant_evaluation_report_teacher_access"
+    : "revoke_evaluation_report_teacher_access";
+  const args = action === "list" ? { p_report_record_id: reportId }
+    : action === "grant"
+      ? { p_report_record_id: fields.report_record_id, p_teacher_user_id: fields.teacher_user_id, p_reason: String(fields.reason).trim() }
+      : { p_access_grant_id: fields.access_grant_id, p_reason: String(fields.reason).trim() };
+  const { data, error } = await auth.context.supabase.rpc(rpc, args);
+  if (error) {
+    if (error.code === "42501") return jsonResponse({ error: "pa_reviewer_forbidden" }, 403);
+    if (error.code === "P0002") return jsonResponse({ error: "pa_reviewer_not_found" }, 404);
+    if (error.code === "22023") return jsonResponse({ error: "invalid_pa_reviewer_request" }, 400);
+    if (error.code === "23505" || error.code === "23503") return jsonResponse({ error: "pa_reviewer_conflict" }, 409);
+    return jsonResponse({ error: "pa_reviewer_unavailable" }, 503);
+  }
+  if (action === "list") {
+    return new Response(JSON.stringify({ grants: asRows(data).map(row => ({
+      access_grant_id: row.access_grant_id,
+      teacher_user_id: row.teacher_user_id,
+      granted_at: row.granted_at,
+    })) }), { status: 200, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+  }
+  if (action === "revoke") return jsonResponse({ revoked: data === true });
+  const grant = asRows(data)[0];
+  return grant ? jsonResponse({ access_grant_id: grant.access_grant_id, granted_at: grant.granted_at })
+    : jsonResponse({ error: "pa_reviewer_unavailable" }, 503);
+}
+
 async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts" | "reviews" | "review", reportRecordId?: string): Promise<Response> {
   let fields: Record<string, unknown> = {};
   if (request.method === "POST") {
@@ -4210,6 +4271,16 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   );
   if (diagnosticReportMatch && request.method === "POST") {
     return createLearnerEvaluationReport(request, env, diagnosticReportMatch[1]);
+  }
+  const paReviewerGrantsMatch = url.pathname.match(/^\/api\/v1\/admin\/pa-feedback\/([0-9a-f-]{36})\/reviewers$/i);
+  if (paReviewerGrantsMatch && request.method === "GET") {
+    return ownerPaReviewerAccess(request, env, "list", paReviewerGrantsMatch[1]);
+  }
+  if (url.pathname === "/api/v1/admin/pa-feedback/reviewers/grant" && request.method === "POST") {
+    return ownerPaReviewerAccess(request, env, "grant");
+  }
+  if (url.pathname === "/api/v1/admin/pa-feedback/reviewers/revoke" && request.method === "POST") {
+    return ownerPaReviewerAccess(request, env, "revoke");
   }
   if (url.pathname === "/api/v1/staff/pa-feedback/queue" && request.method === "GET") {
     return listStaffPaEvaluationReports(request, env);
