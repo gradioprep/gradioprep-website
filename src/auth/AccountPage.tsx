@@ -6,6 +6,7 @@ import LearnerAttemptPanel from "./LearnerAttemptPanel";
 import DiagnosticPanel from "./DiagnosticPanel";
 import TranscriptReviewPanel from "./TranscriptReviewPanel";
 import GraderWorkspacePanel from "./GraderWorkspacePanel";
+import PaFeedbackWorkspacePanel from "./PaFeedbackWorkspacePanel";
 
 type AccountMode = "sign-in" | "sign-up" | "recovery-request";
 
@@ -649,6 +650,13 @@ export default function AccountPage({
             </div>
           </>}
       </section>}
+      {(ownerRole || graderRole) && auth.session?.access_token && (
+        <PaFeedbackWorkspacePanel
+          accessToken={auth.session.access_token}
+          assuranceLevel={auth.mfaCurrentLevel}
+          owner={ownerRole}
+        />
+      )}
       {graderRole && auth.session?.access_token && (
         <GraderWorkspacePanel
           accessToken={auth.session.access_token}
