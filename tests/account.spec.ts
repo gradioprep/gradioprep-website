@@ -92,6 +92,24 @@ test.describe("Phase 1B account foundation", () => {
     const draftId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
     const reviewId = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 
+    const anonymousGrants = await request.get("/api/v1/admin/pa-feedback/" + reportId + "/reviewers");
+    expect(anonymousGrants.status()).toBe(401);
+    const anonymousAssignment = await request.post("/api/v1/admin/pa-feedback/reviewers/grant", {
+      data: { report_record_id: reportId, teacher_user_id: draftId, reason: "Synthetic assignment test" },
+    });
+    expect(anonymousAssignment.status()).toBe(401);
+    const anonymousRevocation = await request.post("/api/v1/admin/pa-feedback/reviewers/revoke", {
+      data: { access_grant_id: reviewId, reason: "Synthetic revocation test" },
+    });
+    expect(anonymousRevocation.status()).toBe(401);
+    const malformedAssignment = await request.post("/api/v1/admin/pa-feedback/reviewers/grant", {
+      data: { report_record_id: reportId, teacher_user_id: draftId, reason: "a" },
+    });
+    expect(malformedAssignment.status()).toBe(400);
+    const malformedRevocation = await request.post("/api/v1/admin/pa-feedback/reviewers/revoke", {
+      data: { access_grant_id: reviewId, reason: "a" },
+    });
+    expect(malformedRevocation.status()).toBe(400);
     const anonymousQueue = await request.get("/api/v1/staff/pa-feedback/queue");
     expect(anonymousQueue.status()).toBe(401);
     const invalidQueue = await request.get("/api/v1/staff/pa-feedback/queue?limit=51");
