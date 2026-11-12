@@ -50,6 +50,11 @@ interface EvaluationReport {
   };
   curriculum_mapping_snapshot?: MappingSnapshotEntry[];
   learner_evidence_snapshot?: LearnerEvidenceEntry[];
+  published_feedback_snapshot?: {
+    status?: string;
+    feedback_text?: string;
+    approved_at?: string;
+  };
   created_at: string;
 }
 
@@ -186,6 +191,10 @@ export default function EvaluationReportPanel({
   const mappingsByCode = new Map((report.curriculum_mapping_snapshot ?? []).map(entry => [entry.observation_code, entry]));
   const sittingCount = report.content_snapshot?.sitting_count;
   const totalMinutes = report.content_snapshot?.total_minutes;
+  const approvedFeedback = report.published_feedback_snapshot?.status === "human_approved_published"
+    && typeof report.published_feedback_snapshot.feedback_text === "string"
+    && report.published_feedback_snapshot.feedback_text.trim().length > 0
+    ? report.published_feedback_snapshot.feedback_text : null;
   const createdAt = new Date(report.created_at);
   const createdLabel = Number.isNaN(createdAt.getTime())
     ? "Date unavailable"
@@ -249,8 +258,13 @@ export default function EvaluationReportPanel({
       </article>
       <article className="proto-panel proto-evaluation-card">
         <p className="proto-eyebrow">PERSONALISED FEEDBACK</p>
-        <h3>Awaiting reviewed feedback</h3>
-        <p>No teacher-approved personalised feedback is included in this report version. Response coverage alone is not a skill judgement.</p>
+        {approvedFeedback ? <>
+          <h3>Teacher-reviewed feedback available</h3>
+          <p>This report version contains feedback published after human approval.</p>
+        </> : <>
+          <h3>Awaiting reviewed feedback</h3>
+          <p>No teacher-approved personalised feedback is included in this report version. Response coverage alone is not a skill judgement.</p>
+        </>}
       </article>
       <article className="proto-panel proto-evaluation-card">
         <p className="proto-eyebrow">ASSESSMENT RESULTS</p>
@@ -258,6 +272,12 @@ export default function EvaluationReportPanel({
         <p>This report does not contain a score, grade or percentile comparison. The report scoring state is {scope?.report_scoring_state === "unscored_baseline" ? "unscored baseline" : "not confirmed"}.</p>
       </article>
     </div>
+
+    {approvedFeedback && <section className="proto-panel proto-evaluation-note" aria-labelledby="proto-evaluation-approved-feedback">
+      <h3 id="proto-evaluation-approved-feedback">Teacher-reviewed feedback</h3>
+      <p style={{ whiteSpace: "pre-wrap" }}>{approvedFeedback}</p>
+      <p>This feedback belongs to report version {report.version_number}. It is not an official IB, Cambridge or CBSE grade.</p>
+    </section>}
 
     <section className="proto-panel proto-evaluation-note" aria-labelledby="proto-evaluation-item-heading">
       <h3 id="proto-evaluation-item-heading">Your assessment evidence</h3>
@@ -294,7 +314,9 @@ export default function EvaluationReportPanel({
 
     <div className="proto-panel proto-evaluation-note">
       <h3>What this report contains</h3>
-      <p>This immutable report version summarises submitted evidence and curriculum link checks. It is not a final teacher-approved Evaluation Report and does not contain a score, grade, percentile comparison, personalised feedback or recommended learning plan.</p>
+      <p>This immutable report version summarises submitted evidence and curriculum link checks. {approvedFeedback
+        ? "Its teacher feedback was human-approved before publication. No score, official grade, percentile comparison or recommended learning plan is provided."
+        : "It is not a final teacher-approved Evaluation Report and does not contain a score, grade, percentile comparison, personalised feedback or recommended learning plan."}</p>
     </div>
   </section>;
 }
