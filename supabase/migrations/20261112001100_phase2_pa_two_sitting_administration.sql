@@ -113,13 +113,15 @@ BEGIN
   END IF;
   SELECT count(*)::integer INTO expected FROM public.diagnostic_observations o
     WHERE o.diagnostic_version_id=attempt.diagnostic_version_id
-      AND o.sitting_number=p_sitting_number AND o.learner_capture_enabled;
+      AND o.sitting_number=p_sitting_number AND o.learner_capture_enabled
+      AND (o.group_code NOT IN ('AW','CW','SP') OR o.observation_code IN ('AW01','CW01','SP01'));
   SELECT count(DISTINCT r.observation_id)::integer INTO saved
     FROM public.diagnostic_response_versions r
     JOIN public.diagnostic_observations o ON o.id=r.observation_id
     WHERE r.attempt_id=p_attempt_id
       AND o.diagnostic_version_id=attempt.diagnostic_version_id
-      AND o.sitting_number=p_sitting_number AND o.learner_capture_enabled;
+      AND o.sitting_number=p_sitting_number AND o.learner_capture_enabled
+      AND (o.group_code NOT IN ('AW','CW','SP') OR o.observation_code IN ('AW01','CW01','SP01'));
   IF expected=0 OR saved<>expected THEN
     RAISE EXCEPTION USING ERRCODE='P0001',MESSAGE='pa_sitting_responses_incomplete';
   END IF;
@@ -172,15 +174,15 @@ CREATE OR REPLACE FUNCTION private.guard_full_pa_sitting_write()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
 AS $$
 DECLARE selected_attempt public.diagnostic_attempts%ROWTYPE;
- sitting_number integer; enabled_count integer;
+ selected_sitting_number integer; enabled_count integer;
 BEGIN
   SELECT a.* INTO selected_attempt FROM public.diagnostic_attempts a WHERE a.id=NEW.attempt_id;
-  SELECT o.sitting_number INTO sitting_number FROM public.diagnostic_observations o WHERE o.id=NEW.observation_id;
+  SELECT o.sitting_number INTO selected_sitting_number FROM public.diagnostic_observations o WHERE o.id=NEW.observation_id;
   SELECT count(*)::integer INTO enabled_count FROM public.diagnostic_observations o
     WHERE o.diagnostic_version_id=selected_attempt.diagnostic_version_id AND o.learner_capture_enabled;
   IF enabled_count>=30 AND NOT EXISTS(
     SELECT 1 FROM private.pa_sitting_sessions s
-    WHERE s.attempt_id=NEW.attempt_id AND s.sitting_number=sitting_number
+    WHERE s.attempt_id=NEW.attempt_id AND s.sitting_number=selected_sitting_number
       AND s.completed_at IS NULL
       AND (s.untimed OR clock_timestamp()<s.started_at+make_interval(secs=>s.duration_seconds+s.extra_seconds))
   ) THEN

@@ -357,7 +357,7 @@ export default function DiagnosticPanel({
     if (!attemptId) return;
     setLoading(true); setError(""); setMessage("");
     try {
-      if (action === "complete") {
+      if (action === "complete" && !sittingExpired) {
         if (!(await saveAll())) return;
       }
       const response = await fetch(
@@ -781,7 +781,7 @@ export default function DiagnosticPanel({
         <p>{savedCodes.filter(code => requiredCodes.includes(code)).length} of {requiredCodes.length} questions have response-ready answers. Response guidance is not a hard word limit.</p>
         {!readOnly && <>
           {twoSitting && activeSitting > 0 && <button className="proto-action"
-            type="button" disabled={buttonDisabled || !pendingForSitting(activeSitting)}
+            type="button" disabled={loading || saving || readOnly || !pendingForSitting(activeSitting)}
             onClick={() => void sittingAction(activeSitting,"complete")}>
             Finish Sitting {activeSitting}
           </button>}

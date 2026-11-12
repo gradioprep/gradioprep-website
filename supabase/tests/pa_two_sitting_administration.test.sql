@@ -16,7 +16,8 @@ SELECT is((SELECT duration_seconds FROM public.start_pa_sitting(
  (SELECT attempt_id FROM pa_sitting_test_state),1)),2100,'first sitting uses 35 minutes');
 SELECT is((SELECT count(*)::integer FROM public.start_pa_sitting(
  (SELECT attempt_id FROM pa_sitting_test_state),1)),1,'repeated start resumes the same sitting');
-SELECT is((SELECT count(*)::integer FROM private.pa_sitting_sessions),1,
+SELECT is((SELECT count(*)::integer FROM public.get_pa_sitting_state(
+ (SELECT attempt_id FROM pa_sitting_test_state))),1,
  'idempotent start never resets the sitting clock');
 SELECT throws_ok($q$SELECT public.complete_pa_sitting(
  (SELECT attempt_id FROM pa_sitting_test_state),1)$q$,
@@ -48,13 +49,15 @@ SELECT is(public.adjust_pa_sitting_access(
 SELECT is(public.adjust_pa_sitting_access(
  (SELECT attempt_id FROM pa_sitting_test_state),1,0,true,'Approved untimed arrangement'),true,
  'MFA-verified owner grants untimed accommodation');
-SELECT is((SELECT extra_seconds FROM private.pa_sitting_sessions),300,
- 'an untimed adjustment never removes an earlier extension');
-SELECT is((SELECT untimed FROM private.pa_sitting_sessions),true,
- 'untimed arrangement persists');
+-- Authorised roles do not get direct access to private session rows.
+-- The private state is inspected below after resetting the test role.
 SELECT is((SELECT count(*)::integer FROM private.security_audit_events
  WHERE action='pa_sitting_adjusted' AND reason_category='owner_accommodation'),2,
  'both arrangements are audit recorded');
 RESET ROLE;
+SELECT is((SELECT extra_seconds FROM private.pa_sitting_sessions),300,
+ 'an untimed adjustment never removes an earlier extension');
+SELECT is((SELECT untimed FROM private.pa_sitting_sessions),true,
+ 'untimed arrangement persists');
 SELECT * FROM finish();
 ROLLBACK;
