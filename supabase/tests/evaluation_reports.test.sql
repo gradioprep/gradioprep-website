@@ -192,6 +192,10 @@ SELECT is((SELECT count(*)::integer FROM public.get_evaluation_report(
   '1d000000-0000-4000-8000-000000000401',NULL)),1,
   'Owner at AAL2 can inspect the report through the audited RPC');
 
+SELECT is((SELECT count(*)::integer FROM public.list_pa_evaluation_teacher_grants(
+  '1d000000-0000-4000-8000-000000000401')),0,
+  'Owner sees no Grader assignments before assigning a reviewer');
+
 SELECT is((SELECT count(*)::integer FROM public.list_pa_evaluation_review_queue()),1,
   'AAL2 Owner can discover the synthetic PA report oldest-first');
 SELECT is((SELECT report_record_id FROM public.list_pa_evaluation_review_queue(1)),
@@ -204,6 +208,9 @@ INSERT INTO report_access_test_state
 SELECT access_grant_id FROM public.grant_evaluation_report_teacher_access(
   '1d000000-0000-4000-8000-000000000401','55555555-5555-4555-8555-555555555555','Synthetic report-specific teacher grant'
 );
+SELECT is((SELECT count(*)::integer FROM public.list_pa_evaluation_teacher_grants(
+  '1d000000-0000-4000-8000-000000000401')),1,
+  'Owner sees assigned Grader through the restricted list');
 RESET ROLE;
 
 SET LOCAL ROLE authenticated;
@@ -211,6 +218,11 @@ SELECT set_config('request.jwt.claim.sub','55555555-5555-4555-8555-555555555555'
 SELECT set_config('request.jwt.claims','{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}',true);
 SELECT is((SELECT count(*)::integer FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',NULL)),1,
   'AAL2 Grader with an active report-specific grant can read the report');
+
+SELECT throws_ok($q$SELECT * FROM public.list_pa_evaluation_teacher_grants(
+  '1d000000-0000-4000-8000-000000000401')$q$,
+  '42501','pa_report_grants_forbidden',
+  'assigned Grader cannot enumerate private reviewer assignments');
 
 SELECT is((SELECT count(*)::integer FROM public.list_pa_evaluation_review_queue()),1,
   'AAL2 Grader queue lists only report-specific active grants');
@@ -221,6 +233,10 @@ SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888'
 SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
 SELECT is(public.revoke_evaluation_report_teacher_access((SELECT grant_id FROM report_access_test_state),'Synthetic access review complete'),true,
   'Owner at AAL2 can revoke a report-specific teacher grant');
+
+SELECT is((SELECT count(*)::integer FROM public.list_pa_evaluation_teacher_grants(
+  '1d000000-0000-4000-8000-000000000401')),0,
+  'Owner reviewer list immediately reflects revocation');
 RESET ROLE;
 
 SET LOCAL ROLE authenticated;
