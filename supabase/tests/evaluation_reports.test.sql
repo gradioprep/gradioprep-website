@@ -538,6 +538,11 @@ SELECT throws_ok($q$SELECT * FROM public.list_pa_evaluation_review_queue()$q$,
 RESET ROLE;
 
 -- Scoped private oral performance tests. All identities and content are synthetic.
+CREATE TEMP TABLE pa_spoken_test_state AS
+  SELECT id AS report_version_id FROM public.evaluation_report_versions
+  WHERE report_record_id='1d000000-0000-4000-8000-000000000401' AND version_number=3;
+GRANT SELECT ON pa_spoken_test_state TO authenticated;
+
 INSERT INTO public.diagnostic_observations(
   id,diagnostic_version_id,observation_code,group_code,sitting_number,
   sequence_number,response_kind,learner_capture_enabled
@@ -558,7 +563,7 @@ SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111'
 SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
 SELECT throws_ok($q$SELECT public.record_pa_spoken_performance(
   '1d000000-0000-4000-8000-000000000401',
-  (SELECT id FROM public.evaluation_report_versions WHERE version_number=3),
+  (SELECT report_version_id FROM pa_spoken_test_state),
   'This is a fake learner claim of presenting the plan.',
   'This is a fake learner claim of answering the question.',true)$q$,
   '42501','pa_spoken_evidence_forbidden','learner cannot self-certify oral evidence');
@@ -571,7 +576,7 @@ SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888'
 SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
 SELECT throws_ok($q$SELECT public.record_pa_spoken_performance(
   '1d000000-0000-4000-8000-000000000401',
-  (SELECT id FROM public.evaluation_report_versions WHERE version_number=3),
+  (SELECT report_version_id FROM pa_spoken_test_state),
   'Observed a clear presentation developing the proposal.',
   'Observed a response addressing the standard concern.',true)$q$,
   '42501','pa_spoken_evidence_forbidden','Owner without MFA cannot record oral evidence');
@@ -581,13 +586,13 @@ SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888'
 SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
 SELECT throws_ok($q$SELECT public.record_pa_spoken_performance(
   '1d000000-0000-4000-8000-000000000401',
-  (SELECT id FROM public.evaluation_report_versions WHERE version_number=3),
+  (SELECT report_version_id FROM pa_spoken_test_state),
   'Observed a clear presentation developing the proposal.',
   'Observed a response addressing the standard concern.',false)$q$,
   '22023','invalid_pa_spoken_evidence','assessor must attest to witnessing live speech');
 SELECT ok(public.record_pa_spoken_performance(
   '1d000000-0000-4000-8000-000000000401',
-  (SELECT id FROM public.evaluation_report_versions WHERE version_number=3),
+  (SELECT report_version_id FROM pa_spoken_test_state),
   'Observed coherent explanation and a practical example.',
   'Observed a reasoned response to another preference.',true) IS NOT NULL,
   'Owner at MFA may append witnessed evidence to the exact PA report version');
