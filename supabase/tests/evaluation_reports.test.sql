@@ -288,12 +288,17 @@ SELECT is((SELECT count(*)::integer FROM private.security_audit_events
   'legacy allowlisted Worker actions remain operational after report audit extension');
 
 
+-- A test-only identifier avoids having restricted roles query the report table directly.
+CREATE TEMP TABLE pa_feedback_test_state AS
+  SELECT id AS report_version_id FROM public.evaluation_report_versions LIMIT 1;
+GRANT SELECT ON pa_feedback_test_state TO authenticated;
+
 -- Private teacher feedback authoring: never changes the learner's immutable report snapshot.
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
 SELECT throws_ok($q$SELECT public.create_pa_evaluation_feedback_draft(
-  (SELECT id FROM public.evaluation_report_versions LIMIT 1),
+  (SELECT report_version_id FROM pa_feedback_test_state),
   'This is a private synthetic review draft, not approved feedback.')$q$,
   '42501','pa_feedback_draft_forbidden','learner cannot author private feedback drafts');
 SELECT throws_ok($q$SELECT * FROM public.get_pa_evaluation_feedback_drafts(
@@ -307,7 +312,7 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
 SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
 SELECT throws_ok($q$SELECT public.create_pa_evaluation_feedback_draft(
-  (SELECT id FROM public.evaluation_report_versions LIMIT 1),
+  (SELECT report_version_id FROM pa_feedback_test_state),
   'AAL1 must not be able to write teacher feedback drafts.')$q$,
   '42501','pa_feedback_draft_forbidden','Owner without AAL2 cannot author feedback drafts');
 RESET ROLE;
@@ -316,7 +321,7 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
 SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
 SELECT ok(public.create_pa_evaluation_feedback_draft(
-  (SELECT id FROM public.evaluation_report_versions LIMIT 1),
+  (SELECT report_version_id FROM pa_feedback_test_state),
   'Synthetic private teacher draft. This is unapproved and never shown to the learner.') IS NOT NULL,
   'Owner AAL2 can record an unapproved, version-bound private feedback draft');
 SELECT is((SELECT count(*)::integer FROM public.get_pa_evaluation_feedback_drafts(
