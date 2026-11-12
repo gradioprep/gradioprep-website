@@ -122,7 +122,7 @@ export default function PaFeedbackWorkspacePanel({
             <button className="proto-action secondary" disabled={busy || !selected || reviewNotes.trim().length < 10}
               onClick={() => void perform(async () => {
                 await request("/api/v1/admin/pa-feedback/review", {
-                  draft_id: selected.draft_id, decision: "changes_requested", reviewer_note: reviewNotes,
+                  draft_id: selected!.draft_id, decision: "changes_requested", reviewer_note: reviewNotes,
                 });
                 setReviewNotes(""); await refresh();
               }, "Changes requested and recorded.")}>Request changes</button>
@@ -130,7 +130,7 @@ export default function PaFeedbackWorkspacePanel({
               selected.report_version_id !== report.report_version_id || reviewNotes.trim().length < 10}
               onClick={() => void perform(async () => {
                 await request("/api/v1/admin/pa-feedback/review", {
-                  draft_id: selected.draft_id, decision: "approved_for_publication", reviewer_note: reviewNotes,
+                  draft_id: selected!.draft_id, decision: "approved_for_publication", reviewer_note: reviewNotes,
                 });
                 setReviewNotes(""); await refresh();
               }, "Human review decision recorded.")}>Approve feedback</button>
