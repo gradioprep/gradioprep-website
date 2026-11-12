@@ -38,6 +38,27 @@ SELECT is((SELECT count(*)::integer FROM public.diagnostic_observation_outcome_m
   WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),0,
   'draft blueprint cannot invent reviewed official-outcome mappings');
 
+-- Publication may not be forced merely by changing a draft's state.
+SELECT throws_ok($q$UPDATE public.diagnostic_versions
+  SET release_state='published'
+  WHERE id='ed222222-2222-4222-8222-222222222222'$q$,
+  '55000','pa_publication_requires_reviewed_direct_mapping',
+  'unreviewed thirty-observation PA cannot be published by changing release state');
+SELECT is((SELECT release_state FROM public.diagnostic_versions
+  WHERE id='ed222222-2222-4222-8222-222222222222'),'draft',
+  'rejected publication leaves the full PA blueprint as a draft');
+
+-- Even enabling every observation does not turn missing curriculum review into approval.
+UPDATE public.diagnostic_observations SET learner_capture_enabled=true
+WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
+SELECT throws_ok($q$UPDATE public.diagnostic_versions
+  SET release_state='published'
+  WHERE id='ed222222-2222-4222-8222-222222222222'$q$,
+  '55000','pa_publication_requires_reviewed_direct_mapping',
+  'all thirty enabled items still cannot publish without reviewed direct mappings');
+UPDATE public.diagnostic_observations SET learner_capture_enabled=false
+WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
+
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
