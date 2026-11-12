@@ -254,7 +254,7 @@ export default function EvaluationReportPanel({
               <span>{linked ? "Curriculum connection verified" : "Curriculum connection unavailable"}</span>
               {linked && <ul aria-label={`Verified curriculum outcomes for ${code || `item ${index + 1}`}`}>
                 {verifiedOutcomes.map((outcome, outcomeIndex) =>
-                  <li key={outcome.outcome_reference + outcomeIndex}>
+                  <li key={String(outcome.outcome_reference) + outcomeIndex}>
                     <strong>{outcome.outcome_reference}</strong>
                     {outcome.outcome_title ? ` — ${outcome.outcome_title}` : ""}
                   </li>)}
