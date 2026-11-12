@@ -102,6 +102,14 @@ export default function EvaluationReportPanel({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [retryCount, setRetryCount] = useState(0);
+  // null always means the newest immutable version, never a locally cached draft.
+  const [selectedVersion, setSelectedVersion] = useState<number | null>(null);
+  const [latestVersion, setLatestVersion] = useState(0);
+
+  useEffect(() => {
+    setSelectedVersion(null);
+    setLatestVersion(0);
+  }, [reportRecordId, accessToken]);
 
   useEffect(() => {
     if (!accessToken || !reportRecordId) {
@@ -114,7 +122,9 @@ export default function EvaluationReportPanel({
     setLoading(true);
     setReport(null);
     setError("");
-    fetch("/api/v1/learner/evaluation-reports/" + reportRecordId, {
+    const url = "/api/v1/learner/evaluation-reports/" + reportRecordId +
+      (selectedVersion === null ? "" : "?version=" + selectedVersion);
+    fetch(url, {
       headers: { Authorization: "Bearer " + accessToken },
       cache: "no-store",
     })
@@ -126,7 +136,10 @@ export default function EvaluationReportPanel({
         return result.report;
       })
       .then(nextReport => {
-        if (active) setReport(nextReport);
+        if (active) {
+          setReport(nextReport);
+          if (selectedVersion === null) setLatestVersion(nextReport.version_number);
+        }
       })
       .catch(() => {
         if (active) {
@@ -140,7 +153,7 @@ export default function EvaluationReportPanel({
     return () => {
       active = false;
     };
-  }, [accessToken, reportRecordId, retryCount]);
+  }, [accessToken, reportRecordId, retryCount, selectedVersion]);
 
   if (!accessToken) {
     return <section className="proto-panel proto-evaluation-empty" aria-labelledby="proto-evaluation-signin">
@@ -209,6 +222,22 @@ export default function EvaluationReportPanel({
       <h2 id="proto-evaluation-report-heading">Your starting point is recorded.</h2>
       <p>This report records the evidence saved with your submitted Preliminary Assessment. It is an initial record of your work, not a scored evaluation.</p>
       <small>Created {createdLabel}</small>
+      <div className="proto-evaluation-versions" role="group" aria-label="Evaluation Report versions">
+        <span aria-live="polite">Viewing version {report.version_number}{selectedVersion === null ? " · Latest" : " · Earlier version"}</span>
+        <button type="button" className="proto-action secondary"
+          disabled={report.version_number <= 1}
+          onClick={() => setSelectedVersion(report.version_number - 1)}>Previous version</button>
+        <button type="button" className="proto-action secondary"
+          disabled={selectedVersion === null || report.version_number >= latestVersion}
+          onClick={() => setSelectedVersion(report.version_number + 1 >= latestVersion ? null : report.version_number + 1)}>
+          Next version
+        </button>
+        <button type="button" className="proto-action secondary"
+          onClick={() => {
+            setSelectedVersion(null);
+            setRetryCount(value => value + 1);
+          }}>Check latest report</button>
+      </div>
     </div>
 
     <section className="proto-panel proto-evaluation-note" aria-labelledby="proto-evaluation-scope-heading">
