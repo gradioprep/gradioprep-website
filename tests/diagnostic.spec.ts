@@ -72,6 +72,8 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     expect(startedBody.available_observation_codes).toHaveLength(15);
     expect(startedBody.available_observation_codes).not.toContain("AW01");
     expect(startedBody.available_observation_codes).not.toContain("CW01");
+    expect(startedBody.available_observation_codes).not.toContain("SP01");
+    await expect(page.getByRole("heading", { name: /Speaking\/Presenting · A better shared space/ })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /Creative\/Purposeful Production · The Book Swap/ })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /Analytical Writing · The Unfinished Label/ })).toHaveCount(0);
     await expect(page.locator("audio")).toHaveCount(0);
@@ -131,6 +133,17 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     // response because the released fixture has no learner-capturable CW item.
     expect(unreleasedCreative.status()).toBe(404);
     expect(await unreleasedCreative.json()).toMatchObject({ error: "not_found" });
+    const unreleasedSpeakingOutline = await request.put(
+      "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/SP01",
+      { headers, data: { response: {
+        title: "A quiet corner", opening: "I suggest a shared reading corner.",
+        development: "Students can read together and take turns.",
+        consideration: "Some prefer games; the hall can offer other space.",
+        closing: "Please trial the corner for a month.",
+      } } },
+    );
+    expect(unreleasedSpeakingOutline.status()).toBe(404);
+    expect(await unreleasedSpeakingOutline.json()).toMatchObject({ error: "not_found" });
     const injectedAnalyticalScore = await request.put(
       "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/AW01",
       { headers, data: { response: { text: "A reasoned interpretation supported by evidence.", score: 7 } } },

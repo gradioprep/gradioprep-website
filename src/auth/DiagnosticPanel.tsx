@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PaAnalyticalWritingTask, { isPaAnalyticalWritingResponse } from "./PaAnalyticalWritingTask";
 import PaCreativeWritingTask, { emptyCreativeWritingResponse, isPaCreativeWritingResponse, type PaCreativeWritingResponse } from "./PaCreativeWritingTask";
+import PaSpeakingOutlineTask, { emptySpeakingOutline, isPaSpeakingOutline, type PaSpeakingOutline } from "./PaSpeakingOutlineTask";
 
 type ResponseValue = {
   a?: string;
@@ -15,6 +16,11 @@ type ResponseValue = {
   revision_before?: string;
   revision_after?: string;
   revision_note?: string;
+  title?: string;
+  opening?: string;
+  development?: string;
+  consideration?: string;
+  closing?: string;
 };
 
 type DiagnosticResponseMap = Record<string, ResponseValue>;
@@ -129,6 +135,7 @@ export default function DiagnosticPanel({
   const [responses, setResponses] = useState<DiagnosticResponseMap>({});
   const [availableCodes, setAvailableCodes] = useState<string[]>([]);
   const [creativeDraft, setCreativeDraft] = useState<PaCreativeWritingResponse>(emptyCreativeWritingResponse);
+  const [speakingOutline, setSpeakingOutline] = useState<PaSpeakingOutline>(emptySpeakingOutline);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -183,13 +190,18 @@ export default function DiagnosticPanel({
     if (availableCodes.includes("CW01") && isPaCreativeWritingResponse(creativeDraft)) {
       output.push({ code: "CW01", response: { ...creativeDraft } });
     }
+    // The card is SP01 preparation evidence only. SP02–SP05 require observed speech.
+    if (availableCodes.includes("SP01") && isPaSpeakingOutline(speakingOutline)) {
+      output.push({ code: "SP01", response: { ...speakingOutline } });
+    }
     return output;
   }
 
   const savedCodes = payloads().map(item => item.code);
   const requiredCodes = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "LC01", "LC02", "LC03", "LC04", "LC05",
     ...(availableCodes.includes("AW01") ? ["AW01"] : []),
-    ...(availableCodes.includes("CW01") ? ["CW01"] : [])];
+    ...(availableCodes.includes("CW01") ? ["CW01"] : []),
+    ...(availableCodes.includes("SP01") ? ["SP01"] : [])];
   const complete = requiredCodes.every(code => savedCodes.includes(code));
 
   function reportIdempotencyKeyFor(targetAttemptId: string): string {
@@ -276,6 +288,14 @@ export default function DiagnosticPanel({
             revision_note: savedCreative.revision_note ?? "",
           }
         : { ...emptyCreativeWritingResponse });
+      const savedSpeaking = restored.SP01;
+      setSpeakingOutline(savedSpeaking ? {
+        title: savedSpeaking.title ?? "",
+        opening: savedSpeaking.opening ?? "",
+        development: savedSpeaking.development ?? "",
+        consideration: savedSpeaking.consideration ?? "",
+        closing: savedSpeaking.closing ?? "",
+      } : { ...emptySpeakingOutline });
       setAvailableCodes(Array.isArray(result.available_observation_codes)
         ? result.available_observation_codes.filter((code): code is string => typeof code === "string")
         : []);
@@ -662,6 +682,12 @@ export default function DiagnosticPanel({
       {availableCodes.includes("CW01") && <PaCreativeWritingTask
         value={creativeDraft}
         onChange={setCreativeDraft}
+        readOnly={readOnly || saving}
+      />}
+
+      {availableCodes.includes("SP01") && <PaSpeakingOutlineTask
+        value={speakingOutline}
+        onChange={setSpeakingOutline}
         readOnly={readOnly || saving}
       />}
 

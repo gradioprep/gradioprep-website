@@ -1183,6 +1183,13 @@ function isValidDiagnosticResponse(observationCode: string, response: unknown): 
     return only(["choice"]) && choice(value.choice);
   }
   if (observationCode === "LC05" || observationCode === "AW01") return only(["text"]) && text(value.text);
+  if (observationCode === "SP01") {
+    const boundedNote = (field: string) => typeof value[field] === "string"
+      && (value[field] as string).trim().length >= 3
+      && (value[field] as string).length <= 1000;
+    return only(["title", "opening", "development", "consideration", "closing"])
+      && ["title", "opening", "development", "consideration", "closing"].every(boundedNote);
+  }
   if (observationCode === "CW01") {
     const bounded = (key: string, min: number, max: number) =>
       typeof value[key] === "string" && (value[key] as string).trim().length >= min
