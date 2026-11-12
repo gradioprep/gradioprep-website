@@ -287,5 +287,60 @@ SELECT is((SELECT count(*)::integer FROM private.security_audit_events
     AND outcome='failed'),5,
   'legacy allowlisted Worker actions remain operational after report audit extension');
 
+
+-- Private teacher feedback authoring: never changes the learner's immutable report snapshot.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.create_pa_evaluation_feedback_draft(
+  (SELECT id FROM public.evaluation_report_versions LIMIT 1),
+  'This is a private synthetic review draft, not approved feedback.')$q$,
+  '42501','pa_feedback_draft_forbidden','learner cannot author private feedback drafts');
+SELECT throws_ok($q$SELECT * FROM public.get_pa_evaluation_feedback_drafts(
+  '1d000000-0000-4000-8000-000000000401')$q$,
+  '42501','pa_feedback_draft_forbidden','learner cannot retrieve private teacher feedback drafts');
+SELECT throws_ok($q$SELECT * FROM private.pa_evaluation_feedback_drafts$q$,
+  '42501',NULL,'learner cannot directly read private drafts');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.create_pa_evaluation_feedback_draft(
+  (SELECT id FROM public.evaluation_report_versions LIMIT 1),
+  'AAL1 must not be able to write teacher feedback drafts.')$q$,
+  '42501','pa_feedback_draft_forbidden','Owner without AAL2 cannot author feedback drafts');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims','{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT ok(public.create_pa_evaluation_feedback_draft(
+  (SELECT id FROM public.evaluation_report_versions LIMIT 1),
+  'Synthetic private teacher draft. This is unapproved and never shown to the learner.') IS NOT NULL,
+  'Owner AAL2 can record an unapproved, version-bound private feedback draft');
+SELECT is((SELECT count(*)::integer FROM public.get_pa_evaluation_feedback_drafts(
+  '1d000000-0000-4000-8000-000000000401')),1,
+  'Owner AAL2 can read the restricted draft through its RPC');
+SELECT throws_ok($q$UPDATE private.pa_evaluation_feedback_drafts
+  SET draft_text='This modification must fail.'$q$,
+  '42501','pa_feedback_draft_immutable','private draft revisions must be append-only');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','55555555-5555-4555-8555-555555555555',true);
+SELECT set_config('request.jwt.claims','{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}',true);
+SELECT throws_ok($q$SELECT * FROM public.get_pa_evaluation_feedback_drafts(
+  '1d000000-0000-4000-8000-000000000401')$q$,
+  '42501','pa_feedback_draft_forbidden','revoked grader access cannot read private drafts');
+RESET ROLE;
+
+SELECT is((SELECT published_feedback_snapshot->>'status' FROM public.evaluation_report_versions LIMIT 1),
+  'not_applicable_unscored_preliminary_assessment',
+  'unapproved private draft never enters the immutable learner report');
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+  WHERE action='pa_feedback_draft_created' AND outcome='success'),1,
+  'private draft authoring records metadata-only audit evidence');
+
 SELECT * FROM finish();
 ROLLBACK;
