@@ -322,9 +322,6 @@ SELECT ok(public.create_pa_evaluation_feedback_draft(
 SELECT is((SELECT count(*)::integer FROM public.get_pa_evaluation_feedback_drafts(
   '1d000000-0000-4000-8000-000000000401')),1,
   'Owner AAL2 can read the restricted draft through its RPC');
-SELECT throws_ok($q$UPDATE private.pa_evaluation_feedback_drafts
-  SET draft_text='This modification must fail.'$q$,
-  '42501','pa_feedback_draft_immutable','private draft revisions must be append-only');
 RESET ROLE;
 
 SET LOCAL ROLE authenticated;
@@ -341,6 +338,10 @@ SELECT is((SELECT published_feedback_snapshot->>'status' FROM public.evaluation_
 SELECT is((SELECT count(*)::integer FROM private.security_audit_events
   WHERE action='pa_feedback_draft_created' AND outcome='success'),1,
   'private draft authoring records metadata-only audit evidence');
+SELECT throws_ok($q$UPDATE private.pa_evaluation_feedback_drafts
+  SET draft_text='This modification must fail.'$q$,
+  '42501','pa_feedback_draft_immutable','private draft revisions must be append-only');
+
 
 SELECT * FROM finish();
 ROLLBACK;
