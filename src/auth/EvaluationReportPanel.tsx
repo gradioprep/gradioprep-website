@@ -5,6 +5,7 @@ interface ObservationSnapshot {
   observation_code?: string;
   group_code?: string;
   sitting_number?: number;
+  sequence_number?: number;
 }
 
 interface MappingSnapshotEntry {
@@ -158,6 +159,8 @@ export default function EvaluationReportPanel({
     entry => entry.mapping_status === "direct" &&
       Array.isArray(entry.direct_outcomes) && entry.direct_outcomes.length > 0,
   ).length;
+  const evidenceByCode = new Map((report.learner_evidence_snapshot ?? []).map(entry => [entry.observation_code, entry]));
+  const mappingsByCode = new Map((report.curriculum_mapping_snapshot ?? []).map(entry => [entry.observation_code, entry]));
   const sittingCount = report.content_snapshot?.sitting_count;
   const totalMinutes = report.content_snapshot?.total_minutes;
   const createdAt = new Date(report.created_at);
@@ -223,6 +226,28 @@ export default function EvaluationReportPanel({
         <p>This report does not contain a score, grade or percentile comparison.</p>
       </article>
     </div>
+
+    <section className="proto-panel proto-evaluation-note" aria-labelledby="proto-evaluation-item-heading">
+      <h3 id="proto-evaluation-item-heading">Your assessment evidence</h3>
+      <p>Each entry shows whether a response was saved and whether its curriculum connection was verified. These are evidence checks, not marks or grades.</p>
+      {observations.length === 0 ? <p>No item records are available in this report.</p> : (
+        <ul className="proto-evaluation-observations">
+          {observations.map((item, index) => {
+            const code = item.observation_code ?? "";
+            const response = evidenceByCode.get(code);
+            const mappingEntry = mappingsByCode.get(code);
+            const saved = typeof response?.response_sha256 === "string" && /^[a-f0-9]{64}$/i.test(response.response_sha256);
+            const linked = mappingEntry?.mapping_status === "direct"
+              && Array.isArray(mappingEntry.direct_outcomes) && mappingEntry.direct_outcomes.length > 0;
+            return <li key={code || index}>
+              <strong>{code || `Item ${index + 1}`}</strong>
+              <span>{saved ? "Response saved" : "No saved response"}</span>
+              <span>{linked ? "Curriculum connection verified" : "Curriculum connection unavailable"}</span>
+            </li>;
+          })}
+        </ul>
+      )}
+    </section>
 
     <div className="proto-panel proto-evaluation-note">
       <h3>What this report contains</h3>
