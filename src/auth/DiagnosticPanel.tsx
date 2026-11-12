@@ -94,10 +94,15 @@ function TextField({
   onChange: (value: string) => void;
   disabled?: boolean;
 }) {
+  const count = value.trim() ? value.trim().split(/\s+/u).length : 0;
+  const target = guidance?.match(/Ideal target:\s*(\d+)\s*words/i)?.[1];
   return <label className="proto-diagnostic-text-field">
     <span>{label}</span>
     {guidance && <small>{guidance}</small>}
     <textarea rows={4} maxLength={12000} value={value} onChange={event => onChange(event.target.value)} disabled={disabled} />
+    <small className="proto-diagnostic-word-count" aria-live="polite" aria-atomic="true">
+      {count} / {target ?? "—"} words
+    </small>
   </label>;
 }
 
