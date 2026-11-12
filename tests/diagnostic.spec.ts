@@ -64,6 +64,15 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     expect(startedBody.attempt.is_replay).toBe(false);
     expect(startedBody.section_status).toBe("read_view_language_context_only");
     await expect(page.locator("audio")).toHaveCount(0);
+    const firstWrittenResponse = page.locator(".proto-diagnostic-text-field").first();
+    await expect(firstWrittenResponse.locator(".proto-diagnostic-word-count")).toHaveText("0 / 40 words");
+    await firstWrittenResponse.locator("textarea").fill("An answer with six words in total");
+    await expect(firstWrittenResponse.locator(".proto-diagnostic-word-count")).toHaveText("7 / 40 words");
+    await firstWrittenResponse.locator("textarea").fill(Array(46).fill("word").join(" "));
+    await expect(firstWrittenResponse.locator(".proto-diagnostic-word-count")).toHaveText("46 / 40 words");
+    await firstWrittenResponse.locator("textarea").fill("");
+    await expect(firstWrittenResponse.locator(".proto-diagnostic-word-count")).toHaveText("0 / 40 words");
+
 
     const resumed = await request.post(startPath, {
       headers,
