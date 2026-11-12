@@ -92,6 +92,12 @@ test.describe("Phase 1B account foundation", () => {
     const draftId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
     const reviewId = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 
+    const anonymousQueue = await request.get("/api/v1/staff/pa-feedback/queue");
+    expect(anonymousQueue.status()).toBe(401);
+    const invalidQueue = await request.get("/api/v1/staff/pa-feedback/queue?limit=51");
+    expect(invalidQueue.status()).toBe(400);
+    const unexpectedQueueParameter = await request.get("/api/v1/staff/pa-feedback/queue?learner_id=" + reportId);
+    expect(unexpectedQueueParameter.status()).toBe(400);
     const invalidDraft = await request.post("/api/v1/staff/pa-feedback/drafts", {
       data: { report_version_id: versionId, draft_text: "short" },
     });
