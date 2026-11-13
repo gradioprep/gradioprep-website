@@ -610,5 +610,108 @@ SELECT is((SELECT count(*)::integer FROM public.evaluation_report_versions),3,
   'private speaking observations do not fabricate a new learner report');
 SELECT is((SELECT count(*)::integer FROM private.pa_spoken_performance_evidence),1,
   'one witnessed performance record remains private');
+
+-- Full-instrument, fabricated TEST-only report snapshots exercise the exact
+-- 30-dimension evidence audit. These are not approved PA curriculum records or marks.
+INSERT INTO public.evaluation_report_versions(
+  report_record_id,report_scope,learner_id,version_number,idempotency_key,supersedes_version_id,
+  curriculum_mapping_status,evidence_sufficiency_status,scope_snapshot,content_snapshot,
+  unit_set_snapshot,curriculum_mapping_snapshot,learner_evidence_snapshot,
+  published_feedback_snapshot,eligible_analytics_snapshot,created_by)
+SELECT v.report_record_id,v.report_scope,v.learner_id,4,
+  '1d000000-0000-4000-8000-000000000831',v.id,
+  'complete_direct','sufficient',v.scope_snapshot,
+  jsonb_set(v.content_snapshot,'{observations}',
+    (SELECT jsonb_agg(jsonb_build_object(
+      'observation_code',o.observation_code,'group_code',o.group_code,
+      'capture_enabled',true,'sitting_number',o.sitting_number)
+      ORDER BY o.sequence_number)
+     FROM public.diagnostic_observations o
+     WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222')),
+  v.unit_set_snapshot,
+  (SELECT jsonb_agg(jsonb_build_object(
+    'observation_code',o.observation_code,'mapping_status','direct',
+    'direct_outcomes',jsonb_build_array(jsonb_build_object('outcome_reference','TEST-ONLY')))
+    ORDER BY o.sequence_number)
+   FROM public.diagnostic_observations o
+   WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),
+  (SELECT jsonb_agg(jsonb_build_object(
+    'observation_code',o.observation_code,
+    'source_response_observation_code',CASE WHEN o.group_code IN ('AW','CW','SP')
+      THEN o.group_code||'01' ELSE o.observation_code END,
+    'response_sha256',repeat('a',64)) ORDER BY o.sequence_number)
+   FROM public.diagnostic_observations o
+   WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),
+  v.published_feedback_snapshot,v.eligible_analytics_snapshot,
+  '88888888-8888-4888-8888-888888888888'
+FROM public.evaluation_report_versions v WHERE v.version_number=3;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+  '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT expected_dimensions FROM public.inspect_pa_scoring_evidence(
+  '1d000000-0000-4000-8000-000000000401')),30,
+  'the full synthetic rubric snapshot has thirty dimensions');
+SELECT is((SELECT directly_mapped_dimensions FROM public.inspect_pa_scoring_evidence(
+  '1d000000-0000-4000-8000-000000000401')),30,
+  'each synthetic dimension has exactly one direct mapping');
+SELECT is((SELECT evidenced_dimensions FROM public.inspect_pa_scoring_evidence(
+  '1d000000-0000-4000-8000-000000000401')),30,
+  'five dimensions per AW/CW/SP shared response count correctly as distinct evidence');
+SELECT is((SELECT mapping_and_evidence_complete FROM public.inspect_pa_scoring_evidence(
+  '1d000000-0000-4000-8000-000000000401')),false,
+  'oral live-performance evidence is mandatory even when every outline is present');
+RESET ROLE;
+
+-- Synthetic staff witness for report version 4 only.
+INSERT INTO private.pa_spoken_performance_evidence(
+ report_record_id,report_version_id,assessor_id,presentation_observation,followup_observation,observed_live)
+SELECT v.report_record_id,v.id,'88888888-8888-4888-8888-888888888888',
+  'Synthetic witnessed presentation evidence for the full thirty-dimension regression.',
+  'Synthetic witnessed follow-up evidence for the full thirty-dimension regression.',true
+FROM public.evaluation_report_versions v WHERE v.version_number=4;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+  '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT mapping_and_evidence_complete FROM public.inspect_pa_scoring_evidence(
+  '1d000000-0000-4000-8000-000000000401')),true,
+  'complete synthetic structure and a same-version witness satisfy structural evidence gate');
+SELECT is((SELECT scoring_state FROM public.inspect_pa_scoring_evidence(
+  '1d000000-0000-4000-8000-000000000401')),'human_rubric_approval_required',
+  'even structurally sufficient test snapshots never imply rubric approval or grades');
+RESET ROLE;
+
+-- New immutable report version deliberately misattributes AW02 to LC01.
+INSERT INTO public.evaluation_report_versions(
+  report_record_id,report_scope,learner_id,version_number,idempotency_key,supersedes_version_id,
+  curriculum_mapping_status,evidence_sufficiency_status,scope_snapshot,content_snapshot,
+  unit_set_snapshot,curriculum_mapping_snapshot,learner_evidence_snapshot,
+  published_feedback_snapshot,eligible_analytics_snapshot,created_by)
+SELECT v.report_record_id,v.report_scope,v.learner_id,5,
+  '1d000000-0000-4000-8000-000000000832',v.id,
+  v.curriculum_mapping_status,v.evidence_sufficiency_status,v.scope_snapshot,v.content_snapshot,
+  v.unit_set_snapshot,v.curriculum_mapping_snapshot,
+  (SELECT jsonb_agg(CASE WHEN item->>'observation_code'='AW02'
+    THEN jsonb_set(item,'{source_response_observation_code}',to_jsonb('LC01'::text))
+    ELSE item END ORDER BY ordinality)
+   FROM jsonb_array_elements(v.learner_evidence_snapshot)
+     WITH ORDINALITY AS e(item,ordinality)),
+  v.published_feedback_snapshot,v.eligible_analytics_snapshot,
+  '88888888-8888-4888-8888-888888888888'
+FROM public.evaluation_report_versions v WHERE v.version_number=4;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+  '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT evidenced_dimensions FROM public.inspect_pa_scoring_evidence(
+  '1d000000-0000-4000-8000-000000000401')),29,
+  'mismatched AW dimension source is rejected despite a present response hash');
+SELECT is((SELECT mapping_and_evidence_complete FROM public.inspect_pa_scoring_evidence(
+  '1d000000-0000-4000-8000-000000000401')),false,
+  'newer invalid evidence cannot inherit a preceding report version witness');
+RESET ROLE;
+
 SELECT * FROM finish();
 ROLLBACK;
