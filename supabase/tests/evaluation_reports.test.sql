@@ -683,6 +683,89 @@ SELECT is((SELECT scoring_state FROM public.inspect_pa_scoring_evidence(
   'even structurally sufficient test snapshots never imply rubric approval or grades');
 RESET ROLE;
 
+-- Synthetic human-scoring review regression. All rubric maxima, marks,
+-- review notes and evidence are deliberately fabricated and rolled back.
+INSERT INTO private.pa_rubric_approvals(
+  id,diagnostic_version_id,rubric_sha256,dimension_maxima,
+  academic_review_reference,assessor_calibration_reference,approval_note,approved_by)
+SELECT '1d000000-0000-4000-8000-000000000851',
+  '1d000000-0000-4000-8000-000000000501',repeat('b',64),
+  jsonb_agg(jsonb_build_object('code',o.observation_code,'max_points',4)
+    ORDER BY o.sequence_number),
+  'Synthetic academic approval fixture','Synthetic assessor calibration fixture',
+  'Synthetic only, regression does not constitute human approval.',
+  '88888888-8888-4888-8888-888888888888'
+FROM public.diagnostic_observations o
+WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
+INSERT INTO private.pa_scoring_drafts(
+  id,report_record_id,report_version_id,rubric_approval_id,
+  scorer_id,dimension_marks,response_evidence_sha256)
+SELECT '1d000000-0000-4000-8000-000000000852',v.report_record_id,v.id,
+  '1d000000-0000-4000-8000-000000000851',
+  '88888888-8888-4888-8888-888888888888',
+  (SELECT jsonb_agg(jsonb_build_object('code',o.observation_code,'points',2)
+    ORDER BY o.sequence_number)
+    FROM public.diagnostic_observations o
+    WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),
+  encode(extensions.digest(v.learner_evidence_snapshot::text,'sha256'),'hex')
+FROM public.evaluation_report_versions v WHERE v.version_number=4;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+  '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.review_pa_scoring_draft(
+ '1d000000-0000-4000-8000-000000000852','approved_private',
+ 'Learner cannot approve internal scoring.')$q$,
+ '42501','pa_scoring_review_forbidden','learner cannot approve scoring');
+SELECT throws_ok($q$SELECT * FROM public.get_private_pa_scoring_review(
+ '1d000000-0000-4000-8000-000000000853')$q$,
+ '42501','pa_scoring_review_read_forbidden','learner cannot access internal results');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+  '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.review_pa_scoring_draft(
+ '1d000000-0000-4000-8000-000000000852','approved_private',
+ 'MFA is mandatory for staff approval.')$q$,
+ '42501','pa_scoring_review_forbidden','Owner AAL1 cannot review scores');
+SELECT set_config('request.jwt.claims',
+  '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT throws_ok($q$SELECT public.review_pa_scoring_draft(
+ '1d000000-0000-4000-8000-000000000852','not_a_decision',
+ 'Invalid review decision must fail.')$q$,
+ '22023','invalid_pa_scoring_review','unrecognised decision is rejected');
+CREATE TEMP TABLE pa_score_test_result(id uuid);
+GRANT SELECT ON pa_score_test_result TO authenticated;
+INSERT INTO pa_score_test_result
+SELECT public.review_pa_scoring_draft(
+ '1d000000-0000-4000-8000-000000000852','approved_private',
+ 'Synthetic human review decision for strictly private regression evidence.');
+SELECT is((SELECT points_awarded FROM public.get_private_pa_scoring_review(
+ (SELECT id FROM pa_score_test_result))),60::numeric,
+ 'private approved synthetic score totals the thirty human-marked dimensions');
+SELECT is((SELECT points_possible FROM public.get_private_pa_scoring_review(
+ (SELECT id FROM pa_score_test_result))),120::numeric,
+ 'private maximum points derive from the exact approved rubric dimensions');
+SELECT is((SELECT attainment_percent FROM public.get_private_pa_scoring_review(
+ (SELECT id FROM pa_score_test_result))),50::numeric,
+ 'private attainment is derived with a nonzero rubric denominator');
+SELECT throws_ok($q$SELECT public.review_pa_scoring_draft(
+ '1d000000-0000-4000-8000-000000000852','changes_requested',
+ 'A conflicting review must not overwrite the original.')$q$,
+ '23505',NULL,'a scoring draft cannot receive contradictory decisions');
+RESET ROLE;
+SELECT ok((SELECT eligible_analytics_snapshot->>'score' IS NULL
+  AND eligible_analytics_snapshot->>'official_grade' IS NULL
+  FROM public.evaluation_report_versions WHERE version_number=4),
+  'human-reviewed private scores do not leak into learner report analytics');
+SELECT throws_ok($q$UPDATE private.pa_scoring_reviews SET decision='changes_requested'$q$,
+  '42501','pa_feedback_draft_immutable','private human scoring decisions are immutable');
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+  WHERE action='pa_scoring_review_decided'),1,
+  'private approval records exactly one metadata-only security audit');
+  
 -- New immutable report version deliberately misattributes AW02 to LC01.
 INSERT INTO public.evaluation_report_versions(
   report_record_id,report_scope,learner_id,version_number,idempotency_key,supersedes_version_id,
