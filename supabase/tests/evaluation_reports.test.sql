@@ -910,13 +910,78 @@ SELECT is((SELECT count(*)::integer FROM private.security_audit_events
  WHERE action='pa_private_scored_manifest_read'),5,
  'all successful Owner-only private manifest reads have metadata-only audit');
 
+-- Human-approved scored PA publication (synthetic fixture only).
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT * FROM public.publish_approved_pa_scored_report(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state),
+ '1d000000-0000-4000-8000-000000000861')$q$,
+ '42501','pa_scored_publication_forbidden','learner cannot publish a scored report');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT * FROM public.publish_approved_pa_scored_report(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state),
+ '1d000000-0000-4000-8000-000000000861')$q$,
+ '42501','pa_scored_publication_forbidden','Owner without MFA cannot publish scored PA');
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT throws_ok($q$SELECT * FROM public.publish_approved_pa_scored_report(
+ '1d000000-0000-4000-8000-000000000899',
+ '1d000000-0000-4000-8000-000000000861')$q$,
+ '55000','pa_scored_publication_requires_joint_approval',
+ 'unapproved composition cannot produce a scored learner report');
+SELECT is((SELECT version_number FROM public.publish_approved_pa_scored_report(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state),
+ '1d000000-0000-4000-8000-000000000861')),5,
+ 'joint Owner-approved scored PA publishes a fifth immutable report version');
+SELECT is((SELECT is_replay FROM public.publish_approved_pa_scored_report(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state),
+ '1d000000-0000-4000-8000-000000000861')),true,
+ 'same request idempotently replays without duplicate publication');
+SELECT throws_ok($q$SELECT * FROM public.publish_approved_pa_scored_report(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state),
+ '1d000000-0000-4000-8000-000000000862')$q$,
+ '55000','pa_scored_publication_report_superseded',
+ 'new request cannot republish a superseded scored report source');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT is((SELECT (eligible_analytics_snapshot->'pa_human_scoring'->>'attainment_percent')::numeric
+ FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',5)),
+ 50::numeric,'learner sees only published, human-approved attainment');
+SELECT is((SELECT jsonb_array_length(eligible_analytics_snapshot->'pa_human_scoring'->'dimensions')
+ FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',5)),
+ 30,'published report contains all human-reviewed dimension marks');
+SELECT is((SELECT published_feedback_snapshot->>'status'
+ FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',5)),
+ 'human_approved_published','published scored report includes approved teacher feedback');
+SELECT ok((SELECT eligible_analytics_snapshot->'pa_human_scoring'->>'official_ib_grade' IS NULL
+   AND eligible_analytics_snapshot->'pa_human_scoring'->>'rank' IS NULL
+   AND eligible_analytics_snapshot->'pa_human_scoring'->>'percentile' IS NULL
+ FROM public.get_evaluation_report('1d000000-0000-4000-8000-000000000401',5)),
+ 'no official IB grade, ranking or percentile is invented');
+RESET ROLE;
+SELECT ok((SELECT eligible_analytics_snapshot->'pa_human_scoring' IS NULL
+ FROM public.evaluation_report_versions WHERE version_number=4),
+ 'prior private baseline remains unmodified and unscored');
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+ WHERE action='pa_scored_report_published'),1,
+ 'exactly one metadata-only scored publication audit');
+
 -- New immutable report version deliberately misattributes AW02 to LC01.
 INSERT INTO public.evaluation_report_versions(
   report_record_id,report_scope,learner_id,version_number,idempotency_key,supersedes_version_id,
   curriculum_mapping_status,evidence_sufficiency_status,scope_snapshot,content_snapshot,
   unit_set_snapshot,curriculum_mapping_snapshot,learner_evidence_snapshot,
   published_feedback_snapshot,eligible_analytics_snapshot,created_by)
-SELECT v.report_record_id,v.report_scope,v.learner_id,5,
+SELECT v.report_record_id,v.report_scope,v.learner_id,6,
   '1d000000-0000-4000-8000-000000000832',v.id,
   v.curriculum_mapping_status,v.evidence_sufficiency_status,v.scope_snapshot,v.content_snapshot,
   v.unit_set_snapshot,v.curriculum_mapping_snapshot,
