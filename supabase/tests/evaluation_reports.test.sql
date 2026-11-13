@@ -868,6 +868,48 @@ SELECT ok((SELECT eligible_analytics_snapshot->>'attainment_percent' IS NULL
  FROM public.evaluation_report_versions WHERE version_number=4),
  'private joint approval does not release attainment to learner analytics');
 
+-- Strictly private, reconciled 30-dimension report manifest acceptance.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.get_private_pa_scored_report_review_manifest(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state))$q$,
+ '42501','pa_scored_manifest_forbidden','learner cannot inspect private scored report manifest');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.get_private_pa_scored_report_review_manifest(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state))$q$,
+ '42501','pa_scored_manifest_forbidden','Owner without MFA cannot inspect manifest');
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT (public.get_private_pa_scored_report_review_manifest(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state))->>'dimension_count')::integer),
+ 30,'private review manifest reconciles all thirty marked dimensions');
+SELECT is((SELECT (public.get_private_pa_scored_report_review_manifest(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state))->'private_attainment'->>'points_awarded')::numeric),
+ 60::numeric,'manifest total is independently matched to approved private 30-dimension scoring');
+SELECT is((SELECT (public.get_private_pa_scored_report_review_manifest(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state))->'private_attainment'->>'points_possible')::numeric),
+ 120::numeric,'manifest denominator comes from exact approved rubric');
+SELECT is((SELECT jsonb_array_length(
+ public.get_private_pa_scored_report_review_manifest(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state))->'dimensions')),
+ 30,'manifest contains thirty individual criterion evidence entries');
+SELECT is((SELECT public.get_private_pa_scored_report_review_manifest(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state))->>'learner_visible'),'false',
+ 'private manifest explicitly remains outside learner publication');
+RESET ROLE;
+SELECT ok((SELECT eligible_analytics_snapshot->>'attainment_percent' IS NULL
+ FROM public.evaluation_report_versions WHERE version_number=4),
+ 'private manifest does not write scored analytics into learner report version');
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+ WHERE action='pa_private_scored_manifest_read'),5,
+ 'all successful Owner-only private manifest reads have metadata-only audit');
+
 -- New immutable report version deliberately misattributes AW02 to LC01.
 INSERT INTO public.evaluation_report_versions(
   report_record_id,report_scope,learner_id,version_number,idempotency_key,supersedes_version_id,
