@@ -33,9 +33,9 @@ BEGIN
   IF source_learner IS NULL THEN
     RAISE EXCEPTION USING ERRCODE='55000',MESSAGE='pa_scored_publication_invalid_report';
   END IF;
-  SELECT * INTO source_version FROM public.evaluation_report_versions
-    WHERE id=chosen.report_version_id AND report_record_id=chosen.report_record_id
-      AND learner_id=source_learner AND report_scope='pa_baseline';
+  SELECT v.* INTO source_version FROM public.evaluation_report_versions AS v
+    WHERE v.id=chosen.report_version_id AND v.report_record_id=chosen.report_record_id
+      AND v.learner_id=source_learner AND v.report_scope='pa_baseline';
   IF NOT FOUND THEN
     RAISE EXCEPTION USING ERRCODE='55000',MESSAGE='pa_scored_publication_invalid_lineage';
   END IF;
