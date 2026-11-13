@@ -25,5 +25,24 @@ SELECT throws_ok(
   'P0002','pa_report_not_found',
   'authorised Owner cannot invent a missing report');
 RESET ROLE;
+-- The blueprint has thirty scoring dimensions but only eighteen source
+-- response codes: RV(10) + LC(5) + AW01/CW01/SP01(3).
+SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),30,
+  'PA rubric blueprint retains thirty distinct observations');
+SELECT is((SELECT count(DISTINCT CASE WHEN group_code IN ('AW','CW','SP')
+    THEN group_code || '01' ELSE observation_code END)::integer
+  FROM public.diagnostic_observations
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),18,
+  'thirty dimensions correctly resolve to eighteen source response slots');
+SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations o
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
+    AND EXISTS (
+      SELECT 1 FROM public.diagnostic_observations src
+      WHERE src.diagnostic_version_id=o.diagnostic_version_id
+        AND src.observation_code=CASE WHEN o.group_code IN ('AW','CW','SP')
+          THEN o.group_code || '01' ELSE o.observation_code END
+    )),30,
+  'each rubric dimension has a valid source observation within its version');
 SELECT * FROM finish();
 ROLLBACK;
