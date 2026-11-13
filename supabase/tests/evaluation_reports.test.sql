@@ -801,10 +801,10 @@ SELECT is((SELECT public.get_private_pa_report_composition(
  (SELECT id FROM pa_score_test_result),
  '1d000000-0000-4000-8000-000000000854')->>'learner_visible'),'false',
  'composition is explicitly not published to learner');
+RESET ROLE;
 SELECT ok((SELECT eligible_analytics_snapshot->>'attainment_percent' IS NULL
  FROM public.evaluation_report_versions WHERE version_number=4),
  'composed private attainment does not change public report snapshot');
-RESET ROLE;
 SELECT is((SELECT count(*)::integer FROM private.security_audit_events
  WHERE action='pa_private_report_composition_read'),2,
  'successful private composition reads are metadata-only audited');
