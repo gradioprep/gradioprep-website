@@ -809,6 +809,65 @@ SELECT is((SELECT count(*)::integer FROM private.security_audit_events
  WHERE action='pa_private_report_composition_read'),2,
  'successful private composition reads are metadata-only audited');
 
+-- Step 8 joint score/feedback approval: synthetic-only, private, exact-version.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.approve_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),'1d000000-0000-4000-8000-000000000855',
+ 'No learner can approve internal report composition.')$q$,
+ '42501','pa_joint_composition_approval_forbidden','learner cannot join private report approvals');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.approve_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),'1d000000-0000-4000-8000-000000000855',
+ 'Owner must use MFA for report composition approval.')$q$,
+ '42501','pa_joint_composition_approval_forbidden','Owner without MFA cannot join approvals');
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT throws_ok($q$SELECT public.approve_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),'1d000000-0000-4000-8000-000000000855',
+ 'Owner cannot approve feedback before it receives a human review.')$q$,
+ '55000','pa_joint_composition_requires_matching_human_approvals',
+ 'private score alone cannot authorize report composition');
+CREATE TEMP TABLE pa_joint_approval_test_state(feedback_review_id uuid,composition_approval_id uuid);
+GRANT SELECT ON pa_joint_approval_test_state TO authenticated;
+INSERT INTO pa_joint_approval_test_state(feedback_review_id)
+SELECT public.review_pa_evaluation_feedback_draft(
+ '1d000000-0000-4000-8000-000000000854','approved_for_publication',
+ 'Synthetic only: verified feedback text for the exact same private scoring snapshot.');
+SELECT ok((SELECT feedback_review_id FROM pa_joint_approval_test_state) IS NOT NULL,
+ 'separate human feedback approval is recorded for the synthetic exact-version draft');
+SELECT throws_ok($q$SELECT public.approve_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),(SELECT feedback_review_id FROM pa_joint_approval_test_state),
+ 'short')$q$,
+ '22023','invalid_pa_joint_composition_approval','joint approval needs a meaningful human note');
+UPDATE pa_joint_approval_test_state
+SET composition_approval_id=public.approve_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),feedback_review_id,
+ 'Synthetic joint review of the exact private scoring and feedback evidence, not live release.');
+SELECT ok((SELECT composition_approval_id FROM pa_joint_approval_test_state) IS NOT NULL,
+ 'Owner AAL2 can join two separately approved decisions into one immutable private gate');
+SELECT throws_ok($q$SELECT public.approve_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),(SELECT feedback_review_id FROM pa_joint_approval_test_state),
+ 'A second approval for the same scored report cannot be inserted.')$q$,
+ '23505',NULL,'same scoring decision cannot receive conflicting joint approvals');
+RESET ROLE;
+SELECT is((SELECT count(*)::integer FROM private.pa_report_composition_approvals),1,
+ 'joint approval exists only as private immutable evidence');
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+ WHERE action='pa_private_composition_approved'),1,
+ 'joint approval records exactly one metadata-only security audit');
+SELECT throws_ok($q$UPDATE private.pa_report_composition_approvals SET approval_note='changed'$q$,
+ '42501','pa_feedback_draft_immutable','joint approval cannot be edited');
+SELECT ok((SELECT eligible_analytics_snapshot->>'attainment_percent' IS NULL
+ FROM public.evaluation_report_versions WHERE version_number=4),
+ 'private joint approval does not release attainment to learner analytics');
+
 -- New immutable report version deliberately misattributes AW02 to LC01.
 INSERT INTO public.evaluation_report_versions(
   report_record_id,report_scope,learner_id,version_number,idempotency_key,supersedes_version_id,
