@@ -766,6 +766,49 @@ SELECT is((SELECT count(*)::integer FROM private.security_audit_events
   WHERE action='pa_scoring_review_decided'),1,
   'private approval records exactly one metadata-only security audit');
   
+-- Private score + draft composition handoff remains entirely outside learner reports.
+INSERT INTO private.pa_evaluation_feedback_drafts(
+  id,report_version_id,report_record_id,author_id,draft_text)
+SELECT '1d000000-0000-4000-8000-000000000854',v.id,v.report_record_id,
+  '88888888-8888-4888-8888-888888888888',
+  'Synthetic evidence-linked teacher feedback for private report composition.'
+FROM public.evaluation_report_versions v WHERE v.version_number=4;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.get_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),
+ '1d000000-0000-4000-8000-000000000854')$q$,
+ '42501','pa_composition_forbidden','learner cannot compose or read private scoring');
+RESET ROLE;
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal1"}',true);
+SELECT throws_ok($q$SELECT public.get_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),
+ '1d000000-0000-4000-8000-000000000854')$q$,
+ '42501','pa_composition_forbidden','Owner AAL1 cannot view composed private scoring');
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT (public.get_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),
+ '1d000000-0000-4000-8000-000000000854')->'private_attainment'->>'attainment_percent')::numeric),
+ 50::numeric,'private report composition uses exact 30-dimension human score');
+SELECT is((SELECT public.get_private_pa_report_composition(
+ (SELECT id FROM pa_score_test_result),
+ '1d000000-0000-4000-8000-000000000854')->>'learner_visible'),'false',
+ 'composition is explicitly not published to learner');
+SELECT ok((SELECT eligible_analytics_snapshot->>'attainment_percent' IS NULL
+ FROM public.evaluation_report_versions WHERE version_number=4),
+ 'composed private attainment does not change public report snapshot');
+RESET ROLE;
+SELECT is((SELECT count(*)::integer FROM private.security_audit_events
+ WHERE action='pa_private_report_composition_read'),2,
+ 'successful private composition reads are metadata-only audited');
+
 -- New immutable report version deliberately misattributes AW02 to LC01.
 INSERT INTO public.evaluation_report_versions(
   report_record_id,report_scope,learner_id,version_number,idempotency_key,supersedes_version_id,
