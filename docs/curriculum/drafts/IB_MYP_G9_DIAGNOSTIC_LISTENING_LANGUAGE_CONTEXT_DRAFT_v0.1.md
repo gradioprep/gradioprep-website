@@ -169,8 +169,8 @@ Rewrite the note as a short, respectful notice for students and visitors. Keep t
 | L03 | Audience, context and purpose from explicit/audible evidence | A3 |
 | L04 | Effect of a spoken choice and delivery feature | A4 |
 | L05 | Distinguish supported conclusion from overstatement or incomplete evidence | A7, A5 |
-| LC01 | Contextual meaning of vocabulary | D1 |
-| LC02 | Effect of sentence order on focus/emphasis | D2 |
+| LC01 | Contextual word meaning supported by a cited clue | A1 (D1 internal support only) |
+| LC02 | Sentence-order effect supported by a direct comparison | A1, A4 (D2 internal support only) |
 | LC03 | Grammar/usage correction that preserves present-time meaning | D3 |
 | LC04 | Punctuation that clarifies the relationship between clauses | D3, D2 |
 | LC05 | Adapt wording to audience and purpose with suitable register | D4 |
