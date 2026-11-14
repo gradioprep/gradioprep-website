@@ -60,7 +60,8 @@ test("candidate strands never substitute for authorised Year 4 mapping approval"
 test("the complete authoring blueprint remains unreleased with no learner capture or fictional mappings", () => {
   expect(seed).toContain("'ed222222-2222-4222-8222-222222222222'");
   expect(seed).toMatch(/'IB MYP Year 4 Preliminary Assessment — full evidence blueprint \(synthetic draft\)'[\s\S]*?2, 'draft', 80, 2/);
-  expect(seed).toContain("sequence_number, response_kind, false");
+  expect(seed).toContain("CASE WHEN observation_code IN ('RV04','RV05','LC01','LC02')");
+  expect(seed).toContain("THEN 'choice_and_text' ELSE response_kind END, false");
   expect(migrationTest).toContain("no unreviewed draft observation is learner-capturable");
   expect(migrationTest).toContain("draft blueprint cannot invent reviewed official-outcome mappings");
   expect(migrationTest).toContain("student cannot begin unreleased full instrument");
@@ -86,7 +87,8 @@ test("unreleased RV06 and LC01 drafts now elicit direct, observable curriculum e
   expect(readView).toContain("Authoring draft for human academic review");
   expect(combinedHistorical).toContain("not a current learner-app specification");
   expect(section).toContain("All 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`");
-  expect(seed).toContain("sequence_number, response_kind, false");
+  expect(seed).toContain("CASE WHEN observation_code IN ('RV04','RV05','LC01','LC02')");
+  expect(seed).toContain("THEN 'choice_and_text' ELSE response_kind END, false");
 });
 
 
@@ -144,4 +146,17 @@ test("Step 8 contextual analysis evidence requires explanations, not bare select
   expect(readView).toContain("Authoring draft for human academic review");
   expect(language).toContain("not a current learner-app specification");
   expect(section).toContain("All 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`");
+});
+
+
+test("Founder approval of the restricted Step 8 review package remains separate from Year 4 academic signoff", () => {
+  const receipt = readFileSync("docs/curriculum/IB_MYP_G9_PA_STEP8_CONTENT_OWNER_APPROVAL_RECORD.md", "utf8");
+  expect(receipt).toContain("5575a0d1bb8e4358697014dcc13d946de1c6ed31e2cac96f225987aba642355b");
+  expect(receipt).toContain("Founder/content-owner approval: recorded 14 November 2026");
+  expect(receipt).toContain("PENDING_Y4_ACADEMIC_REVIEW");
+  expect(receipt).toContain("No independent assessor calibration has been recorded");
+  expect(receipt).toContain("The existing released v1 response schema is unchanged");
+  expect(migrationTest).toContain("all four revised draft observations declare choice-plus-explanation evidence");
+  expect(migrationTest).toContain("content-owner adoption does not enable revised questions for students");
+  expect(mappingStandard).toContain("Only `DIRECT` items may form the PA/SA evidence basis");
 });
