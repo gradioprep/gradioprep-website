@@ -65,7 +65,7 @@ Respond in your own words. You may refer to your outline card.
 | SP02 | Spoken ideas progress logically, connect clearly and include enough relevant explanation or example to develop the recommendation | B2, B3, B4 |
 | SP03 | Word choice, explanation and delivery are suited to the student-council audience and the purpose of proposing a practical shared-space use | C3 |
 | SP04 | The learner communicates a relevant viewpoint, explains why it matters and responds thoughtfully to a different preference or concern | C4 |
-| SP05 | Speech is intelligible and appropriately paced, with purposeful emphasis and interaction; posture, gesture or expression are considered only when they help communicate meaning | D5, D6 |
+| SP05 | Separately observed spoken register/style (D.ii), intelligible pronunciation (D.iv) and purposeful non-verbal communication (D.v). Do not score interaction as its own strand, or infer ability from accent conformity, extroversion or eye-contact norms | D2, D5, D6 (candidate D.ii, D.iv, D.v) |
 
 One prepared presentation and the follow-up provide evidence for the five observations; they are not five separate oral questions. Judge each dimension separately. Do not reward confidence, extroversion, accent conformity, eye contact as a cultural norm or disability-related speech characteristics as proxies for communication skill. Assess intelligibility and communicative effectiveness in context.
 
@@ -81,4 +81,4 @@ One prepared presentation and the follow-up provide evidence for the five observ
 - Final rubric language, numerical scoring, weights, aggregation, thresholds and cut scores: **not set or approved**.
 - Recording, speech-to-text, automated speech assessment, learner release and automated marking: **not approved**. An unreleased app outline and private AAL2 human-witnessed observation path are implemented for synthetic tests only; academic release remains blocked.
 
-The Founder-approved 35-observation map, six skill areas and four criterion profiles remain unchanged. No official IB mapping, IB 1–7 conversion, composite score, percentile or learner ranking is implied.
+The current provisional PA scope contains 30 observations across five segments; Listening is excluded. Four MYP criterion profiles remain candidate, uncalibrated evidence only. No official IB mapping, IB 1–7 conversion, composite score, percentile or learner ranking is implied.
