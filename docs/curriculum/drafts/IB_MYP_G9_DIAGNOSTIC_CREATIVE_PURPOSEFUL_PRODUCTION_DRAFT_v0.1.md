@@ -44,11 +44,11 @@ The word target is guidance only. A response above 150 words must remain editabl
 
 | Observation | Evidence sought | Direct taxonomy |
 |---|---|---|
-| CW01 | Relevant ideas are selected and developed beyond a bare list or predictable opening | C1 |
-| CW02 | The short narrative scene uses recognisable and purposeful conventions of the specified form | C2 |
+| CW01 | Purposeful development of ideas or perspectives visible in the completed scene; planning alone cannot prove a final-text dimension | C1 (candidate C.i) |
+| CW02 | Purposeful narrative organisation and deliberate stylistic choices visible in the scene, rather than genre labelling | B1, C2 (candidate B.i, C.ii) |
 | CW03 | Language and stylistic choices are suited to the stated school-magazine audience and intended effect | C3 |
-| CW04 | A considered perspective or creative direction is evident; originality is judged by purposeful development, not novelty for its own sake | C4 |
-| CW05 | A meaningful edit improves clarity, precision, coherence or effect, supported by a retained before/after trace or revision note | C5 |
+| CW04 | Purposeful perspective and imaginative development visible in the produced scene; novelty is not scored separately | C1 (candidate C.i) |
+| CW05 | Organisation in the final scene, plus separately evidenced revision/development only where retained before/after wording demonstrates it | B2, C1 (conditional candidate B.ii, C.i) |
 
 One narrative supplies the five mapped observations; they are not five separate questions. The plan provides evidence of idea generation and selection. The final scene provides evidence of form, audience, perspective and development. The retained revision trace is required to judge craft and revision.
 
@@ -63,4 +63,4 @@ One narrative supplies the five mapped observations; they are not five separate 
 - Final rubric language, numerical scoring, weights, aggregation, thresholds and cut scores: **not set or approved**.
 - App integration, learner release and automated marking: **not approved**.
 
-The Founder-approved 35-observation map, six skill areas and four criterion profiles remain unchanged. No official IB mapping, IB 1–7 conversion, composite score, percentile or learner ranking is implied.
+The current provisional PA scope contains 30 observations across five segments; Listening is excluded. Four MYP criterion profiles remain candidate, uncalibrated evidence only. No official IB mapping, IB 1–7 conversion, composite score, percentile or learner ranking is implied.
