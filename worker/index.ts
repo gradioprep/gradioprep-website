@@ -1179,7 +1179,13 @@ function isValidDiagnosticResponse(observationCode: string, response: unknown): 
   if (["RV02", "RV03", "RV06", "RV07a", "RV07b"].includes(observationCode)) {
     return only(["text"]) && text(value.text);
   }
-  if (["RV04", "RV05", "LC01", "LC02", "LC03", "LC04"].includes(observationCode)) {
+  if (["RV04", "RV05", "LC01", "LC02"].includes(observationCode)) {
+    // The DB validates the exact PA instrument version. At this boundary,
+    // accept either strictly shaped legacy choices or the v2 explanation pair.
+    return (only(["choice"]) && choice(value.choice))
+      || (only(["choice", "explanation"]) && choice(value.choice) && text(value.explanation));
+  }
+  if (["LC03", "LC04"].includes(observationCode)) {
     return only(["choice"]) && choice(value.choice);
   }
   if (observationCode === "LC05" || observationCode === "AW01") return only(["text"]) && text(value.text);
@@ -1300,8 +1306,9 @@ async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise
     .from("diagnostic_versions")
     .select("id, diagnostic_code, pathway_id, title, version, total_minutes, sitting_count")
     .eq("diagnostic_code", "ib-myp-g9-cycle1")
-    .eq("version", 1)
     .eq("release_state", "published")
+    .order("version", { ascending: false })
+    .limit(1)
     .maybeSingle();
   if (versionError || !version) {
     const audit = await auditDiagnosticWriteFailure(
@@ -1386,7 +1393,7 @@ async function startLearnerDiagnostic(request: Request, env: WorkerEnv): Promise
     available_sittings: enabledRows.map(row => ({
       observation_code: row.observation_code, sitting_number: row.sitting_number,
     })),
-    section_status: "read_view_language_context_only",
+    section_status: version.version >= 2 ? "full_preliminary_assessment" : "read_view_language_context_only",
   }, created.is_replay === true ? 200 : 201);
 }
 
