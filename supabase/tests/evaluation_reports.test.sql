@@ -920,6 +920,18 @@ SELECT throws_ok($q$SELECT * FROM public.publish_approved_pa_scored_report(
  '1d000000-0000-4000-8000-000000000861')$q$,
  '42501','pa_scored_publication_forbidden','learner cannot publish a scored report');
 RESET ROLE;
+-- Even an MFA-verified assigned Grader cannot independently release scored results.
+-- Academic approval, calibrated scoring and final publication remain Owner decisions.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','55555555-5555-4555-8555-555555555555',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"55555555-5555-4555-8555-555555555555","role":"authenticated","aal":"aal2"}',true);
+SELECT throws_ok($q$SELECT * FROM public.publish_approved_pa_scored_report(
+ (SELECT composition_approval_id FROM pa_joint_approval_test_state),
+ '1d000000-0000-4000-8000-000000000863')$q$,
+ '42501','pa_scored_publication_forbidden',
+ 'MFA-verified Grader cannot publish a scored PA even with a joint approval');
+RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
 SELECT set_config('request.jwt.claims',
