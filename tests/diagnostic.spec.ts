@@ -175,6 +175,21 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     );
     expect(invalidLanguageContext.status()).toBe(400);
 
+    // The Worker recognizes the draft choice-and-explanation shape, but the
+    // version-bound SQL validator must still reject it for published v1.
+    for (const code of ["RV04", "RV05", "LC01", "LC02"]) {
+      const mismatchedVersion = await request.put(
+        "/api/v1/learner/diagnostic-attempts/" + startedBody.attempt.id + "/responses/" + code,
+        { headers, data: { response: {
+          choice: "A", explanation: "This interpretation is supported by a specific wording choice.",
+        } } },
+      );
+      expect(mismatchedVersion.status(), code).toBe(400);
+      await expect(mismatchedVersion.json()).resolves.toMatchObject({
+        error: "invalid_diagnostic_response",
+      });
+    }
+
     const responses: Array<[string, Record<string, unknown>]> = [
       ["RV01", { a: "B", b: ["A", "C"] }],
       ["RV02", { text: "Nia records what was completed and what must wait, showing a balanced view of the afternoon." }],
