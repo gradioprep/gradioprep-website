@@ -38,3 +38,8 @@ The following remain mandatory, individually witnessed evidence, not decisions g
 Until those exist, **all 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`** and the full instrument stays a non-learner-capturable draft. Its scoring and reporting code is verified but its academic publication gate is not met. The required school progression may be supplied under restricted access; do not copy licensed or confidential curriculum excerpts into this public repository.
 
 **Step 8 status:** IN PROGRESS, content-owner approval now recorded. **7 individual implementation requests remaining**, excluding Founder-controlled DNS; reduce only after the entire academic acceptance gate is genuinely satisfied. No production/hosted provisioning, DNS change, paid services, real learner data, external AI processing, PR merge or unreviewed item release is authorised.
+
+
+## Supplemental restricted draft packs created after this approval
+
+On 14 November 2026, *new* private `GRADIOPREP_MYP4_RV_TEACHER_EDITOR_PACK_DRAFT_v0.2_RESTRICTED.md` and `GRADIOPREP_MYP4_LC_TEACHER_EDITOR_PACK_DRAFT_v0.2_RESTRICTED.md` were authored separately with provisional keys, per-distractor explanations, task-specific models, alternatives and qualitative evidence descriptions. They are distributed in a **separate restricted supplemental ZIP**, **not** the hash-pinned package approved above. Their model content and scoring instructions still require independent academic review and cannot be treated as adopted/validated by the earlier Founder approval. They are not in the public repository. Official Year 4 route/source and all rubric/calibration/release gates remain pending.
