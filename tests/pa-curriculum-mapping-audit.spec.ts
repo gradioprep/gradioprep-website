@@ -95,7 +95,7 @@ test("Step 8 provisional map and draft descriptions retain direct-evidence requi
   const creative = readFileSync("docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_CREATIVE_PURPOSEFUL_PRODUCTION_DRAFT_v0.1.md", "utf8");
   const speaking = readFileSync("docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_SPEAKING_PRESENTING_DRAFT_v0.1.md", "utf8");
 
-  const taskRows = map.split("\n").filter(line => /^\\| (RV06|LC01|CW01|CW02|CW04|CW05|SP05) \\|/.test(line));
+  const taskRows = map.split("## 5.1 Item-by-item public-strand audit")[0].split("\n").filter(line => line.startsWith("| ") && /^(RV06|LC01|CW01|CW02|CW04|CW05|SP05)$/.test(line.split("|")[1]?.trim() ?? ""));
   expect(taskRows).toHaveLength(7);
   const taskByCode = new Map(taskRows.map(line => [line.split("|")[1].trim(), line]));
   expect(taskByCode.get("RV06")).toContain("do not assess external-source credibility");
