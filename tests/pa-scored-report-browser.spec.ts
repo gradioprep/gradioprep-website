@@ -63,7 +63,7 @@ test("signed-in learner sees only synthetic published scores and version-specifi
   }, reportId);
   await page.goto("/assessment");
   await expect(page.getByRole("heading", { name: "Human-reviewed assessment results" })).toBeVisible();
-  await expect(page.getByText("60 of 120 rubric points")).toBeVisible();
+  await expect(page.getByText("60 of 120 rubric points", { exact: true })).toBeVisible();
   await expect(page.getByText("18 / 18", { exact: false })).toBeVisible();
   await expect(page.getByText("Synthetic reviewed feedback.")).toBeVisible();
   await expect(page.getByText("official IB grade", { exact: false }).first()).toBeVisible();
