@@ -120,3 +120,28 @@ test("Step 8 provisional map and draft descriptions retain direct-evidence requi
   expect(map).toContain("Private marking keys and exemplars stay outside this public repository");
   expect(section).toContain("All 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`");
 });
+
+
+test("Step 8 contextual analysis evidence requires explanations, not bare selected answers", () => {
+  const readView = readFileSync("docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_READ_VIEW_DRAFT_v0.1.md", "utf8");
+  const language = readFileSync("docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_LISTENING_LANGUAGE_CONTEXT_DRAFT_v0.1.md", "utf8");
+  const itemMap = readFileSync("docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md", "utf8");
+  const rv04 = readView.split("### RV04 —")[1]?.split("### RV05 —")[0] ?? "";
+  const rv05 = readView.split("### RV05 —")[1]?.split("### RV06 —")[0] ?? "";
+  const lc02 = language.split("### LC02 —")[1]?.split("### LC03 —")[0] ?? "";
+  expect(rv04).toContain("wording or layout choice");
+  expect(rv04).toContain("Ideal target:** 25 words");
+  expect(rv05).toContain("visual grouping");
+  expect(rv05).toContain("Ideal target:** 25 words");
+  expect(lc02).toContain("changes what the reader notices first");
+  expect(lc02).toContain("Ideal target:** 20 words");
+  const canonical = itemMap.split("## 3. Task-level item map")[1]?.split("## 4. Complete taxonomy coverage crosswalk")[0] ?? "";
+  for (const code of ["RV04", "RV05", "LC02"]) {
+    const row = canonical.split("\n").find(line => line.startsWith("| " + code + " |")) ?? "";
+    expect(row).toMatch(/selection alone|do not infer A\\.ii from selection/i);
+  }
+  // These are unreleased drafts. No item is adopted into the existing published 15-observation instrument.
+  expect(readView).toContain("Authoring draft for human academic review");
+  expect(language).toContain("not a current learner-app specification");
+  expect(section).toContain("All 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`");
+});
