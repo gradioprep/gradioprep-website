@@ -617,7 +617,8 @@ export default function DiagnosticPanel({
       </div>
 
       <div className="proto-diagnostic-question">
-        <h3>RV06 · Analysing a represented claim</h3>
+        <h3>{instrument.code === "ib-myp-g9-cycle1" && instrument.version >= 2
+          ? "RV06 · Analysing a represented claim" : "RV06 · Critical perspective and representation"}</h3>
         {instrument.code === "ib-myp-g9-cycle1" && instrument.version >= 2
           ? <p>The poster says “Small repairs. Shared skills.” Analyse how its wording and outcome figures together present the event's achievements and limits. Support your interpretation with a figure and explain how a wording choice shapes the reader's understanding.</p>
           : <p>A volunteer says: “The team fixed almost every object on the day.” Is that a fair description of the poster’s results? Use at least one figure from the graphic and explain one limitation in the statement.</p>}
