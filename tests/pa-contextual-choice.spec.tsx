@@ -64,6 +64,7 @@ test("learner panel is version-bound and cannot bypass draft publication or expo
   const panel = readFileSync("src/auth/DiagnosticPanel.tsx", "utf8");
   const seed = readFileSync("supabase/seed.sql", "utf8");
   const gate = readFileSync("supabase/migrations/20261112000600_phase2_pa_direct_mapping_publication_gate.sql", "utf8");
+  const worker = readFileSync("worker/index.ts", "utf8");
   expect(panel).toContain("setInstrument({ code: result.diagnostic?.diagnostic_code");
   expect(panel).toContain("paChoiceResponse(instrument.code, instrument.version, code");
   expect((panel.match(/<PaContextualExplanationField/g) ?? []).length).toBe(4);
@@ -72,5 +73,10 @@ test("learner panel is version-bound and cannot bypass draft publication or expo
   expect(seed).toMatch(/2, 'draft', 80, 2/);
   expect(gate).toContain("pa_publication_requires_reviewed_direct_mapping");
   expect(gate).toContain("directly_mapped_observations <> total_observations");
+  expect(worker).toContain('.eq("release_state", "published")');
+  expect(worker).toContain('.order("version", { ascending: false })');
+  expect(worker).not.toContain('.eq("version", 1)');
+  expect(worker).toContain('only(["choice", "explanation"]) && choice(value.choice) && text(value.explanation)');
+  expect(worker).toContain('section_status: version.version >= 2 ? "full_preliminary_assessment"');
   expect(panel).not.toMatch(/GRADIOPREP_MYP4_.*TEACHER_EDITOR|rubric_sha256/);
 });
