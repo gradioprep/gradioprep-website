@@ -172,9 +172,9 @@ Explain briefly why the selected information is stronger evidence for the claim 
 | RV01 | Central idea plus more than one explicit detail | A1 |
 | RV02 | Inference supported by a relevant detail | A2, A5 |
 | RV03 | Contextual effect of a creator’s language choice | A4, A5 |
-| RV04 | Audience, context and purpose | A3 |
-| RV05 | Visual/verbal data interpretation | A1, A2, A4 |
-| RV06 | Evaluate a claim against evidence and limits | A7, A5 |
+| RV04 | Audience/purpose plus an explained poster wording/layout choice | A3, A4 |
+| RV05 | Graphic/figure interpretation plus an explained visual/verbal effect | A1, A2, A4 |
+| RV06 | Interpret poster achievements/limits through wording and figures | A1, A4, A5 (A7 internal support only) |
 | RV07a | Compare perspectives/ideas | A6, A5 |
 | RV07b | Compare form, structure and effect | A6, A4 |
 | RV08 | Sequence and structural development | A1, A4 |
