@@ -38,6 +38,28 @@ SELECT is((SELECT count(*)::integer FROM public.diagnostic_observation_outcome_m
   WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),0,
   'draft blueprint cannot invent reviewed official-outcome mappings');
 
+-- The content-owner-adopted v2 questions require a selected option AND an
+-- observable contextual explanation. They remain unreleased and unscored.
+SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
+    AND observation_code IN ('RV04','RV05','LC01','LC02')
+    AND response_kind='choice_and_text'),4,
+  'all four revised draft observations declare choice-plus-explanation evidence');
+SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations
+  WHERE diagnostic_version_id='ed111111-1111-4111-8111-111111111111'
+    AND observation_code IN ('RV04','RV05','LC01','LC02')
+    AND response_kind='single_choice'),4,
+  'previous synthetic published v1 observations preserve their original response schema');
+SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
+    AND observation_code IN ('RV04','RV05','LC01','LC02')
+    AND learner_capture_enabled),0,
+  'content-owner adoption does not enable revised questions for students');
+SELECT is((SELECT count(*)::integer FROM public.diagnostic_observation_outcome_mappings
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
+    AND mapping_status='direct'),0,
+  'content-owner adoption creates no fictional directly reviewed Year 4 mappings');
+
 -- Publication may not be forced merely by changing a draft's state.
 SELECT throws_ok($q$UPDATE public.diagnostic_versions
   SET release_state='published'
