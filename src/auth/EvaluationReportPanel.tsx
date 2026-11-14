@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Navigate } from "../App";
+import PaScoredResults, { approvedPaScoring, type PublishedPaSnapshot } from "./PaScoredResults";
 
 interface ObservationSnapshot {
   observation_code?: string;
@@ -24,7 +25,7 @@ interface LearnerEvidenceEntry {
   response_sha256?: string | null;
 }
 
-interface EvaluationReport {
+interface EvaluationReport extends PublishedPaSnapshot {
   report_record_id: string;
   report_version_id: string;
   report_scope: string;
@@ -204,6 +205,9 @@ export default function EvaluationReportPanel({
   const mappingsByCode = new Map((report.curriculum_mapping_snapshot ?? []).map(entry => [entry.observation_code, entry]));
   const sittingCount = report.content_snapshot?.sitting_count;
   const totalMinutes = report.content_snapshot?.total_minutes;
+  const approvedScore = report.curriculum_mapping_status === "complete_direct"
+    && report.evidence_sufficiency_status === "sufficient"
+    ? approvedPaScoring(report) : null;
   const approvedFeedback = report.published_feedback_snapshot?.status === "human_approved_published"
     && typeof report.published_feedback_snapshot.feedback_text === "string"
     && report.published_feedback_snapshot.feedback_text.trim().length > 0
@@ -219,8 +223,10 @@ export default function EvaluationReportPanel({
         <p className="proto-eyebrow"><span />PRELIMINARY ASSESSMENT</p>
         <span className="proto-evaluation-status">Submitted · Version {report.version_number}</span>
       </div>
-      <h2 id="proto-evaluation-report-heading">Your starting point is recorded.</h2>
-      <p>This report records the evidence saved with your submitted Preliminary Assessment. It is an initial record of your work, not a scored evaluation.</p>
+      <h2 id="proto-evaluation-report-heading">{approvedScore ? "Your Evaluation Report" : "Your starting point is recorded."}</h2>
+      <p>{approvedScore
+        ? "This report contains your teacher-reviewed Preliminary Assessment results and the evidence behind them."
+        : "This report records the evidence saved with your submitted Preliminary Assessment. It is an initial record of your work, not a scored evaluation."}</p>
       <small>Created {createdLabel}</small>
       <div className="proto-evaluation-versions" role="group" aria-label="Evaluation Report versions">
         <span aria-live="polite">Viewing version {report.version_number}{selectedVersion === null ? " · Latest" : " · Earlier version"}</span>
@@ -297,10 +303,14 @@ export default function EvaluationReportPanel({
       </article>
       <article className="proto-panel proto-evaluation-card">
         <p className="proto-eyebrow">ASSESSMENT RESULTS</p>
-        <h3>Not scored</h3>
-        <p>This report does not contain a score, grade or percentile comparison. The report scoring state is {scope?.report_scoring_state === "unscored_baseline" ? "unscored baseline" : "not confirmed"}.</p>
+        <h3>{approvedScore ? "Human-reviewed results available" : "Not scored"}</h3>
+        <p>{approvedScore
+          ? `${approvedScore.points_awarded} of ${approvedScore.points_possible} rubric points. These are assessment results, not an official board grade or percentile.`
+          : `This report does not contain a score, grade or percentile comparison. The report scoring state is ${scope?.report_scoring_state === "unscored_baseline" ? "unscored baseline" : "not confirmed"}.`}</p>
       </article>
     </div>
+
+    {approvedScore && <PaScoredResults score={approvedScore} />}
 
     {approvedFeedback && <section className="proto-panel proto-evaluation-note" aria-labelledby="proto-evaluation-approved-feedback">
       <h3 id="proto-evaluation-approved-feedback">Teacher-reviewed feedback</h3>
@@ -344,7 +354,9 @@ export default function EvaluationReportPanel({
     <div className="proto-panel proto-evaluation-note">
       <h3>What this report contains</h3>
       <p>This immutable report version summarises submitted evidence and curriculum link checks. {approvedFeedback
-        ? "Its teacher feedback was human-approved before publication. No score, official grade, percentile comparison or recommended learning plan is provided."
+        ? (approvedScore
+          ? "Its scoring and teacher feedback were human-approved before publication. No official grade, percentile comparison or automatically generated learning plan is included."
+          : "Its teacher feedback was human-approved before publication. No score, official grade, percentile comparison or recommended learning plan is provided.")
         : "It is not a final teacher-approved Evaluation Report and does not contain a score, grade, percentile comparison, personalised feedback or recommended learning plan."}</p>
     </div>
   </section>;
