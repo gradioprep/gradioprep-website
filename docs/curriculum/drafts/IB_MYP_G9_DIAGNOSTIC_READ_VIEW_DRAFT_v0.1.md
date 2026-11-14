@@ -103,6 +103,10 @@ B. Professional technicians; provide a detailed training manual for replacing pa
 C. Children attending a music performance; advertise a concert.
 D. Collectors; prove that every household object can be repaired.
 
+Explain how one wording or layout choice in the poster helps this audience understand its purpose. Refer to the poster rather than guessing about a general audience.
+
+**Response guidance for the explanation:** 20–30 words. **Ideal target:** 25 words.
+
 ### RV05 — Visual and verbal interpretation
 
 Which statement accurately interprets the outcome graphic in Stimulus B?
@@ -111,6 +115,10 @@ A. 31 objects were repaired that day; 17 were not completed that day because 9 w
 B. 31 objects were waiting for parts; 17 were repaired that day.
 C. All 48 objects were repaired that day.
 D. Only 8 objects were checked.
+
+Explain how the poster's visual grouping and a specific outcome figure work together to communicate the event's results.
+
+**Response guidance for the explanation:** 20–30 words. **Ideal target:** 25 words.
 
 ### RV06 — Analysing a represented claim
 
