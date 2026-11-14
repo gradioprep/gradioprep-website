@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Navigate } from "../App";
 import PaScoredResults, { approvedPaScoring, type PublishedPaSnapshot } from "./PaScoredResults";
+import { paResponseSourceSummary } from "./PaReportEvidenceSummary";
 
 interface ObservationSnapshot {
   observation_code?: string;
@@ -23,6 +24,7 @@ interface MappingSnapshotEntry {
 interface LearnerEvidenceEntry {
   observation_code?: string;
   response_sha256?: string | null;
+  source_response_observation_code?: string;
 }
 
 interface EvaluationReport extends PublishedPaSnapshot {
@@ -194,9 +196,8 @@ export default function EvaluationReportPanel({
   const editionLabel = [scope?.academic_session, scope?.syllabus_edition]
     .filter((part): part is string => typeof part === "string" && part.trim().length > 0).join(" · ");
   const totalItems = observations.length;
-  const responseRecords = (report.learner_evidence_snapshot ?? []).filter(
-    entry => typeof entry.response_sha256 === "string" && /^[a-f0-9]{64}$/i.test(entry.response_sha256),
-  ).length;
+  const responseSources = paResponseSourceSummary(observations, report.learner_evidence_snapshot ?? []);
+  const responseRecords = responseSources.recorded;
   const verifiedLinks = (report.curriculum_mapping_snapshot ?? []).filter(
     entry => entry.mapping_status === "direct" &&
       Array.isArray(entry.direct_outcomes) && entry.direct_outcomes.length > 0,
@@ -263,8 +264,8 @@ export default function EvaluationReportPanel({
       </div>
       <div>
         <p className="proto-eyebrow">RESPONSES RECORDED</p>
-        <strong>{responseRecords} <small>/ {totalItems || "—"}</small></strong>
-        <span>Saved response records referenced</span>
+        <strong>{responseRecords} <small>/ {responseSources.expected || "—"}</small></strong>
+        <span>Distinct learner response sources</span>
       </div>
       <div>
         <p className="proto-eyebrow">CURRICULUM LINKS</p>
@@ -289,7 +290,7 @@ export default function EvaluationReportPanel({
         <p className="proto-eyebrow">RESPONSE EVIDENCE</p>
         <h3>{evidence.heading}</h3>
         <p>{evidence.description}</p>
-        <p className="proto-evaluation-detail">{responseRecords} of {totalItems || "the recorded"} response records are referenced in this report. Your answer text is not copied into this summary.</p>
+        <p className="proto-evaluation-detail">{responseRecords} of {responseSources.expected || "the planned"} independent response sources are referenced in this report. Some tasks contribute several scoring observations from one response. Your answer text is not copied into this summary.</p>
       </article>
       <article className="proto-panel proto-evaluation-card">
         <p className="proto-eyebrow">PERSONALISED FEEDBACK</p>
