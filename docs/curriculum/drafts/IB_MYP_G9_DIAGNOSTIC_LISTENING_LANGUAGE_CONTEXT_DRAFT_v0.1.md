@@ -114,6 +114,10 @@ B. It changes the review so that it happens before the trial.
 C. It suggests that the group will review only the physical space, not feedback.
 D. It removes the group as the people responsible for the review.
 
+Explain why moving the time phrase changes what the reader notices first without changing when the review happens. Cite both sentence versions in your reasoning.
+
+**Response guidance for the explanation:** 15–25 words. **Ideal target:** 20 words.
+
 ### LC03 — Grammar and usage
 
 **Excerpt ID:** `MYP4-LC-EX-003`
