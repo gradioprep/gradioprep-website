@@ -333,7 +333,12 @@ INSERT INTO public.diagnostic_observations (
 )
 SELECT
   'ed222222-2222-4222-8222-222222222222'::uuid, observation_code, group_code, sitting_number,
-  sequence_number, response_kind, false
+  sequence_number,
+  -- The Founder-adopted *draft* RV04/RV05/LC01/LC02 wording now needs both
+  -- a selected answer and a contextual explanation. Keep existing published
+  -- v1 observation schemas unchanged; v2 is unreleased and not capturable.
+  CASE WHEN observation_code IN ('RV04','RV05','LC01','LC02')
+       THEN 'choice_and_text' ELSE response_kind END, false
 FROM public.diagnostic_observations
 WHERE diagnostic_version_id = 'ed111111-1111-4111-8111-111111111111'
   AND group_code IN ('RV', 'LC')
