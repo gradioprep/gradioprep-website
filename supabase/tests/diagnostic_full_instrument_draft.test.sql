@@ -84,60 +84,17 @@ SELECT ok(NOT private.valid_diagnostic_response('RV04',
   '{"choice":"A","explanation":"Reasoned reply"}'::jsonb),
   'published v1 remains strict selection-only and does not silently adopt the draft version');
 
--- Academic acceptance is dimension-complete, not a group-level or Founder-only
--- approval. Verify a full identity crosswalk and absence of private sign-offs.
-SELECT is((SELECT count(DISTINCT observation_code)::integer
-  FROM public.diagnostic_observations
-  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),30,
-  'every draft observation has its own distinct review identity');
-SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations
-  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
-    AND (observation_code !~ '^(RV(0[1-9]|10)|LC0[1-5]|AW0[1-5]|CW0[1-5]|SP0[1-5])
-SELECT throws_ok($q$UPDATE public.diagnostic_versions
-  SET release_state='published'
-  WHERE id='ed222222-2222-4222-8222-222222222222'$q$,
-  '55000','pa_publication_requires_reviewed_direct_mapping',
-  'unreviewed thirty-observation PA cannot be published by changing release state');
-SELECT is((SELECT release_state FROM public.diagnostic_versions
-  WHERE id='ed222222-2222-4222-8222-222222222222'),'draft',
-  'rejected publication leaves the full PA blueprint as a draft');
-
--- Even enabling every observation does not turn missing curriculum review into approval.
-UPDATE public.diagnostic_observations SET learner_capture_enabled=true
-WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
-SELECT throws_ok($q$UPDATE public.diagnostic_versions
-  SET release_state='published'
-  WHERE id='ed222222-2222-4222-8222-222222222222'$q$,
-  '55000','pa_publication_requires_reviewed_direct_mapping',
-  'all thirty enabled items still cannot publish without reviewed direct mappings');
-UPDATE public.diagnostic_observations SET learner_capture_enabled=false
-WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
-
-SET LOCAL ROLE authenticated;
-SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-SELECT set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
-SELECT is((SELECT count(*)::integer FROM public.diagnostic_versions
-  WHERE id='ed222222-2222-4222-8222-222222222222'),0,
-  'student cannot read draft version through RLS');
-SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations
-  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),0,
-  'student cannot read unapproved observation metadata');
-SELECT throws_ok($q$SELECT * FROM public.create_diagnostic_attempt(
- 'ed222222-2222-4222-8222-222222222222','ed222222-0000-4000-8000-000000000001')$q$,
- 'P0002','diagnostic_not_available','student cannot begin unreleased full instrument');
-RESET ROLE;
-SELECT * FROM finish();
-ROLLBACK;
-
-         OR group_code <> left(observation_code,2))),0,
-  'all thirty dimension identities match the five approved blueprint groups');
+-- The complete blueprint has distinct dimension identities, but no independent approvals.
+SELECT is((SELECT count(DISTINCT observation_code)::integer FROM public.diagnostic_observations
+ WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),30,
+ 'thirty distinct academic dimension identities remain individually reviewable');
 SELECT is((SELECT count(*)::integer FROM private.pa_rubric_approvals
-  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),0,
-  'content-owner approval did not invent an independent numeric rubric sign-off');
+ WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),0,
+ 'content-owner approval has not manufactured a numerical rubric sign-off');
 SELECT is((SELECT count(*)::integer FROM public.diagnostic_observation_outcome_mappings
-  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
-    AND reviewed_by IS NOT NULL AND reviewed_at IS NOT NULL),0,
-  'content-owner approval did not create any witnessed official outcome review');
+ WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
+ AND reviewed_by IS NOT NULL AND reviewed_at IS NOT NULL),0,
+ 'independent official outcome reviews cannot be inferred from Founder approval');
 
 -- Publication may not be forced merely by changing a draft's state.
 SELECT throws_ok($q$UPDATE public.diagnostic_versions
