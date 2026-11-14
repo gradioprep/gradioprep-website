@@ -89,12 +89,14 @@ The questions below use original microcontexts. Select or edit language in a way
 
 During the planning meeting, the proposal was described as **modest**: it involved one narrow shelf, not a new room.
 
-In this context, what does **modest** most nearly mean?
+In this context, what does **modest** most nearly mean? Select one answer and explain which words in the meeting description support your interpretation.
 
 A. Limited in scale or ambition.
 B. Expensive to maintain.
 C. Uncertain to succeed.
 D. Disrespectful to the people involved.
+
+**Response guidance for the contextual explanation:** 15–25 words. **Ideal target:** 20 words.
 
 ### LC02 — Sentence structure and emphasis
 
