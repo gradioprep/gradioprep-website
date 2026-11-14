@@ -60,6 +60,30 @@ SELECT is((SELECT count(*)::integer FROM public.diagnostic_observation_outcome_m
     AND mapping_status='direct'),0,
   'content-owner adoption creates no fictional directly reviewed Year 4 mappings');
 
+-- Validate the new shape independently of access: v2 still cannot start.
+SELECT ok(private.valid_pa_choice_and_explanation(
+  '{"choice":"A","explanation":"The poster groups repaired and unfinished items clearly."}'::jsonb),
+  'v2 draft validator accepts a selected option and meaningful explanation');
+SELECT ok(NOT private.valid_pa_choice_and_explanation('{"choice":"A"}'::jsonb),
+  'selection alone cannot satisfy the revised v2 evidence construct');
+SELECT ok(NOT private.valid_pa_choice_and_explanation(
+  '{"choice":"A","explanation":"  "}'::jsonb),
+  'blank reasoning is rejected');
+SELECT ok(NOT private.valid_pa_choice_and_explanation(
+  '{"choice":"X","explanation":"The sentence emphasises the time."}'::jsonb),
+  'unknown choice is rejected');
+SELECT ok(NOT private.valid_pa_choice_and_explanation(
+  '{"choice":"A","explanation":"Reasoned reply","key":"extra"}'::jsonb),
+  'extra response fields are rejected');
+SELECT ok(NOT private.valid_pa_choice_and_explanation(
+  '{"choice":"A","explanation":123}'::jsonb),
+  'non-text explanation is rejected');
+SELECT ok(private.valid_diagnostic_response('RV04','{"choice":"A"}'::jsonb),
+  'existing published v1 answer contract remains valid');
+SELECT ok(NOT private.valid_diagnostic_response('RV04',
+  '{"choice":"A","explanation":"Reasoned reply"}'::jsonb),
+  'published v1 remains strict selection-only and does not silently adopt the draft version');
+
 -- Publication may not be forced merely by changing a draft's state.
 SELECT throws_ok($q$UPDATE public.diagnostic_versions
   SET release_state='published'
