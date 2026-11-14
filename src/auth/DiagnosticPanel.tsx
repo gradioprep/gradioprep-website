@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PaAnalyticalWritingTask, { isPaAnalyticalWritingResponse } from "./PaAnalyticalWritingTask";
 import PaCreativeWritingTask, { emptyCreativeWritingResponse, isPaCreativeWritingResponse, type PaCreativeWritingResponse } from "./PaCreativeWritingTask";
 import PaSpeakingOutlineTask, { emptySpeakingOutline, isPaSpeakingOutline, type PaSpeakingOutline } from "./PaSpeakingOutlineTask";
+import PaContextualExplanationField, { paChoiceResponse } from "./PaContextualChoiceTask";
 
 type ResponseValue = {
   a?: string;
@@ -134,6 +135,7 @@ export default function DiagnosticPanel({
   const [attemptId, setAttemptId] = useState("");
   const [attemptStatus, setAttemptStatus] = useState<"not_started" | "in_progress" | "submitted">("not_started");
   const [responses, setResponses] = useState<DiagnosticResponseMap>({});
+  const [instrument, setInstrument] = useState({ code: "", version: 0 });
   const [availableCodes, setAvailableCodes] = useState<string[]>([]);
   const [availableSittings, setAvailableSittings] = useState<Record<string, number>>({});
   const [sittingSessions, setSittingSessions] = useState<Array<{
@@ -178,9 +180,9 @@ export default function DiagnosticPanel({
       if (nonEmpty(current(code).text)) output.push({ code, response: { text: current(code).text } });
     }
     for (const code of ["RV04", "RV05", "LC01", "LC02", "LC03", "LC04"]) {
-      if (current(code).choice && ["A", "B", "C", "D"].includes(current(code).choice!)) {
-        output.push({ code, response: { choice: current(code).choice } });
-      }
+      const response = paChoiceResponse(instrument.code, instrument.version, code,
+        current(code).choice, current(code).explanation);
+      if (response) output.push({ code, response });
     }
     const rv08 = current("RV08");
     if (Array.isArray(rv08.order) && rv08.order.length === 5 &&
@@ -296,6 +298,7 @@ export default function DiagnosticPanel({
       const result = await response.json() as StartedDiagnostic & { error?: string };
       if (!response.ok || !result.attempt?.id) throw new Error(result.error ?? "The Preliminary Assessment could not be opened.");
       setAttemptId(result.attempt.id);
+      setInstrument({ code: result.diagnostic?.diagnostic_code ?? "", version: result.diagnostic?.version ?? 0 });
       setAttemptStatus(result.attempt.status === "submitted" ? "submitted" : "in_progress");
       const restored: DiagnosticResponseMap = {};
       for (const [code, value] of Object.entries(result.responses ?? {})) {
@@ -578,6 +581,14 @@ export default function DiagnosticPanel({
             "Collectors; prove that every household object can be repaired.",
           ])}
         />
+        <PaContextualExplanationField
+          instrumentCode={instrument.code}
+          instrumentVersion={instrument.version}
+          code="RV04"
+          value={current("RV04").explanation ?? ""}
+          onChange={value => update("RV04", "explanation", value)}
+          disabled={readOnly}
+        />
       </div>
 
       <div className="proto-diagnostic-question">
@@ -595,11 +606,21 @@ export default function DiagnosticPanel({
             "Only 8 objects were checked.",
           ])}
         />
+        <PaContextualExplanationField
+          instrumentCode={instrument.code}
+          instrumentVersion={instrument.version}
+          code="RV05"
+          value={current("RV05").explanation ?? ""}
+          onChange={value => update("RV05", "explanation", value)}
+          disabled={readOnly}
+        />
       </div>
 
       <div className="proto-diagnostic-question">
-        <h3>RV06 · Critical perspective and representation</h3>
-        <p>A volunteer says: “The team fixed almost every object on the day.” Is that a fair description of the poster’s results? Use at least one figure from the graphic and explain one limitation in the statement.</p>
+        <h3>RV06 · Analysing a represented claim</h3>
+        {instrument.code === "ib-myp-g9-cycle1" && instrument.version >= 2
+          ? <p>The poster says “Small repairs. Shared skills.” Analyse how its wording and outcome figures together present the event's achievements and limits. Support your interpretation with a figure and explain how a wording choice shapes the reader's understanding.</p>
+          : <p>A volunteer says: “The team fixed almost every object on the day.” Is that a fair description of the poster’s results? Use at least one figure from the graphic and explain one limitation in the statement.</p>}
         <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV06").text ?? ""} onChange={value => update("RV06", "text", value)} disabled={readOnly}  />
       </div>
 
@@ -679,6 +700,14 @@ export default function DiagnosticPanel({
             "Disrespectful to the people involved.",
           ])}
         />
+        <PaContextualExplanationField
+          instrumentCode={instrument.code}
+          instrumentVersion={instrument.version}
+          code="LC01"
+          value={current("LC01").explanation ?? ""}
+          onChange={value => update("LC01", "explanation", value)}
+          disabled={readOnly}
+        />
       </div>
 
       <div className="proto-diagnostic-question">
@@ -700,6 +729,14 @@ export default function DiagnosticPanel({
             "It suggests that the group will review only the physical space, not feedback.",
             "It removes the group as the people responsible for the review.",
           ])}
+        />
+        <PaContextualExplanationField
+          instrumentCode={instrument.code}
+          instrumentVersion={instrument.version}
+          code="LC02"
+          value={current("LC02").explanation ?? ""}
+          onChange={value => update("LC02", "explanation", value)}
+          disabled={readOnly}
         />
       </div>
 
