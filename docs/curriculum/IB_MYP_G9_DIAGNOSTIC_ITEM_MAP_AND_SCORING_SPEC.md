@@ -40,7 +40,7 @@ Use two contrasting stimuli: (a) an age-appropriate literary text and (b) a non-
 | RV03 | Explain the effect of a deliberate creator choice (for example diction, imagery, syntax, voice, tone or structure) in its specific context. | A4, A5 | A2 | Short constructed response; accept defensible interpretations supported by the stimulus |
 | RV04 | Explain how the non-literary text's context, audience and purpose shape its content or presentation. | A3 | A4 | Short constructed response or structured selection plus brief justification |
 | RV05 | Interpret the visual/multimodal layer: identify relevant visual evidence and explain how a visual choice contributes to meaning or works with the verbal layer. | A1, A2, A4 | A5 | Selected observation plus brief explanation; score visual and verbal evidence separately where possible |
-| RV06 | Evaluate a representation, claim or source for reliability, perspective, possible bias or omission; distinguish what is shown from what is assumed. | A7 | A2, A5 | Short constructed response with evidence and qualification |
+| RV06 | Analyse how a text's wording and presented evidence shape a perspective or interpretation, including its limits; do not assess external-source credibility or generic media reliability. | A7 | A2, A5 | Short constructed response with evidence and qualification |
 | RV07a | Compare the perspectives or central ideas in two texts; explain one meaningful similarity or difference using relevant evidence. | A6, A5 | A2 | Short comparative response; reward explained comparison, not a list of differences |
 | RV07b | Compare how the two texts use form, structure or creator choices to shape a related idea or effect. | A6, A4 | A5 | Short comparative response; distinguish comparison of technique/effect from feature-spotting |
 | RV08 | Track sequence, progression or structural development and explain how the order/arrangement affects meaning. | A1, A4 | B2 when the learner's explanation is organised | Selected ordering or short constructed response, chosen to suit the stimulus |
@@ -54,7 +54,7 @@ Use brief, meaningful sentences or micro-contexts drawn from original diagnostic
 
 | ID | Intended evidence / response | Direct subskills | Supporting evidence | Draft scoring |
 |---|---|---|---|---|
-| LC01 | Infer or select the most precise meaning of a word/phrase from its context and explain the contextual clue where appropriate. | D1 | A1 | Keyed response plus brief rationale where needed |
+| LC01 | Select a contextual meaning and explain which specific words in the microcontext support that interpretation; a selected answer alone is insufficient evidence for A.i. | D1 | A1 | Keyed response plus brief rationale where needed |
 | LC02 | Interpret how sentence structure, syntax or emphasis changes meaning, focus or reader effect. | D2 | A4 | Keyed comparison or short explanation |
 | LC03 | Identify or correct a grammar/usage issue while preserving the intended meaning. | D3 | D2 | Keyed edit; record acceptable variants |
 | LC04 | Use punctuation and sentence boundaries to make relationships and meaning clear. | D3 | D2 | Keyed edit or selection; do not score a stylistic preference as an error |
@@ -80,11 +80,11 @@ Use one original prompt with a clearly stated audience and purpose and one contr
 
 | ID | Scoring dimension | Direct subskills | Evidence expected |
 |---|---|---|---|
-| CW01 | Idea generation and development | C1 | Relevant ideas are selected and developed beyond a bare list or predictable opening |
-| CW02 | Genre and form control | C2 | The text uses recognisable and purposeful conventions of the specified form |
+| CW01 | Development of ideas/perspectives in the produced text | C1 | The final scene visibly develops a purposeful idea or perspective; do not infer an unseen idea-generation process |
+| CW02 | Purposeful structure and stylistic form choices | B1, C2 | The final scene visibly organises its narrative for its intended context and uses deliberate stylistic choices; genre labelling alone is insufficient |
 | CW03 | Audience impact | C3 | Language and stylistic choices are deliberately suited to the stated reader and intended effect |
-| CW04 | Perspective and originality | C4 | A considered perspective or creative direction is evident; originality is judged by purposeful development, not novelty for its own sake |
-| CW05 | Craft and revision | C5 | A meaningful edit improves clarity, precision, coherence or effect; retain a brief before/after trace or revision note |
+| CW04 | Purposeful perspective and imaginative development | C1 | A perspective is imaginatively developed and evidenced in the final text; novelty is not separately scored |
+| CW05 | Observable revision trace and final organisation | B2, C1 (conditional) | Retain the initial wording, revised wording and explanation; assess organisation in the final text under B.ii and claim C.i process evidence only when the trace actually shows development |
 
 The CW05 trace is essential: without an observable draft-to-revision change or documented revision decision, the task cannot support a confident judgement about C5. Do not infer revision skill from the polished final text alone.
 
@@ -98,7 +98,7 @@ The task should assess purposeful oral communication without requiring recording
 | SP02 | Sequence, coherence and development | B2, B3, B4 | Spoken ideas progress logically, connect clearly and include enough relevant explanation/example |
 | SP03 | Audience and intended effect | C3 | Delivery and choices are suited to the stated audience and purpose |
 | SP04 | Considered viewpoint | C4 | The learner communicates a relevant perspective or interpretation rather than reciting unrelated points |
-| SP05 | Oral and non-verbal communication | D5, D6 | Intelligibility, pace, emphasis, interaction, and purposeful use of posture, gesture or expression; do not reward performative confidence unrelated to communication |
+| SP05 | Oral register, pronunciation and non-verbal communication | D2, D5, D6 | Record separate observed evidence of spoken register/style, intelligible pronunciation and meaningful non-verbal choices; do not score interaction as an independent strand or reward accent conformity, extroversion or normative eye contact |
 
 **Proposed 10-minute sequence:** 2 minutes to prepare the card, up to 3 minutes to present, up to 2 minutes for a standardised follow-up, and 3 minutes for transition/rater notes. The assessor records observations locally in the teacher/editor scoring sheet; no voice recording is assumed or retained. Do not score accent conformity, extroversion, eye contact as a cultural norm or disability-related speech characteristics as a proxy for literary/language competence. Assess intelligibility and communicative effectiveness in context.
 
@@ -301,3 +301,8 @@ The Founder approved the original v0.1 map on 2 November 2026. On 11 November 20
 The next project prerequisite is the shared PDF-response, teacher-grading and timed-analytics feature recorded in docs/FLAGSHIP_PDF_RESPONSE_GRADING_AND_TIMED_ANALYTICS_SPEC.md. The phased plan and 24-hour grading target are approved; actual implementation has not started. Actual diagnostic item authoring is paused until the shared task metadata, response modes and timer configuration can be authored against the approved feature design.
 
 After that prerequisite is implemented and pilot-validated, the next content step will be controlled authoring of the actual stimuli, prompts, keyed answers, distractor rationales, model responses and separate teacher/editor scoring pack. Pilot calibration follows that authoring review. Final scoring thresholds, automated scoring, report UI, remedial lesson writing, diagnostic implementation, integration, merge and release remain separate gates.
+
+
+### Step 8 provisional authoring alignment — 14 November 2026
+
+The §3 task-level descriptions and current CW/SP authoring drafts have been brought into line with §5.1's provisional strand treatments for RV06, LC01, CW01, CW02, CW04, CW05 and SP05. These are **candidate** wording/crosswalk corrections, not authorised Year 4 acceptance, official criterion outcomes or scored rubric anchors. The historical D1/D2/C1 etc. taxonomy is an internal label and must not be misreported as the exact IB strand. Independently witnessed Year 4 source/progression, the full 30-observation teacher-pack validation (including item-specific keys, each distractor and plausible alternatives), observable dimension-level high/mid/low rubric exemplars, double-scoring/calibration, accessibility and timing must remain blocked until completed by authorised human reviewers. Private marking keys and exemplars stay outside this public repository. Do not alter learner-capturable published items or scoring schemas based on these drafts alone.
