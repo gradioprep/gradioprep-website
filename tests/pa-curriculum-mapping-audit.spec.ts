@@ -155,7 +155,7 @@ test("Founder approval of the restricted Step 8 review package remains separate 
   expect(receipt).toContain("Founder/content-owner approval: recorded 14 November 2026");
   expect(receipt).toContain("PENDING_Y4_ACADEMIC_REVIEW");
   expect(receipt).toContain("No independent assessor calibration has been recorded");
-  expect(receipt).toContain("The existing released v1 response schema is unchanged");
+  expect(receipt).toContain("The existing released v1 synthetic 15-observation response schema is unchanged");
   expect(migrationTest).toContain("all four revised draft observations declare choice-plus-explanation evidence");
   expect(migrationTest).toContain("content-owner adoption does not enable revised questions for students");
   expect(mappingStandard).toContain("Only `DIRECT` items may form the PA/SA evidence basis");
