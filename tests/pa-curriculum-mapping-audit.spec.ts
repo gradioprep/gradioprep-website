@@ -65,3 +65,26 @@ test("the complete authoring blueprint remains unreleased with no learner captur
   expect(migrationTest).toContain("draft blueprint cannot invent reviewed official-outcome mappings");
   expect(migrationTest).toContain("student cannot begin unreleased full instrument");
 });
+
+
+test("unreleased RV06 and LC01 drafts now elicit direct, observable curriculum evidence without implying approval", () => {
+  const readView = readFileSync(
+    "docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_READ_VIEW_DRAFT_v0.1.md", "utf8");
+  const combinedHistorical = readFileSync(
+    "docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_LISTENING_LANGUAGE_CONTEXT_DRAFT_v0.1.md", "utf8");
+  const rv06 = readView.split("### RV06 —")[1]?.split("\\n### RV07a")[0] ?? "";
+  const lc01 = combinedHistorical.split("### LC01 —")[1]?.split("\\n### LC02")[0] ?? "";
+
+  expect(rv06).toContain("Analyse how the poster's wording and outcome figures");
+  expect(rv06).toContain("particular wording choice");
+  expect(rv06).toContain("reader's understanding");
+  expect(rv06).not.toContain("Is that a fair description");
+  expect(lc01).toContain("explain which words in the meeting description");
+  expect(lc01).toContain("Ideal target:** 20 words");
+  expect(lc01).not.toContain("In this context, what does **modest** most nearly mean?\\n\\nA.");
+  // This confirms draft preparation only, never bypasses human Year 4 adoption.
+  expect(readView).toContain("Authoring draft for human academic review");
+  expect(combinedHistorical).toContain("not a current learner-app specification");
+  expect(section).toContain("All 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`");
+  expect(seed).toContain("sequence_number, response_kind, false");
+});
