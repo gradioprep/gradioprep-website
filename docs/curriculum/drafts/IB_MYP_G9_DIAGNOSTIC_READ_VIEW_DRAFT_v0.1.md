@@ -112,9 +112,9 @@ B. 31 objects were waiting for parts; 17 were repaired that day.
 C. All 48 objects were repaired that day.
 D. Only 8 objects were checked.
 
-### RV06 — Critical perspective and representation
+### RV06 — Analysing a represented claim
 
-A volunteer says: **“The team fixed almost every object on the day.”** Is that a fair description of the poster’s results? Use at least one figure from the graphic and explain one limitation in the statement.
+The poster says **“Small repairs. Shared skills.”** Analyse how the poster's wording and outcome figures together present the event's achievements and its limits. Support your interpretation with at least one figure and explain how a particular wording choice shapes the reader's understanding.
 
 **Response guidance:** 35–45 words. **Ideal target:** 40 words.
 
