@@ -88,3 +88,34 @@ test("unreleased RV06 and LC01 drafts now elicit direct, observable curriculum e
   expect(section).toContain("All 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`");
   expect(seed).toContain("sequence_number, response_kind, false");
 });
+
+
+test("Step 8 provisional map and draft descriptions retain direct-evidence requirements and unreleased gates", () => {
+  const map = readFileSync("docs/curriculum/IB_MYP_G9_DIAGNOSTIC_ITEM_MAP_AND_SCORING_SPEC.md", "utf8");
+  const creative = readFileSync("docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_CREATIVE_PURPOSEFUL_PRODUCTION_DRAFT_v0.1.md", "utf8");
+  const speaking = readFileSync("docs/curriculum/drafts/IB_MYP_G9_DIAGNOSTIC_SPEAKING_PRESENTING_DRAFT_v0.1.md", "utf8");
+
+  const taskRows = map.split("\n").filter(line => /^\\| (RV06|LC01|CW01|CW02|CW04|CW05|SP05) \\|/.test(line));
+  expect(taskRows).toHaveLength(7);
+  const taskByCode = new Map(taskRows.map(line => [line.split("|")[1].trim(), line]));
+  expect(taskByCode.get("RV06")).toContain("do not assess external-source credibility");
+  expect(taskByCode.get("LC01")).toContain("a selected answer alone is insufficient");
+  expect(taskByCode.get("CW01")).toContain("produced text");
+  expect(taskByCode.get("CW02")).toContain("B1, C2");
+  expect(taskByCode.get("CW04")).toContain("not separately scored");
+  expect(taskByCode.get("CW05")).toContain("conditional");
+  expect(taskByCode.get("SP05")).toContain("D2, D5, D6");
+
+  for (const code of ["CW01", "CW02", "CW04", "CW05"]) {
+    const line = creative.split("\n").find(row => row.startsWith("| " + code + " |"));
+    expect(line, code + " should have a draft evidence row").toBeTruthy();
+    expect(line).not.toMatch(/novelty for its own sake|genre labelling alone is sufficient/i);
+  }
+  expect(creative).toContain("candidate B.i, C.ii");
+  expect(creative).toContain("candidate B.ii, C.i");
+  expect(speaking).toContain("candidate D.ii, D.iv, D.v");
+  expect(speaking).toContain("Do not score interaction as its own strand");
+  expect(map).toContain("not authorised Year 4 acceptance");
+  expect(map).toContain("Private marking keys and exemplars stay outside this public repository");
+  expect(section).toContain("All 30 observations remain `PENDING_Y4_ACADEMIC_REVIEW`");
+});
