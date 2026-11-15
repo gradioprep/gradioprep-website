@@ -11,7 +11,7 @@ test("private Owner scoring UI reuses the 30-dimension human marking and report 
   expect(workspace).toContain('report.curriculum_mapping_status === "complete_direct"');
   expect(workspace).toContain('report.evidence_sufficiency_status === "sufficient"');
   expect(workspace).toContain("new Set(codes).size === 30");
-  expect(workspace).toContain('["LC","AW","CW","SP"]');
+  expect(workspace).toContain("RV: 10, LC: 5, AW: 5, CW: 5, SP: 5");
   expect(workspace).toContain("/api/v1/admin/pa-scoring/drafts");
   expect(workspace).toContain("/api/v1/admin/pa-scoring/review");
   expect(workspace).toContain("/api/v1/admin/pa-scoring/joint");
