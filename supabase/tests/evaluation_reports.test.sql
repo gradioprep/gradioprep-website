@@ -842,6 +842,17 @@ SELECT public.review_pa_evaluation_feedback_draft(
  'Synthetic only: verified feedback text for the exact same private scoring snapshot.');
 SELECT ok((SELECT feedback_review_id FROM pa_joint_approval_test_state) IS NOT NULL,
  'separate human feedback approval is recorded for the synthetic exact-version draft');
+-- A full thirty-observation instrument must publish human-scored and
+-- human-feedback snapshots together; feedback-only is a legacy partial route.
+SELECT throws_ok($q$SELECT * FROM public.publish_pa_evaluation_feedback(
+ (SELECT feedback_review_id FROM pa_joint_approval_test_state),
+ '1d000000-0000-4000-8000-000000000695')$q$,
+ '55000','pa_full_instrument_requires_scored_report',
+ 'complete PA cannot bypass joint scored publication through feedback-only RPC');
+SELECT throws_ok($q$SELECT * FROM public.publish_pa_evaluation_feedback_pre_scored_gate(
+ (SELECT feedback_review_id FROM pa_joint_approval_test_state),
+ '1d000000-0000-4000-8000-000000000696')$q$,
+ '42501',NULL,'authenticated Owner cannot invoke the bypassed legacy function');
 SELECT throws_ok($q$SELECT public.approve_private_pa_report_composition(
  (SELECT id FROM pa_score_test_result),(SELECT feedback_review_id FROM pa_joint_approval_test_state),
  'short')$q$,
