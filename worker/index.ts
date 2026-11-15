@@ -1855,6 +1855,112 @@ async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts
   return jsonResponse(action === "drafts" ? { draft_id: data } : { review_id: data }, 201);
 }
 
+
+/** Only the qualified Owner with AAL2 can perform private, rubric-bound PA
+ * scoring, joint teacher-feedback acceptance and deliberate publication.
+ * The database independently checks all 30 evidence dimensions and lineage. */
+async function ownerPaScoringWorkflow(
+  request: Request, env: WorkerEnv,
+  action: "draft" | "review" | "joint" | "manifest" | "publish",
+  approvalId?: string,
+): Promise<Response> {
+  let f: Record<string, unknown> = {};
+  if (action !== "manifest") {
+    const parsed = await readBoundedJson(request, 6800);
+    if (!parsed.ok) return parsed.response;
+    if (!parsed.body || typeof parsed.body !== "object" || Array.isArray(parsed.body))
+      return jsonResponse({ error: "invalid_pa_scoring_request" }, 400);
+    f = parsed.body as Record<string, unknown>;
+  } else if (!approvalId || !isUuid(approvalId) || new URL(request.url).search) {
+    return jsonResponse({ error: "invalid_pa_scoring_request" }, 400);
+  }
+  const expected = action === "draft" ? ["report_version_id", "rubric_approval_id", "dimension_marks"]
+    : action === "review" ? ["scoring_draft_id", "decision", "review_note"]
+    : action === "joint" ? ["scoring_review_id", "feedback_review_id", "approval_note"]
+    : action === "publish" ? ["composition_approval_id", "idempotency_key"] : [];
+  if (action !== "manifest" && (Object.keys(f).length !== expected.length ||
+      !expected.every(k => Object.hasOwn(f, k)))) {
+    return jsonResponse({ error: "invalid_pa_scoring_request" }, 400);
+  }
+  if (action === "draft") {
+    const marks = f.dimension_marks;
+    const codes = ["RV01","RV02","RV03","RV04","RV05","RV06","RV07a","RV07b","RV08","RV09",
+      ...["LC","AW","CW","SP"].flatMap(group => Array.from({ length: 5 }, (_, i) => group + "0" + (i + 1)))];
+    if (!isUuid(f.report_version_id) || !isUuid(f.rubric_approval_id) ||
+        !Array.isArray(marks) || marks.length !== 30 ||
+        marks.some(mark => !mark || typeof mark !== "object" || Array.isArray(mark) ||
+          Object.keys(mark).length !== 2 || !codes.includes(mark.code) ||
+          typeof mark.points !== "number" || !Number.isFinite(mark.points) ||
+          mark.points < 0 || mark.points > 100) ||
+        new Set(marks.map(mark => mark.code)).size !== 30) {
+      return jsonResponse({ error: "invalid_pa_scoring_request" }, 400);
+    }
+  } else if (action === "review") {
+    if (!isUuid(f.scoring_draft_id) ||
+      !["approved_private","changes_requested"].includes(String(f.decision)) ||
+      typeof f.review_note !== "string" || f.review_note.trim().length < 12 ||
+      f.review_note.trim().length > 1000) return jsonResponse({ error: "invalid_pa_scoring_request" }, 400);
+  } else if (action === "joint") {
+    if (!isUuid(f.scoring_review_id) || !isUuid(f.feedback_review_id) ||
+      typeof f.approval_note !== "string" || f.approval_note.trim().length < 20 ||
+      f.approval_note.trim().length > 1000) return jsonResponse({ error: "invalid_pa_scoring_request" }, 400);
+  } else if (action === "publish") {
+    if (!isUuid(f.composition_approval_id) || !isUuid(f.idempotency_key))
+      return jsonResponse({ error: "invalid_pa_scoring_request" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const assuranceDenied = requireAal2(auth.context);
+  if (assuranceDenied) return assuranceDenied;
+  const rpc = action === "draft" ? "create_pa_scoring_draft"
+    : action === "review" ? "review_pa_scoring_draft"
+    : action === "joint" ? "approve_private_pa_report_composition"
+    : action === "manifest" ? "get_private_pa_scored_report_review_manifest"
+    : "publish_approved_pa_scored_report";
+  const args = action === "draft"
+    ? { p_report_version_id: f.report_version_id, p_rubric_approval_id: f.rubric_approval_id, p_dimension_marks: f.dimension_marks }
+    : action === "review"
+      ? { p_scoring_draft_id: f.scoring_draft_id, p_decision: f.decision, p_review_note: (f.review_note as string).trim() }
+    : action === "joint"
+      ? { p_scoring_review_id: f.scoring_review_id, p_feedback_review_id: f.feedback_review_id, p_approval_note: (f.approval_note as string).trim() }
+    : action === "manifest" ? { p_composition_approval_id: approvalId }
+    : { p_composition_approval_id: f.composition_approval_id, p_idempotency_key: f.idempotency_key };
+  const { data, error } = await auth.context.supabase.rpc(rpc, args);
+  if (error) {
+    if (error.code === "42501") return jsonResponse({ error: "pa_scoring_forbidden" }, 403);
+    if (error.code === "P0002") return jsonResponse({ error: "pa_scoring_not_found" }, 404);
+    if (error.code === "22023") return jsonResponse({ error: "invalid_pa_scoring_request" }, 400);
+    if (["55000","P0001","23505","23514","23503"].includes(error.code))
+      return jsonResponse({ error: "pa_scoring_not_ready" }, 409);
+    return jsonResponse({ error: "pa_scoring_unavailable" }, 503);
+  }
+  if (action === "manifest") {
+    if (!data || typeof data !== "object" || Array.isArray(data))
+      return jsonResponse({ error: "pa_scoring_unavailable" }, 503);
+    const m = data as Record<string, unknown>;
+    return jsonResponse({ manifest: {
+      report_record_id: m.report_record_id, source_report_version_id: m.source_report_version_id,
+      composition_approval_id: m.composition_approval_id, rubric_sha256: m.rubric_sha256,
+      curriculum_mapping_status: m.curriculum_mapping_status,
+      evidence_sufficiency_status: m.evidence_sufficiency_status,
+      dimension_count: m.dimension_count, dimensions: m.dimensions,
+      private_attainment: m.private_attainment, teacher_feedback: m.teacher_feedback,
+      learner_visible: false, status: "private_review_only",
+    } });
+  }
+  if (action === "publish") {
+    const row = asRows(data)[0];
+    if (!row) return jsonResponse({ error: "pa_scoring_unavailable" }, 503);
+    return jsonResponse({ report_record_id: row.report_record_id,
+      report_version_id: row.report_version_id, version_number: row.version_number,
+      is_replay: row.is_replay }, row.is_replay ? 200 : 201);
+  }
+  return jsonResponse({ [action === "draft" ? "scoring_draft_id"
+    : action === "review" ? "scoring_review_id" : "composition_approval_id"]: data }, 201);
+}
+
 async function publishOwnerPaEvaluationFeedback(request: Request, env: WorkerEnv): Promise<Response> {
   const parsed = await readBoundedJson(request, 256);
   if (!parsed.ok) return parsed.response;
@@ -4465,6 +4571,19 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   if (url.pathname === "/api/v1/admin/pa-feedback/publish" && request.method === "POST") {
     return publishOwnerPaEvaluationFeedback(request, env);
   }
+  // Score approval and publication are separate, explicit Owner+AAL2 actions.
+  if (url.pathname === "/api/v1/admin/pa-scoring/drafts" && request.method === "POST")
+    return ownerPaScoringWorkflow(request, env, "draft");
+  if (url.pathname === "/api/v1/admin/pa-scoring/review" && request.method === "POST")
+    return ownerPaScoringWorkflow(request, env, "review");
+  if (url.pathname === "/api/v1/admin/pa-scoring/joint" && request.method === "POST")
+    return ownerPaScoringWorkflow(request, env, "joint");
+  const privatePaManifest = url.pathname.match(/^\\/api\\/v1\\/admin\\/pa-scoring\\/manifest\\/([0-9a-f-]{36})$/i);
+  if (privatePaManifest && request.method === "GET")
+    return ownerPaScoringWorkflow(request, env, "manifest", privatePaManifest[1]);
+  if (url.pathname === "/api/v1/admin/pa-scoring/publish" && request.method === "POST")
+    return ownerPaScoringWorkflow(request, env, "publish");
+
   const evaluationReportMatch = url.pathname.match(
     /^\/api\/v1\/learner\/evaluation-reports\/([0-9a-f-]{36})$/i,
   );
