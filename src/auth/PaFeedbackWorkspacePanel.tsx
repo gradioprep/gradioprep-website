@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PaScoringWorkspacePanel from "./PaScoringWorkspacePanel";
 import PaReportEvidenceReview, { type PaReportEvidenceSnapshot } from "./PaReportEvidenceReview";
 
 type ReviewerGrant = { access_grant_id: string; teacher_user_id: string; granted_at: string };
@@ -295,6 +296,12 @@ export default function PaFeedbackWorkspacePanel({
               }, "Approved feedback published as a new report version.")}>Publish approved feedback</button>
           </div>
         </>}
+        {owner && <PaScoringWorkspacePanel key={report.report_version_id}
+          accessToken={accessToken} report={report} feedbackReviews={reviews}
+          onPublished={async () => {
+            await refresh();
+            setSelectedDraft(""); setSelectedReview("");
+          }} />}
       </>}
       {error && <p role="alert">{error}</p>}
       {message && <p role="status">{message}</p>}
