@@ -41,7 +41,7 @@ test("all private scoring actions require Owner and AAL2, no direct table access
   expect(handler).not.toContain("answer_key");
 });
 
-test("private Owner scoring requests are not accessible to anonymous callers", async ({ request }) => {
+test("private Owner scoring rejects anonymous and authenticated learner callers", async ({ page, request }) => {
   const uuid = "00000000-0000-0000-0000-000000000123";
   const codes = ["RV01","RV02","RV03","RV04","RV05","RV06","RV07a","RV07b","RV08","RV09",
     ...["LC","AW","CW","SP"].flatMap(group => Array.from({ length: 5 }, (_, i) => group + "0" + (i+1)))];
@@ -68,4 +68,24 @@ test("private Owner scoring requests are not accessible to anonymous callers", a
   }
   const manifest = await request.get("/api/v1/admin/pa-scoring/manifest/" + uuid);
   expect(manifest.status()).toBe(401);
+
+  let authorization = "";
+  page.on("request", outgoing => {
+    if (new URL(outgoing.url()).pathname === "/api/v1/me" && outgoing.method() === "GET") {
+      authorization = outgoing.headers()["authorization"] ?? authorization;
+    }
+  });
+  await page.goto("/account");
+  await page.getByLabel("Email address").fill("student.a@example.invalid");
+  await page.getByLabel("Password").fill(["Local-only","GradiPrep","2026!"].join("-"));
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page.getByRole("heading", { name: "Synthetic Student A", exact: true })).toBeVisible();
+  await expect.poll(() => authorization.length).toBeGreaterThan(20);
+  for (const [path, body] of testCases) {
+    const denied = await request.post(path, { headers: { Authorization: authorization }, data: body });
+    expect(denied.status(), path).toBe(403);
+  }
+  const privateManifest = await request.get("/api/v1/admin/pa-scoring/manifest/" + uuid,
+    { headers: { Authorization: authorization } });
+  expect(privateManifest.status()).toBe(403);
 });
