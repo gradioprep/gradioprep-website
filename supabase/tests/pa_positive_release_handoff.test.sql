@@ -11,15 +11,28 @@ SELECT is((SELECT release_state FROM public.diagnostic_versions
  WHERE id='ed222222-2222-4222-8222-222222222222'),'draft',
  'synthetic full 30-observation instrument starts as a hidden draft');
 
--- A mock verified route is already present in the LOCAL seed, explicitly
--- labelled TEST. Supply one fictional unit and 30 fictional direct outcomes,
--- each with a separate observation identity rather than one generic mapping.
+-- Build an isolated TEST-only route while it is still pending. Real route
+-- records lock unit additions after verification, so exercise proper ordering.
+INSERT INTO public.curriculum_route_versions (
+ id,route_key,version,awarding_body,programme_code,subject_code,course_code,
+ level_code,level_label,academic_session,syllabus_edition,official_source_title,
+ official_source_url,source_checked_at,review_state
+) VALUES (
+ 'fe000000-0000-4000-8000-000000000001','synthetic-ib-myp-year-4',99,
+ 'TEST','SYNTHETIC','ENGLISH','SYNTHETIC-PA',
+ 'SYN-Y4','Synthetic only','synthetic-session','synthetic-edition',
+ 'Fictional positive-path test; not official IB material',
+ 'https://example.invalid/pa-positive-release',clock_timestamp(),'pending_review'
+);
+UPDATE public.diagnostic_versions
+ SET route_version_id='fe000000-0000-4000-8000-000000000001'
+ WHERE id='ed222222-2222-4222-8222-222222222222';
 INSERT INTO public.curriculum_unit_versions(
   id,route_version_id,unit_code,version,sequence_number,title,
   learning_objective_summary,release_state
 ) VALUES (
   'fe000000-0000-4000-8000-000000000101',
-  'ea111111-1111-4111-8111-111111111111',
+  'fe000000-0000-4000-8000-000000000001',
   'SYN-STEP8-UNIT',1,91,'Synthetic-only acceptance unit',
   'Synthetic direct mappings for transaction-rolled-back CI; not an IB unit.','draft'
 );
@@ -35,6 +48,10 @@ SELECT 'fe000000-0000-4000-8000-000000000101',
   '88888888-8888-4888-8888-888888888888',clock_timestamp()
 FROM public.diagnostic_observations o
 WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
+UPDATE public.curriculum_route_versions
+ SET review_state='verified',verified_by='88888888-8888-4888-8888-888888888888',
+     verified_at=clock_timestamp()
+ WHERE id='fe000000-0000-4000-8000-000000000001';
 UPDATE public.curriculum_unit_versions SET release_state='published'
 WHERE id='fe000000-0000-4000-8000-000000000101';
 
@@ -44,7 +61,7 @@ INSERT INTO public.diagnostic_observation_outcome_mappings(
   mapping_status,mapping_rationale,reviewed_by,reviewed_at
 )
 SELECT o.diagnostic_version_id,o.id,
-  'ea111111-1111-4111-8111-111111111111',
+  'fe000000-0000-4000-8000-000000000001',
   'fe000000-0000-4000-8000-000000000101',
   m.id,'direct','Synthetic CI-only direct outcome mapping.',
   '88888888-8888-4888-8888-888888888888',clock_timestamp()
