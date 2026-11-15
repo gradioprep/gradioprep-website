@@ -4578,7 +4578,7 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
     return ownerPaScoringWorkflow(request, env, "review");
   if (url.pathname === "/api/v1/admin/pa-scoring/joint" && request.method === "POST")
     return ownerPaScoringWorkflow(request, env, "joint");
-  const privatePaManifest = url.pathname.match(/^\\/api\\/v1\\/admin\\/pa-scoring\\/manifest\\/([0-9a-f-]{36})$/i);
+  const privatePaManifest = url.pathname.match(/^\/api\/v1\/admin\/pa-scoring\/manifest\/([0-9a-f-]{36})$/i);
   if (privatePaManifest && request.method === "GET")
     return ownerPaScoringWorkflow(request, env, "manifest", privatePaManifest[1]);
   if (url.pathname === "/api/v1/admin/pa-scoring/publish" && request.method === "POST")
