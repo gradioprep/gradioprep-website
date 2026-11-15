@@ -213,7 +213,7 @@ $$;
 ALTER FUNCTION private.guard_pa_release_evidence() OWNER TO postgres;
 REVOKE ALL ON FUNCTION private.guard_pa_release_evidence()
   FROM PUBLIC,anon,authenticated,service_role;
-CREATE TRIGGER pa_academic_evidence_publication_gate
+CREATE TRIGGER zz_pa_academic_evidence_publication_gate
   BEFORE UPDATE OF release_state ON public.diagnostic_versions
   FOR EACH ROW EXECUTE FUNCTION private.guard_pa_release_evidence();
 
