@@ -72,8 +72,17 @@ SELECT ok(EXISTS(SELECT 1 FROM public.diagnostic_versions
    AND version=1), 'previous published v1 remains unchanged');
 SELECT throws_ok($q$UPDATE public.diagnostic_versions SET release_state='published'
  WHERE id='ed222222-2222-4222-8222-222222222222'$q$,
+ '55000','pa_publication_requires_reviewed_direct_mapping',
+ 'direct mapping gate remains first for an unreviewed full v2');
+-- Separate synthetic-only trigger-order assertion. Temporarily bypass the
+-- older mapping gate within this rolled-back pgTAP transaction to prove that
+-- the NEW independent private-evidence publication safeguard is also effective.
+ALTER TABLE public.diagnostic_versions DISABLE TRIGGER pa_version_publication_gate;
+SELECT throws_ok($q$UPDATE public.diagnostic_versions SET release_state='published'
+ WHERE id='ed222222-2222-4222-8222-222222222222'$q$,
  '55000','pa_publication_requires_exact_academic_evidence',
- 'full v2 cannot publish without an authentic private evidence receipt');
+ 'new academic receipt gate independently denies release if mapping gate were bypassed');
+ALTER TABLE public.diagnostic_versions ENABLE TRIGGER pa_version_publication_gate;
 SELECT is((SELECT release_state FROM public.diagnostic_versions
  WHERE id='ed222222-2222-4222-8222-222222222222'),
  'draft','full instrument remains hidden and uncapturable');
