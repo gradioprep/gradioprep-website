@@ -104,7 +104,10 @@ export default function PaFeedbackWorkspacePanel({
     report?.evidence_sufficiency_status === "sufficient";
   const selected = drafts.find(item => item.draft_id === selectedDraft);
   const reviewed = reviews.find(item => item.review_id === selectedReview);
-  const canPublish = owner && eligible && reviewed?.decision === "approved_for_publication" &&
+  // A complete thirty-observation PA must be published with jointly approved
+  // human scores and teacher feedback, never through the legacy feedback-only route.
+  const canPublish = owner && report?.content_snapshot?.observations?.length !== 30 &&
+    eligible && reviewed?.decision === "approved_for_publication" &&
     reviewed.draft_id === selected?.draft_id && selected?.report_version_id === report?.report_version_id;
 
   return <section className="proto-panel" aria-labelledby="pa-feedback-workspace-title">
@@ -296,6 +299,9 @@ export default function PaFeedbackWorkspacePanel({
               }, "Approved feedback published as a new report version.")}>Publish approved feedback</button>
           </div>
         </>}
+        {owner && report.content_snapshot?.observations?.length === 30 && <p>
+          Complete PA reports require jointly approved human scores and teacher feedback.
+          Use the scoring workflow below instead of feedback-only publication.</p>}
         {owner && <PaScoringWorkspacePanel key={report.report_version_id}
           accessToken={accessToken} report={report} feedbackReviews={reviews}
           onPublished={async () => {
