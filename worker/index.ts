@@ -1856,6 +1856,76 @@ async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts
 }
 
 
+
+/** Restricted academic evidence handoff: never accepts source documents, only
+ * exact-version human-entered numerical rubric data and document fingerprints.
+ * SQL independently validates curriculum and release state. */
+async function ownerPaAcademicHandoff(
+  request: Request, env: WorkerEnv,
+  action: "readiness" | "rubric" | "receipt", diagnosticVersionId?: string,
+): Promise<Response> {
+  let fields: Record<string, unknown> = {};
+  if (action === "readiness") {
+    if (!diagnosticVersionId || !isUuid(diagnosticVersionId) || new URL(request.url).search)
+      return jsonResponse({ error: "invalid_pa_academic_handoff" }, 400);
+  } else {
+    const parsed = await readBoundedJson(request, 8200);
+    if (!parsed.ok) return parsed.response;
+    if (!parsed.body || typeof parsed.body !== "object" || Array.isArray(parsed.body))
+      return jsonResponse({ error: "invalid_pa_academic_handoff" }, 400);
+    fields = parsed.body as Record<string, unknown>;
+    const expected = action === "rubric"
+      ? ["diagnostic_version_id","rubric_sha256","dimension_maxima",
+        "academic_review_reference","assessor_calibration_reference","approval_note"]
+      : ["diagnostic_version_id","rubric_approval_id","route_source_reference",
+        "review_bundle_sha256","direct_mapping_sha256","restricted_teacher_packs_sha256",
+        "calibration_evidence_sha256","evidence_note"];
+    const digest = (value: unknown) => typeof value === "string" && /^[a-f0-9]{64}$/.test(value);
+    if (Object.keys(fields).length !== expected.length || !expected.every(k=>Object.hasOwn(fields,k)) ||
+        !isUuid(fields.diagnostic_version_id) ||
+        (action === "rubric" ? (
+          !digest(fields.rubric_sha256) ||
+          !Array.isArray(fields.dimension_maxima) || fields.dimension_maxima.length !== 30 ||
+          new Set((fields.dimension_maxima as Array<Record<string,unknown>>).map(x=>x?.code)).size !== 30 ||
+          !(fields.dimension_maxima as Array<Record<string,unknown>>).every(x=>
+            x && typeof x.code === "string" && /^[A-Z0-9]+$/i.test(x.code) &&
+            typeof x.max_points === "number" && Number.isFinite(x.max_points) &&
+            x.max_points > 0 && x.max_points <= 100) ||
+          typeof fields.academic_review_reference !== "string" ||
+          typeof fields.assessor_calibration_reference !== "string" ||
+          typeof fields.approval_note !== "string"
+        ) : (
+          !isUuid(fields.rubric_approval_id) ||
+          !["review_bundle_sha256","direct_mapping_sha256","restricted_teacher_packs_sha256",
+            "calibration_evidence_sha256"].every(k=>digest(fields[k])) ||
+          typeof fields.route_source_reference !== "string" ||
+          typeof fields.evidence_note !== "string"
+        ))) return jsonResponse({ error: "invalid_pa_academic_handoff" }, 400);
+  }
+  const auth = await authenticatedCaller(request, env);
+  if (!auth.context) return auth.response!;
+  const roleDenied = await requireActiveRole(auth.context, "owner");
+  if (roleDenied) return roleDenied;
+  const aalDenied = requireAal2(auth.context);
+  if (aalDenied) return aalDenied;
+  const operation = action === "readiness" ? "inspect_pa_academic_readiness"
+    : action === "rubric" ? "approve_pa_scoring_rubric" : "record_pa_release_evidence";
+  const args = action === "readiness"
+    ? { p_diagnostic_version_id: diagnosticVersionId }
+    : Object.fromEntries(Object.entries(fields).map(([key,value])=>["p_"+key,value]));
+  const { data, error } = await auth.context.supabase.rpc(operation, args);
+  if (error) {
+    if (error.code === "42501") return jsonResponse({ error: "pa_academic_handoff_forbidden" }, 403);
+    if (error.code === "22023") return jsonResponse({ error: "invalid_pa_academic_handoff" }, 400);
+    if (["55000","23503","23505","P0001"].includes(error.code))
+      return jsonResponse({ error: "pa_academic_evidence_incomplete_or_conflicting" }, 409);
+    return jsonResponse({ error: "pa_academic_handoff_unavailable" }, 503);
+  }
+  if (action === "readiness") return jsonResponse({ dimensions: asRows(data) });
+  return jsonResponse(action === "rubric"
+    ? { rubric_approval_id: data } : { evidence_receipt_id: data }, 201);
+}
+
 /** Only the qualified Owner with AAL2 can perform private, rubric-bound PA
  * scoring, joint teacher-feedback acceptance and deliberate publication.
  * The database independently checks all 30 evidence dimensions and lineage. */
@@ -4571,6 +4641,13 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   if (url.pathname === "/api/v1/admin/pa-feedback/publish" && request.method === "POST") {
     return publishOwnerPaEvaluationFeedback(request, env);
   }
+  const paAcademicReadiness = url.pathname.match(/^\\/api\\/v1\\/admin\\/pa-academic\\/readiness\\/([0-9a-f-]{36})$/i);
+  if (paAcademicReadiness && request.method === "GET")
+    return ownerPaAcademicHandoff(request, env, "readiness", paAcademicReadiness[1]);
+  if (url.pathname === "/api/v1/admin/pa-academic/rubric" && request.method === "POST")
+    return ownerPaAcademicHandoff(request, env, "rubric");
+  if (url.pathname === "/api/v1/admin/pa-academic/evidence" && request.method === "POST")
+    return ownerPaAcademicHandoff(request, env, "receipt");
   // Score approval and publication are separate, explicit Owner+AAL2 actions.
   if (url.pathname === "/api/v1/admin/pa-scoring/drafts" && request.method === "POST")
     return ownerPaScoringWorkflow(request, env, "draft");
