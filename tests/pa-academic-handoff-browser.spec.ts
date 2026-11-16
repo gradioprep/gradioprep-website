@@ -4,6 +4,8 @@ const worker = readFileSync("worker/index.ts", "utf8");
 const workspace = readFileSync("src/auth/PaFeedbackWorkspacePanel.tsx", "utf8");
 const evidence = readFileSync("src/auth/PaAcademicEvidencePanel.tsx", "utf8");
 const zero = "00000000-0000-0000-0000-000000000000";
+const codes = ["RV01","RV02","RV03","RV04","RV05","RV06","RV07a","RV07b","RV08","RV09",
+  ...["LC","AW","CW","SP"].flatMap(group=>Array.from({ length:5 },(_,i)=>group+"0"+(i+1)))];
 
 test("qualified Founder handoff reuses existing private rubric and academic receipt RPCs", () => {
   const handler = worker.split("async function ownerPaAcademicHandoff(")[1]
@@ -34,7 +36,7 @@ test("private academic handoff API denies anonymous and signed-in student", asyn
     { path: base + "/readiness/" + zero, method: "GET" },
     { path: base + "/rubric", method: "POST",
       data: { diagnostic_version_id: zero, rubric_sha256: "a".repeat(64),
-        dimension_maxima: [], academic_review_reference: "Synthetic reference",
+        dimension_maxima: codes.map(code=>({ code, max_points: 2 })), academic_review_reference: "Synthetic reference",
         assessor_calibration_reference: "Synthetic reference",
         approval_note: "Synthetic note for authorization test." } },
     { path: base + "/evidence", method: "POST",
