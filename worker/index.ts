@@ -4660,7 +4660,7 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const paAcademicReadiness = url.pathname.match(/^\/api\/v1\/admin\/pa-academic\/readiness\/([0-9a-f-]{36})$/i);
   if (paAcademicReadiness && request.method === "GET")
     return ownerPaAcademicHandoff(request, env, "readiness", paAcademicReadiness[1]);
-  const paAcademicOutcomes = url.pathname.match(/^\\/api\\/v1\\/admin\\/pa-academic\\/outcomes\\/([0-9a-f-]{36})$/i);
+  const paAcademicOutcomes = url.pathname.match(/^\/api\/v1\/admin\/pa-academic\/outcomes\/([0-9a-f-]{36})$/i);
   if (paAcademicOutcomes && request.method === "GET")
     return ownerPaAcademicHandoff(request, env, "outcomes", paAcademicOutcomes[1]);
   if (url.pathname === "/api/v1/admin/pa-academic/rubric" && request.method === "POST")
