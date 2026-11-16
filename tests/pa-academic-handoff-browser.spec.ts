@@ -39,6 +39,11 @@ test("private academic handoff API denies anonymous and signed-in student", asyn
         dimension_maxima: codes.map(code=>({ code, max_points: 2 })), academic_review_reference: "Synthetic reference",
         assessor_calibration_reference: "Synthetic reference",
         approval_note: "Synthetic note for authorization test." } },
+    { path: base + "/crosswalk", method: "POST",
+      data: { diagnostic_version_id: zero,
+        mappings: codes.map(code=>({ code,
+          outcome_mapping_id: zero,
+          rationale: "Synthetic-only placeholder; not approved real curriculum evidence." })) } },
     { path: base + "/evidence", method: "POST",
       data: { diagnostic_version_id: zero, rubric_approval_id: zero,
         route_source_reference: "Synthetic only, no actual Year 4 route",
@@ -88,4 +93,18 @@ test("restricted source files are fingerprinted in the Owner browser without upl
   expect(fingerprint).not.toContain('fetch(');
   expect(fingerprint).not.toContain('FormData');
   expect(fingerprint).not.toContain('localStorage');
+});
+
+test("verified 30-link direct mapping handoff is tightly scoped to Owner AAL2", () => {
+  const handler=worker.split("async function ownerPaAcademicHandoff(")[1]
+    ?.split("async function ownerPaScoringWorkflow(")[0] ?? "";
+  expect(handler).toContain('"record_pa_verified_direct_crosswalk"');
+  expect(handler).toContain('"crosswalk"');
+  expect(handler).toContain('fields.mappings.length !== 30');
+  expect(handler).toContain('requireActiveRole(auth.context, "owner")');
+  expect(handler).toContain('requireAal2(auth.context)');
+  expect(worker).toContain('"/api/v1/admin/pa-academic/crosswalk"');
+  expect(evidence).toContain("Record 30 reviewed direct links");
+  expect(evidence).toContain("parsedCrosswalk");
+  expect(evidence).not.toContain("max_points: 4");
 });
