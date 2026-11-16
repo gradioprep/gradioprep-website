@@ -84,6 +84,13 @@ SELECT is((SELECT count(*)::integer FROM
  WHERE learner_capture_enabled AND reviewed_direct_mapping_present),30,
  'Owner AAL2 sees exactly thirty mocked reviewed direct mappings');
 
+-- A complete-looking rubric or a chat approval cannot authorise a real
+-- Year 4 scored report while the instrument is still a hidden draft.
+SELECT throws_ok($q$SELECT private.assert_pa_full_scored_release_ready(
+ 'ed222222-2222-4222-8222-222222222222',repeat('a',64))$q$,
+ '55000','pa_full_scored_report_requires_academic_evidence',
+ 'real Year 4 scored publication refuses an unreleased draft without evidence');
+
 -- Mappings and enabled capture alone cannot publish without a real private
 -- rubric/evidence receipt. The new publication safeguard must reject it.
 RESET ROLE;
@@ -128,6 +135,20 @@ WHERE id='ed222222-2222-4222-8222-222222222222';
 SELECT is((SELECT release_state FROM public.diagnostic_versions
  WHERE id='ed222222-2222-4222-8222-222222222222'),'published',
  'synthetic full PA passes both mapping and academic-evidence release gates');
+-- Full scored-report publication checks the exact matching academic receipt,
+-- not merely a 30-observation JSON snapshot or arbitrary rubric digest.
+SELECT lives_ok($q$SELECT private.assert_pa_full_scored_release_ready(
+ 'ed222222-2222-4222-8222-222222222222',repeat('a',64))$q$,
+ 'published TEST-only instrument with exact rubric and receipt clears scored-report academic gate');
+SELECT throws_ok($q$SELECT private.assert_pa_full_scored_release_ready(
+ 'ed222222-2222-4222-8222-222222222222',repeat('f',64))$q$,
+ '55000','pa_full_scored_report_requires_academic_evidence',
+ 'different rubric fingerprint cannot reuse a release receipt');
+SELECT throws_ok($q$SELECT private.assert_pa_full_scored_release_ready(
+ 'ed111111-1111-4111-8111-111111111111',repeat('a',64))$q$,
+ '55000','pa_full_scored_report_requires_academic_evidence',
+ 'old 15-observation version cannot impersonate reviewed 30-dimension Year 4 rubric');
+
 SELECT is((SELECT count(*)::integer FROM private.pa_release_evidence_receipts
  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),1,
  'one immutable audit-linked receipt for the exact synthetic version');
