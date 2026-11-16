@@ -1862,14 +1862,14 @@ async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts
  * SQL independently validates curriculum and release state. */
 async function ownerPaAcademicHandoff(
   request: Request, env: WorkerEnv,
-  action: "readiness" | "rubric" | "receipt", diagnosticVersionId?: string,
+  action: "readiness" | "rubric" | "receipt" | "crosswalk", diagnosticVersionId?: string,
 ): Promise<Response> {
   let fields: Record<string, unknown> = {};
   if (action === "readiness") {
     if (!diagnosticVersionId || !isUuid(diagnosticVersionId) || new URL(request.url).search)
       return jsonResponse({ error: "invalid_pa_academic_handoff" }, 400);
   } else {
-    const parsed = await readBoundedJson(request, 8200);
+    const parsed = await readBoundedJson(request, action === "crosswalk" ? 65000 : 8200);
     if (!parsed.ok) return parsed.response;
     if (!parsed.body || typeof parsed.body !== "object" || Array.isArray(parsed.body))
       return jsonResponse({ error: "invalid_pa_academic_handoff" }, 400);
@@ -1877,6 +1877,7 @@ async function ownerPaAcademicHandoff(
     const expected = action === "rubric"
       ? ["diagnostic_version_id","rubric_sha256","dimension_maxima",
         "academic_review_reference","assessor_calibration_reference","approval_note"]
+      : action === "crosswalk" ? ["diagnostic_version_id","mappings"]
       : ["diagnostic_version_id","rubric_approval_id","route_source_reference",
         "review_bundle_sha256","direct_mapping_sha256","restricted_teacher_packs_sha256",
         "calibration_evidence_sha256","evidence_note"];
@@ -1894,6 +1895,15 @@ async function ownerPaAcademicHandoff(
           typeof fields.academic_review_reference !== "string" ||
           typeof fields.assessor_calibration_reference !== "string" ||
           typeof fields.approval_note !== "string"
+        ) : action === "crosswalk" ? (
+          !Array.isArray(fields.mappings) || fields.mappings.length !== 30 ||
+          new Set((fields.mappings as Array<Record<string,unknown>>).map(x=>x?.code)).size !== 30 ||
+          !(fields.mappings as Array<Record<string,unknown>>).every(x=>
+            x && typeof x === "object" && !Array.isArray(x) &&
+            Object.keys(x).length === 3 && typeof x.code === "string" &&
+            /^(?:RV(?:0[1-6]|07[ab]|08|09)|(?:LC|AW|CW|SP)0[1-5])$/.test(x.code) &&
+            isUuid(x.outcome_mapping_id) && typeof x.rationale === "string" &&
+            x.rationale.trim().length >= 20 && x.rationale.length <= 2000)
         ) : (
           !isUuid(fields.rubric_approval_id) ||
           !["review_bundle_sha256","direct_mapping_sha256","restricted_teacher_packs_sha256",
@@ -1909,7 +1919,9 @@ async function ownerPaAcademicHandoff(
   const aalDenied = requireAal2(auth.context);
   if (aalDenied) return aalDenied;
   const operation = action === "readiness" ? "inspect_pa_academic_readiness"
-    : action === "rubric" ? "approve_pa_scoring_rubric" : "record_pa_release_evidence";
+    : action === "rubric" ? "approve_pa_scoring_rubric"
+    : action === "crosswalk" ? "record_pa_verified_direct_crosswalk"
+    : "record_pa_release_evidence";
   const args = action === "readiness"
     ? { p_diagnostic_version_id: diagnosticVersionId }
     : Object.fromEntries(Object.entries(fields).map(([key,value])=>["p_"+key,value]));
@@ -1923,7 +1935,9 @@ async function ownerPaAcademicHandoff(
   }
   if (action === "readiness") return jsonResponse({ dimensions: asRows(data) });
   return jsonResponse(action === "rubric"
-    ? { rubric_approval_id: data } : { evidence_receipt_id: data }, 201);
+    ? { rubric_approval_id: data }
+    : action === "crosswalk" ? { recorded_direct_mappings: data }
+    : { evidence_receipt_id: data }, 201);
 }
 
 /** Only the qualified Owner with AAL2 can perform private, rubric-bound PA
@@ -4648,6 +4662,8 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
     return ownerPaAcademicHandoff(request, env, "rubric");
   if (url.pathname === "/api/v1/admin/pa-academic/evidence" && request.method === "POST")
     return ownerPaAcademicHandoff(request, env, "receipt");
+  if (url.pathname === "/api/v1/admin/pa-academic/crosswalk" && request.method === "POST")
+    return ownerPaAcademicHandoff(request, env, "crosswalk");
   // Score approval and publication are separate, explicit Owner+AAL2 actions.
   if (url.pathname === "/api/v1/admin/pa-scoring/drafts" && request.method === "POST")
     return ownerPaScoringWorkflow(request, env, "draft");
