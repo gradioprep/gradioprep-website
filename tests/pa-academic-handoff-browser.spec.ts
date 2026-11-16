@@ -71,3 +71,21 @@ test("private academic handoff API denies anonymous and signed-in student", asyn
     expect(response.status(), op.path).toBe(403);
   }
 });
+
+test("restricted source files are fingerprinted in the Owner browser without uploading their bytes", () => {
+  expect(evidence).toContain('crypto.subtle.digest("SHA-256", bytes)');
+  expect(evidence).toContain('file.arrayBuffer()');
+  expect(evidence).toContain('event.currentTarget.files?.[0]');
+  expect(evidence).toContain('setHash(hash)');
+  expect(evidence).toContain('Reviewed rubric');
+  expect(evidence).toContain('Verified 30-row direct crosswalk');
+  expect(evidence).toContain('Complete restricted teacher-pack bundle');
+  expect(evidence).toContain('Witnessed calibration record');
+  expect(evidence).toContain('!fingerprinting && allMapped');
+  expect(evidence).toContain('!fingerprinting && uuid(version)');
+  const fingerprint = evidence.split('async function fingerprintLocalFile(')[1]
+    ?.split('export default function PaAcademicEvidencePanel(')[0] ?? '';
+  expect(fingerprint).not.toContain('fetch(');
+  expect(fingerprint).not.toContain('FormData');
+  expect(fingerprint).not.toContain('localStorage');
+});
