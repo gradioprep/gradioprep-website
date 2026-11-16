@@ -176,21 +176,65 @@ CREATE TEMP TABLE synthetic_pa_scored_state(
 GRANT SELECT,INSERT,UPDATE ON synthetic_pa_scored_state TO authenticated;
 
 INSERT INTO public.diagnostic_attempts(
- id,learner_id,diagnostic_version_id,status,idempotency_key,submitted_at)
+ id,learner_id,diagnostic_version_id,status,idempotency_key)
 VALUES ('fe000000-0000-4000-8000-000000000301',
  '11111111-1111-4111-8111-111111111111',
- 'ed222222-2222-4222-8222-222222222222','submitted',
- 'fe000000-0000-4000-8000-000000000302',clock_timestamp());
+ 'ed222222-2222-4222-8222-222222222222','in_progress',
+ 'fe000000-0000-4000-8000-000000000302');
 
--- The AW/CW/SP dimensions each share only their 01 source; there are exactly
--- 18 distinct physical response records for 30 academically mapped dimensions.
+-- Exercise the same strict sitting transitions used by real learners.
+-- Responses can be captured only during an active sitting.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT is((SELECT sitting_number FROM public.start_pa_sitting(
+ 'fe000000-0000-4000-8000-000000000301',1)),1,
+ 'synthetic full PA first sitting starts under learner authorisation');
+RESET ROLE;
+
 INSERT INTO public.diagnostic_response_versions(
  attempt_id,observation_id,revision_number,response_json)
 SELECT 'fe000000-0000-4000-8000-000000000301',o.id,1,
- jsonb_build_object('synthetic_response','CI fixture for '||o.observation_code)
+ jsonb_build_object('synthetic_response','CI first sitting response for '||o.observation_code)
 FROM public.diagnostic_observations o
 WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
- AND (o.group_code IN ('RV','LC') OR o.observation_code IN ('AW01','CW01','SP01'));
+ AND o.sitting_number=1 AND
+ (o.group_code IN ('RV','LC') OR o.observation_code IN ('AW01','CW01','SP01'));
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT is(public.complete_pa_sitting(
+ 'fe000000-0000-4000-8000-000000000301',1),true,
+ 'first sitting completes only with all required source responses');
+SELECT is((SELECT sitting_number FROM public.start_pa_sitting(
+ 'fe000000-0000-4000-8000-000000000301',2)),2,
+ 'second sitting starts after completion of first');
+RESET ROLE;
+
+INSERT INTO public.diagnostic_response_versions(
+ attempt_id,observation_id,revision_number,response_json)
+SELECT 'fe000000-0000-4000-8000-000000000301',o.id,1,
+ jsonb_build_object('synthetic_response','CI second sitting response for '||o.observation_code)
+FROM public.diagnostic_observations o
+WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
+ AND o.sitting_number=2 AND
+ (o.group_code IN ('RV','LC') OR o.observation_code IN ('AW01','CW01','SP01'));
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT is(public.complete_pa_sitting(
+ 'fe000000-0000-4000-8000-000000000301',2),true,
+ 'second sitting completes with all writing and presentation evidence');
+SELECT is((SELECT status FROM public.submit_diagnostic_attempt(
+ 'fe000000-0000-4000-8000-000000000301')),'submitted',
+ 'full Year 4 PA submits through the guarded learner workflow');
+RESET ROLE;
+
 SELECT is((SELECT count(*)::integer FROM public.diagnostic_response_versions
  WHERE attempt_id='fe000000-0000-4000-8000-000000000301'),18,
  'real PA response snapshot input has exactly 18 synthetic source responses');
