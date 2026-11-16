@@ -61,6 +61,47 @@ ALTER FUNCTION private.assert_pa_full_scored_release_ready(uuid,text) OWNER TO p
 REVOKE ALL ON FUNCTION private.assert_pa_full_scored_release_ready(uuid,text)
   FROM PUBLIC,anon,authenticated,service_role;
 
+-- Bind scored publication to the submitted learner instrument, not to a
+-- potentially incomplete, stale or mislabeled report snapshot. The exact
+-- 30 distinct observation codes must match the instrument's own catalogue.
+-- This is a pure validation helper; it does not create academic evidence.
+CREATE FUNCTION private.assert_pa_myp4_scored_snapshot(
+  p_attempt_version_id uuid,p_snapshot_version_id uuid,p_observations jsonb
+) RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
+AS $
+DECLARE
+  actual_codes integer;
+  snapshot_codes integer;
+  matching_codes integer;
+BEGIN
+  IF p_attempt_version_id IS DISTINCT FROM p_snapshot_version_id
+    OR jsonb_typeof(p_observations) IS DISTINCT FROM 'array' THEN
+    RAISE EXCEPTION USING ERRCODE='55000',
+      MESSAGE='pa_full_scored_report_instrument_lineage_mismatch';
+  END IF;
+  SELECT count(*)::integer INTO actual_codes
+  FROM public.diagnostic_observations
+  WHERE diagnostic_version_id=p_attempt_version_id;
+  SELECT count(DISTINCT item->>'observation_code')::integer,
+    count(*) FILTER (WHERE EXISTS (
+      SELECT 1 FROM public.diagnostic_observations obs
+      WHERE obs.diagnostic_version_id=p_attempt_version_id
+        AND obs.observation_code=item->>'observation_code'
+    ))::integer
+    INTO snapshot_codes,matching_codes
+  FROM jsonb_array_elements(p_observations) AS item;
+  IF actual_codes<>30 OR jsonb_array_length(p_observations)<>30
+     OR snapshot_codes<>30 OR matching_codes<>30 THEN
+    RAISE EXCEPTION USING ERRCODE='55000',
+      MESSAGE='pa_full_scored_report_instrument_lineage_mismatch';
+  END IF;
+END;
+$;
+ALTER FUNCTION private.assert_pa_myp4_scored_snapshot(uuid,uuid,jsonb)
+  OWNER TO postgres;
+REVOKE ALL ON FUNCTION private.assert_pa_myp4_scored_snapshot(uuid,uuid,jsonb)
+  FROM PUBLIC,anon,authenticated,service_role;
+
 -- Preserve the existing human-scoring, joint approval and immutable publishing
 -- implementation; insert only the exact-version academic release assertions.
 -- Explicit Owner+AAL2 publication of an academically and human-reviewed PA result.
@@ -79,6 +120,8 @@ DECLARE
   created_version public.evaluation_report_versions%ROWTYPE;
   manifest jsonb;
   source_learner uuid;
+  actual_instrument_id uuid;
+  actual_instrument_code text;
 BEGIN
   IF auth.uid() IS NULL OR NOT private.current_account_is_active()
     OR NOT private.current_user_has_role('owner'::public.app_role)
@@ -122,41 +165,35 @@ BEGIN
       AND v.version_number>source_version.version_number) THEN
     RAISE EXCEPTION USING ERRCODE='55000',MESSAGE='pa_scored_publication_report_superseded';
   END IF;
-  -- Real full Year 4 reports must bind the actual submitted PA instrument,
-  -- not just a 30-row report snapshot. Generic rollback-only legacy fixtures
-  -- remain independent of the real Year 4 academic approval boundary.
-  IF (SELECT count(*) FROM jsonb_array_elements(
-      CASE WHEN jsonb_typeof(source_version.content_snapshot->'observations')='array'
-        THEN source_version.content_snapshot->'observations' ELSE '[]'::jsonb END))=30
-     AND EXISTS (
-       SELECT 1 FROM public.diagnostic_versions dv
-       WHERE dv.id=(source_version.content_snapshot->>'diagnostic_version_id')::uuid
-         AND dv.diagnostic_code='ib-myp-g9-cycle1'
-     ) THEN
-    PERFORM 1 FROM public.evaluation_report_records er
-      JOIN public.diagnostic_attempts a ON a.id=er.diagnostic_attempt_id
-      WHERE er.id=source_version.report_record_id
-        AND er.report_scope='pa_baseline'
-        AND a.learner_id=source_version.learner_id
-        AND a.diagnostic_version_id::text=source_version.content_snapshot->>'diagnostic_version_id';
-    IF NOT FOUND THEN
-      RAISE EXCEPTION USING ERRCODE='55000',
-        MESSAGE='pa_full_scored_report_instrument_lineage_mismatch';
-    END IF;
+  -- Resolve the source instrument from the immutable submitted attempt, not
+  -- from user-facing report JSON. This check also catches missing/altered
+  -- observation lists and a misleading diagnostic_version_id snapshot.
+  SELECT a.diagnostic_version_id,dv.diagnostic_code
+    INTO actual_instrument_id,actual_instrument_code
+  FROM public.evaluation_report_records er
+  JOIN public.diagnostic_attempts a ON a.id=er.diagnostic_attempt_id
+  JOIN public.diagnostic_versions dv ON dv.id=a.diagnostic_version_id
+  WHERE er.id=source_version.report_record_id
+    AND er.report_scope='pa_baseline'
+    AND a.learner_id=source_version.learner_id;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION USING ERRCODE='55000',
+      MESSAGE='pa_full_scored_report_instrument_lineage_mismatch';
+  END IF;
+  IF actual_instrument_code='ib-myp-g9-cycle1' THEN
+    PERFORM private.assert_pa_myp4_scored_snapshot(
+      actual_instrument_id,
+      CASE WHEN (source_version.content_snapshot->>'diagnostic_version_id')
+         ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+        THEN (source_version.content_snapshot->>'diagnostic_version_id')::uuid
+        ELSE NULL END,
+      source_version.content_snapshot->'observations');
   END IF;
   -- Recompute every dimension and revalidate version/evidence under the same lock.
   manifest := public.get_private_pa_scored_report_review_manifest(chosen.id);
-  IF (SELECT count(*) FROM jsonb_array_elements(
-      CASE WHEN jsonb_typeof(source_version.content_snapshot->'observations')='array'
-        THEN source_version.content_snapshot->'observations' ELSE '[]'::jsonb END))=30
-     AND EXISTS (
-       SELECT 1 FROM public.diagnostic_versions dv
-       WHERE dv.id=(source_version.content_snapshot->>'diagnostic_version_id')::uuid
-         AND dv.diagnostic_code='ib-myp-g9-cycle1'
-     ) THEN
+  IF actual_instrument_code='ib-myp-g9-cycle1' THEN
     PERFORM private.assert_pa_full_scored_release_ready(
-      (source_version.content_snapshot->>'diagnostic_version_id')::uuid,
-      manifest->>'rubric_sha256');
+      actual_instrument_id,manifest->>'rubric_sha256');
   END IF;
   IF manifest->>'source_report_version_id' IS DISTINCT FROM source_version.id::text
     OR (manifest->>'dimension_count')::integer<>30
