@@ -34,6 +34,7 @@ test("private academic handoff API denies anonymous and signed-in student", asyn
   const base = "/api/v1/admin/pa-academic";
   const operations = [
     { path: base + "/readiness/" + zero, method: "GET" },
+    { path: base + "/outcomes/" + zero, method: "GET" },
     { path: base + "/rubric", method: "POST",
       data: { diagnostic_version_id: zero, rubric_sha256: "a".repeat(64),
         dimension_maxima: codes.map(code=>({ code, max_points: 2 })), academic_review_reference: "Synthetic reference",
@@ -107,4 +108,18 @@ test("verified 30-link direct mapping handoff is tightly scoped to Owner AAL2", 
   expect(evidence).toContain("Record 30 reviewed direct links");
   expect(evidence).toContain("parsedCrosswalk");
   expect(evidence).not.toContain("max_points: 4");
+});
+
+test("Owner mapping selector exposes only reviewed exact-route outcome references", () => {
+  const sql=readFileSync("supabase/migrations/20261116000300_phase2_pa_verified_route_outcome_inventory.sql","utf8");
+  expect(sql).toContain("private.current_user_has_role('owner'::public.app_role)");
+  expect(sql).toContain("coalesce(auth.jwt()->>'aal','aal1') <> 'aal2'");
+  expect(sql).toContain("unit.route_version_id=instrument.route_version_id");
+  expect(sql).toContain("outcome.mapping_status='direct'");
+  expect(sql).toContain("outcome.reviewed_by IS NOT NULL");
+  expect(sql).toContain("unit.release_state='published'");
+  expect(evidence).toContain("verifiedOutcomes.map(");
+  expect(evidence).toContain("Prepare the 30 verified links for review");
+  expect(evidence).toContain('"/api/v1/admin/pa-academic/outcomes/"+version');
+  expect(worker).toContain('"/api/v1/admin/pa-academic/crosswalk"');
 });
