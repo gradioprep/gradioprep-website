@@ -90,7 +90,7 @@ BEGIN
   );
   RETURN count_written;
 END;
-$;
+$$;
 ALTER FUNCTION public.record_pa_verified_direct_crosswalk(uuid,jsonb) OWNER TO postgres;
 REVOKE ALL ON FUNCTION public.record_pa_verified_direct_crosswalk(uuid,jsonb)
   FROM PUBLIC,anon,service_role;
