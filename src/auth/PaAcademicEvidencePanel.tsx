@@ -10,6 +10,14 @@ type ReadinessRow = {
 const uuid = (s: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
 const digest = (s: string) => /^[a-f0-9]{64}$/.test(s);
 
+/** Fingerprint restricted evidence locally. File bytes never leave the browser. */
+async function fingerprintLocalFile(file: File): Promise<string> {
+  const bytes = await file.arrayBuffer();
+  const hash = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, "0")).join("");
+}
+
+
 export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: string }) {
   const [version, setVersion] = useState("");
   const [rows, setRows] = useState<ReadinessRow[]>([]);
@@ -27,6 +35,27 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
   const [calibrationHash, setCalibrationHash] = useState("");
   const [evidenceNote, setEvidenceNote] = useState("");
   const [receiptId, setReceiptId] = useState("");
+  const [fingerprintStatus, setFingerprintStatus] = useState("");
+  const [fingerprinting, setFingerprinting] = useState(false);
+  async function hashSelectedFile(file: File | undefined, setHash: (hash: string) => void) {
+    if (!file || busy || fingerprinting) return;
+    setFingerprinting(true); setError(""); setFingerprintStatus("");
+    try {
+      const hash = await fingerprintLocalFile(file);
+      setHash(hash);
+      setFingerprintStatus("SHA-256 calculated locally for " + file.name +
+        ". Confirm that this is the correct approved exact-version evidence before recording.");
+    } catch {
+      setError("The file could not be fingerprinted on this device. No file was uploaded.");
+    } finally { setFingerprinting(false); }
+  }
+  function localFingerprintField(label: string, setter: (hash: string) => void) {
+    return <label key={label}>{label} — calculate from an existing private file
+      <input type="file" disabled={busy || fingerprinting}
+        onChange={event=>{ const file = event.currentTarget.files?.[0];
+          void hashSelectedFile(file, setter); event.currentTarget.value = ""; }} />
+    </label>;
+  }
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
@@ -52,11 +81,11 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
   const allMapped = loaded && rows.length === 30 && new Set(rows.map(r=>r.observation_code)).size === 30 &&
     rows.every(r=>r.reviewed_direct_mapping_present && r.learner_capture_enabled);
   const numericMaxima = rows.map(r=>({ code: r.observation_code, max_points: Number(maxima[r.observation_code]) }));
-  const rubricReady = allMapped && digest(rubricHash) && academicRef.trim().length >= 12 &&
+  const rubricReady = !fingerprinting && allMapped && digest(rubricHash) && academicRef.trim().length >= 12 &&
     calibrationRef.trim().length >= 12 && rubricNote.trim().length >= 20 &&
     numericMaxima.every(r=>maxima[r.code] !== undefined && maxima[r.code].trim() !== "" &&
       Number.isFinite(r.max_points) && r.max_points > 0 && r.max_points <= 100);
-  const receiptReady = uuid(version) && uuid(rubricId) &&
+  const receiptReady = !fingerprinting && uuid(version) && uuid(rubricId) &&
     sourceRef.trim().length >= 20 && [bundleHash,mappingHash,packsHash,calibrationHash].every(digest) &&
     evidenceNote.trim().length >= 30;
   return <section aria-label="Owner-only academic evidence handoff" className="proto-pa-academic-evidence">
@@ -86,6 +115,7 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
       <legend>Record real, reviewed numerical rubric</legend>
       <p>Numbers and rubric fingerprint must come from the existing approved restricted evidence,
         not from defaults or an invented scoring scale.</p>
+      {localFingerprintField("Reviewed rubric",setRubricHash)}
       <label>Rubric SHA-256 <input value={rubricHash} maxLength={64}
         onChange={e=>setRubricHash(e.target.value.trim())}/></label>
       {rows.map(r=><label key={r.observation_code}>{r.observation_code} approved maximum points
@@ -120,6 +150,13 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
         ["Witnessed calibration SHA-256",calibrationHash,setCalibrationHash],
       ] as const).map(([label,value,update])=><label key={label}>{label}
         <input maxLength={64} value={value} onChange={e=>update(e.target.value.trim())}/></label>)}
+      <p>Calculate each fingerprint from its actual approved private document. Hashing is not
+        academic verification and does not establish that a calibration occurred. The files
+        remain on this device; only their SHA-256 values may be submitted.</p>
+      {localFingerprintField("Approved review bundle",setBundleHash)}
+      {localFingerprintField("Verified 30-row direct crosswalk",setMappingHash)}
+      {localFingerprintField("Complete restricted teacher-pack bundle",setPacksHash)}
+      {localFingerprintField("Witnessed calibration record",setCalibrationHash)}
       <label>Exact-version evidence reconciliation note
         <textarea rows={3} maxLength={1000} value={evidenceNote}
           onChange={e=>setEvidenceNote(e.target.value)}/></label>
@@ -135,6 +172,8 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
         Bind restricted evidence to rubric</button>
     </fieldset>
     {receiptId && <p>Private evidence receipt ID: <code>{receiptId}</code></p>}
+    {fingerprinting && <p role="status">Calculating file fingerprint locally…</p>}
+    {fingerprintStatus && <p role="status">{fingerprintStatus}</p>}
     {error && <p role="alert">{error}</p>}
     {status && <p role="status">{status}</p>}
   </section>;
