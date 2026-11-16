@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PaScoringWorkspacePanel from "./PaScoringWorkspacePanel";
+import PaAcademicEvidencePanel from "./PaAcademicEvidencePanel";
 import PaReportEvidenceReview, { type PaReportEvidenceSnapshot } from "./PaReportEvidenceReview";
 
 type ReviewerGrant = { access_grant_id: string; teacher_user_id: string; granted_at: string };
@@ -143,6 +144,7 @@ export default function PaFeedbackWorkspacePanel({
             });
           },"Timing arrangement applied.")}>Apply arrangement</button>
       </section>}
+      {owner && <PaAcademicEvidencePanel accessToken={accessToken} />}
       <div className="proto-pa-review-queue">
         <button className="proto-action secondary" disabled={busy}
           onClick={() => void perform(loadQueue, "Review queue updated.")}>Load review queue</button>
