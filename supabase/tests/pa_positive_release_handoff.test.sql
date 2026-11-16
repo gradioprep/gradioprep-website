@@ -163,5 +163,152 @@ SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations
  AND group_code='L'),0,
  'even structurally ready full PA excludes Listening');
 
+
+-- Integrated POSITIVE acceptance: actual submitted synthetic Year 4 PA v2 ->
+-- all 18 saved response sources -> 30 directly mapped report observations ->
+-- witnessed SP -> Owner private rubric marks and teacher approval -> immutable
+-- scored report -> learner-only readback. Every row is rolled back at EOF.
+CREATE TEMP TABLE synthetic_pa_scored_state(
+  report_id uuid, source_version_id uuid, score_draft_id uuid,
+  score_review_id uuid, feedback_draft_id uuid, feedback_review_id uuid,
+  joint_id uuid
+);
+GRANT SELECT,INSERT,UPDATE ON synthetic_pa_scored_state TO authenticated;
+
+INSERT INTO public.diagnostic_attempts(
+ id,learner_id,diagnostic_version_id,status,idempotency_key,submitted_at)
+VALUES ('fe000000-0000-4000-8000-000000000301',
+ '11111111-1111-4111-8111-111111111111',
+ 'ed222222-2222-4222-8222-222222222222','submitted',
+ 'fe000000-0000-4000-8000-000000000302',clock_timestamp());
+
+-- The AW/CW/SP dimensions each share only their 01 source; there are exactly
+-- 18 distinct physical response records for 30 academically mapped dimensions.
+INSERT INTO public.diagnostic_response_versions(
+ attempt_id,observation_id,revision_number,response_json)
+SELECT 'fe000000-0000-4000-8000-000000000301',o.id,1,
+ jsonb_build_object('synthetic_response','CI fixture for '||o.observation_code)
+FROM public.diagnostic_observations o
+WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
+ AND (o.group_code IN ('RV','LC') OR o.observation_code IN ('AW01','CW01','SP01'));
+SELECT is((SELECT count(*)::integer FROM public.diagnostic_response_versions
+ WHERE attempt_id='fe000000-0000-4000-8000-000000000301'),18,
+ 'real PA response snapshot input has exactly 18 synthetic source responses');
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+INSERT INTO synthetic_pa_scored_state(report_id,source_version_id)
+SELECT report_record_id,report_version_id FROM public.create_preliminary_evaluation_report(
+ 'fe000000-0000-4000-8000-000000000301',
+ (SELECT id FROM public.course_enrolments
+  WHERE learner_id='11111111-1111-4111-8111-111111111111'
+    AND pathway_id='synthetic-ib-myp-year-4'),
+ 'fe000000-0000-4000-8000-000000000001',
+ 'fe000000-0000-4000-8000-000000000305');
+SELECT is((SELECT curriculum_mapping_status FROM public.get_evaluation_report(
+ (SELECT report_id FROM synthetic_pa_scored_state),NULL)),
+ 'complete_direct','submitted synthetic PA report retains all 30 real mapping rows');
+SELECT is((SELECT evidence_sufficiency_status FROM public.get_evaluation_report(
+ (SELECT report_id FROM synthetic_pa_scored_state),NULL)),
+ 'sufficient','18 captured response sources satisfy 30 direct observation dimensions');
+SELECT ok((SELECT eligible_analytics_snapshot->'pa_human_scoring' IS NULL
+ FROM public.get_evaluation_report((SELECT report_id FROM synthetic_pa_scored_state),NULL)),
+ 'learner sees no private marks before Owner publication');
+RESET ROLE;
+
+INSERT INTO private.pa_spoken_performance_evidence(
+ report_record_id,report_version_id,assessor_id,presentation_observation,
+ followup_observation,observed_live)
+SELECT report_id,source_version_id,'88888888-8888-4888-8888-888888888888',
+ 'Synthetic witnessed live SP presentation for CI only.',
+ 'Synthetic witnessed follow-up for CI only.',true
+FROM synthetic_pa_scored_state;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT mapping_and_evidence_complete
+ FROM public.inspect_pa_scoring_evidence(
+ (SELECT report_id FROM synthetic_pa_scored_state))),true,
+ 'owner witness and all 30 mapped response dimensions pass real evidence audit');
+
+UPDATE synthetic_pa_scored_state
+SET score_draft_id=public.create_pa_scoring_draft(
+ source_version_id,(SELECT rubric_id FROM synthetic_pa_release_state),
+ (SELECT jsonb_agg(jsonb_build_object('code',o.observation_code,'points',2)
+     ORDER BY o.sequence_number)
+  FROM public.diagnostic_observations o
+  WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222'));
+UPDATE synthetic_pa_scored_state
+SET score_review_id=public.review_pa_scoring_draft(
+ score_draft_id,'approved_private',
+ 'CI-only human scoring acceptance using a synthetic four-point scale.');
+UPDATE synthetic_pa_scored_state
+SET feedback_draft_id=public.create_pa_evaluation_feedback_draft(
+ source_version_id,'Synthetic exact-version feedback for thirty scored observations.');
+UPDATE synthetic_pa_scored_state
+SET feedback_review_id=public.review_pa_evaluation_feedback_draft(
+ feedback_draft_id,'approved_for_publication',
+ 'Synthetic-only teacher decision, not a real academic release.');
+UPDATE synthetic_pa_scored_state
+SET joint_id=public.approve_private_pa_report_composition(
+ score_review_id,feedback_review_id,
+ 'Synthetic joint review binds human marks and feedback at one exact version.');
+
+SELECT is((SELECT (public.get_private_pa_scored_report_review_manifest(
+ (SELECT joint_id FROM synthetic_pa_scored_state))
+ ->'private_attainment'->>'points_possible')::numeric),120::numeric,
+ 'joint reviewed manifest reconciles exact 30 maxima with 120 test points');
+
+-- Deliberately invalidate an unrelated released version: the actual scorer
+-- must not be able to substitute the old partial Year 4 instrument.
+SELECT throws_ok($q$SELECT private.assert_pa_full_scored_release_ready(
+ 'ed111111-1111-4111-8111-111111111111',repeat('a',64))$q$,
+ '42501',NULL,'private evidence helper stays inaccessible to staff clients');
+RESET ROLE;
+
+-- The helper's private EXECUTE permission stays unchanged; publication
+-- reaches it only through the existing SECURITY DEFINER scored-report RPC.
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is((SELECT version_number FROM public.publish_approved_pa_scored_report(
+ (SELECT joint_id FROM synthetic_pa_scored_state),
+ 'fe000000-0000-4000-8000-000000000361')),2,
+ 'exactly linked Year 4 source, rubric and release receipt allow a scored report');
+SELECT is((SELECT is_replay FROM public.publish_approved_pa_scored_report(
+ (SELECT joint_id FROM synthetic_pa_scored_state),
+ 'fe000000-0000-4000-8000-000000000361')),true,
+ 'scored Year 4 report publish replay is idempotent');
+RESET ROLE;
+
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+SELECT set_config('request.jwt.claims',
+ '{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated","aal":"aal1"}',true);
+SELECT is((SELECT (eligible_analytics_snapshot->'pa_human_scoring'->>'dimension_count')::integer
+ FROM public.get_evaluation_report(
+ (SELECT report_id FROM synthetic_pa_scored_state),2)),30,
+ 'learner readback contains 30 only-after-release human-scored dimensions');
+SELECT is((SELECT (eligible_analytics_snapshot->'pa_human_scoring'->>'attainment_percent')::numeric
+ FROM public.get_evaluation_report(
+ (SELECT report_id FROM synthetic_pa_scored_state),2)),50::numeric,
+ 'learner readback computes fifty percent only from synthetic accepted human marks');
+SELECT is((SELECT published_feedback_snapshot->>'status'
+ FROM public.get_evaluation_report(
+ (SELECT report_id FROM synthetic_pa_scored_state),2)),
+ 'human_approved_published','same-version human feedback is included in learner readback');
+SELECT ok((SELECT eligible_analytics_snapshot->'pa_human_scoring'->>'official_ib_grade' IS NULL
+ AND eligible_analytics_snapshot->'pa_human_scoring'->>'rank' IS NULL
+ AND eligible_analytics_snapshot->'pa_human_scoring'->>'percentile' IS NULL
+ FROM public.get_evaluation_report(
+ (SELECT report_id FROM synthetic_pa_scored_state),2)),
+ 'integrated genuine-code regression never invents official grades or cohort rankings');
+RESET ROLE;
+
 SELECT * FROM finish();
 ROLLBACK;
