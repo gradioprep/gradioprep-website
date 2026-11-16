@@ -2,6 +2,13 @@ import { useState } from "react";
 
 /** The Founder already granted qualified academic approval. This workspace
  * records only the genuine, version-bound evidence underlying that decision. */
+type VerifiedOutcome = {
+  outcome_mapping_id: string;
+  unit_code: string;
+  outcome_reference: string;
+  outcome_title: string;
+  source_locator: string;
+};
 type ReadinessRow = {
   observation_code: string; group_code: string;
   learner_capture_enabled: boolean; reviewed_direct_mapping_present: boolean;
@@ -22,6 +29,9 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
   const [version, setVersion] = useState("");
   const [rows, setRows] = useState<ReadinessRow[]>([]);
   const [crosswalkJson, setCrosswalkJson] = useState("");
+  const [verifiedOutcomes, setVerifiedOutcomes] = useState<VerifiedOutcome[]>([]);
+  const [selectedOutcomes, setSelectedOutcomes] = useState<Record<string,string>>({});
+  const [mappingRationales, setMappingRationales] = useState<Record<string,string>>({});
   const [crosswalkRecorded, setCrosswalkRecorded] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [rubricHash, setRubricHash] = useState("");
@@ -117,7 +127,7 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
       Never use test values. Private teacher files stay outside public GitHub.</p>
     <label>PA instrument version ID
       <input value={version} onChange={e=>{setVersion(e.target.value.trim());setRows([]);
-        setLoaded(false);setRubricId("");setReceiptId("");setCrosswalkJson("");setCrosswalkRecorded(false);
+        setLoaded(false);setRubricId("");setReceiptId("");setCrosswalkJson("");setCrosswalkRecorded(false);setVerifiedOutcomes([]);setSelectedOutcomes({});setMappingRationales({});
         setRubricHash("");setMaxima({});setAcademicRef("");setCalibrationRef("");
         setRubricNote("");setSourceRef("");setBundleHash("");setMappingHash("");
         setPacksHash("");setCalibrationHash("");setEvidenceNote("");}} placeholder="Exact instrument version UUID" />
@@ -125,7 +135,10 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
     <button type="button" className="proto-action secondary" disabled={busy || !uuid(version)}
       onClick={()=>void perform(async()=>{
         const response=await call("/api/v1/admin/pa-academic/readiness/"+version);
-        setRows((response.dimensions as ReadinessRow[]) ?? []);setLoaded(true);
+        setRows((response.dimensions as ReadinessRow[]) ?? []);
+        const verified=await call("/api/v1/admin/pa-academic/outcomes/"+version);
+        setVerifiedOutcomes((verified.outcomes as VerifiedOutcome[]) ?? []);
+        setLoaded(true);
       },"Exact-version mapping and capture state loaded.")}>Check 30 dimensions</button>
     {loaded && !allMapped && !crosswalkRecorded && <fieldset disabled={busy || fingerprinting}>
       <legend>Record verified 30-observation direct curriculum crosswalk</legend>
@@ -133,6 +146,44 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
         Each entry must name the exact observation code, an existing reviewed DIRECT outcome
         mapping UUID on this verified Year 4 route, and its evidence rationale. This does
         not create curriculum outcomes or substitute for source verification.</p>
+      <p>{verifiedOutcomes.length} existing, reviewed curriculum outcomes available for this
+        exact route. If none appear, the underlying verified curriculum records must be
+        supplied first; this workspace cannot create them.</p>
+      {verifiedOutcomes.length > 0 && <>
+        {rows.map(row=><div key={row.observation_code}>
+          <label>{row.observation_code} — reviewed curriculum outcome
+            <select value={selectedOutcomes[row.observation_code] ?? ""}
+              onChange={event=>setSelectedOutcomes(previous=>({
+                ...previous,[row.observation_code]:event.target.value
+              }))}>
+              <option value="">Choose an exact curriculum outcome</option>
+              {verifiedOutcomes.map(outcome=><option key={outcome.outcome_mapping_id}
+                value={outcome.outcome_mapping_id}>
+                {outcome.unit_code} · {outcome.outcome_reference} · {outcome.outcome_title}
+                {" — "}{outcome.source_locator}
+              </option>)}
+            </select>
+          </label>
+          <label>{row.observation_code} — direct link rationale
+            <textarea rows={2} maxLength={2000}
+              value={mappingRationales[row.observation_code] ?? ""}
+              onChange={event=>setMappingRationales(previous=>({
+                ...previous,[row.observation_code]:event.target.value
+              }))} />
+          </label>
+        </div>)}
+        <button type="button" className="proto-action secondary"
+          disabled={busy || rows.length !== 30 || rows.some(row=>
+            !selectedOutcomes[row.observation_code] ||
+            (mappingRationales[row.observation_code] ?? "").trim().length < 20)}
+          onClick={()=>{
+            setCrosswalkJson(JSON.stringify(rows.map(row=>({
+              code:row.observation_code,
+              outcome_mapping_id:selectedOutcomes[row.observation_code],
+              rationale:mappingRationales[row.observation_code].trim()
+            })),null,2));
+          }}>Prepare the 30 verified links for review</button>
+      </>}
       <label>Verified mapping file (JSON containing 30 entries)
         <input type="file" accept=".json,application/json" onChange={event=>{
           const file=event.currentTarget.files?.[0];
