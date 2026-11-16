@@ -68,7 +68,7 @@ REVOKE ALL ON FUNCTION private.assert_pa_full_scored_release_ready(uuid,text)
 CREATE FUNCTION private.assert_pa_myp4_scored_snapshot(
   p_attempt_version_id uuid,p_snapshot_version_id uuid,p_observations jsonb
 ) RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=''
-AS $
+AS $$
 DECLARE
   actual_codes integer;
   snapshot_codes integer;
@@ -96,7 +96,7 @@ BEGIN
       MESSAGE='pa_full_scored_report_instrument_lineage_mismatch';
   END IF;
 END;
-$;
+$$;
 ALTER FUNCTION private.assert_pa_myp4_scored_snapshot(uuid,uuid,jsonb)
   OWNER TO postgres;
 REVOKE ALL ON FUNCTION private.assert_pa_myp4_scored_snapshot(uuid,uuid,jsonb)
