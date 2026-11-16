@@ -156,6 +156,52 @@ SELECT throws_ok($q$SELECT private.assert_pa_full_scored_release_ready(
  '55000','pa_full_scored_report_requires_academic_evidence',
  'old 15-observation version cannot impersonate reviewed 30-dimension Year 4 rubric');
 
+-- The exact submitted version and all 30 distinct catalogue codes are
+-- mandatory even when a report snapshot claims full academic completeness.
+SELECT lives_ok($q$SELECT private.assert_pa_myp4_scored_snapshot(
+ 'ed222222-2222-4222-8222-222222222222',
+ 'ed222222-2222-4222-8222-222222222222',
+ (SELECT jsonb_agg(jsonb_build_object('observation_code',observation_code))
+  FROM public.diagnostic_observations
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'))$q$,
+ 'exact actual Year 4 instrument and 30 distinct codes clear source snapshot check');
+SELECT throws_ok($q$SELECT private.assert_pa_myp4_scored_snapshot(
+ 'ed222222-2222-4222-8222-222222222222',
+ 'ed111111-1111-4111-8111-111111111111',
+ (SELECT jsonb_agg(jsonb_build_object('observation_code',observation_code))
+  FROM public.diagnostic_observations
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'))$q$,
+ '55000','pa_full_scored_report_instrument_lineage_mismatch',
+ 'the report cannot substitute another diagnostic version');
+SELECT throws_ok($q$SELECT private.assert_pa_myp4_scored_snapshot(
+ 'ed222222-2222-4222-8222-222222222222',
+ NULL::uuid,'[]'::jsonb)$q$,
+ '55000','pa_full_scored_report_instrument_lineage_mismatch',
+ 'missing snapshot instrument ID fails closed');
+SELECT throws_ok($q$SELECT private.assert_pa_myp4_scored_snapshot(
+ 'ed222222-2222-4222-8222-222222222222',
+ 'ed222222-2222-4222-8222-222222222222',
+ '[]'::jsonb)$q$,
+ '55000','pa_full_scored_report_instrument_lineage_mismatch',
+ 'an empty observation list cannot evade the Year 4 release gate');
+SELECT throws_ok($q$SELECT private.assert_pa_myp4_scored_snapshot(
+ 'ed222222-2222-4222-8222-222222222222',
+ 'ed222222-2222-4222-8222-222222222222',
+ (SELECT jsonb_agg(jsonb_build_object('observation_code','RV01'))
+  FROM public.diagnostic_observations
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'))$q$,
+ '55000','pa_full_scored_report_instrument_lineage_mismatch',
+ 'duplicate codes cannot pass a nominally 30-row scored report');
+SELECT throws_ok($q$SELECT private.assert_pa_myp4_scored_snapshot(
+ 'ed222222-2222-4222-8222-222222222222',
+ 'ed222222-2222-4222-8222-222222222222',
+ (SELECT jsonb_agg(jsonb_build_object('observation_code',
+  CASE WHEN observation_code='RV01' THEN 'FAKE' ELSE observation_code END))
+  FROM public.diagnostic_observations
+  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'))$q$,
+ '55000','pa_full_scored_report_instrument_lineage_mismatch',
+ 'a missing authentic observation replaced with an invented code fails closed');
+
 SELECT is((SELECT count(*)::integer FROM private.pa_release_evidence_receipts
  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),1,
  'one immutable audit-linked receipt for the exact synthetic version');
