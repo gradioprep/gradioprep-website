@@ -1862,10 +1862,10 @@ async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts
  * SQL independently validates curriculum and release state. */
 async function ownerPaAcademicHandoff(
   request: Request, env: WorkerEnv,
-  action: "readiness" | "rubric" | "receipt" | "crosswalk", diagnosticVersionId?: string,
+  action: "readiness" | "outcomes" | "rubric" | "receipt" | "crosswalk", diagnosticVersionId?: string,
 ): Promise<Response> {
   let fields: Record<string, unknown> = {};
-  if (action === "readiness") {
+  if (action === "readiness" || action === "outcomes") {
     if (!diagnosticVersionId || !isUuid(diagnosticVersionId) || new URL(request.url).search)
       return jsonResponse({ error: "invalid_pa_academic_handoff" }, 400);
   } else {
@@ -1919,10 +1919,11 @@ async function ownerPaAcademicHandoff(
   const aalDenied = requireAal2(auth.context);
   if (aalDenied) return aalDenied;
   const operation = action === "readiness" ? "inspect_pa_academic_readiness"
+    : action === "outcomes" ? "list_pa_verified_route_outcomes"
     : action === "rubric" ? "approve_pa_scoring_rubric"
     : action === "crosswalk" ? "record_pa_verified_direct_crosswalk"
     : "record_pa_release_evidence";
-  const args = action === "readiness"
+  const args = (action === "readiness" || action === "outcomes")
     ? { p_diagnostic_version_id: diagnosticVersionId }
     : Object.fromEntries(Object.entries(fields).map(([key,value])=>["p_"+key,value]));
   const { data, error } = await auth.context.supabase.rpc(operation, args);
@@ -1934,6 +1935,7 @@ async function ownerPaAcademicHandoff(
     return jsonResponse({ error: "pa_academic_handoff_unavailable" }, 503);
   }
   if (action === "readiness") return jsonResponse({ dimensions: asRows(data) });
+  if (action === "outcomes") return jsonResponse({ outcomes: asRows(data) });
   return jsonResponse(action === "rubric"
     ? { rubric_approval_id: data }
     : action === "crosswalk" ? { recorded_direct_mappings: data }
@@ -4658,6 +4660,9 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   const paAcademicReadiness = url.pathname.match(/^\/api\/v1\/admin\/pa-academic\/readiness\/([0-9a-f-]{36})$/i);
   if (paAcademicReadiness && request.method === "GET")
     return ownerPaAcademicHandoff(request, env, "readiness", paAcademicReadiness[1]);
+  const paAcademicOutcomes = url.pathname.match(/^\\/api\\/v1\\/admin\\/pa-academic\\/outcomes\\/([0-9a-f-]{36})$/i);
+  if (paAcademicOutcomes && request.method === "GET")
+    return ownerPaAcademicHandoff(request, env, "outcomes", paAcademicOutcomes[1]);
   if (url.pathname === "/api/v1/admin/pa-academic/rubric" && request.method === "POST")
     return ownerPaAcademicHandoff(request, env, "rubric");
   if (url.pathname === "/api/v1/admin/pa-academic/evidence" && request.method === "POST")
