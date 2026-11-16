@@ -1862,10 +1862,12 @@ async function staffPaFeedback(request: Request, env: WorkerEnv, action: "drafts
  * SQL independently validates curriculum and release state. */
 async function ownerPaAcademicHandoff(
   request: Request, env: WorkerEnv,
-  action: "readiness" | "outcomes" | "rubric" | "receipt" | "crosswalk", diagnosticVersionId?: string,
+  action: "versions" | "readiness" | "outcomes" | "rubric" | "receipt" | "crosswalk", diagnosticVersionId?: string,
 ): Promise<Response> {
   let fields: Record<string, unknown> = {};
-  if (action === "readiness" || action === "outcomes") {
+  if (action === "versions") {
+    if (new URL(request.url).search) return jsonResponse({ error: "invalid_pa_academic_handoff" }, 400);
+  } else if (action === "readiness" || action === "outcomes") {
     if (!diagnosticVersionId || !isUuid(diagnosticVersionId) || new URL(request.url).search)
       return jsonResponse({ error: "invalid_pa_academic_handoff" }, 400);
   } else {
@@ -1918,12 +1920,14 @@ async function ownerPaAcademicHandoff(
   if (roleDenied) return roleDenied;
   const aalDenied = requireAal2(auth.context);
   if (aalDenied) return aalDenied;
-  const operation = action === "readiness" ? "inspect_pa_academic_readiness"
+  const operation = action === "versions" ? "list_pa_academic_versions"
+    : action === "readiness" ? "inspect_pa_academic_readiness"
     : action === "outcomes" ? "list_pa_verified_route_outcomes"
     : action === "rubric" ? "approve_pa_scoring_rubric"
     : action === "crosswalk" ? "record_pa_verified_direct_crosswalk"
     : "record_pa_release_evidence";
-  const args = (action === "readiness" || action === "outcomes")
+  const args = action === "versions" ? {}
+    : (action === "readiness" || action === "outcomes")
     ? { p_diagnostic_version_id: diagnosticVersionId }
     : Object.fromEntries(Object.entries(fields).map(([key,value])=>["p_"+key,value]));
   const { data, error } = await auth.context.supabase.rpc(operation, args);
@@ -1934,6 +1938,7 @@ async function ownerPaAcademicHandoff(
       return jsonResponse({ error: "pa_academic_evidence_incomplete_or_conflicting" }, 409);
     return jsonResponse({ error: "pa_academic_handoff_unavailable" }, 503);
   }
+  if (action === "versions") return jsonResponse({ versions: asRows(data) });
   if (action === "readiness") return jsonResponse({ dimensions: asRows(data) });
   if (action === "outcomes") return jsonResponse({ outcomes: asRows(data) });
   return jsonResponse(action === "rubric"
@@ -4657,6 +4662,8 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
   if (url.pathname === "/api/v1/admin/pa-feedback/publish" && request.method === "POST") {
     return publishOwnerPaEvaluationFeedback(request, env);
   }
+  if (url.pathname === "/api/v1/admin/pa-academic/versions" && request.method === "GET")
+    return ownerPaAcademicHandoff(request, env, "versions");
   const paAcademicReadiness = url.pathname.match(/^\/api\/v1\/admin\/pa-academic\/readiness\/([0-9a-f-]{36})$/i);
   if (paAcademicReadiness && request.method === "GET")
     return ownerPaAcademicHandoff(request, env, "readiness", paAcademicReadiness[1]);
