@@ -21,6 +21,8 @@ async function fingerprintLocalFile(file: File): Promise<string> {
 export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: string }) {
   const [version, setVersion] = useState("");
   const [rows, setRows] = useState<ReadinessRow[]>([]);
+  const [crosswalkJson, setCrosswalkJson] = useState("");
+  const [crosswalkRecorded, setCrosswalkRecorded] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [rubricHash, setRubricHash] = useState("");
   const [maxima, setMaxima] = useState<Record<string,string>>({});
@@ -78,6 +80,26 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
     catch (e) { setError(e instanceof Error ? e.message : "Operation failed."); }
     finally { setBusy(false); }
   }
+  const expectedCodes = new Set(rows.map(row => row.observation_code));
+  const parsedCrosswalk = (() => {
+    try {
+      const raw: unknown = JSON.parse(crosswalkJson);
+      if (!Array.isArray(raw) || raw.length !== 30 || !loaded || rows.length !== 30)
+        return null;
+      const codes = new Set<string>();
+      for (const item of raw) {
+        if (!item || typeof item !== "object" || Array.isArray(item)) return null;
+        const entry = item as Record<string, unknown>;
+        if (Object.keys(entry).length !== 3 ||
+          typeof entry.code !== "string" || !expectedCodes.has(entry.code) ||
+          codes.has(entry.code) || typeof entry.outcome_mapping_id !== "string" ||
+          !uuid(entry.outcome_mapping_id) || typeof entry.rationale !== "string" ||
+          entry.rationale.trim().length < 20 || entry.rationale.length > 2000) return null;
+        codes.add(entry.code);
+      }
+      return codes.size === 30 ? raw : null;
+    } catch { return null; }
+  })();
   const allMapped = loaded && rows.length === 30 && new Set(rows.map(r=>r.observation_code)).size === 30 &&
     rows.every(r=>r.reviewed_direct_mapping_present && r.learner_capture_enabled);
   const numericMaxima = rows.map(r=>({ code: r.observation_code, max_points: Number(maxima[r.observation_code]) }));
@@ -95,13 +117,53 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
       Never use test values. Private teacher files stay outside public GitHub.</p>
     <label>PA instrument version ID
       <input value={version} onChange={e=>{setVersion(e.target.value.trim());setRows([]);
-        setLoaded(false);setRubricId("");setReceiptId("");}} placeholder="Exact instrument version UUID" />
+        setLoaded(false);setRubricId("");setReceiptId("");setCrosswalkJson("");setCrosswalkRecorded(false);
+        setRubricHash("");setMaxima({});setAcademicRef("");setCalibrationRef("");
+        setRubricNote("");setSourceRef("");setBundleHash("");setMappingHash("");
+        setPacksHash("");setCalibrationHash("");setEvidenceNote("");}} placeholder="Exact instrument version UUID" />
     </label>
     <button type="button" className="proto-action secondary" disabled={busy || !uuid(version)}
       onClick={()=>void perform(async()=>{
         const response=await call("/api/v1/admin/pa-academic/readiness/"+version);
         setRows((response.dimensions as ReadinessRow[]) ?? []);setLoaded(true);
       },"Exact-version mapping and capture state loaded.")}>Check 30 dimensions</button>
+    {loaded && !allMapped && !crosswalkRecorded && <fieldset disabled={busy || fingerprinting}>
+      <legend>Record verified 30-observation direct curriculum crosswalk</legend>
+      <p>Use only a complete crosswalk from the qualified Founder's existing reviewed evidence.
+        Each entry must name the exact observation code, an existing reviewed DIRECT outcome
+        mapping UUID on this verified Year 4 route, and its evidence rationale. This does
+        not create curriculum outcomes or substitute for source verification.</p>
+      <label>Verified mapping file (JSON containing 30 entries)
+        <input type="file" accept=".json,application/json" onChange={event=>{
+          const file=event.currentTarget.files?.[0];
+          if (file && file.size <= 64000) {
+            void file.text().then(text=>setCrosswalkJson(text)).catch(()=>
+              setError("Could not read the private crosswalk file on this device."));
+          } else if (file) setError("Crosswalk file is too large.");
+          event.currentTarget.value="";
+        }} />
+      </label>
+      <label>Review 30-link JSON before secure handoff
+        <textarea rows={5} value={crosswalkJson} onChange={event=>setCrosswalkJson(event.target.value)}
+          placeholder={'[{"code":"RV01","outcome_mapping_id":"existing-reviewed-outcome-uuid","rationale":"Exact source and task-specific direct outcome rationale"}, ...]'} />
+      </label>
+      <p>{parsedCrosswalk
+        ? "All 30 unique observation codes and identifiers have the required format. Database verification is still required."
+        : "A complete, correctly formatted 30-row crosswalk is required before recording."}</p>
+      <button type="button" className="proto-action secondary"
+        disabled={!parsedCrosswalk || busy || fingerprinting}
+        onClick={()=>void perform(async()=>{
+          const result=await call("/api/v1/admin/pa-academic/crosswalk",{
+            diagnostic_version_id:version,mappings:parsedCrosswalk,
+          });
+          if (result.recorded_direct_mappings !== 30)
+            throw new Error("The database did not confirm all 30 mappings.");
+          setCrosswalkRecorded(true);
+          const updated=await call("/api/v1/admin/pa-academic/readiness/"+version);
+          setRows((updated.dimensions as ReadinessRow[]) ?? []);
+        },"All 30 verified DIRECT links recorded atomically and checked against the exact Year 4 route.")}>
+        Record 30 reviewed direct links</button>
+    </fieldset>}
     {loaded && <>
       <p>{rows.filter(r=>r.reviewed_direct_mapping_present).length} / 30 reviewed direct mappings;
         {" "}{rows.filter(r=>r.learner_capture_enabled).length} / 30 capture-enabled observations.
