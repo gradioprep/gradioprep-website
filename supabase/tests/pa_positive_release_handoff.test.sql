@@ -84,6 +84,9 @@ SELECT is((SELECT count(*)::integer FROM
  WHERE learner_capture_enabled AND reviewed_direct_mapping_present),30,
  'Owner AAL2 sees exactly thirty mocked reviewed direct mappings');
 
+-- The helper is intentionally private, so exercise its state validation as
+-- the migration owner (not as an authenticated client without EXECUTE).
+RESET ROLE;
 -- A complete-looking rubric or a chat approval cannot authorise a real
 -- Year 4 scored report while the instrument is still a hidden draft.
 SELECT throws_ok($q$SELECT private.assert_pa_full_scored_release_ready(
