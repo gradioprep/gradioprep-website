@@ -1,7 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 /** The Founder already granted qualified academic approval. This workspace
  * records only the genuine, version-bound evidence underlying that decision. */
+type PaVersionSummary = {
+  diagnostic_version_id: string;
+  instrument_version: number;
+  instrument_title: string;
+  instrument_release_state: string;
+  route_version_id: string;
+  route_key: string;
+  route_review_state: string;
+  route_source_title: string | null;
+  route_source_url: string | null;
+  total_observations: number;
+  direct_mappings: number;
+  capture_enabled: number;
+};
 type VerifiedOutcome = {
   outcome_mapping_id: string;
   unit_code: string;
@@ -27,6 +41,8 @@ async function fingerprintLocalFile(file: File): Promise<string> {
 
 export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: string }) {
   const [version, setVersion] = useState("");
+  const [availableVersions, setAvailableVersions] = useState<PaVersionSummary[]>([]);
+  const [versionsError, setVersionsError] = useState("");
   const [rows, setRows] = useState<ReadinessRow[]>([]);
   const [crosswalkJson, setCrosswalkJson] = useState("");
   const [verifiedOutcomes, setVerifiedOutcomes] = useState<VerifiedOutcome[]>([]);
@@ -84,6 +100,18 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
       : "The academic evidence operation could not be completed.");
     return result;
   }
+  useEffect(() => {
+    let active=true;
+    setAvailableVersions([]);
+    setVersionsError("");
+    void call("/api/v1/admin/pa-academic/versions").then(result=>{
+      if (active) setAvailableVersions((result.versions as PaVersionSummary[]) ?? []);
+    }).catch(()=>{
+      if (active) setVersionsError("The private PA version inventory could not be loaded.");
+    });
+    return ()=>{ active=false; };
+    // The caller's access token scopes this request; stale results are discarded on sign-out.
+  }, [accessToken]);
   async function perform(task: () => Promise<void>, success: string) {
     setBusy(true); setError(""); setStatus("");
     try { await task(); setStatus(success); }
@@ -125,13 +153,27 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
     <p>Existing Founder academic approvals remain valid. Enter only genuine exact-version source
       references, verified direct mappings, numerical scoring anchors and witnessed calibration records.
       Never use test values. Private teacher files stay outside public GitHub.</p>
-    <label>PA instrument version ID
-      <input value={version} onChange={e=>{setVersion(e.target.value.trim());setRows([]);
+    <label>Choose the exact PA instrument
+      <select aria-label="Exact PA instrument version" value={version}
+        onChange={e=>{setVersion(e.target.value);setRows([]);
         setLoaded(false);setRubricId("");setReceiptId("");setCrosswalkJson("");setCrosswalkRecorded(false);setVerifiedOutcomes([]);setSelectedOutcomes({});setMappingRationales({});
         setRubricHash("");setMaxima({});setAcademicRef("");setCalibrationRef("");
         setRubricNote("");setSourceRef("");setBundleHash("");setMappingHash("");
-        setPacksHash("");setCalibrationHash("");setEvidenceNote("");}} placeholder="Exact instrument version UUID" />
+        setPacksHash("");setCalibrationHash("");setEvidenceNote("");}}>
+        <option value="">Select an instrument version</option>
+        {availableVersions.map(item=><option key={item.diagnostic_version_id}
+          value={item.diagnostic_version_id}>Version {item.instrument_version} · {item.instrument_title}</option>)}
+      </select>
     </label>
+    {versionsError && <p role="alert">{versionsError}</p>}
+    {availableVersions.find(item=>item.diagnostic_version_id===version) && <p>
+      {(()=>{const current=availableVersions.find(item=>item.diagnostic_version_id===version)!;
+        return "Curriculum route: "+current.route_key+" · "+current.route_review_state+
+          " · "+current.direct_mappings+"/"+current.total_observations+" verified direct mappings"+
+          " · "+current.capture_enabled+"/"+current.total_observations+" capture-enabled observations"+
+          (current.route_source_title ? " · Source: "+current.route_source_title : " · Official source not recorded");
+      })()}
+    </p>}
     <button type="button" className="proto-action secondary" disabled={busy || !uuid(version)}
       onClick={()=>void perform(async()=>{
         const response=await call("/api/v1/admin/pa-academic/readiness/"+version);
