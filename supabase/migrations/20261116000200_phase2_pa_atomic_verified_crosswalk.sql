@@ -82,9 +82,15 @@ BEGIN
       WHERE learner_capture_enabled AND reviewed_direct_mapping_present)<>30 THEN
     RAISE EXCEPTION USING ERRCODE='55000', MESSAGE='pa_crosswalk_incomplete';
   END IF;
+  INSERT INTO private.security_audit_events(
+    actor_id,action,target_type,target_id,outcome,reason_category
+  ) VALUES(
+    auth.uid(),'pa_direct_crosswalk_recorded','diagnostic_version',
+    instrument.id,'success','qualified_founder_exact_version_evidence'
+  );
   RETURN count_written;
 END;
-$$;
+$;
 ALTER FUNCTION public.record_pa_verified_direct_crosswalk(uuid,jsonb) OWNER TO postgres;
 REVOKE ALL ON FUNCTION public.record_pa_verified_direct_crosswalk(uuid,jsonb)
   FROM PUBLIC,anon,service_role;
