@@ -55,21 +55,20 @@ UPDATE public.curriculum_route_versions
 UPDATE public.curriculum_unit_versions SET release_state='published'
 WHERE id='fe000000-0000-4000-8000-000000000101';
 
-INSERT INTO public.diagnostic_observation_outcome_mappings(
-  diagnostic_version_id,diagnostic_observation_id,route_version_id,
-  curriculum_unit_version_id,curriculum_unit_outcome_mapping_id,
-  mapping_status,mapping_rationale,reviewed_by,reviewed_at
-)
-SELECT o.diagnostic_version_id,o.id,
-  'fe000000-0000-4000-8000-000000000001',
-  'fe000000-0000-4000-8000-000000000101',
-  m.id,'direct','Synthetic CI-only direct outcome mapping.',
-  '88888888-8888-4888-8888-888888888888',clock_timestamp()
+-- Prepare exact test-only crosswalk from the existing synthetic reviewed outcomes.
+-- The new Owner handoff must persist all 30 together, not individual writes.
+CREATE TEMP TABLE synthetic_pa_crosswalk_payload AS
+SELECT jsonb_agg(jsonb_build_object(
+ 'code',o.observation_code,
+ 'outcome_mapping_id',m.id,
+ 'rationale','Synthetic source-specific mapping for the exact observation.'
+) ORDER BY o.observation_code) AS mappings
 FROM public.diagnostic_observations o
 JOIN public.curriculum_unit_outcome_mappings m
   ON m.curriculum_unit_version_id='fe000000-0000-4000-8000-000000000101'
- AND m.outcome_reference='SYN-'||o.observation_code
+  AND m.outcome_reference='SYN-'||o.observation_code
 WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
+GRANT SELECT ON synthetic_pa_crosswalk_payload TO authenticated;
 
 -- This never enables the actual draft: the SQL transaction ROLLBACK at EOF.
 UPDATE public.diagnostic_observations SET learner_capture_enabled=true
@@ -79,6 +78,11 @@ SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
 SELECT set_config('request.jwt.claims',
  '{"sub":"88888888-8888-4888-8888-888888888888","role":"authenticated","aal":"aal2"}',true);
+SELECT is(public.record_pa_verified_direct_crosswalk(
+ 'ed222222-2222-4222-8222-222222222222',
+ (SELECT mappings FROM synthetic_pa_crosswalk_payload)),30,
+ 'Owner AAL2 records all 30 verified exact-route synthetic links atomically');
+
 SELECT is((SELECT count(*)::integer FROM
  public.inspect_pa_academic_readiness('ed222222-2222-4222-8222-222222222222')
  WHERE learner_capture_enabled AND reviewed_direct_mapping_present),30,
