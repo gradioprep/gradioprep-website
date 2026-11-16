@@ -33,6 +33,7 @@ test("qualified Founder handoff reuses existing private rubric and academic rece
 test("private academic handoff API denies anonymous and signed-in student", async ({ page, request }) => {
   const base = "/api/v1/admin/pa-academic";
   const operations = [
+    { path: base + "/versions", method: "GET" },
     { path: base + "/readiness/" + zero, method: "GET" },
     { path: base + "/outcomes/" + zero, method: "GET" },
     { path: base + "/rubric", method: "POST",
@@ -122,4 +123,18 @@ test("Owner mapping selector exposes only reviewed exact-route outcome reference
   expect(evidence).toContain("Prepare the 30 verified links for review");
   expect(evidence).toContain('"/api/v1/admin/pa-academic/outcomes/"+version');
   expect(worker).toContain('"/api/v1/admin/pa-academic/crosswalk"');
+});
+
+test("Owner selects actual PA versions with exact-route readiness, not manually typed IDs", () => {
+  const sql=readFileSync("supabase/migrations/20261116000400_phase2_pa_owner_instrument_inventory.sql","utf8");
+  expect(sql).toContain("private.current_user_has_role('owner'::public.app_role)");
+  expect(sql).toContain("coalesce(auth.jwt()->>'aal','aal1') <> 'aal2'");
+  expect(sql).toContain("dv.diagnostic_code='ib-myp-g9-cycle1'");
+  expect(sql).toContain("m.mapping_status='direct'");
+  expect(sql).toContain("om.mapping_status='direct'");
+  expect(worker).toContain('"/api/v1/admin/pa-academic/versions"');
+  expect(worker).toContain('"list_pa_academic_versions"');
+  expect(evidence).toContain('aria-label="Exact PA instrument version"');
+  expect(evidence).toContain("availableVersions.map(");
+  expect(evidence).toContain('"/api/v1/admin/pa-academic/versions"');
 });
