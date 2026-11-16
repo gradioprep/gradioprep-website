@@ -138,3 +138,31 @@ test("Owner selects actual PA versions with exact-route readiness, not manually 
   expect(evidence).toContain("availableVersions.map(");
   expect(evidence).toContain('"/api/v1/admin/pa-academic/versions"');
 });
+
+
+test("the Founder can prepare a private blank crosswalk before learner capture opens", () => {
+  expect(evidence).toContain("blankPaCrosswalkTemplate");
+  expect(evidence).toContain("Download blank 30-row crosswalk template");
+  expect(evidence).toContain("URL.createObjectURL(blob)");
+  expect(evidence).toContain('outcome_mapping_id: "", rationale: ""');
+  expect(evidence).toContain("rows.every(r=>r.reviewed_direct_mapping_present)");
+  expect(evidence).not.toContain("rows.every(r=>r.reviewed_direct_mapping_present && r.learner_capture_enabled)");
+  const migration = readFileSync("supabase/migrations/20261116000200_phase2_pa_atomic_verified_crosswalk.sql", "utf8");
+  expect(migration).toContain("WHERE reviewed_direct_mapping_present)<>30");
+  expect(migration).not.toContain("WHERE learner_capture_enabled AND reviewed_direct_mapping_present");
+  const override = readFileSync("supabase/migrations/20261116000500_phase2_pa_hidden_draft_evidence_handoff.sql", "utf8");
+  expect(override).toContain("CREATE OR REPLACE FUNCTION public.approve_pa_scoring_rubric(");
+  expect(override).toContain("CREATE OR REPLACE FUNCTION public.record_pa_release_evidence(");
+  expect(override).not.toContain("WHERE reviewed_direct_mapping_present AND learner_capture_enabled");
+  const positive = readFileSync("supabase/tests/pa_positive_release_handoff.test.sql", "utf8");
+  expect(positive).toContain("Academic mapping is possible while every learner capture path remains closed");
+  expect(positive.indexOf("learner_capture_enabled=true")).toBeGreaterThan(
+    positive.indexOf("private academic receipts never bypass learner capture publication safeguards"));
+});
+
+test("the full scored academic release migration has correctly closed dollar-quoted functions", () => {
+  const migration = readFileSync("supabase/migrations/20261116000100_phase2_pa_full_scored_academic_release_gate.sql", "utf8");
+  expect(migration).toContain("CREATE FUNCTION private.assert_pa_myp4_scored_snapshot(");
+  expect(migration).not.toMatch(/\nAS \$\n|\n\$;\n/);
+  expect((migration.match(/\nAS \$\$\n/g) ?? []).length).toBe(3);
+});

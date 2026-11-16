@@ -70,9 +70,8 @@ JOIN public.curriculum_unit_outcome_mappings m
 WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
 GRANT SELECT ON synthetic_pa_crosswalk_payload TO authenticated;
 
--- This never enables the actual draft: the SQL transaction ROLLBACK at EOF.
-UPDATE public.diagnostic_observations SET learner_capture_enabled=true
-WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
+-- Keep learner capture disabled throughout mapping and private-evidence preparation.
+-- Even synthetic test actors must not enable unfinished PA questions early.
 
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
@@ -85,8 +84,12 @@ SELECT is(public.record_pa_verified_direct_crosswalk(
 
 SELECT is((SELECT count(*)::integer FROM
  public.inspect_pa_academic_readiness('ed222222-2222-4222-8222-222222222222')
- WHERE learner_capture_enabled AND reviewed_direct_mapping_present),30,
- 'Owner AAL2 sees exactly thirty mocked reviewed direct mappings');
+ WHERE reviewed_direct_mapping_present),30,
+ 'Owner AAL2 sees thirty reviewed direct mappings in the hidden draft');
+SELECT is((SELECT count(*)::integer FROM public.diagnostic_observations
+ WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'
+   AND learner_capture_enabled),0,
+ 'Academic mapping is possible while every learner capture path remains closed');
 
 -- The helper is intentionally private, so exercise its state validation as
 -- the migration owner (not as an authenticated client without EXECUTE).
@@ -135,6 +138,14 @@ SELECT ok((SELECT receipt_id FROM synthetic_pa_release_state) IS NOT NULL,
  'Owner can bind source, crosswalk, teacher packs and calibration hashes to the exact rubric');
 RESET ROLE;
 
+-- Even with the private evidence receipt, publication cannot happen while
+-- learner capture remains disabled; enabling it is a distinct release action.
+SELECT throws_ok($q$UPDATE public.diagnostic_versions SET release_state='published'
+ WHERE id='ed222222-2222-4222-8222-222222222222'$q$,
+ '55000','pa_publication_requires_reviewed_direct_mapping',
+ 'private academic receipts never bypass learner capture publication safeguards');
+UPDATE public.diagnostic_observations SET learner_capture_enabled=true
+WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222';
 -- All structural gates now permit TEST publication. The transaction below is
 -- ALWAYS rolled back, so there is no actual learner-facing v2 publication.
 UPDATE public.diagnostic_versions SET release_state='published'

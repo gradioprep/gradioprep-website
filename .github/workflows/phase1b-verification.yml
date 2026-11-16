@@ -26,6 +26,7 @@ jobs:
     timeout-minutes: 45
     permissions:
       contents: read
+      issues: write  # Update the fixed PR #22 Preview handoff only
     steps:
       - name: Check out exact branch revision
         uses: actions/checkout@v7
@@ -138,6 +139,7 @@ jobs:
         if: always()
         run: npx supabase stop --no-backup || true
 
+      # Push-triggered exact-head CI publishes only after all test steps pass.
       # Never upload a public Worker Preview with local API endpoints or local
       # publishable keys embedded in its browser bundle or Worker vars.
       - name: Remove local-only environment files
@@ -146,6 +148,14 @@ jobs:
 
       - name: Build clean public-preview assets without local credentials
         run: npm run build
+
+      - name: Reject local backend URLs in public Preview files
+        run: |
+          set -euo pipefail
+          if grep -R -E -l '(127\\.0\\.0\\.1:5432[0-9]|localhost:5432[0-9])' dist; then
+            echo "Refusing Preview upload: local Supabase URL is present in assets." >&2
+            exit 1
+          fi
 
       - name: Check whether Cloudflare preview credentials are configured
         id: credentials
@@ -162,13 +172,13 @@ jobs:
       - name: Create or update public Cloudflare Preview after all tests pass
         id: preview
         if: >-
-          github.event_name == 'pull_request' &&
-          contains(github.event.pull_request.body, '<!-- founder-preview-required -->') &&
+          github.ref == 'refs/heads/feature/phase-1b-local-auth-api' &&
+          github.actor == 'gradioprep' &&
           steps.credentials.outputs.available == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          PREVIEW_NAME: ${{ format('pr-{0}', github.event.pull_request.number) }}
+          PREVIEW_NAME: pr-22
         run: |
           set -euo pipefail
           output="$(npx wrangler preview --name "$PREVIEW_NAME" --json)"
@@ -180,6 +190,7 @@ jobs:
             echo "### Public Cloudflare Worker Preview ready"
             echo ""
             echo "Preview URL: $preview_url"
+            echo "Application commit: $GITHUB_SHA"
             echo ""
             echo "The complete local Auth/RLS, build and browser test pipeline passed before this Preview was uploaded."
             echo ""
@@ -199,11 +210,13 @@ jobs:
 
             **Preview URL:** ${process.env.PREVIEW_URL}
 
+            **Exact application commit:** ${context.sha}
+
             **Verification order:** local Supabase/RLS tests → TypeScript/Worker/Vite build → Playwright → clean public Preview upload.
 
             This is an unreleased synthetic-data-only Preview. It is public unless Cloudflare Access is enabled. It is not connected to a hosted or production Supabase project. Do not enter personal or real learner data.`;
             const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
+            const issue_number = 22; // Dedicated trusted push branch for draft PR #22
             const { data: comments } = await github.rest.issues.listComments({
               owner, repo, issue_number, per_page: 100
             });
@@ -222,8 +235,8 @@ jobs:
 
       - name: Record why the public Preview was not deployed
         if: >-
-          github.event_name == 'pull_request' &&
-          contains(github.event.pull_request.body, '<!-- founder-preview-required -->') &&
+          github.ref == 'refs/heads/feature/phase-1b-local-auth-api' &&
+          github.actor == 'gradioprep' &&
           steps.credentials.outputs.available != 'true'
         run: |
           {

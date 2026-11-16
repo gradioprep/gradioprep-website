@@ -31,6 +31,16 @@ type ReadinessRow = {
 const uuid = (s: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
 const digest = (s: string) => /^[a-f0-9]{64}$/.test(s);
 
+/** Owner-only, locally generated form: no outcome or rationale is pre-approved. */
+export function blankPaCrosswalkTemplate(rows: ReadinessRow[]): string | null {
+  if (rows.length !== 30 || new Set(rows.map(row => row.observation_code)).size !== 30
+    || rows.some(row => row.group_code === "L"
+      || !/^(RV|LC|AW|CW|SP)[0-9]{2}[ab]?$/.test(row.observation_code))) return null;
+  return JSON.stringify(rows.map(row => ({
+    code: row.observation_code, outcome_mapping_id: "", rationale: "",
+  })), null, 2);
+}
+
 /** Fingerprint restricted evidence locally. File bytes never leave the browser. */
 async function fingerprintLocalFile(file: File): Promise<string> {
   const bytes = await file.arrayBuffer();
@@ -119,6 +129,17 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
     finally { setBusy(false); }
   }
   const expectedCodes = new Set(rows.map(row => row.observation_code));
+  const emptyCrosswalkTemplate = loaded ? blankPaCrosswalkTemplate(rows) : null;
+  function downloadCrosswalkTemplate() {
+    if (!emptyCrosswalkTemplate || !uuid(version)) return;
+    const blob = new Blob([emptyCrosswalkTemplate], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "pa-direct-crosswalk-" + version + ".json";
+    link.click();
+    URL.revokeObjectURL(url);
+  }
   const parsedCrosswalk = (() => {
     try {
       const raw: unknown = JSON.parse(crosswalkJson);
@@ -139,7 +160,7 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
     } catch { return null; }
   })();
   const allMapped = loaded && rows.length === 30 && new Set(rows.map(r=>r.observation_code)).size === 30 &&
-    rows.every(r=>r.reviewed_direct_mapping_present && r.learner_capture_enabled);
+    rows.every(r=>r.reviewed_direct_mapping_present);
   const numericMaxima = rows.map(r=>({ code: r.observation_code, max_points: Number(maxima[r.observation_code]) }));
   const rubricReady = !fingerprinting && allMapped && digest(rubricHash) && academicRef.trim().length >= 12 &&
     calibrationRef.trim().length >= 12 && rubricNote.trim().length >= 20 &&
@@ -191,6 +212,11 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
       <p>{verifiedOutcomes.length} existing, reviewed curriculum outcomes available for this
         exact route. If none appear, the underlying verified curriculum records must be
         supplied first; this workspace cannot create them.</p>
+      <p>Download the exact 30 observation codes to prepare the real crosswalk
+        privately. Outcome identifiers and rationales are left blank, never invented.</p>
+      <button type="button" className="proto-action secondary"
+        disabled={!emptyCrosswalkTemplate || busy}
+        onClick={downloadCrosswalkTemplate}>Download blank 30-row crosswalk template</button>
       {verifiedOutcomes.length > 0 && <>
         {rows.map(row=><div key={row.observation_code}>
           <label>{row.observation_code} — reviewed curriculum outcome
@@ -260,7 +286,9 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
     {loaded && <>
       <p>{rows.filter(r=>r.reviewed_direct_mapping_present).length} / 30 reviewed direct mappings;
         {" "}{rows.filter(r=>r.learner_capture_enabled).length} / 30 capture-enabled observations.
-        {allMapped ? " Structural prerequisite satisfied." : " Release and rubric recording remain blocked."}</p>
+        {allMapped
+          ? " Direct mapping preparation is complete. Learner capture and publication remain separately protected."
+          : " Rubric recording waits for all reviewed direct links; learner capture stays protected."}</p>
       <ul aria-label="Exact-version academic readiness">{rows.map(r=><li key={r.observation_code}>
         {r.observation_code}: {r.reviewed_direct_mapping_present ? "direct mapping recorded" : "mapping missing"}
         {" · "}{r.learner_capture_enabled ? "capture enabled" : "capture disabled"}

@@ -31,8 +31,7 @@ BEGIN
   ) OR (SELECT count(*) FROM public.diagnostic_observations o
         WHERE o.diagnostic_version_id=instrument.id AND o.group_code<>'L')<>30
     OR EXISTS(SELECT 1 FROM public.diagnostic_observations o
-        WHERE o.diagnostic_version_id=instrument.id AND (o.group_code='L'
-          OR NOT o.learner_capture_enabled))
+        WHERE o.diagnostic_version_id=instrument.id AND o.group_code='L')
     OR EXISTS(SELECT 1 FROM public.diagnostic_observation_outcome_mappings m
         WHERE m.diagnostic_version_id=instrument.id) THEN
     RAISE EXCEPTION USING ERRCODE='55000', MESSAGE='pa_crosswalk_route_or_version_not_ready';
@@ -71,7 +70,7 @@ BEGIN
       ON u.id=outcome.curriculum_unit_version_id
       AND u.route_version_id=instrument.route_version_id AND u.release_state='published'
     WHERE o.diagnostic_version_id=instrument.id AND o.observation_code=code
-      AND o.learner_capture_enabled AND o.group_code<>'L';
+      AND o.group_code<>'L';
     IF NOT FOUND THEN
       RAISE EXCEPTION USING ERRCODE='55000', MESSAGE='pa_crosswalk_requires_verified_exact_route_outcome';
     END IF;
@@ -79,7 +78,7 @@ BEGIN
   END LOOP;
   IF count_written<>30 OR
     (SELECT count(*) FROM public.inspect_pa_academic_readiness(instrument.id)
-      WHERE learner_capture_enabled AND reviewed_direct_mapping_present)<>30 THEN
+      WHERE reviewed_direct_mapping_present)<>30 THEN
     RAISE EXCEPTION USING ERRCODE='55000', MESSAGE='pa_crosswalk_incomplete';
   END IF;
   INSERT INTO private.security_audit_events(
