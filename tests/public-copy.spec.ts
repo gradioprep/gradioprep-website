@@ -75,6 +75,10 @@ const internalCopyPatterns = [
   /your next learning activity will appear here/i,
   /syllabus edition and level structure to be confirmed/i,
   /\bStep 8\b/i,
+  /not independently verified by this page/i,
+  /report scoring state is/i,
+  /not a final teacher-approved evaluation report/i,
+  /course details not available in this snapshot/i,
 ];
 
 test.describe("public website copy rules", () => {

@@ -74,8 +74,8 @@ function curriculumConnection(status: string): { heading: string; description: s
     };
   }
   return {
-    heading: "Not complete",
-    description: "Some assessment tasks cannot yet be linked to a verified curriculum outcome.",
+    heading: "Curriculum links incomplete",
+    description: "Some assessed skills in this report do not have confirmed curriculum connections.",
   };
 }
 
@@ -87,8 +87,8 @@ function responseEvidence(status: string): { heading: string; description: strin
     };
   }
   return {
-    heading: "Not yet sufficient",
-    description: "The report does not yet meet the combined checks for response evidence and verified curriculum connections.",
+    heading: "Response evidence incomplete",
+    description: "This report does not contain all the responses and curriculum connections needed for a complete assessment summary.",
   };
 }
 
@@ -249,11 +249,11 @@ export default function EvaluationReportPanel({
 
     <section className="proto-panel proto-evaluation-note" aria-labelledby="proto-evaluation-scope-heading">
       <h3 id="proto-evaluation-scope-heading">Assessment scope and source</h3>
-      <p><strong>Programme and course:</strong> {routeLabel || "Course details not available in this snapshot"}</p>
+      <p><strong>Programme and course:</strong> {routeLabel || "Course information unavailable"}</p>
       <p><strong>Session and source edition:</strong> {editionLabel || "Not recorded"}</p>
       <p><strong>Curriculum source:</strong> {scope?.official_source_title || "Not recorded"}</p>
       <p><strong>Assessment record:</strong> {report.content_snapshot?.diagnostic_title || "Preliminary Assessment"} · Report version {report.version_number}</p>
-      <p>The details above come from the saved report version. They are not independently verified by this page.</p>
+      <p>These details describe the course and assessment recorded with this report.</p>
     </section>
 
     <section className="proto-panel proto-evaluation-coverage" aria-label="Assessment evidence summary">
@@ -307,7 +307,7 @@ export default function EvaluationReportPanel({
         <h3>{approvedScore ? "Human-reviewed results available" : "Not scored"}</h3>
         <p>{approvedScore
           ? `${approvedScore.points_awarded} of ${approvedScore.points_possible} rubric points. These are assessment results, not an official board grade or percentile.`
-          : `This report does not contain a score, grade or percentile comparison. The report scoring state is ${scope?.report_scoring_state === "unscored_baseline" ? "unscored baseline" : "not confirmed"}.`}</p>
+          : `This report has no published score, official grade or percentile comparison.`}</p>
       </article>
     </div>
 
@@ -354,11 +354,11 @@ export default function EvaluationReportPanel({
 
     <div className="proto-panel proto-evaluation-note">
       <h3>What this report contains</h3>
-      <p>This immutable report version summarises submitted evidence and curriculum link checks. {approvedFeedback
+      <p>This report brings together your assessment responses and their curriculum connections. {approvedFeedback
         ? (approvedScore
-          ? "Its scoring and teacher feedback were human-approved before publication. No official grade, percentile comparison or automatically generated learning plan is included."
-          : "Its teacher feedback was human-approved before publication. No score, official grade, percentile comparison or recommended learning plan is provided.")
-        : "It is not a final teacher-approved Evaluation Report and does not contain a score, grade, percentile comparison, personalised feedback or recommended learning plan."}</p>
+          ? "Your teacher-reviewed results and feedback are included. These are not official board grades or percentile rankings."
+          : "Your teacher-reviewed feedback is included. No score, official grade or percentile ranking is provided.")
+        : "There is no teacher-published feedback or score in this report. Only assessed and reviewed results can be added to a later report version."}</p>
     </div>
   </section>;
 }
