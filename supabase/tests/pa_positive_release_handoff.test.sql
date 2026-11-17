@@ -101,13 +101,13 @@ SELECT throws_ok($q$SELECT private.assert_pa_full_scored_release_ready(
  '55000','pa_full_scored_report_requires_academic_evidence',
  'real Year 4 scored publication refuses an unreleased draft without evidence');
 
--- Mappings and enabled capture alone cannot publish without a real private
--- rubric/evidence receipt. The new publication safeguard must reject it.
+-- Mappings alone cannot publish. The learner-capture publication guard rejects
+-- the still-disabled draft before the private academic receipt is checked.
 RESET ROLE;
 SELECT throws_ok($q$UPDATE public.diagnostic_versions SET release_state='published'
  WHERE id='ed222222-2222-4222-8222-222222222222'$q$,
- '55000','pa_publication_requires_exact_academic_evidence',
- 'mapped 30-observation draft stays blocked until evidence receipt');
+ '55000','pa_publication_requires_reviewed_direct_mapping',
+ 'mapped 30-observation draft stays blocked while learner capture is disabled');
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','88888888-8888-4888-8888-888888888888',true);
 SELECT set_config('request.jwt.claims',

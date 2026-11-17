@@ -29,8 +29,8 @@ SELECT throws_ok($q$SELECT public.record_pa_verified_direct_crosswalk(
    'rationale','Synthetic placeholder not a verified mapping.'))
  FROM public.diagnostic_observations o
  WHERE o.diagnostic_version_id='ed222222-2222-4222-8222-222222222222'))$q$,
- '55000','pa_crosswalk_route_or_version_not_ready',
- 'Owner cannot authorise mappings against an unverified school route');
+ '55000','pa_crosswalk_requires_verified_exact_route_outcome',
+ 'Owner cannot record a link to a nonexistent reviewed route outcome');
 RESET ROLE;
 SELECT is((SELECT count(*)::integer FROM public.diagnostic_observation_outcome_mappings
  WHERE diagnostic_version_id='ed222222-2222-4222-8222-222222222222'),0,
