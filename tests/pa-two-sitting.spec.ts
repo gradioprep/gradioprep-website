@@ -18,8 +18,8 @@ test("two-sitting UI saves and finishes one session before moving to next",async
 test("expired sittings lock all response controls including longer writing tasks",async()=>{
  const panel=await readFile(new URL("../src/auth/DiagnosticPanel.tsx",import.meta.url),"utf8");
  expect(panel).toContain("const sittingExpired = twoSitting");
- expect((panel.match(/disabled=\\{readOnly \\|\\| sittingExpired\\}/g) ?? []).length).toBeGreaterThanOrEqual(15);
- expect((panel.match(/readOnly=\\{readOnly \\|\\| saving \\|\\| sittingExpired\\}/g) ?? []).length).toBe(3);
+ expect((panel.match(/disabled=\{readOnly \|\| sittingExpired\}/g) ?? []).length).toBeGreaterThanOrEqual(15);
+ expect((panel.match(/readOnly=\{readOnly \|\| saving \|\| sittingExpired\}/g) ?? []).length).toBe(3);
  expect(panel).toContain("no further changes can be saved");
 });
 
