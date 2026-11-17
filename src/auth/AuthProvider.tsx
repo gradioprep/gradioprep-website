@@ -3,6 +3,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -56,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [mfaNextLevel, setMfaNextLevel] = useState<AuthenticatorLevel>("aal1");
   const [mfaLoading, setMfaLoading] = useState(true);
   const [mfaStatusError, setMfaStatusError] = useState("");
+  const authEventReceived = useRef(false);
 
   async function refreshMfaStatus() {
     if (!supabase || !session?.access_token) {
@@ -110,6 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let active = true;
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, nextSession) => {
       if (active) {
+        authEventReceived.current = true;
         if (event === "PASSWORD_RECOVERY") setPasswordRecovery(true);
         if (event === "SIGNED_OUT") {
           setPasswordRecovery(false);
@@ -118,10 +121,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setMfaNextLevel("aal1");
           setMfaLoading(false);
         }
-        // Auth profile updates (including password recovery) do not always
-        // change the access token. Do not leave the security gate loading when
-        // the token-dependent assurance refresh will not run.
-        if (nextSession && event !== "USER_UPDATED") setMfaLoading(true);
         setSession(nextSession);
         setLoading(false);
       }
@@ -129,6 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     void supabase.auth.getSession().then(({ data, error }) => {
       if (!active) return;
+      if (authEventReceived.current) return;
       const nextSession = error ? null : data.session;
       setSession(nextSession);
       setMfaLoading(Boolean(nextSession));
@@ -142,6 +142,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    // Assurance checks are token-driven; USER_UPDATED and duplicate auth events
+    // must not re-enter a loading state without a corresponding refresh.
     void refreshMfaStatus();
   }, [session?.access_token]);
 

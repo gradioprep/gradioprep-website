@@ -161,6 +161,27 @@ test.describe("Phase 1B account foundation", () => {
     expect(body.error).toBe("authentication_required");
   });
 
+  test("password visibility controls are keyboard accessible and preserve autofill", async ({ page }) => {
+    await page.goto("/account");
+    const password = page.getByLabel("Password", { exact: true });
+    await expect(password).toHaveAttribute("type", "password");
+    await expect(password).toHaveAttribute("autocomplete", "current-password");
+    await password.fill("Synthetic-test-password-2026");
+    const show = page.getByRole("button", { name: "Show password" });
+    await show.focus();
+    await page.keyboard.press("Enter");
+    await expect(password).toHaveAttribute("type", "text");
+    await expect(password).toHaveValue("Synthetic-test-password-2026");
+    await expect(page.getByRole("button", { name: "Hide password" })).toHaveAttribute("aria-pressed", "true");
+    await page.keyboard.press("Enter");
+    await expect(password).toHaveAttribute("type", "password");
+
+    await page.getByRole("button", { name: /create a student account/i }).click();
+    await expect(page.getByLabel("Password", { exact: true })).toHaveAttribute("autocomplete", "new-password");
+    await page.getByRole("button", { name: "Show password" }).click();
+    await expect(page.getByLabel("Password", { exact: true })).toHaveAttribute("type", "text");
+  });
+
   test("synthetic student can sign up, load own profile, edit display name and sign out", async ({ page }) => {
     const pageErrors: string[] = [];
     const apiResponses: string[] = [];

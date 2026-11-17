@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import type { Navigate } from "../App";
 import { useAuth } from "./AuthProvider";
 import LearnerSubmissionPanel from "./LearnerSubmissionPanel";
@@ -38,6 +38,40 @@ interface CreatedStaffInvitation {
   invited_role: "grader" | "admin";
   created_at: string;
   expires_at: string;
+}
+
+
+function PasswordField({
+  label, value, onChange, autoComplete, minLength = 1,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  autoComplete: "current-password" | "new-password";
+  minLength?: number;
+}) {
+  const id = useId();
+  const [visible, setVisible] = useState(false);
+  return <div className="proto-password-field">
+    <label htmlFor={id}>{label}</label>
+    <div style={{ position: "relative" }}>
+      <input id={id} type={visible ? "text" : "password"} autoComplete={autoComplete}
+        value={value} onChange={event => onChange(event.target.value)}
+        minLength={minLength} required style={{ paddingRight: "3.25rem" }} />
+      <button type="button" onClick={() => setVisible(current => !current)}
+        aria-label={visible ? "Hide " + label.toLowerCase() : "Show " + label.toLowerCase()}
+        aria-pressed={visible}
+        title={visible ? "Hide password" : "Show password"}
+        style={{ position: "absolute", right: "0.5rem", top: "50%", transform: "translateY(-50%)", display: "grid", placeItems: "center", width: "2.25rem", height: "2.25rem", background: "transparent", border: 0, cursor: "pointer", color: "inherit" }}>
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+          <circle cx="12" cy="12" r="3" />
+          {visible && <path d="M3 3l18 18" />}
+        </svg>
+      </button>
+    </div>
+  </div>;
 }
 
 export default function AccountPage({
@@ -538,8 +572,8 @@ export default function AccountPage({
       </div>
       <p className="proto-account-description">Use at least 12 characters. Your password is managed by the secure sign-in service.</p>
       <form className="proto-account-form" onSubmit={completePasswordReset}>
-        <label>New password<input type="password" autoComplete="new-password" value={password} onChange={event => setPassword(event.target.value)} minLength={12} required /></label>
-        <label>Confirm new password<input type="password" autoComplete="new-password" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} minLength={12} required /></label>
+        <PasswordField label="New password" autoComplete="new-password" value={password} onChange={setPassword} minLength={12} />
+        <PasswordField label="Confirm new password" autoComplete="new-password" value={confirmPassword} onChange={setConfirmPassword} minLength={12} />
         <button className="proto-action" type="submit" disabled={submitting}>{submitting ? "Please wait…" : "Update password"}</button>
       </form>
       <button className="proto-account-toggle" type="button" onClick={signOut} disabled={submitting}>Cancel and sign out</button>
@@ -696,7 +730,7 @@ export default function AccountPage({
       <form className="proto-account-form" onSubmit={submitAuth}>
         {mode === "sign-up" && <label>Display name<input autoComplete="name" value={displayName} onChange={event => setDisplayName(event.target.value)} maxLength={80} required minLength={2} /></label>}
         <label>Email address<input type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} required /></label>
-        <label>Password<input type="password" autoComplete={mode === "sign-in" ? "current-password" : "new-password"} value={password} onChange={event => setPassword(event.target.value)} minLength={mode === "sign-up" ? 12 : 1} required /></label>
+        <PasswordField label="Password" autoComplete={mode === "sign-in" ? "current-password" : "new-password"} value={password} onChange={setPassword} minLength={mode === "sign-up" ? 12 : 1} />
         {mode === "sign-up" && <small className="proto-account-hint">Use at least 12 characters.</small>}
         <button className="proto-action" type="submit" disabled={submitting}>{submitting ? "Please wait…" : mode === "sign-in" ? "Sign in" : "Create account"}</button>
       </form>
