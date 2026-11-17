@@ -135,6 +135,8 @@ export default function DiagnosticPanel({
   const [attemptId, setAttemptId] = useState("");
   const [attemptStatus, setAttemptStatus] = useState<"not_started" | "in_progress" | "submitted">("not_started");
   const [responses, setResponses] = useState<DiagnosticResponseMap>({});
+  // Only server-acknowledged response versions count as saved; typing alone does not.
+  const [savedSignatures, setSavedSignatures] = useState<Record<string, string>>({});
   const [instrument, setInstrument] = useState({ code: "", version: 0 });
   const [availableCodes, setAvailableCodes] = useState<string[]>([]);
   const [availableSittings, setAvailableSittings] = useState<Record<string, number>>({});
@@ -215,7 +217,8 @@ export default function DiagnosticPanel({
   const currentSittingCodes = (codes: string[], sitting: number) =>
     codes.filter(code => availableSittings[code] === sitting);
   const pendingForSitting = (sitting: number) =>
-    currentSittingCodes(requiredCodes, sitting).every(code => savedCodes.includes(code));
+    currentSittingCodes(requiredCodes, sitting).every(code =>
+      (sittingExpired ? savedCodes : responseReadyCodes).includes(code));
   const session = sittingSessions.find(s => s.sitting_number === activeSitting);
   const secondsLeft = session && !session.untimed
     ? Math.max(0, Math.ceil((new Date(session.started_at).getTime()
@@ -224,12 +227,17 @@ export default function DiagnosticPanel({
   void clockTick;
   const sittingExpired = twoSitting && !!session && secondsLeft === 0;
   const finishedSittings = sittingSessions.filter(s => s.completed_at !== null).map(s => s.sitting_number);
-  const savedCodes = payloads().map(item => item.code);
+  const responseReadyItems = payloads();
+  const responseReadyCodes = responseReadyItems.map(item => item.code);
+  const savedCodes = responseReadyItems
+    .filter(item => savedSignatures[item.code] === JSON.stringify(item.response))
+    .map(item => item.code);
   const requiredCodes = ["RV01", "RV02", "RV03", "RV04", "RV05", "RV06", "RV07a", "RV07b", "RV08", "RV09", "LC01", "LC02", "LC03", "LC04", "LC05",
     ...(availableCodes.includes("AW01") ? ["AW01"] : []),
     ...(availableCodes.includes("CW01") ? ["CW01"] : []),
     ...(availableCodes.includes("SP01") ? ["SP01"] : [])];
-  const complete = requiredCodes.every(code => savedCodes.includes(code));
+  const complete = requiredCodes.every(code =>
+    (twoSitting ? savedCodes : responseReadyCodes).includes(code));
 
   function reportIdempotencyKeyFor(targetAttemptId: string): string {
     const cached = reportIdempotencyKeys[targetAttemptId];
@@ -305,6 +313,10 @@ export default function DiagnosticPanel({
         restored[code] = value.response ?? {};
       }
       setResponses(restored);
+      setSavedSignatures(Object.fromEntries(
+        Object.entries(result.responses ?? {}).map(([code, value]) =>
+          [code, JSON.stringify(value.response ?? {})]),
+      ));
       const savedCreative = restored.CW01;
       setCreativeDraft(savedCreative
         ? {
@@ -389,8 +401,13 @@ export default function DiagnosticPanel({
     setError("");
     setMessage("");
     try {
-      for (const item of payloads().filter(item => !twoSitting ||
-        availableSittings[item.code] === activeSitting)) {
+      const answers = responseReadyItems.filter(item => !twoSitting ||
+        availableSittings[item.code] === activeSitting);
+      if (answers.length === 0) {
+        setMessage("Complete an answer before saving your progress.");
+        return false;
+      }
+      for (const item of answers) {
         const response = await fetch(
           "/api/v1/learner/diagnostic-attempts/" + attemptId + "/responses/" + item.code,
           {
@@ -401,6 +418,9 @@ export default function DiagnosticPanel({
         );
         const result = await response.json() as { error?: string };
         if (!response.ok) throw new Error(result.error ?? "A response could not be saved.");
+        setSavedSignatures(current => ({
+          ...current, [item.code]: JSON.stringify(item.response),
+        }));
       }
       setMessage("Your completed answers have been saved.");
       return true;
@@ -418,7 +438,7 @@ export default function DiagnosticPanel({
     setError("");
     setMessage("");
     try {
-      for (const item of payloads().filter(() => !twoSitting)) {
+      for (const item of responseReadyItems.filter(() => !twoSitting)) {
         const response = await fetch(
           "/api/v1/learner/diagnostic-attempts/" + attemptId + "/responses/" + item.code,
           {
@@ -431,6 +451,9 @@ export default function DiagnosticPanel({
           const result = await response.json() as { error?: string };
           throw new Error(result.error ?? "A response could not be saved.");
         }
+        setSavedSignatures(current => ({
+          ...current, [item.code]: JSON.stringify(item.response),
+        }));
       }
       const submitted = await fetch(
         "/api/v1/learner/diagnostic-attempts/" + attemptId + "/submit",
@@ -816,14 +839,14 @@ export default function DiagnosticPanel({
 
       </>}
       <div className="proto-diagnostic-footer">
-        <p>{savedCodes.filter(code => requiredCodes.includes(code)).length} of {requiredCodes.length} questions have response-ready answers. Response guidance is not a hard word limit.</p>
+        <p>{responseReadyCodes.filter(code => requiredCodes.includes(code)).length} of {requiredCodes.length} questions have complete responses; {savedCodes.filter(code => requiredCodes.includes(code)).length} are saved to your assessment. Save progress before leaving. Response guidance is not a hard word limit.</p>
         {!readOnly && <>
           {twoSitting && activeSitting > 0 && <button className="proto-action"
             type="button" disabled={loading || saving || readOnly || !pendingForSitting(activeSitting)}
             onClick={() => void sittingAction(activeSitting,"complete")}>
             Finish Sitting {activeSitting}
           </button>}
-          <button className="proto-action secondary" type="button" onClick={() => void saveAll()} disabled={buttonDisabled || savedCodes.length === 0 || (twoSitting && activeSitting === 0)}>
+          <button className="proto-action secondary" type="button" onClick={() => void saveAll()} disabled={buttonDisabled || responseReadyCodes.length === 0 || (twoSitting && activeSitting === 0)}>
             {saving ? "Saving…" : "Save progress"}
           </button>
           <button className="proto-action" type="button" onClick={() => void submitDiagnostic()} disabled={buttonDisabled || !complete || (twoSitting && finishedSittings.length !== 2)}>

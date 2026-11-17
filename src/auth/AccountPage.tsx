@@ -507,8 +507,8 @@ export default function AccountPage({
     {!auth.configured ? <section className="proto-panel proto-account-card">
       <span className="proto-account-icon">i</span>
       <h2>Account access is currently unavailable.</h2>
-      <p>Please return to the homepage and try again later.</p>
-      <p></p>
+      <p>You can still explore English pathways and read available learning activities without signing in.</p>
+      <button className="proto-action" type="button" onClick={() => go("pathways")}>Explore English pathways</button>
       <button className="proto-action secondary" type="button" onClick={() => go("home")}>← Back to homepage</button>
     </section> : auth.loading ? <section className="proto-panel proto-account-card" role="status">Checking your sign-in status…</section> : auth.session && auth.mfaLoading ? <section className="proto-panel proto-account-card" role="status">Checking account security…</section> : auth.session && auth.mfaStatusError ? <section className="proto-panel proto-account-card">
       <h2>Account security is unavailable.</h2>

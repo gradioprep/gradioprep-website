@@ -82,10 +82,12 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     await expect(firstWrittenResponse.locator(".proto-diagnostic-word-count")).toHaveText("0 / 40 words");
     await firstWrittenResponse.locator("textarea").fill("An answer with six words in total");
     await expect(firstWrittenResponse.locator(".proto-diagnostic-word-count")).toHaveText("7 / 40 words");
+    await expect(page.getByText("1 of 15 questions have complete responses; 0 are saved to your assessment.", { exact: false })).toBeVisible();
     await firstWrittenResponse.locator("textarea").fill(Array(46).fill("word").join(" "));
     await expect(firstWrittenResponse.locator(".proto-diagnostic-word-count")).toHaveText("46 / 40 words");
     await firstWrittenResponse.locator("textarea").fill("");
     await expect(firstWrittenResponse.locator(".proto-diagnostic-word-count")).toHaveText("0 / 40 words");
+    await expect(page.getByText("0 of 15 questions have complete responses; 0 are saved to your assessment.", { exact: false })).toBeVisible();
 
 
     const resumed = await request.post(startPath, {

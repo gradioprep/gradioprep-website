@@ -6,6 +6,11 @@ test("two-sitting UI saves and finishes one session before moving to next",async
  expect(panel).toContain('Start Sitting 2');
  expect(panel).toContain('Finish Sitting {activeSitting}');
  expect(panel).toContain('pendingForSitting(activeSitting)');
+ expect(panel).toContain('savedSignatures[item.code] === JSON.stringify(item.response)');
+ expect(panel).toContain('(sittingExpired ? savedCodes : responseReadyCodes).includes(code)');
+ expect(panel).toContain('setSavedSignatures(current => ({');
+ expect(panel).toContain('are saved to your assessment');
+ expect(panel).not.toContain('questions have response-ready answers');
  expect(panel).toContain('sittingExpired');
  expect(panel).toContain('finishedSittings.length !== 2');
  expect(panel).toContain('availableSittings[item.code] === activeSitting');
