@@ -146,8 +146,35 @@ jobs:
         if: always()
         run: rm -f .dev.vars .env.local
 
-      - name: Build clean public-preview assets without local credentials
+      - name: Require isolated Supabase Preview secrets
+        env:
+          PREVIEW_SUPABASE_URL: ${{ secrets.PREVIEW_SUPABASE_URL }}
+          PREVIEW_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PREVIEW_SUPABASE_PUBLISHABLE_KEY }}
+          PREVIEW_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PREVIEW_SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+          for name in PREVIEW_SUPABASE_URL PREVIEW_SUPABASE_PUBLISHABLE_KEY PREVIEW_SUPABASE_SERVICE_ROLE_KEY; do
+            if [ -z "${!name:-}" ]; then
+              echo "Missing required Preview secret name: $name" >&2
+              exit 1
+            fi
+          done
+
+      - name: Build clean public-preview assets with publishable Supabase settings only
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.PREVIEW_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PREVIEW_SUPABASE_PUBLISHABLE_KEY }}
         run: npm run build
+
+      - name: Refuse to publish private service-role credentials in browser assets
+        env:
+          PREVIEW_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PREVIEW_SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+          if grep -R -F -q -- "$PREVIEW_SUPABASE_SERVICE_ROLE_KEY" dist; then
+            echo "Refusing Preview upload: privileged credential present in public assets." >&2
+            exit 1
+          fi
 
       - name: Reject local backend URLs in public Preview files
         run: |
@@ -179,12 +206,25 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           PREVIEW_NAME: pr-22
+          PREVIEW_SUPABASE_URL: ${{ secrets.PREVIEW_SUPABASE_URL }}
+          PREVIEW_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PREVIEW_SUPABASE_PUBLISHABLE_KEY }}
+          PREVIEW_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PREVIEW_SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           set -euo pipefail
           output="$(npx wrangler preview --name "$PREVIEW_NAME" --json)"
           printf '%s\n' "$output"
           preview_json="$(printf '%s\n' "$output" | awk 'BEGIN { capture = 0 } /^[[:space:]]*[{]/ { capture = 1 } capture { print }')"
           preview_url="$(printf '%s\n' "$preview_json" | jq -er '.preview.urls[0]')"
+          # Bind privileged settings as encrypted Worker Preview secrets, not public Vite variables.
+          umask 077
+          secret_file="$(mktemp)"
+          trap 'rm -f "$secret_file"' EXIT
+          jq -n \
+            --arg url "$PREVIEW_SUPABASE_URL" \
+            --arg publishable "$PREVIEW_SUPABASE_PUBLISHABLE_KEY" \
+            --arg service "$PREVIEW_SUPABASE_SERVICE_ROLE_KEY" \
+            '{SUPABASE_URL: $url, SUPABASE_PUBLISHABLE_KEY: $publishable, SUPABASE_SERVICE_ROLE_KEY: $service}' > "$secret_file"
+          npx wrangler preview secret bulk "$secret_file" --name "$PREVIEW_NAME" >/dev/null
           echo "preview_url=$preview_url" >> "$GITHUB_OUTPUT"
           {
             echo "### Public Cloudflare Worker Preview ready"
@@ -214,7 +254,7 @@ jobs:
 
             **Verification order:** local Supabase/RLS tests → TypeScript/Worker/Vite build → Playwright → clean public Preview upload.
 
-            This is an unreleased synthetic-data-only Preview. It is public unless Cloudflare Access is enabled. It is not connected to a hosted or production Supabase project. Do not enter personal or real learner data.`;
+            This is an unreleased synthetic-data-only Preview. It is public unless Cloudflare Access is enabled. It uses the isolated synthetic Preview Supabase project. Do not enter personal or real learner data.`;
             const { owner, repo } = context.repo;
             const issue_number = 22; // Dedicated trusted push branch for draft PR #22
             const { data: comments } = await github.rest.issues.listComments({
