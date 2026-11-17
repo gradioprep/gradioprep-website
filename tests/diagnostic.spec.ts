@@ -406,7 +406,7 @@ test.describe("Cycle 1 Preliminary Assessment — Read & View and Language in Co
     await expect(itemEvidence.last()).toContainText("LC05");
     await expect(itemEvidence.last()).toContainText("Response saved");
     await expect(page.getByText("Not scored", { exact: true })).toBeVisible();
-    await expect(page.getByText(/does not contain a score, grade or percentile comparison/i)).toBeVisible();
+    await expect(page.getByText(/has no published score, official grade or percentile comparison/i)).toBeVisible();
     await expect(page.getByRole("heading", { name: "Teacher-reviewed feedback" })).toHaveCount(0);
   });
 });
