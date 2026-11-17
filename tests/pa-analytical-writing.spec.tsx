@@ -27,9 +27,9 @@ test("word guidance never rejects a valid over-target typed response", () => {
   expect(isPaAnalyticalWritingResponse("    ")).toBe(false);
   const html = renderToStaticMarkup(<PaAnalyticalWritingTask value={longAnswer} onChange={() => {}} />);
   expect(html).toContain("220 / 180 words");
-  expect(html).not.toContain("disabled=\"\"");
+  expect(html).not.toContain('disabled=""');
   const readOnly = renderToStaticMarkup(<PaAnalyticalWritingTask value={longAnswer} readOnly onChange={() => {}} />);
-  expect(readOnly).toContain("disabled=\"\"");
+  expect(readOnly).toContain('disabled=""');
 });
 
 test("AW capture is available only through the server-authorised PA instrument", async () => {
@@ -39,7 +39,7 @@ test("AW capture is available only through the server-authorised PA instrument",
   expect(panel).toContain('availableCodes.includes("AW01") && <PaAnalyticalWritingTask');
   expect(panel).toContain('isPaAnalyticalWritingResponse(current("AW01").text ?? "")');
   expect(panel).toContain('onChange={value => update("AW01", "text", value)}');
-  expect(panel).toContain('readOnly={readOnly || saving}');
+  expect(panel).toContain('readOnly={readOnly || saving || sittingExpired}');
   expect(worker).toContain('.eq("diagnostic_version_id", version.id)');
   expect(worker).toContain('.eq("learner_capture_enabled", true)');
   expect(worker).toContain("available_observation_codes: enabledRows.map");
