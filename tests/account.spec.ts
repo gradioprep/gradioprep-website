@@ -167,18 +167,18 @@ test.describe("Phase 1B account foundation", () => {
     await expect(password).toHaveAttribute("type", "password");
     await expect(password).toHaveAttribute("autocomplete", "current-password");
     await password.fill("Synthetic-test-password-2026");
-    const show = page.getByRole("button", { name: "Show password" });
+    const show = page.getByRole("button", { name: "Show entered characters" });
     await show.focus();
     await page.keyboard.press("Enter");
     await expect(password).toHaveAttribute("type", "text");
     await expect(password).toHaveValue("Synthetic-test-password-2026");
-    await expect(page.getByRole("button", { name: "Hide password" })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("button", { name: "Hide entered characters" })).toHaveAttribute("aria-pressed", "true");
     await page.keyboard.press("Enter");
     await expect(password).toHaveAttribute("type", "password");
 
     await page.getByRole("button", { name: /create a student account/i }).click();
     await expect(page.getByLabel("Password", { exact: true })).toHaveAttribute("autocomplete", "new-password");
-    await page.getByRole("button", { name: "Show password" }).click();
+    await page.getByRole("button", { name: "Show entered characters" }).click();
     await expect(page.getByLabel("Password", { exact: true })).toHaveAttribute("type", "text");
   });
 

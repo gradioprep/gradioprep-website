@@ -59,7 +59,7 @@ function PasswordField({
         value={value} onChange={event => onChange(event.target.value)}
         minLength={minLength} required style={{ paddingRight: "3.25rem" }} />
       <button type="button" onClick={() => setVisible(current => !current)}
-        aria-label={visible ? "Hide " + label.toLowerCase() : "Show " + label.toLowerCase()}
+        aria-label={visible ? "Hide entered characters" : "Show entered characters"}
         aria-pressed={visible}
         title={visible ? "Hide password" : "Show password"}
         style={{ position: "absolute", right: "0.5rem", top: "50%", transform: "translateY(-50%)", display: "grid", placeItems: "center", width: "2.25rem", height: "2.25rem", background: "transparent", border: 0, cursor: "pointer", color: "inherit" }}>
