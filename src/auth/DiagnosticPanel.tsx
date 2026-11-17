@@ -551,7 +551,7 @@ export default function DiagnosticPanel({
         <ChoiceField
           legend="RV01a. Which statement best expresses the central idea of Stimulus A?"
           name="rv01a"
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
           value={current("RV01").a ?? ""}
           onChange={value => update("RV01", "a", value as string)}
           options={textOptions([
@@ -564,7 +564,7 @@ export default function DiagnosticPanel({
         <ChoiceField
           legend="RV01b. Select two details from Stimulus A that show that some work could not be completed that afternoon."
           name="rv01b"
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
           multiple
           value={current("RV01").b ?? []}
           onChange={value => update("RV01", "b", value as string[])}
@@ -580,13 +580,13 @@ export default function DiagnosticPanel({
       <div className="proto-diagnostic-question">
         <h3>RV02 · Inference and interpretation</h3>
         <p>Why does Nia place the card beside the waiting pile at the end of Stimulus A? Explain what this action suggests about how her view of the afternoon has changed.</p>
-        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV02").text ?? ""} onChange={value => update("RV02", "text", value)}  disabled={readOnly} />
+        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV02").text ?? ""} onChange={value => update("RV02", "text", value)}  disabled={readOnly || sittingExpired} />
       </div>
 
       <div className="proto-diagnostic-question">
         <h3>RV03 · Creator’s choice</h3>
         <p>Explain how the phrase “Its bright note crossed the hall” shapes the atmosphere at that moment and contributes to the reader’s understanding of Nia’s response.</p>
-        <TextField label="Your response" guidance="Response guidance: 35–50 words. Ideal target: 45 words; this is guidance, not a limit." value={current("RV03").text ?? ""} onChange={value => update("RV03", "text", value)}  disabled={readOnly} />
+        <TextField label="Your response" guidance="Response guidance: 35–50 words. Ideal target: 45 words; this is guidance, not a limit." value={current("RV03").text ?? ""} onChange={value => update("RV03", "text", value)}  disabled={readOnly || sittingExpired} />
       </div>
 
       <div className="proto-diagnostic-question">
@@ -594,7 +594,7 @@ export default function DiagnosticPanel({
         <ChoiceField
           legend="Who is the most likely audience for Stimulus B, and what is the poster mainly designed to do?"
           name="rv04"
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
           value={current("RV04").choice ?? ""}
           onChange={value => update("RV04", "choice", value as string)}
           options={textOptions([
@@ -610,7 +610,7 @@ export default function DiagnosticPanel({
           code="RV04"
           value={current("RV04").explanation ?? ""}
           onChange={value => update("RV04", "explanation", value)}
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
         />
       </div>
 
@@ -619,7 +619,7 @@ export default function DiagnosticPanel({
         <ChoiceField
           legend="Which statement accurately interprets the outcome graphic in Stimulus B?"
           name="rv05"
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
           value={current("RV05").choice ?? ""}
           onChange={value => update("RV05", "choice", value as string)}
           options={textOptions([
@@ -635,7 +635,7 @@ export default function DiagnosticPanel({
           code="RV05"
           value={current("RV05").explanation ?? ""}
           onChange={value => update("RV05", "explanation", value)}
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
         />
       </div>
 
@@ -645,19 +645,19 @@ export default function DiagnosticPanel({
         {instrument.code === "ib-myp-g9-cycle1" && instrument.version >= 2
           ? <p>The poster says “Small repairs. Shared skills.” Analyse how its wording and outcome figures together present the event's achievements and limits. Support your interpretation with a figure and explain how a wording choice shapes the reader's understanding.</p>
           : <p>A volunteer says: “The team fixed almost every object on the day.” Is that a fair description of the poster’s results? Use at least one figure from the graphic and explain one limitation in the statement.</p>}
-        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV06").text ?? ""} onChange={value => update("RV06", "text", value)} disabled={readOnly}  />
+        <TextField label="Your response" guidance="Response guidance: 35–45 words. Ideal target: 40 words; this is guidance, not a limit." value={current("RV06").text ?? ""} onChange={value => update("RV06", "text", value)} disabled={readOnly || sittingExpired}  />
       </div>
 
       <div className="proto-diagnostic-question">
         <h3>RV07a · Compare perspectives</h3>
         <p>How do Nia in Stimulus A and the poster in Stimulus B present what counts as a successful repair afternoon? Use relevant evidence from both stimuli.</p>
-        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07a").text ?? ""} onChange={value => update("RV07a", "text", value)}  disabled={readOnly} />
+        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07a").text ?? ""} onChange={value => update("RV07a", "text", value)}  disabled={readOnly || sittingExpired} />
       </div>
 
       <div className="proto-diagnostic-question">
         <h3>RV07b · Compare form, structure and creator choices</h3>
         <p>How do the story’s sequence and the poster’s visual categories guide the reader in different ways? Refer to one specific choice in each stimulus.</p>
-        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07b").text ?? ""} onChange={value => update("RV07b", "text", value)} disabled={readOnly}  />
+        <TextField label="Your response" guidance="Response guidance: 45–60 words. Ideal target: 50 words; this is guidance, not a limit." value={current("RV07b").text ?? ""} onChange={value => update("RV07b", "text", value)} disabled={readOnly || sittingExpired}  />
       </div>
 
       <div className="proto-diagnostic-question">
@@ -673,7 +673,7 @@ export default function DiagnosticPanel({
                 next[index] = e.target.value;
                 update("RV08", "order", next);
               }}
-              disabled={readOnly}
+              disabled={readOnly || sittingExpired}
               aria-label={"Event in position " + position}
             >
               <option value="">Choose an event</option>
@@ -681,7 +681,7 @@ export default function DiagnosticPanel({
             </select>
           </label>)}
         </div>
-        <TextField label="Then explain in one sentence how this sequence helps the reader understand the change in Nia’s view." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV08").explanation ?? ""} onChange={value => update("RV08", "explanation", value)}  disabled={readOnly} />
+        <TextField label="Then explain in one sentence how this sequence helps the reader understand the change in Nia’s view." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV08").explanation ?? ""} onChange={value => update("RV08", "explanation", value)}  disabled={readOnly || sittingExpired} />
       </div>
 
       <div className="proto-diagnostic-question">
@@ -689,7 +689,7 @@ export default function DiagnosticPanel({
         <ChoiceField
           legend="Which part of Stimulus B is the strongest evidence for the claim that the poster reports both completed and unfinished outcomes?"
           name="rv09"
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
           value={current("RV09").choice ?? ""}
           onChange={value => update("RV09", "choice", value as string)}
           options={textOptions([
@@ -699,7 +699,7 @@ export default function DiagnosticPanel({
             "“You do not need to know how to repair it.”",
           ])}
         />
-        <TextField label="Explain briefly why this information is stronger evidence than one of the other statements." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV09").explanation ?? ""} onChange={value => update("RV09", "explanation", value)}  disabled={readOnly} />
+        <TextField label="Explain briefly why this information is stronger evidence than one of the other statements." guidance="Response guidance: 15–25 words. Ideal target: 20 words; this is guidance, not a limit." value={current("RV09").explanation ?? ""} onChange={value => update("RV09", "explanation", value)}  disabled={readOnly || sittingExpired} />
       </div>
 
 
@@ -714,7 +714,7 @@ export default function DiagnosticPanel({
         <ChoiceField
           legend="In this context, what does “modest” most nearly mean?"
           name="lc01"
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
           value={current("LC01").choice ?? ""}
           onChange={value => update("LC01", "choice", value as string)}
           options={textOptions([
@@ -730,7 +730,7 @@ export default function DiagnosticPanel({
           code="LC01"
           value={current("LC01").explanation ?? ""}
           onChange={value => update("LC01", "explanation", value)}
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
         />
       </div>
 
@@ -744,7 +744,7 @@ export default function DiagnosticPanel({
         <ChoiceField
           legend="What is the main effect of placing “After four weeks” at the beginning of Version 2?"
           name="lc02"
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
           value={current("LC02").choice ?? ""}
           onChange={value => update("LC02", "choice", value as string)}
           options={textOptions([
@@ -760,7 +760,7 @@ export default function DiagnosticPanel({
           code="LC02"
           value={current("LC02").explanation ?? ""}
           onChange={value => update("LC02", "explanation", value)}
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
         />
       </div>
 
@@ -772,7 +772,7 @@ export default function DiagnosticPanel({
         <ChoiceField
           legend="Which sentence is correct?"
           name="lc03"
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
           value={current("LC03").choice ?? ""}
           onChange={value => update("LC03", "choice", value as string)}
           options={textOptions([
@@ -791,7 +791,7 @@ export default function DiagnosticPanel({
         <ChoiceField
           legend="Which edit makes the relationship between the two clauses clear?"
           name="lc04"
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
           value={current("LC04").choice ?? ""}
           onChange={value => update("LC04", "choice", value as string)}
           options={textOptions([
@@ -813,7 +813,7 @@ export default function DiagnosticPanel({
           guidance="Response guidance: 30–40 words. Ideal target: 35 words; this is guidance, not a limit."
           value={current("LC05").text ?? ""}
           onChange={value => update("LC05", "text", value)}
-          disabled={readOnly}
+          disabled={readOnly || sittingExpired}
         />
       </div>
 
@@ -822,19 +822,19 @@ export default function DiagnosticPanel({
       {availableCodes.includes("AW01") && <PaAnalyticalWritingTask
         value={current("AW01").text ?? ""}
         onChange={value => update("AW01", "text", value)}
-        readOnly={readOnly || saving}
+        readOnly={readOnly || saving || sittingExpired}
       />}
 
       {availableCodes.includes("CW01") && <PaCreativeWritingTask
         value={creativeDraft}
         onChange={setCreativeDraft}
-        readOnly={readOnly || saving}
+        readOnly={readOnly || saving || sittingExpired}
       />}
 
       {availableCodes.includes("SP01") && <PaSpeakingOutlineTask
         value={speakingOutline}
         onChange={setSpeakingOutline}
-        readOnly={readOnly || saving}
+        readOnly={readOnly || saving || sittingExpired}
       />}
 
       </>}
