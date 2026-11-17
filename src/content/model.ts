@@ -48,6 +48,9 @@ export interface PlannedUnitSlot {
   pathwayId: string;
   sequence: UnitSequence;
   title: string;
+  /** Learner-ready skill overview, not a claim of board-specific curriculum adoption. */
+  summary: string;
+  insights: readonly [string, string];
 }
 
 /**

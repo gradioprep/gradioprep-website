@@ -67,6 +67,14 @@ const internalCopyPatterns = [
   /synthetic (?:student|learner|test) (?:account|data)/i,
   /development (?:environment|status)/i,
   /release (?:status|gate|candidate)/i,
+  /your next unit is being prepared/i,
+  /your next learning focus/i,
+  /your course plan will show/i,
+  /once your course plan is set/i,
+  /your .* will appear here/i,
+  /your next learning activity will appear here/i,
+  /syllabus edition and level structure to be confirmed/i,
+  /\bStep 8\b/i,
 ];
 
 test.describe("public website copy rules", () => {
@@ -100,11 +108,24 @@ test.describe("public website copy rules", () => {
 
   test("dashboard shows useful empty states instead of fictional learner activity", async ({ page }) => {
     await page.goto("/dashboard");
-    await expect(page.getByText("Your completed work will appear here.")).toBeVisible();
+    await expect(page.getByText("Review your learning activity and choose a useful next step.")).toBeVisible();
     await expect(page.getByText("Complete your first Preliminary Assessment or practice activity to start building your learning record.")).toBeVisible();
-    await expect(page.getByText("Your recent activity will appear here.")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "No recent activity" })).toBeVisible();
     await expect(page.getByText("12", { exact: true })).toHaveCount(0);
     await expect(page.getByText("28", { exact: true })).toHaveCount(0);
+  });
+
+  test("unit overview text describes a genuine learning focus, not release or planning notes", async ({ page }) => {
+    for (const route of [
+      "/pathways/ib-myp/language-and-literature/year-1/units/unit-1",
+      "/pathways/ib-myp/language-and-literature/year-4/units/unit-2",
+      "/pathways/cambridge-lower-secondary/english/stage-7/units/unit-3",
+    ]) {
+      await page.goto(route);
+      await expect(page.locator("h1")).toBeVisible();
+      await expect(page.getByText(/This unit explores how/i).first()).toBeVisible();
+      await expect(page.getByText(/Your next unit is being prepared|Your course plan will show/i)).toHaveCount(0);
+    }
   });
 
   test("Evaluation Report screen requires the submitting learner to sign in", async ({ page }) => {
@@ -176,6 +197,10 @@ test.describe("public website copy rules", () => {
       /synthetic data/i,
       /TODO:/i,
       /TEMP_COPY_/i,
+      /your next unit is being prepared/i,
+      /your course plan will show/i,
+      /once your course plan is set/i,
+      /syllabus edition and level structure to be confirmed/i,
     ];
     for (const pattern of internalAssetPatterns) {
       expect(bundleText, `internal content or metadata ${pattern} must not be shipped in client assets`).not.toMatch(pattern);

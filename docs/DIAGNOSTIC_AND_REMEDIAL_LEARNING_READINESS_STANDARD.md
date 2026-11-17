@@ -177,7 +177,7 @@ Drafting or passing automated tests alone does not complete or release a cycle. 
 
 For Cycle 1, this gate is completed immediately after the diagnostic test and evaluation report/analytics are ready and checked, and before any personalised remedial lesson, activity or remedial teacher/editor content is authored. It applies to the **entire website**, not merely the diagnostic feature.
 
-Follow docs/DESIGN_SPEC.md Section 17 for the full inventory, examples, copy direction, code-traceability convention and acceptance checks. Review every public and learner-facing route and every state, including shared navigation/footer, dashboard, pathway/course/level/unit/lesson/practice, diagnostic, report/analytics, sign-in, feedback/profile, preview/status, empty/loading/error/locked and responsive states.
+Follow Master Brief §16.9 and Design Spec §17 with their **17 November 2026 overriding finished-copy policy**: no internal notes or apparent future-work placeholders (“being prepared”, “will appear here”, “to be confirmed”). Show actual learning descriptions, relevant actions and honest data-empty states without claiming unverified syllabus adoption.
 
 Remove visible internal planning instructions, development commentary, editor notes, temporary placeholder statements and fictional-data disclaimers. Replace them with accurate, context-specific learner-facing copy or a purposeful empty state. Do not delete the bands, cards, panels or visual hierarchy carrying the copy. Do not present synthetic metrics as live learner activity or infer a unit/syllabus focus that has not been verified.
 

@@ -2,14 +2,51 @@ import type { CurriculumPathway, PlannedUnitSlot, UnitSequence } from "./model";
 
 const unitSequences: readonly UnitSequence[] = [1, 2, 3];
 
+/** Broad language-learning themes for pathway exploration, not official board
+ * unit titles or syllabus mappings. Formal assessments use separately verified
+ * route-specific academic records and release controls. */
+const unitThemes: Record<UnitSequence, {
+  title: string; summary: string; insights: readonly [string, string];
+}> = {
+  1: {
+    title: "Reading with evidence",
+    summary: "This unit explores how to recognise central ideas, follow supporting details and explain a reading with evidence from the text.",
+    insights: [
+      "Find the details that give an idea its meaning.",
+      "Use a precise example from the text to support your interpretation.",
+    ],
+  },
+  2: {
+    title: "Exploring perspectives",
+    summary: "This unit explores how viewpoint, word choice and structure influence the ways readers understand different texts.",
+    insights: [
+      "Notice whose perspective shapes the text and what it emphasises.",
+      "Compare language and structural choices across different viewpoints.",
+    ],
+  },
+  3: {
+    title: "Writing for an audience",
+    summary: "This unit explores how to choose ideas, organise a response and refine language for a particular purpose and reader.",
+    insights: [
+      "Plan an opening and a clear sequence of ideas for your reader.",
+      "Revisit vocabulary and sentence choices to make the intended effect clearer.",
+    ],
+  },
+};
+
 function plannedUnitSlots(pathwayId: string): PlannedUnitSlot[] {
   return unitSequences.map((sequence) => {
     const isFirstUnit = pathwayId === "ib-myp-lal-y1" && sequence === 1;
+    const theme = unitThemes[sequence];
     return {
       id: `${pathwayId}-u${sequence}`,
       pathwayId,
       sequence,
-      title: isFirstUnit ? "How writers shape meaning" : "Your next unit is being prepared",
+      title: isFirstUnit ? "How writers shape meaning" : theme.title,
+      summary: isFirstUnit
+        ? "This unit explores how writers shape meaning and mood through word and sentence choices, and how readers explain these effects with evidence."
+        : theme.summary,
+      insights: theme.insights,
     };
   });
 }

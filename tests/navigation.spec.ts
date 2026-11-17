@@ -111,8 +111,9 @@ test.describe("curriculum pathway URLs", () => {
     await page.getByRole("button", { name: /Continue to Unit 2/ }).click();
     await page.getByRole("button", { name: /Continue to Unit 3/ }).click();
     await expect(page).toHaveURL(new RegExp(`${unitThree}$`));
-    await expect(page.getByText("Next learning step")).toBeVisible();
-    await expect(page.getByText(/Your next learning activity will appear here/)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Writing for an audience" })).toBeVisible();
+    await expect(page.getByText(/This unit explores how to choose ideas/i).first()).toBeVisible();
+    await expect(page.getByText("Next learning step")).toHaveCount(0);
 
     await page.getByRole("button", { name: /Back to Unit 2/ }).click();
     await expect(page).toHaveURL(new RegExp(`${unitTwo}$`));
@@ -121,8 +122,8 @@ test.describe("curriculum pathway URLs", () => {
   test("IGCSE offers a clear back button and learner-friendly level guidance", async ({ page }) => {
     await page.goto("/pathways/cambridge-igcse/first-language-english");
     await expect(page.getByRole("button", { name: /Back to Pathways catalogue/ })).toBeVisible();
-    await expect(page.getByText("Your level choices will appear here.")).toBeVisible();
-    await expect(page.getByRole("button", { name: /Choose another pathway/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Reading, language and composition" })).toBeVisible();
+    await expect(page.getByText(/First Language English \(0500\), close reading/)).toBeVisible();
     await expect(page.getByRole("button", { name: /Continue to/ })).toHaveCount(0);
   });
 

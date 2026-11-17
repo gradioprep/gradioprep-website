@@ -170,10 +170,10 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
     sourceRef.trim().length >= 20 && [bundleHash,mappingHash,packsHash,calibrationHash].every(digest) &&
     evidenceNote.trim().length >= 30;
   return <section aria-label="Owner-only academic evidence handoff" className="proto-pa-academic-evidence">
-    <h4>Step 8 · Restricted academic evidence handoff</h4>
-    <p>Existing Founder academic approvals remain valid. Enter only genuine exact-version source
-      references, verified direct mappings, numerical scoring anchors and witnessed calibration records.
-      Never use test values. Private teacher files stay outside public GitHub.</p>
+    <h4>Assessment curriculum and scoring evidence</h4>
+    <p>Connect each assessment observation to a verified curriculum outcome, then
+      record the matching scoring rubric and supporting academic records.
+      Teacher reference files remain private.</p>
     <label>Choose the exact PA instrument
       <select aria-label="Exact PA instrument version" value={version}
         onChange={e=>{setVersion(e.target.value);setRows([]);
@@ -264,7 +264,7 @@ export default function PaAcademicEvidencePanel({ accessToken }: { accessToken: 
       </label>
       <label>Review 30-link JSON before secure handoff
         <textarea rows={5} value={crosswalkJson} onChange={event=>setCrosswalkJson(event.target.value)}
-          placeholder={'[{"code":"RV01","outcome_mapping_id":"existing-reviewed-outcome-uuid","rationale":"Exact source and task-specific direct outcome rationale"}, ...]'} />
+          placeholder="Paste the completed 30-row curriculum crosswalk JSON" />
       </label>
       <p>{parsedCrosswalk
         ? "All 30 unique observation codes and identifiers have the required format. Database verification is still required."

@@ -334,7 +334,7 @@ async function authenticatedMe(request: Request, env: WorkerEnv): Promise<Respon
   if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
     return jsonResponse({
       error: "backend_not_configured",
-      message: "Authentication is not connected to this public preview. Use the local development environment for synthetic account testing.",
+      message: "Sign-in is unavailable right now. Please try again later.",
     }, 503);
   }
 
@@ -389,7 +389,7 @@ async function updateProfile(request: Request, env: WorkerEnv): Promise<Response
   if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
     return jsonResponse({
       error: "backend_not_configured",
-      message: "Profile changes are unavailable in this public preview.",
+      message: "Account settings are unavailable right now. Please try again later.",
     }, 503);
   }
 
@@ -444,7 +444,7 @@ async function revokeRole(request: Request, env: WorkerEnv): Promise<Response> {
   if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
     return jsonResponse({
       error: "backend_not_configured",
-      message: "Role administration is unavailable in this public preview.",
+      message: "Account permissions cannot be managed right now. Please try again later.",
     }, 503);
   }
 

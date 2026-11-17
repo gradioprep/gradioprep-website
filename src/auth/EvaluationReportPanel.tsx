@@ -169,7 +169,7 @@ export default function EvaluationReportPanel({
   if (!reportRecordId) {
     return <section className="proto-panel proto-evaluation-empty" aria-labelledby="proto-evaluation-empty">
       <h2 id="proto-evaluation-empty">Start with your Preliminary Assessment.</h2>
-      <p>Your Evaluation Report will appear here after you submit the Preliminary Assessment.</p>
+      <p>Complete your Preliminary Assessment to receive a report based on your saved responses and teacher-reviewed feedback.</p>
       <button className="proto-action secondary" type="button" onClick={() => go("account")}>Open your account →</button>
     </section>;
   }
