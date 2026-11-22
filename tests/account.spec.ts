@@ -477,7 +477,40 @@ test.describe("Phase 1B account foundation", () => {
     await expect(page.getByRole("button", { name: "Set up authenticator app" })).toBeVisible();
     await expect.poll(() => Boolean(ownerToken)).toBe(true);
 
+    const studentDirectory = await page.request.get("/api/v1/admin/accounts", {
+      headers: { Authorization: learnerToken },
+    });
+    expect(studentDirectory.status()).toBe(403);
+    await expect(studentDirectory.json()).resolves.toMatchObject({ error: "role_required" });
+
+    const studentSuspend = await page.request.post("/api/v1/admin/accounts/status", {
+      headers: { Authorization: learnerToken },
+      data: { user_id: "88888888-8888-4888-8888-888888888888", status: "suspended" },
+    });
+    expect(studentSuspend.status()).toBe(403);
+    const studentRename = await page.request.post("/api/v1/admin/accounts/name", {
+      headers: { Authorization: learnerToken },
+      data: { user_id: "88888888-8888-4888-8888-888888888888", display_name: "Wrong Owner Name" },
+    });
+    expect(studentRename.status()).toBe(403);
+
     const firstFactorToken = ownerToken;
+    const ownerDirectoryAal1 = await page.request.get("/api/v1/admin/accounts", {
+      headers: { Authorization: firstFactorToken },
+    });
+    expect(ownerDirectoryAal1.status()).toBe(403);
+    await expect(ownerDirectoryAal1.json()).resolves.toMatchObject({ error: "mfa_required" });
+    for (const [endpoint, payload] of [
+      ["/api/v1/admin/accounts/status", { user_id: "11111111-1111-4111-8111-111111111111", status: "suspended" }],
+      ["/api/v1/admin/accounts/name", { user_id: "11111111-1111-4111-8111-111111111111", display_name: "Forbidden Name" }],
+    ] as const) {
+      const denied = await page.request.post(endpoint, {
+        headers: { Authorization: firstFactorToken }, data: payload,
+      });
+      expect(denied.status()).toBe(403);
+      await expect(denied.json()).resolves.toMatchObject({ error: "mfa_required" });
+    }
+
     const firstFactorAttempt = await page.request.post("/api/v1/admin/roles/revoke", {
       headers: { Authorization: firstFactorToken },
       data: roleRequest,
@@ -633,6 +666,51 @@ test.describe("Phase 1B account foundation", () => {
     await page.waitForTimeout(750);
     await expect(page.getByText("Verified authenticator", { exact: true })).toBeVisible();
     await expect.poll(() => ownerToken !== firstFactorToken, { timeout: 10_000 }).toBe(true);
+
+    await expect(page.getByRole("heading", { name: "Account directory" })).toBeVisible();
+    const ownerDirectory = await page.request.get("/api/v1/admin/accounts", {
+      headers: { Authorization: ownerToken },
+    });
+    expect(ownerDirectory.status()).toBe(200);
+    const directoryData = await ownerDirectory.json() as { accounts: Array<{
+      user_id: string; display_name: string; account_status: string; roles: string[];
+    }> };
+    expect(directoryData.accounts.some(row =>
+      row.user_id === "88888888-8888-4888-8888-888888888888" &&
+      row.roles.includes("owner"))).toBe(true);
+
+    const accountToEdit = "11111111-1111-4111-8111-111111111111";
+    const originalName = directoryData.accounts.find(row => row.user_id === accountToEdit)?.display_name;
+    expect(originalName).toBeTruthy();
+    const rename = await page.request.post("/api/v1/admin/accounts/name", {
+      headers: { Authorization: ownerToken },
+      data: { user_id: accountToEdit, display_name: "Synthetic Managed Learner" },
+    });
+    expect(rename.status()).toBe(200);
+    const suspend = await page.request.post("/api/v1/admin/accounts/status", {
+      headers: { Authorization: ownerToken },
+      data: { user_id: accountToEdit, status: "suspended" },
+    });
+    expect(suspend.status()).toBe(200);
+    const suspendedDirectory = await page.request.get("/api/v1/admin/accounts", {
+      headers: { Authorization: ownerToken },
+    });
+    const suspendedRows = await suspendedDirectory.json() as { accounts: Array<{
+      user_id: string; display_name: string; account_status: string;
+    }> };
+    expect(suspendedRows.accounts.find(row => row.user_id === accountToEdit)).toMatchObject({
+      display_name: "Synthetic Managed Learner", account_status: "suspended",
+    });
+    const reactivate = await page.request.post("/api/v1/admin/accounts/status", {
+      headers: { Authorization: ownerToken },
+      data: { user_id: accountToEdit, status: "active" },
+    });
+    expect(reactivate.status()).toBe(200);
+    const restoreName = await page.request.post("/api/v1/admin/accounts/name", {
+      headers: { Authorization: ownerToken },
+      data: { user_id: accountToEdit, display_name: originalName! },
+    });
+    expect(restoreName.status()).toBe(200);
 
     const verifiedAttempt = await page.request.post("/api/v1/admin/roles/revoke", {
       headers: { Authorization: ownerToken },
@@ -1384,6 +1462,19 @@ test.describe("Phase 1B account foundation", () => {
     });
     expect(adminGraderQueue.status()).toBe(403);
     await expect(adminGraderQueue.json()).resolves.toMatchObject({ error: "role_required" });
+  });
+
+  test("Owner account-management endpoints deny anonymous access", async ({ request }) => {
+    const directory = await request.get("/api/v1/admin/accounts");
+    expect(directory.status()).toBe(401);
+    const status = await request.post("/api/v1/admin/accounts/status", {
+      data: { user_id: "11111111-1111-4111-8111-111111111111", status: "suspended" },
+    });
+    expect(status.status()).toBe(401);
+    const rename = await request.post("/api/v1/admin/accounts/name", {
+      data: { user_id: "11111111-1111-4111-8111-111111111111", display_name: "Not Allowed" },
+    });
+    expect(rename.status()).toBe(401);
   });
 
   test("role revocation and staff invitation endpoints reject anonymous and malformed requests", async ({ request }) => {
