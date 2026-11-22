@@ -402,6 +402,45 @@ async function changeOwnerAccountStatus(request: Request, env: WorkerEnv): Promi
   return jsonResponse({ updated: true });
 }
 
+// AAL2 and Owner role are validated again in PostgreSQL; no service-role
+// client or authentication credentials are made available to the browser.
+async function updateOwnerAccountName(request: Request, env: WorkerEnv): Promise<Response> {
+  const auth = await authenticatedCaller(request, env);
+  if (auth.response) return auth.response;
+  const context = auth.context!;
+  const roleDenied = await requireActiveRole(context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(context);
+  if (mfaDenied) return mfaDenied;
+  const parsed = await readBoundedJson(request, 512);
+  if (!parsed.ok) return parsed.response;
+  if (!parsed.body || typeof parsed.body !== "object" || Array.isArray(parsed.body)) {
+    return jsonResponse({ error: "invalid_display_name" }, 400);
+  }
+  const data = parsed.body as Record<string, unknown>;
+  if (Object.keys(data).sort().join(",") !== "display_name,user_id" ||
+      typeof data.user_id !== "string" || !isUuid(data.user_id) ||
+      typeof data.display_name !== "string" ||
+      data.display_name.trim().length < 2 ||
+      data.display_name.trim().length > 80 ||
+      /[\x00-\x1f\x7f]/.test(data.display_name)) {
+    return jsonResponse({ error: "invalid_display_name" }, 400);
+  }
+  const { error } = await context.supabase.rpc("owner_update_account_display_name", {
+    target_user_id: data.user_id,
+    new_display_name: data.display_name.trim(),
+  });
+  if (error) {
+    if (error.message === "owner_required" || error.message === "mfa_required") {
+      return jsonResponse({ error: error.message }, 403);
+    }
+    if (error.code === "P0002") return jsonResponse({ error: "account_not_found" }, 404);
+    if (error.code === "22023") return jsonResponse({ error: "invalid_display_name" }, 400);
+    return jsonResponse({ error: "account_update_failed" }, 503);
+  }
+  return jsonResponse({ updated: true });
+}
+
 async function authenticatedMe(request: Request, env: WorkerEnv): Promise<Response> {
   if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
     return jsonResponse({
@@ -4672,6 +4711,10 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
 
   if (url.pathname === "/api/v1/me" && request.method === "PATCH") {
     return updateProfile(request, env);
+  }
+
+  if (url.pathname === "/api/v1/admin/accounts/name" && request.method === "POST") {
+    return updateOwnerAccountName(request, env);
   }
 
   if (url.pathname === "/api/v1/admin/accounts/status" && request.method === "POST") {

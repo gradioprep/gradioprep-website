@@ -55,6 +55,27 @@ export default function OwnerAccountDirectory({ token }: { token: string }) {
     finally { setBusy(false); }
   }
 
+  async function editName(row: AccountRow) {
+    const next = window.prompt("Display name for this account", row.display_name);
+    if (next === null || next.trim() === row.display_name) return;
+    if (next.trim().length < 2 || next.trim().length > 80) {
+      setError("Enter a display name between 2 and 80 characters.");
+      return;
+    }
+    setBusy(true);
+    setError("");
+    try {
+      const response = await fetch("/api/v1/admin/accounts/name", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: row.user_id, display_name: next.trim() }),
+      });
+      if (!response.ok) throw new Error("Display name could not be updated.");
+      setRevision(n => n + 1);
+    } catch (e) { setError(e instanceof Error ? e.message : "Display name could not be updated."); }
+    finally { setBusy(false); }
+  }
+
   async function changeStatus(row: AccountRow) {
     const next = row.account_status === "active" ? "suspended" : "active";
     if (!window.confirm((next === "suspended" ? "Suspend " : "Reactivate ") +
@@ -102,6 +123,10 @@ export default function OwnerAccountDirectory({ token }: { token: string }) {
             <strong>{row.display_name}</strong>
             <small>Account ID: {row.user_id}</small>
             <small>Status: {row.account_status} · Roles: {row.roles.join(", ") || "None"}</small>
+          </div>
+          <div>
+            {row.account_status !== "closed" && <button className="proto-account-toggle" type="button"
+              disabled={busy} onClick={() => void editName(row)}>Edit display name</button>}
           </div>
           <div>
             {(row.account_status === "active" || row.account_status === "suspended") &&
