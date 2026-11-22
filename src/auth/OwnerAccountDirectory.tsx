@@ -107,7 +107,7 @@ export default function OwnerAccountDirectory({ token }: { token: string }) {
     <div className="proto-account-invitations-heading">
       <div><p className="proto-eyebrow"><span />OWNER CONTROLS</p>
         <h3 id="owner-directory-heading">Account directory</h3></div>
-      <span className="proto-account-status">MFA verified</span>
+      <span className="proto-account-status">Owner directory</span>
     </div>
     <p>Find learner and staff accounts and review their access. Account IDs are unique.</p>
     <label>Search this page
