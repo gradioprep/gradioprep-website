@@ -332,7 +332,7 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
 
 // Read only caller-scoped, RLS-protected profile and active role data.
 async function listOwnerAccounts(request: Request, env: WorkerEnv): Promise<Response> {
-  const auth = await requireAuthenticatedContext(request, env);
+  const auth = await authenticatedCaller(request, env);
   if (auth.response) return auth.response;
   const context = auth.context!;
   const roleDenied = await requireActiveRole(context, "owner");
@@ -366,7 +366,7 @@ async function listOwnerAccounts(request: Request, env: WorkerEnv): Promise<Resp
 
 // Only an MFA-verified Owner can change an existing synthetic account status.
 async function changeOwnerAccountStatus(request: Request, env: WorkerEnv): Promise<Response> {
-  const auth = await requireAuthenticatedContext(request, env);
+  const auth = await authenticatedCaller(request, env);
   if (auth.response) return auth.response;
   const context = auth.context!;
   const roleDenied = await requireActiveRole(context, "owner");
