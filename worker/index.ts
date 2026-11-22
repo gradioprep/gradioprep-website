@@ -364,6 +364,44 @@ async function listOwnerAccounts(request: Request, env: WorkerEnv): Promise<Resp
   return jsonResponse({ accounts, has_more: (profiles ?? []).length > 50 });
 }
 
+// Only an MFA-verified Owner can change an existing synthetic account status.
+async function changeOwnerAccountStatus(request: Request, env: WorkerEnv): Promise<Response> {
+  const auth = await requireAuthenticatedContext(request, env);
+  if (auth.response) return auth.response;
+  const context = auth.context!;
+  const roleDenied = await requireActiveRole(context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(context);
+  if (mfaDenied) return mfaDenied;
+  let input: unknown;
+  try {
+    const body = await request.text();
+    if (body.length > 512) return jsonResponse({ error: "request_too_large" }, 413);
+    input = JSON.parse(body);
+  } catch { return jsonResponse({ error: "invalid_json" }, 400); }
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    return jsonResponse({ error: "invalid_account_status" }, 400);
+  }
+  const data = input as Record<string, unknown>;
+  if (Object.keys(data).sort().join(",") !== "status,user_id" ||
+      typeof data.user_id !== "string" ||
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.user_id) ||
+      (data.status !== "active" && data.status !== "suspended")) {
+    return jsonResponse({ error: "invalid_account_status" }, 400);
+  }
+  const { error } = await context.supabase.rpc("set_owner_account_status", {
+    target_user_id: data.user_id, new_status: data.status,
+  });
+  if (error) {
+    if (error.message === "mfa_required" || error.message === "owner_required")
+      return jsonResponse({ error: error.message }, 403);
+    if (error.code === "P0002") return jsonResponse({ error: "account_not_found" }, 404);
+    if (error.code === "23514") return jsonResponse({ error: error.message }, 409);
+    return jsonResponse({ error: "account_status_change_failed" }, 503);
+  }
+  return jsonResponse({ updated: true });
+}
+
 async function authenticatedMe(request: Request, env: WorkerEnv): Promise<Response> {
   if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
     return jsonResponse({
@@ -4634,6 +4672,10 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
 
   if (url.pathname === "/api/v1/me" && request.method === "PATCH") {
     return updateProfile(request, env);
+  }
+
+  if (url.pathname === "/api/v1/admin/accounts/status" && request.method === "POST") {
+    return changeOwnerAccountStatus(request, env);
   }
 
   if (url.pathname === "/api/v1/admin/accounts" && request.method === "GET") {

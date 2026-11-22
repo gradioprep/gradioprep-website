@@ -55,6 +55,31 @@ export default function OwnerAccountDirectory({ token }: { token: string }) {
     finally { setBusy(false); }
   }
 
+  async function changeStatus(row: AccountRow) {
+    const next = row.account_status === "active" ? "suspended" : "active";
+    if (!window.confirm((next === "suspended" ? "Suspend " : "Reactivate ") +
+      row.display_name + "?")) return;
+    setBusy(true);
+    setError("");
+    try {
+      const response = await fetch("/api/v1/admin/accounts/status", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: row.user_id, status: next }),
+      });
+      if (!response.ok) {
+        const detail = await response.json() as { error?: string };
+        throw new Error(detail.error === "own_account_protected"
+          ? "Your own account cannot be suspended."
+          : detail.error === "last_owner_protected"
+            ? "The final active Owner cannot be suspended."
+            : "Account status could not be changed.");
+      }
+      setRevision(n => n + 1);
+    } catch (e) { setError(e instanceof Error ? e.message : "Account status could not be changed."); }
+    finally { setBusy(false); }
+  }
+
   const filtered = rows.filter(row => [row.display_name, row.user_id, ...row.roles]
     .some(value => value.toLowerCase().includes(search.trim().toLowerCase())));
   return <section className="proto-account-invitations" aria-labelledby="owner-directory-heading">
@@ -77,6 +102,13 @@ export default function OwnerAccountDirectory({ token }: { token: string }) {
             <strong>{row.display_name}</strong>
             <small>Account ID: {row.user_id}</small>
             <small>Status: {row.account_status} · Roles: {row.roles.join(", ") || "None"}</small>
+          </div>
+          <div>
+            {(row.account_status === "active" || row.account_status === "suspended") &&
+              <button className="proto-account-toggle" type="button" disabled={busy}
+                onClick={() => void changeStatus(row)}>
+                {row.account_status === "active" ? "Suspend account" : "Reactivate account"}
+              </button>}
           </div>
           <div>{row.roles.filter(role => role !== "owner").map(role =>
             <button key={role} className="proto-account-toggle" type="button"
