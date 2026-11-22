@@ -7,6 +7,7 @@ import DiagnosticPanel from "./DiagnosticPanel";
 import TranscriptReviewPanel from "./TranscriptReviewPanel";
 import GraderWorkspacePanel from "./GraderWorkspacePanel";
 import PaFeedbackWorkspacePanel from "./PaFeedbackWorkspacePanel";
+import OwnerAccountDirectory from "./OwnerAccountDirectory";
 
 type AccountMode = "sign-in" | "sign-up" | "recovery-request";
 
@@ -634,6 +635,8 @@ export default function AccountPage({
           <button className="proto-account-toggle" type="button" onClick={cancelPendingTotpEnrollment} disabled={submitting}>Cancel pending setup</button>
         </div> : <button className="proto-action" type="button" onClick={startTotpEnrollment} disabled={submitting}>{submitting ? "Please wait…" : "Set up authenticator app"}</button>}
       </section>
+      {ownerRole && auth.mfaCurrentLevel === "aal2" && auth.session?.access_token &&
+        <OwnerAccountDirectory token={auth.session.access_token} />}
       {ownerRole && <section className="proto-account-invitations" aria-labelledby="proto-account-invitations-heading">
         <div className="proto-account-invitations-heading">
           <div>

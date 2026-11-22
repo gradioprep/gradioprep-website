@@ -330,6 +330,40 @@ async function createCallerContext(request: Request, env: WorkerEnv) {
   };
 }
 
+// Read only caller-scoped, RLS-protected profile and active role data.
+async function listOwnerAccounts(request: Request, env: WorkerEnv): Promise<Response> {
+  const auth = await requireAuthenticatedContext(request, env);
+  if (auth.response) return auth.response;
+  const context = auth.context!;
+  const roleDenied = await requireActiveRole(context, "owner");
+  if (roleDenied) return roleDenied;
+  const mfaDenied = requireAal2(context);
+  if (mfaDenied) return mfaDenied;
+  const url = new URL(request.url);
+  const pageValue = url.searchParams.get("page") ?? "0";
+  if (!/^(0|[1-9][0-9]{0,5})$/.test(pageValue) ||
+      [...url.searchParams.keys()].some(key => key !== "page")) {
+    return jsonResponse({ error: "invalid_page" }, 400);
+  }
+  const page = Number(pageValue);
+  const { data: profiles, error } = await context.supabase.from("profiles")
+    .select("user_id, display_name, account_status")
+    .order("created_at", { ascending: false })
+    .order("user_id", { ascending: false })
+    .range(page * 50, page * 50 + 50);
+  if (error) return jsonResponse({ error: "directory_unavailable" }, 503);
+  const ids = (profiles ?? []).map(profile => profile.user_id);
+  if (!ids.length) return jsonResponse({ accounts: [], has_more: false });
+  const roles = await context.supabase.from("role_assignments")
+    .select("user_id, role").in("user_id", ids).is("revoked_at", null);
+  if (roles.error) return jsonResponse({ error: "directory_unavailable" }, 503);
+  const accounts = (profiles ?? []).slice(0, 50).map(profile => ({
+    ...profile,
+    roles: (roles.data ?? []).filter(row => row.user_id === profile.user_id).map(row => row.role),
+  }));
+  return jsonResponse({ accounts, has_more: (profiles ?? []).length > 50 });
+}
+
 async function authenticatedMe(request: Request, env: WorkerEnv): Promise<Response> {
   if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) {
     return jsonResponse({
@@ -4600,6 +4634,10 @@ async function handleApi(request: Request, env: WorkerEnv): Promise<Response> {
 
   if (url.pathname === "/api/v1/me" && request.method === "PATCH") {
     return updateProfile(request, env);
+  }
+
+  if (url.pathname === "/api/v1/admin/accounts" && request.method === "GET") {
+    return listOwnerAccounts(request, env);
   }
 
   if (url.pathname === "/api/v1/admin/roles/revoke" && request.method === "POST") {
